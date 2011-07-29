@@ -1,32 +1,24 @@
 using System;
-using com.xexuxjy.magiccarpet.objects;
 using com.xexuxjy.magiccarpet.terrain;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MagicCarpet.com.xexuxjy.magiccarpet;
 
 
 namespace com.xexuxjy.magiccarpet.renderers
 {
-    public class TerrainSectionRenderer 
+    public class TerrainSectionRenderer : DrawableGameComponent
     {
-        static TerrainSectionRenderer()
-        {
-            buildVertexDecleration();
-            buildTerrainTextures();
-        }
 
-        public TerrainSectionRenderer(TerrainSection terrainSection,Terrain terrain)
+        public TerrainSectionRenderer(MagicCarpet game,TerrainSection terrainSection,Terrain terrain) : base(game)
         {
             m_terrainSection = terrainSection;
             m_terrain = terrain;
             m_sectorX = terrainSection.m_sectorX;
             m_sectorZ = terrainSection.m_sectorZ;
             
-            computeValues((int)terrainSection.m_worldSpanX, (int)terrainSection.m_worldSpanZ);
-            loadEffectFile();
-
-            buildVertexBuffer();
-            buildIndexBuffer();
+            ComputeValues((int)terrainSection.m_worldSpanX, (int)terrainSection.m_worldSpanZ);
+            LoadEffectFile();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,27 +49,20 @@ namespace com.xexuxjy.magiccarpet.renderers
 
             // only one of these should be active.
 
-            drawBasicEffect(device,ref view,ref world,ref projection);
-            drawEffect(device, ref view, ref world, ref projection);
+            DrawBasicEffect(device,ref view,ref world,ref projection);
+            DrawEffect(device, ref view, ref world, ref projection);
 
-            drawDebugAxes(device);
-            if (shouldDrawBoundingBox())
+            DrawDebugAxes(device);
+            if (ShouldDrawBoundingBox())
             {
-                drawBoundingBox(device);
+                DrawBoundingBox(device);
             }
         }
 
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public override int DrawOrder
-        {
-            get { return CommonSettings.TerrainDrawOrder; }
-        }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void drawEffect(GraphicsDevice device, ref Matrix view, ref Matrix world, ref Matrix projection)
+        private void DrawEffect(GraphicsDevice device, ref Matrix view, ref Matrix world, ref Matrix projection)
         {
             if (null != m_effect)
             {
@@ -112,10 +97,9 @@ namespace com.xexuxjy.magiccarpet.renderers
         }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool buildVertexBuffer()
+        private bool BuildVertexBuffer(GraphicsDevice device)
         {
             bool result = true;
-            GraphicsDevice device = ((IGraphicsDeviceService)GlobalUtils.GameServices.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
 
             if (null != device)
             {
@@ -181,9 +165,8 @@ namespace com.xexuxjy.magiccarpet.renderers
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void buildIndexBuffer()
+        private void BuildIndexBuffer(GraphicsDevice device)
         {
-            GraphicsDevice device = ((IGraphicsDeviceService)GlobalUtils.GameServices.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
             m_indices = new int[m_numberOfQuadsX * m_numberOfQuadsZ * 6];
             for (int x = 0; x < m_numberOfQuadsX; x++)
             {
@@ -206,7 +189,7 @@ namespace com.xexuxjy.magiccarpet.renderers
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public int[] getOffsetIndices(int minX, int minZ, int maxX, int maxZ)
+        public int[] GetOffsetIndices(int minX, int minZ, int maxX, int maxZ)
         {
             Vector3 offset = m_terrainSection.BoundingBox.Min;
 
@@ -243,7 +226,7 @@ namespace com.xexuxjy.magiccarpet.renderers
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected void computeValues(int width, int height)
+        protected void ComputeValues(int width, int height)
         {
             // Vertices
             m_numberOfVerticesX = width+1;
@@ -261,7 +244,7 @@ namespace com.xexuxjy.magiccarpet.renderers
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void computeNormals()
+        private void ComputeNormals()
         {
             // compute normals
             for (int z = 1; z < m_numberOfQuadsZ; z++)
@@ -280,56 +263,52 @@ namespace com.xexuxjy.magiccarpet.renderers
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void buildTextureForGrid()
+        private void BuildTextureForGrid(GraphicsDevice device)
         {
-            GraphicsDevice device = ((IGraphicsDeviceService)GlobalUtils.GameServices.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
             if (null != device)
             {
-                unsafe
+                int textureWidth = 256;
+                int textureBreadth = 256;
+                if (m_texture == null)
                 {
-                    int textureWidth = 256;
-                    int textureBreadth = 256;
-                    if (m_texture == null)
+                    m_texture = new Texture2D(device, textureWidth, textureBreadth, true, SurfaceFormat.Color);
+                }
+                uint[] textureData = new uint[textureBreadth * textureWidth];
+                m_texture.GetData<uint>(textureData);
+
+                int stepSizeX = textureWidth / m_numberOfQuadsX;
+                int stepSizeZ = textureBreadth / m_numberOfQuadsZ;
+
+                // got top left corner.
+                Vector3 foo = m_terrainSection.BoundingBox.Min;
+                int squareOffsetX = (int)foo.X;
+                int squareOffsetZ = (int)foo.Z;
+
+                for (int i = 0; i < textureWidth; ++i)
+                {
+                    int xoffset = i / stepSizeX;
+                    for (int j = 0; j < textureBreadth; ++j)
                     {
-                        m_texture = new Texture2D(device, textureWidth, textureBreadth, true, SurfaceFormat.Color);
-                    }
-                    uint[] textureData = new uint[textureBreadth * textureWidth];
-                    m_texture.GetData<uint>(textureData);
-
-                    int stepSizeX = textureWidth / m_numberOfQuadsX;
-                    int stepSizeZ = textureBreadth / m_numberOfQuadsZ;
-
-                    // got top left corner.
-                    Vector3 foo = m_terrainSection.BoundingBox.Min;
-                    int squareOffsetX = (int)foo.X;
-                    int squareOffsetZ = (int)foo.Z;
-
-                    for (int i = 0; i < textureWidth; ++i)
-                    {
-                        int xoffset = i / stepSizeX;
-                        for (int j = 0; j < textureBreadth; ++j)
-                        {
-                            int zoffset = j / stepSizeZ;
-                            Color color = getColourForTerrainType(m_terrain.GetTerrainSquareAtPoint(squareOffsetX+
+                        int zoffset = j / stepSizeZ;
+                        Color color = getColourForTerrainType(m_terrain.GetTerrainSquareAtPoint(squareOffsetX+
 xoffset, squareOffsetZ+zoffset).Type);
-                            textureData[(i * textureWidth) + j] = color.PackedValue;
-                        }
+                        textureData[(i * textureWidth) + j] = color.PackedValue;
                     }
-                    m_texture.SetData(textureData); 
+                }
+                m_texture.SetData(textureData); 
            
                 
-                }
             }
             //m_texture.Save(@"c:\tmp\test.jpg", ImageFileFormat.Jpg);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void loadEffectFile()
+        public void LoadEffectFile()
         {
             GraphicsDevice device = ((IGraphicsDeviceService)GlobalUtils.GameServices.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
 
-            m_effect = s_contentManager.Load<Effect>(CommonSettings.terrainEffect);
+            m_effect = Game.Content.Load<Effect>(Globals.terrainEffect);
             // dummy values for now, need reconciling with map
             m_effect.Parameters["deepWaterHeightValue"].SetValue(-5.0f);
             m_effect.Parameters["shallowWaterHeightValue"].SetValue(-3.0f);
@@ -349,21 +328,10 @@ xoffset, squareOffsetZ+zoffset).Type);
         }
 
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        public static System.Drawing.Brush getBrushForTerrainType(TerrainType terrainType)
-        {
-            if (s_brushes[(int)terrainType] == null)
-            {
-                Color color = getColourForTerrainType(terrainType);
-                s_brushes[(int)terrainType] = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(color.A,color.R,color.G,color.B));
-            }
-            return s_brushes[(int)terrainType];
-        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3 getNormalAtPoint(float xpct, float zpct,int worldSpanX,int worldSpanZ)
+        public Vector3 GetNormalAtPoint(float xpct, float zpct,int worldSpanX,int worldSpanZ)
         {
             int x = (int)(xpct);
             int z = (int)(zpct);
@@ -371,12 +339,13 @@ xoffset, squareOffsetZ+zoffset).Type);
             x = MathHelper.Clamp(0, x, worldSpanX - 1);
             z = MathHelper.Clamp(0, z, worldSpanZ - 1);
 
+
             return m_vertices[(z * m_numberOfVerticesZ) + x].Normal; 
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static Color getColourForTerrainType(TerrainType terrainType)
+        public static Color GetColourForTerrainType(TerrainType terrainType)
         {
             switch (terrainType)
             {
@@ -463,7 +432,7 @@ xoffset, squareOffsetZ+zoffset).Type);
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private static void buildVertexDecleration()
+        private static void BuildVertexDecleration()
         {
             VertexElement[] vertexElements = new VertexElement[]
             {
@@ -487,16 +456,20 @@ xoffset, squareOffsetZ+zoffset).Type);
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private static void buildTerrainTextures()
+        protected override void LoadContent()
         {
-            s_terrainTextures = new Texture2D[6];
-            s_terrainTextures[(int)TerrainTextureSlot.deepWaterTexture] = s_contentManager.Load<Texture2D>(CommonSettings.deepWaterTextureId);
-            s_terrainTextures[(int)TerrainTextureSlot.shallowWaterTexture] = s_contentManager.Load<Texture2D>(CommonSettings.shallowWaterTextureId);
-            s_terrainTextures[(int)TerrainTextureSlot.sandTexture] = s_contentManager.Load<Texture2D>(CommonSettings.sandTextureId);
-            s_terrainTextures[(int)TerrainTextureSlot.grassTexture] = s_contentManager.Load<Texture2D>(CommonSettings.grassTextureId);
-            s_terrainTextures[(int)TerrainTextureSlot.screeTexture] = s_contentManager.Load<Texture2D>(CommonSettings.screeTextureId);
-            s_terrainTextures[(int)TerrainTextureSlot.iceTexture] = s_contentManager.Load<Texture2D>(CommonSettings.iceTextureId);
+            base.LoadContent();
+            if (s_terrainTextures == null)
+            {
+                s_terrainTextures = new Texture2D[6];
+                s_terrainTextures[(int)TerrainTextureSlot.deepWaterTexture] = Game.Content.Load<Texture2D>(Globals.deepWaterTextureId);
+                s_terrainTextures[(int)TerrainTextureSlot.shallowWaterTexture] = Game.Content.Load<Texture2D>(Globals.shallowWaterTextureId);
+                s_terrainTextures[(int)TerrainTextureSlot.sandTexture] = Game.Content.Load<Texture2D>(Globals.sandTextureId);
+                s_terrainTextures[(int)TerrainTextureSlot.grassTexture] = Game.Content.Load<Texture2D>(Globals.grassTextureId);
+                s_terrainTextures[(int)TerrainTextureSlot.screeTexture] = Game.Content.Load<Texture2D>(Globals.screeTextureId);
+                s_terrainTextures[(int)TerrainTextureSlot.iceTexture] = Game.Content.Load<Texture2D>(Globals.iceTextureId);
 
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -515,7 +488,6 @@ xoffset, squareOffsetZ+zoffset).Type);
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private static System.Drawing.Brush[] s_brushes = new System.Drawing.Brush[Enum.GetValues(typeof(TerrainType)).Length];
         private TerrainSection m_terrainSection;
         protected MorphingTerrainVertexFormatStruct[] m_vertices;
         int m_sectorX;
