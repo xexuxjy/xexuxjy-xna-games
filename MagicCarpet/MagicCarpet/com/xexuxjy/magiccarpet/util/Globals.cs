@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using com.xexuxjy.magiccarpet.interfaces;
-using com.xexuxjy.magiccarpet.terrain;
 
-namespace com.xexuxjy.magiccarpet
+namespace MagicCarpet.com.xexuxjy.magiccarpet
 {
     public static class Globals
     {
@@ -110,54 +108,47 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static ICamera Camera;
-        public static Terrain Terrain;
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public static void Initialize()
+        public static void initialise()
         {
-            String contentBase = "";
+            textureBase = @".\content\Textures\";
+            deepWaterTextureId = textureBase + @"Terrain\deepWater";
+            shallowWaterTextureId = textureBase + @"Terrain\shallowWater";
+            sandTextureId = textureBase + @"Terrain\sand";
+            grassTextureId = textureBase + @"Terrain\grass";
+            screeTextureId = textureBase + @"Terrain\scree";
+            iceTextureId = textureBase + @"Terrain\ice";
 
-            textureBase = contentBase+"Textures/";
-            deepWaterTextureId = textureBase + "Terrain/deepWater";
-            shallowWaterTextureId = textureBase + "Terrain/shallowWater";
-            sandTextureId = textureBase + "Terrain/sand";
-            grassTextureId = textureBase + "Terrain/grass";
-            screeTextureId = textureBase + "Terrain/scree";
-            iceTextureId = textureBase + "Terrain/ice";
+            modelBase = @".\content\Models\";
+            magicianModel = modelBase + @"Magician\magician";
+            manaballModel = modelBase + @"Manaball\Manaball";
+            balloonModel = modelBase + @"Balloon\Balloon";
 
-            modelBase = contentBase+"Models/";
-            magicianModel = modelBase + "Magician/magician";
-            manaballModel = modelBase + "Manaball/Manaball";
-            balloonModel = modelBase + "Balloon/Balloon";
+            castle1Model = modelBase + @"Castle\CastleSize1";
+            castle2Model = modelBase + @"Castle\CastleSize2";
+            castle3Model = modelBase + @"Castle\CastleSize3";
+            castle4Model = modelBase + @"Castle\castle4";
+            castle5Model = modelBase + @"Castle\castle5";
 
-            castle1Model = modelBase + "Castle/CastleSize1";
-            castle2Model = modelBase + "Castle/CastleSize2";
-            castle3Model = modelBase + "Castle/CastleSize3";
-            castle4Model = modelBase + "Castle/castle4";
-            castle5Model = modelBase + "Castle/castle5";
-
-            monster1Model = modelBase + "Monster/monster1";
-            monster2Model = modelBase + "Monster/monster2";
-            monster3Model = modelBase + "Monster/monster3";
+            monster1Model = modelBase + @"Monster\monster1";
+            monster2Model = modelBase + @"Monster\monster2";
+            monster3Model = modelBase + @"Monster\monster3";
 
             fireballModel = manaballModel;
 
-            skydomeModel = modelBase + "Skydome/skydome";
+            skydomeModel = modelBase + @"Skydome\skydome";
 
-            planeMeshModel = modelBase + "PlaneMesh/planeMesh";
+            planeMeshModel = modelBase + @"PlaneMesh\planeMesh";
 
-            effectBase = contentBase+"Effects/";
-            terrainEffect = effectBase + "Terrain/terrain1";
+            effectBase = @".\content\Effects\";
+            terrainEffect = effectBase + @"Terrain\terrain1";
 
-            fontBase = contentBase+"Fonts/";
+            fontBase = @".\Content\Fonts\";
             debugFont = fontBase + "DebugFont";
 
-            spellBase = modelBase + "Spells/";
-            fireballModel = spellBase + "Fireball";
-            movelandModel = spellBase + "Moveland";
-            convertModel = spellBase + "Convert";
+            spellBase = modelBase + @"Spells\";
+            fireballModel = spellBase + @"Fireball";
+            movelandModel = spellBase + @"Moveland";
+            convertModel = spellBase + @"Convert";
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

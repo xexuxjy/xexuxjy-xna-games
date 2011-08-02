@@ -2,12 +2,14 @@ using System;
 using com.xexuxjy.magiccarpet.terrain;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MagicCarpet.com.xexuxjy.magiccarpet;
+using com.xexuxjy.magiccarpet.util;
+using com.xexuxjy.magiccarpet.interfaces;
+using System.IO;
 
 
-namespace com.xexuxjy.magiccarpet.renderers
+namespace com.xexuxjy.magiccarpet.renderer
 {
-    public class TerrainSectionRenderer : DrawableGameComponent
+    public class TerrainSectionRenderer : DefaultRenderer
     {
 
         public TerrainSectionRenderer(MagicCarpet game,TerrainSection terrainSection,Terrain terrain) : base(game)
@@ -23,19 +25,20 @@ namespace com.xexuxjy.magiccarpet.renderers
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
         public override void Draw(GameTime gameTime)
         {
             if (m_terrainSection.IsDirty())
             {
-                buildVertexBuffer();
+                BuildVertexBuffer(Game.GraphicsDevice);
             }
 
-            GraphicsDevice device = ((IGraphicsDeviceService)GlobalUtils.GameServices.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
+            
 
             //device.VertexDeclaration = m_vertexDecleration;
             //device.Vertices[0].SetSource(m_vertexBuffer, 0, MorphingTerrainVertexFormatStruct.SizeInBytes);
             //device.Indices = m_indexBuffer;
-            Camera camera = ((ICameraService)(GlobalUtils.GameServices.GetService(typeof(ICameraService)))).Camera;
+            ICamera camera = Globals.Camera;
 
             Matrix identity = Matrix.Identity;
             //Matrix translation = Matrix.CreateTranslation(m_terrainSection.Position);
@@ -43,19 +46,19 @@ namespace com.xexuxjy.magiccarpet.renderers
             Matrix view = camera.View;
             Matrix world = Matrix.Multiply(translation, identity);
 
-            Matrix projection = camera.PerspectiveMatrix;
+            Matrix projection = camera.Projection;
 
             Matrix worldViewProjection = world * view * projection;
 
             // only one of these should be active.
 
-            DrawBasicEffect(device,ref view,ref world,ref projection);
-            DrawEffect(device, ref view, ref world, ref projection);
+            DrawBasicEffect(Game.GraphicsDevice, ref view, ref world, ref projection);
+            DrawEffect(Game.GraphicsDevice, ref view, ref world, ref projection);
 
-            DrawDebugAxes(device);
+            DrawDebugAxes(Game.GraphicsDevice);
             if (ShouldDrawBoundingBox())
             {
-                DrawBoundingBox(device);
+                DrawBoundingBox(Game.GraphicsDevice);
             }
         }
 
@@ -90,7 +93,7 @@ namespace com.xexuxjy.magiccarpet.renderers
                 foreach (EffectPass effectPass in m_effect.CurrentTechnique.Passes)
                 {
                     effectPass.Apply();
-                    device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_totalNumberOfVertices, 0, (m_numberOfQuadsX * m_numberOfQuadsZ * 2));
+                    device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_vertices.Length, 0, (m_numberOfQuadsX * m_numberOfQuadsZ * 2));
                 }
             }
 
@@ -109,7 +112,7 @@ namespace com.xexuxjy.magiccarpet.renderers
                 //
                 String tempName = String.Format("terrain_section_[0]_[1]", m_sectorX, m_sectorZ);
 
-                buildTextureForGrid();
+                BuildTextureForGrid(Game.GraphicsDevice);
 
 
                 //if (m_vertexBuffer == null)
@@ -118,7 +121,7 @@ namespace com.xexuxjy.magiccarpet.renderers
                     //m_vertexBuffer = new VertexBuffer(device, MorphingTerrainVertexFormatStruct.SizeInBytes * m_totalNumberOfVertices);
 
                     // All the vertices's are stored in a 1D array
-                    m_vertices = new MorphingTerrainVertexFormatStruct[m_totalNumberOfVertices];
+                    m_vertices = new MorphingTerrainVertexFormatStruct[m_numberOfVerticesX * m_numberOfVerticesZ];
                 }
                 // Load vertices's into the buffer one by one
                 Vector3 offset = m_terrainSection.BoundingBox.Min;
@@ -157,7 +160,6 @@ namespace com.xexuxjy.magiccarpet.renderers
                 //{
                 //    vertexFormatClassToStruct(m_vertices[i], ref copyOfClassData[i]);
                 //}
-                m_vertexBuffer.SetData(m_vertices);     
                 m_terrainSection.ClearDirty();
             }
             return result;
@@ -183,8 +185,6 @@ namespace com.xexuxjy.magiccarpet.renderers
                 }
             }
             // this is the index buffer we are going to store the indices in
-            m_indexBuffer = new IndexBuffer(device, typeof(int), m_indices.Length, BufferUsage.None);
-            m_indexBuffer.SetData(m_indices, 0, m_indices.Length);
         }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +231,6 @@ namespace com.xexuxjy.magiccarpet.renderers
             // Vertices
             m_numberOfVerticesX = width+1;
             m_numberOfVerticesZ = height+1;
-            m_totalNumberOfVertices = m_numberOfVerticesX * m_numberOfVerticesZ;
 
             // Quads
             m_numberOfQuadsX = width;
@@ -290,7 +289,7 @@ namespace com.xexuxjy.magiccarpet.renderers
                     for (int j = 0; j < textureBreadth; ++j)
                     {
                         int zoffset = j / stepSizeZ;
-                        Color color = getColourForTerrainType(m_terrain.GetTerrainSquareAtPoint(squareOffsetX+
+                        Color color = GetColourForTerrainType(m_terrain.GetTerrainSquareAtPoint(squareOffsetX+
 xoffset, squareOffsetZ+zoffset).Type);
                         textureData[(i * textureWidth) + j] = color.PackedValue;
                     }
@@ -306,7 +305,6 @@ xoffset, squareOffsetZ+zoffset).Type);
 
         public void LoadEffectFile()
         {
-            GraphicsDevice device = ((IGraphicsDeviceService)GlobalUtils.GameServices.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
 
             m_effect = Game.Content.Load<Effect>(Globals.terrainEffect);
             // dummy values for now, need reconciling with map
@@ -336,8 +334,8 @@ xoffset, squareOffsetZ+zoffset).Type);
             int x = (int)(xpct);
             int z = (int)(zpct);
 
-            x = MathHelper.Clamp(0, x, worldSpanX - 1);
-            z = MathHelper.Clamp(0, z, worldSpanZ - 1);
+            x = MathHelperExtension.Clamp(0, x, worldSpanX - 1);
+            z = MathHelperExtension.Clamp(0, z, worldSpanZ - 1);
 
 
             return m_vertices[(z * m_numberOfVerticesZ) + x].Normal; 
@@ -441,7 +439,6 @@ xoffset, squareOffsetZ+zoffset).Type);
                 new VertexElement(sizeof(float)*5,VertexElementFormat.Vector3,VertexElementUsage.Normal,0),
                 new VertexElement(sizeof(float)*8,VertexElementFormat.Single,VertexElementUsage.TextureCoordinate,1)
             };
-            GraphicsDevice device = ((IGraphicsDeviceService)GlobalUtils.GameServices.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
             
             s_vertexDecleration = new VertexDeclaration(vertexElements);
 
@@ -462,6 +459,9 @@ xoffset, squareOffsetZ+zoffset).Type);
             if (s_terrainTextures == null)
             {
                 s_terrainTextures = new Texture2D[6];
+
+                DirectoryInfo dir = new DirectoryInfo(Game.Content.RootDirectory);
+
                 s_terrainTextures[(int)TerrainTextureSlot.deepWaterTexture] = Game.Content.Load<Texture2D>(Globals.deepWaterTextureId);
                 s_terrainTextures[(int)TerrainTextureSlot.shallowWaterTexture] = Game.Content.Load<Texture2D>(Globals.shallowWaterTextureId);
                 s_terrainTextures[(int)TerrainTextureSlot.sandTexture] = Game.Content.Load<Texture2D>(Globals.sandTextureId);
@@ -501,11 +501,9 @@ xoffset, squareOffsetZ+zoffset).Type);
         int m_totalNumberOfTriangles;
         Terrain m_terrain;
         private Effect m_effect;
-        private BasicEffect m_basicEffect;
         private Texture2D m_heightMap;
         private static VertexDeclaration s_vertexDecleration;
         private static Texture2D[] s_terrainTextures;
         private int[] m_indices;
-        private Vector3[] m_vertices;
     }
 }

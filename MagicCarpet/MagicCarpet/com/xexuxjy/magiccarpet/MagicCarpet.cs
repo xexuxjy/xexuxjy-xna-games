@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using com.xexuxjy.magiccarpet.camera;
+using com.xexuxjy.magiccarpet.terrain;
+using com.xexuxjy.magiccarpet.util;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -23,6 +26,7 @@ namespace com.xexuxjy.magiccarpet
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
         }
 
         /// <summary>
@@ -34,6 +38,13 @@ namespace com.xexuxjy.magiccarpet
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            DefaultCamera camera  = new DefaultCamera(MathHelper.ToRadians(40), 1, 10, 1000);
+            Globals.Camera = camera;
+            Globals.Initialize();
+            Globals.Terrain = new Terrain(Vector3.Zero, this);
+            Components.Add(camera);
+            Components.Add(Globals.Terrain);
+            Components.Add(new KeyboardController(this));
 
             base.Initialize();
         }

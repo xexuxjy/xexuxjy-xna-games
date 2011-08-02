@@ -1,9 +1,8 @@
-
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicCarpet", "MagicCarpet\MagicCarpet.csproj", "{529FB650-8C06-441E-92FF-635C0C6A7353}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MagicCarpetContent", "MagicCarpetContent\MagicCarpetContent.contentproj", "{FAF449CF-C173-4DEC-BC1A-E02576C62389}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicCarpetContent", "MagicCarpetContent\MagicCarpetContent.contentproj", "{FAF449CF-C173-4DEC-BC1A-E02576C62389}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,6 +15,7 @@ Global
 		{529FB650-8C06-441E-92FF-635C0C6A7353}.Release|x86.ActiveCfg = Release|x86
 		{529FB650-8C06-441E-92FF-635C0C6A7353}.Release|x86.Build.0 = Release|x86
 		{FAF449CF-C173-4DEC-BC1A-E02576C62389}.Debug|x86.ActiveCfg = Debug|x86
+		{FAF449CF-C173-4DEC-BC1A-E02576C62389}.Debug|x86.Build.0 = Debug|x86
 		{FAF449CF-C173-4DEC-BC1A-E02576C62389}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

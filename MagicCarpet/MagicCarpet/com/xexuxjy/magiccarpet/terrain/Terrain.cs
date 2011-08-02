@@ -8,8 +8,9 @@ using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.collision;
-using com.xexuxjy.magiccarpet.renderers;
+using com.xexuxjy.magiccarpet.renderer;
 using System.Collections.Generic;
+using com.xexuxjy.magiccarpet.util;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
@@ -23,9 +24,11 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
         }
 
+        
+
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Initialise()
+        public override void Initialize()
         {
             m_collider = false;
             // register or re-initialise this terrain
@@ -42,7 +45,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             BuildSectionRenderers();
             //buildLandscape();
             QuadTree.GetInstance().GetRootNode().BuildTerrainIndicies();
-            base.Initialise();
+            base.Initialize();
 
         }
 
@@ -114,12 +117,12 @@ namespace com.xexuxjy.magiccarpet.terrain
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         
-        protected void buildSectionRenderers()
+        protected void BuildSectionRenderers()
         {
             int totalSections = m_numTerrainSectionsX * m_numTerrainSectionsZ;
             for (int i = 0; i < totalSections; ++i)
             {
-                new TerrainSectionRenderer(m_terrainSectionGrid[i],this);
+                new TerrainSectionRenderer((MagicCarpet)Game,m_terrainSectionGrid[i],this);
             }
         }		
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,12 +363,12 @@ namespace com.xexuxjy.magiccarpet.terrain
 	        fMapZ -= iMapZ0;
 
             // make sure it's constrained to world bounds
-	        iMapX0 = MathHelper.Clamp(0,iMapX0, Width-1);
-            iMapZ0 = MathHelper.Clamp(0,iMapZ0, Breadth - 1);
+	        iMapX0 = MathHelperExtension.Clamp(0,iMapX0, Width-1);
+            iMapZ0 = MathHelperExtension.Clamp(0, iMapZ0, Breadth - 1);
 
             // and get an extra set for sampling.
-            int iMapX1 = MathHelper.Clamp(0,iMapX0 + 1, Width - 1);
-            int iMapZ1 = MathHelper.Clamp(0,iMapZ0 + 1, Breadth - 1);
+            int iMapX1 = MathHelperExtension.Clamp(0, iMapX0 + 1, Width - 1);
+            int iMapZ1 = MathHelperExtension.Clamp(0, iMapZ0 + 1, Breadth - 1);
             
 	        // read 4 map values and get an average from them.
             float h0 = GetHeightAtPoint(iMapX0, iMapZ0, getTargetHeight);
@@ -412,12 +415,12 @@ namespace com.xexuxjy.magiccarpet.terrain
 	        fMapX -= iMapX0;
 	        fMapZ -= iMapZ0;
             // make sure it's constrained to world bounds
-            iMapX0 = MathHelper.Clamp(0, iMapX0, Width - 1);
-            iMapZ0 = MathHelper.Clamp(0, iMapZ0, Breadth - 1);
+            iMapX0 = MathHelperExtension.Clamp(0, iMapX0, Width - 1);
+            iMapZ0 = MathHelperExtension.Clamp(0, iMapZ0, Breadth - 1);
 
             // and get an extra set for sampling.
-            int iMapX1 = MathHelper.Clamp(0, iMapX0 + 1, Width - 1);
-            int iMapZ1 = MathHelper.Clamp(0, iMapZ0 + 1, Breadth - 1);
+            int iMapX1 = MathHelperExtension.Clamp(0, iMapX0 + 1, Width - 1);
+            int iMapZ1 = MathHelperExtension.Clamp(0, iMapZ0 + 1, Breadth - 1);
 
             // read 4 map values and get an average from them.
             Vector3 v0 = GetNormalAtPoint(iMapX0, iMapZ0);
@@ -447,7 +450,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void SetHeightAtPoint(int x, int z, float height)
         {
             int index = (int)((x * Width) + z);
-            m_terrainSquares[index].setTargetHeight(height);
+            m_terrainSquares[index].SetTargetHeight(height);
         }
 
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -464,7 +467,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             x = Math.Min(x, (Width - 1));
             z = Math.Min(z, (Breadth - 1));
             int index = (int)((x * Width) + z);
-            float returnValue = getTargetHeight ? m_terrainSquares[index].getTargetHeight() : m_terrainSquares[index].getHeight();
+            float returnValue = getTargetHeight ? m_terrainSquares[index].GetTargetHeight() : m_terrainSquares[index].GetHeight();
             return returnValue;
 		}
 
@@ -520,7 +523,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 {
                     height = -height;
                 }
-				addPeak(xpos, ypos, radius, height,maxOverallHeight);
+				AddPeak(xpos, ypos, radius, height,maxOverallHeight);
 			}
 		}
 		
@@ -670,9 +673,9 @@ namespace com.xexuxjy.magiccarpet.terrain
             for (int i = 0; i < m_terrainSquares.Length; ++i)
             {
                 //int index = (int)((x * m_worldExtents.Width) + z);
-                float currentHeight = m_terrainSquares[i].getHeight();
-                float targetHeight = m_terrainSquares[i].getTargetHeight();
-                if (!MathUtils.compareFloat(currentHeight, targetHeight))
+                float currentHeight = m_terrainSquares[i].GetHeight();
+                float targetHeight = m_terrainSquares[i].GetTargetHeight();
+                if (!MathHelperExtension.CompareFloat(currentHeight, targetHeight))
                 {
                     bool down = targetHeight < currentHeight;
 
@@ -690,10 +693,10 @@ namespace com.xexuxjy.magiccarpet.terrain
                         delta *= -1.0f;
                     }
 
-                    m_terrainSquares[i].setHeight(currentHeight + delta);
+                    m_terrainSquares[i].SetHeight(currentHeight + delta);
 
                     TerrainSquare terrainSquare = m_terrainSquares[i];
-                    SetTerrainType(terrainSquare, terrainSquare.getHeight());
+                    SetTerrainType(terrainSquare, terrainSquare.GetHeight());
                 }
             }
         }
@@ -717,24 +720,24 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void DropRandomManaBall()
-        {
-            int xpos = (int)(m_terrainRandom.NextDouble() * Width);
-            int zpos = (int)(m_terrainRandom.NextDouble() * Breadth);
-            double ypos = GetHeightAtPoint(xpos, zpos);
-            Vector3 vec = new Vector3((float)xpos, (float)ypos, (float)zpos);
-            ManaBall manaBall = (ManaBall)WorldObjectFactory.getInstance().getWorldObject(WorldObjectType.manaball,null, vec);
-        }
+        //public void DropRandomManaBall()
+        //{
+        //    int xpos = (int)(m_terrainRandom.NextDouble() * Width);
+        //    int zpos = (int)(m_terrainRandom.NextDouble() * Breadth);
+        //    double ypos = GetHeightAtPoint(xpos, zpos);
+        //    Vector3 vec = new Vector3((float)xpos, (float)ypos, (float)zpos);
+        //    ManaBall manaBall = (ManaBall)WorldObjectFactory.getInstance().getWorldObject(WorldObjectType.manaball,null, vec);
+        //}
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void ToggleVisibility()
-        {
-            for (int i = 0; i < m_terrainSectionGrid.Length; ++i)
-            {
-                ((DefaultRenderer)m_terrainSectionGrid[i].Renderer).setVisible(!m_terrainSectionGrid[i].Renderer.Visible);
-            }
-        }
+        //public void ToggleVisibility()
+        //{
+        //    for (int i = 0; i < m_terrainSectionGrid.Length; ++i)
+        //    {
+        //        ((DefaultRenderer)m_terrainSectionGrid[i].Renderer).setVisible(!m_terrainSectionGrid[i].Renderer.Visible);
+        //    }
+        //}
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 

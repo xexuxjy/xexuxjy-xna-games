@@ -5,7 +5,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.magiccarpet.terrain;
-using MagicCarpet.com.xexuxjy.magiccarpet;
+using com.xexuxjy.magiccarpet;
 
 namespace com.xexuxjy.magiccarpet.collision
 {

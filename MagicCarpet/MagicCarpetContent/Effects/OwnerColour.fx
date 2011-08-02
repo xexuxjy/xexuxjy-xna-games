@@ -59,14 +59,14 @@
 	//--------------------------------------------------------------//
 	// Technique Section for OwnerColourVS screen transform
 	//--------------------------------------------------------------//
-	technique OwnerColourVS
+	technique OwnerColourVSTech
 	{
 	   pass Single_Pass
 	   {
-			LIGHTING = TRUE;
+			//LIGHTING = TRUE;
 			ZENABLE = TRUE;
 			ZWRITEENABLE = TRUE;
-			ALPHATESTENABLE = TRUE;
+			//ALPHATESTENABLE = TRUE;
 			ALPHABLENDENABLE = FALSE;
 
 			CULLMODE = CCW;

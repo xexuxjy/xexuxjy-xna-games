@@ -107,18 +107,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="com\xexuxjy\magiccarpet\camera\DefaultCamera.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTree.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTreeNode.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Globals.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\interfaces\ICamera.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\MagicCarpet.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Program.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\renderer\DefaultRenderer.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\TerrainSectionRenderer.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\Terrain.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSection.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSquare.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\WorldObject.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\util\FreeListNode.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +163,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
