@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using com.xexuxjy.magiccarpet.renderers;
+using com.xexuxjy.magiccarpet.renderer;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.collision;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.terrain;
-using MagicCarpet.com.xexuxjy.magiccarpet;
+using com.xexuxjy.magiccarpet;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
@@ -67,9 +67,15 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public DefaultRenderer Renderer
+        {
+            get { return m_terrainSectionRenderer; }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public void BuildRenderer()
         {
-            m_terrainSectionRenderer = new TerrainSectionRenderer(this,m_terrain);
+            m_terrainSectionRenderer = new TerrainSectionRenderer((MagicCarpet)Game,this,m_terrain);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +107,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             if (null != m_terrainSectionRenderer)
             {
-                return m_terrainSectionRenderer.getNormalAtPoint(x, z, m_worldSpanX, m_worldSpanZ);
+                return m_terrainSectionRenderer.GetNormalAtPoint(x, z, m_worldSpanX, m_worldSpanZ);
             }
             return Vector3.Zero;
         }
@@ -143,17 +149,17 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Terrain m_terrain;
-        TerrainSectionRenderer m_terrainSectionRenderer;
-        private TerrainSquare[][] m_terrainSquares;
+        protected Terrain m_terrain;
+        protected TerrainSectionRenderer m_terrainSectionRenderer;
+        protected TerrainSquare[][] m_terrainSquares;
         public int m_sectorX;
         public int m_sectorZ;
         public int m_xVerts;
         public int m_zVerts;
         public int m_worldSpanX;
         public int m_worldSpanZ;
-        private float m_terrainMoveTime; // counter used when adjusting terrain heights
-        private bool m_isDirty = false;
+        protected float m_terrainMoveTime; // counter used when adjusting terrain heights
+        protected bool m_isDirty = false;
 
     }
 }

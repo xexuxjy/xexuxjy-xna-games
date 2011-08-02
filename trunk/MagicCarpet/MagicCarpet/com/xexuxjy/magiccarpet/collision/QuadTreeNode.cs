@@ -4,6 +4,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.terrain;
+using com.xexuxjy.magiccarpet.renderer;
+using com.xexuxjy.magiccarpet.interfaces;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
@@ -126,7 +128,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void BuildVisibilityList(List<WorldObject> objectList, Camera camera)
+        public void BuildVisibilityList(List<WorldObject> objectList, ICamera camera)
         {
              foreach (WorldObject worldObject in m_objectsInNode)
              {
@@ -224,9 +226,9 @@ namespace com.xexuxjy.magiccarpet.collision
         // These are only built when the quadtreenode belongs to only one terrain section.
         public void BuildTerrainIndicies()
         {
-            Terrain terrain = null;
+            Terrain terrain = Globals.Terrain;
 
-            TerrainSection terrainSection = terrain.getSectionForBoundingBox(ref m_extents);
+            TerrainSection terrainSection = terrain.GetSectionForBoundingBox(ref m_extents);
             if (terrainSection != null)
             {
                 m_terrainSection = terrainSection;
@@ -238,7 +240,7 @@ namespace com.xexuxjy.magiccarpet.collision
                 // only makes sense to do this if granulatrity is at least one square
                 if (maxX - minX > 0)
                 {
-                    m_terrainIndices = ((TerrainSectionRenderer)m_terrainSection.Renderer).getOffsetIndices(minX, minZ, maxX, maxZ);
+                    m_terrainIndices = ((TerrainSectionRenderer)m_terrainSection.Renderer).GetOffsetIndices(minX, minZ, maxX, maxZ);
                     for (int i = 0; i < m_terrainIndices.Length; ++i)
                     {
                         if (m_terrainIndices[i] > 6000)

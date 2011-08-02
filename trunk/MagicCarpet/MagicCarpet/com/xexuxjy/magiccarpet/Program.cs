@@ -1,6 +1,6 @@
 using System;
 
-namespace MagicCarpet
+namespace com.xexuxjy.magiccarpet
 {
 #if WINDOWS || XBOX
     static class Program
