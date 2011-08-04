@@ -29,12 +29,68 @@ namespace com.xexuxjy.magiccarpet.util
 
         public virtual void KeyboardCallback(Keys key, GameTime gameTime, bool released, ref KeyboardState newState, ref KeyboardState oldState)
         {
-            if (key == Keys.Q || key == Keys.Escape)
+            switch (key)
             {
-                Game.Exit();
+                case Keys.Q:
+                case Keys.Escape:
+                    {
+                        Game.Exit();
+                        break;
+                    }
+                case Keys.L: StepLeft((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.R: StepRight((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.F: StepFront((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.B: StepBack((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.Z: ZoomIn(0.4f); break;
+                case Keys.X: ZoomOut(0.4f); break;
+                case Keys.Left: StepLeft((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.Right: StepRight((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.Up: StepFront((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.Down: StepBack((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.PageUp: ZoomIn(0.4f); break;
+                case Keys.PageDown: ZoomOut(0.4f); break;
             }
         }
 
+        public void StepLeft(float delta)
+        {
+            Globals.Camera.Yaw -= delta;
+        }
+
+        //----------------------------------------------------------------------------------------------
+
+        public void StepRight(float delta)
+        {
+            Globals.Camera.Yaw += delta;
+        }
+
+        //----------------------------------------------------------------------------------------------
+
+        public void StepFront(float delta)
+        {
+            Globals.Camera.Pitch += delta;
+        }
+
+        //----------------------------------------------------------------------------------------------
+
+        public void StepBack(float delta)
+        {
+            Globals.Camera.Pitch -= delta;
+        }
+
+        //----------------------------------------------------------------------------------------------
+
+        public void ZoomIn(float delta)
+        {
+            Globals.Camera.Distance -= delta;
+        }
+
+        //----------------------------------------------------------------------------------------------
+
+        public void ZoomOut(float delta)
+        {
+            Globals.Camera.Distance += delta;
+        }
 
         //----------------------------------------------------------------------------------------------
         // workaround from justastro at : http://forums.create.msdn.com/forums/p/1610/157478.aspx

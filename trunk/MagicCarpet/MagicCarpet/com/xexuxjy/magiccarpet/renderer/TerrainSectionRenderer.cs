@@ -21,6 +21,7 @@ namespace com.xexuxjy.magiccarpet.renderer
             
             ComputeValues((int)terrainSection.m_worldSpanX, (int)terrainSection.m_worldSpanZ);
             LoadEffectFile();
+            BuildIndexBuffer(game.GraphicsDevice);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +91,8 @@ namespace com.xexuxjy.magiccarpet.renderer
                 float moveTime = m_terrainSection.TerrainMoveTime;
                 m_effect.Parameters["timeStep"].SetValue(moveTime);
 
+                device.SetVertexBuffer(m_vertexBuffer, 0);
+                device.Indices = m_indexBuffer;
                 foreach (EffectPass effectPass in m_effect.CurrentTechnique.Passes)
                 {
                     effectPass.Apply();
@@ -114,14 +117,16 @@ namespace com.xexuxjy.magiccarpet.renderer
 
                 BuildTextureForGrid(Game.GraphicsDevice);
 
-
-                //if (m_vertexBuffer == null)
-                if(m_vertices == null)
+                if (s_vertexDecleration == null)
                 {
-                    //m_vertexBuffer = new VertexBuffer(device, MorphingTerrainVertexFormatStruct.SizeInBytes * m_totalNumberOfVertices);
+                    BuildVertexDecleration();
+                }
 
+                if (m_vertexBuffer == null)
+                {
                     // All the vertices's are stored in a 1D array
                     m_vertices = new MorphingTerrainVertexFormatStruct[m_numberOfVerticesX * m_numberOfVerticesZ];
+                    m_vertexBuffer = new VertexBuffer(device, s_vertexDecleration, m_vertices.Length, BufferUsage.None);
                 }
                 // Load vertices's into the buffer one by one
                 Vector3 offset = m_terrainSection.BoundingBox.Min;
@@ -161,6 +166,7 @@ namespace com.xexuxjy.magiccarpet.renderer
                 //    vertexFormatClassToStruct(m_vertices[i], ref copyOfClassData[i]);
                 //}
                 m_terrainSection.ClearDirty();
+                m_vertexBuffer.SetData<MorphingTerrainVertexFormatStruct>(m_vertices);
             }
             return result;
         }
@@ -185,6 +191,9 @@ namespace com.xexuxjy.magiccarpet.renderer
                 }
             }
             // this is the index buffer we are going to store the indices in
+            // this is the index buffer we are going to store the indices in
+            m_indexBuffer = new IndexBuffer(device, typeof(int), m_indices.Length, BufferUsage.None);
+            m_indexBuffer.SetData(m_indices, 0, m_indices.Length);
         }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,7 +307,12 @@ xoffset, squareOffsetZ+zoffset).Type);
            
                 
             }
-            //m_texture.Save(@"c:\tmp\test.jpg", ImageFileFormat.Jpg);
+            String filename = "d:/tmp/mc-test.jpg";
+            using (FileStream fileStream = File.OpenWrite(filename))  
+            {  
+                m_texture.SaveAsJpeg(fileStream,m_texture.Width,m_texture.Height);
+                fileStream.Close();  
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -502,6 +516,9 @@ xoffset, squareOffsetZ+zoffset).Type);
         Terrain m_terrain;
         private Effect m_effect;
         private Texture2D m_heightMap;
+        private VertexBuffer m_vertexBuffer;
+        private IndexBuffer m_indexBuffer;
+
         private static VertexDeclaration s_vertexDecleration;
         private static Texture2D[] s_terrainTextures;
         private int[] m_indices;
