@@ -114,6 +114,9 @@ namespace com.xexuxjy.magiccarpet
         public static Terrain Terrain;
 
 
+        public const float STEPSIZEROTATE = (float)Math.PI/ 3f; // 60 deg a second
+        public const float STEPSIZETRANSLATE = 20f; 
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public static void Initialize()
         {

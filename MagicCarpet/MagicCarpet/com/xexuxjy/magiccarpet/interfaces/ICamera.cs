@@ -9,6 +9,10 @@ namespace com.xexuxjy.magiccarpet.interfaces
 {
     public interface ICamera : IUpdateable , IGameComponent
     {
+        float Pitch {get;set;}
+        float Yaw {get;set;}
+        float Distance { get; set; }
+        Vector3 Position { get; set; }
         Matrix View { get; set; }
         Matrix Projection{ get; set; }
         bool IsInViewFrustum(WorldObject worldObject);
