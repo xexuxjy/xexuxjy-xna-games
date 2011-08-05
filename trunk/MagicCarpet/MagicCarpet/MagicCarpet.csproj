@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="com\xexuxjy\magiccarpet\camera\DefaultCamera.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTree.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTreeNode.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
@@ -122,10 +123,10 @@
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSquare.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\WorldObject.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\util\Globals.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathUtil.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\MouseController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +134,14 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
+      <Project>{3E64761A-AC83-4C76-93BE-475F95165560}</Project>
+      <Name>BulletXNADemos-Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
+      <Project>{4E1937EE-3139-44CB-989D-F050BC099CE6}</Project>
+      <Name>BulletXNA-Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MagicCarpetContent\MagicCarpetContent.contentproj">
       <Name>MagicCarpetContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>

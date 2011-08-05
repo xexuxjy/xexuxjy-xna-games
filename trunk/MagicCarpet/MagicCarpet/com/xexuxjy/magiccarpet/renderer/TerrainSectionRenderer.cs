@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.interfaces;
 using System.IO;
+using BulletXNA.LinearMath;
 
 
 namespace com.xexuxjy.magiccarpet.renderer
@@ -22,9 +23,11 @@ namespace com.xexuxjy.magiccarpet.renderer
             ComputeValues((int)terrainSection.m_worldSpanX, (int)terrainSection.m_worldSpanZ);
             LoadEffectFile();
             BuildIndexBuffer(game.GraphicsDevice);
+            BuildVertexBuffer(game.GraphicsDevice);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
         public override void Draw(GameTime gameTime)
@@ -34,11 +37,6 @@ namespace com.xexuxjy.magiccarpet.renderer
                 BuildVertexBuffer(Game.GraphicsDevice);
             }
 
-            
-
-            //device.VertexDeclaration = m_vertexDecleration;
-            //device.Vertices[0].SetSource(m_vertexBuffer, 0, MorphingTerrainVertexFormatStruct.SizeInBytes);
-            //device.Indices = m_indexBuffer;
             ICamera camera = Globals.Camera;
 
             Matrix identity = Matrix.Identity;
@@ -92,7 +90,7 @@ namespace com.xexuxjy.magiccarpet.renderer
                 m_effect.Parameters["timeStep"].SetValue(moveTime);
 
                 device.SetVertexBuffer(m_vertexBuffer, 0);
-                device.Indices = m_indexBuffer;
+                device.Indices = s_indexBuffer;
                 foreach (EffectPass effectPass in m_effect.CurrentTechnique.Passes)
                 {
                     effectPass.Apply();
@@ -174,27 +172,14 @@ namespace com.xexuxjy.magiccarpet.renderer
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void BuildIndexBuffer(GraphicsDevice device)
+        private static void BuildIndexBuffer(GraphicsDevice device)
         {
-            m_indices = new int[m_numberOfQuadsX * m_numberOfQuadsZ * 6];
-            for (int x = 0; x < m_numberOfQuadsX; x++)
+            if (s_indexBuffer == null)
             {
-                for (int y = 0; y < m_numberOfQuadsZ; y++)
-                {
-                    int index = (x + y * (m_numberOfQuadsX)) * 6;
-                    m_indices[index] = (x + y * m_numberOfVerticesX);
-                    m_indices[index + 1] = ((x + 1) + y * m_numberOfVerticesX);
-                    m_indices[index + 2] = ((x + 1) + (y + 1) * m_numberOfVerticesX);
-
-                    m_indices[index + 3] = (x + (y + 1) * m_numberOfVerticesX);
-                    m_indices[index + 4] = (x + y * m_numberOfVerticesX);
-                    m_indices[index + 5] = ((x + 1) + (y + 1) * m_numberOfVerticesX);
-                }
+                ObjectArray<int> indices = TerrainSection.GetSectionIndices();
+                s_indexBuffer = new IndexBuffer(device, typeof(int), indices.Count, BufferUsage.None);
+                s_indexBuffer.SetData(indices.GetRawArray(), 0, indices.Count);
             }
-            // this is the index buffer we are going to store the indices in
-            // this is the index buffer we are going to store the indices in
-            m_indexBuffer = new IndexBuffer(device, typeof(int), m_indices.Length, BufferUsage.None);
-            m_indexBuffer.SetData(m_indices, 0, m_indices.Length);
         }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -496,13 +481,6 @@ xoffset, squareOffsetZ+zoffset).Type);
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public int[] Indices
-        {
-            get { return m_indices; }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         private TerrainSection m_terrainSection;
         protected MorphingTerrainVertexFormatStruct[] m_vertices;
         int m_sectorX;
@@ -518,10 +496,9 @@ xoffset, squareOffsetZ+zoffset).Type);
         private Effect m_effect;
         private Texture2D m_heightMap;
         private VertexBuffer m_vertexBuffer;
-        private IndexBuffer m_indexBuffer;
 
+        private static IndexBuffer s_indexBuffer;
         private static VertexDeclaration s_vertexDecleration;
         private static Texture2D[] s_terrainTextures;
-        private int[] m_indices;
     }
 }

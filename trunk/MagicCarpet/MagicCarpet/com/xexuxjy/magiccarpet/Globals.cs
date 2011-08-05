@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using com.xexuxjy.magiccarpet.interfaces;
 using com.xexuxjy.magiccarpet.terrain;
+using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.collision;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -112,6 +114,8 @@ namespace com.xexuxjy.magiccarpet
 
         public static ICamera Camera;
         public static Terrain Terrain;
+        public static IDebugDraw DebugDraw;
+        public static CollisionManager CollisionManager;
 
 
         public const float STEPSIZEROTATE = (float)Math.PI/ 3f; // 60 deg a second

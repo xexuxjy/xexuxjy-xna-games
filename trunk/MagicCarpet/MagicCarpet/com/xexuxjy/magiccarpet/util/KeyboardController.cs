@@ -81,55 +81,43 @@ namespace com.xexuxjy.magiccarpet.util
 
         public void StepUp(float delta)
         {
-            Vector3 val = Globals.Camera.Position;
-            Vector3 axis = Globals.Camera.Up;
-            axis *= delta;
-            Globals.Camera.Position += axis;
+            Vector3 axis = Vector3.Up * delta;
+            Globals.Camera.TranslateLocal(axis);
         }
         //----------------------------------------------------------------------------------------------
 
         public void StepDown(float delta)
         {
-            Vector3 val = Globals.Camera.Position;
-            Vector3 axis = Globals.Camera.Up;
-            axis *= -delta;
-            Globals.Camera.Position += axis;
+            Vector3 axis = Vector3.Up * -delta;
+            Globals.Camera.TranslateLocal(axis);
         }
         //----------------------------------------------------------------------------------------------
 
         public void StepForward(float delta)
         {
-            Vector3 val = Globals.Camera.Position;
-            Vector3 axis = Globals.Camera.Forward;
-            axis *= -delta;
-            Globals.Camera.Position += axis;
+            Vector3 axis = Vector3.Forward * delta;
+            Globals.Camera.TranslateLocal(axis);
         }
         //----------------------------------------------------------------------------------------------
 
         public void StepBackward(float delta)
         {
-            Vector3 val = Globals.Camera.Position;
-            Vector3 axis = Globals.Camera.Forward;
-            axis *= delta;
-            Globals.Camera.Position += axis;
+            Vector3 axis = Vector3.Forward * -delta;
+            Globals.Camera.TranslateLocal(axis);
         }
 
         //----------------------------------------------------------------------------------------------
         public void StepLeft(float delta)
         {
-            Vector3 val = Globals.Camera.Position;
-            Vector3 axis = Globals.Camera.Right;
-            axis *= -delta;
-            Globals.Camera.Position += axis;
+            Vector3 axis = Vector3.Right * -delta;
+            Globals.Camera.TranslateLocal(axis);
         }
         //----------------------------------------------------------------------------------------------
 
         public void StepRight(float delta)
         {
-            Vector3 val = Globals.Camera.Position;
-            Vector3 axis = Globals.Camera.Right;
-            axis *= delta;
-            Globals.Camera.Position += axis;
+            Vector3 axis = Vector3.Right * delta;
+            Globals.Camera.TranslateLocal(axis);
         }
 
 

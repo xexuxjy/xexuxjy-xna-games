@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using com.xexuxjy.magiccarpet.camera;
 using com.xexuxjy.magiccarpet.terrain;
 using com.xexuxjy.magiccarpet.util;
+using com.xexuxjy.magiccarpet.collision;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -41,10 +42,16 @@ namespace com.xexuxjy.magiccarpet
             DefaultCamera camera  = new DefaultCamera(MathHelper.ToRadians(40), 1, 10, 1000);
             Globals.Camera = camera;
             Globals.Initialize();
+
+            Globals.CollisionManager = new CollisionManager(this,Globals.worldMinPos,Globals.worldMaxPos);
+            Components.Add(Globals.CollisionManager);
+
             Globals.Terrain = new Terrain(Vector3.Zero, this);
             Components.Add(camera);
             //Components.Add(Globals.Terrain);
             Components.Add(new KeyboardController(this));
+            Components.Add(new MouseController(this));
+
 
             base.Initialize();
         }

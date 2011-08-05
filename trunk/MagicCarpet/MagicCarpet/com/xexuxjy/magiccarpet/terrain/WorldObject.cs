@@ -8,6 +8,7 @@
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
 using com.xexuxjy.magiccarpet.collision;
+using BulletXNA.BulletDynamics;
 namespace com.xexuxjy.magiccarpet.terrain
 {
 
@@ -92,6 +93,23 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public RigidBody RigidBody
+        {
+            get { return m_rigidBody; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        protected virtual void BuildCollisionObject()
+        {
+
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
         protected System.String m_id;
 	
         protected Vector3 m_spawnPosition; // where the object starts in the world, used by AI
@@ -117,6 +135,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         private bool m_initialised = false;
         protected Vector3 m_heading;
+
+        protected RigidBody m_rigidBody;
 
     }
 }
