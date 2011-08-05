@@ -1,4 +1,4 @@
-		//Input variables
+	//Input variables
 	float4x4 worldViewProjection;
 	float4 Ambient = float4(0.25, 0.25, 0.25, 1.0); 
 
@@ -146,6 +146,7 @@
 			outputColor += tex2D(iceSampler,In.TextureCoords);
 		}
 		Out.Color = outputColor;
+		//Out.Color = float4(1,0,0,1);
 		return Out;
 	}
 
@@ -156,15 +157,14 @@
 	{
 	   pass Single_Pass
 	   {
-			//LIGHTING = TRUE;
-			ZENABLE = TRUE;
-			ZWRITEENABLE = TRUE;
-			//ALPHATESTENABLE = TRUE;
-			ALPHABLENDENABLE = FALSE;
+//			LIGHTING = TRUE;
+//			ZENABLE = TRUE;
+//			ZWRITEENABLE = TRUE;
+//			ALPHATESTENABLE = TRUE;
+//			ALPHABLENDENABLE = FALSE;
+//			CULLMODE = CW;
 
-			CULLMODE = CCW;
-
-			VertexShader = compile vs_3_0 SimpleVS();
-			PixelShader = compile ps_3_0 SimplePS();
+			VertexShader = compile vs_2_0 SimpleVS();
+			PixelShader = compile ps_2_0 SimplePS();
 	   }
 	}

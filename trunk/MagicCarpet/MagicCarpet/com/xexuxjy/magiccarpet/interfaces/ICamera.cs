@@ -13,6 +13,9 @@ namespace com.xexuxjy.magiccarpet.interfaces
         float Yaw {get;set;}
         float Distance { get; set; }
         Vector3 Position { get; set; }
+        Vector3 Up { get; }
+        Vector3 Right { get; }
+        Vector3 Forward { get; }
         Matrix View { get; set; }
         Matrix Projection{ get; set; }
         bool IsInViewFrustum(WorldObject worldObject);

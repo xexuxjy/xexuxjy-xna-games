@@ -43,7 +43,7 @@ namespace com.xexuxjy.magiccarpet
             Globals.Initialize();
             Globals.Terrain = new Terrain(Vector3.Zero, this);
             Components.Add(camera);
-            Components.Add(Globals.Terrain);
+            //Components.Add(Globals.Terrain);
             Components.Add(new KeyboardController(this));
 
             base.Initialize();

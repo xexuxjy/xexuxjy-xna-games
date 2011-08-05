@@ -98,6 +98,7 @@ namespace com.xexuxjy.magiccarpet.renderer
                     effectPass.Apply();
                     device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_vertices.Length, 0, (m_numberOfQuadsX * m_numberOfQuadsZ * 2));
                 }
+                
             }
 
         }
@@ -308,11 +309,11 @@ xoffset, squareOffsetZ+zoffset).Type);
                 
             }
             String filename = "d:/tmp/mc-test.jpg";
-            using (FileStream fileStream = File.OpenWrite(filename))  
-            {  
-                m_texture.SaveAsJpeg(fileStream,m_texture.Width,m_texture.Height);
-                fileStream.Close();  
-            }
+            //using (FileStream fileStream = File.OpenWrite(filename))  
+            //{  
+            //    m_texture.SaveAsJpeg(fileStream,m_texture.Width,m_texture.Height);
+            //    fileStream.Close();  
+            //}
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

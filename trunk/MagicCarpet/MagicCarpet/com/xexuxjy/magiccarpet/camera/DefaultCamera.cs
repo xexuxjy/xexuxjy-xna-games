@@ -16,7 +16,6 @@ namespace com.xexuxjy.magiccarpet.camera
             m_farPlane = far;
             m_aspect = aspect;
             m_fov = fov;
-            m_up = Vector3.Up;
             m_distance = 50f;
         }
 
@@ -55,7 +54,10 @@ namespace com.xexuxjy.magiccarpet.camera
         public Vector3 Position
         {
             get { return m_position; }
-            set { m_position = value; }
+            set 
+            { 
+                m_position = value; 
+            }
         }
 
 
@@ -79,38 +81,21 @@ namespace com.xexuxjy.magiccarpet.camera
             float rele = m_pitch;
             float razi = m_yaw;
 
-            Quaternion rot = Quaternion.CreateFromAxisAngle(m_up, razi);
+            Quaternion q = Quaternion.CreateFromYawPitchRoll(-m_yaw, m_pitch, 0);
+            m_view = Matrix.Invert(Matrix.CreateFromQuaternion(q) * Matrix.CreateTranslation(m_position));
 
-            Vector3 eyePos = new Vector3();
-            eyePos.Z = -m_distance;
+            //m_up = Vector3.Transform(m_up, rot);
+            //m_up.Normalize();
+            //Quaternion roll = Quaternion.CreateFromAxisAngle(Vector3.Right, -rele);
+            //m_right = Vector3.Transform(Vector3.Right, roll);
+            //m_right.Normalize();
+            ////m_forward = Vector3.Cross(m_up,m_right);
+            //m_forward = Vector3.Cross(m_right, m_up);
+            //m_forward.Normalize();
 
-            Vector3 forward = eyePos;
-            if (forward.LengthSquared() < float.Epsilon)
-            {
-                forward = new Vector3(0, 0, -1);
-            }
-            Vector3 right = Vector3.Cross(m_up, Vector3.Normalize(forward));
-            Quaternion roll = Quaternion.CreateFromAxisAngle(right, -rele);
-            rot.Normalize();
-            roll.Normalize();
+            //m_targetPosition = m_position + m_forward;
 
-            Matrix m1 = Matrix.CreateFromQuaternion(rot);
-            Matrix m2 = Matrix.CreateFromQuaternion(roll);
-            Matrix m3 = m1 * m2;
-
-
-            eyePos = Vector3.Transform(eyePos, (rot * roll));
-
-            //m_cameraTargetPosition = m_cameraPosition + eyePos;
-            m_position = eyePos;
-
-            m_position += m_targetPosition;
-
-            //if (m_glutScreenWidth == 0 && m_glutScreenHeight == 0)
-            //    return;
-
-            m_view= Matrix.CreateLookAt(m_position, m_targetPosition, m_up);
-            int ibreak = 0;
+            //m_view= Matrix.CreateLookAt(m_position, m_targetPosition, m_up);
         }
 
         public int UpdateOrder
@@ -143,12 +128,30 @@ namespace com.xexuxjy.magiccarpet.camera
             set { m_yaw = value; }
         }
 
+        public Vector3 Forward
+        {
+            get { return m_view.Backward; }
+        }
+
+        public Vector3 Up
+        {
+            get { return m_view.Up; }
+        }
+
+        public Vector3 Right
+        {
+            get { return m_view.Right; }
+        }
+
 
         public event EventHandler<EventArgs> UpdateOrderChanged;
         protected Vector3 m_position;
         protected Vector3 m_targetPosition;
         protected Vector3 m_lookAtPosition;
-        protected Vector3 m_up;
+        //protected Vector3 m_up;
+        //protected Vector3 m_forward;
+        //protected Vector3 m_right;
+
         protected Matrix m_view;
         protected Matrix m_projection;
         protected float m_nearPlane;

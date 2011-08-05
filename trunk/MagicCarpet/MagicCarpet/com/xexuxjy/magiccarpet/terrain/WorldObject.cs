@@ -19,6 +19,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public WorldObject(Game game)
             : base(game)
         {
+            game.Components.Add(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +27,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public WorldObject(Vector3 startPosition, Game game)
             : base(game)
         {
-            
+            game.Components.Add(this);
         }
 
 

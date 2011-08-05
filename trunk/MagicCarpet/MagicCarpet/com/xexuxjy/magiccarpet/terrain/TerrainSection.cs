@@ -114,12 +114,14 @@ namespace com.xexuxjy.magiccarpet.terrain
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Update(GameTime updateTime)
+        public override void Update(GameTime gameTime)
         {
-            float delta = (updateTime.ElapsedGameTime.Milliseconds / 1000.0f) * m_terrain.TerrainMoveTime;
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * m_terrain.TerrainMoveTime;
+            
+
             m_terrainMoveTime += delta;
             m_terrainMoveTime = Math.Min(m_terrainMoveTime, 1.0f);
-            base.Update(updateTime);
+            base.Update(gameTime);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
