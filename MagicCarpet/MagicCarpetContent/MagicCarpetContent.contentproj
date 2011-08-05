@@ -42,6 +42,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="textures\Castle\" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Effects\OwnerColour.fx">
       <Name>OwnerColour</Name>
       <Importer>EffectImporter</Importer>
@@ -52,15 +55,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Fonts\DebugFont.spritefont">
       <Name>DebugFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\Balloon\Balloon.fbx">
       <Name>Balloon</Name>
       <Importer>FbxImporter</Importer>
@@ -143,62 +142,50 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\Monster3\WaspBody.jpg">
+    <Compile Include="textures\Monster3\WaspBody.jpg">
       <Name>WaspBody</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Monster3\WaspHead.jpg">
+    <Compile Include="textures\Monster3\WaspHead.jpg">
       <Name>WaspHead</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Terrain\deepwater.bmp">
+    <Compile Include="textures\Terrain\deepwater.bmp">
       <Name>deepwater</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Terrain\grass.bmp">
+    <Compile Include="textures\Terrain\grass.bmp">
       <Name>grass</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Terrain\ice.bmp">
+    <Compile Include="textures\Terrain\ice.bmp">
       <Name>ice</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Terrain\sand.bmp">
+    <Compile Include="textures\Terrain\sand.bmp">
       <Name>sand</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Terrain\scree.bmp">
+    <Compile Include="textures\Terrain\scree.bmp">
       <Name>scree</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Terrain\shallowwater.bmp">
+    <Compile Include="textures\Terrain\shallowwater.bmp">
       <Name>shallowwater</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\ui\SpellSelector.bmp">
+    <Compile Include="textures\ui\SpellSelector.bmp">
       <Name>SpellSelector</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Textures\Castle\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Fonts\DebugFont8.spritefont">
-      <Name>DebugFont8</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

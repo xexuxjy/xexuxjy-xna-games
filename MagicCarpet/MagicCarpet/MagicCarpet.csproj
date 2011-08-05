@@ -122,8 +122,10 @@
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSquare.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\WorldObject.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\Globals.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\MathUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -131,8 +131,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 		{
           // increase these to represent vertices
 
-            m_numTerrainSectionsX = 8;
-            m_numTerrainSectionsZ = 8;
+            m_numTerrainSectionsX = 1;//8;
+            m_numTerrainSectionsZ = 1;//8;
 
             int totalSections = m_numTerrainSectionsX * m_numTerrainSectionsZ;
 
@@ -666,10 +666,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public override void Update(GameTime updateTime)
+        public override void Update(GameTime gameTime)
         {
             // go through and adjust our current and target heights to make the landscape move nicely.
-            base.Update(updateTime);
+            base.Update(gameTime);
             for (int i = 0; i < m_terrainSquares.Length; ++i)
             {
                 //int index = (int)((x * m_worldExtents.Width) + z);
@@ -680,8 +680,12 @@ namespace com.xexuxjy.magiccarpet.terrain
                     bool down = targetHeight < currentHeight;
 
                     // adjust the height by move time and clamp it.
-                    float delta = (updateTime.ElapsedGameTime.Milliseconds / 1000.0f) * TerrainMoveTime;
-
+                    //float delta = (updateTime.ElapsedGameTime.Milliseconds / 1000.0f) * TerrainMoveTime;
+                    float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * TerrainMoveTime;
+                    if (delta > 0f)
+                    {
+                        int ibreak = 0;
+                    }
                     float diff = Math.Abs(targetHeight - currentHeight);
                     if(delta > diff)
                     {

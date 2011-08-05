@@ -14,7 +14,10 @@ namespace com.xexuxjy.magiccarpet.util
 
         public static bool CompareFloat(float val1, float val2)
         {
-            return Math.Abs(val1 - val2) > float.Epsilon;
+            return Math.Abs(val1 - val2) < Epsilon;
         }
+
+
+        public const float Epsilon = 0.0000000001f;
     }
 }
