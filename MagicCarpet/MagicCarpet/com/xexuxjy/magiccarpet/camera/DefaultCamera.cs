@@ -144,6 +144,16 @@ namespace com.xexuxjy.magiccarpet.camera
         }
 
 
+        // move relative to camera
+        public void TranslateLocal(Vector3 vec)
+        {
+            Quaternion q = Quaternion.CreateFromYawPitchRoll(-m_yaw, m_pitch, 0);
+            Vector3 localTranslate = Vector3.Transform(vec, q);
+            m_position += localTranslate;
+        }
+
+
+
         public event EventHandler<EventArgs> UpdateOrderChanged;
         protected Vector3 m_position;
         protected Vector3 m_targetPosition;

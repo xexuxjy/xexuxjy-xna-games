@@ -33,8 +33,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_collider = false;
             // register or re-initialise this terrain
 
-            m_worldExtents.Width = 256;
-            m_worldExtents.Height = 256;
+            m_worldExtents.Width = 64;
+            m_worldExtents.Height = 64;
             m_terrainRandom = new Random();
 
             BuildTerrainSquareGrid();
@@ -42,7 +42,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             //buildLandscape();
             BuildTestTerrain1();
-            BuildSectionRenderers();
+            //BuildSectionRenderers();
             //buildLandscape();
             QuadTree.GetInstance().GetRootNode().BuildTerrainIndicies();
             base.Initialize();

@@ -18,6 +18,8 @@ namespace com.xexuxjy.magiccarpet.interfaces
         Vector3 Forward { get; }
         Matrix View { get; set; }
         Matrix Projection{ get; set; }
+        // move relative to camera
+        void TranslateLocal(Vector3 vec);
         bool IsInViewFrustum(WorldObject worldObject);
     }
 }
