@@ -123,8 +123,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 		{
           // increase these to represent vertices
 
-            m_numTerrainSectionsX = 1;//8;
-            m_numTerrainSectionsZ = 1;//8;
+            m_numTerrainSectionsX = 2;//8;
+            m_numTerrainSectionsZ = 2;//8;
 
             int spanPerSectionX = Width / m_numTerrainSectionsX;
             int spanPerSectionZ = Breadth / m_numTerrainSectionsZ;
@@ -142,6 +142,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                     max.Y = m_boundingBox.Max.Y;
                     m_terrainSectionGrid[i,j] = new TerrainSection(this, i, j, min,max, Game);
                     m_terrainSectionGrid[i,j].Initialize();
+                    Console.WriteLine("[{0}] min[{1}] max[{2}].", m_terrainSectionGrid[i, j].Id, min, max);
                 }
             }
 		}
