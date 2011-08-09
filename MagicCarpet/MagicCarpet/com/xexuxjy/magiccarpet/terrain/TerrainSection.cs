@@ -125,7 +125,12 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainMoveTime = Math.Min(m_terrainMoveTime, 1.0f);
             if (IsDirty())
             {
-                ((BvhTriangleMeshShape)m_rigidBody.GetCollisionShape()).RefitTree(ref Globals.worldMinPos, ref Globals.worldMaxPos);
+                Vector3 min = m_boundingBox.Min;
+                min.Y = Globals.worldMinPos.Y;
+                Vector3 max = m_boundingBox.Max;
+                max.Y = Globals.worldMaxPos.Y;
+
+                ((BvhTriangleMeshShape)m_rigidBody.GetCollisionShape()).RefitTree(ref min,ref max);
             }
 
 
@@ -228,7 +233,6 @@ namespace com.xexuxjy.magiccarpet.terrain
         protected TerrainSectionRenderer m_terrainSectionRenderer;
         public int m_sectorX;
         public int m_sectorZ;
-        BoundingBox m_boundingBox;
         protected float m_terrainMoveTime; // counter used when adjusting terrain heights
         protected bool m_isDirty = false;
         protected ObjectArray<Vector3> m_plainVertices;

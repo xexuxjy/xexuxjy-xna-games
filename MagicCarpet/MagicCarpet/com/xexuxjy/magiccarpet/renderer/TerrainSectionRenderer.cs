@@ -40,8 +40,8 @@ namespace com.xexuxjy.magiccarpet.renderer
             ICamera camera = Globals.Camera;
 
             Matrix identity = Matrix.Identity;
-            //Matrix translation = Matrix.CreateTranslation(m_terrainSection.Position);
-            Matrix translation = Matrix.CreateTranslation(new Vector3());
+            Matrix translation = Matrix.CreateTranslation(m_terrainSection.Position);
+            //Matrix translation = Matrix.CreateTranslation(new Vector3());
             Matrix view = camera.ViewMatrix;
             Matrix world = Matrix.Multiply(translation, identity);
 
@@ -284,8 +284,8 @@ namespace com.xexuxjy.magiccarpet.renderer
                     for (int j = 0; j < textureBreadth; ++j)
                     {
                         int zoffset = j / stepSizeZ;
-                        Color color = GetColourForTerrainType(m_terrain.GetTerrainSquareAtPoint(squareOffsetX+
-xoffset, squareOffsetZ+zoffset).Type);
+                        Vector3 point = new Vector3(squareOffsetX + xoffset, 0, squareOffsetZ + zoffset);
+                        Color color = GetColourForTerrainType(m_terrain.GetTerrainSquareAtPoint(ref point).Type);
                         textureData[(i * textureWidth) + j] = color.PackedValue;
                     }
                 }
