@@ -176,7 +176,7 @@ namespace com.xexuxjy.magiccarpet.util
         private bool IsHeldKey(ref KeyboardState current, Keys key)
         {
             return (current.IsKeyDown(key) && ((key == Keys.Left || key == Keys.Right || key == Keys.Up ||
-                key == Keys.Down || key == Keys.PageUp || key == Keys.PageDown || key == Keys.A || 
+                key == Keys.Down || key == Keys.PageUp || key == Keys.PageDown || key == Keys.A ||
                 key == Keys.W || key == Keys.S || key == Keys.D || key == Keys.Q || key == Keys.Z)));
         }
         //----------------------------------------------------------------------------------------------

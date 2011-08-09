@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -31,7 +29,7 @@ namespace com.xexuxjy.magiccarpet.util
             //    Globals.Camera.Yaw += xdiff;
             //}
 
-            
+
             //float ydiff = (mouseState.Y - m_lastMouseState.Y) * scale * (m_invertY?1:-1);
             //if (!MathHelperExtension.CompareFloat(ydiff, 0f))
             //{
@@ -40,13 +38,28 @@ namespace com.xexuxjy.magiccarpet.util
             //// set mouse back to center
             //Rectangle r = Game.Window.ClientBounds;
             //Mouse.SetPosition((r.Width / 2), (r.Height / 2));
-            //mouseState = Mouse.GetState();
+            MouseState mouseState = Mouse.GetState();
 
 
-            //if (WasReleased(ref m_lastMouseState, ref mouseState,0))
-            //{
+            if (WasReleased(ref m_lastMouseState, ref mouseState, 0))
+            {
 
-            //}
+                int rayLength = 100;
+                int normalLength = 10;
+                Vector3 startPos = Globals.Camera.Position;
+                Vector3 direction = Globals.Camera.ViewDirection;
+                Vector3 endPos = startPos + (direction * rayLength);
+
+                Vector3 collisionPoint = Vector3.Zero;
+                Vector3 collisionNormal = Vector3.Zero;
+
+                if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                {
+                    Vector3 normalStart = collisionPoint;
+                    Globals.Terrain.AddPeak(normalStart, 10);
+                }
+
+            }
 
             // add something to draw and test collision?
             if (true)
@@ -63,20 +76,20 @@ namespace com.xexuxjy.magiccarpet.util
                     Vector3 collisionPoint = Vector3.Zero;
                     Vector3 collisionNormal = Vector3.Zero;
 
-                    if(Globals.DebugDraw != null)
+                    if (Globals.DebugDraw != null)
                     {
-                        Vector3 rayColor = new Vector3(1,1,1);
-                        Vector3 normalColor = new Vector3(1,0,0);
-                        Globals.DebugDraw.DrawLine(ref startPos,ref endPos,ref rayColor);
+                        Vector3 rayColor = new Vector3(1, 1, 1);
+                        Vector3 normalColor = new Vector3(1, 0, 0);
+                        Globals.DebugDraw.DrawLine(ref startPos, ref endPos, ref rayColor);
                         if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
                         {
                             Vector3 normalStart = collisionPoint;
                             Vector3 normalEnd = collisionPoint + (collisionNormal * normalLength);
-                            Globals.DebugDraw.DrawLine(ref normalStart,ref normalEnd,ref normalColor);
+                            Globals.DebugDraw.DrawLine(ref normalStart, ref normalEnd, ref normalColor);
                         }
 
                         Vector3 location = new Vector3(10, 10, 0);
-                        Vector3 colour = new Vector3(1,1,1);
+                        Vector3 colour = new Vector3(1, 1, 1);
                         Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}].", startPos, direction), ref location, ref colour);
 
                     }
@@ -86,7 +99,7 @@ namespace com.xexuxjy.magiccarpet.util
 
 
 
-            //m_lastMouseState = mouseState;
+            m_lastMouseState = mouseState;
 
         }
 

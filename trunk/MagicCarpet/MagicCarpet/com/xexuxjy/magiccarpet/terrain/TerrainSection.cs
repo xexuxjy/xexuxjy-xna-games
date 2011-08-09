@@ -16,15 +16,16 @@ namespace com.xexuxjy.magiccarpet.terrain
     {
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public TerrainSection(Terrain terrain, int sectorX, int sectorZ, Vector3 minBounds,Vector3 maxBounds, Game game)
+        public TerrainSection(Terrain terrain, int sectorX, int sectorZ, int stepSize,Vector3 minBounds,Vector3 maxBounds, Game game)
             : base(new Vector3(), game)
         {
             // cheat and build once as they should all be uniform.
-            BuildSectionIndices(minBounds, maxBounds);
+            BuildSectionIndices(minBounds, maxBounds,stepSize);
             
             m_terrain = terrain;
             m_sectorX = sectorX;
             m_sectorZ = sectorZ;
+            m_stepSize = stepSize;
             m_boundingBox = new BoundingBox(minBounds, maxBounds);
         }
 
@@ -32,28 +33,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
-            //// do this before base initialise otherwise we'll be added to the collision system.
-            ////m_collider = false;
-
-            //float sectionWidth = m_terrain.Width / m_terrain.NumSectionsX;
-            //float sectionBreadth = m_terrain.Breadth / m_terrain.NumSectionsZ;
-
-            //Vector3 transformVector = new Vector3();
-            //transformVector.X = m_sectorX * sectionWidth;
-            //transformVector.Z = m_sectorZ * sectionBreadth;
-            //// up the bounds of the object.
-            //Vector3 minBound = transformVector;
-            //minBound.Y = Globals.containmentMinHeight;
-            //Vector3 maxBound = transformVector;
-            //maxBound.X += sectionWidth;
-            //maxBound.Z += sectionBreadth;
-            //maxBound.Y = Globals.containmentMaxHeight;
-
-            //// need position to be the middle of it
-            //transformVector.X += sectionWidth / 2.0f;
-            //transformVector.Z += sectionBreadth / 2.0f;
-
-
             Position = (m_boundingBox.Max - m_boundingBox.Min) * 0.5f ;
             BuildRenderer();
             BuildCollisionObject();
@@ -160,7 +139,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             {
                 m_plainVertices[i] = morphingVertices[i].Position;
             }
-            int totalTriangles = (Width-1) * (Breadth-1) * 2;
+            int totalTriangles = s_indices.Count / 3;
 
             TriangleIndexVertexArray indexVertexArrays = new TriangleIndexVertexArray(totalTriangles,
                 s_indices, 1, m_plainVertices.Count, m_plainVertices, 1);
@@ -201,29 +180,31 @@ namespace com.xexuxjy.magiccarpet.terrain
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public static void BuildSectionIndices(Vector3 min,Vector3 max)
+        public static void BuildSectionIndices(Vector3 min,Vector3 max,int stepSize)
         {
-            int numX = (int)(max.X - min.X);
-            int numZ = (int)(max.Z - min.Z);
-            int numberOfQuadsX = numX - 1;
-            int numberOfQuadsZ = numZ - 1;
-            int stepSize = 6;
+            int numVerticesX = (int)(max.X - min.X) ;
+            numVerticesX /= stepSize;
+            int numVerticesZ = (int)(max.Z - min.Z);
+            numVerticesZ /= stepSize;
+            int numberOfQuadsX = numVerticesX - 1;
+            int numberOfQuadsZ = numVerticesZ - 1;
+            int stride = 6;
 
             if (s_indices == null)
             {
-                s_indices = new ObjectArray<int>(numberOfQuadsX * numberOfQuadsZ * stepSize);
+                s_indices = new ObjectArray<int>(numberOfQuadsX * numberOfQuadsZ * stride);
                 for (int x = 0; x < numberOfQuadsX; x++)
                 {
                     for (int y = 0; y < numberOfQuadsZ; y++)
                     {
-                        int index = (x + y * (numberOfQuadsX)) * stepSize;
-                        s_indices[index] = (x + y * numX);
-                        s_indices[index + 1] = ((x + 1) + y * numX);
-                        s_indices[index + 2] = ((x + 1) + (y + 1) * numX);
+                        int index = (x + y * (numberOfQuadsX)) * stride;
+                        s_indices[index] = (x + y * numVerticesX);
+                        s_indices[index + 1] = ((x + 1) + y * numVerticesX);
+                        s_indices[index + 2] = ((x + 1) + (y + 1) * numVerticesX);
 
-                        s_indices[index + 3] = (x + (y + 1) * numX);
-                        s_indices[index + 4] = (x + y * numX);
-                        s_indices[index + 5] = ((x + 1) + (y + 1) * numX);
+                        s_indices[index + 3] = (x + (y + 1) * numVerticesX);
+                        s_indices[index + 4] = (x + y * numVerticesX);
+                        s_indices[index + 5] = ((x + 1) + (y + 1) * numVerticesX);
                     }
                 }
             }
@@ -233,6 +214,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         protected TerrainSectionRenderer m_terrainSectionRenderer;
         public int m_sectorX;
         public int m_sectorZ;
+        public int m_stepSize; // allows us to skip to avoid 1:1
         protected float m_terrainMoveTime; // counter used when adjusting terrain heights
         protected bool m_isDirty = false;
         protected ObjectArray<Vector3> m_plainVertices;

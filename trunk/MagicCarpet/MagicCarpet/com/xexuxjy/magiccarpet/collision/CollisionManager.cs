@@ -13,7 +13,8 @@ namespace com.xexuxjy.magiccarpet.collision
 {
     public class CollisionManager : GameComponent
     {
-        public CollisionManager(Game game,Vector3 worldMin,Vector3 worldMax) : base(game)
+        public CollisionManager(Game game, Vector3 worldMin, Vector3 worldMax)
+            : base(game)
         {
             //game.Components.Add(this);
             m_collisionConfiguration = new DefaultCollisionConfiguration();
@@ -49,7 +50,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         public override void Initialize()
         {
-            if(Globals.DebugDraw != null)
+            if (Globals.DebugDraw != null)
             {
                 m_dynamicsWorld.SetDebugDrawer(Globals.DebugDraw);
             }
@@ -112,10 +113,10 @@ namespace com.xexuxjy.magiccarpet.collision
             ClosestRayResultCallback callback = null;
             if (m_dynamicsWorld != null)
             {
-                callback = new ClosestRayResultCallback(startPos,endPos);
+                callback = new ClosestRayResultCallback(startPos, endPos);
                 m_dynamicsWorld.RayTest(ref startPos, ref endPos, callback);
             }
-            if(callback != null)
+            if (callback != null)
             {
                 if (callback.HasHit())
                 {
@@ -126,8 +127,8 @@ namespace com.xexuxjy.magiccarpet.collision
             }
             return false;
         }
-        
-        
+
+
         //----------------------------------------------------------------------------------------------
 
         protected IBroadphaseInterface m_broadphase;
