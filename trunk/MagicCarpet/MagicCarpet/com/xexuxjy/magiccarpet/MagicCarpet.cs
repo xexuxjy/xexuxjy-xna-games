@@ -8,10 +8,11 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using com.xexuxjy.magiccarpet.camera;
 using com.xexuxjy.magiccarpet.terrain;
 using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.collision;
+using BulletXNADemos.Demos;
+using Dhpoware;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -39,9 +40,11 @@ namespace com.xexuxjy.magiccarpet
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            DefaultCamera camera  = new DefaultCamera(MathHelper.ToRadians(40), 1, 10, 1000);
+            CameraComponent camera = new CameraComponent(this);
             Globals.Camera = camera;
             Globals.Initialize();
+
+            Globals.DebugDraw = new XNA_ShapeDrawer(this);
 
             Globals.CollisionManager = new CollisionManager(this,Globals.worldMinPos,Globals.worldMaxPos);
             Components.Add(Globals.CollisionManager);
@@ -53,6 +56,8 @@ namespace com.xexuxjy.magiccarpet
             Components.Add(new MouseController(this));
 
 
+
+            
             base.Initialize();
         }
 
@@ -64,6 +69,10 @@ namespace com.xexuxjy.magiccarpet
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            if (Globals.DebugDraw != null)
+            {
+                Globals.DebugDraw.LoadContent();
+            }
 
             // TODO: use this.Content to load your game content here
         }
@@ -100,10 +109,18 @@ namespace com.xexuxjy.magiccarpet
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            base.Draw(gameTime);
 
+            // do these last.
+            if (Globals.DebugDraw != null)
+            {
+                Matrix view = Globals.Camera.ViewMatrix;
+                Matrix projection = Globals.Camera.ProjectionMatrix;
+                Globals.DebugDraw.RenderDebugLines(gameTime, ref view, ref projection);
+                Globals.DebugDraw.RenderOthers(gameTime, ref view, ref projection);
+            }
             // TODO: Add your drawing code here
 
-            base.Draw(gameTime);
         }
     }
 }

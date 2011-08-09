@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.terrain;
 using com.xexuxjy.magiccarpet.renderer;
-using com.xexuxjy.magiccarpet.interfaces;
+using Dhpoware;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
@@ -130,18 +130,18 @@ namespace com.xexuxjy.magiccarpet.collision
 
         public void BuildVisibilityList(List<WorldObject> objectList, ICamera camera)
         {
-             foreach (WorldObject worldObject in m_objectsInNode)
-             {
-                if (camera.IsInViewFrustum(worldObject))
-                {
-                    objectList.Add(worldObject);
-                }
-            }
+            // foreach (WorldObject worldObject in m_objectsInNode)
+            // {
+            //    if (camera.IsInViewFrustum(worldObject))
+            //    {
+            //        objectList.Add(worldObject);
+            //    }
+            //}
 
-            for (int i = 0; i < m_childNodes.Length; ++i)
-            {
-                m_childNodes[i].BuildVisibilityList(objectList, camera);
-            }
+            //for (int i = 0; i < m_childNodes.Length; ++i)
+            //{
+            //    m_childNodes[i].BuildVisibilityList(objectList, camera);
+            //}
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

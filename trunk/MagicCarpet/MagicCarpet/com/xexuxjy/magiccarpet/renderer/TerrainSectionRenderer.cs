@@ -3,9 +3,9 @@ using com.xexuxjy.magiccarpet.terrain;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.magiccarpet.util;
-using com.xexuxjy.magiccarpet.interfaces;
 using System.IO;
 using BulletXNA.LinearMath;
+using Dhpoware;
 
 
 namespace com.xexuxjy.magiccarpet.renderer
@@ -20,7 +20,7 @@ namespace com.xexuxjy.magiccarpet.renderer
             m_sectorX = terrainSection.m_sectorX;
             m_sectorZ = terrainSection.m_sectorZ;
             
-            ComputeValues((int)terrainSection.m_worldSpanX, (int)terrainSection.m_worldSpanZ);
+            ComputeValues();
             LoadEffectFile();
             BuildIndexBuffer(game.GraphicsDevice);
             BuildVertexBuffer(game.GraphicsDevice);
@@ -42,10 +42,10 @@ namespace com.xexuxjy.magiccarpet.renderer
             Matrix identity = Matrix.Identity;
             //Matrix translation = Matrix.CreateTranslation(m_terrainSection.Position);
             Matrix translation = Matrix.CreateTranslation(new Vector3());
-            Matrix view = camera.View;
+            Matrix view = camera.ViewMatrix;
             Matrix world = Matrix.Multiply(translation, identity);
 
-            Matrix projection = camera.Projection;
+            Matrix projection = camera.ProjectionMatrix;
 
             Matrix worldViewProjection = world * view * projection;
 
@@ -221,15 +221,15 @@ namespace com.xexuxjy.magiccarpet.renderer
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected void ComputeValues(int width, int height)
+        protected void ComputeValues()
         {
             // Vertices
-            m_numberOfVerticesX = width+1;
-            m_numberOfVerticesZ = height+1;
+            m_numberOfVerticesX = m_terrainSection.Width;
+            m_numberOfVerticesZ = m_terrainSection.Breadth;
 
             // Quads
-            m_numberOfQuadsX = width;
-            m_numberOfQuadsZ = height;
+            m_numberOfQuadsX = m_numberOfVerticesX-1;
+            m_numberOfQuadsZ = m_numberOfVerticesZ-1;
             m_totalNumberOfQuads = m_numberOfQuadsX * m_numberOfQuadsZ;
 
             m_totalNumberOfTriangles = m_totalNumberOfQuads * 2;
@@ -329,17 +329,18 @@ xoffset, squareOffsetZ+zoffset).Type);
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3 GetNormalAtPoint(float xpct, float zpct,int worldSpanX,int worldSpanZ)
-        {
-            int x = (int)(xpct);
-            int z = (int)(zpct);
+        //public Vector3 GetNormalAtPoint(Vector3 point)
+        //{
+        //    if(!m_
+        //    int x = (int)(point.X);
+        //    int z = (int)(point.X);
 
-            x = MathHelperExtension.Clamp(0, x, worldSpanX - 1);
-            z = MathHelperExtension.Clamp(0, z, worldSpanZ - 1);
+        //    x = MathHelperExtension.Clamp(0, x, worldSpanX - 1);
+        //    z = MathHelperExtension.Clamp(0, z, worldSpanZ - 1);
 
 
-            return m_vertices[(z * m_numberOfVerticesZ) + x].Normal; 
-        }
+        //    return m_vertices[(z * m_numberOfVerticesZ) + x].Normal; 
+        //}
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
