@@ -32,29 +32,29 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
-            // do this before base initialise otherwise we'll be added to the collision system.
-            //m_collider = false;
+            //// do this before base initialise otherwise we'll be added to the collision system.
+            ////m_collider = false;
 
-            float sectionWidth = m_terrain.Width / m_terrain.NumSectionsX;
-            float sectionBreadth = m_terrain.Breadth / m_terrain.NumSectionsZ;
+            //float sectionWidth = m_terrain.Width / m_terrain.NumSectionsX;
+            //float sectionBreadth = m_terrain.Breadth / m_terrain.NumSectionsZ;
 
-            Vector3 transformVector = new Vector3();
-            transformVector.X = m_sectorX * sectionWidth;
-            transformVector.Z = m_sectorZ * sectionBreadth;
-            // up the bounds of the object.
-            Vector3 minBound = transformVector;
-            minBound.Y = Globals.containmentMinHeight;
-            Vector3 maxBound = transformVector;
-            maxBound.X += sectionWidth;
-            maxBound.Z += sectionBreadth;
-            maxBound.Y = Globals.containmentMaxHeight;
+            //Vector3 transformVector = new Vector3();
+            //transformVector.X = m_sectorX * sectionWidth;
+            //transformVector.Z = m_sectorZ * sectionBreadth;
+            //// up the bounds of the object.
+            //Vector3 minBound = transformVector;
+            //minBound.Y = Globals.containmentMinHeight;
+            //Vector3 maxBound = transformVector;
+            //maxBound.X += sectionWidth;
+            //maxBound.Z += sectionBreadth;
+            //maxBound.Y = Globals.containmentMaxHeight;
 
-            // need position to be the middle of it
-            transformVector.X += sectionWidth / 2.0f;
-            transformVector.Z += sectionBreadth / 2.0f;
+            //// need position to be the middle of it
+            //transformVector.X += sectionWidth / 2.0f;
+            //transformVector.Z += sectionBreadth / 2.0f;
 
 
-            Position = transformVector;
+            Position = (m_boundingBox.Max - m_boundingBox.Min) * 0.5f ;
             BuildRenderer();
             BuildCollisionObject();
 
