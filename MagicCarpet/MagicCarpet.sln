@@ -4,9 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicCarpet", "MagicCarpet\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicCarpetContent", "MagicCarpetContent\MagicCarpetContent.contentproj", "{FAF449CF-C173-4DEC-BC1A-E02576C62389}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemos-Windows", "..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj", "{3E64761A-AC83-4C76-93BE-475F95165560}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNA-Windows", "..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj", "{4E1937EE-3139-44CB-989D-F050BC099CE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNA-Windows", "..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj", "{4E1937EE-3139-44CB-989D-F050BC099CE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemos-Windows", "..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj", "{3E64761A-AC83-4C76-93BE-475F95165560}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content", "..\..\bullet-xna\trunk\BulletXNADemos\Content\Content.contentproj", "{19F18FB0-6BA5-4076-9E7E-934437CAC410}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,14 +23,16 @@ Global
 		{FAF449CF-C173-4DEC-BC1A-E02576C62389}.Debug|x86.ActiveCfg = Debug|x86
 		{FAF449CF-C173-4DEC-BC1A-E02576C62389}.Debug|x86.Build.0 = Debug|x86
 		{FAF449CF-C173-4DEC-BC1A-E02576C62389}.Release|x86.ActiveCfg = Release|x86
-		{3E64761A-AC83-4C76-93BE-475F95165560}.Debug|x86.ActiveCfg = Debug|x86
-		{3E64761A-AC83-4C76-93BE-475F95165560}.Debug|x86.Build.0 = Debug|x86
-		{3E64761A-AC83-4C76-93BE-475F95165560}.Release|x86.ActiveCfg = Release|x86
-		{3E64761A-AC83-4C76-93BE-475F95165560}.Release|x86.Build.0 = Release|x86
 		{4E1937EE-3139-44CB-989D-F050BC099CE6}.Debug|x86.ActiveCfg = Debug|x86
 		{4E1937EE-3139-44CB-989D-F050BC099CE6}.Debug|x86.Build.0 = Debug|x86
 		{4E1937EE-3139-44CB-989D-F050BC099CE6}.Release|x86.ActiveCfg = Release|x86
 		{4E1937EE-3139-44CB-989D-F050BC099CE6}.Release|x86.Build.0 = Release|x86
+		{3E64761A-AC83-4C76-93BE-475F95165560}.Debug|x86.ActiveCfg = Debug|x86
+		{3E64761A-AC83-4C76-93BE-475F95165560}.Debug|x86.Build.0 = Debug|x86
+		{3E64761A-AC83-4C76-93BE-475F95165560}.Release|x86.ActiveCfg = Release|x86
+		{3E64761A-AC83-4C76-93BE-475F95165560}.Release|x86.Build.0 = Release|x86
+		{19F18FB0-6BA5-4076-9E7E-934437CAC410}.Debug|x86.ActiveCfg = Debug|x86
+		{19F18FB0-6BA5-4076-9E7E-934437CAC410}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

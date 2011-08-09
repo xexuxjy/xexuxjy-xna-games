@@ -128,23 +128,21 @@ namespace com.xexuxjy.magiccarpet.renderer
                     m_vertexBuffer = new VertexBuffer(device, s_vertexDecleration, m_vertices.Length, BufferUsage.None);
                 }
                 // Load vertices's into the buffer one by one
-                Vector3 offset = m_terrainSection.BoundingBox.Min;
+                Vector3 startPosition = m_terrainSection.BoundingBox.Min;
                 for (int x = 0; x < m_numberOfVerticesX; x++)
                 {
                     for (int z = 0; z < m_numberOfVerticesZ; z++)
                     {
                         MorphingTerrainVertexFormatStruct vertex = new MorphingTerrainVertexFormatStruct();
-                        vertex.Position = offset;
-                        vertex.Position.X += x;
-                        vertex.Position.Z += z;
-                        vertex.Position.Y = m_terrain.GetHeightAtPoint(vertex.Position.X, vertex.Position.Z);
-                        vertex.TargetHeight = m_terrain.GetHeightAtPoint(vertex.Position.X, vertex.Position.Z, true);
+                        vertex.Position = startPosition;
+                        
+                        // increase granularity
+                        vertex.Position.X += (x * m_terrainSection.m_stepSize);
+                        vertex.Position.Z += (z * m_terrainSection.m_stepSize);
 
-                        if (Math.Abs(vertex.Position.Y - vertex.TargetHeight) > 0.3f)
-                        {
-                            int ibreak = 0;
-                            vertex.Position.Y = vertex.TargetHeight;
-                        }
+
+                        vertex.Position.Y = m_terrain.GetHeightAtPoint(vertex.Position);
+                        vertex.TargetHeight = m_terrain.GetHeightAtPoint(vertex.Position, true);
 
                         // Set the u,v values so one texture covers the entire terrain
                         vertex.TextureCoordinate = new Vector2((float)z / m_numberOfQuadsZ * 4, (float)x / m_numberOfQuadsX *4);
@@ -224,8 +222,8 @@ namespace com.xexuxjy.magiccarpet.renderer
         protected void ComputeValues()
         {
             // Vertices
-            m_numberOfVerticesX = m_terrainSection.Width;
-            m_numberOfVerticesZ = m_terrainSection.Breadth;
+            m_numberOfVerticesX = m_terrainSection.Width / m_terrainSection.m_stepSize;
+            m_numberOfVerticesZ = m_terrainSection.Breadth / m_terrainSection.m_stepSize;
 
             // Quads
             m_numberOfQuadsX = m_numberOfVerticesX-1;

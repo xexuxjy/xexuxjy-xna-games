@@ -132,6 +132,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainSectionGrid = new TerrainSection[m_numTerrainSectionsX,m_numTerrainSectionsZ];
 
             Vector3 startPos = m_boundingBox.Min;
+            int stepSize = 4;
 
             for (int i = 0; i < m_numTerrainSectionsX; ++i)
             {
@@ -140,7 +141,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                     Vector3 min = startPos + new Vector3(i * spanPerSectionX, 0, j * spanPerSectionZ);
                     Vector3 max = min+ new Vector3(spanPerSectionX,0,spanPerSectionZ);
                     max.Y = m_boundingBox.Max.Y;
-                    m_terrainSectionGrid[i,j] = new TerrainSection(this, i, j, min,max, Game);
+                    m_terrainSectionGrid[i,j] = new TerrainSection(this, i, j, 2,min,max, Game);
                     m_terrainSectionGrid[i,j].Initialize();
                     Console.WriteLine("[{0}] min[{1}] max[{2}].", m_terrainSectionGrid[i, j].Id, min, max);
                 }
@@ -149,70 +150,73 @@ namespace com.xexuxjy.magiccarpet.terrain
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////
 
-        //public void AddPeak(Vector3 point, float height)
-        //{
-        //    AddPeak(point.X, point.Z, height);
-        //}
+        public void AddPeak(Vector3 point, float height)
+        {
+            AddPeak(point.X, point.Z, height);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void AddPeak(float x, float y, float height)
+        {
+            float defaultRadius = 10.0f;
+            float maxHeight = 20.0f;
+            AddPeak(x, y, defaultRadius, height, maxHeight);
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        //public void AddPeak(float x, float y, float height)
-        //{
-        //    float defaultRadius = 10.0f;
-        //    float maxHeight = 20.0f;
-        //    AddPeak(x,y,defaultRadius,height,maxHeight);
-        //}
+        public virtual void AddPeak(float x, float z, float radius, float height, float maxHeight)
+        {
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+            int leftBound = (int)System.Math.Max(m_boundingBox.Min.X, x - radius);
+            int rightBound = (int)System.Math.Min(m_boundingBox.Max.X, x + radius);
+            int upBound = (int)System.Math.Max(m_boundingBox.Min.Z, z - radius);
+            int downBound = (int)System.Math.Min(m_boundingBox.Max.Z, z + radius);
 
-//        public virtual void AddPeak(float x, float y, float radius, float height,float maxHeight)
-//        {
-//            int leftBound = (int) System.Math.Max(0, x - radius);
-//            int rightBound = (int) System.Math.Min(Width, x + radius);
-//            int upBound = (int) System.Math.Max(0, y - radius);
-//            int downBound = (int) System.Math.Min(Breadth, y + radius);
-			
-			
-//            float floatRadius = radius;
 
-//            for (int i = leftBound; i < rightBound; ++i)
-//            {
-//                for (int j = upBound; j < downBound; ++j)
-//                {
-//                    TerrainSquare terrainSquare = GetTerrainSquareAtPoint(i, j);
-//                    // for now only land squares can have their height changed in this way.
-//                    if (terrainSquare.Type != TerrainType.immovable)
-//                    {
-//                        Vector2 vec2;
-//                        vec2.X = System.Math.Abs(i - x);
-//                        vec2.Y = System.Math.Abs(j - y);
-//                        float distance = vec2.Length();
-//                        float lerpValue = 1.0f - MathHelper.Lerp(0.0f, floatRadius, distance);
-//                        // play with lerp value to smooth the terrain?
-////                          lerpValue = (float)Math.Sqrt(lerpValue);
-//                        //lerpValue *= lerpValue;
-////                        lerpValue *= lerpValue;
+            float floatRadius = radius;
 
-//                        // ToDo - fractal hill generation.
-                        
-//                        float oldHeight = GetHeightAtPoint(i, j,true);
-//                        //float oldHeight = getHeightAtPoint(i, j);
-//                        float newHeight =  oldHeight + (height * lerpValue);
-//                        newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
-//                        SetHeightAtPoint(i,j,newHeight);
-//                        Vector3 point = new Vector3(i, 0.0f, j);
-//                        foreach (TerrainSection section in m_terrainSectionGrid)
-//                        {
-//                            if (section.ContainsPoint(point))
-//                            {
-//                                section.SetDirty();
-//                            }
-//                        }
+            for (int i = leftBound; i < rightBound; ++i)
+            {
+                for (int j = upBound; j < downBound; ++j)
+                {
+                    Vector3 worldPoint = new Vector3(i, 0, j);
+                    TerrainSquare terrainSquare = GetTerrainSquareAtPoint(ref worldPoint);
+                    // for now only land squares can have their height changed in this way.
+                    if (terrainSquare.Type != TerrainType.immovable)
+                    {
+                        Vector2 vec2;
+                        vec2.X = System.Math.Abs(i - x);
+                        vec2.Y = System.Math.Abs(j - z);
+                        float distance = vec2.Length();
+                        float lerpValue = 1.0f - MathHelper.Lerp(0.0f, floatRadius, distance);
+                        // play with lerp value to smooth the terrain?
+                        //                          lerpValue = (float)Math.Sqrt(lerpValue);
+                        //lerpValue *= lerpValue;
+                        //                        lerpValue *= lerpValue;
 
-//                    }
-//                }
-//            }
-//        }
+                        // ToDo - fractal hill generation.
+
+                        float oldHeight = GetHeightAtPoint(i, j, true);
+                        //float oldHeight = getHeightAtPoint(i, j);
+                        float newHeight = oldHeight + (height * lerpValue);
+                        newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
+                        Vector3 newPos = new Vector3(i, newHeight, j);
+                        SetHeightAtPoint(ref newPos);
+                        Vector3 point = new Vector3(i, 0.0f, j);
+                        foreach (TerrainSection section in m_terrainSectionGrid)
+                        {
+                            if (section.ContainsPoint(point))
+                            {
+                                section.SetDirty();
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
 		
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -317,65 +321,25 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
 		public virtual float GetHeightAtPoint(Vector3 point)
 		{
 			// straight down
-            float result = GetHeightAtPoint(point.X, point.Z,true);
+            float result = GetHeightAtPoint(point.X, point.Z,false);
 			return result;
 		}
 		
-		///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public float GetHeightAtPoint(float mapX, float mapZ)
-        {
-            return GetHeightAtPoint(mapX,mapZ,false);
-        }
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-        
-        public virtual float GetHeightAtPoint(float x, float z, bool getTargetHeight)
-		{
-            return CalcMapHeight(x, z, getTargetHeight);
-		}
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        private float CalcMapHeight(float mapX, float mapZ,bool getTargetHeight)
-        {
-            // assumes that values coming in varies between 0.0 and 1.0
-	        float fMapX = mapX * (Width-1);
-	        float fMapZ = mapZ * (Breadth-1);
-
-	        int iMapX0 = (int)(fMapX);
-	        int iMapZ0 = (int)(fMapZ);
-
-	        fMapX -= iMapX0;
-	        fMapZ -= iMapZ0;
-
-            // make sure it's constrained to world bounds
-	        iMapX0 = MathHelperExtension.Clamp(0,iMapX0, Width-1);
-            iMapZ0 = MathHelperExtension.Clamp(0, iMapZ0, Breadth - 1);
-
-            // and get an extra set for sampling.
-            int iMapX1 = MathHelperExtension.Clamp(0, iMapX0 + 1, Width - 1);
-            int iMapZ1 = MathHelperExtension.Clamp(0, iMapZ0 + 1, Breadth - 1);
-            
-	        // read 4 map values and get an average from them.
-            float h0 = GetHeightAtPoint(iMapX0, iMapZ0, getTargetHeight);
-            float h1 = GetHeightAtPoint(iMapX1, iMapZ0, getTargetHeight);
-            float h2 = GetHeightAtPoint(iMapX0, iMapZ1, getTargetHeight);
-            float h3 = GetHeightAtPoint(iMapX1, iMapZ1, getTargetHeight);
-
-            float avgLo = (h1*fMapX) + (h0*(1.0f-fMapX));
-            float avgHi = (h3*fMapX) + (h2*(1.0f-fMapX));
-            float result = (avgHi*fMapZ) + (avgLo*(1.0f-fMapZ));;
-
-            return result;
-        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public virtual float GetHeightAtPoint(Vector3 point, bool getTargetHeight)
+        {
+            // straight down
+            float result = GetHeightAtPoint(point.X, point.Z, getTargetHeight);
+            return result;
+        }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////
         //public Vector3 GetNormalAtPoint(Vector3 worldPoint)
         //{
         //    return GetNormalAtPointInternal(worldPoint);
@@ -434,12 +398,24 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-		public virtual float GetHeightAtPoint(int x, int z,bool getTargetHeight)
+		public virtual float GetHeightAtPoint(float x, float z,bool getTargetHeight)
 		{
-            x = Math.Min(x, (Width - 1));
-            z = Math.Min(z, (Breadth - 1));
-            int index = (int)((x * Width) + z);
-            float returnValue = getTargetHeight ? m_terrainSquareGrid[x, z].TargetHeight : m_terrainSquareGrid[x, z].Height;
+            float returnValue = float.MinValue;
+            float ymid = (m_boundingBox.Max.Y + m_boundingBox.Min.Y) * 0.5f;
+            Vector3 pos = new Vector3(x, ymid, z);
+            // to local
+            pos -= Position;
+            if (m_boundingBox.Contains(pos) != ContainmentType.Disjoint)
+            {
+                Vector3 adjustedPos = pos - m_boundingBox.Min;
+                int localX = (int)adjustedPos.X;
+                int localZ = (int)adjustedPos.Z;
+                returnValue = getTargetHeight ? m_terrainSquareGrid[localX, localZ].TargetHeight : m_terrainSquareGrid[localX, localZ].Height;
+            }
+            else
+            {
+                int ibreak = 0;
+            }
             return returnValue;
 		}
 
