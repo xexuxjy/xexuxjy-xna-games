@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="com\xexuxjy\magiccarpet\camera\DefaultCamera.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\camera\DHPCameraComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTree.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTreeNode.cs" />

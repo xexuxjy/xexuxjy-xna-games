@@ -16,19 +16,16 @@ namespace com.xexuxjy.magiccarpet.terrain
     {
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public TerrainSection(Terrain terrain, int sectorX, int sectorZ, int worldSpanX, int worldSpanZ, Game game)
+        public TerrainSection(Terrain terrain, int sectorX, int sectorZ, Vector3 minBounds,Vector3 maxBounds, Game game)
             : base(new Vector3(), game)
         {
             // cheat and build once as they should all be uniform.
-            BuildSectionIndices(worldSpanX, worldSpanZ);
+            BuildSectionIndices(minBounds, maxBounds);
             
             m_terrain = terrain;
             m_sectorX = sectorX;
             m_sectorZ = sectorZ;
-            m_worldSpanX = worldSpanX;
-            m_worldSpanZ = worldSpanZ;
-            m_xVerts = m_worldSpanX;
-            m_zVerts = m_worldSpanZ;
+            m_boundingBox = new BoundingBox(minBounds, maxBounds);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,9 +34,6 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             // do this before base initialise otherwise we'll be added to the collision system.
             //m_collider = false;
-
-            int stepSizeX = m_worldSpanX / m_xVerts;
-            int stepSizeZ = m_worldSpanZ / m_zVerts;
 
             float sectionWidth = m_terrain.Width / m_terrain.NumSectionsX;
             float sectionBreadth = m_terrain.Breadth / m_terrain.NumSectionsZ;
@@ -111,14 +105,14 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // FIXME - Sort out this god awful system of percentages and world points!
-        public Vector3 GetNormalAtPoint(int x, int z)
-        {
-            if (null != m_terrainSectionRenderer)
-            {
-                return m_terrainSectionRenderer.GetNormalAtPoint(x, z, m_worldSpanX, m_worldSpanZ);
-            }
-            return Vector3.Zero;
-        }
+        //public Vector3 GetNormalAtPoint(int x, int z)
+        //{
+        //    if (null != m_terrainSectionRenderer)
+        //    {
+        //        return m_terrainSectionRenderer.GetNormalAtPoint(x, z, m_worldSpanX, m_worldSpanZ);
+        //    }
+        //    return Vector3.Zero;
+        //}
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -129,6 +123,12 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             m_terrainMoveTime += delta;
             m_terrainMoveTime = Math.Min(m_terrainMoveTime, 1.0f);
+            if (IsDirty())
+            {
+                ((BvhTriangleMeshShape)m_rigidBody.GetCollisionShape()).RefitTree(ref Globals.worldMinPos, ref Globals.worldMaxPos);
+            }
+
+
             base.Update(gameTime);
         }
 
@@ -155,7 +155,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             {
                 m_plainVertices[i] = morphingVertices[i].Position;
             }
-            int totalTriangles = (m_xVerts-1) * (m_zVerts-1) * 2;
+            int totalTriangles = (Width-1) * (Breadth-1) * 2;
 
             TriangleIndexVertexArray indexVertexArrays = new TriangleIndexVertexArray(totalTriangles,
                 s_indices, 1, m_plainVertices.Count, m_plainVertices, 1);
@@ -171,12 +171,37 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             return s_indices;
         }
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static void BuildSectionIndices(int numx, int numz)
+        virtual public int Width
         {
-            int numberOfQuadsX = numx - 1;
-            int numberOfQuadsZ = numz - 1;
+            get
+            {
+                return (int)(m_boundingBox.Max.X - m_boundingBox.Min.X);
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        virtual public int Breadth
+        {
+            get
+            {
+                return (int)(m_boundingBox.Max.Z - m_boundingBox.Min.Z);
+            }
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        public static void BuildSectionIndices(Vector3 min,Vector3 max)
+        {
+            int numX = (int)(max.X - min.X);
+            int numZ = (int)(max.Z - min.Z);
+            int numberOfQuadsX = numX - 1;
+            int numberOfQuadsZ = numZ - 1;
             int stepSize = 6;
 
             if (s_indices == null)
@@ -187,13 +212,13 @@ namespace com.xexuxjy.magiccarpet.terrain
                     for (int y = 0; y < numberOfQuadsZ; y++)
                     {
                         int index = (x + y * (numberOfQuadsX)) * stepSize;
-                        s_indices[index] = (x + y * numx);
-                        s_indices[index + 1] = ((x + 1) + y * numx);
-                        s_indices[index + 2] = ((x + 1) + (y + 1) * numx);
+                        s_indices[index] = (x + y * numX);
+                        s_indices[index + 1] = ((x + 1) + y * numX);
+                        s_indices[index + 2] = ((x + 1) + (y + 1) * numX);
 
-                        s_indices[index + 3] = (x + (y + 1) * numx);
-                        s_indices[index + 4] = (x + y * numx);
-                        s_indices[index + 5] = ((x + 1) + (y + 1) * numx);
+                        s_indices[index + 3] = (x + (y + 1) * numX);
+                        s_indices[index + 4] = (x + y * numX);
+                        s_indices[index + 5] = ((x + 1) + (y + 1) * numX);
                     }
                 }
             }
@@ -201,13 +226,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         protected Terrain m_terrain;
         protected TerrainSectionRenderer m_terrainSectionRenderer;
-        protected TerrainSquare[][] m_terrainSquares;
         public int m_sectorX;
         public int m_sectorZ;
-        public int m_xVerts;
-        public int m_zVerts;
-        public int m_worldSpanX;
-        public int m_worldSpanZ;
+        BoundingBox m_boundingBox;
         protected float m_terrainMoveTime; // counter used when adjusting terrain heights
         protected bool m_isDirty = false;
         protected ObjectArray<Vector3> m_plainVertices;
