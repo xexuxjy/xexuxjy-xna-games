@@ -549,9 +549,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public TerrainSquare GetTerrainSquareAtPoint(int x, int z)
+        public TerrainSquare GetTerrainSquareAtPoint(ref Vector3 worldPoint)
         {
-            return m_terrainSquareGrid[x, z];
+            Vector3 local = worldPoint - m_boundingBox.Min;
+            return m_terrainSquareGrid[(int)local.X, (int)local.Z];
         }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////	

@@ -87,8 +87,14 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public BoundingBox BoundingBox
         {
-            get { return m_boundingBox; }
-            set { m_boundingBox = value; }
+            get 
+            {
+                 return m_boundingBox; 
+            }
+            set 
+            { 
+                m_boundingBox = value; 
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

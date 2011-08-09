@@ -13,6 +13,7 @@ using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.collision;
 using BulletXNADemos.Demos;
 using Dhpoware;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -23,11 +24,12 @@ namespace com.xexuxjy.magiccarpet
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        DebugDrawModes m_debugDrawMode;
         public MagicCarpet()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb;
 
         }
 
@@ -45,6 +47,7 @@ namespace com.xexuxjy.magiccarpet
             Globals.Initialize();
 
             Globals.DebugDraw = new XNA_ShapeDrawer(this);
+            Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
 
             Globals.CollisionManager = new CollisionManager(this,Globals.worldMinPos,Globals.worldMaxPos);
             Components.Add(Globals.CollisionManager);
