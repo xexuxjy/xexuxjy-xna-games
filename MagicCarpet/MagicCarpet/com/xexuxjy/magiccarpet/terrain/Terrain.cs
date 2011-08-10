@@ -35,7 +35,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
             Vector3 halfExtents = new Vector3(32,1,32);
-            m_boundingBox = new BoundingBox(-halfExtents, halfExtents);
+            m_boundingBox = new BoundingBox(-halfExtents+Position, halfExtents+Position);
 
             m_terrainRandom = new Random();
 
@@ -123,8 +123,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 		{
           // increase these to represent vertices
 
-            m_numTerrainSectionsX = 2;//8;
-            m_numTerrainSectionsZ = 2;//8;
+            m_numTerrainSectionsX = 1;//8;
+            m_numTerrainSectionsZ = 1;//8;
 
             int spanPerSectionX = Width / m_numTerrainSectionsX;
             int spanPerSectionZ = Breadth / m_numTerrainSectionsZ;
@@ -174,8 +174,12 @@ namespace com.xexuxjy.magiccarpet.terrain
             int upBound = (int)System.Math.Max(m_boundingBox.Min.Z, z - radius);
             int downBound = (int)System.Math.Min(m_boundingBox.Max.Z, z + radius);
 
+            float xspan = rightBound - leftBound;
+            float zspan = downBound - upBound;
 
-            float floatRadius = radius;
+            float floatRadius2 = radius * radius;
+
+            Vector3 center = new Vector3(x,0,z);
 
             for (int i = leftBound; i < rightBound; ++i)
             {
@@ -186,30 +190,30 @@ namespace com.xexuxjy.magiccarpet.terrain
                     // for now only land squares can have their height changed in this way.
                     if (terrainSquare.Type != TerrainType.immovable)
                     {
-                        Vector2 vec2;
-                        vec2.X = System.Math.Abs(i - x);
-                        vec2.Y = System.Math.Abs(j - z);
-                        float distance = vec2.Length();
-                        float lerpValue = 1.0f - MathHelper.Lerp(0.0f, floatRadius, distance);
-                        // play with lerp value to smooth the terrain?
-                        //                          lerpValue = (float)Math.Sqrt(lerpValue);
-                        //lerpValue *= lerpValue;
-                        //                        lerpValue *= lerpValue;
-
-                        // ToDo - fractal hill generation.
-
-                        float oldHeight = GetHeightAtPoint(i, j, true);
-                        //float oldHeight = getHeightAtPoint(i, j);
-                        float newHeight = oldHeight + (height * lerpValue);
-                        newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
-                        Vector3 newPos = new Vector3(i, newHeight, j);
-                        SetHeightAtPoint(ref newPos);
-                        Vector3 point = new Vector3(i, 0.0f, j);
-                        foreach (TerrainSection section in m_terrainSectionGrid)
+                        Vector3 diff = worldPoint - center;
+                        float diffLength2 = diff.LengthSquared();
+                        if (diffLength2 < floatRadius2)
                         {
-                            if (section.ContainsPoint(point))
+                            float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
+                            // play with lerp value to smooth the terrain?
+                            //                          lerpValue = (float)Math.Sqrt(lerpValue);
+                            //lerpValue *= lerpValue;
+                            //                        lerpValue *= lerpValue;
+
+                            // ToDo - fractal hill generation.
+
+                            float oldHeight = terrainSquare.Height;
+                            //float oldHeight = getHeightAtPoint(i, j);
+                            float newHeight = oldHeight + (height * lerpValue);
+                            newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
+                            Vector3 newPos = new Vector3(i, newHeight, j);
+                            SetHeightAtPoint(ref newPos);
+                            foreach (TerrainSection section in m_terrainSectionGrid)
                             {
-                                section.SetDirty();
+                                if (section.ContainsPoint(worldPoint))
+                                {
+                                    section.SetDirty();
+                                }
                             }
                         }
 
@@ -660,7 +664,6 @@ namespace com.xexuxjy.magiccarpet.terrain
         private void BuildTerrainSquareGrid()
         {
             m_terrainSquareGrid = new TerrainSquare[Width,Breadth];
-            Vector3 halfExtents = new Vector3(Width, 0, Breadth) * 0.5f;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -81,23 +81,27 @@ namespace com.xexuxjy.magiccarpet.util
                         Vector3 rayColor = new Vector3(1, 1, 1);
                         Vector3 normalColor = new Vector3(1, 0, 0);
                         Globals.DebugDraw.DrawLine(ref startPos, ref endPos, ref rayColor);
+
+                        Vector3 location = Globals.DebugTextCamera;
+                        Vector3 colour = new Vector3(1, 1, 1);
+                        
                         if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
                         {
                             Vector3 normalStart = collisionPoint;
                             Vector3 normalEnd = collisionPoint + (collisionNormal * normalLength);
                             Globals.DebugDraw.DrawLine(ref normalStart, ref normalEnd, ref normalColor);
-                        }
+                            Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}] Collide[{2}] Normal[{3}].", startPos, direction,collisionPoint,collisionNormal), ref location, ref colour);
 
-                        Vector3 location = new Vector3(10, 10, 0);
-                        Vector3 colour = new Vector3(1, 1, 1);
-                        Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}].", startPos, direction), ref location, ref colour);
+                        }
+                        else
+                        {
+                            Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}].", startPos, direction), ref location, ref colour);
+                        }
 
                     }
                 }
 
             }
-
-
 
             m_lastMouseState = mouseState;
 

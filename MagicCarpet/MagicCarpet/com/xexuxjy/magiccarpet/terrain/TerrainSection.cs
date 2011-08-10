@@ -33,7 +33,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
-            Position = (m_boundingBox.Max - m_boundingBox.Min) * 0.5f ;
+            //Position = (m_boundingBox.Max - m_boundingBox.Min) * 0.5f ;
             BuildRenderer();
             BuildCollisionObject();
 
@@ -44,6 +44,18 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
         }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override Vector3 Position
+        {
+            get
+            {
+                return m_terrain.Position;
+            }
+            set { }
+        }
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
