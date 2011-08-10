@@ -57,7 +57,7 @@ namespace com.xexuxjy.magiccarpet
             //Components.Add(Globals.Terrain);
             Components.Add(new KeyboardController(this));
             Components.Add(new MouseController(this));
-
+            Components.Add(new FrameRateCounter(this));
 
 
             
