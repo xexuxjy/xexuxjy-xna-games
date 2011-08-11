@@ -86,8 +86,8 @@ namespace com.xexuxjy.magiccarpet.renderer
                     m_effect.Parameters[slotName].SetValue(s_terrainTextures[count++]);
                 }
 
-                float moveTime = m_terrainSection.TerrainMoveTime;
-                m_effect.Parameters["timeStep"].SetValue(moveTime);
+                //float moveTime = m_terrainSection.TerrainMoveTime;
+                //m_effect.Parameters["timeStep"].SetValue(moveTime);
 
                 device.SetVertexBuffer(m_vertexBuffer, 0);
                 device.Indices = s_indexBuffer;
@@ -142,7 +142,8 @@ namespace com.xexuxjy.magiccarpet.renderer
 
 
                         vertex.Position.Y = m_terrain.GetHeightAtPoint(vertex.Position);
-                        vertex.TargetHeight = m_terrain.GetHeightAtPoint(vertex.Position, true);
+                        vertex.TargetHeight = vertex.Position.Y;
+                        //vertex.TargetHeight = m_terrain.GetHeightAtPoint(vertex.Position, true);
 
                         // Set the u,v values so one texture covers the entire terrain
                         vertex.TextureCoordinate = new Vector2((float)z / m_numberOfQuadsZ * 4, (float)x / m_numberOfQuadsX *4);
