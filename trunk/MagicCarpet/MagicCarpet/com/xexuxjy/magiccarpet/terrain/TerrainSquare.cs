@@ -9,6 +9,5 @@ namespace com.xexuxjy.magiccarpet.terrain
     {
         public TerrainType Type;
         public float Height;
-        public float TargetHeight;
     }
 }

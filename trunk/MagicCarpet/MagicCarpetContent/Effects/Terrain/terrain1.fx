@@ -85,11 +85,13 @@
 		float4 position = In.ObjectPos;
 		float targetPosition = In.TargetPos;
 		
-		float interpHeight = lerp(position.y,targetPosition,timeStep);
-		position.y = interpHeight;
+		//float interpHeight = lerp(position.y,targetPosition,timeStep);
+		//position.y = interpHeight;
+		
 		Out.ScreenPos = mul(position, worldViewProjection);
 		Out.TextureCoords = In.TextureCoords;
-		Out.Height = interpHeight;
+		//Out.Height = interpHeight;
+		Out.Height = position.y;
 		return Out;
 	}
 

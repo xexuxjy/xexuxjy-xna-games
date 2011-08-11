@@ -24,22 +24,14 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
         }
 
-        
-
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         public override void Initialize()
         {
             m_collider = false;
-            // register or re-initialise this terrain
-
-
-            Vector3 halfExtents = new Vector3(32,1,32);
-            m_boundingBox = new BoundingBox(-halfExtents+Position, halfExtents+Position);
 
             m_terrainRandom = new Random();
 
-            BuildTerrainSquareGrid();
             InitialiseWorldGrid();
 
             //buildLandscape();
@@ -58,11 +50,13 @@ namespace com.xexuxjy.magiccarpet.terrain
             // quick test for now, go through and see which section contains it.
             // again may need a solution for splitting the box, but need to have that in one place
             // so test is against containts, not intersects.
-            foreach (TerrainSection section in m_terrainSectionGrid)
+            TerrainSection[][] sections = m_terrainSectionGrid;
+            for (int i = 0; i < sections.Length; ++i)
             {
-                if (section.BoundingBox.Contains(boundingBox) == ContainmentType.Contains)
+                for (int j = 0; j < sections[i].Length; ++j)
+                if (sections[i][j].BoundingBox.Contains(boundingBox) == ContainmentType.Contains)
                 {
-                    return section;
+                    return sections[i][j];
                 }
             }
 
@@ -112,27 +106,41 @@ namespace com.xexuxjy.magiccarpet.terrain
         protected void BuildSectionRenderers()
         {
             int totalSections = m_numTerrainSectionsX * m_numTerrainSectionsZ;
-            foreach (TerrainSection section in m_terrainSectionGrid)
+            TerrainSection[][] sections = m_terrainSectionGrid;
+            for (int i = 0; i < sections.Length; ++i)
             {
-                new TerrainSectionRenderer((MagicCarpet)Game,section,this);
+                for (int j = 0; j < sections[i].Length; ++j)
+                {
+                    new TerrainSectionRenderer((MagicCarpet)Game, sections[i][j], this);
+                }
             }
         }		
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		
 		protected virtual void InitialiseWorldGrid()
 		{
-          // increase these to represent vertices
+            Vector3 halfExtents = new Vector3(128, 1, 128);
+            m_boundingBox = new BoundingBox(-halfExtents + Position, halfExtents + Position);
 
-            m_numTerrainSectionsX = 1;//8;
-            m_numTerrainSectionsZ = 1;//8;
-
+            m_numTerrainSectionsX = 4;//8;
+            m_numTerrainSectionsZ = 4;//8;
+            m_stepSize = 1;
             int spanPerSectionX = Width / m_numTerrainSectionsX;
             int spanPerSectionZ = Breadth / m_numTerrainSectionsZ;
             QuadTreeNode rootNode = QuadTree.GetInstance().GetRootNode();
-            m_terrainSectionGrid = new TerrainSection[m_numTerrainSectionsX,m_numTerrainSectionsZ];
+            m_terrainSectionGrid = new TerrainSection[m_numTerrainSectionsX][];
+            for(int i=0;i<m_terrainSectionGrid.Length;++i)
+            {
+                m_terrainSectionGrid[i] = new TerrainSection[m_numTerrainSectionsZ];
+            }
+
+            m_terrainSquareGrid = new TerrainSquare[Width][];
+            for (int i = 0; i < m_terrainSquareGrid.Length; ++i)
+            {
+                m_terrainSquareGrid[i] = new TerrainSquare[Breadth];
+            }
 
             Vector3 startPos = m_boundingBox.Min;
-            int stepSize = 4;
 
             for (int i = 0; i < m_numTerrainSectionsX; ++i)
             {
@@ -141,9 +149,9 @@ namespace com.xexuxjy.magiccarpet.terrain
                     Vector3 min = startPos + new Vector3(i * spanPerSectionX, 0, j * spanPerSectionZ);
                     Vector3 max = min+ new Vector3(spanPerSectionX,0,spanPerSectionZ);
                     max.Y = m_boundingBox.Max.Y;
-                    m_terrainSectionGrid[i,j] = new TerrainSection(this, i, j, 2,min,max, Game);
-                    m_terrainSectionGrid[i,j].Initialize();
-                    Console.WriteLine("[{0}] min[{1}] max[{2}].", m_terrainSectionGrid[i, j].Id, min, max);
+                    m_terrainSectionGrid[i][j] = new TerrainSection(this, i, j, m_stepSize,min,max, Game);
+                    m_terrainSectionGrid[i][j].Initialize();
+                    Console.WriteLine("[{0}] min[{1}] max[{2}].", m_terrainSectionGrid[i][ j].Id, min, max);
                 }
             }
 		}
@@ -169,59 +177,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         public virtual void AddPeak(float x, float z, float radius, float height, float maxHeight)
         {
 
-            int leftBound = (int)System.Math.Max(m_boundingBox.Min.X, x - radius);
-            int rightBound = (int)System.Math.Min(m_boundingBox.Max.X, x + radius);
-            int upBound = (int)System.Math.Max(m_boundingBox.Min.Z, z - radius);
-            int downBound = (int)System.Math.Min(m_boundingBox.Max.Z, z + radius);
-
-            float xspan = rightBound - leftBound;
-            float zspan = downBound - upBound;
-
-            float floatRadius2 = radius * radius;
-
-            Vector3 center = new Vector3(x,0,z);
-
-            for (int i = leftBound; i < rightBound; ++i)
-            {
-                for (int j = upBound; j < downBound; ++j)
-                {
-                    Vector3 worldPoint = new Vector3(i, 0, j);
-                    TerrainSquare terrainSquare = GetTerrainSquareAtPoint(ref worldPoint);
-                    // for now only land squares can have their height changed in this way.
-                    if (terrainSquare.Type != TerrainType.immovable)
-                    {
-                        Vector3 diff = worldPoint - center;
-                        float diffLength2 = diff.LengthSquared();
-                        if (diffLength2 < floatRadius2)
-                        {
-                            float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
-                            // play with lerp value to smooth the terrain?
-                            //                          lerpValue = (float)Math.Sqrt(lerpValue);
-                            //lerpValue *= lerpValue;
-                            //                        lerpValue *= lerpValue;
-
-                            // ToDo - fractal hill generation.
-
-                            float oldHeight = terrainSquare.Height;
-                            //float oldHeight = getHeightAtPoint(i, j);
-                            float newHeight = oldHeight + (height * lerpValue);
-                            newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
-                            Vector3 newPos = new Vector3(i, newHeight, j);
-                            SetHeightAtPoint(ref newPos);
-                            foreach (TerrainSection section in m_terrainSectionGrid)
-                            {
-                                if (section.ContainsPoint(worldPoint))
-                                {
-                                    section.SetDirty();
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-		
+            TerrainUpdater terrainUpdate = new TerrainUpdater(new Vector3(x, 0, z), radius, s_terrainMoveTime, height, this);
+            m_terrainUpdaters.Add(terrainUpdate);
+        }		
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         //public void AddPeak(Vector3 position, float innerRadius, float outerRadius,float height,float maxHeight)
@@ -325,64 +283,13 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-		public virtual float GetHeightAtPoint(Vector3 point)
-		{
-			// straight down
-            float result = GetHeightAtPoint(point.X, point.Z,false);
-			return result;
-		}
-		
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public virtual float GetHeightAtPoint(Vector3 point, bool getTargetHeight)
+        public virtual float GetHeightAtPoint(Vector3 point)
         {
             // straight down
-            float result = GetHeightAtPoint(point.X, point.Z, getTargetHeight);
+            float result = GetHeightAtPoint(point.X, point.Z);
             return result;
         }
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////
-        //public Vector3 GetNormalAtPoint(Vector3 worldPoint)
-        //{
-        //    return GetNormalAtPointInternal(worldPoint);
-        //}
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //private Vector3 GetNormalAtPointInternal(Vector3 worldPoint)
-        //{
-        //    Vector3 result = Vector3.Zero;
-        //    if (!(m_boundingBox.Contains(worldPoint) == ContainmentType.Disjoint))
-        //    {
-        //        Vector3 localPosition = worldPoint - Position;
-
-        //        Vector3 lerpResult = MathUtil.Vector3InverseLerp(BoundingBox.Min, localPosition, BoundingBox.Max);
-
-        //        // read 4 map values and get an average from them.
-        //        Vector3 v0 = GetNormalAtPoint(iMapX0, iMapZ0);
-        //        Vector3 v1 = GetNormalAtPoint(iMapX1, iMapZ0);
-        //        Vector3 v2 = GetNormalAtPoint(iMapX0, iMapZ1);
-        //        Vector3 v3 = GetNormalAtPoint(iMapX1, iMapZ1);
-
-        //        Vector3 avgLo = (v1 * fMapX) + (v0 * (1.0f - fMapX));
-        //        Vector3 avgHi = (v3 * fMapX) + (v2 * (1.0f - fMapX));
-        //        Vector3 result = (avgHi * fMapZ) + (avgLo * (1.0f - fMapZ)); ;
-        //    }
-        //    return result;
-        //}
-        
-        /////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //private Vector3 GetNormalAtPoint(int x, int z)
-        //{
-        //    float outX;
-        //    float outZ;
-        //    TerrainSection terrainSection = GetSectionAtPoint(x, z, out outX, out outZ);
-        //    return terrainSection.GetNormalAtPoint(x, z);
-        //}
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -390,19 +297,15 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void SetHeightAtPoint(ref Vector3 worldPoint)
         {
             Vector3 local = worldPoint - m_boundingBox.Min;
-            m_terrainSquareGrid[(int)local.X, (int)local.Z].TargetHeight = worldPoint.Y;
+            m_terrainSquareGrid[(int)local.X][(int)local.Z].Height = worldPoint.Y;
         }
 
 		///////////////////////////////////////////////////////////////////////////////////////////////
         
-        public virtual float GetHeightAtPoint(int x, int z)
-        {
-            return GetHeightAtPoint(x, z, false);
-        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-		public virtual float GetHeightAtPoint(float x, float z,bool getTargetHeight)
+		public virtual float GetHeightAtPoint(float x, float z)
 		{
             float returnValue = float.MinValue;
             float ymid = (m_boundingBox.Max.Y + m_boundingBox.Min.Y) * 0.5f;
@@ -414,11 +317,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 Vector3 adjustedPos = pos - m_boundingBox.Min;
                 int localX = (int)adjustedPos.X;
                 int localZ = (int)adjustedPos.Z;
-                returnValue = getTargetHeight ? m_terrainSquareGrid[localX, localZ].TargetHeight : m_terrainSquareGrid[localX, localZ].Height;
-            }
-            else
-            {
-                int ibreak = 0;
+                returnValue = m_terrainSquareGrid[localX][localZ].Height;
             }
             return returnValue;
 		}
@@ -441,7 +340,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             
             sectionXPct = xrem;
             sectionZPct = zrem;
-            return m_terrainSectionGrid[x,z];
+            return m_terrainSectionGrid[x][z];
         }
 
 		///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -533,7 +432,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public TerrainSquare GetTerrainSquareAtPoint(ref Vector3 worldPoint)
         {
             Vector3 local = worldPoint - m_boundingBox.Min;
-            return m_terrainSquareGrid[(int)local.X, (int)local.Z];
+            return m_terrainSquareGrid[(int)local.X][(int)local.Z];
         }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -552,12 +451,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
-        //public void SetTerrainType(int x, int z)
-        //{
-        //    TerrainSquare terrainSquare = GetTerrainSquareAtPoint(x, z);
-        //    float val = terrainSquare.Position.Y;
-        //    SetTerrainType(terrainSquare, val);
-        //}
 
         public void SetTerrainType(TerrainSquare terrainSquare,float val)
         {
@@ -622,48 +515,26 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             // go through and adjust our current and target heights to make the landscape move nicely.
             base.Update(gameTime);
-            for (int i = 0; i < m_terrainSquareGrid.GetLength(0); ++i)
+
+            foreach (TerrainUpdater terrainUpdate in m_terrainUpdaters)
             {
-                for (int j = 0; j < m_terrainSquareGrid.GetLength(1); ++j)
+                terrainUpdate.Update(gameTime);
+                if (!terrainUpdate.Complete())
                 {
-                    //int index = (int)((x * m_worldExtents.Width) + z);
-                    float currentHeight = m_terrainSquareGrid[i, j].Height;
-                    float targetHeight = m_terrainSquareGrid[i, j].TargetHeight;
-                    if (!MathHelperExtension.CompareFloat(currentHeight, targetHeight))
-                    {
-                        bool down = targetHeight < currentHeight;
-
-                        // adjust the height by move time and clamp it.
-                        //float delta = (updateTime.ElapsedGameTime.Milliseconds / 1000.0f) * TerrainMoveTime;
-                        float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * TerrainMoveTime;
-                        if (delta > 0f)
-                        {
-                            int ibreak = 0;
-                        }
-                        float diff = Math.Abs(targetHeight - currentHeight);
-                        if (delta > diff)
-                        {
-                            delta = diff;
-                        }
-
-                        if (down)
-                        {
-                            delta *= -1.0f;
-                        }
-
-                        //m_terrainSquareGrid[i,j].SetHeight(currentHeight + delta);
-                        m_terrainSquareGrid[i, j].Height = (currentHeight + delta);
-                    }
+                    terrainUpdate.ApplyToTerrain(m_terrainSquareGrid);
+                }
+                else
+                {
+                    m_terrainUpdatersRemove.Add(terrainUpdate);
                 }
             }
-        }
 
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        private void BuildTerrainSquareGrid()
-        {
-            m_terrainSquareGrid = new TerrainSquare[Width,Breadth];
+            foreach (TerrainUpdater terrainUpdate in m_terrainUpdatersRemove)
+            {
+                m_terrainUpdaters.Remove(terrainUpdate);
+            }
+            m_terrainUpdatersRemove.Clear();
+            // FIXME - avoid going through this entire list searching and use a list of updates instead.
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -679,17 +550,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        //public void ToggleVisibility()
-        //{
-        //    for (int i = 0; i < m_terrainSectionGrid.Length; ++i)
-        //    {
-        //        ((DefaultRenderer)m_terrainSectionGrid[i].Renderer).setVisible(!m_terrainSectionGrid[i].Renderer.Visible);
-        //    }
-        //}
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public TerrainSquare[,] TerrainSquares
+        public TerrainSquare[][] TerrainSquares
         {
             get { return m_terrainSquareGrid; }
             set { m_terrainSquareGrid = value; }
@@ -697,21 +558,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         
-        public TerrainSection[,] TerrainSections
+        public TerrainSection[][] TerrainSections
         {
             get { return m_terrainSectionGrid; }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        private void UpdateTerrainHeights(GameTime gameTime)
-        {
-            //for(int i=0;i<m_terrainHeightList.Length;++i)
-            //{
-            //    // set a height value that lerps between current height
-            //    float currentHeight = getHeightAtPoint();
-            //    addPeak(Position,height);
-            //}
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -756,38 +605,148 @@ namespace com.xexuxjy.magiccarpet.terrain
                     SetHeightAtPoint(ref point);
                 }
             }
-            foreach (TerrainSection section in m_terrainSectionGrid)
+            TerrainSection[][] sections = m_terrainSectionGrid;
+            for (int i = 0; i < sections.Length; ++i)
             {
-                section.SetDirty();
+                for (int j = 0; j < sections[i].Length; ++j)
+                {
+                    sections[i][j].SetDirty();
+                }
             }
         }
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        private struct TerrainHeightUpdate
+        public float TerrainMoveTime
         {
-            Vector3 position;
-            float height;
-            float radius;
-            long currentTime;
-            long maxTime;
-        };
-
+            get{return s_terrainMoveTime;}
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
 
-        public float TerrainMoveTime{get{return s_terrainMoveTime;}}
-        
-        private Vector3 m_worldHalfdExtents;
-        private Vector3 m_position;
+        private class TerrainUpdater
+        {
+            public TerrainUpdater(Vector3 position, float radius, float totalTime, float totalDeflection,Terrain terrain)
+            {
+                m_terrain = terrain;
+                m_position = position;
+                // need to adjust position based on midpoint of terrain
+                //m_position -= new Vector3(CommonSettings.worldWidth / 2, 0, CommonSettings.worldBreadth / 2);
+                m_radius = radius;
+                m_totalTime = totalTime;
+                m_totalDeflection = totalDeflection;
+                m_currentTime = 0f;
+
+                BoundingBox terrainBB = m_terrain.BoundingBox;
+
+                m_minX = (int)System.Math.Max(terrainBB.Min.X, position.X - radius);
+                m_maxX = (int)System.Math.Min(terrainBB.Max.X, position.X + radius);
+                m_minZ = (int)System.Math.Max(terrainBB.Min.Z, position.Z - radius);
+                m_maxZ = (int)System.Math.Min(terrainBB.Max.Z, position.Z + radius);
+
+                // build a list of terrain sections that will be affected by this updater so we can get them to 
+                // refresh their vertices
+                m_affectedSections = new List<TerrainSection>();
+                BoundingSphere boundingSphere = new BoundingSphere(m_position, m_radius);
+
+                TerrainSection[][] sections = m_terrain.TerrainSections;
+                for (int i = 0; i < sections.Length; ++i)
+                {
+                    for (int j = 0; j < sections[i].Length; ++j)
+                    {
+                        TerrainSection terrainSection = sections[i][j];
+                        if (terrainSection.BoundingBox.Intersects(boundingSphere))
+                        {
+                            m_affectedSections.Add(terrainSection);
+                        }
+                    }
+                }
+            }
+
+
+            public void Update(GameTime gameTime)
+            {
+                float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                m_currentTime += timeStep;
+                m_updateDeflection = (timeStep / m_totalTime) * m_totalDeflection;
+            }
+
+            public bool Complete()
+            {
+                return m_currentTime > m_totalTime;
+            }
+
+            public void ApplyToTerrain(TerrainSquare[][] heightMap)
+            {
+                float maxHeight = 20f;
+                if (m_currentTime < m_totalTime)
+                {
+                    float floatRadius2 = m_radius * m_radius;
+
+                    for (int i = m_minX; i < m_maxX; i++)
+                    {
+                        for (int j = m_minZ; j < m_maxZ; j++)
+                        {
+                            Vector3 worldPoint = new Vector3(i, 0, j);
+                            Vector3 diff = worldPoint - m_position;
+                            float diffLength2 = diff.LengthSquared();
+                            if (diffLength2 < floatRadius2)
+                            {
+                                TerrainSquare terrainSquare = m_terrain.GetTerrainSquareAtPoint(ref worldPoint);
+                                float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
+                                // play with lerp value to smooth the terrain?
+                                //                          lerpValue = (float)Math.Sqrt(lerpValue);
+                                //lerpValue *= lerpValue;
+                                //                        lerpValue *= lerpValue;
+
+                                // ToDo - fractal hill generation.
+
+                                float currentHeight = terrainSquare.Height;
+                                //float oldHeight = getHeightAtPoint(i, j);
+                                float newHeight = currentHeight + (m_updateDeflection * lerpValue);
+                                newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
+                                Vector3 newPos = new Vector3(i, newHeight, j);
+                                m_terrain.SetHeightAtPoint(ref newPos);
+                            }
+                        }
+                    }
+                    foreach (TerrainSection terrainSection in m_affectedSections)
+                    {
+                        terrainSection.SetDirty();
+                    }
+                }
+            }
+
+            private Terrain m_terrain;
+            private Vector3 m_position;
+            private Vector3 m_midPoint;
+            private float m_radius;
+            private float m_totalTime;
+            private float m_currentTime;
+            private float m_totalDeflection;
+            private float m_updateDeflection;
+            int m_minX;
+            int m_maxX;
+            int m_minZ;
+            int m_maxZ;
+            private List<TerrainSection> m_affectedSections; // this list of sections that this will overlap.
+        }
+
+
+
+
 
         private int m_numTerrainSectionsX;
         private int m_numTerrainSectionsZ;
+        private int m_stepSize;
 
-        private TerrainSection[,] m_terrainSectionGrid;
-        private TerrainSquare[,] m_terrainSquareGrid;
+        private TerrainSection[][] m_terrainSectionGrid;
+        private TerrainSquare[][] m_terrainSquareGrid;
+
+        private List<TerrainUpdater> m_terrainUpdaters = new List<TerrainUpdater>();
+        private List<TerrainUpdater> m_terrainUpdatersRemove = new List<TerrainUpdater>();
 
 		private bool m_defaultHeightMethod = true;
         private bool m_terrainHasChanged;
@@ -796,9 +755,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         private float m_maxIslandSize = 15.0f;
 
         // the amount of space the terrain can move in a second.
-        private float s_terrainMoveTime = 5;
+        private float s_terrainMoveTime = 0.5f;
 
-        private List<TerrainHeightUpdate> m_terrainHeightList;
         private Random m_terrainRandom;
 	}
 }
