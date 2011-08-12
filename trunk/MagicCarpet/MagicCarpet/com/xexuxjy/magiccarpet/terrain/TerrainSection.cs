@@ -5,14 +5,14 @@ using com.xexuxjy.magiccarpet.renderer;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.collision;
 using System.Diagnostics;
-using com.xexuxjy.magiccarpet.terrain;
 using com.xexuxjy.magiccarpet;
 using BulletXNA.BulletCollision;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
-    public class TerrainSection : WorldObject
+    public class TerrainSection : GameObject
     {
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -164,7 +164,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 s_indices, 1, m_plainVertices.Count, m_plainVertices, 1);
 
             CollisionShape heightFieldTerrain = new BvhTriangleMeshShape(indexVertexArrays, true, true);
-            m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(m_position), heightFieldTerrain, true);
+            m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), heightFieldTerrain,null, true);
 
         }
 

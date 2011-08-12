@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using System.Reflection;
 using Microsoft.Xna.Framework.Input;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.util
 {
@@ -36,7 +37,14 @@ namespace com.xexuxjy.magiccarpet.util
                         Game.Exit();
                         break;
                     }
-
+                case Keys.OemPeriod:
+                    {
+                        if (Globals.cameraHasGroundContact)
+                        {
+                            PlaceManaBall(Globals.cameraGroundContactPoint);
+                        }
+                        break;
+                    }
                 //case Keys.W: StepForward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
                 //case Keys.A: StepLeft((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
                 //case Keys.S: StepBackward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
@@ -187,8 +195,16 @@ namespace com.xexuxjy.magiccarpet.util
             return old.IsKeyDown(key) && !current.IsKeyDown(key);
         }
 
+        //----------------------------------------------------------------------------------------------
+
+        public void PlaceManaBall(Vector3 position)
+        {
+            Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.ManaBall, position);
+        }
+
+
 
         protected KeyboardState m_lastKeyboardState;
-
+        
     }
 }

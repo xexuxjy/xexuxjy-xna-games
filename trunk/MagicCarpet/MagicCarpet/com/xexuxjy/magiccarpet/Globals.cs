@@ -9,6 +9,7 @@ using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.collision;
 using BulletXNADemos.Demos;
 using Dhpoware;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -99,6 +100,8 @@ namespace com.xexuxjy.magiccarpet
         public static Color unassignedPlayerColour = Color.Pink;
 
 
+
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Debug Text Positions
         public static Vector3 DebugTextCamera = new Vector3(10, 10, 0);
@@ -121,12 +124,21 @@ namespace com.xexuxjy.magiccarpet
         public static Terrain Terrain;
         public static XNA_ShapeDrawer DebugDraw;
         public static CollisionManager CollisionManager;
-
+        public static GameObjectManager GameObjectManager;
 
         public const float STEPSIZEROTATE = (float)Math.PI/ 3f; // 60 deg a second
         public const float STEPSIZETRANSLATE = 20f; 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // hacky for now to preserve last point.
+
+        public static bool cameraHasGroundContact;
+        public static Vector3 cameraGroundContactPoint;
+        public static Vector3 cameraGroundContactNormal;
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public static void Initialize()
         {
             String contentBase = "";
@@ -141,7 +153,7 @@ namespace com.xexuxjy.magiccarpet
 
             modelBase = contentBase+"Models/";
             magicianModel = modelBase + "Magician/magician";
-            manaballModel = modelBase + "Manaball/Manaball";
+            manaballModel = modelBase + "SimpleShapes/unitsphere";//"Manaball/Manaball";
             balloonModel = modelBase + "Balloon/Balloon";
 
             castle1Model = modelBase + "Castle/CastleSize1";

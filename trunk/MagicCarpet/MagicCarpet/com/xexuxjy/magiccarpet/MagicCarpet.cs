@@ -14,6 +14,7 @@ using com.xexuxjy.magiccarpet.collision;
 using BulletXNADemos.Demos;
 using Dhpoware;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -53,6 +54,10 @@ namespace com.xexuxjy.magiccarpet
             Components.Add(Globals.CollisionManager);
 
             Globals.Terrain = new Terrain(Vector3.Zero, this);
+
+            Globals.GameObjectManager = new GameObjectManager(this);
+
+
             Components.Add(camera);
             //Components.Add(Globals.Terrain);
             Components.Add(new KeyboardController(this));
@@ -76,7 +81,7 @@ namespace com.xexuxjy.magiccarpet
             {
                 Globals.DebugDraw.LoadContent();
             }
-
+            base.LoadContent();
             // TODO: use this.Content to load your game content here
         }
 

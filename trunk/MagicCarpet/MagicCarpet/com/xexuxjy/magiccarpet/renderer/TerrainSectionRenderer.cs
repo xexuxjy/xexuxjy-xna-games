@@ -13,7 +13,7 @@ namespace com.xexuxjy.magiccarpet.renderer
     public class TerrainSectionRenderer : DefaultRenderer
     {
 
-        public TerrainSectionRenderer(MagicCarpet game,TerrainSection terrainSection,Terrain terrain) : base(game)
+        public TerrainSectionRenderer(MagicCarpet game,TerrainSection terrainSection,Terrain terrain) : base(game,terrainSection)
         {
             m_terrainSection = terrainSection;
             m_terrain = terrain;
@@ -28,44 +28,23 @@ namespace com.xexuxjy.magiccarpet.renderer
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void Initialize()
+        {
+            LoadContent();
+            base.Initialize();
+        }
 
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Draw(GameTime gameTime)
+        protected override void DrawEffect(GraphicsDevice device, ref Matrix view, ref Matrix world, ref Matrix projection)
         {
             if (m_terrainSection.IsDirty())
             {
                 BuildVertexBuffer(Game.GraphicsDevice);
             }
 
-            ICamera camera = Globals.Camera;
-
-            Matrix identity = Matrix.Identity;
-            Matrix translation = Matrix.CreateTranslation(m_terrainSection.Position);
-            //Matrix translation = Matrix.CreateTranslation(new Vector3());
-            Matrix view = camera.ViewMatrix;
-            Matrix world = Matrix.Multiply(translation, identity);
-
-            Matrix projection = camera.ProjectionMatrix;
-
-            Matrix worldViewProjection = world * view * projection;
-
-            // only one of these should be active.
-
-            DrawBasicEffect(Game.GraphicsDevice, ref view, ref world, ref projection);
-            DrawEffect(Game.GraphicsDevice, ref view, ref world, ref projection);
-
-            DrawDebugAxes(Game.GraphicsDevice);
-            if (ShouldDrawBoundingBox())
-            {
-                DrawBoundingBox(Game.GraphicsDevice);
-            }
-        }
-
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private void DrawEffect(GraphicsDevice device, ref Matrix view, ref Matrix world, ref Matrix projection)
-        {
+            
             if (null != m_effect)
             {
                 Matrix worldViewProjection = world * view * projection;
@@ -409,30 +388,6 @@ namespace com.xexuxjy.magiccarpet.renderer
             public static int SizeInBytes { get { return (sizeof(float) * 9); } }
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        //public class MorphingTerrainVertexFormatClass
-        //{
-        //    public Vector3 Position;
-        //    public Vector2 TextureCoordinate;
-        //    public Vector3 Normal;
-        //    public float TargetHeight;
-        //    public static int SizeInBytes { get { return (sizeof(float) * 8) + 4; } }
-        //    public void positionAsRef(ref Vector3 inVec)
-        //    {
-        //        inVec = Position;
-        //    }
-        //};
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //private void vertexFormatClassToStruct(MorphingTerrainVertexFormatClass clazz, ref MorphingTerrainVertexFormatStruct strukt)
-        //{
-        //    strukt.Position = clazz.Position;
-        //    strukt.Normal = clazz.Normal;
-        //    strukt.TextureCoordinate = clazz.TextureCoordinate;
-        //    strukt.TargetHeight = clazz.TargetHeight;
-        //}
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

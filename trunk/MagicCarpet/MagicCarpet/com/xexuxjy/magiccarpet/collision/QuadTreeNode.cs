@@ -6,6 +6,7 @@ using System.Diagnostics;
 using com.xexuxjy.magiccarpet.terrain;
 using com.xexuxjy.magiccarpet.renderer;
 using Dhpoware;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
@@ -61,7 +62,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public bool AddWorldObject(WorldObject worldObject)
+        public bool AddWorldObject(GameObject worldObject)
         {
             bool fitsInChild = false;
             // try and add it in all of our child nodes first?
@@ -91,7 +92,7 @@ namespace com.xexuxjy.magiccarpet.collision
         /// track their owner node so a straight remove is ok.
         /// </summary>
         /// <param name="worldObject"></param>
-        public void RemoveObject(WorldObject worldObject)
+        public void RemoveObject(GameObject worldObject)
        {
            worldObject.QuadTreeNode = null;
            m_objectsInNode.Remove(worldObject);
@@ -128,7 +129,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void BuildVisibilityList(List<WorldObject> objectList, ICamera camera)
+        public void BuildVisibilityList(List<GameObject> objectList, ICamera camera)
         {
             // foreach (WorldObject worldObject in m_objectsInNode)
             // {
@@ -146,7 +147,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private bool DoesObjectFitInNode(WorldObject worldObject)
+        private bool DoesObjectFitInNode(GameObject worldObject)
         {
             BoundingBox boundingBox = worldObject.BoundingBox;
             return m_extents.Contains(boundingBox) == ContainmentType.Contains;
@@ -168,7 +169,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void GetObjectsInNode(List<WorldObject> resultList)
+        public void GetObjectsInNode(List<GameObject> resultList)
         {
             resultList.AddRange(m_objectsInNode);
             // and do the same on the children.
@@ -180,7 +181,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public bool DoesNodeContainObject(WorldObject wo)
+        public bool DoesNodeContainObject(GameObject wo)
         {
             bool found = m_objectsInNode.Contains(wo);
             return found;
@@ -192,7 +193,7 @@ namespace com.xexuxjy.magiccarpet.collision
         /// </summary>
         /// <param name="worldObject"></param>
         /// <returns></returns>
-        public QuadTreeNode FindNodeForObject(WorldObject worldObject)
+        public QuadTreeNode FindNodeForObject(GameObject worldObject)
         {
             QuadTreeNode returnNode = null;
             if (DoesNodeContainObject(worldObject))
@@ -294,7 +295,7 @@ namespace com.xexuxjy.magiccarpet.collision
         private QuadTreeNode m_parentNode;
         private BoundingBox m_extents;
         private int m_depth;
-        private List<WorldObject> m_objectsInNode = new List<WorldObject>();
+        private List<GameObject> m_objectsInNode = new List<GameObject>();
         private String m_debugId;
         private TerrainSection m_terrainSection;
         private int[] m_terrainIndices;
