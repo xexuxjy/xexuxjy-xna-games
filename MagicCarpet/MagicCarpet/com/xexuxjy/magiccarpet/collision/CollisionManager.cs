@@ -70,12 +70,12 @@ namespace com.xexuxjy.magiccarpet.collision
 
         //----------------------------------------------------------------------------------------------
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, bool addToWorld)
+        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld)
         {
-            return LocalCreateRigidBody(mass, ref startTransform, shape, addToWorld);
+            return LocalCreateRigidBody(mass, ref startTransform, shape,motionState, addToWorld);
         }
 
-        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, bool addToWorld)
+        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld)
         {
 
             Debug.Assert((shape == null || shape.GetShapeType() != BroadphaseNativeTypes.INVALID_SHAPE_PROXYTYPE));
@@ -92,9 +92,12 @@ namespace com.xexuxjy.magiccarpet.collision
 
             //#define USE_MOTIONSTATE 1
             //#ifdef USE_MOTIONSTATE
-            DefaultMotionState myMotionState = new DefaultMotionState(startTransform, Matrix.Identity);
+            if (motionState == null)
+            {
+                motionState = new DefaultMotionState(startTransform, Matrix.Identity);
+            }
 
-            RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia);
+            RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, motionState, shape, localInertia);
 
             RigidBody body = new RigidBody(cInfo);
 

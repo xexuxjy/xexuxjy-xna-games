@@ -90,6 +90,11 @@ namespace com.xexuxjy.magiccarpet.util
                         
                         if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
                         {
+                            Globals.cameraHasGroundContact = true;
+                            Globals.cameraGroundContactPoint = collisionPoint;
+                            Globals.cameraGroundContactNormal = collisionNormal;
+
+                            
                             Vector3 normalStart = collisionPoint;
                             Vector3 normalEnd = collisionPoint + (collisionNormal * normalLength);
                             Globals.DebugDraw.DrawLine(ref normalStart, ref normalEnd, ref normalColor);
@@ -98,6 +103,7 @@ namespace com.xexuxjy.magiccarpet.util
                         }
                         else
                         {
+                            Globals.cameraHasGroundContact = false;
                             Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}].", startPos, direction), ref location, ref colour);
                         }
 

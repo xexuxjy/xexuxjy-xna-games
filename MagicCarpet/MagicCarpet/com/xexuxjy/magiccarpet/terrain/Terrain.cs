@@ -11,10 +11,11 @@ using com.xexuxjy.magiccarpet.collision;
 using com.xexuxjy.magiccarpet.renderer;
 using System.Collections.Generic;
 using com.xexuxjy.magiccarpet.util;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
-	public class Terrain:WorldObject
+	public class Terrain:GameObject
 	{
         ///////////////////////////////////////////////////////////////////////////////////////////////
 

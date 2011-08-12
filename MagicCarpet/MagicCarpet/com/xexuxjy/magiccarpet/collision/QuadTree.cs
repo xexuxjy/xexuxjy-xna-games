@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.magiccarpet.terrain;
 using com.xexuxjy.magiccarpet;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
@@ -84,7 +85,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void GetObjectsInRange(ref BoundingBox boundingBox, List<WorldObject> resultList)
+        public void GetObjectsInRange(ref BoundingBox boundingBox, List<GameObject> resultList)
         {
             resultList.Clear();
             // find the node that best includes position and radius.
@@ -127,14 +128,14 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void AddWorldObject(WorldObject worldObject)
+        public void AddWorldObject(GameObject worldObject)
         {
             m_rootNode.AddWorldObject(worldObject);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void RemoveWorldObject(WorldObject worldObject)
+        public void RemoveWorldObject(GameObject worldObject)
         {
             QuadTreeNode currentHolder = m_rootNode.FindNodeForObject(worldObject);
             // should always exist.
@@ -148,7 +149,7 @@ namespace com.xexuxjy.magiccarpet.collision
         /// </summary>
         /// <param name="worldObject"></param>
         /// <param name="currentOwner"></param>
-        public void MoveObject(WorldObject worldObject, QuadTreeNode currentOwner)
+        public void MoveObject(GameObject worldObject, QuadTreeNode currentOwner)
         {
             // just make sure it's where it says it is.
             Debug.Assert(currentOwner.DoesNodeContainObject(worldObject));
