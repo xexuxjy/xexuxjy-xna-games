@@ -40,10 +40,13 @@ namespace com.xexuxjy.magiccarpet.util
             //Mouse.SetPosition((r.Width / 2), (r.Height / 2));
             MouseState mouseState = Mouse.GetState();
 
+            bool leftReleased = WasReleased(ref m_lastMouseState, ref mouseState, 0);
+            bool rightReleased = WasReleased(ref m_lastMouseState, ref mouseState, 2);
 
-            if (WasReleased(ref m_lastMouseState, ref mouseState, 0))
+
+            if ( leftReleased || rightReleased)
             {
-
+                float peakHeight = leftReleased ? 10 : -10;
                 int rayLength = 100;
                 int normalLength = 10;
                 Vector3 startPos = Globals.Camera.Position;
@@ -56,7 +59,7 @@ namespace com.xexuxjy.magiccarpet.util
                 if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
                 {
                     Vector3 normalStart = collisionPoint;
-                    Globals.Terrain.AddPeak(normalStart, 10);
+                    Globals.Terrain.AddPeak(normalStart, peakHeight);
                 }
 
             }

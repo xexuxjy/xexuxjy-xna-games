@@ -29,7 +29,7 @@ namespace com.xexuxjy.magiccarpet
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb;
+            m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
 
         }
 

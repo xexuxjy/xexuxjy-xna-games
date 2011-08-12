@@ -107,6 +107,30 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void UpdatePlainVerticesAndCollisionShape(TerrainSectionRenderer.MorphingTerrainVertexFormatStruct[] morphingVertices)
+        {
+            Vector3 min = m_boundingBox.Min;
+            min.Y = Globals.worldMinPos.Y;
+            Vector3 max = m_boundingBox.Max;
+            max.Y = Globals.worldMaxPos.Y;
+            if (m_plainVertices == null)
+            {
+                m_plainVertices = new ObjectArray<Vector3>(morphingVertices.Length);
+            }
+
+            for (int i = 0; i < morphingVertices.Length; ++i)
+            {
+                m_plainVertices[i] = morphingVertices[i].Position;
+            }
+            if (m_rigidBody != null)
+            {
+                ((BvhTriangleMeshShape)m_rigidBody.GetCollisionShape()).RefitTree(ref min, ref max);
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * m_terrain.TerrainMoveTime;
@@ -114,17 +138,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             m_terrainMoveTime += delta;
             m_terrainMoveTime = Math.Min(m_terrainMoveTime, 1.0f);
-            if (IsDirty())
-            {
-                Vector3 min = m_boundingBox.Min;
-                min.Y = Globals.worldMinPos.Y;
-                Vector3 max = m_boundingBox.Max;
-                max.Y = Globals.worldMaxPos.Y;
-
-                ((BvhTriangleMeshShape)m_rigidBody.GetCollisionShape()).RefitTree(ref min,ref max);
-            }
-
-
             base.Update(gameTime);
         }
 
@@ -145,12 +158,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         protected override void BuildCollisionObject()
         {
-            TerrainSectionRenderer.MorphingTerrainVertexFormatStruct[] morphingVertices = m_terrainSectionRenderer.Vertices;
-            m_plainVertices = new ObjectArray<Vector3>(morphingVertices.Length);
-            for (int i = 0; i < morphingVertices.Length; ++i)
-            {
-                m_plainVertices[i] = morphingVertices[i].Position;
-            }
             int totalTriangles = s_indices.Count / 3;
 
             TriangleIndexVertexArray indexVertexArrays = new TriangleIndexVertexArray(totalTriangles,

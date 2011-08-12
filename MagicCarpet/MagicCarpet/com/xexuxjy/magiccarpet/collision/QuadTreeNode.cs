@@ -226,37 +226,37 @@ namespace com.xexuxjy.magiccarpet.collision
         // These are only built when the quadtreenode belongs to only one terrain section.
         public void BuildTerrainIndicies()
         {
-            Terrain terrain = Globals.Terrain;
+            //Terrain terrain = Globals.Terrain;
 
-            TerrainSection terrainSection = terrain.GetSectionForBoundingBox(ref m_extents);
-            if (terrainSection != null)
-            {
-                m_terrainSection = terrainSection;
-                int minX = (int)m_extents.Min.X;
-                int maxX = (int)m_extents.Max.X;
-                int minZ = (int)m_extents.Min.Z;
-                int maxZ = (int)m_extents.Max.Z;
+            //TerrainSection terrainSection = terrain.GetSectionForBoundingBox(ref m_extents);
+            //if (terrainSection != null)
+            //{
+            //    m_terrainSection = terrainSection;
+            //    int minX = (int)m_extents.Min.X;
+            //    int maxX = (int)m_extents.Max.X;
+            //    int minZ = (int)m_extents.Min.Z;
+            //    int maxZ = (int)m_extents.Max.Z;
 
-                // only makes sense to do this if granulatrity is at least one square
-                if (maxX - minX > 0)
-                {
-                    m_terrainIndices = ((TerrainSectionRenderer)m_terrainSection.Renderer).GetOffsetIndices(minX, minZ, maxX, maxZ);
-                    for (int i = 0; i < m_terrainIndices.Length; ++i)
-                    {
-                        if (m_terrainIndices[i] > 6000)
-                        {
-                            int ibreak = 0;
-                        }
-                    }
-                }
-            }
-            //else
-            {
-                for (int i = 0; i < m_childNodes.Length; ++i)
-                {
-                    m_childNodes[i].BuildTerrainIndicies();
-                }
-            }
+            //    // only makes sense to do this if granulatrity is at least one square
+            //    if (maxX - minX > 0)
+            //    {
+            //        m_terrainIndices = ((TerrainSectionRenderer)m_terrainSection.Renderer).GetOffsetIndices(minX, minZ, maxX, maxZ);
+            //        for (int i = 0; i < m_terrainIndices.Length; ++i)
+            //        {
+            //            if (m_terrainIndices[i] > 6000)
+            //            {
+            //                int ibreak = 0;
+            //            }
+            //        }
+            //    }
+            //}
+            ////else
+            //{
+            //    for (int i = 0; i < m_childNodes.Length; ++i)
+            //    {
+            //        m_childNodes[i].BuildTerrainIndicies();
+            //    }
+            //}
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

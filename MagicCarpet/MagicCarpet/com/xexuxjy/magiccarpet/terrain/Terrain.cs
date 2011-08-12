@@ -119,11 +119,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 		
 		protected virtual void InitialiseWorldGrid()
 		{
-            Vector3 halfExtents = new Vector3(128, 1, 128);
+            Vector3 halfExtents = new Vector3(32, s_maxTerrainHeight, 32);
             m_boundingBox = new BoundingBox(-halfExtents + Position, halfExtents + Position);
 
-            m_numTerrainSectionsX = 4;//8;
-            m_numTerrainSectionsZ = 4;//8;
+            m_numTerrainSectionsX = 1;//8;
+            m_numTerrainSectionsZ = 1;//8;
             m_stepSize = 1;
             int spanPerSectionX = Width / m_numTerrainSectionsX;
             int spanPerSectionZ = Breadth / m_numTerrainSectionsZ;
@@ -148,7 +148,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                 {
                     Vector3 min = startPos + new Vector3(i * spanPerSectionX, 0, j * spanPerSectionZ);
                     Vector3 max = min+ new Vector3(spanPerSectionX,0,spanPerSectionZ);
-                    max.Y = m_boundingBox.Max.Y;
+                    min.Y = -s_maxTerrainHeight;
+                    max.Y = s_maxTerrainHeight;
                     m_terrainSectionGrid[i][j] = new TerrainSection(this, i, j, m_stepSize,min,max, Game);
                     m_terrainSectionGrid[i][j].Initialize();
                     Console.WriteLine("[{0}] min[{1}] max[{2}].", m_terrainSectionGrid[i][ j].Id, min, max);
@@ -680,7 +681,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             public void ApplyToTerrain(TerrainSquare[][] heightMap)
             {
-                float maxHeight = 20f;
                 if (m_currentTime < m_totalTime)
                 {
                     float floatRadius2 = m_radius * m_radius;
@@ -706,7 +706,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                                 float currentHeight = terrainSquare.Height;
                                 //float oldHeight = getHeightAtPoint(i, j);
                                 float newHeight = currentHeight + (m_updateDeflection * lerpValue);
-                                newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
+                                newHeight = MathHelper.Clamp(-m_terrain.s_maxTerrainHeight, newHeight, m_terrain.s_maxTerrainHeight);
                                 Vector3 newPos = new Vector3(i, newHeight, j);
                                 m_terrain.SetHeightAtPoint(ref newPos);
                             }
@@ -756,6 +756,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         // the amount of space the terrain can move in a second.
         private float s_terrainMoveTime = 0.5f;
+        private float s_maxTerrainHeight = 20f;
 
         private Random m_terrainRandom;
 	}
