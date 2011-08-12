@@ -163,6 +163,12 @@ namespace com.xexuxjy.magiccarpet.renderer
                 //{
                 //    vertexFormatClassToStruct(m_vertices[i], ref copyOfClassData[i]);
                 //}
+                
+                
+                m_terrainSection.UpdatePlainVerticesAndCollisionShape(m_vertices);
+
+
+
                 m_terrainSection.ClearDirty();
                 m_vertexBuffer.SetData<MorphingTerrainVertexFormatStruct>(m_vertices);
             }
@@ -183,40 +189,40 @@ namespace com.xexuxjy.magiccarpet.renderer
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public int[] GetOffsetIndices(int minX, int minZ, int maxX, int maxZ)
-        {
-            Vector3 offset = m_terrainSection.BoundingBox.Min;
+        //public int[] GetOffsetIndices(int minX, int minZ, int maxX, int maxZ)
+        //{
+        //    Vector3 offset = m_terrainSection.BoundingBox.Min;
 
-            // adjust the offsets so they fit our local coord scheme.
-            minX = minX - (int)(offset.X);
-            maxX = maxX - (int)(offset.X);
+        //    // adjust the offsets so they fit our local coord scheme.
+        //    minX = minX - (int)(offset.X);
+        //    maxX = maxX - (int)(offset.X);
 
-            minZ = minZ - (int)(offset.Z);
-            maxZ = maxZ - (int)(offset.Z);
+        //    minZ = minZ - (int)(offset.Z);
+        //    maxZ = maxZ - (int)(offset.Z);
                 
-            int quadsX = (maxX - minX);
-            int quadsZ = (maxZ - minZ);
+        //    int quadsX = (maxX - minX);
+        //    int quadsZ = (maxZ - minZ);
             
-            int size = quadsX * quadsZ * 6;
-            int stepSize = m_numberOfVerticesX;
-            int[] returnArray = new int[size];
-            // Working with quads so it's (max -1)
-            for (int x = minX; x < maxX; x++)
-            {
-                for (int y = minZ; y < maxZ; y++)
-                {
-                    int index = ((x-minX) + ((y-minZ) * quadsZ))* 6;
-                    returnArray[index] = (x + (y * stepSize));
-                    returnArray[index + 1] = ((x + 1) + (y * stepSize));
-                    returnArray[index + 2] = ((x + 1) + ((y + 1) * stepSize));
+        //    int size = quadsX * quadsZ * 6;
+        //    int stepSize = m_numberOfVerticesX;
+        //    int[] returnArray = new int[size];
+        //    // Working with quads so it's (max -1)
+        //    for (int x = minX; x < maxX; x++)
+        //    {
+        //        for (int y = minZ; y < maxZ; y++)
+        //        {
+        //            int index = ((x-minX) + ((y-minZ) * quadsZ))* 6;
+        //            returnArray[index] = (x + (y * stepSize));
+        //            returnArray[index + 1] = ((x + 1) + (y * stepSize));
+        //            returnArray[index + 2] = ((x + 1) + ((y + 1) * stepSize));
 
-                    returnArray[index + 3] = (x + ((y + 1) * stepSize));
-                    returnArray[index + 4] = (x + (y * stepSize));
-                    returnArray[index + 5] = ((x + 1) + ((y + 1) * stepSize));
-                }
-            }
-            return returnArray;
-        }
+        //            returnArray[index + 3] = (x + ((y + 1) * stepSize));
+        //            returnArray[index + 4] = (x + (y * stepSize));
+        //            returnArray[index + 5] = ((x + 1) + ((y + 1) * stepSize));
+        //        }
+        //    }
+        //    return returnArray;
+        //}
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -400,7 +406,7 @@ namespace com.xexuxjy.magiccarpet.renderer
             public Vector2 TextureCoordinate;
             public Vector3 Normal;
             public float TargetHeight;
-            public static int SizeInBytes { get { return (sizeof(float) * 8) + 4; } }
+            public static int SizeInBytes { get { return (sizeof(float) * 9); } }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -480,6 +486,9 @@ namespace com.xexuxjy.magiccarpet.renderer
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private int m_updateModifier; // way of stopping too many updates on collision mesh.
+        private bool m_needsMeshUpdate;
 
         private TerrainSection m_terrainSection;
         protected MorphingTerrainVertexFormatStruct[] m_vertices;
