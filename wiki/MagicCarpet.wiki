@@ -1,0 +1,42 @@
+Design Doc for Magic Carpet Game
+
+An attempt to re-create the Bullfrog Classic
+
+Uses XNA 4.0 and Bullet-XNA for collision detection.
+
+
+
+Game Entities
+  * Player
+  * Magician
+  * Manaball
+  * Balloon
+  * Spells
+  * World/Terrain
+
+
+
+Spells
+  * [SpellHeal]Heal
+  * Turbo
+  * Fireball
+  * RubberBand
+  * Castle
+  * Lightning
+  * Convert
+  * Swarm of Bees
+  * Lower / Raise Land
+  * Earthquake
+  * Volcano
+  * Skeletal Army
+
+
+AI States
+   * Idle
+   * Hunt
+   * Roam
+   * Attack
+   * Defend
+   * Acquire
+   * Build
+   * Flee
