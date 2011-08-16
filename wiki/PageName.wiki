@@ -2,7 +2,7 @@
 
 = Introduction =
 
-[[MagicCarpet][Magic Carpet]]
+[MagicCarpet] Magic Carpet
 
 
 = Details =
