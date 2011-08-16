@@ -17,7 +17,7 @@ Game Entities
 
 
 Spells
-  * [SpellHeal]Heal
+  * [SpellHeal Heal]
   * Turbo
   * Fireball
   * RubberBand
