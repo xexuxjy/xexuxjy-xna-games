@@ -1,4 +1,5 @@
-Increase Casters Speed by X % for Y seconds
+Details For Turbo Spell
 
-Mana Cost
-Cooldown time
+  * Increase Casters Speed by X % for Y seconds
+  * Mana Cost
+  * Cooldown time
