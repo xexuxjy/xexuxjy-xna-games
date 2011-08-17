@@ -18,17 +18,17 @@ Game Entities
 
 Spells
   * [SpellHeal Heal]
-  * Turbo
-  * Fireball
-  * RubberBand
-  * Castle
-  * Lightning
-  * Convert
-  * Swarm of Bees
-  * Lower / Raise Land
-  * Earthquake
-  * Volcano
-  * Skeletal Army
+  * [SpellTurbo Turbo]
+  * [SpellFireball Fireball]
+  * [SpellRubberBand RubberBand]
+  * [SpellCastle Castle]
+  * [SpellLightning Lightning]
+  * [SpellConvert Convert]
+  * [SpellSwarmOfBees Swarm of Bees]
+  * [SpellLowerRaise Lower / Raise Land]
+  * [SpellEarthquake Earthquake]
+  * [SpellVolcano Volcano]
+  * [SpellSkeletalArmy Skeletal Army]
 
 
 AI States
