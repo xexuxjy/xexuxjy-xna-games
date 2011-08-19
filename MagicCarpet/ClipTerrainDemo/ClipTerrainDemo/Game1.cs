@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -8,30 +7,25 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using com.xexuxjy.magiccarpet.terrain;
-using com.xexuxjy.magiccarpet.util;
-using com.xexuxjy.magiccarpet.collision;
-using BulletXNADemos.Demos;
 using Dhpoware;
 using BulletXNA.LinearMath;
-using com.xexuxjy.magiccarpet.gameobjects;
+using BulletXNADemos.Demos;
 
-namespace com.xexuxjy.magiccarpet
+namespace ClipTerrainDemo
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class MagicCarpet : Microsoft.Xna.Framework.Game
+    public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        DebugDrawModes m_debugDrawMode;
-        public MagicCarpet()
+        public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            m_graphics = new GraphicsDeviceManager(this);
+
+            m_debugDraw = new XNA_ShapeDrawer(this);
             Content.RootDirectory = "Content";
             m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
-
+            m_debugDraw.SetDebugMode(m_debugDrawMode);
         }
 
         /// <summary>
@@ -43,29 +37,7 @@ namespace com.xexuxjy.magiccarpet
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            CameraComponent camera = new CameraComponent(this);
-            Globals.Camera = camera;
-            Globals.Initialize();
 
-            Globals.DebugDraw = new XNA_ShapeDrawer(this);
-            Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
-
-            Globals.CollisionManager = new CollisionManager(this,Globals.worldMinPos,Globals.worldMaxPos);
-            Components.Add(Globals.CollisionManager);
-
-            Globals.Terrain = new Terrain(Vector3.Zero, this);
-
-            Globals.GameObjectManager = new GameObjectManager(this);
-
-
-            Components.Add(camera);
-            //Components.Add(Globals.Terrain);
-            Components.Add(new KeyboardController(this));
-            Components.Add(new MouseController(this));
-            Components.Add(new FrameRateCounter(this,Globals.DebugTextFPS,Globals.DebugDraw));
-
-
-            
             base.Initialize();
         }
 
@@ -75,14 +47,16 @@ namespace com.xexuxjy.magiccarpet
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            if (Globals.DebugDraw != null)
-            {
-                Globals.DebugDraw.LoadContent();
-            }
-            base.LoadContent();
-            // TODO: use this.Content to load your game content here
+            m_debugDraw.LoadContent();
+
+            m_camera = new CameraComponent(this);
+            m_clipTerrain = new ClipTerrain(this, m_camera);
+            m_clipTerrain.Initialize();
+            Components.Add(m_clipTerrain);
+            Components.Add(m_camera);
+            Components.Add(new FrameRateCounter(this, new Vector3(20,0,20),m_debugDraw));
+
+
         }
 
         /// <summary>
@@ -103,9 +77,15 @@ namespace com.xexuxjy.magiccarpet
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                this.Exit();
+
+            KeyboardState currentState = Keyboard.GetState();
+            if (currentState.IsKeyDown(Keys.Escape))
             {
                 this.Exit();
             }
+
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -118,18 +98,24 @@ namespace com.xexuxjy.magiccarpet
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            base.Draw(gameTime);
 
-            // do these last.
-            if (Globals.DebugDraw != null)
-            {
-                Matrix view = Globals.Camera.ViewMatrix;
-                Matrix projection = Globals.Camera.ProjectionMatrix;
-                Globals.DebugDraw.RenderDebugLines(gameTime, ref view, ref projection);
-                Globals.DebugDraw.RenderOthers(gameTime, ref view, ref projection);
-            }
             // TODO: Add your drawing code here
+            Matrix view = m_camera.ViewMatrix;
+            Matrix projection = m_camera.ProjectionMatrix;
+            m_debugDraw.RenderDebugLines(gameTime, ref view, ref projection);
+            m_debugDraw.RenderOthers(gameTime, ref view, ref projection);
 
+
+            base.Draw(gameTime);
         }
+
+        
+        XNA_ShapeDrawer m_debugDraw;
+        DebugDrawModes m_debugDrawMode;
+        CameraComponent m_camera;
+        ClipTerrain m_clipTerrain;
+        GraphicsDeviceManager m_graphics;
+
     }
+
 }
