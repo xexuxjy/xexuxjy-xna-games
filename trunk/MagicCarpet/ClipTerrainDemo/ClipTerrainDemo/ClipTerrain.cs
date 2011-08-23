@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Dhpoware;
+using System.Diagnostics;
 
 namespace ClipTerrainDemo
 {
@@ -14,10 +15,6 @@ namespace ClipTerrainDemo
         public ClipTerrain(Game game,ICamera camera)
             : base(game)
         {
-            m_basicEffect = new BasicEffect(game.GraphicsDevice);
-            //m_basicEffect.TextureEnabled = true;
-            m_basicEffect.VertexColorEnabled = true;
-            
             m_rasterizerState = new RasterizerState();
             m_rasterizerState.FillMode = FillMode.WireFrame;
             m_camera = camera;
@@ -39,6 +36,9 @@ namespace ClipTerrainDemo
 
         public void BuildRings()
         {
+            m_effect = Game.Content.Load<Effect>("ClipTerrain");
+            //m_basicEffect.TextureEnabled = true;
+            //m_basicEffect.VertexColorEnabled = true;
             m_numRings = 4;
 
             Vector2 center = new Vector2();
@@ -46,17 +46,17 @@ namespace ClipTerrainDemo
 
             ringDims[0] = new Vector2(33, 33);
             ringDims[1] = ringDims[0]*2;
-            ringDims[2] = ringDims[1]*3;
-            ringDims[3] = ringDims[2] * 4;
+            ringDims[2] = ringDims[1]*4;
+            ringDims[3] = ringDims[2] * 8;
             //ringDims[3] = new Vector2(1024, 1024);
 
             int numSteps = (int)ringDims[0].X * 2;
 
-            List<VertexPositionColor>[] ringVertices = new List<VertexPositionColor>[m_numRings];
+            List<PosOnlyVertex>[] ringVertices = new List<PosOnlyVertex>[m_numRings];
             List<int>[] ringIndices= new List<int>[m_numRings];
             for (int i = 0; i < m_numRings; ++i)
             {
-                ringVertices[i] = new List<VertexPositionColor>();
+                ringVertices[i] = new List<PosOnlyVertex>();
                 ringIndices[i] = new List<int>();
             }
             for (int i = 0; i < m_numRings; ++i)
@@ -77,8 +77,8 @@ namespace ClipTerrainDemo
 
             for (int i = 0; i < m_numRings; i++)
             {
-                m_ringVertexBuffers[i] = new VertexBuffer(Game.GraphicsDevice, VertexPositionColor.VertexDeclaration, ringVertices[i].Count, BufferUsage.None);
-                m_ringVertexBuffers[i].SetData<VertexPositionColor>(ringVertices[i].ToArray());
+                m_ringVertexBuffers[i] = new VertexBuffer(Game.GraphicsDevice, PosOnlyVertex.VertexDeclaration, ringVertices[i].Count, BufferUsage.None);
+                m_ringVertexBuffers[i].SetData<PosOnlyVertex>(ringVertices[i].ToArray());
                 m_ringIndexBuffers[i] = new IndexBuffer(Game.GraphicsDevice, IndexElementSize.ThirtyTwoBits, ringIndices[i].Count, BufferUsage.None);
                 m_ringIndexBuffers[i].SetData<int>(ringIndices[i].ToArray());
             }
@@ -87,6 +87,30 @@ namespace ClipTerrainDemo
             m_ringDemoTextures[1] = GetTexture(Color.Red.ToVector3());
             //m_ringDemoTextures[2] = GetTexture(Color.Green.ToVector3());
             //m_ringDemoTextures[3] = GetTexture(Color.Blue.ToVector3());
+
+
+
+            Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("heightmap");
+            m_heightMapTexture = new Texture2D(Game.GraphicsDevice,wrongFormatTexture.Width,wrongFormatTexture.Height,false,SurfaceFormat.Single);
+            Color[] colorData = new Color[wrongFormatTexture.Width*wrongFormatTexture.Height];
+            wrongFormatTexture.GetData<Color>(colorData);
+
+            Single[] adjustedData = new Single[colorData.Length];
+            m_heightMapTexture.GetData<Single>(adjustedData);
+
+            for (int i = 0; i < colorData.Length; ++i)
+            {
+                adjustedData[i] = colorData[i].R;
+            }
+
+            m_heightMapTexture.SetData<Single>(adjustedData);
+
+            //m_heightMapTexture.GetData<Single>
+
+            m_effect.Parameters["fineLevelTexture"].SetValue(m_heightMapTexture);
+            m_normalTexture = new Texture2D(Game.GraphicsDevice, m_heightMapTexture.Width * 2, m_heightMapTexture.Height * 2);
+            m_effect.Parameters["normalsTexture"].SetValue(m_normalTexture);
+            m_effect.Parameters["ZScaleFactor"].SetValue(1.0f);
 
         }
 
@@ -107,7 +131,7 @@ namespace ClipTerrainDemo
 
 
 
-        public void BuildRing(int ring, Vector2 min, Vector2 max, Vector2 holeMin, Vector2 holeMax, int numSteps, List<VertexPositionColor> vertices, List<int> indices)
+        public void BuildRing(int ring, Vector2 min, Vector2 max, Vector2 holeMin, Vector2 holeMax, int numSteps, List<PosOnlyVertex> vertices, List<int> indices)
         {
             //int xstep = (int)((max.X - min.X) / numSteps);
             //int ystep = (int)((max.Y - min.Y) / numSteps);
@@ -174,7 +198,7 @@ namespace ClipTerrainDemo
 
         }
 
-        private void BuildSubSquare(Vector2 min, Vector2 max, int xSpan, int ySpan, List<VertexPositionColor> vertices, List<int> indices, Color color)
+        private void BuildSubSquare(Vector2 min, Vector2 max, int xSpan, int ySpan, List<PosOnlyVertex> vertices, List<int> indices, Color color)
         {
             float xstep = ((max.X - min.X) / xSpan);
             float ystep = ((max.Y - min.Y) / ySpan);
@@ -188,8 +212,8 @@ namespace ClipTerrainDemo
             {
                 for (int y = 0; y < vertsY; ++y)
                 {
-                    Vector3 v = new Vector3(min.X + (x * xstep), 0, min.Y + (y * ystep));
-                    VertexPositionColor vpnt = new VertexPositionColor(v,color);
+                    Vector2 v = new Vector2(min.X + (x * xstep), min.Y + (y * ystep));
+                    PosOnlyVertex vpnt = new PosOnlyVertex(v);
 
                     vertices.Add(vpnt);
                     if (x < xSpan && y < ySpan)
@@ -208,18 +232,21 @@ namespace ClipTerrainDemo
 
         public override void Draw(GameTime gameTime)
         {
-            m_basicEffect.View = m_camera.ViewMatrix;
-            m_basicEffect.Projection = m_camera.ProjectionMatrix;
-            m_basicEffect.World = Matrix.Identity;
+            Matrix worldMatrix = Matrix.Identity;
+            m_effect.Parameters["WorldViewProjMatrix"].SetValue(worldMatrix * m_camera.ViewMatrix * m_camera.ProjectionMatrix);
+
             RasterizerState oldState = Game.GraphicsDevice.RasterizerState;
             Game.GraphicsDevice.RasterizerState = m_rasterizerState;
-            foreach (EffectPass pass in m_basicEffect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 for(int i=0;i<m_numRings;++i)
                 {
+                    m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(1, 1, 0, 0));
+                    m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(1.0f / m_heightMapTexture.Width, 1.0f / m_heightMapTexture.Height, 0, 0));
+
+                    m_effect.Parameters["blockColor"].SetValue(ColorForRing(i));
                     Game.GraphicsDevice.Indices = m_ringIndexBuffers[i];
-                    Game.GraphicsDevice.Textures[0] = m_ringDemoTextures[i];
                     Game.GraphicsDevice.SetVertexBuffer(m_ringVertexBuffers[i]);
                     Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_ringVertexBuffers[i].VertexCount, 0, m_ringIndexBuffers[i].IndexCount/ 3);                
                 }
@@ -227,7 +254,27 @@ namespace ClipTerrainDemo
             Game.GraphicsDevice.RasterizerState = oldState;
         }
 
-        private BasicEffect m_basicEffect;
+        public void UpdateHeight(float[] p, int index, float new_val)
+        {
+            p[index] = new_val;
+        }
+
+
+        public Vector4 ColorForRing(int ring)
+        {
+            switch (ring)
+            {
+                case (0):
+                    return Color.Yellow.ToVector4();
+                case (1):
+                    return Color.Red.ToVector4();
+                default:
+                    return Color.Black.ToVector4();
+            }
+        }
+
+
+        private Effect m_effect;
         
         // simple one vb per ring to begin with
         private VertexBuffer[] m_ringVertexBuffers;
@@ -238,9 +285,41 @@ namespace ClipTerrainDemo
         private int m_numRings;
 
         private Texture2D m_heightMapTexture;
+        private Texture2D m_normalTexture;
+
         private float[][] m_heightMap;
         private ICamera m_camera;
         private Dictionary<Vector3, Texture2D> m_colorMap = new Dictionary<Vector3, Texture2D>();
         private RasterizerState m_rasterizerState;
+
+        private Random m_random = new Random();
+        const int m_randomMax = 0x7fff;
+        const int s_gridSize = 32 + 1;  // must be (2^N) + 1
+        const float s_gridSpacing = 5.0f;
+
+        const float s_gridHeightScale = 0.2f;
+
+        
     }
+
+    public struct PosOnlyVertex : IVertexType
+    {
+
+        public PosOnlyVertex(Vector2 v)
+        {
+            Position = v;
+        }
+
+        public Vector2 Position;
+
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+            new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0)
+        );
+
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+    };
+
+    
+
 }
