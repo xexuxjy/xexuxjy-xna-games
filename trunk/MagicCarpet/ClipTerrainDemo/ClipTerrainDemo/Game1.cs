@@ -50,9 +50,25 @@ namespace ClipTerrainDemo
             m_debugDraw.LoadContent();
 
             m_camera = new CameraComponent(this);
-            m_clipTerrain = new ClipTerrain(this, m_camera);
-            m_clipTerrain.Initialize();
-            Components.Add(m_clipTerrain);
+            
+            
+            //m_clipTerrain = new ClipTerrain(this, m_camera);
+            //m_clipTerrain.Initialize();
+            //Components.Add(m_clipTerrain);
+
+            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 1));
+            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 2));
+            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 3));
+            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 4));
+            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 5));
+
+            foreach (ClipLevel clipLevel in m_clipLevels)
+            {
+                clipLevel.Initialize();
+                Components.Add(clipLevel);
+            }
+            
+            
             Components.Add(m_camera);
             Components.Add(new FrameRateCounter(this, new Vector3(20,0,20),m_debugDraw));
 
@@ -114,6 +130,7 @@ namespace ClipTerrainDemo
         DebugDrawModes m_debugDrawMode;
         CameraComponent m_camera;
         ClipTerrain m_clipTerrain;
+        List<ClipLevel> m_clipLevels = new List<ClipLevel>();
         GraphicsDeviceManager m_graphics;
 
     }
