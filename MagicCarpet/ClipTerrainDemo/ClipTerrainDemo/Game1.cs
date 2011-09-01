@@ -56,11 +56,12 @@ namespace ClipTerrainDemo
             //m_clipTerrain.Initialize();
             //Components.Add(m_clipTerrain);
 
+            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 0));
             m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 1));
             m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 2));
-            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 3));
-            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 4));
-            m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 5));
+            //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 3));
+            //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 4));
+            //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 5));
 
             foreach (ClipLevel clipLevel in m_clipLevels)
             {
