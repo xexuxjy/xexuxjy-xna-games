@@ -65,6 +65,8 @@ namespace ClipTerrainDemo
             Game.GraphicsDevice.Indices = s_blockIndexBuffer;
             Game.GraphicsDevice.SetVertexBuffer(s_blockVertexBuffer);
 
+            m_effect.Parameters["blockColor"].SetValue(ColorForRing(m_scaleLevel));
+
             if (m_scaleLevel == 0)
             {
                 DrawCore(gameTime, boundingFrustrum);
@@ -78,39 +80,43 @@ namespace ClipTerrainDemo
 
         public void DrawCore(GameTime gameTime, BoundingFrustum boundingFrustrum)
         {
-            DrawAtOffset(-1, -1, m_scaleLevel, boundingFrustrum, false);
-            DrawAtOffset(0, -1, m_scaleLevel, boundingFrustrum, false);
-            DrawAtOffset(-1, 0, m_scaleLevel, boundingFrustrum, false);
-            DrawAtOffset(0, 0, m_scaleLevel, boundingFrustrum,false);
+            DrawAtOffset(s_blockSize, s_blockSize, m_scaleLevel, boundingFrustrum, false);
+            DrawAtOffset((s_blockSize * 2) - 1, s_blockSize, m_scaleLevel, boundingFrustrum, false);
+            DrawAtOffset(s_blockSize, (s_blockSize*2)-1, m_scaleLevel, boundingFrustrum, false);
+            DrawAtOffset((s_blockSize * 2) - 1, (s_blockSize * 2) - 1, m_scaleLevel, boundingFrustrum, false);
         }
 
 
 
         public void DrawRing(GameTime gameTime,BoundingFrustum boundingFrustrum)
         {
-            DrawAtOffset(-2, -2, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(-1, -2, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(0, -2, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(1, -2, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(0, 0, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(s_blockSize-1, 0, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset((s_blockSize*2), 0, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(((s_blockSize*3)-1), 0, m_scaleLevel, boundingFrustrum);
 
-            DrawAtOffset(-2, -1, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(1, -1, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(((s_blockSize * 3) - 1), s_blockSize-1, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(((s_blockSize * 3) - 1), s_blockSize*2, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(((s_blockSize * 3) - 1), ((s_blockSize*3)-1), m_scaleLevel, boundingFrustrum);
 
-            DrawAtOffset(-2, 0, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(1, 0, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(s_blockSize*2, ((s_blockSize * 3) - 1), m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(s_blockSize-1, ((s_blockSize * 3) - 1), m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(0, ((s_blockSize * 3) - 1), m_scaleLevel, boundingFrustrum);
 
-            DrawAtOffset(-2, 1, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(-1, 1, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(0, 1, m_scaleLevel, boundingFrustrum);
-            DrawAtOffset(1, 1, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(0, s_blockSize*2, m_scaleLevel, boundingFrustrum);
+            DrawAtOffset(0, s_blockSize-1, m_scaleLevel, boundingFrustrum);
 
 
-            Game.GraphicsDevice.Indices = s_fixupIndexBuffer;
-            Game.GraphicsDevice.SetVertexBuffer(s_fixupVertexBuffer);
+            m_effect.Parameters["blockColor"].SetValue(Color.Green.ToVector4());
+
+            Game.GraphicsDevice.Indices = s_fixupIndexBufferH;
             DrawFixup(0, m_scaleLevel, boundingFrustrum);
             DrawFixup(1, m_scaleLevel, boundingFrustrum);
+
+            Game.GraphicsDevice.Indices = s_fixupIndexBufferV;
             DrawFixup(2, m_scaleLevel, boundingFrustrum);
             DrawFixup(3, m_scaleLevel, boundingFrustrum);
+            m_effect.Parameters["blockColor"].SetValue(ColorForRing(m_scaleLevel));
 
         }
 
@@ -122,69 +128,52 @@ namespace ClipTerrainDemo
             int y = 0;
             int scaleFactor = (int)Math.Pow(2, scaleLevel);
             Matrix rotate = Matrix.Identity;
-
+            BoundingBox box;
+            Vector3 max = Vector3.Zero;
             switch (pos)
             {
                 case (0):
                     {
-                        x = -1 * scaleFactor;
-                        y = -2 * (scaleFactor * (s_blockSize - 1));
-                        y -= scaleFactor;
+                        x = ((s_blockSize * 2) -2) * scaleFactor;
+                        y = 0;
+                        max = new Vector3(x + ((s_fixupOffset - 1) * scaleFactor), s_maxHeight, y + ((s_blockSize - 1) * scaleFactor));
                         break;
                     }
                 case (1):
                     {
-                        y = (-2 * scaleFactor * (s_blockSize - 1));
-                        y -= scaleFactor;
-                        x -= scaleFactor;
-                        rotate = Matrix.CreateRotationY((float)Math.PI / 2f);
-                        break;
+                        x = ((s_blockSize * 2) - 2) * scaleFactor;
+                        y = ((s_blockSize * 3) - 1) * scaleFactor;
+                        max = new Vector3(x + ((s_fixupOffset - 1) * scaleFactor), s_maxHeight, y + ((s_blockSize - 1) * scaleFactor));
+                        break; 
                     }
                 case (2):
                     {
-                        y = (scaleFactor * (s_blockSize - 1));
-                        y += scaleFactor;
-                        x -= scaleFactor;
-                        rotate = Matrix.CreateRotationY((float)Math.PI / 2f);
+                        x = ((s_blockSize * 3) - 1) * scaleFactor;
+                        y = ((s_blockSize * 2) - 2) * scaleFactor;
+                        max = new Vector3(x + ((s_blockSize - 1) * scaleFactor), s_maxHeight, y + ((s_fixupOffset - 1) * scaleFactor));
                         break;
                     }
                 case (3):
                     {
-                        x = -1 * scaleFactor;
-                        y = (scaleFactor * (s_blockSize - 1));
-                        y += scaleFactor;
+                        x = 0;
+                        y = ((s_blockSize * 2) - 2) * scaleFactor;
+                        max = new Vector3(x + ((s_blockSize - 1) * scaleFactor), s_maxHeight, y + ((s_fixupOffset - 1) * scaleFactor));
                         break;
                     }
             }
+            Vector3 min = new Vector3(x, -s_maxHeight, y);
+            //min = Vector3.TransformNormal(min,rotate);
+            //max = Vector3.TransformNormal(max, rotate);
 
-            x += (int)m_position.X;
-            y += (int)m_position.Z;
-
+            min += m_position;
+            max += m_position;
             //x = 0;
             //y = 0;
             //rotate = Matrix.Identity;
 
-            BoundingBox box = new BoundingBox(new Vector3(x, -s_maxHeight, y), new Vector3(x + ((s_blockSize - 1) * scaleFactor), s_maxHeight, y + ((s_blockSize - 1) * scaleFactor)));
-            //if (boundingFrustrum.Intersects(box))
-            {
+            box = new BoundingBox(min,max);
 
-                Matrix worldMatrix = rotate;
-                m_effect.Parameters["WorldViewProjMatrix"].SetValue(worldMatrix * m_camera.ViewMatrix * m_camera.ProjectionMatrix);
-                m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scaleFactor, scaleFactor, x, y));
-                m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(1.0f / m_heightMapTexture.Width, 1.0f / m_heightMapTexture.Height, 0, 0));
-                m_effect.Parameters["blockColor"].SetValue(ColorForRing(scaleLevel));
-
-                RasterizerState oldState = Game.GraphicsDevice.RasterizerState;
-                Game.GraphicsDevice.RasterizerState = m_rasterizerState;
-
-                foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
-                {
-                    pass.Apply();
-                    Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, s_fixupVertexBuffer.VertexCount, 0, s_fixupIndexBuffer.IndexCount / 3);
-                }
-            }
-
-
+            InternalDraw(ref box, boundingFrustrum, ref rotate, s_blockSize*3, s_fixupIndexBufferH.IndexCount);
         }
 
 
@@ -197,58 +186,36 @@ namespace ClipTerrainDemo
         {
             int scaleFactor = (int)Math.Pow(2, scaleLevel);
 
-            x *= (scaleFactor * (s_blockSize - 1));
-            y *= (scaleFactor * (s_blockSize - 1));
+            x *= scaleFactor;
+            y *= scaleFactor;
 
-            if (applyFixups)
-            {
-                //offset for fixups
-                if (x < 0)
-                {
-                    x -= scaleFactor;
-                }
-                else
-                {
-                    x += scaleFactor;
-                }
-
-                if (y < 0)
-                {
-                    y -= scaleFactor;
-                }
-                else
-                {
-                    y += scaleFactor;
-                }
-            }
-            
             x += (int)m_position.X;
             y += (int)m_position.Z;
 
             BoundingBox box = new BoundingBox(new Vector3(x, -s_maxHeight, y), new Vector3(x + ((s_blockSize - 1) * scaleFactor), s_maxHeight, y + ((s_blockSize - 1) * scaleFactor)));
-            if (boundingFrustrum.Intersects(box))
+            Matrix worldMatrix = Matrix.Identity;
+            InternalDraw(ref box, boundingFrustrum, ref worldMatrix, s_blockVertexBuffer.VertexCount, s_blockIndexBuffer.IndexCount);
+        }
+
+
+        private void InternalDraw(ref BoundingBox boundingBox, BoundingFrustum boundingFrustrum, ref Matrix world, int numVertices, int numIndices)
+        {
+            if (boundingFrustrum.Intersects(boundingBox))
             {
-
-                Matrix worldMatrix = Matrix.Identity;
-                m_effect.Parameters["WorldViewProjMatrix"].SetValue(worldMatrix * m_camera.ViewMatrix * m_camera.ProjectionMatrix);
-                m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scaleFactor, scaleFactor, x, y));
+                int scaleFactor = (int)Math.Pow(2, m_scaleLevel);
+                m_effect.Parameters["WorldViewProjMatrix"].SetValue(world * m_camera.ViewMatrix * m_camera.ProjectionMatrix);
+                m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scaleFactor, scaleFactor, boundingBox.Min.X, boundingBox.Min.Z));
                 m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(1.0f / m_heightMapTexture.Width, 1.0f / m_heightMapTexture.Height, 0, 0));
-
-                m_effect.Parameters["blockColor"].SetValue(ColorForRing(scaleLevel));
 
                 RasterizerState oldState = Game.GraphicsDevice.RasterizerState;
                 Game.GraphicsDevice.RasterizerState = m_rasterizerState;
                 foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
                 {
                     pass.Apply();
-                    Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, s_blockVertexBuffer.VertexCount, 0, s_blockIndexBuffer.IndexCount / 3);
+                    Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numIndices / 3);
                 }
             }
-            //Game.GraphicsDevice.RasterizerState = oldState;
-
-
         }
-
 
 
         public static void BuildVertexBuffers(GraphicsDevice graphicsDevice)
@@ -285,16 +252,12 @@ namespace ClipTerrainDemo
             vertexCounter = 0;
             indexCounter = 0;
 
-            stride = s_fixupOffset;
+            stride = s_blockSize;
 
             for (int y = 0; y < s_blockSize; ++y)
             {
                 for (int x = 0; x < s_fixupOffset; ++x)
                 {
-                    Vector2 v = new Vector2(x, y);
-                    PosOnlyVertex vpnt = new PosOnlyVertex(v);
-
-                    fixupVertices[vertexCounter++] = vpnt;
                     if (x < s_fixupOffset-1 && y < s_blockSize-1)
                     {
                         fixupIndices[indexCounter++] = (x + (y * stride));
@@ -308,56 +271,95 @@ namespace ClipTerrainDemo
                     }
                 }
             }
-
-
-            int[] degenerateIndices = new int[(((s_clipMapSize - 1) / 2) * 3) * 4];
-            vertexCounter = 0;
+            s_fixupIndexBufferH = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, fixupIndices.Length, BufferUsage.None);
+            s_fixupIndexBufferH.SetData<int>(fixupIndices);
             indexCounter = 0;
 
-		    for (int i=0;i<s_blockSize-2;i+=2)
-		    {
-			    degenerateIndices[indexCounter++] = i;
-			    degenerateIndices[indexCounter++] = i + 2;
-			    degenerateIndices[indexCounter++] = i + 1;
-		    }
+            stride = s_blockSize;
 
-		    for (int i = 0; i < s_clipMapSize - 2; i+=2 )
-		    {
-			    degenerateIndices[indexCounter++] = i * s_clipMapSize + (s_clipMapSize-1);
-			    degenerateIndices[indexCounter++] = (i + 2) * s_clipMapSize + (s_clipMapSize-1);
-			    degenerateIndices[indexCounter++] = (i + 1) * s_clipMapSize + (s_clipMapSize-1);
-		    }
+            for (int y = 0; y < s_fixupOffset; ++y)
+            {
+                for (int x = 0; x < s_blockSize; ++x)
+                {
+                    if (x < s_blockSize - 1 && y < s_fixupOffset- 1)
+                    {
+                        fixupIndices[indexCounter++] = (x + (y * stride));
+                        fixupIndices[indexCounter++] = (x + 1 + (y * stride));
+                        fixupIndices[indexCounter++] = (x + 1 + ((y + 1) * stride));
 
-		    for (int i =  s_clipMapSize-1; i > 1; i-=2 )
-		    {
-			    degenerateIndices[indexCounter++] = (s_clipMapSize-1) * s_clipMapSize + i;
-			    degenerateIndices[indexCounter++] = (s_clipMapSize-1) * s_clipMapSize + (i - 2);
-			    degenerateIndices[indexCounter++] = (s_clipMapSize-1) * s_clipMapSize + (i - 1);
-		    }
+                        fixupIndices[indexCounter++] = (x + 1 + ((y + 1) * stride));
+                        fixupIndices[indexCounter++] = (x + ((y + 1) * stride));
+                        fixupIndices[indexCounter++] = (x + (y * stride));
 
-		    for (int i = s_clipMapSize-1; i > 1; i-=2 )
-		    {
-			    degenerateIndices[indexCounter++] = i * s_clipMapSize;
-			    degenerateIndices[indexCounter++] = (i - 2) * s_clipMapSize;
-			    degenerateIndices[indexCounter++] = (i - 1) * s_clipMapSize;
-		    }
+                    }
+                }
+            }
+            s_fixupIndexBufferV = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, fixupIndices.Length, BufferUsage.None);
+            s_fixupIndexBufferV.SetData<int>(fixupIndices);
+
+
+
+            //int numDegenerateIndices = (((s_clipMapSize - 1) / 2) * 3) * 4;
+            //indexCounter = 0;
+
+            //PosOnlyVertex[] degenerates = new PosOnlyVertex[numDegenerateIndices/6];
+
+            //for(int i=0;i<s_blockSize;++i)
+            //{
+            //    degenerates[indexCounter] = new PosOnlyVertex(new Vector2(i,0));
+            //    degenerates[indexCounter+s_blockSize] = new PosOnlyVertex(new Vector2(0,i));
+            //    degenerates[indexCounter+(2*s_blockSize)] = new PosOnlyVertex(new Vector2(i,s_blockSize));
+            //    degenerates[indexCounter+(3*s_blockSize)] = new PosOnlyVertex(new Vector2(s_blockSize,i));
+            //    indexCounter++;
+            //}
+
+            //int[] degenerateIndices = new int[numDegenerateIndices];
+            //vertexCounter = 0;
+            //indexCounter = 0;
+
+            //for (int i=0;i<s_blockSize-2;i+=2)
+            //{
+            //    degenerateIndices[indexCounter++] = i;
+            //    degenerateIndices[indexCounter++] = i + 2;
+            //    degenerateIndices[indexCounter++] = i + 1;
+            //}
+
+            //for (int i = 0; i < s_clipMapSize - 2; i+=2 )
+            //{
+            //    degenerateIndices[indexCounter++] = i * s_clipMapSize + (s_clipMapSize-1);
+            //    degenerateIndices[indexCounter++] = (i + 2) * s_clipMapSize + (s_clipMapSize-1);
+            //    degenerateIndices[indexCounter++] = (i + 1) * s_clipMapSize + (s_clipMapSize-1);
+            //}
+
+            //for (int i =  s_clipMapSize-1; i > 1; i-=2 )
+            //{
+            //    degenerateIndices[indexCounter++] = (s_clipMapSize-1) * s_clipMapSize + i;
+            //    degenerateIndices[indexCounter++] = (s_clipMapSize-1) * s_clipMapSize + (i - 2);
+            //    degenerateIndices[indexCounter++] = (s_clipMapSize-1) * s_clipMapSize + (i - 1);
+            //}
+
+            //for (int i = s_clipMapSize-1; i > 1; i-=2 )
+            //{
+            //    degenerateIndices[indexCounter++] = i * s_clipMapSize;
+            //    degenerateIndices[indexCounter++] = (i - 2) * s_clipMapSize;
+            //    degenerateIndices[indexCounter++] = (i - 1) * s_clipMapSize;
+            //}
 
 
             
             s_blockVertexBuffer = new VertexBuffer(graphicsDevice, PosOnlyVertex.VertexDeclaration, blockVertices.Length, BufferUsage.None);
-            s_fixupVertexBuffer = new VertexBuffer(graphicsDevice, PosOnlyVertex.VertexDeclaration, fixupVertices.Length, BufferUsage.None);
+            //s_degenerateVertexBuffer = new VertexBuffer(graphicsDevice, PosOnlyVertex.VertexDeclaration, degenerates.Length, BufferUsage.None);
 
             s_blockVertexBuffer.SetData<PosOnlyVertex>(blockVertices, 0, blockVertices.Length);
-            s_fixupVertexBuffer.SetData<PosOnlyVertex>(fixupVertices, 0, fixupVertices.Length);
+            //s_degenerateVertexBuffer.SetData<PosOnlyVertex>(degenerates, 0, degenerates.Length);
 
             s_blockIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, blockIndices.Length, BufferUsage.None);
-            s_fixupIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, fixupIndices.Length, BufferUsage.None);
-            s_degenerateIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, degenerateIndices.Length, BufferUsage.None);
+            //s_fixupIndexBufferH = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, fixupIndices.Length, BufferUsage.None);
+            //s_degenerateIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, degenerateIndices.Length, BufferUsage.None);
 
 
             s_blockIndexBuffer.SetData<int>(blockIndices);
-            s_fixupIndexBuffer.SetData<int>(fixupIndices);
-            s_degenerateIndexBuffer.SetData(degenerateIndices);
+            //s_degenerateIndexBuffer.SetData(degenerateIndices);
         }
 
 
@@ -403,11 +405,12 @@ namespace ClipTerrainDemo
 
 
         private static VertexBuffer s_blockVertexBuffer;
-        private static VertexBuffer s_fixupVertexBuffer;
-        //private static VertexBuffer s_degenerateVertexBuffer;
+        private static VertexBuffer s_degenerateVertexBuffer;
 
         private static IndexBuffer s_blockIndexBuffer;
-        private static IndexBuffer s_fixupIndexBuffer;
+        private static IndexBuffer s_fixupIndexBufferH;
+        private static IndexBuffer s_fixupIndexBufferV;
+
         private static IndexBuffer s_degenerateIndexBuffer;
 
 
