@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClipLevel.cs" />
+    <Compile Include="ClipLevelManager.cs" />
     <Compile Include="ClipTerrain.cs" />
     <Compile Include="DHPCameraComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
