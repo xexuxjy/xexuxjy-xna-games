@@ -99,10 +99,11 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float2 alpha = clamp((abs(worldPos-ViewerPos) - AlphaOffset) * OneOverWidth, 0, 1);
     alpha.x  = max(alpha.x, alpha.y);   
     
-    float z = zf + alpha.x * zd;
+    //float z = zf + alpha.x * zd;
+	float z = zf;
     z = z * ZScaleFactor;
     
-    output.pos = mul(float4(worldPos.x, 1,worldPos.y, 1), WorldViewProjMatrix);
+    output.pos = mul(float4(worldPos.x, z,worldPos.y, 1), WorldViewProjMatrix);
     
     output.uv = uv;
     output.zalpha = float2(0.5 + z/1600, alpha.x);
