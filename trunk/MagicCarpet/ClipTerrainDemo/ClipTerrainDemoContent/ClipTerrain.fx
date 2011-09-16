@@ -96,7 +96,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	float3 c1 = float3(worldPos.x+ScaleFactor.x,xplus1,worldPos.y);
 	float3 c2 = float3(worldPos.x,yplus1,worldPos.y+ScaleFactor.y);
 
-	output.normal = normalize(cross((c1-c0), (c2-0)));
+	output.normal = normalize(cross((c2-c0), (c1-c0)));
 
 	
 	// 
@@ -163,11 +163,16 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	// adjust for lighting.
 
 	float projection = saturate(DotProduct(LightPosition,input.pos,input.normal));
-	projection *= 0.2;
+	projection *= 0.02;
 	float3 directionalComponent = DirectionalLight * projection;
 	float4 light = (AmbientLight + directionalComponent,1);
+	//float4 light = (directionalComponent,1);
 	//result *= light;
-	result = light;
+	
+	//light = float4(0.1,0.1,0.1,1);
+	
+	
+	result *= light;
 
 	return result;
 }
