@@ -1,7 +1,7 @@
 texture fineLevelTexture;
 texture normalsTexture;
 texture rampTexture;
-
+texture HeightMapTexture;
 
 uniform matrix WorldViewProjMatrix;
 uniform float  ZScaleFactor;
@@ -12,6 +12,9 @@ uniform float2 ViewerPos;
 uniform float  OneOverWidth;
 uniform float3 LightDirection;
 float4 BlockColor;
+float OneOverMaxExtents;
+float2 TerrainTextureWindow;
+
 
 struct VertexShaderInput
 {
@@ -30,12 +33,12 @@ struct VertexShaderOutput
 
 uniform sampler ElevationSampler = sampler_state            // fine level height sampler
 {
-    Texture   = (fineLevelTexture);
+    Texture   = (HeightMapTexture);
     MipFilter = None;
     MinFilter = Point;
     MagFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 uniform sampler NormalMapSampler = sampler_state            
@@ -71,29 +74,33 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     // compute coordinates for vertex texture
     //  FineBlockOrig.xy: 1/(w, h) of texture
     //  FineBlockOrig.zw: origin of block in texture           
-    float2 uv = float2(input.gridPos*FineTextureBlockOrigin.zw+FineTextureBlockOrigin.xy);
-    
+    //float2 uv = float2(input.gridPos*FineTextureBlockOrigin.zw+FineTextureBlockOrigin.xy);
+	// calc texture coordinate (assuming positions are centered)
+	float2 uv = float2((worldPos.x * OneOverMaxExtents)+0.5,(worldPos.y * OneOverMaxExtents)+0.5);
+    uv += TerrainTextureWindow;
     // sample the vertex texture
     float zf_zd = tex2Dlod(ElevationSampler, float4(uv, 0, 1));
 
     // unpack to obtain zf and zd = (zc - zf)
     //  zf is elevation value in current (fine) level
     //  zc is elevation value in coarser level
-    float zf   = floor(zf_zd);
-    float zd   = frac(zf_zd) * 512 - 256;       // zd = zc - z
+//    float zf   = floor(zf_zd);
+  //  float zd   = frac(zf_zd) * 512 - 256;       // zd = zc - z
 
     // compute alpha (transition parameter), and blend elevation.
-    float2 alpha = clamp((abs(worldPos-ViewerPos) - AlphaOffset) * OneOverWidth, 0, 1);
-    alpha.x  = max(alpha.x, alpha.y);   
+    //float2 alpha = clamp((abs(worldPos-ViewerPos) - AlphaOffset) * OneOverWidth, 0, 1);
+    //alpha.x  = max(alpha.x, alpha.y);   
     
-    float z = zf + alpha.x * zd;
+    //float z = zf + alpha.x * zd;
+	float z = zf_zd;
     z = z * ZScaleFactor;
     
-    output.pos = mul(float4(worldPos.x, 1,worldPos.y, 1), WorldViewProjMatrix);
+    output.pos = mul(float4(worldPos.x, z,worldPos.y, 1), WorldViewProjMatrix);
+	//output.pos = mul(float4(worldPos.x, 0,worldPos.y, 1), WorldViewProjMatrix);
     
     output.uv = uv;
-    output.zalpha = float2(0.5 + z/1600, alpha.x);
-    
+    //output.zalpha = float2(0.5 + z/1600, alpha.x);
+    output.zalpha = 1.0;
     
     return output;
 

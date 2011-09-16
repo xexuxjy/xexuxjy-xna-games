@@ -22,7 +22,24 @@ namespace ClipTerrainDemo
         public override void Initialize()
         {
             m_effect = Game.Content.Load<Effect>("ClipTerrain");
+            Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("heightmap");
+            m_heightMapTexture = new Texture2D(Game.GraphicsDevice, wrongFormatTexture.Width, wrongFormatTexture.Height, false, SurfaceFormat.Single);
+            Color[] colorData = new Color[wrongFormatTexture.Width * wrongFormatTexture.Height];
+            wrongFormatTexture.GetData<Color>(colorData);
+
+            Single[] adjustedData = new Single[colorData.Length];
+            m_heightMapTexture.GetData<Single>(adjustedData);
+
+            for (int i = 0; i < colorData.Length; ++i)
+            {
+                adjustedData[i] = colorData[i].R;
+            }
+
+            m_heightMapTexture.SetData<Single>(adjustedData);
+            m_effect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
+
             BuildVertexBuffers();
+
         }
 
 
@@ -94,12 +111,25 @@ namespace ClipTerrainDemo
             m_graphicsDevice.RasterizerState = m_rasterizerState;
             m_graphicsDevice.Indices = m_blockIndexBuffer;
             m_graphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
-            float textureWidth = 1024;
-            m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(1.0f / textureWidth, 1.0f / textureWidth, 0, 0));
-            m_effect.Parameters["ZScaleFactor"].SetValue(1.0f);
-
+            float oneOverTextureWidth = 1f/1024f;
+            m_effect.Parameters["ZScaleFactor"].SetValue(0.1f);
 
             float maxHeight = 100;
+
+            float maxSpan2 = (float)Math.Pow(3, m_numLevels) * m_blockVertices;
+
+
+            // need to figure out a window on the height map texture.
+            float visibleTerrainFraction = 1.0f;
+            m_effect.Parameters["TerrainTextureWindow"].SetValue(new Vector2(0, 0));
+            maxSpan2 *= visibleTerrainFraction;
+
+            m_effect.Parameters["OneOverMaxExtents"].SetValue(1 / maxSpan2);
+
+
+            Vector3 maxPos = Vector3.Zero;
+
+            Vector3 lastStartPosition = Vector3.Zero;
 
             foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
             {
@@ -113,8 +143,6 @@ namespace ClipTerrainDemo
                 // need apply on inner level to make sure latest vals copied across
                 pass.Apply();
                 Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
-
-                Vector3 lastStartPosition = Vector3.Zero;
 
 
                 for (int level = 0; level < m_numLevels; ++level)
@@ -137,9 +165,22 @@ namespace ClipTerrainDemo
                                 position += lastStartPosition;
 
                                 BoundingBox bb = new BoundingBox(position,position+blockSize);
+
+                                if (bb.Max.X > maxPos.X)
+                                {
+                                    maxPos.X = bb.Max.X;
+                                }
+
+                                if (bb.Max.Z > maxPos.Z)
+                                {
+                                    maxPos.Z = bb.Max.Z;
+                                }
+
                                 if (boundingFrustrum.Intersects(bb))
                                 {
                                     m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scale.X, scale.Z, position.X, position.Z));
+                                    m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, 0, 0));
+
                                     // need apply on inner level to make sure latest vals copied across
                                     pass.Apply();
                                     Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
@@ -186,8 +227,8 @@ namespace ClipTerrainDemo
         }
 
 
-        const int m_numLevels = 4;
-        const int m_blockVertices = 127;
+        const int m_numLevels = 2;
+        const int m_blockVertices = 65;
         const int m_blockSize = m_blockVertices-1;
         VertexBuffer m_blockVertexBuffer;
         IndexBuffer m_blockIndexBuffer;
