@@ -59,6 +59,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ClipTerrainDemo.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
@@ -111,6 +114,7 @@
     <Compile Include="ClipLevelManager.cs" />
     <Compile Include="ClipTerrain.cs" />
     <Compile Include="DHPCameraComponent.cs" />
+    <Compile Include="NoLimitClipLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
@@ -120,13 +124,22 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
+    <ProjectReference Include="..\..\..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
       <Project>{3E64761A-AC83-4C76-93BE-475F95165560}</Project>
       <Name>BulletXNADemos-Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
+    <ProjectReference Include="..\..\..\..\..\bullet-xna\trunk\BulletXNADemos\Content\Content.contentproj">
+      <Project>{19F18FB0-6BA5-4076-9E7E-934437CAC410}</Project>
+      <Name>Content</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
       <Project>{4E1937EE-3139-44CB-989D-F050BC099CE6}</Project>
       <Name>BulletXNA-Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MagicCarpet\MagicCarpet.csproj">
+      <Project>{529FB650-8C06-441E-92FF-635C0C6A7353}</Project>
+      <Name>MagicCarpet</Name>
     </ProjectReference>
     <ProjectReference Include="..\ClipTerrainDemoContent\ClipTerrainDemoContent.contentproj">
       <Name>ClipTerrainDemoContent</Name>

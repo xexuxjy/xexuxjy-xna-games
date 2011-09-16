@@ -245,7 +245,7 @@ namespace ClipTerrainDemo
                     m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(1, 1, 0, 0));
                     m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(1.0f / m_heightMapTexture.Width, 1.0f / m_heightMapTexture.Height, 0, 0));
 
-                    m_effect.Parameters["blockColor"].SetValue(ColorForRing(i));
+                    m_effect.Parameters["BlockColor"].SetValue(ColorForRing(i));
                     Game.GraphicsDevice.Indices = m_ringIndexBuffers[i];
                     Game.GraphicsDevice.SetVertexBuffer(m_ringVertexBuffers[i]);
                     Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_ringVertexBuffers[i].VertexCount, 0, m_ringIndexBuffers[i].IndexCount/ 3);                
