@@ -15,7 +15,7 @@ namespace ClipTerrainDemo
         {
             m_camera = camera;
             m_rasterizerState = new RasterizerState();
-            m_rasterizerState.FillMode = FillMode.WireFrame;
+            //m_rasterizerState.FillMode = FillMode.WireFrame;
             m_graphicsDevice = Game.GraphicsDevice;
         }
 
@@ -23,6 +23,9 @@ namespace ClipTerrainDemo
         {
             m_effect = Game.Content.Load<Effect>("ClipTerrain");
             Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("heightmap");
+            m_baseTexture = Game.Content.Load<Texture2D>("base");
+            m_noiseTexture = Game.Content.Load<Texture2D>("noise");
+
             m_heightMapTexture = new Texture2D(Game.GraphicsDevice, wrongFormatTexture.Width, wrongFormatTexture.Height, false, SurfaceFormat.Single);
             Color[] colorData = new Color[wrongFormatTexture.Width * wrongFormatTexture.Height];
             wrongFormatTexture.GetData<Color>(colorData);
@@ -37,6 +40,21 @@ namespace ClipTerrainDemo
 
             m_heightMapTexture.SetData<Single>(adjustedData);
             m_effect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
+            m_effect.Parameters["BaseTexture"].SetValue(m_baseTexture);
+            m_effect.Parameters["NoiseTexture"].SetValue(m_noiseTexture);
+
+            Vector3 lightDirection = new Vector3(0.5f,-1,0.5f);
+            lightDirection.Normalize();
+            Vector3 ambientLight = new Vector3(0.2f);
+            Vector3 directionalLight = new Vector3(1f);
+
+            //m_effect.Parameters["LightDirection"].SetValue(lightDirection);
+            m_effect.Parameters["AmbientLight"].SetValue(ambientLight);
+            m_effect.Parameters["DirectionalLight"].SetValue(directionalLight);
+
+
+            m_effect.Parameters["LightPosition"].SetValue(new Vector3(1000, 40, 1000));
+
 
             BuildVertexBuffers();
 
@@ -236,6 +254,9 @@ namespace ClipTerrainDemo
         Effect m_effect;
         RasterizerState m_rasterizerState;
         Texture2D m_heightMapTexture;
+        Texture2D m_baseTexture;
+        Texture2D m_noiseTexture;
+
         GraphicsDevice m_graphicsDevice;
     }
 
