@@ -1,7 +1,6 @@
 texture fineLevelTexture;
 texture normalsTexture;
 texture rampTexture;
-texture blockColorTexture;
 
 
 uniform matrix WorldViewProjMatrix;
@@ -12,8 +11,7 @@ uniform float2 AlphaOffset;
 uniform float2 ViewerPos;
 uniform float  OneOverWidth;
 uniform float3 LightDirection;
-float4 blockColor;
-
+float4 BlockColor;
 
 struct VertexShaderInput
 {
@@ -60,17 +58,6 @@ uniform sampler ZBasedColorSampler = sampler_state
     AddressV  = Clamp;
 };
 
-uniform sampler dumbSampler = sampler_state
-{
-    Texture   = (blockColorTexture);
-    MipFilter = Linear;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-
 
 // Vertex shader for rendering the geometry clipmap
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
@@ -99,11 +86,10 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float2 alpha = clamp((abs(worldPos-ViewerPos) - AlphaOffset) * OneOverWidth, 0, 1);
     alpha.x  = max(alpha.x, alpha.y);   
     
-    //float z = zf + alpha.x * zd;
-	float z = zf;
+    float z = zf + alpha.x * zd;
     z = z * ZScaleFactor;
     
-    output.pos = mul(float4(worldPos.x, z,worldPos.y, 1), WorldViewProjMatrix);
+    output.pos = mul(float4(worldPos.x, 1,worldPos.y, 1), WorldViewProjMatrix);
     
     output.uv = uv;
     output.zalpha = float2(0.5 + z/1600, alpha.x);
@@ -116,18 +102,18 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
     // do a texture lookup to get the normal in current level
-    //float4 normalfc = tex2D(NormalMapSampler, input.uv);
+    float4 normalfc = tex2D(NormalMapSampler, input.uv);
     // normal_fc.xy contains normal at current (fine) level
     // normal_fc.zw contains normal at coarser level
     // blend normals using alpha computed in vertex shader  
-    //float3 normal = float3((1 - input.zalpha.y) * normalfc.xy + input.zalpha.y * (normalfc.zw), 1.0);
+    float3 normal = float3((1 - input.zalpha.y) * normalfc.xy + input.zalpha.y * (normalfc.zw), 1.0);
     
     // unpack coordinates from [0, 1] to [-1, +1] range, and renormalize.
-    //normal = normalize(normal * 2 - 1);
+    normal = normalize(normal * 2 - 1);
 
-    //float s = clamp(dot(normal, LightDirection), 0, 1); 
+    float s = clamp(dot(normal, LightDirection), 0, 1); 
     //return s * tex1D(ZBasedColorSampler, input.zalpha.x);
-	return blockColor;
+	return BlockColor;
 }
 
 technique Technique1

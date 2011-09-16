@@ -50,25 +50,24 @@ namespace ClipTerrainDemo
             m_debugDraw.LoadContent();
 
             m_camera = new CameraComponent(this);
-            
-            
-            //m_clipTerrain = new ClipTerrain(this, m_camera);
-            //m_clipTerrain.Initialize();
-            //Components.Add(m_clipTerrain);
 
-            m_clipLevelManager = new ClipLevelManager(this, m_camera, Vector3.Zero);
+            m_clipLevel = new NoLimitClipLevel(this, m_camera);
+            m_clipLevel.Initialize();
+            Components.Add(m_clipLevel);
+
+            //m_clipLevelManager = new ClipLevelManager(this, m_camera, Vector3.Zero);
             //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 1));
             //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 2));
             //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 3));
             //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 4));
             //m_clipLevels.Add(new ClipLevel(this, m_camera, Vector3.Zero, 5));
 
-            m_clipLevelManager.Initialize();
-            Components.Add(m_clipLevelManager);
-            
-            
+            //m_clipLevelManager.Initialize();
+            //Components.Add(m_clipLevelManager);
+
+
             Components.Add(m_camera);
-            Components.Add(new FrameRateCounter(this, new Vector3(20,0,20),m_debugDraw));
+            Components.Add(new FrameRateCounter(this, new Vector3(20, 0, 20), m_debugDraw));
 
 
         }
@@ -123,13 +122,12 @@ namespace ClipTerrainDemo
             base.Draw(gameTime);
         }
 
-        
+
         XNA_ShapeDrawer m_debugDraw;
         DebugDrawModes m_debugDrawMode;
         CameraComponent m_camera;
-        ClipTerrain m_clipTerrain;
-        ClipLevelManager m_clipLevelManager;
         GraphicsDeviceManager m_graphics;
+        NoLimitClipLevel m_clipLevel;
 
     }
 
