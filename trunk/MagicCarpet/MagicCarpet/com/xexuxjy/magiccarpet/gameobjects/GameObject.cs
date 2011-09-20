@@ -1,10 +1,3 @@
-/*
-* Created on 11-Jan-2006
-*
-* To change the template for this generated file go to
-* Window - Preferences - Java - Code Generation - Code and Comments
-*/
-
 using Microsoft.Xna.Framework;
 using System.ComponentModel;
 using com.xexuxjy.magiccarpet.collision;
@@ -12,6 +5,9 @@ using BulletXNA.BulletDynamics;
 using BulletXNA;
 using com.xexuxjy.magiccarpet.renderer;
 using System;
+using System.Collections.Generic;
+using BulletXNA.BulletCollision;
+using com.xexuxjy.magiccarpet.spells;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
@@ -106,22 +102,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             set{m_id = value;}
 		}
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        virtual public System.String ModelName
-        {
-            get { return m_modelName; }
-            set { m_modelName = value; }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public QuadTreeNode QuadTreeNode
-        {
-            get { return m_quadTreeNode; }
-            set { m_quadTreeNode = value; }
-        }
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public BoundingBox BoundingBox
@@ -138,45 +118,99 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public RigidBody RigidBody
+        public CollisionObject CollisionObject
         {
-            get { return m_rigidBody; }
+            get { return m_collisionObject; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        protected virtual void BuildCollisionObject()
+        public GameObject Owner
         {
-
+            get { return m_owner; }
+            set 
+            {
+                if (value != m_owner)
+                {
+                    OwnerChanged(m_owner, value);
+                }
+                m_owner = value; 
+            }
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void CastSpell(SpellType spellType)
+        {
+            if (CanCastSpell(spellType))
+            {
+                SpellTemplate template;
+                m_spellTemplates.TryGetValue(spellType, out template);
+                GameObjectAttribute mana = GetAttribute(GameObjectAttributeType.Mana);
+                mana.CurrentValue -= template.ManaCost;
+                // Todo - factory or similar to create object
+                Spell spell = new Turbo(this);
+                m_activeSpells.Add(spell);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool CanCastSpell(SpellType spellType)
+        {
+            bool result = false;
+            SpellTemplate template;
+            m_spellTemplates.TryGetValue(spellType, out template);
+            if (template != null && template.Available)
+            {
+                GameObjectAttribute mana = GetAttribute(GameObjectAttributeType.Mana);
+                if (mana.CurrentValue > template.ManaCost)
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public GameObjectAttribute GetAttribute(GameObjectAttributeType type)
+        {
+            return m_attributes[type];
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Delegates and events
+
+        public delegate void OwnerChangedHandler(GameObject oldOwner,GameObject newOwner);
+        public delegate void DamagedHandler(object sender, EventArgs e);
+
+        public delegate void SpellCastHandler(Magician magician, Spell spell);
+        public delegate void SpellCompleteHandler(Magician magician, Spell spell);
+
+        public event OwnerChangedHandler OwnerChanged;
+        public event DamagedHandler Damaged;
+
+        public event SpellCastHandler SpellCast;
+        public event SpellCompleteHandler SpellComplete;
+
+        // And others
+        private List<Spell> m_activeSpells = new List<Spell>();
+        private Dictionary<SpellType, SpellTemplate> m_spellTemplates = new Dictionary<SpellType, SpellTemplate>();
+
+        private Dictionary<GameObjectAttributeType, GameObjectAttribute> m_attributes = new Dictionary<GameObjectAttributeType, GameObjectAttribute>();
 
         protected String m_id;
-        protected String m_modelName;
         protected Vector3 m_spawnPosition; // where the object starts in the world, used by AI
  
-        protected  GameObject m_owner; // if this is owned by another entitiy (e.g. manaballs,castles, balloons owned by magicians)
-
-		protected  long m_currentElapsedTime = 0;
+        protected GameObject m_owner; // if this is owned by another entitiy (e.g. manaballs,castles, balloons owned by magicians)
 
         protected BoundingBox m_boundingBox;
  
-        protected QuadTreeNode m_quadTreeNode;
-        protected bool m_isSelected;
-        protected bool m_collider = true;
-        protected bool m_aiControlled = false; // wether this is being controlled by the ai.
-
         protected Color m_badgeColor; // represents the color for multiplayer type stuff.
-        protected uint m_reactObjects; // This is a bitmask of the object types we're interested in.
-        protected uint m_threatObjects; // Objects that we'll attack.
-        private float m_minGroundHeight; // used to lift object above the ground. 
 
         protected IMotionState m_motionState;
-        protected RigidBody m_rigidBody;
+        protected CollisionObject m_collisionObject;
         protected DefaultRenderer m_defaultRenderer;
     }
 }
