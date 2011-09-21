@@ -12,9 +12,9 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Initialize(GameObject owner)
+        public override void Initialize(SpellTemplate template,GameObject owner)
         {
-            base.Initialize(owner);
+            base.Initialize(template,owner);
             //Set up to heal the caster for m_multipler over duration
             m_modifier = new GameObjectAttributeModifier();
             m_modifier.Initialize(Owner.GetAttribute(GameObjectAttributeType.Health),
@@ -24,7 +24,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             // delegate it on to the modifier
             m_modifier.Update(gameTime);

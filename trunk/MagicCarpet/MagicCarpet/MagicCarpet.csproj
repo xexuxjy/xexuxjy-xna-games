@@ -115,13 +115,21 @@
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObjectType.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Magician.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\ManaBall.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\ObjectAttribute.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Globals.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\interfaces\ICamera.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\interfaces\ICollideable.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\MagicCarpet.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Program.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\DefaultRenderer.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\TerrainSectionRenderer.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\spells\Convert.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\spells\Heal.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\spells\MovingSpell.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\spells\Turbo.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\spells\Spell.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\Terrain.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSection.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSquare.cs" />
@@ -138,11 +146,11 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
+    <ProjectReference Include="..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
       <Project>{3E64761A-AC83-4C76-93BE-475F95165560}</Project>
       <Name>BulletXNADemos-Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
+    <ProjectReference Include="..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
       <Project>{4E1937EE-3139-44CB-989D-F050BC099CE6}</Project>
       <Name>BulletXNA-Windows</Name>
     </ProjectReference>

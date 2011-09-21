@@ -93,6 +93,17 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        // Object constants 
+        // Todo - load these in as config
+
+        public static float BalloonLoadTime = 2.0f;
+        public static float BalloonUnLoadTime = 2.0f;
+
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public static Color player1Colour = Color.Red;
         public static Color player2Colour = Color.Green;
         public static Color player3Colour = Color.Blue;
