@@ -78,6 +78,15 @@ namespace com.xexuxjy.magiccarpet.spells
             get { return m_duration; }
             set { m_duration = value; }
         }
+
+        private SpellType m_spellType;
+
+        public SpellType SpellType
+        {
+          get { return m_spellType; }
+          set { m_spellType = value; }
+        }
+
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -110,10 +119,26 @@ namespace com.xexuxjy.magiccarpet.spells
 
         public virtual void Cleanup()
         {
-            m_owner.SpellComplete(this);
+            SpellComplete(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public SpellType SpellType
+        {
+            get { return m_spellTemplate.SpellType; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public SpellTemplate SpellTemplate
+        {
+            get { return m_spellTemplate; }
+        }
+        
+        public delegate void SpellCompleteHandler(Magician magician, Spell spell);
+        public event SpellCompleteHandler SpellComplete;
+
 
         protected GameObject m_owner;
         protected SpellTemplate m_spellTemplate;

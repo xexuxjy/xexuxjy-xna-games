@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.spells;
+using com.xexuxjy.magiccarpet.actions;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
@@ -16,20 +17,21 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject(Game game)
+        public GameObject(Game game,GameObjectType gameObjectType)
             : base(game)
         {
+            m_gameObjectType = gameObjectType;
             m_motionState = new DefaultMotionState();
             game.Components.Add(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject(Vector3 startPosition, Game game)
+        public GameObject(Vector3 startPosition, Game game,GameObjectType gameObjectType)
             : base(game)
         {
+            m_gameObjectType = gameObjectType;
             m_motionState = new DefaultMotionState(Matrix.CreateTranslation(startPosition), Matrix.Identity);
-
             game.Components.Add(this);
         }
 
@@ -43,6 +45,30 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
             base.Initialize();
+        }
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (CurrentAction != null)
+            {
+                CurrentAction.Update(gameTime);
+            }
+
+            foreach (Spell spell in m_activeSpells)
+            {
+                spell.Update(gameTime);
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual void Cleanup()
+        {
+
         }
 
 
@@ -149,9 +175,17 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 GameObjectAttribute mana = GetAttribute(GameObjectAttributeType.Mana);
                 mana.CurrentValue -= template.ManaCost;
                 // Todo - factory or similar to create object
-                Spell spell = new Turbo(this);
+                Spell spell = new Turbo();
+                spell.Initialize(template, this);
                 m_activeSpells.Add(spell);
+                spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);
             }
+        }
+
+        void spell_SpellComplete(Magician magician, Spell spell)
+        {
+            SpellTemplate spellTemplate = spell.SpellTemplate;
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,19 +214,62 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public BaseAction CurrentAction
+        {
+            get { return m_currentAction; }
+            set 
+            {
+                if (value != m_currentAction)
+                {
+                    m_currentAction = value;
+                    value.Initialize();
+                    value.ActionStarted += new BaseAction.ActionStartedHandler(value_ActionStarted);
+                    value.ActionComplete += new BaseAction.ActionCompleteHandler(value_ActionComplete);
+                }
+
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void value_ActionComplete(BaseAction action)
+        {
+        
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void value_ActionStarted(BaseAction baseAction)
+        {
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public GameObjectType GameObjectType
+        {
+            get { return m_gameObjectType; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Delegates and events
 
+
+
         public delegate void OwnerChangedHandler(GameObject oldOwner,GameObject newOwner);
-        public delegate void DamagedHandler(object sender, EventArgs e);
-
-        public delegate void SpellCastHandler(Magician magician, Spell spell);
-        public delegate void SpellCompleteHandler(Magician magician, Spell spell);
-
         public event OwnerChangedHandler OwnerChanged;
+
+        public delegate void DamagedHandler(GameObject sender, EventArgs e);
         public event DamagedHandler Damaged;
 
+        public delegate void SpellCastHandler(GameObject gameObject, Spell spell);
         public event SpellCastHandler SpellCast;
-        public event SpellCompleteHandler SpellComplete;
+
+
+
+
+
+
 
         // And others
         private List<Spell> m_activeSpells = new List<Spell>();
@@ -209,8 +286,26 @@ namespace com.xexuxjy.magiccarpet.gameobjects
  
         protected Color m_badgeColor; // represents the color for multiplayer type stuff.
 
+        protected GameObjectType m_gameObjectType;
+
         protected IMotionState m_motionState;
         protected CollisionObject m_collisionObject;
         protected DefaultRenderer m_defaultRenderer;
+        protected BaseAction m_currentAction;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

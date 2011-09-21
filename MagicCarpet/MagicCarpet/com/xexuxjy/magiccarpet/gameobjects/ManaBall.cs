@@ -12,11 +12,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     {
 
         public ManaBall(Vector3 startPosition,Game game)
-            : base( startPosition,game)
+            : base( startPosition,game,GameObjectType.ManaBall)
         {
             m_defaultRenderer = new DefaultRenderer(game,this);
-            m_modelName = Globals.manaballModel;
-
+            //m_modelName = Globals.manaballModel;
+            ManaValue = 10;
         }
 
 
@@ -27,8 +27,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 s_collisionShape = new SphereShape(1f);
             }
 
-            m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true);
+            //m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true);
         }
+
+        public float ManaValue
+        {
+            get { return m_manaValue; }
+            set { m_manaValue = value; }
+
+        }
+
+
+        private float m_manaValue;
 
         protected static CollisionShape s_collisionShape;
     }
