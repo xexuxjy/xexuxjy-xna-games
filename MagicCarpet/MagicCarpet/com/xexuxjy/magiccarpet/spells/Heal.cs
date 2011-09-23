@@ -9,6 +9,10 @@ namespace com.xexuxjy.magiccarpet.spells
 {
     public class Heal : Spell
     {
+        public Heal(Game game)
+            : base(game)
+        {
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -9,16 +9,16 @@ namespace com.xexuxjy.magiccarpet.spells
 {
     public class Turbo : Spell
     {
-        public Turbo()
+        public Turbo(Game game) : base(game)
         {
 
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Initialize(GameObject owner)
+        public override void Initialize(SpellTemplate spellTemplate,GameObject owner)
         {
-            base.Initialize(owner);
+            base.Initialize(spellTemplate,owner);
             m_modifier = new GameObjectAttributeModifier();
             m_modifier.Initialize(Owner.GetAttribute(GameObjectAttributeType.Speed),
                 GameObjectAttributeModifierEffectDuration.InstantTemporary, 
@@ -27,7 +27,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             // delegate it on to the modifier
             m_modifier.Update(gameTime);

@@ -19,7 +19,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public Balloon(Vector3 startPosition, Game game)
-            : base(startPosition,game)
+            : base(startPosition,game,GameObjectType.Balloon)
         {
         }
 

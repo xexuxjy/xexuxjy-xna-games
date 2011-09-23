@@ -21,7 +21,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
         public Terrain(Vector3 position,Game game)
-            : base(position, game)
+            : base(position, game,GameObjectType.Terrain)
         {
         }
 
@@ -29,8 +29,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
-            m_collider = false;
-
             m_terrainRandom = new Random();
 
             InitialiseWorldGrid();
@@ -39,7 +37,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             BuildTestTerrain1();
             //BuildSectionRenderers();
             //buildLandscape();
-            QuadTree.GetInstance().GetRootNode().BuildTerrainIndicies();
             base.Initialize();
 
         }
@@ -128,7 +125,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_stepSize = 1;
             int spanPerSectionX = Width / m_numTerrainSectionsX;
             int spanPerSectionZ = Breadth / m_numTerrainSectionsZ;
-            QuadTreeNode rootNode = QuadTree.GetInstance().GetRootNode();
             m_terrainSectionGrid = new TerrainSection[m_numTerrainSectionsX][];
             for(int i=0;i<m_terrainSectionGrid.Length;++i)
             {

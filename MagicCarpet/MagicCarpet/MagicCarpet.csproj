@@ -46,6 +46,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>false</XnaCompressContent>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -107,12 +108,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionDie.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionLoad.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionUnload.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\BaseAction.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\camera\DefaultCamera.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\camera\DHPCameraComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTree.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\collision\QuadTreeNode.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObjectType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Magician.cs" />
@@ -135,10 +140,16 @@
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSquare.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObject.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\console\SimpleConsole.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugObjectManager.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugTextBuilder.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugWindow.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\debug\IDebuggable.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathUtil.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MouseController.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\profile\SimpleProfiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -146,11 +157,11 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
+    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
       <Project>{3E64761A-AC83-4C76-93BE-475F95165560}</Project>
       <Name>BulletXNADemos-Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
+    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
       <Project>{4E1937EE-3139-44CB-989D-F050BC099CE6}</Project>
       <Name>BulletXNA-Windows</Name>
     </ProjectReference>

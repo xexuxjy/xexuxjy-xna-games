@@ -17,7 +17,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public TerrainSection(Terrain terrain, int sectorX, int sectorZ, int stepSize,Vector3 minBounds,Vector3 maxBounds, Game game)
-            : base(new Vector3(), game)
+            : base(new Vector3(), game,GameObjectType.Terrain)
         {
             // cheat and build once as they should all be uniform.
             BuildSectionIndices(minBounds, maxBounds,stepSize);
@@ -122,9 +122,9 @@ namespace com.xexuxjy.magiccarpet.terrain
             {
                 m_plainVertices[i] = morphingVertices[i].Position;
             }
-            if (m_rigidBody != null)
+            if (m_collisionObject != null)
             {
-                ((BvhTriangleMeshShape)m_rigidBody.GetCollisionShape()).RefitTree(ref min, ref max);
+                ((BvhTriangleMeshShape)m_collisionObject.GetCollisionShape()).RefitTree(ref min, ref max);
             }
         }
 
@@ -164,7 +164,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 s_indices, 1, m_plainVertices.Count, m_plainVertices, 1);
 
             CollisionShape heightFieldTerrain = new BvhTriangleMeshShape(indexVertexArrays, true, true);
-            m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), heightFieldTerrain,null, true);
+            //m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), heightFieldTerrain,null, true);
 
         }
 

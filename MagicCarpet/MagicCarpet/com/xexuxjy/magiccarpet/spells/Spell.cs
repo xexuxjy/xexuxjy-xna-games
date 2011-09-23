@@ -90,8 +90,13 @@ namespace com.xexuxjy.magiccarpet.spells
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public class Spell
+    public abstract class Spell : GameObject
     {
+        public Spell(Game game)
+            : base(game,GameObjectType.Spell)
+        {
+
+        }
 
         public virtual void Initialize(SpellTemplate spellTemplate,GameObject owner)
         {
@@ -101,11 +106,6 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void Update(GameTime gameTime)
-        {
-
-
-        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -117,7 +117,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void Cleanup()
+        public override void Cleanup()
         {
             SpellComplete(this);
         }
@@ -135,16 +135,13 @@ namespace com.xexuxjy.magiccarpet.spells
         {
             get { return m_spellTemplate; }
         }
-        
-        public delegate void SpellCompleteHandler(Magician magician, Spell spell);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public delegate void SpellCompleteHandler(Spell spell);
         public event SpellCompleteHandler SpellComplete;
 
-
-        protected GameObject m_owner;
         protected SpellTemplate m_spellTemplate;
         protected float m_currentTime;
-
-        protected CollisionObject m_collisionObject;
-
     }
 }

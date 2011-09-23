@@ -4,14 +4,23 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BulletXNA;
+using com.xexuxjy.magiccarpet.interfaces;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
-    public class MovingSpell : Spell
+    public abstract class MovingSpell : Spell, ICollideable
     {
-        public override void Initialize()
+        public MovingSpell(Game game)
+            : base(game)
         {
-            base.Initialize();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void Initialize(SpellTemplate spellTemplate, GameObject owner)
+        {
+            base.Initialize(spellTemplate,owner);
             m_motionState = new DefaultMotionState();
         }
 
@@ -38,6 +47,33 @@ namespace com.xexuxjy.magiccarpet.spells
 
             m_motionState.SetWorldTransform(Matrix.CreateTranslation(currentPosition));
 
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual GameObject GetGameObject()
+        {
+            return this;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual int GetCollisionMask()
+        {
+            return 0;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        public virtual bool ShouldCollideWith(ICollideable partner)
+        {
+            return false;
+        }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        public virtual void ProcessCollision(ICollideable partner)
+        {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +105,5 @@ namespace com.xexuxjy.magiccarpet.spells
         private Vector3 m_startPosition;
         private Vector3 m_direction;
         private float m_speed;
-        private IMotionState m_motionState;
     }
 }

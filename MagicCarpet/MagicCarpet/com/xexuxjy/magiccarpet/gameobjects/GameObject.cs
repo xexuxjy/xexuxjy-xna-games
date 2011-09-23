@@ -9,10 +9,11 @@ using System.Collections.Generic;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.spells;
 using com.xexuxjy.magiccarpet.actions;
+using com.xexuxjy.utils.debug;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
-    public abstract class GameObject : GameComponent
+    public abstract class GameObject : GameComponent , IDebuggable
 	{
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +71,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
 
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        protected virtual void BuildCollisionObject()
+        {
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         [DescriptionAttribute("Position in the world")]
@@ -175,14 +180,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 GameObjectAttribute mana = GetAttribute(GameObjectAttributeType.Mana);
                 mana.CurrentValue -= template.ManaCost;
                 // Todo - factory or similar to create object
-                Spell spell = new Turbo();
+                Spell spell = new Turbo(Game);
                 spell.Initialize(template, this);
                 m_activeSpells.Add(spell);
                 spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);
             }
         }
 
-        void spell_SpellComplete(Magician magician, Spell spell)
+        void spell_SpellComplete(Spell spell)
         {
             SpellTemplate spellTemplate = spell.SpellTemplate;
 
@@ -215,6 +220,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void Die()
+        {
+            CurrentAction = new ActionDie(this);
+
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         public BaseAction CurrentAction
         {
             get { return m_currentAction; }
@@ -249,6 +263,29 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public GameObjectType GameObjectType
         {
             get { return m_gameObjectType; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public String ModelName
+        {
+            get { return m_modelName; }
+            set { m_modelName = value; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public String DebugText
+        {
+            get { return ""; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool DebugEnabled
+        {
+            get { return m_debugEnabled; }
+            set { m_debugEnabled = value; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,6 +329,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected CollisionObject m_collisionObject;
         protected DefaultRenderer m_defaultRenderer;
         protected BaseAction m_currentAction;
+
+        protected bool m_debugEnabled;
+
+        protected String m_modelName;
+
     }
 
 

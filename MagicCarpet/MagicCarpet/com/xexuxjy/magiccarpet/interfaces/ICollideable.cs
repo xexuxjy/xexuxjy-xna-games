@@ -8,11 +8,9 @@ namespace com.xexuxjy.magiccarpet.interfaces
 {
     public interface ICollideable
     {
-        public int GetCollisionMask();
-        public void ShouldCollideWith(ICollideable partner);
-        public void ProcessCollision(ICollideable partner);
-        public GameObject GetGameObject();
-
-
+        int GetCollisionMask();
+        bool ShouldCollideWith(ICollideable partner);
+        void ProcessCollision(ICollideable partner);
+        GameObject GetGameObject();
     }
 }
