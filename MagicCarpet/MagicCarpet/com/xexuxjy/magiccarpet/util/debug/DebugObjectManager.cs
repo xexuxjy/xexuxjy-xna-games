@@ -5,13 +5,15 @@ using com.xexuxjy.utils.debug;
 using com.xexuxjy.magiccarpet.debug;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.utils.debug
 {
     public class DebugObjectManager : DebugWindow
     {
 
-        public DebugObjectManager(Game game) : base("DebugObjectManager",game)
+        public DebugObjectManager(Game game, IDebugDraw debugDraw)
+            : base("DebugObjectManager", game,debugDraw)
         {
 
         }

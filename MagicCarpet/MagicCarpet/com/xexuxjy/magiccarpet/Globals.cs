@@ -13,6 +13,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.utils.debug;
 using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.utils.profile;
+using com.xexuxjy.utils.console;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -127,8 +128,8 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static Vector3 worldMinPos = new Vector3(-2048f, -100f, -2048f);
-        public static Vector3 worldMaxPos = new Vector3(2048f, 100f, 2048f);
+        public static Vector3 worldMinPos = new Vector3(-512, -50f, -512f);
+        public static Vector3 worldMaxPos = new Vector3(512f, 50f, 512);
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -139,13 +140,13 @@ namespace com.xexuxjy.magiccarpet
 
         public static ICamera Camera;
         public static Terrain Terrain;
-        public static XNA_ShapeDrawer DebugDraw;
+        public static IDebugDraw DebugDraw;
         public static CollisionManager CollisionManager;
         public static GameObjectManager GameObjectManager;
         public static DebugObjectManager DebugObjectManager;
         public static SimpleProfiler SimpleProfiler;
         public static GraphicsDevice GraphicsDevice;
-
+        public static SimpleConsole SimpleConsole;
 
         public const float STEPSIZEROTATE = (float)Math.PI/ 3f; // 60 deg a second
         public const float STEPSIZETRANSLATE = 20f; 
@@ -197,7 +198,7 @@ namespace com.xexuxjy.magiccarpet
             terrainEffect = effectBase + "Terrain/terrain1";
 
             fontBase = contentBase+"Fonts/";
-            debugFontName = fontBase + "DebugFont";
+            debugFontName = "DebugFont";
 
             spellBase = modelBase + "Spells/";
             fireballModel = spellBase + "Fireball";

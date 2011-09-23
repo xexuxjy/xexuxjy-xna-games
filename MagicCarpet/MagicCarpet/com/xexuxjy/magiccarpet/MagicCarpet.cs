@@ -15,6 +15,7 @@ using BulletXNADemos.Demos;
 using Dhpoware;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.gameobjects;
+using com.xexuxjy.utils.console;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -49,6 +50,12 @@ namespace com.xexuxjy.magiccarpet
 
             Globals.DebugDraw = new XNA_ShapeDrawer(this);
             Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
+            if (Globals.DebugDraw != null)
+            {
+                Globals.DebugDraw.LoadContent();
+            }
+
+            Globals.debugFont = Content.Load<SpriteFont>(Globals.debugFontName);
 
             Globals.CollisionManager = new CollisionManager(this,Globals.worldMinPos,Globals.worldMaxPos);
             Components.Add(Globals.CollisionManager);
@@ -56,6 +63,10 @@ namespace com.xexuxjy.magiccarpet
             Globals.Terrain = new Terrain(Vector3.Zero, this);
 
             Globals.GameObjectManager = new GameObjectManager(this);
+            Globals.SimpleConsole = new SimpleConsole(this,Globals.DebugDraw);
+
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
 
             Components.Add(camera);
@@ -63,7 +74,7 @@ namespace com.xexuxjy.magiccarpet
             Components.Add(new KeyboardController(this));
             Components.Add(new MouseController(this));
             Components.Add(new FrameRateCounter(this,Globals.DebugTextFPS,Globals.DebugDraw));
-
+            Components.Add(Globals.SimpleConsole);
 
             
             base.Initialize();
@@ -75,14 +86,6 @@ namespace com.xexuxjy.magiccarpet
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            if (Globals.DebugDraw != null)
-            {
-                Globals.DebugDraw.LoadContent();
-            }
-            base.LoadContent();
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -125,8 +128,8 @@ namespace com.xexuxjy.magiccarpet
             {
                 Matrix view = Globals.Camera.ViewMatrix;
                 Matrix projection = Globals.Camera.ProjectionMatrix;
-                Globals.DebugDraw.RenderDebugLines(gameTime, ref view, ref projection);
-                Globals.DebugDraw.RenderOthers(gameTime, ref view, ref projection);
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderDebugLines(gameTime, ref view, ref projection);
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderOthers(gameTime, ref view, ref projection);
             }
             // TODO: Add your drawing code here
 

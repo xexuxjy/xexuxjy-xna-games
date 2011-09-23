@@ -6,12 +6,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.debug;
 using com.xexuxjy.magiccarpet;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.utils.profile
 {
     public class SimpleProfiler : DebugWindow
     {
-        public SimpleProfiler(Game game,bool millisecondTimer) : base("SimpleProfiler",game)
+        public SimpleProfiler(Game game, bool millisecondTimer, IDebugDraw debugDraw)
+            : base("SimpleProfiler", game,debugDraw)
         {
             m_millisecondTimer = millisecondTimer;
             m_profileDictionary = new Dictionary<string, ProfileInformation>();
@@ -39,73 +41,73 @@ namespace com.xexuxjy.utils.profile
 
         public override void Draw(GameTime gameTime)
         {
-            if (Enabled)
-            {
-                SpriteBatch.Begin();
-                int numEntries = m_profileDictionary.Count;
-                int ystep = s_textureHeight / numEntries;
-                int counter = 0;
+            //if (Enabled)
+            //{
+            //    SpriteBatch.Begin();
+            //    int numEntries = m_profileDictionary.Count;
+            //    int ystep = s_textureHeight / numEntries;
+            //    int counter = 0;
 
-                ProfileInformation totalPI = m_profileDictionary[m_totalID];
+            //    ProfileInformation totalPI = m_profileDictionary[m_totalID];
 
-                unsafe
-                {
-                    uint[] textureData = new uint[s_textureWidth * s_textureHeight];
-                    Array.Clear(textureData, 0, textureData.Length);
+            //    unsafe
+            //    {
+            //        uint[] textureData = new uint[s_textureWidth * s_textureHeight];
+            //        Array.Clear(textureData, 0, textureData.Length);
 
-                    m_texture.GetData<uint>(textureData);
-                    foreach (String key in m_profileDictionary.Keys)
-                    {
-                        ProfileInformation currentPi = m_profileDictionary[key];
+            //        m_texture.GetData<uint>(textureData);
+            //        foreach (String key in m_profileDictionary.Keys)
+            //        {
+            //            ProfileInformation currentPi = m_profileDictionary[key];
 
-                        float scaler = totalPI.LastTime != 0 ? (float)((double)currentPi.LastTime / (double)totalPI.LastTime) : 1.0f;
+            //            float scaler = totalPI.LastTime != 0 ? (float)((double)currentPi.LastTime / (double)totalPI.LastTime) : 1.0f;
 
-                        // seems to have a bug where individual values exceed total so clamp.
-                        scaler = Math.Min(1f, scaler);
+            //            // seems to have a bug where individual values exceed total so clamp.
+            //            scaler = Math.Min(1f, scaler);
 
 
-                        int scaledWidth = (int)(scaler * s_textureWidth);
+            //            int scaledWidth = (int)(scaler * s_textureWidth);
 
-                        Color colour = Color.White;
-                        switch (counter % 3)
-                        {
-                            case 0:
-                                colour = Color.Red;
-                                break;
-                            case 1:
-                                colour = Color.Yellow;
-                                break;
-                            case 2:
-                                colour = Color.Green;
-                                break;
-                        }
+            //            Color colour = Color.White;
+            //            switch (counter % 3)
+            //            {
+            //                case 0:
+            //                    colour = Color.Red;
+            //                    break;
+            //                case 1:
+            //                    colour = Color.Yellow;
+            //                    break;
+            //                case 2:
+            //                    colour = Color.Green;
+            //                    break;
+            //            }
 
-                        int xpos = (int)ScreenPosition.X;
-                        int ypos = (int)ScreenPosition.Y + (counter * ystep);
-                        for (int y = 0; y < ystep; ++y)
-                        {
-                            for (int x = 0; x < scaledWidth; ++x)
-                            {
-                                int index = (ystep * counter * s_textureWidth) + (s_textureWidth * y) + x;
-                                textureData[index] = colour.PackedValue;
-                            }
-                        }
-                        counter++;
-                    }
-                    m_texture.SetData(textureData);
-                }
+            //            int xpos = (int)ScreenPosition.X;
+            //            int ypos = (int)ScreenPosition.Y + (counter * ystep);
+            //            for (int y = 0; y < ystep; ++y)
+            //            {
+            //                for (int x = 0; x < scaledWidth; ++x)
+            //                {
+            //                    int index = (ystep * counter * s_textureWidth) + (s_textureWidth * y) + x;
+            //                    textureData[index] = colour.PackedValue;
+            //                }
+            //            }
+            //            counter++;
+            //        }
+            //        m_texture.SetData(textureData);
+            //    }
 
-                SpriteBatch.Draw(m_texture, ScreenPosition, Color.White);
-                counter = 0;
-                foreach (String key in m_profileDictionary.Keys)
-                {
-                    int xpos = (int)ScreenPosition.X;
-                    int ypos = (int)ScreenPosition.Y + (counter * ystep);
-                    SpriteBatch.DrawString(Globals.debugFont, m_profileDictionary[key].DebugInfo(), new Vector2(xpos, ypos), Color.Black);
-                    ++counter;
-                }
-                SpriteBatch.End();
-            }
+            //    SpriteBatch.Draw(m_texture, ScreenPosition, Color.White);
+            //    counter = 0;
+            //    foreach (String key in m_profileDictionary.Keys)
+            //    {
+            //        int xpos = (int)ScreenPosition.X;
+            //        int ypos = (int)ScreenPosition.Y + (counter * ystep);
+            //        SpriteBatch.DrawString(Globals.debugFont, m_profileDictionary[key].DebugInfo(), new Vector2(xpos, ypos), Color.Black);
+            //        ++counter;
+            //    }
+            //    SpriteBatch.End();
+            //}
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

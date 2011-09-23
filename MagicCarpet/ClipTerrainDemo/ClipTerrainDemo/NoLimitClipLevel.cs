@@ -21,10 +21,10 @@ namespace ClipTerrainDemo
 
         public override void Initialize()
         {
-            m_effect = Game.Content.Load<Effect>("ClipTerrain");
-            Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("heightmap");
-            m_baseTexture = Game.Content.Load<Texture2D>("base");
-            m_noiseTexture = Game.Content.Load<Texture2D>("noise");
+            m_effect = Game.Content.Load<Effect>("Effects\\Terrain\\ClipTerrain");
+            Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\heightmap");
+            m_baseTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\base");
+            m_noiseTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\noise");
 
             m_heightMapTexture = new Texture2D(Game.GraphicsDevice, wrongFormatTexture.Width, wrongFormatTexture.Height, false, SurfaceFormat.Single);
             Color[] colorData = new Color[wrongFormatTexture.Width * wrongFormatTexture.Height];

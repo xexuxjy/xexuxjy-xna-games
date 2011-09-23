@@ -13,7 +13,7 @@ using com.xexuxjy.utils.debug;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
-    public abstract class GameObject : GameComponent , IDebuggable
+    public abstract class GameObject : DrawableGameComponent , IDebuggable
 	{
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using BulletXNA.LinearMath;
 namespace com.xexuxjy.magiccarpet.debug
 {
     /// <summary>
@@ -7,10 +8,10 @@ namespace com.xexuxjy.magiccarpet.debug
     /// </summary>
     public class DebugWindow : DrawableGameComponent
     {
-        public DebugWindow(string id,Game game) : base(game)
+        public DebugWindow(string id,Game game,IDebugDraw debugDraw) : base(game)
         {
             Id = id;
-            m_spriteBatch = new SpriteBatch(game.GraphicsDevice);
+            m_debugDraw = debugDraw;
         }
 
         public Vector2 ScreenPosition
@@ -25,14 +26,14 @@ namespace com.xexuxjy.magiccarpet.debug
             set { m_id = value; }
         }
 
-        public SpriteBatch SpriteBatch
+        public IDebugDraw DebugDraw
         {
-            get { return m_spriteBatch; }
+            get { return m_debugDraw; }
+            set { m_debugDraw = value; }
         }
 
         private string m_id;
-        private bool m_enabled;
         private Vector2 m_screenPosition;
-        private SpriteBatch m_spriteBatch;
+        private IDebugDraw m_debugDraw;
     }
 }

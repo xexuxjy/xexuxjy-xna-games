@@ -30,6 +30,13 @@ namespace com.xexuxjy.magiccarpet.util
 
         public virtual void KeyboardCallback(Keys key, GameTime gameTime, bool released, ref KeyboardState newState, ref KeyboardState oldState)
         {
+            // forward commands onto the game console
+            if (Globals.SimpleConsole.Enabled && released)
+            {
+                Globals.SimpleConsole.KeyEvent(key);
+            }
+
+
             switch (key)
             {
                 case Keys.Escape:
@@ -45,6 +52,12 @@ namespace com.xexuxjy.magiccarpet.util
                         }
                         break;
                     }
+                case Keys.OemTilde:
+                    {
+                        Globals.SimpleConsole.Enabled = !Globals.SimpleConsole.Enabled;
+                        break;
+                    }
+
                 //case Keys.W: StepForward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
                 //case Keys.A: StepLeft((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
                 //case Keys.S: StepBackward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
