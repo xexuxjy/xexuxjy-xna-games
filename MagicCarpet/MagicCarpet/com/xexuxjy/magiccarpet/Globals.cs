@@ -128,8 +128,11 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static Vector3 worldMinPos = new Vector3(-512, -50f, -512f);
-        public static Vector3 worldMaxPos = new Vector3(512f, 50f, 512);
+        public const int WorldWidth = 1024;
+        public const int WorldHeight = 50;
+
+        public static Vector3 worldMinPos = new Vector3(-WorldWidth/2, -WorldHeight, -WorldWidth/2);
+        public static Vector3 worldMaxPos = -worldMinPos;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -107,7 +107,7 @@ namespace com.xexuxjy.magiccarpet.renderer
                     m_vertexBuffer = new VertexBuffer(device, s_vertexDecleration, m_vertices.Length, BufferUsage.None);
                 }
                 // Load vertices's into the buffer one by one
-                Vector3 startPosition = m_terrainSection.BoundingBox.Min;
+                Vector3 startPosition = Vector3.Zero;
                 for (int x = 0; x < m_numberOfVerticesX; x++)
                 {
                     for (int z = 0; z < m_numberOfVerticesZ; z++)
@@ -119,8 +119,7 @@ namespace com.xexuxjy.magiccarpet.renderer
                         vertex.Position.X += (x * m_terrainSection.m_stepSize);
                         vertex.Position.Z += (z * m_terrainSection.m_stepSize);
 
-
-                        vertex.Position.Y = m_terrain.GetHeightAtPoint(vertex.Position);
+                        vertex.Position.Y = m_terrain.GetHeightAtPointLocal(vertex.Position.X, vertex.Position.Z);
                         vertex.TargetHeight = vertex.Position.Y;
                         //vertex.TargetHeight = m_terrain.GetHeightAtPoint(vertex.Position, true);
 
