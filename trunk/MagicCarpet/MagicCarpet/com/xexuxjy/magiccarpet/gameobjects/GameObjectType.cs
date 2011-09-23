@@ -8,6 +8,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     [Flags]
     public enum GameObjectType
     {
+        None = 0,
         Magician = 1,
         ManaBall = 2,
         Castle = 4,
@@ -15,6 +16,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         Spell = 16,
         Player=32,
         Monster=64,
+        Terrain=128,
         NumTypes
     }
 }

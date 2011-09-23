@@ -13,12 +13,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
         }
 
+        public int Level
+        {
+            get { return m_level; }
+            set { m_level = value; }
+        }
+
         public float StoredMana
         {
             get { return m_storedMana; }
             set { m_storedMana = value; }
         }
 
+        private int m_level;
         private float m_storedMana;
     }
 }
