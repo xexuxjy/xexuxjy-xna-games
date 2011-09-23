@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNA-Windows", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemos-Windows", "..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj", "{3E64761A-AC83-4C76-93BE-475F95165560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content", "..\..\..\bullet-xna\trunk\BulletXNADemos\Content\Content.contentproj", "{19F18FB0-6BA5-4076-9E7E-934437CAC410}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemoContent", "..\..\..\bullet-xna\trunk\BulletXNADemos\Content\BulletXNADemoContent.contentproj", "{19F18FB0-6BA5-4076-9E7E-934437CAC410}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

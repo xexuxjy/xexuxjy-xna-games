@@ -9,21 +9,30 @@ using com.xexuxjy.magiccarpet.debug;
 using System.IO;
 using com.xexuxjy.magiccarpet.gameobjects;
 using BulletXNA;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.utils.console
 {
     // acts as a command processor?
     public class SimpleConsole : DebugWindow
     {
-        public SimpleConsole(Game game)
-            : base("SimpleConsole",game)
+        public SimpleConsole(Game game,IDebugDraw debugDraw)
+            : base("SimpleConsole",game,debugDraw)
         {
             m_commandBuffer = new CommandBuffer(10);
             m_commandLine = new StringBuilder();
             m_outputLine = new StringBuilder();
             m_commandQueue = new Queue<string>();
             RegisterCommands();
+            ClearCommandLine();
         }
+
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            BuildTexture();
+        }
+
 
         public void AddCommand(String command)
         {
@@ -277,7 +286,7 @@ namespace com.xexuxjy.utils.console
         private void BuildTexture()
         {
             m_consoleHeight = (Globals.debugFont.LineSpacing * 2) + 3;
-            m_texture = new Texture2D(Globals.GraphicsDevice, m_consoleWidth, m_consoleHeight);
+            m_texture = new Texture2D(GraphicsDevice, m_consoleWidth, m_consoleHeight);
             uint[] textureData = new uint[m_consoleWidth * m_consoleHeight];
             Array.Clear(textureData, 0, textureData.Length);
             m_texture.GetData<uint>(textureData);
@@ -300,33 +309,26 @@ namespace com.xexuxjy.utils.console
             if (Enabled)
             {
 
-                if (m_texture == null)
-                {
-                    BuildTexture();
-                }
-
                 Rectangle bounds = Game.Window.ClientBounds;
 
                 // have it at the bottom of the screen
                 m_screenPosition.Y = bounds.Height - m_consoleHeight;
                 m_screenPosition.X = 0;
 
-                Vector2 commandLinePosition = new Vector2(0,bounds.Height - m_consoleHeight);
-                Vector2 outputLinePosition = commandLinePosition;
+                Vector3 commandLinePosition = new Vector3(0,bounds.Height - m_consoleHeight,0);
+                Vector3 outputLinePosition = commandLinePosition;
                 outputLinePosition.Y += (Globals.debugFont.LineSpacing)+2;
 
 
-                SpriteBatch.Begin();
-                SpriteBatch.Draw(m_texture, m_screenPosition, Color.White);
+                DebugDraw.DrawTexture(m_texture, m_screenPosition, Color.White.ToVector3());
                 if (m_commandLine.Length > 0)
                 {
-                    SpriteBatch.DrawString(Globals.debugFont, m_commandLine.ToString(), commandLinePosition, Color.White);
+                    DebugDraw.DrawText(m_commandLine.ToString(), commandLinePosition, Color.White.ToVector3());
                 }
                 if(m_outputLine.Length > 0)
                 {
-                    SpriteBatch.DrawString(Globals.debugFont, m_outputLine.ToString(), outputLinePosition, Color.White);
+                    DebugDraw.DrawText(m_outputLine.ToString(), outputLinePosition, Color.White.ToVector3());
                 }
-                SpriteBatch.End();
             }
         }
 
@@ -363,6 +365,12 @@ namespace com.xexuxjy.utils.console
             return result;
         }
 
+        public void ClearCommandLine()
+        {
+            m_commandLine.Clear();
+            m_commandLine.Append(s_commandLinePrefix);
+        }
+
         public void KeyEvent(Keys key)
         {
             char c = (char)key;
@@ -382,8 +390,8 @@ namespace com.xexuxjy.utils.console
                             m_commandIndex += m_commandBuffer.Size;
                         }
                     }
-                    m_commandLine.Clear();
-                    m_commandLine.Insert(0, m_commandBuffer.GetCommand(m_commandIndex));
+                    ClearCommandLine();
+                    m_commandLine.Append(m_commandBuffer.GetCommand(m_commandIndex));
                 }
                 else 
                 {
@@ -391,13 +399,13 @@ namespace com.xexuxjy.utils.console
                     m_commandIndex = 0;
                     if (key == Keys.Enter)
                     {
-                        ProcessCommand(m_commandLine.ToString());
+                        ProcessCommand(m_commandLine.ToString(s_commandLinePrefix.Length, m_commandLine.Length - s_commandLinePrefix.Length));
                         m_commandBuffer.AddCommand(m_commandLine.ToString());
-                        m_commandLine.Clear();
+                        ClearCommandLine();
                     }
                     else if (key == Keys.Back)
                     {
-                        if (m_commandLine.Length > 0)
+                        if (m_commandLine.Length > s_commandLinePrefix.Length)
                         {
                             m_commandLine.Length -=1;
                         }
@@ -506,7 +514,7 @@ namespace com.xexuxjy.utils.console
 
         private Dictionary<String, CommandDetails> m_commandDetailsMap = new Dictionary<string, CommandDetails>();
         private Texture2D m_texture;
-        public Vector2 m_screenPosition;
+        public Vector3 m_screenPosition;
 
         private CommandBuffer m_commandBuffer;
         private int m_commandIndex;
@@ -518,8 +526,6 @@ namespace com.xexuxjy.utils.console
         
         private static char[] s_splitChars = { ' ' };
         private static String SUCCESS = "Ok";
-        //private static ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
+        private static String s_commandLinePrefix = ">>";
     }
-
 }

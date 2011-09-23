@@ -12,13 +12,13 @@ using com.xexuxjy.magiccarpet.renderer;
 using System.Collections.Generic;
 using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.gameobjects;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
-	public class Terrain:GameObject
+	public class Terrain : GameObject
 	{
         ///////////////////////////////////////////////////////////////////////////////////////////////
-
 
         public Terrain(Vector3 position,Game game)
             : base(position, game,GameObjectType.Terrain)
@@ -27,42 +27,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Initialize()
-        {
-            m_terrainRandom = new Random();
-
-            InitialiseWorldGrid();
-
-            //buildLandscape();
-            BuildTestTerrain1();
-            //BuildSectionRenderers();
-            //buildLandscape();
-            base.Initialize();
-
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        public TerrainSection GetSectionForBoundingBox(ref BoundingBox boundingBox)
-        {
-            // quick test for now, go through and see which section contains it.
-            // again may need a solution for splitting the box, but need to have that in one place
-            // so test is against containts, not intersects.
-            TerrainSection[][] sections = m_terrainSectionGrid;
-            for (int i = 0; i < sections.Length; ++i)
-            {
-                for (int j = 0; j < sections[i].Length; ++j)
-                if (sections[i][j].BoundingBox.Contains(boundingBox) == ContainmentType.Contains)
-                {
-                    return sections[i][j];
-                }
-            }
-
-            return null;
-        }
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
         virtual public int Width
 		{
 			get
@@ -83,53 +47,266 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        virtual public int NumSectionsX
+        public void LoadOrCreateHeighMap(String textureName)
         {
-            get { return m_numTerrainSectionsX; }
-            set { m_numTerrainSectionsX = value; }
-        }
-
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        virtual public int NumSectionsZ
-        {
-            get { return m_numTerrainSectionsZ; }
-            set { m_numTerrainSectionsZ = value; }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        
-        protected void BuildSectionRenderers()
-        {
-            int totalSections = m_numTerrainSectionsX * m_numTerrainSectionsZ;
-            TerrainSection[][] sections = m_terrainSectionGrid;
-            for (int i = 0; i < sections.Length; ++i)
+            m_heightMap = new float[s_heightMapSize * s_heightMapSize];
+            m_heightMapTexture = new Texture2D(Game.GraphicsDevice, s_heightMapSize, s_heightMapSize, false, SurfaceFormat.Single);
+            if (!String.IsNullOrEmpty(textureName))
             {
-                for (int j = 0; j < sections[i].Length; ++j)
+                Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\"+textureName);
+                //m_heightMapTexture = new Texture2D(Game.GraphicsDevice, wrongFormatTexture.Width, wrongFormatTexture.Height, false, SurfaceFormat.Single);
+                Color[] colorData = new Color[wrongFormatTexture.Width * wrongFormatTexture.Height];
+                wrongFormatTexture.GetData<Color>(colorData);
+
+                //m_heightMapTexture.GetData<Single>(m_heightMap);
+
+                for (int i = 0; i < colorData.Length; ++i)
                 {
-                    new TerrainSectionRenderer((MagicCarpet)Game, sections[i][j], this);
+                    m_heightMap[i] = colorData[i].R;
+                }
+
+                //m_heightMapTexture.SetData<Single>(m_heightMap);
+            }
+            UpdateHeightMap();
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void UpdateHeightMap()
+        {
+            m_effect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
+            m_heightMapTexture.SetData<Single>(m_heightMap);
+        }
+
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        
+        public override void Initialize()
+        {
+            m_effect = Game.Content.Load<Effect>("Effects\\Terrain\\ClipTerrain");
+            m_baseTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\base");
+            m_noiseTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\noise");
+
+            m_effect.Parameters["BaseTexture"].SetValue(m_baseTexture);
+            m_effect.Parameters["NoiseTexture"].SetValue(m_noiseTexture);
+
+            Vector3 lightDirection = new Vector3(0.5f,-1,0.5f);
+            lightDirection.Normalize();
+            Vector3 ambientLight = new Vector3(0.2f);
+            Vector3 directionalLight = new Vector3(1f);
+
+            //m_effect.Parameters["LightDirection"].SetValue(lightDirection);
+            m_effect.Parameters["AmbientLight"].SetValue(ambientLight);
+            m_effect.Parameters["DirectionalLight"].SetValue(directionalLight);
+
+
+            m_effect.Parameters["LightPosition"].SetValue(new Vector3(1000, 40, 1000));
+
+            BuildVertexBuffers();
+
+
+            m_terrainRandom = new Random();
+
+            InitialiseWorldGrid();
+
+            //buildLandscape();
+            LoadOrCreateHeighMap(null);
+            BuildTestTerrain1();
+            //BuildSectionRenderers();
+            //buildLandscape();
+            base.Initialize();
+        
+        }
+
+
+        public void BuildVertexBuffers()
+        {
+            PosOnlyVertex[] blockVertices = new PosOnlyVertex[m_blockVertices * m_blockVertices];
+            int[] blockIndices = new int[(m_blockSize) * (m_blockSize) * 6];
+            int indexCounter = 0;
+            int vertexCounter = 0;
+            int stride = m_blockVertices;
+
+            for (int y = 0; y < m_blockVertices; ++y)
+            {
+                for (int x = 0; x < m_blockVertices; ++x)
+                {
+                    Vector2 v = new Vector2(x, y);
+                    PosOnlyVertex vpnt = new PosOnlyVertex(v);
+
+                    blockVertices[vertexCounter++] = vpnt;
+                    if (x < m_blockSize && y < m_blockSize)
+                    {
+                        blockIndices[indexCounter++] = (x + (y * stride));
+                        blockIndices[indexCounter++] = (x + 1 + (y * stride));
+                        blockIndices[indexCounter++] = (x + 1 + ((y + 1) * stride));
+
+                        blockIndices[indexCounter++] = (x + 1 + ((y + 1) * stride));
+                        blockIndices[indexCounter++] = (x + ((y + 1) * stride));
+                        blockIndices[indexCounter++] = (x + (y * stride));
+                    }
                 }
             }
-        }		
+
+
+
+
+
+            m_blockVertexBuffer = new VertexBuffer(Game.GraphicsDevice, PosOnlyVertex.VertexDeclaration, blockVertices.Length, BufferUsage.None);
+            //m_degenerateVertexBuffer = new VertexBuffer(graphicsDevice, PosOnlyVertex.VertexDeclaration, degenerates.Length, BufferUsage.None);
+
+            m_blockVertexBuffer.SetData<PosOnlyVertex>(blockVertices, 0, blockVertices.Length);
+            //m_degenerateVertexBuffer.SetData<PosOnlyVertex>(degenerates, 0, degenerates.Length);
+
+            m_blockIndexBuffer = new IndexBuffer(Game.GraphicsDevice, IndexElementSize.ThirtyTwoBits, blockIndices.Length, BufferUsage.None);
+            //m_fixupIndexBufferH = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, fixupIndices.Length, BufferUsage.None);
+            //m_degenerateIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, degenerateIndices.Length, BufferUsage.None);
+
+
+            m_blockIndexBuffer.SetData<int>(blockIndices);
+            //m_degenerateIndexBuffer.SetData(degenerateIndices);
+
+            //CreateLShapes();
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            
+            Matrix worldMatrix = Matrix.Identity;
+
+            float a = (int)Math.Pow(3, m_numLevels);
+            a *= (m_blockSize * 3);
+            a *= -0.5f;
+
+            //worldMatrix = Matrix.CreateTranslation(new Vector3(a, 0, a));
+
+            Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
+            BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
+
+            Game.GraphicsDevice.Indices = m_blockIndexBuffer;
+            Game.GraphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
+            float oneOverTextureWidth = 1f/1024f;
+            m_effect.Parameters["ZScaleFactor"].SetValue(0.1f);
+
+            float maxHeight = 100;
+
+            float maxSpan2 = (float)Math.Pow(3, m_numLevels) * m_blockVertices;
+
+
+            // need to figure out a window on the height map texture.
+            float visibleTerrainFraction = 1.0f;
+            m_effect.Parameters["TerrainTextureWindow"].SetValue(new Vector2(0, 0));
+            maxSpan2 *= visibleTerrainFraction;
+
+            m_effect.Parameters["OneOverMaxExtents"].SetValue(1 / maxSpan2);
+
+
+            Vector3 maxPos = Vector3.Zero;
+
+            Vector3 lastStartPosition = Vector3.Zero;
+
+
+            foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
+            {
+                // Draw Center
+                Vector3 position = Vector3.Zero;
+                Vector3 scale = new Vector3(1, 1, 1);
+                m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scale.X, scale.Z, position.X, position.Z));
+                Matrix transform = worldMatrix * viewProjection;
+                m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
+
+                // need apply on inner level to make sure latest vals copied across
+                pass.Apply();
+                Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
+
+
+                for (int level = 0; level < m_numLevels; ++level)
+                {
+                    m_effect.Parameters["BlockColor"].SetValue(ColorForRing(level));
+                    Vector3 blockSize = new Vector3(m_blockSize,0,m_blockSize);
+                    blockSize *= scale;
+
+                    lastStartPosition -= blockSize;
+
+                    for (int j = 0; j < 3; ++j)
+                    {
+                        for (int k = 0; k < 3; ++k)
+                        {
+                            // skip center
+                            if (!(j == 1 && k == 1))
+                            {
+                                position = new Vector3((m_blockSize) * k,0,(m_blockSize)*j);
+                                position *= scale;
+                                position += lastStartPosition;
+
+                                BoundingBox bb = new BoundingBox(position,position+blockSize);
+
+                                if (bb.Max.X > maxPos.X)
+                                {
+                                    maxPos.X = bb.Max.X;
+                                }
+
+                                if (bb.Max.Z > maxPos.Z)
+                                {
+                                    maxPos.Z = bb.Max.Z;
+                                }
+
+                                if (boundingFrustrum.Intersects(bb))
+                                {
+                                    m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scale.X, scale.Z, position.X, position.Z));
+                                    m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, 0, 0));
+
+                                    // need apply on inner level to make sure latest vals copied across
+                                    pass.Apply();
+                                    Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
+
+                                }
+                                else
+                                {
+                                    int ibreak = 0;
+                                }
+                            }
+                        }
+                    }
+                    scale *= new Vector3(3, 1, 3);
+
+                }
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public Vector4 ColorForRing(int ring)
+        {
+            switch (ring)
+            {
+                case (0):
+                    return Color.White.ToVector4();
+                case (1):
+                    return Color.Yellow.ToVector4();
+                case (2):
+                    return Color.Red.ToVector4();
+                case (3):
+                    return Color.Green.ToVector4();
+                case (4):
+                    return Color.Blue.ToVector4();
+                case (5):
+                    return Color.Magenta.ToVector4();
+                case (6):
+                    return Color.Olive.ToVector4();
+
+                default:
+                    return Color.Black.ToVector4();
+            }
+        }
+
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		
 		protected virtual void InitialiseWorldGrid()
 		{
-            Vector3 halfExtents = new Vector3(32, s_maxTerrainHeight, 32);
-            m_boundingBox = new BoundingBox(-halfExtents + Position, halfExtents + Position);
-
-            m_numTerrainSectionsX = 1;//8;
-            m_numTerrainSectionsZ = 1;//8;
-            m_stepSize = 1;
-            int spanPerSectionX = Width / m_numTerrainSectionsX;
-            int spanPerSectionZ = Breadth / m_numTerrainSectionsZ;
-            m_terrainSectionGrid = new TerrainSection[m_numTerrainSectionsX][];
-            for(int i=0;i<m_terrainSectionGrid.Length;++i)
-            {
-                m_terrainSectionGrid[i] = new TerrainSection[m_numTerrainSectionsZ];
-            }
+            m_boundingBox = new BoundingBox(Position+Globals.worldMinPos,Position+Globals.worldMaxPos);
 
             m_terrainSquareGrid = new TerrainSquare[Width][];
             for (int i = 0; i < m_terrainSquareGrid.Length; ++i)
@@ -139,19 +316,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             Vector3 startPos = m_boundingBox.Min;
 
-            for (int i = 0; i < m_numTerrainSectionsX; ++i)
-            {
-                for (int j = 0; j < m_numTerrainSectionsZ; ++j)
-                {
-                    Vector3 min = startPos + new Vector3(i * spanPerSectionX, 0, j * spanPerSectionZ);
-                    Vector3 max = min+ new Vector3(spanPerSectionX,0,spanPerSectionZ);
-                    min.Y = -s_maxTerrainHeight;
-                    max.Y = s_maxTerrainHeight;
-                    m_terrainSectionGrid[i][j] = new TerrainSection(this, i, j, m_stepSize,min,max, Game);
-                    m_terrainSectionGrid[i][j].Initialize();
-                    Console.WriteLine("[{0}] min[{1}] max[{2}].", m_terrainSectionGrid[i][ j].Id, min, max);
-                }
-            }
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,13 +459,23 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void SetHeightAtPoint(ref Vector3 worldPoint)
         {
             Vector3 local = worldPoint - m_boundingBox.Min;
-            m_terrainSquareGrid[(int)local.X][(int)local.Z].Height = worldPoint.Y;
+            int localX = (int)local.X;
+            int localZ = (int)local.Z;
+            m_terrainSquareGrid[localX][localZ].Height = worldPoint.Y;
+
         }
 
-		///////////////////////////////////////////////////////////////////////////////////////////////
-        
-
         ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void SetHeightDirect(int index, float height)
+        {
+
+
+
+        }
+
+
+		///////////////////////////////////////////////////////////////////////////////////////////////
 
 		public virtual float GetHeightAtPoint(float x, float z)
 		{
@@ -320,60 +494,39 @@ namespace com.xexuxjy.magiccarpet.terrain
             return returnValue;
 		}
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        private TerrainSection GetSectionAtPoint(float worldPosX, float worldPosZ , out float sectionXPct, out float sectionZPct)
-        {
-            int xdiff = Width / m_numTerrainSectionsX;
-            int zdiff = Breadth / m_numTerrainSectionsZ;
-
-            int x = (int)worldPosX / xdiff;
-            int z = (int)worldPosZ / zdiff;
-
-            x = Math.Min(x, m_numTerrainSectionsX - 1);
-            z = Math.Min(z, m_numTerrainSectionsZ - 1);
-
-            float xrem = worldPosX - (x * xdiff);
-            float zrem = worldPosZ - (z * zdiff);
-            
-            sectionXPct = xrem;
-            sectionZPct = zrem;
-            return m_terrainSectionGrid[x][z];
-        }
-
 		///////////////////////////////////////////////////////////////////////////////////////////////	
 		
 		public virtual void  BuildLandscape()
 		{
-            //int counter = 0;
-            //int increment = 1;
-            //int maxHills = 1000;
-            //int maxInstanceHeight = 10;
-            //int maxOverallHeight = 20;
-            //int maxRadius = 20;
-            //int currentHills = 0;
-            //while (currentHills++ < maxHills)
-            //{
-            //    if (counter == 5)
-            //    {
-            //        increment = - 1;
-            //    }
-            //    else if (counter == 0)
-            //    {
-            //        increment = 1;
-            //    }
-            //    counter += increment;
-            //    int xpos = (int)((float)m_terrainRandom.NextDouble() * Width);
-            //    int ypos = (int)((float)m_terrainRandom.NextDouble() * Breadth);
-            //    float radius = ((float)m_terrainRandom.NextDouble() * maxRadius);
-            //    float height = ((float)m_terrainRandom.NextDouble() * maxInstanceHeight);
-            //    bool up = (float)m_terrainRandom.NextDouble() > 0.5;
-            //    if (!up)
-            //    {
-            //        height = -height;
-            //    }
-            //    AddPeak(xpos, ypos, radius, height,maxOverallHeight);
-            //}
+            int counter = 0;
+            int increment = 1;
+            int maxHills = 1000;
+            int maxInstanceHeight = 10;
+            int maxOverallHeight = 20;
+            int maxRadius = 20;
+            int currentHills = 0;
+            while (currentHills++ < maxHills)
+            {
+                if (counter == 5)
+                {
+                    increment = -1;
+                }
+                else if (counter == 0)
+                {
+                    increment = 1;
+                }
+                counter += increment;
+                int xpos = (int)((float)m_terrainRandom.NextDouble() * Width);
+                int ypos = (int)((float)m_terrainRandom.NextDouble() * Breadth);
+                float radius = ((float)m_terrainRandom.NextDouble() * maxRadius);
+                float height = ((float)m_terrainRandom.NextDouble() * maxInstanceHeight);
+                bool up = (float)m_terrainRandom.NextDouble() > 0.5;
+                if (!up)
+                {
+                    height = -height;
+                }
+                AddPeak(xpos, ypos, radius, height, maxOverallHeight);
+            }
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -519,7 +672,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 terrainUpdate.Update(gameTime);
                 if (!terrainUpdate.Complete())
                 {
-                    terrainUpdate.ApplyToTerrain(m_terrainSquareGrid);
+                    //terrainUpdate.ApplyToTerrain(m_terrainSquareGrid);
                 }
                 else
                 {
@@ -532,7 +685,6 @@ namespace com.xexuxjy.magiccarpet.terrain
                 m_terrainUpdaters.Remove(terrainUpdate);
             }
             m_terrainUpdatersRemove.Clear();
-            // FIXME - avoid going through this entire list searching and use a list of updates instead.
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -554,12 +706,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             set { m_terrainSquareGrid = value; }
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-        
-        public TerrainSection[][] TerrainSections
-        {
-            get { return m_terrainSectionGrid; }
-        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -594,23 +740,14 @@ namespace com.xexuxjy.magiccarpet.terrain
         // simple terrain with two levels
         public void BuildTestTerrain1()
         {
-            Vector3 min = m_boundingBox.Min;
-            for (int i = 0; i < Width; ++i)
+            for(int z=0;z<s_heightMapSize;++z)
             {
-                for (int j = Breadth / 2; j < Breadth; ++j)
+                for (int x = 0; x < s_heightMapSize / 2; ++x)
                 {
-                    Vector3 point = min + new Vector3(i, 20, j);
-                    SetHeightAtPoint(ref point);
+                    m_heightMap[(z * s_heightMapSize) + x] = 20.0f;
                 }
             }
-            TerrainSection[][] sections = m_terrainSectionGrid;
-            for (int i = 0; i < sections.Length; ++i)
-            {
-                for (int j = 0; j < sections[i].Length; ++j)
-                {
-                    sections[i][j].SetDirty();
-                }
-            }
+            UpdateHeightMap();
         }
 
 
@@ -649,18 +786,18 @@ namespace com.xexuxjy.magiccarpet.terrain
                 m_affectedSections = new List<TerrainSection>();
                 BoundingSphere boundingSphere = new BoundingSphere(m_position, m_radius);
 
-                TerrainSection[][] sections = m_terrain.TerrainSections;
-                for (int i = 0; i < sections.Length; ++i)
-                {
-                    for (int j = 0; j < sections[i].Length; ++j)
-                    {
-                        TerrainSection terrainSection = sections[i][j];
-                        if (terrainSection.BoundingBox.Intersects(boundingSphere))
-                        {
-                            m_affectedSections.Add(terrainSection);
-                        }
-                    }
-                }
+                //TerrainSection[][] sections = m_terrain.TerrainSections;
+                //for (int i = 0; i < sections.Length; ++i)
+                //{
+                //    for (int j = 0; j < sections[i].Length; ++j)
+                //    {
+                //        TerrainSection terrainSection = sections[i][j];
+                //        if (terrainSection.BoundingBox.Intersects(boundingSphere))
+                //        {
+                //            m_affectedSections.Add(terrainSection);
+                //        }
+                //    }
+                //}
             }
 
 
@@ -676,45 +813,6 @@ namespace com.xexuxjy.magiccarpet.terrain
                 return m_currentTime > m_totalTime;
             }
 
-            public void ApplyToTerrain(TerrainSquare[][] heightMap)
-            {
-                if (m_currentTime < m_totalTime)
-                {
-                    float floatRadius2 = m_radius * m_radius;
-
-                    for (int i = m_minX; i < m_maxX; i++)
-                    {
-                        for (int j = m_minZ; j < m_maxZ; j++)
-                        {
-                            Vector3 worldPoint = new Vector3(i, 0, j);
-                            Vector3 diff = worldPoint - m_position;
-                            float diffLength2 = diff.LengthSquared();
-                            if (diffLength2 < floatRadius2)
-                            {
-                                TerrainSquare terrainSquare = m_terrain.GetTerrainSquareAtPoint(ref worldPoint);
-                                float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
-                                // play with lerp value to smooth the terrain?
-                                //                          lerpValue = (float)Math.Sqrt(lerpValue);
-                                //lerpValue *= lerpValue;
-                                //                        lerpValue *= lerpValue;
-
-                                // ToDo - fractal hill generation.
-
-                                float currentHeight = terrainSquare.Height;
-                                //float oldHeight = getHeightAtPoint(i, j);
-                                float newHeight = currentHeight + (m_updateDeflection * lerpValue);
-                                newHeight = MathHelper.Clamp(-m_terrain.s_maxTerrainHeight, newHeight, m_terrain.s_maxTerrainHeight);
-                                Vector3 newPos = new Vector3(i, newHeight, j);
-                                m_terrain.SetHeightAtPoint(ref newPos);
-                            }
-                        }
-                    }
-                    foreach (TerrainSection terrainSection in m_affectedSections)
-                    {
-                        terrainSection.SetDirty();
-                    }
-                }
-            }
 
             private Terrain m_terrain;
             private Vector3 m_position;
@@ -731,16 +829,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             private List<TerrainSection> m_affectedSections; // this list of sections that this will overlap.
         }
 
-
-
-
-
-        private int m_numTerrainSectionsX;
-        private int m_numTerrainSectionsZ;
-        private int m_stepSize;
-
-        private TerrainSection[][] m_terrainSectionGrid;
         private TerrainSquare[][] m_terrainSquareGrid;
+        private float[] m_heightMap;
 
         private List<TerrainUpdater> m_terrainUpdaters = new List<TerrainUpdater>();
         private List<TerrainUpdater> m_terrainUpdatersRemove = new List<TerrainUpdater>();
@@ -755,6 +845,42 @@ namespace com.xexuxjy.magiccarpet.terrain
         private float s_terrainMoveTime = 0.5f;
         private float s_maxTerrainHeight = 20f;
 
+        const int m_numLevels = 2;
+        const int m_blockVertices = 65;
+        const int m_blockSize = m_blockVertices - 1;
+        VertexBuffer m_blockVertexBuffer;
+        IndexBuffer m_blockIndexBuffer;
+        Effect m_effect;
+        RasterizerState m_rasterizerState;
+        Texture2D m_heightMapTexture;
+        Texture2D m_baseTexture;
+        Texture2D m_noiseTexture;
+
+
+        public const int s_heightMapSize = 1024;
+
+
+
         private Random m_terrainRandom;
 	}
+
+    public struct PosOnlyVertex : IVertexType
+    {
+
+        public PosOnlyVertex(Vector2 v)
+        {
+            Position = v;
+        }
+
+        public Vector2 Position;
+
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+            new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0)
+        );
+
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+    };
+
+
 }

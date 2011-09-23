@@ -166,7 +166,8 @@
       <Name>BulletXNA-Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\MagicCarpetContent\MagicCarpetContent.contentproj">
-      <Name>MagicCarpetContent</Name>
+      <Project>{FAF449CF-C173-4DEC-BC1A-E02576C62389}</Project>
+      <Name>MagicCarpetContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>

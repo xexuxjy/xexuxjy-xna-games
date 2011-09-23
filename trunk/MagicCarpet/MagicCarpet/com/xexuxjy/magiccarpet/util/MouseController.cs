@@ -98,13 +98,13 @@ namespace com.xexuxjy.magiccarpet.util
                             Vector3 normalStart = collisionPoint;
                             Vector3 normalEnd = collisionPoint + (collisionNormal * normalLength);
                             Globals.DebugDraw.DrawLine(ref normalStart, ref normalEnd, ref normalColor);
-                            Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}] Collide[{2}] Normal[{3}].", startPos, direction,collisionPoint,collisionNormal), ref location, ref colour);
+                            Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}] Collide[{2}] Normal[{3}].", startPos, direction,collisionPoint,collisionNormal), location, colour);
 
                         }
                         else
                         {
                             Globals.cameraHasGroundContact = false;
-                            Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}].", startPos, direction), ref location, ref colour);
+                            Globals.DebugDraw.DrawText(String.Format("Camera Pos[{0} Forward[{1}].", startPos, direction), location, colour);
                         }
 
                     }
