@@ -14,6 +14,7 @@ using com.xexuxjy.utils.debug;
 using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.utils.profile;
 using com.xexuxjy.utils.console;
+using com.xexuxjy.magiccarpet.manager;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -47,54 +48,6 @@ namespace com.xexuxjy.magiccarpet
         public static Keys Down = Keys.Z;
         public static Keys A = Keys.P;
 
-        public static String textureBase;
-        public static String deepWaterTextureId;
-        public static String shallowWaterTextureId;
-        public static String sandTextureId;
-        public static String grassTextureId;
-        public static String screeTextureId;
-        public static String iceTextureId;
-
-
-        public static String modelBase;
-        public static String magicianModel;
-        public static String manaballModel;
-        public static String balloonModel;
-
-        public static String castle1Model;
-        public static String castle2Model;
-        public static String castle3Model;
-        public static String castle4Model;
-        public static String castle5Model;
-
-        public static String spellBase;
-        public static String fireballModel;
-        public static String movelandModel;
-        public static String convertModel;
-
-        public static String skydomeModel;
-
-        public static String monster1Model;
-        public static String monster2Model;
-        public static String monster3Model;
-
-        public static String planeMeshModel;
-
-
-        public static String effectBase;
-        public static String terrainEffect;
-
-        public static String fontBase;
-        public static String debugFontName;
-        public static SpriteFont debugFont;
-
-        public static int DebugDrawOrder = 5;
-        public static int TextDrawOrder = 4;
-        public static int CursorDrawOrder = 3;
-        public static int ObjectDrawOrder = 2;
-        public static int TerrainDrawOrder = 1;
-        public static int DefaultDrawOrder = 0;
-
         public static String DebugXMLNodeText = "";
         public static String DebugXMLNodeTag = "foo";
 
@@ -105,8 +58,6 @@ namespace com.xexuxjy.magiccarpet
 
         public static float BalloonLoadTime = 2.0f;
         public static float BalloonUnLoadTime = 2.0f;
-
-
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +92,34 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public static void EnableDebugConsole()
+        {
+            if (SimpleConsole != null)
+            {
+                SimpleConsole.Enabled = true;
+                if (Camera != null)
+                {
+                    Camera.DisableKeyboardInput();
+                }
+            }
+        }
+
+        public static void DisableDebugConsole()
+        {
+            if (SimpleConsole != null)
+            {
+                SimpleConsole.Enabled = false;
+                if (Camera != null)
+                {
+                    Camera.EnableKeyboardInput();
+                }
+            }
+
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        
         public static ICamera Camera;
         public static Terrain Terrain;
         public static IDebugDraw DebugDraw;
@@ -150,6 +129,7 @@ namespace com.xexuxjy.magiccarpet
         public static SimpleProfiler SimpleProfiler;
         public static GraphicsDevice GraphicsDevice;
         public static SimpleConsole SimpleConsole;
+        public static MCContentManager MCContentManager;
 
         public const float STEPSIZEROTATE = (float)Math.PI/ 3f; // 60 deg a second
         public const float STEPSIZETRANSLATE = 20f; 
@@ -164,50 +144,6 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static void Initialize()
-        {
-            String contentBase = "";
-
-            textureBase = contentBase+"Textures/";
-            deepWaterTextureId = textureBase + "Terrain/deepWater";
-            shallowWaterTextureId = textureBase + "Terrain/shallowWater";
-            sandTextureId = textureBase + "Terrain/sand";
-            grassTextureId = textureBase + "Terrain/grass";
-            screeTextureId = textureBase + "Terrain/scree";
-            iceTextureId = textureBase + "Terrain/ice";
-
-            modelBase = contentBase+"Models/";
-            magicianModel = modelBase + "Magician/magician";
-            manaballModel = modelBase + "SimpleShapes/unitsphere";//"Manaball/Manaball";
-            balloonModel = modelBase + "Balloon/Balloon";
-
-            castle1Model = modelBase + "Castle/CastleSize1";
-            castle2Model = modelBase + "Castle/CastleSize2";
-            castle3Model = modelBase + "Castle/CastleSize3";
-            castle4Model = modelBase + "Castle/castle4";
-            castle5Model = modelBase + "Castle/castle5";
-
-            monster1Model = modelBase + "Monster/monster1";
-            monster2Model = modelBase + "Monster/monster2";
-            monster3Model = modelBase + "Monster/monster3";
-
-            fireballModel = manaballModel;
-
-            skydomeModel = modelBase + "Skydome/skydome";
-
-            planeMeshModel = modelBase + "PlaneMesh/planeMesh";
-
-            effectBase = contentBase+"Effects/";
-            terrainEffect = effectBase + "Terrain/terrain1";
-
-            fontBase = contentBase+"Fonts/";
-            debugFontName = "DebugFont";
-
-            spellBase = modelBase + "Spells/";
-            fireballModel = spellBase + "Fireball";
-            movelandModel = spellBase + "Moveland";
-            convertModel = spellBase + "Convert";
-        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

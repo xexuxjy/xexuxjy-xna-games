@@ -117,7 +117,8 @@ namespace com.xexuxjy.magiccarpet.actions
         Casting,
         Dieing,
         Dead,
-        Attacking
+        Attacking,
+        Searching
 
     }
 

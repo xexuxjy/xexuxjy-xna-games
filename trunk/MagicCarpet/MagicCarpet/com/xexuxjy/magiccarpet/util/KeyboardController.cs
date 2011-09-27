@@ -53,8 +53,17 @@ namespace com.xexuxjy.magiccarpet.util
                         break;
                     }
                 case Keys.OemTilde:
+                case Keys.OemPipe:
+                case Keys.Tab:
                     {
-                        Globals.SimpleConsole.Enabled = !Globals.SimpleConsole.Enabled;
+                        if (Globals.SimpleConsole.Enabled)
+                        {
+                            Globals.DisableDebugConsole();
+                        }
+                        else
+                        {
+                            Globals.EnableDebugConsole();
+                        }
                         break;
                     }
 
@@ -212,7 +221,7 @@ namespace com.xexuxjy.magiccarpet.util
 
         public void PlaceManaBall(Vector3 position)
         {
-            Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.ManaBall, position);
+            Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.MANABALL, position);
         }
 
 

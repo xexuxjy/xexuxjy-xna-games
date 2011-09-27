@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
-    public struct TerrainSquare
+    public class TerrainSquare
     {
+        public TerrainSquare()
+        {
+            Type = TerrainType.grass;
+        }
+
         public TerrainType Type;
-        public float Height;
+        public GameObject Occupier;
     }
 }

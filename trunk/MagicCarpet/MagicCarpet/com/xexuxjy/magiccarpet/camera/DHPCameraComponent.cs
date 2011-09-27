@@ -195,6 +195,10 @@ namespace Dhpoware
             get;
         }
 
+        void EnableKeyboardInput();
+        void DisableKeyboardInput();
+
+
     #endregion
     }
 
@@ -262,6 +266,9 @@ namespace Dhpoware
         private Quaternion savedOrientation;
         private Vector3 savedEye;
         private float savedAccumPitchDegrees;
+
+        // Allow us to take control away from the camera for the console.
+        private bool m_keyboardInputEnabled = true;
 
     #region Public Methods
 
@@ -558,6 +565,18 @@ namespace Dhpoware
                 Perspective(zoom, aspectRatio, znear, zfar);
             }
         }
+
+        public void EnableKeyboardInput()
+        {
+            m_keyboardInputEnabled = true;
+        }
+
+        public void DisableKeyboardInput()
+        {
+            m_keyboardInputEnabled = false;
+        }
+
+
 
     #endregion
 
@@ -1073,7 +1092,8 @@ namespace Dhpoware
         private MouseState previousMouseState;
         private KeyboardState currentKeyboardState;
         private Dictionary<Actions, Keys> actionKeys;
-        
+        private bool m_keyboardInputEnabled = true;
+    
     #region Public Methods
 
         /// <summary>
@@ -1304,6 +1324,14 @@ namespace Dhpoware
             direction.X = 0.0f;
             direction.Y = 0.0f;
             direction.Z = 0.0f;
+
+
+            // if we don't have access to the keyboard then do nothing here.
+            if (!m_keyboardInputEnabled)
+            {
+                return;
+            }
+
 
             if (currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveForwardsPrimary]) ||
                 currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveForwardsAlternate]))
@@ -1892,6 +1920,17 @@ namespace Dhpoware
                 break;
             }
         }
+
+        public void EnableKeyboardInput()
+        {
+            m_keyboardInputEnabled = true;
+        }
+
+        public void DisableKeyboardInput()
+        {
+            m_keyboardInputEnabled = false;
+        }
+
 
     #endregion
 

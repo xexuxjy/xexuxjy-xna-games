@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using com.xexuxjy.magiccarpet.gameobjects;
 
-namespace com.xexuxjy.magiccarpet.gameobjects
+namespace com.xexuxjy.magiccarpet.manager
 {
     public class GameObjectManager : GameComponent
     {
@@ -16,11 +17,27 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, Vector3 startPosition)
         {
             GameObject gameObject = null;
-            if (gameObjectType == GameObjectType.ManaBall)
+            switch (gameObjectType)
             {
-
-                gameObject = new ManaBall(startPosition, Game);
+                case GameObjectType.MANABALL:
+                    {
+                        gameObject = new ManaBall(startPosition, Game);
+                        break;
+                    }
+                case GameObjectType.BALLOON:
+                    {
+                        gameObject = new Balloon(startPosition, Game);
+                        break;
+                    }
+                case GameObjectType.CASTLE:
+                    {
+                        gameObject = new Castle(startPosition, Game);
+                        break;
+                    }
             }
+
+
+
 
             if (gameObject != null)
             {
@@ -69,7 +86,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             foreach (GameObject gameObject in m_gameObjectList)
             {
-                if( typeMask == GameObjectType.None || typeMask == gameObject.GameObjectType)
+                if( typeMask == GameObjectType.NONE || typeMask == gameObject.GameObjectType)
                 {
                     results.Add(gameObject);
                 }
@@ -84,6 +101,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void FindObjects(GameObjectType typeMask, Vector3 position, float radius, GameObject owner, List<GameObject> results)
         {
+            float radiusSq = radius * radius;
             foreach (GameObject gameObject in m_gameObjectList)
             {
                 // if it's the sort of object we're interested in
@@ -93,7 +111,34 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     // check and see if it's the owning entity if appropriate
                     if (owner == null || (gameObject.Owner == owner))
                     {
-                        if ((gameObject.Position - position).LengthSquared() <= radius * radius)
+                        if ((gameObject.Position - position).LengthSquared() <= radiusSq)
+                        {
+                            results.Add(gameObject);
+                        }
+                    }
+                }
+            }
+
+            // ToDo - order the return list base on min to max distance.
+
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void FindObjects(GameObjectType typeMask, BoundingBox boundingBox, GameObject owner, List<GameObject> results)
+        {
+            foreach (GameObject gameObject in m_gameObjectList)
+            {
+                // if it's the sort of object we're interested in
+                GameObjectType gameObjectType = gameObject.GameObjectType;
+                if ((gameObjectType & typeMask) > 0)
+                {
+                    // check and see if it's the owning entity if appropriate
+                    if (owner == null || (gameObject.Owner == owner))
+                    {
+                        // if we contain part of it then include.
+                        if(boundingBox.Contains(owner.BoundingBox) != ContainmentType.Disjoint)
                         {
                             results.Add(gameObject);
                         }
@@ -101,6 +146,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 }
             }
         }
+
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
