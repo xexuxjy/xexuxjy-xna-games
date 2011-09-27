@@ -3,13 +3,14 @@ using System.ComponentModel;
 using com.xexuxjy.magiccarpet.collision;
 using BulletXNA.BulletDynamics;
 using BulletXNA;
-using com.xexuxjy.magiccarpet.renderer;
 using System;
 using System.Collections.Generic;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.spells;
 using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.utils.debug;
+using Dhpoware;
+using Microsoft.Xna.Framework.Graphics;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
@@ -40,11 +41,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Initialize()
         {
-            if (m_defaultRenderer != null)
-            {
-                m_defaultRenderer.Initialize();
-            }
+            m_scaleTransform = Matrix.Identity;
 
+            m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
             base.Initialize();
         }
         
@@ -75,6 +74,63 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected virtual void BuildCollisionObject()
         {
+        }
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override void Draw(GameTime gameTime)
+        {
+
+            ICamera camera = Globals.Camera;
+
+            // only one of these should be active.
+
+            DrawEffect(Game.GraphicsDevice, camera.ViewMatrix, WorldTransform, camera.ProjectionMatrix);
+
+            //DrawDebugAxes(Game.GraphicsDevice);
+            //if (ShouldDrawBoundingBox())
+            //{
+            //    DrawBoundingBox(Game.GraphicsDevice);
+            //}
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        protected virtual void DrawEffect(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
+        {
+            if (m_model != null)
+            {
+                //Matrix scale = Matrix.CreateScale(modelScalingData.scale);
+                Matrix[] transforms = new Matrix[m_model.Bones.Count];
+                BasicEffect basicEffect = Globals.MCContentManager.BasicEffect;
+                foreach (ModelMesh mesh in m_model.Meshes)
+                {
+                    m_model.CopyAbsoluteBoneTransformsTo(transforms);
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        basicEffect.View = view;
+                        basicEffect.Projection = projection;
+                        basicEffect.World = transforms[mesh.ParentBone.Index] * world;
+                    }
+                    mesh.Draw();
+                }
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+        
+        public virtual void DrawDebugAxes(GraphicsDevice graphicsDevice)
+        {
+
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual void DrawBoundingBox(GraphicsDevice graphicsDevice)
+        {
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -171,7 +227,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell(SpellType spellType)
+        public void CastSpell(SpellType spellType,Vector3 startPosition,Vector3 targetPosition)
         {
             if (CanCastSpell(spellType))
             {
@@ -247,6 +303,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public Vector3 WorldToLocal(Vector3 worldPoint)
+        {
+            return ( worldPoint - m_boundingBox.Min);
+
+        }
+
+        public Vector3 LocalToWorld(Vector3 localPoint)
+        {
+            return (localPoint + m_boundingBox.Min);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public virtual void value_ActionComplete(BaseAction action)
         {
         
@@ -263,14 +332,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public GameObjectType GameObjectType
         {
             get { return m_gameObjectType; }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public String ModelName
-        {
-            get { return m_modelName; }
-            set { m_modelName = value; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -327,13 +388,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected IMotionState m_motionState;
         protected CollisionObject m_collisionObject;
-        protected DefaultRenderer m_defaultRenderer;
         protected BaseAction m_currentAction;
+        protected Matrix m_scaleTransform;
+        protected Model m_model;
 
         protected bool m_debugEnabled;
-
-        protected String m_modelName;
-
     }
 
 

@@ -198,7 +198,7 @@ namespace com.xexuxjy.utils.console
                         else if (commandDetails.Name.Equals("killall"))
                         {
                             List<GameObject> results = new List<GameObject>();
-                            Globals.GameObjectManager.FindObjects(GameObjectType.None, results);
+                            Globals.GameObjectManager.FindObjects(GameObjectType.NONE, results);
                             foreach (GameObject entity in results)
                             {
                                 //if (entity.KeyComponent == false)
@@ -209,7 +209,7 @@ namespace com.xexuxjy.utils.console
                         }
                         else if (commandDetails.Name.Equals("list"))
                         {
-                            GameObjectType entityType = GameObjectType.None;
+                            GameObjectType entityType = GameObjectType.NONE;
                             if (args.Length == 1)
                             {
                                 entityType = GetGameObjectType(args, 0);
@@ -285,7 +285,7 @@ namespace com.xexuxjy.utils.console
 
         private void BuildTexture()
         {
-            m_consoleHeight = (Globals.debugFont.LineSpacing * 2) + 3;
+            m_consoleHeight = (Globals.MCContentManager.DebugFont.LineSpacing * 2) + 3;
             m_texture = new Texture2D(GraphicsDevice, m_consoleWidth, m_consoleHeight);
             uint[] textureData = new uint[m_consoleWidth * m_consoleHeight];
             Array.Clear(textureData, 0, textureData.Length);
@@ -317,7 +317,7 @@ namespace com.xexuxjy.utils.console
 
                 Vector3 commandLinePosition = new Vector3(0,bounds.Height - m_consoleHeight,0);
                 Vector3 outputLinePosition = commandLinePosition;
-                outputLinePosition.Y += (Globals.debugFont.LineSpacing)+2;
+                outputLinePosition.Y += (Globals.MCContentManager.DebugFont.LineSpacing) + 2;
 
 
                 DebugDraw.DrawTexture(m_texture, m_screenPosition, Color.White.ToVector3());
@@ -335,19 +335,19 @@ namespace com.xexuxjy.utils.console
         Boolean IsValidChar(char c)
         {
             return ((c >= '0' && c <= 'z') || c == ' ' || c == '.' || c == (char)Keys.Enter || c==(char)Keys.Back 
-                ||c == (char)Keys.Up || c == (char)Keys.Down || c == '-');
+                ||c == (char)Keys.Up || c == (char)Keys.Down || c == '-' || c == ',');
         }
 
         public GameObjectType GetGameObjectType(String[] args, int startIndex)
         {
-            GameObjectType returnValue = GameObjectType.None;
+            GameObjectType returnValue = GameObjectType.NONE;
             try
             {
                 returnValue = (GameObjectType)Enum.Parse(typeof(GameObjectType), args[startIndex]);
             }
             catch (Exception e)
             {
-                returnValue = GameObjectType.None;
+                returnValue = GameObjectType.NONE;
             }
             return returnValue;
         }

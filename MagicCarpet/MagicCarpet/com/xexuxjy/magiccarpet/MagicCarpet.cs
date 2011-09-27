@@ -16,6 +16,7 @@ using Dhpoware;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.utils.console;
+using com.xexuxjy.magiccarpet.manager;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -46,7 +47,6 @@ namespace com.xexuxjy.magiccarpet
             // TODO: Add your initialization logic here
             CameraComponent camera = new CameraComponent(this);
             Globals.Camera = camera;
-            Globals.Initialize();
 
             Globals.DebugDraw = new XNA_ShapeDrawer(this);
             Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
@@ -55,8 +55,6 @@ namespace com.xexuxjy.magiccarpet
                 Globals.DebugDraw.LoadContent();
             }
 
-            Globals.debugFont = Content.Load<SpriteFont>(Globals.debugFontName);
-
             Globals.CollisionManager = new CollisionManager(this,Globals.worldMinPos,Globals.worldMaxPos);
             Components.Add(Globals.CollisionManager);
 
@@ -64,6 +62,12 @@ namespace com.xexuxjy.magiccarpet
 
             Globals.GameObjectManager = new GameObjectManager(this);
             Globals.SimpleConsole = new SimpleConsole(this,Globals.DebugDraw);
+            Globals.SimpleConsole.Enabled = false;
+
+            Globals.MCContentManager = new MCContentManager(this);
+            Globals.MCContentManager.Initialize();
+
+
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);

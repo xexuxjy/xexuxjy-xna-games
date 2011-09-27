@@ -12,14 +12,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     public class Balloon : GameObject
     {
         public Balloon(Game game)
-            : base(game,GameObjectType.Balloon)
+            : base(game,GameObjectType.BALLOON)
         {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public Balloon(Vector3 startPosition, Game game)
-            : base(startPosition,game,GameObjectType.Balloon)
+            : base(startPosition,game,GameObjectType.BALLOON)
         {
         }
 
@@ -36,7 +36,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Update(gameTime);
 
-            if (m_currentAction.ActionState == ActionState.Unloading)
+            //if (m_currentAction.ActionState == ActionState.Unloading)
             {
                 // todo transfer mana to castle over time 
 

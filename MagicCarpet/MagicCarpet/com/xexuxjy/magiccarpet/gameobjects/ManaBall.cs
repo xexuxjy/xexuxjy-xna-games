@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BulletXNA.BulletCollision;
-using com.xexuxjy.magiccarpet.renderer;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -12,10 +11,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     {
 
         public ManaBall(Vector3 startPosition,Game game)
-            : base( startPosition,game,GameObjectType.ManaBall)
+            : base( startPosition,game,GameObjectType.MANABALL)
         {
-            m_defaultRenderer = new DefaultRenderer(game,this);
-            //m_modelName = Globals.manaballModel;
             ManaValue = 10;
         }
 
