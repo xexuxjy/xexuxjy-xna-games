@@ -109,6 +109,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionDie.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindCastle.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindManaball.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionLoad.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionUnload.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\BaseAction.cs" />

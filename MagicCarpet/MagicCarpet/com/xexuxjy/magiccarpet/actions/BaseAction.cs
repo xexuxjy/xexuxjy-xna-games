@@ -25,6 +25,9 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        
+        
         public virtual void Update(GameTime gameTime)
         {
             if (!Complete)
@@ -33,9 +36,17 @@ namespace com.xexuxjy.magiccarpet.actions
                 m_currentTime += elapsedSeconds;
                 if (Complete)
                 {
+                    InternalComplete();
                     ActionComplete(this);
                 }
             }
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // let the sub class to something before we complete.
+        protected virtual void InternalComplete()
+        {
 
         }
 
@@ -89,6 +100,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public GameObject Target
         {
             get { return m_target; }
+            set { m_target = value; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

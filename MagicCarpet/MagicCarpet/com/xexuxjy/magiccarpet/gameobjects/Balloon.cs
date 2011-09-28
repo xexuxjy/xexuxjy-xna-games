@@ -6,6 +6,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.actions;
 using System.Diagnostics;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -34,32 +35,44 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
-            //if (m_currentAction.ActionState == ActionState.Unloading)
+            if (m_currentActionState == ActionState.Idle)
             {
-                // todo transfer mana to castle over time 
+                if (Full)
+                {
+                    StartAction(new ActionFindCastle(this,null,s_castleSearchRadius));
+                }
+                else
+                {
+                    StartAction(new ActionFindManaball(this,null,s_balloonSearchRadius));
+                }
+            }
+            else
+            if (m_currentActionState == ActionState.Moving)
+            {
+                if (m_currentTarget != null)
+                {
+                    // if we're moving then check to see if the object is still valid.
+                    if (!TargetValid())
+                    {
+                        // it's not, so set out state back to idle.
+                        m_currentActionState = ActionState.Idle;
+                    }
+                }
+
 
             }
-
-
-
+            base.Update(gameTime);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        public void FindTarget()
+        private bool TargetValid()
         {
-
-
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public void MoveToTarget()
-        {
-
+            if (m_currentTarget != null)
+            {
+                return m_currentTarget.Active();
+            }
+            return false;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +101,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         Debug.Assert(manaball != null);
                         m_currentLoad += manaball.ManaValue;
                         // loaded now so remove object.
-                        Globals.GameObjectManager.RemoveGameObject(manaball);
+                        manaball.Cleanup();
 
                         break;
                     }
@@ -107,12 +120,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     {
                         // drop current load as series of mana balls
                         // then remove ourselves from the game.
-                        Globals.GameObjectManager.RemoveGameObject(this);
+                        Cleanup();
+                        break;
+                    }
+                case (ActionState.Searching):
+                    {
+                        // if the search has completed then grab whatever it found and aim for that.
+                        m_currentTarget = action.Target;
                         break;
                     }
                 default:
                     break;
             }
+            // action has completed so clear it and let another be assigned.
+            m_currentAction = null;
 
         }
 
@@ -124,6 +145,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             set { m_currentLoad = value; }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool Full
+        {
+            get
+            {
+                return MathUtil.CompareFloat(m_currentLoad, m_maxLoad);
+            }
+        }
+
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -133,9 +164,26 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        public override String DebugText
+        {
+            get
+            {
+                return String.Format("Id [{0}] Pos[{1}] Action[{2}] Mana[{3}].", Id, Position, ActionState, CurrentLoad);
+            }
+
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private float m_currentLoad;
         private float m_maxLoad;
-        
+
+        private GameObject m_currentTarget;
+        private const float s_balloonSearchRadius = 50f;
+        private const float s_castleSearchRadius = 250f;
 
     }
 

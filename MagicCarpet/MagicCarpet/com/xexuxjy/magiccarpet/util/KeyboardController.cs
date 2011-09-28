@@ -44,14 +44,6 @@ namespace com.xexuxjy.magiccarpet.util
                         Game.Exit();
                         break;
                     }
-                case Keys.OemPeriod:
-                    {
-                        if (Globals.cameraHasGroundContact)
-                        {
-                            PlaceManaBall(Globals.cameraGroundContactPoint);
-                        }
-                        break;
-                    }
                 case Keys.OemTilde:
                 case Keys.OemPipe:
                 case Keys.Tab:
@@ -66,6 +58,24 @@ namespace com.xexuxjy.magiccarpet.util
                         }
                         break;
                     }
+                case Keys.OemComma :
+                    {
+                        if (Globals.DebugObjectManager.Enabled)
+                        {
+                            Globals.DebugObjectManager.PreviousObject();
+                        }
+                        break;
+                    }
+                case Keys.OemPeriod:
+                    {
+                        if (Globals.DebugObjectManager.Enabled)
+                        {
+                            Globals.DebugObjectManager.NextObject();
+                        }
+                        break;
+                    }
+
+
 
                 //case Keys.W: StepForward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
                 //case Keys.A: StepLeft((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
@@ -81,90 +91,6 @@ namespace com.xexuxjy.magiccarpet.util
                 //case Keys.PageDown: ZoomOut(0.4f); break;
             }
         }
-
-        //public void YawLeft(float delta)
-        //{
-        //    Globals.Camera.Yaw -= delta;
-        //}
-
-        ////----------------------------------------------------------------------------------------------
-
-        //public void YawRight(float delta)
-        //{
-        //    Globals.Camera.Yaw += delta;
-        //}
-
-        ////----------------------------------------------------------------------------------------------
-
-        //public void PitchUp(float delta)
-        //{
-        //    Globals.Camera.Pitch += delta;
-        //}
-
-        ////----------------------------------------------------------------------------------------------
-
-        //public void PitchDown(float delta)
-        //{
-        //    Globals.Camera.Pitch -= delta;
-        //}
-
-        ////----------------------------------------------------------------------------------------------
-
-        //public void StepUp(float delta)
-        //{
-        //    Vector3 axis = Vector3.Up * delta;
-        //    Globals.Camera.TranslateLocal(axis);
-        //}
-        ////----------------------------------------------------------------------------------------------
-
-        //public void StepDown(float delta)
-        //{
-        //    Vector3 axis = Vector3.Up * -delta;
-        //    Globals.Camera.TranslateLocal(axis);
-        //}
-        ////----------------------------------------------------------------------------------------------
-
-        //public void StepForward(float delta)
-        //{
-        //    Vector3 axis = Vector3.Forward * delta;
-        //    Globals.Camera.TranslateLocal(axis);
-        //}
-        ////----------------------------------------------------------------------------------------------
-
-        //public void StepBackward(float delta)
-        //{
-        //    Vector3 axis = Vector3.Forward * -delta;
-        //    Globals.Camera.TranslateLocal(axis);
-        //}
-
-        ////----------------------------------------------------------------------------------------------
-        //public void StepLeft(float delta)
-        //{
-        //    Vector3 axis = Vector3.Right * -delta;
-        //    Globals.Camera.TranslateLocal(axis);
-        //}
-        ////----------------------------------------------------------------------------------------------
-
-        //public void StepRight(float delta)
-        //{
-        //    Vector3 axis = Vector3.Right * delta;
-        //    Globals.Camera.TranslateLocal(axis);
-        //}
-
-
-        ////----------------------------------------------------------------------------------------------
-
-        //public void ZoomIn(float delta)
-        //{
-        //    Globals.Camera.Distance -= delta;
-        //}
-
-        ////----------------------------------------------------------------------------------------------
-
-        //public void ZoomOut(float delta)
-        //{
-        //    Globals.Camera.Distance += delta;
-        //}
 
         //----------------------------------------------------------------------------------------------
         // workaround from justastro at : http://forums.create.msdn.com/forums/p/1610/157478.aspx

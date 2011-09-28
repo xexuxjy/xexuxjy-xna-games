@@ -27,17 +27,22 @@ namespace com.xexuxjy.utils.console
             ClearCommandLine();
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         protected override void LoadContent()
         {
             base.LoadContent();
             BuildTexture();
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void AddCommand(String command)
         {
             m_commandQueue.Enqueue(command);
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private void ProcessCommand(String command)
         {
@@ -46,6 +51,8 @@ namespace com.xexuxjy.utils.console
             m_outputLine.Clear();
             m_outputLine.Append(DoProcess(tokens));
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // very simple for now.
         private String DoProcess(String[] tokens)
@@ -256,11 +263,14 @@ namespace com.xexuxjy.utils.console
             return result;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private string SpawnEntity(GameObjectType entityType)
         {
             return SpawnEntity(entityType, new Vector3(0, 0, 0));
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private string SpawnEntity(GameObjectType entityType, Vector3 position)
         {
@@ -282,6 +292,8 @@ namespace com.xexuxjy.utils.console
             return result;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         private void BuildTexture()
         {
@@ -297,6 +309,8 @@ namespace com.xexuxjy.utils.console
             }
             m_texture.SetData<uint>(textureData);
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public override void Draw(GameTime gameTime)
         {
@@ -332,11 +346,15 @@ namespace com.xexuxjy.utils.console
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         Boolean IsValidChar(char c)
         {
             return ((c >= '0' && c <= 'z') || c == ' ' || c == '.' || c == (char)Keys.Enter || c==(char)Keys.Back 
                 ||c == (char)Keys.Up || c == (char)Keys.Down || c == '-' || c == ',');
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public GameObjectType GetGameObjectType(String[] args, int startIndex)
         {
@@ -352,6 +370,8 @@ namespace com.xexuxjy.utils.console
             return returnValue;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public Vector3? GetVector(String[] args, int startIndex)
         {
             Vector3? result = null;
@@ -365,11 +385,15 @@ namespace com.xexuxjy.utils.console
             return result;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public void ClearCommandLine()
         {
             m_commandLine.Clear();
             m_commandLine.Append(s_commandLinePrefix);
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void KeyEvent(Keys key)
         {
@@ -418,6 +442,8 @@ namespace com.xexuxjy.utils.console
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public void RegisterCommands()
         {
             String id = "spawn";
@@ -452,6 +478,8 @@ namespace com.xexuxjy.utils.console
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
           
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private class CommandBuffer
         {
@@ -490,6 +518,7 @@ namespace com.xexuxjy.utils.console
             private String[] m_commandHistory;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private class CommandDetails
         {
@@ -511,6 +540,8 @@ namespace com.xexuxjy.utils.console
             private String m_name;
             private int[] m_numArgs;
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private Dictionary<String, CommandDetails> m_commandDetailsMap = new Dictionary<string, CommandDetails>();
         private Texture2D m_texture;
