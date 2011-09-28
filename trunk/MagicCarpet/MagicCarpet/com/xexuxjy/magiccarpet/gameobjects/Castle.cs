@@ -213,6 +213,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
 
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
 
             Vector3 m_position;
             float m_cooldownTime;
@@ -225,9 +226,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             const float attackFrequency = 3.0f;
 
         }
-
-
-
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

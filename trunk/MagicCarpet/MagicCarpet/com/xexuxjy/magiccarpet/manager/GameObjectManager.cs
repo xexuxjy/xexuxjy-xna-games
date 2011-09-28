@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.gameobjects;
+using com.xexuxjy.utils.debug;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -93,6 +94,8 @@ namespace com.xexuxjy.magiccarpet.manager
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public void FindObjects(GameObjectType typeMask, Vector3 position, float radius, List<GameObject> results)
         {
@@ -118,10 +121,7 @@ namespace com.xexuxjy.magiccarpet.manager
                     }
                 }
             }
-
-            // ToDo - order the return list base on min to max distance.
-
-
+            results.Sort(new DistanceSorter(position));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +147,12 @@ namespace com.xexuxjy.magiccarpet.manager
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        public IList<GameObject> DebugObjectList
+        {
+            get { return m_gameObjectList; }
+        }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,4 +170,26 @@ namespace com.xexuxjy.magiccarpet.manager
         private IList<GameObject> m_gameObjectListRemove = new List<GameObject>();
 
     }
+
+    public class DistanceSorter : IComparer<GameObject>
+    {
+        public DistanceSorter(Vector3 position)
+        {
+            m_position = position;
+        }
+
+        public int  Compare(GameObject x, GameObject y)
+        {
+            float xlen = (x.Position - m_position).LengthSquared();
+            float ylen = (y.Position - m_position).LengthSquared();
+
+            return (int)(ylen - xlen);
+        }
+
+        private Vector3 m_position;
+    
+
+}
+
+
 }

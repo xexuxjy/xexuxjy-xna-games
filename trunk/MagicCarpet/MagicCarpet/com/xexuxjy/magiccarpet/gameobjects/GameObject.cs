@@ -11,6 +11,7 @@ using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.utils.debug;
 using Dhpoware;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
@@ -44,6 +45,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_scaleTransform = Matrix.Identity;
 
             m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
+            m_currentActionState = ActionState.Idle;
             base.Initialize();
         }
         
@@ -69,6 +71,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public virtual void Cleanup()
         {
 
+            Globals.GameObjectManager.RemoveGameObject(this);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -188,6 +191,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 			get{return m_id;}
             set{m_id = value;}
 		}
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public ActionState ActionState
+        {
+            get { return m_currentActionState; }
+        }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -316,8 +327,25 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void value_ActionComplete(BaseAction action)
+        public virtual void StartAction(BaseAction baseAction)
         {
+            Debug.Assert(m_currentAction == null);
+            Debug.Assert(baseAction != null);
+
+            m_currentAction = baseAction;
+            m_currentActionState = baseAction.ActionState;
+            baseAction.ActionStarted += new BaseAction.ActionStartedHandler(value_ActionStarted);
+            baseAction.ActionComplete += new BaseAction.ActionCompleteHandler(value_ActionComplete);
+
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void value_ActionComplete(BaseAction baseAction)
+        {
+            baseAction.ActionStarted -= new BaseAction.ActionStartedHandler(value_ActionStarted);
+            baseAction.ActionComplete -= new BaseAction.ActionCompleteHandler(value_ActionComplete);
         
         }
 
@@ -336,7 +364,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public String DebugText
+        public virtual String DebugText
         {
             get { return ""; }
         }
@@ -348,6 +376,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             get { return m_debugEnabled; }
             set { m_debugEnabled = value; }
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool Active()
+        {
+            return m_currentActionState != ActionState.Dead && m_currentActionState != ActionState.Dieing;
+        }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Delegates and events
@@ -389,6 +425,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected IMotionState m_motionState;
         protected CollisionObject m_collisionObject;
         protected BaseAction m_currentAction;
+        protected ActionState m_currentActionState;
+
+
         protected Matrix m_scaleTransform;
         protected Model m_model;
 

@@ -16,6 +16,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             ManaValue = 10;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         protected override void BuildCollisionObject()
         {
@@ -27,6 +28,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true);
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public float ManaValue
         {
             get { return m_manaValue; }
@@ -34,6 +37,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private float m_manaValue;
 

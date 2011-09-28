@@ -17,6 +17,7 @@ using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.utils.console;
 using com.xexuxjy.magiccarpet.manager;
+using com.xexuxjy.utils.debug;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -35,6 +36,8 @@ namespace com.xexuxjy.magiccarpet
             m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
 
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -61,13 +64,15 @@ namespace com.xexuxjy.magiccarpet
             Globals.Terrain = new Terrain(Vector3.Zero, this);
 
             Globals.GameObjectManager = new GameObjectManager(this);
+
             Globals.SimpleConsole = new SimpleConsole(this,Globals.DebugDraw);
             Globals.SimpleConsole.Enabled = false;
 
             Globals.MCContentManager = new MCContentManager(this);
             Globals.MCContentManager.Initialize();
 
-
+            Globals.DebugObjectManager = new DebugObjectManager(this,Globals.DebugDraw);
+            Globals.DebugObjectManager.Enabled = true;
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -79,10 +84,12 @@ namespace com.xexuxjy.magiccarpet
             Components.Add(new MouseController(this));
             Components.Add(new FrameRateCounter(this,Globals.DebugTextFPS,Globals.DebugDraw));
             Components.Add(Globals.SimpleConsole);
-
+            Components.Add(Globals.DebugObjectManager);
+            Components.Add(Globals.GameObjectManager);
             
             base.Initialize();
         }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -92,6 +99,7 @@ namespace com.xexuxjy.magiccarpet
         {
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
@@ -101,6 +109,7 @@ namespace com.xexuxjy.magiccarpet
             // TODO: Unload any non ContentManager content here
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -118,6 +127,7 @@ namespace com.xexuxjy.magiccarpet
             base.Update(gameTime);
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
