@@ -9,7 +9,8 @@ namespace com.xexuxjy.magiccarpet.actions
 {
     public class ActionUnload : BaseAction
     {
-        public ActionUnload(GameObject owner,GameObject target) : base(owner,target,ActionState.Unloading)
+        public ActionUnload(GameObject owner, GameObject target)
+            : base(owner, target, ActionState.Unloading)
         {
             Debug.Assert(owner is Balloon);
             Debug.Assert(target is Castle);

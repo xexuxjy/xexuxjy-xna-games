@@ -13,14 +13,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     public class Castle : GameObject
     {
         public Castle(Game game)
-            : base(game, GameObjectType.CASTLE)
+            : base(game, GameObjectType.castle)
         {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public Castle(Vector3 position, Game game)
-            : base(position, game,GameObjectType.CASTLE)
+            : base(position, game,GameObjectType.castle)
         {
             m_initialHeight = position.Y;
         }
@@ -187,7 +187,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     {
                         m_actionState = ActionState.Searching;
                         List<GameObject> searchResults = new List<GameObject>();
-                        GameObjectType searchMask = GameObjectType.MAGICIAN | GameObjectType.BALLOON | GameObjectType.MONSTER;
+                        GameObjectType searchMask = GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster;
                         Globals.GameObjectManager.FindObjects(searchMask, m_position, turretSearchRadius, null, searchResults);
 
                         if (searchResults.Count == 0)

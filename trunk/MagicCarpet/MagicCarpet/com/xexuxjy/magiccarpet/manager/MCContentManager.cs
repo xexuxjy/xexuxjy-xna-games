@@ -21,13 +21,13 @@ namespace com.xexuxjy.magiccarpet.manager
         public void LoadContent()
         {
             m_castleModel = m_contentManager.Load<Model>("unitcube");
-            m_dictionary[GameObjectType.CASTLE] = m_castleModel;
+            m_dictionary[GameObjectType.castle] = m_castleModel;
 
             m_balloonModel = m_contentManager.Load<Model>("unitsphere");
-            m_dictionary[GameObjectType.BALLOON] = m_balloonModel;
+            m_dictionary[GameObjectType.balloon] = m_balloonModel;
 
             m_manaBallModel = m_balloonModel;
-            m_dictionary[GameObjectType.MANABALL] = m_manaBallModel;
+            m_dictionary[GameObjectType.manaball] = m_manaBallModel;
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
             m_basicEffect = new BasicEffect(m_graphicsDevice);

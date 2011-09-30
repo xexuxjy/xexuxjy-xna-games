@@ -20,17 +20,17 @@ namespace com.xexuxjy.magiccarpet.manager
             GameObject gameObject = null;
             switch (gameObjectType)
             {
-                case GameObjectType.MANABALL:
+                case GameObjectType.manaball:
                     {
                         gameObject = new ManaBall(startPosition, Game);
                         break;
                     }
-                case GameObjectType.BALLOON:
+                case GameObjectType.balloon:
                     {
                         gameObject = new Balloon(startPosition, Game);
                         break;
                     }
-                case GameObjectType.CASTLE:
+                case GameObjectType.castle:
                     {
                         gameObject = new Castle(startPosition, Game);
                         break;
@@ -87,7 +87,7 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             foreach (GameObject gameObject in m_gameObjectList)
             {
-                if( typeMask == GameObjectType.NONE || typeMask == gameObject.GameObjectType)
+                if( typeMask == GameObjectType.none || typeMask == gameObject.GameObjectType)
                 {
                     results.Add(gameObject);
                 }
@@ -145,6 +145,13 @@ namespace com.xexuxjy.magiccarpet.manager
                     }
                 }
             }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool ObjectAvailable(GameObject target)
+        {
+            return true;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

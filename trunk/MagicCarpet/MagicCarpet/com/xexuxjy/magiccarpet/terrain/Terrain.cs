@@ -21,7 +21,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         public Terrain(Vector3 position,Game game)
-            : base(position, game,GameObjectType.TERRAIN)
+            : base(position, game,GameObjectType.terrain)
         {
         }
 
@@ -734,17 +734,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainUpdatersRemove.Clear();
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //public void DropRandomManaBall()
-        //{
-        //    int xpos = (int)(m_terrainRandom.NextDouble() * Width);
-        //    int zpos = (int)(m_terrainRandom.NextDouble() * Breadth);
-        //    double ypos = GetHeightAtPoint(xpos, zpos);
-        //    Vector3 vec = new Vector3((float)xpos, (float)ypos, (float)zpos);
-        //    ManaBall manaBall = (ManaBall)WorldObjectFactory.getInstance().getWorldObject(WorldObjectType.manaball,null, vec);
-        //}
-
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public TerrainSquare[] TerrainSquares
@@ -761,7 +750,10 @@ namespace com.xexuxjy.magiccarpet.terrain
             Vector3 result = new Vector3();
             result.X = ((float)m_terrainRandom.NextDouble() * Width);
             result.Z = ((float)m_terrainRandom.NextDouble() * Breadth);
-            return result;
+            result.Y = GetHeightAtPointLocal((int)result.X, (int)result.Z);
+
+
+            return LocalToWorld(result);
         }
         
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -778,6 +770,18 @@ namespace com.xexuxjy.magiccarpet.terrain
             result.Z = MathHelper.Clamp(0.0f, result.Z, Width);
 
             return result;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void ClampToTerrain(ref Vector3 position)
+        {
+            Vector3 local = WorldToLocal(position);
+
+            local.X = MathHelper.Clamp(local.X, 0, Width);
+            local.Z = MathHelper.Clamp(local.Z, 0, Width);
+
+            position = LocalToWorld(local);
         }
 
 

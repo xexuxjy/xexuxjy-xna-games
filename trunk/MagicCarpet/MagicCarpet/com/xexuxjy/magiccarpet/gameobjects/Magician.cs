@@ -10,7 +10,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     public class Magician : GameObject
     {
         public Magician(Game game)
-            : base(game, GameObjectType.MAGICIAN)
+            : base(game, GameObjectType.magician)
         {
         }
 

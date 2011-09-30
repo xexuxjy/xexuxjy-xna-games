@@ -7,11 +7,12 @@ using Microsoft.Xna.Framework;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
-    public class BaseAction
+    public class BaseAction : IUpdateable
     {
         public BaseAction(GameObject owner, GameObject target,ActionState actionState)
         {
             m_actionState = actionState;
+            m_actionPool = owner.ActionPool;
             m_owner = owner;
             m_target = target;
         }
@@ -105,17 +106,47 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        protected void NotifyActionComplete()
+        {
+            ActionStarted(this);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        protected void NotifyActionState()
+        {
+            ActionComplete(this);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
         public delegate void ActionStartedHandler(BaseAction baseAction);
         public event ActionStartedHandler ActionStarted;
 
         public delegate void ActionCompleteHandler(BaseAction action);
         public event ActionCompleteHandler ActionComplete;
 
-        private GameObject m_owner;
+        private ActionPool m_actionPool;
+        private GameObject m_owner; 
         private GameObject m_target;
         private ActionState m_actionState;
         private float m_duration;
         private float m_currentTime;
+
+        public bool Enabled
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public event EventHandler<EventArgs> EnabledChanged;
+
+        public int UpdateOrder
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public event EventHandler<EventArgs> UpdateOrderChanged;
     }
 
 
@@ -130,7 +161,8 @@ namespace com.xexuxjy.magiccarpet.actions
         Dieing,
         Dead,
         Attacking,
-        Searching
+        Searching,
+        Travelling
 
     }
 
