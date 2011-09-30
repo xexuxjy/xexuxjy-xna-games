@@ -13,14 +13,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     public class Balloon : GameObject
     {
         public Balloon(Game game)
-            : base(game,GameObjectType.BALLOON)
+            : base(game,GameObjectType.balloon)
         {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public Balloon(Vector3 startPosition, Game game)
-            : base(startPosition,game,GameObjectType.BALLOON)
+            : base(startPosition,game,GameObjectType.balloon)
         {
         }
 
@@ -35,7 +35,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Update(GameTime gameTime)
         {
-            if (m_currentActionState == ActionState.Idle)
+            if (ActionState == ActionState.Idle)
             {
                 if (Full)
                 {
@@ -43,11 +43,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 }
                 else
                 {
-                    StartAction(new ActionFindManaball(this,null,s_balloonSearchRadius));
+                    if (m_currentTarget == null)
+                    {
+                        StartAction(new ActionFindManaball(this, null, s_balloonSearchRadius));
+                    }
+                    else
+                    {
+                        StartAction(new ActionTravel(this, m_currentTarget,Vector3.Zero));
+                    }
                 }
             }
             else
-            if (m_currentActionState == ActionState.Moving)
+            if (ActionState == ActionState.Moving)
             {
                 if (m_currentTarget != null)
                 {
@@ -55,7 +62,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     if (!TargetValid())
                     {
                         // it's not, so set out state back to idle.
-                        m_currentActionState = ActionState.Idle;
+                       StartAction(ActionState.Idle);
                     }
                 }
 
@@ -79,19 +86,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void Load(ManaBall manaBall)
         {
-            CurrentAction = new ActionLoad(this,manaBall);
+            StartAction(new ActionLoad(this,manaBall));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void Unload(Castle castle)
         {
-            CurrentAction = new ActionUnload(this,castle);
+            StartAction(new ActionUnload(this,castle));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void value_ActionComplete(BaseAction action)
+        public override void ActionComplete(BaseAction action)
         {
             switch (action.ActionState)
             {
@@ -133,8 +140,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     break;
             }
             // action has completed so clear it and let another be assigned.
-            m_currentAction = null;
-
+            StartAction(ActionState.Idle);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,15 +157,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                return MathUtil.CompareFloat(m_currentLoad, m_maxLoad);
+                return MathUtil.CompareFloat(m_currentLoad, s_maxLoad);
             }
-        }
-
-        
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public override void value_ActionStarted(BaseAction action)
-        {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,11 +178,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private float m_currentLoad;
-        private float m_maxLoad;
 
         private GameObject m_currentTarget;
         private const float s_balloonSearchRadius = 50f;
         private const float s_castleSearchRadius = 250f;
+        private const float s_balloonSpeed = 5f;
+        private const float s_maxLoad = 100f;
+
 
     }
 

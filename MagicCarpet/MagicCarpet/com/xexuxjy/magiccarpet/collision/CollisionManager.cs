@@ -110,6 +110,13 @@ namespace com.xexuxjy.magiccarpet.collision
             return body;
         }
 
+        public void AddToWorld(CollisionObject collisionObject)
+        {
+            m_dynamicsWorld.AddCollisionObject(collisionObject);
+        }
+
+
+
 
         public bool CastRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
         {

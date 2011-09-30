@@ -18,6 +18,7 @@ namespace com.xexuxjy.magiccarpet.util
         }
 
 
+
         public const float Epsilon = 0.0000000001f;
     }
 }

@@ -11,7 +11,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     {
 
         public ManaBall(Vector3 startPosition,Game game)
-            : base( startPosition,game,GameObjectType.MANABALL)
+            : base( startPosition,game,GameObjectType.manaball)
         {
             ManaValue = 10;
         }

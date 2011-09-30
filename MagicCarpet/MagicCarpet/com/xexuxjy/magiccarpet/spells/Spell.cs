@@ -93,7 +93,7 @@ namespace com.xexuxjy.magiccarpet.spells
     public abstract class Spell : GameObject
     {
         public Spell(Game game)
-            : base(game,GameObjectType.SPELL)
+            : base(game,GameObjectType.spell)
         {
 
         }

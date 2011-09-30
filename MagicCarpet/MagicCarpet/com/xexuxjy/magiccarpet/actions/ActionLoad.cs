@@ -8,7 +8,8 @@ namespace com.xexuxjy.magiccarpet.actions
 {
     public class ActionLoad : BaseAction
     {
-        public ActionLoad(GameObject owner,GameObject target) : base(owner,target,ActionState.Loading)
+        public ActionLoad( GameObject owner, GameObject target)
+            : base(owner, target, ActionState.Loading)
         {
             Duration = Globals.BalloonLoadTime;
         }

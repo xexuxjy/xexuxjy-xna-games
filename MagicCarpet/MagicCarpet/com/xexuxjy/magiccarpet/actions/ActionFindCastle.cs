@@ -18,7 +18,7 @@ namespace com.xexuxjy.magiccarpet.actions
         protected override void InternalComplete()
         {
             List<GameObject> searchResults = new List<GameObject>();
-            GameObjectType searchMask = GameObjectType.CASTLE;
+            GameObjectType searchMask = GameObjectType.castle;
             Globals.GameObjectManager.FindObjects(searchMask, Owner.Position, m_searchRadius, null, searchResults);
             if (searchResults.Count > 0)
             {

@@ -29,7 +29,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         Multiply
     }
 
-    public class GameObjectAttributeModifier
+    public class GameObjectAttributeModifier : IUpdateable
     {
 
         public GameObjectAttributeModifier()
@@ -127,6 +127,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private float m_currentTime;
         private float m_modifier;
         private float m_originalValue;
+
+        public bool Enabled
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public event EventHandler<EventArgs> EnabledChanged;
+
+        public int UpdateOrder
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public event EventHandler<EventArgs> UpdateOrderChanged;
     }
 
 

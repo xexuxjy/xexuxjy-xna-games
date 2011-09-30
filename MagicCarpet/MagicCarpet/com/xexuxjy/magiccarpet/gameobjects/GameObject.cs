@@ -26,6 +26,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_gameObjectType = gameObjectType;
             m_motionState = new DefaultMotionState();
             game.Components.Add(this);
+            m_id = "" + (++s_idCounter);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,12 +41,28 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public virtual void ActionStarted(BaseAction baseAction)
+        {
+
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual void ActionComplete(BaseAction baseAction)
+        {
+
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public override void Initialize()
         {
             m_scaleTransform = Matrix.Identity;
+            m_actionPool = new ActionPool(this);
+            m_actionPool.Initialize();
+
 
             m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
-            m_currentActionState = ActionState.Idle;
             base.Initialize();
         }
         
@@ -54,15 +71,28 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            if (CurrentAction != null)
-            {
-                CurrentAction.Update(gameTime);
-            }
+            
+            m_actionPool.Update(gameTime);
 
             foreach (Spell spell in m_activeSpells)
             {
                 spell.Update(gameTime);
+            }
+
+            // no acceleration)
+            if (MathUtil.CompareFloat(TargetSpeed, Speed))
+            {
+                Speed = TargetSpeed;
+            }
+
+
+            // movement here?
+            if (Speed > 0)
+            {
+                Vector3 movement = Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Position += movement;
+
+
             }
         }
 
@@ -150,10 +180,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 Matrix m;
                 m_motionState.GetWorldTransform(out m);
-                m.Translation = value;
+
+                Vector3 clampedValue = value;
+                Globals.Terrain.ClampToTerrain(ref clampedValue);
+                m.Translation = clampedValue;
                 m_motionState.SetWorldTransform(ref m);
             }
         }
+
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -196,7 +231,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public ActionState ActionState
         {
-            get { return m_currentActionState; }
+            get { return m_actionPool.ActionState; }
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public ActionPool ActionPool
+        {
+            get { return m_actionPool; }
         }
 
 
@@ -212,6 +255,30 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             { 
                 m_boundingBox = value; 
             }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public Vector3 Direction
+        {
+            get { return m_direction; }
+            set { m_direction = value; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public float Speed
+        {
+            get { return m_speed; }
+            set { m_speed = value; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public float TargetSpeed
+        {
+            get { return m_targetSpeed; }
+            set { m_targetSpeed = value; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,28 +356,37 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void Die()
         {
-            CurrentAction = new ActionDie(this);
+            StartAction(new ActionDie(this));
 
         }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        public BaseAction CurrentAction
+
+        public ActionState CurrentActionState
         {
-            get { return m_currentAction; }
-            set 
+            get
             {
-                if (value != m_currentAction)
-                {
-                    m_currentAction = value;
-                    value.Initialize();
-                    value.ActionStarted += new BaseAction.ActionStartedHandler(value_ActionStarted);
-                    value.ActionComplete += new BaseAction.ActionCompleteHandler(value_ActionComplete);
-                }
+                return m_actionPool.ActionState;
+            }
+            set
+            {
 
             }
+
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void StartAction(BaseAction baseAction)
+        {
+            m_actionPool.StartAction(baseAction);
+        }
+
+        public virtual void StartAction(ActionState actionState)
+        {
+            m_actionPool.StartAction(actionState);
+        }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -325,35 +401,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return (localPoint + m_boundingBox.Min);
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public virtual void StartAction(BaseAction baseAction)
-        {
-            Debug.Assert(m_currentAction == null);
-            Debug.Assert(baseAction != null);
-
-            m_currentAction = baseAction;
-            m_currentActionState = baseAction.ActionState;
-            baseAction.ActionStarted += new BaseAction.ActionStartedHandler(value_ActionStarted);
-            baseAction.ActionComplete += new BaseAction.ActionCompleteHandler(value_ActionComplete);
-
-        }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public virtual void value_ActionComplete(BaseAction baseAction)
-        {
-            baseAction.ActionStarted -= new BaseAction.ActionStartedHandler(value_ActionStarted);
-            baseAction.ActionComplete -= new BaseAction.ActionCompleteHandler(value_ActionComplete);
-        
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public virtual void value_ActionStarted(BaseAction baseAction)
-        {
-        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -381,9 +428,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public bool Active()
         {
-            return m_currentActionState != ActionState.Dead && m_currentActionState != ActionState.Dieing;
+            return CurrentActionState != ActionState.Dead && CurrentActionState != ActionState.Dieing;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void Idle()
+        {
+            TargetSpeed = 0f;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Delegates and events
@@ -398,11 +451,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public delegate void SpellCastHandler(GameObject gameObject, Spell spell);
         public event SpellCastHandler SpellCast;
-
-
-
-
-
 
 
         // And others
@@ -424,14 +472,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected IMotionState m_motionState;
         protected CollisionObject m_collisionObject;
-        protected BaseAction m_currentAction;
-        protected ActionState m_currentActionState;
+
+        protected Vector3 m_direction;
+        protected float m_speed;
+        protected float m_targetSpeed;
+
 
 
         protected Matrix m_scaleTransform;
         protected Model m_model;
 
         protected bool m_debugEnabled;
+
+
+        private ActionPool m_actionPool;
+
+        public static int s_idCounter = 0;
     }
 
 

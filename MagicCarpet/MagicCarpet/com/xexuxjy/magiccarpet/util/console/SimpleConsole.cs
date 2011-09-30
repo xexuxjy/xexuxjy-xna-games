@@ -58,7 +58,7 @@ namespace com.xexuxjy.utils.console
         private String DoProcess(String[] tokens)
         {
             String result = SUCCESS;
-            String command = tokens[0].ToLower();
+            String command = tokens[0];
             String[] args = new String[0];
             if (tokens.Length > 1)
             {
@@ -205,7 +205,7 @@ namespace com.xexuxjy.utils.console
                         else if (commandDetails.Name.Equals("killall"))
                         {
                             List<GameObject> results = new List<GameObject>();
-                            Globals.GameObjectManager.FindObjects(GameObjectType.NONE, results);
+                            Globals.GameObjectManager.FindObjects(GameObjectType.none, results);
                             foreach (GameObject entity in results)
                             {
                                 //if (entity.KeyComponent == false)
@@ -216,7 +216,7 @@ namespace com.xexuxjy.utils.console
                         }
                         else if (commandDetails.Name.Equals("list"))
                         {
-                            GameObjectType entityType = GameObjectType.NONE;
+                            GameObjectType entityType = GameObjectType.none;
                             if (args.Length == 1)
                             {
                                 entityType = GetGameObjectType(args, 0);
@@ -233,10 +233,10 @@ namespace com.xexuxjy.utils.console
                         else if (commandDetails.Name.Equals("load"))
                         {
                             List<String> commands = new List<String>();
-                            StreamReader reader = new StreamReader("../../../scripts/" + args[0] + ".mc");
+                            StreamReader reader = new StreamReader("../../../Scripts/" + args[0] + ".mc");
                             while (reader.EndOfStream == false)
                             {
-                                commands.Add(reader.ReadLine());
+                                commands.Add(reader.ReadLine().ToLower());
                             }
                             foreach (String commandLine in commands)
                             {
@@ -251,6 +251,10 @@ namespace com.xexuxjy.utils.console
                                 result += key;
                                 result += ",";
                             }
+                        }
+                        else if (commandDetails.Name.Equals("droprandommanaball"))
+                        {
+                            DropRandomManaBall();
                         }
 
                     }
@@ -285,9 +289,13 @@ namespace com.xexuxjy.utils.console
             }
 
             string result = "failed to spawn";
-            if(GameObject != null)
+            if (GameObject != null)
             {
-                result = String.Format("Spawned {0} at [{1},{2},{3}]",GameObject.Id,GameObject.Position.X,GameObject.Position.Y,GameObject.Position.Z);
+                result = String.Format("Spawned {0} at [{1},{2},{3}]", GameObject.Id, GameObject.Position.X, GameObject.Position.Y, GameObject.Position.Z);
+            }
+            else
+            {
+                int ibreak = 0;
             }
             return result;
         }
@@ -358,16 +366,24 @@ namespace com.xexuxjy.utils.console
 
         public GameObjectType GetGameObjectType(String[] args, int startIndex)
         {
-            GameObjectType returnValue = GameObjectType.NONE;
+            GameObjectType returnValue = GameObjectType.none;
             try
             {
                 returnValue = (GameObjectType)Enum.Parse(typeof(GameObjectType), args[startIndex]);
             }
             catch (Exception e)
             {
-                returnValue = GameObjectType.NONE;
+                returnValue = GameObjectType.none;
             }
             return returnValue;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void DropRandomManaBall()
+        {
+            Vector3 position = Globals.Terrain.GetRandomWorldPositionXZ();
+            SpawnEntity(GameObjectType.manaball, position);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,8 +439,9 @@ namespace com.xexuxjy.utils.console
                     m_commandIndex = 0;
                     if (key == Keys.Enter)
                     {
-                        ProcessCommand(m_commandLine.ToString(s_commandLinePrefix.Length, m_commandLine.Length - s_commandLinePrefix.Length));
-                        m_commandBuffer.AddCommand(m_commandLine.ToString());
+                        String lowerString = m_commandLine.ToString(s_commandLinePrefix.Length, m_commandLine.Length - s_commandLinePrefix.Length).ToLower();
+                        ProcessCommand(lowerString);
+                        m_commandBuffer.AddCommand(lowerString);
                         ClearCommandLine();
                     }
                     else if (key == Keys.Back)
@@ -476,7 +493,8 @@ namespace com.xexuxjy.utils.console
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
             id = "help";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
-          
+            id = "droprandommanaball";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
