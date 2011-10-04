@@ -18,14 +18,23 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            m_scaleTransform = Matrix.CreateScale(0.5f);
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         protected override void BuildCollisionObject()
         {
             if (s_collisionShape == null)
             {
-                s_collisionShape = new SphereShape(1f);
+                s_collisionShape = new SphereShape(0.5f);
             }
 
-            //m_rigidBody = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true);
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

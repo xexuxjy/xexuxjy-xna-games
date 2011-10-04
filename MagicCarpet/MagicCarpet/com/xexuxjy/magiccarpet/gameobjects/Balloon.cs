@@ -35,26 +35,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Update(GameTime gameTime)
         {
-            if (ActionState == ActionState.Idle)
+            base.Update(gameTime);
+            if (ActionState == ActionState.None)
             {
-                if (Full)
-                {
-                    StartAction(new ActionFindCastle(this,null,s_castleSearchRadius));
-                }
-                else
-                {
-                    if (m_currentTarget == null)
-                    {
-                        StartAction(new ActionFindManaball(this, null, s_balloonSearchRadius));
-                    }
-                    else
-                    {
-                        StartAction(new ActionTravel(this, m_currentTarget,Vector3.Zero));
-                    }
-                }
+                QueueAction(new ActionIdle(this));
             }
-            else
-            if (ActionState == ActionState.Moving)
+            else if (ActionState == ActionState.Moving)
             {
                 if (m_currentTarget != null)
                 {
@@ -62,13 +48,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     if (!TargetValid())
                     {
                         // it's not, so set out state back to idle.
-                       StartAction(ActionState.Idle);
+                       ClearAction();
                     }
                 }
-
-
             }
-            base.Update(gameTime);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,14 +69,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void Load(ManaBall manaBall)
         {
-            StartAction(new ActionLoad(this,manaBall));
+            QueueAction(new ActionLoad(this,manaBall));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void Unload(Castle castle)
         {
-            StartAction(new ActionUnload(this,castle));
+            QueueAction(new ActionUnload(this,castle));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,6 +92,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         m_currentLoad += manaball.ManaValue;
                         // loaded now so remove object.
                         manaball.Cleanup();
+                        if (Full)
+                        {
+                            QueueAction(new ActionFindCastle(this, null, s_castleSearchRadius));
+                        }
 
                         break;
                     }
@@ -120,7 +107,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         Debug.Assert(castle != null);
                         castle.StoredMana += CurrentLoad;
                         CurrentLoad = 0f;
-
                         break;
                     }
                 case (ActionState.Dead):
@@ -134,13 +120,36 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     {
                         // if the search has completed then grab whatever it found and aim for that.
                         m_currentTarget = action.Target;
+                        if (m_currentTarget != null)
+                        {
+                            QueueAction(new ActionTravel(this, m_currentTarget, Vector3.Zero, s_balloonSpeed));
+                        }
+
                         break;
                     }
+                case (ActionState.Idle):
+                    {
+                        QueueAction(new ActionFindManaball(this, null, s_balloonSearchRadius));
+                        break;
+                    }
+                case(ActionState.Travelling):
+                    {
+                        Owner.TargetSpeed = 0f;
+
+                        if (action.Target.GameObjectType == GameObjectType.castle)
+                        {
+                            QueueAction(new ActionUnload(this, action.Target));
+                        }
+                        else if (action.Target.GameObjectType == GameObjectType.manaball)
+                        {
+                            QueueAction(new ActionLoad(this, action.Target));
+                        }
+                        break;
+                    }
+
                 default:
                     break;
             }
-            // action has completed so clear it and let another be assigned.
-            StartAction(ActionState.Idle);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +177,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                return String.Format("Id [{0}] Pos[{1}] Action[{2}] Mana[{3}].", Id, Position, ActionState, CurrentLoad);
+                return String.Format("Balloon Id [{0}] Pos[{1}] Action[{2}] Mana[{3}].", Id, Position, ActionState, CurrentLoad);
             }
 
         }

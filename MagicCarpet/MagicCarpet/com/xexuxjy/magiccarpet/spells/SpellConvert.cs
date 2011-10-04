@@ -5,15 +5,17 @@ using System.Text;
 using com.xexuxjy.magiccarpet.interfaces;
 using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
+using com.xexuxjy.magiccarpet.terrain;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
-    public class Convert : MovingSpell 
+    public class SpellConvert : MovingSpell 
     {
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Convert(Game game) : base(game)
+        public SpellConvert(GameObject owner)
+            : base(owner)
         {
         }
 
@@ -27,10 +29,14 @@ namespace com.xexuxjy.magiccarpet.spells
             if (target is ManaBall)
             {
                 // if it's owned by someone else or is non-aligned
-                if(target.Owner != Owner)
+                if (target.Owner != Owner)
                 {
                     shouldCollide = true;
                 }
+            }
+            else if(target is Terrain)
+            {
+                shouldCollide = true;
             }
             return shouldCollide;
         }
@@ -49,9 +55,12 @@ namespace com.xexuxjy.magiccarpet.spells
             // Double check?
             if (ShouldCollideWith(partner))
             {
-
-                GameObject target = partner.GetGameObject();
-                target.Owner = Owner;
+                // only 2 valid things should be manaballs and terrain.
+                if (partner is ManaBall)
+                {
+                    GameObject target = partner.GetGameObject();
+                    target.Owner = Owner;
+                }
                 Cleanup();
             }
         

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using BulletXNA.LinearMath;
 using System.Diagnostics;
 using BulletXNA;
+using com.xexuxjy.magiccarpet.interfaces;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
@@ -21,6 +22,8 @@ namespace com.xexuxjy.magiccarpet.collision
 
             ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
             m_dispatcher = new CollisionDispatcher(m_collisionConfiguration);
+
+            BulletGlobals.gContactAddedCallback = new ContactCallback();
 
             m_broadphase = new DbvtBroadphase();
             IOverlappingPairCache pairCache = null;
@@ -38,7 +41,7 @@ namespace com.xexuxjy.magiccarpet.collision
             m_dynamicsWorld.SetGravity(ref gravity);
         }
 
-        //----------------------------------------------------------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public void Reset()
         {
@@ -46,7 +49,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         }
 
-        //----------------------------------------------------------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override void Initialize()
         {
@@ -56,7 +59,7 @@ namespace com.xexuxjy.magiccarpet.collision
             }
         }
 
-        //----------------------------------------------------------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override void Update(GameTime gameTime)
         {
@@ -68,14 +71,16 @@ namespace com.xexuxjy.magiccarpet.collision
             base.Update(gameTime);
         }
 
-        //----------------------------------------------------------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld)
+        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld,Object userPointer)
         {
-            return LocalCreateRigidBody(mass, ref startTransform, shape,motionState, addToWorld);
+            return LocalCreateRigidBody(mass, ref startTransform, shape,motionState, addToWorld,userPointer);
         }
 
-        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld)
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer)
         {
 
             Debug.Assert((shape == null || shape.GetShapeType() != BroadphaseNativeTypes.INVALID_SHAPE_PROXYTYPE));
@@ -100,7 +105,7 @@ namespace com.xexuxjy.magiccarpet.collision
             RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, motionState, shape, localInertia);
 
             RigidBody body = new RigidBody(cInfo);
-
+            body.SetUserPointer(userPointer);
 
             if (addToWorld)
             {
@@ -110,12 +115,21 @@ namespace com.xexuxjy.magiccarpet.collision
             return body;
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public void AddToWorld(CollisionObject collisionObject)
         {
             m_dynamicsWorld.AddCollisionObject(collisionObject);
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public void RemoveFromWorld(CollisionObject collisionObject)
+        {
+            m_dynamicsWorld.RemoveCollisionObject(collisionObject);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
 
         public bool CastRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
@@ -139,7 +153,7 @@ namespace com.xexuxjy.magiccarpet.collision
         }
 
 
-        //----------------------------------------------------------------------------------------------
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         protected IBroadphaseInterface m_broadphase;
         protected CollisionDispatcher m_dispatcher;
@@ -147,4 +161,22 @@ namespace com.xexuxjy.magiccarpet.collision
         protected DefaultCollisionConfiguration m_collisionConfiguration;
         protected DynamicsWorld m_dynamicsWorld;
     }
+
+    public class ContactCallback : IContactAddedCallback
+    {
+        public bool Callback(ref ManifoldPoint cp, CollisionObject colObj0, int partId0, int index0, CollisionObject colObj1, int partId1, int index1)
+        {
+            ICollideable user0 = colObj0.GetUserPointer() as ICollideable;
+            ICollideable user1 = colObj1.GetUserPointer() as ICollideable;
+
+            if (user0 != null && user1 != null)
+            {
+                return user0.ShouldCollideWith(user1);
+            }
+
+            return true;
+        }
+    }
+
+
 }

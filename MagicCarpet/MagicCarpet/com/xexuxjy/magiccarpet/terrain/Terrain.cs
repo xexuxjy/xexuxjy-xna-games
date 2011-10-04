@@ -82,6 +82,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             CollisionShape collisionShape = new HeightfieldTerrainShape(Globals.WorldWidth, Globals.WorldWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
             m_collisionObject = new CollisionObject();
             m_collisionObject.SetCollisionShape(collisionShape);
+            Globals.CollisionManager.AddToWorld(m_collisionObject);
             //m_collisionObject = 
         }
 
@@ -340,6 +341,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void AddPeak(Vector3 point, float height)
         {
+            point = WorldToLocal(point);
             AddPeak(point.X, point.Z, height);
         }
 

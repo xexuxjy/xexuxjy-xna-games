@@ -10,10 +10,12 @@ namespace com.xexuxjy.magiccarpet.actions
 {
     public class ActionTravel : BaseAction
     {
-        public ActionTravel(GameObject owner, GameObject target,Vector3 position)
+        public ActionTravel(GameObject owner, GameObject target,Vector3 position,float speed)
             : base(owner, target, ActionState.Travelling)
         {
-
+            m_position = position;
+            m_speed = speed;
+            owner.TargetSpeed = m_speed;
         }
 
         public override void Update(GameTime gameTime)
@@ -21,7 +23,7 @@ namespace com.xexuxjy.magiccarpet.actions
             // whatever target we had is no longer valid.
             if (Target != null && !Globals.GameObjectManager.ObjectAvailable(Target))
             {
-                NotifyActionComplete();
+                ActionComplete();
             }
             else
             {
@@ -31,7 +33,7 @@ namespace com.xexuxjy.magiccarpet.actions
                 float dist2 = MathUtil.Vector3Distance2XZ(currentPosition, targetPosition);
                 if (dist2 <= s_nearnessCheck)
                 {
-                    NotifyActionComplete();
+                    ActionComplete();
                 }
                 else
                 {
@@ -41,10 +43,16 @@ namespace com.xexuxjy.magiccarpet.actions
                     Owner.Direction = direction;
                 }
             }
-
         }
 
+        protected override void InternalComplete()
+        {
+            Owner.TargetSpeed = 0f;
+        }
+
+
         private Vector3 m_position;
+        private float m_speed;
         private const float s_nearnessCheck = 0.1f;
 
     }

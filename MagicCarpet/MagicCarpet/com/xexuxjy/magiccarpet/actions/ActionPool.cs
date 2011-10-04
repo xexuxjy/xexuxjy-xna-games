@@ -26,11 +26,19 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void StartAction(BaseAction baseAction)
+        public void StartAction(BaseAction baseAction)
         {
+            Debug.Assert(!m_startingAction);
+            if (m_currentAction != null && baseAction.ActionState == m_currentAction.ActionState)
+            {
+                return;
+            }
+            
+            m_startingAction = true;
+
             if (m_currentAction != null)
             {
-                ActionComplete(m_currentAction);
+                CompleteAction(m_currentAction);
                 m_currentAction = null;
             }
 
@@ -39,42 +47,46 @@ namespace com.xexuxjy.magiccarpet.actions
 
             m_currentAction = baseAction;
 
-            baseAction.ActionStarted += new BaseAction.ActionStartedHandler(ActionStarted);
-            baseAction.ActionComplete += new BaseAction.ActionCompleteHandler(ActionComplete);
+            m_owner.ActionStarted(baseAction);
+            m_startingAction = false;
 
         }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public virtual void StartAction(ActionState actionState)
         {
-            if (m_currentAction!= null && actionState == m_currentAction.ActionState)
-            {
-                return;
-            }
-
-
-            if (m_currentAction != null)
-            {
-                ActionComplete(m_currentAction);
-                m_currentAction = null;
-            }
-
-
             // new action
+            BaseAction baseAction = null;
             if (actionState == ActionState.Idle)
             {
-                m_currentAction = new ActionIdle(m_owner);
+                baseAction = new ActionIdle(m_owner);
             }
 
-            m_owner.ActionStarted(m_currentAction);
+
+            QueueAction(baseAction);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void CompleteAction(BaseAction baseAction)
+        {
+            m_owner.ActionComplete(baseAction);
+            m_currentAction = null;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void Initialize()
         {
-            StartAction(ActionState.Idle);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void ClearAction()
+        {
+            CompleteAction(m_currentAction);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,8 +94,21 @@ namespace com.xexuxjy.magiccarpet.actions
         public void Update(GameTime gameTime)
         {
             // should always be some form of action
-            Debug.Assert(m_currentAction != null);
-            m_currentAction.Update(gameTime);
+            //Debug.Assert(m_currentAction != null);
+            if (m_currentAction != null)
+            {
+                m_currentAction.Update(gameTime);
+            }
+            else
+            {
+                // if we have another one, then go for it.
+                if (m_nextAction != null)
+                {
+                    StartAction(m_nextAction);
+                    m_nextAction = null;
+                }
+            }
+
 
         }
 
@@ -91,36 +116,31 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public ActionState ActionState
         {
-            get { return m_currentAction.ActionState; }
-            set 
+            get 
             {
-                m_currentAction = null;
-                // end old action, start new one?
-            
+                ActionState current = m_currentAction != null ? m_currentAction.ActionState : ActionState.None;
+                ActionState next = m_nextAction != null ? m_nextAction.ActionState : ActionState.None;
+                return current != ActionState.None ? current : next;
             }
-
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void ActionStarted(BaseAction baseAction)
+        public void QueueAction(BaseAction baseAction)
         {
-            m_owner.ActionStarted(baseAction);
+            Debug.Assert(m_nextAction == null);
+            m_nextAction = baseAction;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public virtual void ActionComplete(BaseAction baseAction)
-        {
-            baseAction.ActionStarted -= new BaseAction.ActionStartedHandler(ActionStarted);
-            baseAction.ActionComplete -= new BaseAction.ActionCompleteHandler(ActionComplete);
-            m_owner.ActionComplete(baseAction);
-        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private BaseAction m_currentAction;
+        private BaseAction m_nextAction;
+
         private GameObject m_owner;
+        private bool m_startingAction;
+        private bool m_completingAction;
 
 
         public bool Enabled

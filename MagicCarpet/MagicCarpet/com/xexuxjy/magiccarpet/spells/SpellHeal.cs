@@ -7,18 +7,18 @@ using Microsoft.Xna.Framework;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
-    public class Heal : Spell
+    public class SpellHeal : Spell
     {
-        public Heal(Game game)
-            : base(game)
+        public SpellHeal(GameObject  owner)
+            : base(owner)
         {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Initialize(SpellTemplate template,GameObject owner)
+        public override void Initialize(SpellTemplate template)
         {
-            base.Initialize(template,owner);
+            base.Initialize(template);
             //Set up to heal the caster for m_multipler over duration
             m_modifier = new GameObjectAttributeModifier();
             m_modifier.Initialize(Owner.GetAttribute(GameObjectAttributeType.Health),

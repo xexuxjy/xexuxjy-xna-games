@@ -7,18 +7,19 @@ using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
-    public class Turbo : Spell
+    public class SpellTurbo : Spell
     {
-        public Turbo(Game game) : base(game)
+        public SpellTurbo(GameObject owner)
+            : base(owner)
         {
 
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Initialize(SpellTemplate spellTemplate,GameObject owner)
+        public override void Initialize(SpellTemplate spellTemplate)
         {
-            base.Initialize(spellTemplate,owner);
+            base.Initialize(spellTemplate);
             m_modifier = new GameObjectAttributeModifier();
             m_modifier.Initialize(Owner.GetAttribute(GameObjectAttributeType.Speed),
                 GameObjectAttributeModifierEffectDuration.InstantTemporary, 

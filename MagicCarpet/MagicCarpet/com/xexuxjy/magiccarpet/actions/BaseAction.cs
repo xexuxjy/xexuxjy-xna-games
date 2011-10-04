@@ -21,13 +21,10 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public virtual void Initialize()
         {
-            ActionStarted(this);
+         
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        
         
         public virtual void Update(GameTime gameTime)
         {
@@ -35,13 +32,19 @@ namespace com.xexuxjy.magiccarpet.actions
             {
                 float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 m_currentTime += elapsedSeconds;
-                if (Complete)
-                {
-                    InternalComplete();
-                    ActionComplete(this);
-                }
+            }
+            else
+            {
+                ActionComplete();
             }
 
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        protected void ActionComplete()
+        {
+            InternalComplete();
+            m_actionPool.CompleteAction(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,8 +54,8 @@ namespace com.xexuxjy.magiccarpet.actions
 
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public virtual void Cleanup()
         {
 
@@ -104,28 +107,8 @@ namespace com.xexuxjy.magiccarpet.actions
             set { m_target = value; }
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        protected void NotifyActionComplete()
-        {
-            ActionStarted(this);
-        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        protected void NotifyActionState()
-        {
-            ActionComplete(this);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        public delegate void ActionStartedHandler(BaseAction baseAction);
-        public event ActionStartedHandler ActionStarted;
-
-        public delegate void ActionCompleteHandler(BaseAction action);
-        public event ActionCompleteHandler ActionComplete;
 
         private ActionPool m_actionPool;
         private GameObject m_owner; 
@@ -153,6 +136,7 @@ namespace com.xexuxjy.magiccarpet.actions
 
     public enum ActionState
     {
+        None,
         Idle,
         Moving,
         Loading,

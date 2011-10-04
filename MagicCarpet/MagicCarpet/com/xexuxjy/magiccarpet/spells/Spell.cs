@@ -92,19 +92,16 @@ namespace com.xexuxjy.magiccarpet.spells
 
     public abstract class Spell : GameObject
     {
-        public Spell(Game game)
-            : base(game,GameObjectType.spell)
+        public Spell(GameObject owner)
+            : base(owner.Game,GameObjectType.spell)
         {
-
-        }
-
-        public virtual void Initialize(SpellTemplate spellTemplate,GameObject owner)
-        {
-            m_spellTemplate = spellTemplate;
             Owner = owner;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        public virtual void Initialize(SpellTemplate spellTemplate)
+        {
+            m_spellTemplate = spellTemplate;
+        }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +110,27 @@ namespace com.xexuxjy.magiccarpet.spells
         {
             get { return m_owner; }
             set { m_owner = value; }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void  Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            m_currentTime += elapsedSeconds;
+            if (Complete())
+            {
+                Cleanup();
+            }
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool Complete()
+        {
+            return m_currentTime >= m_spellTemplate.Duration;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

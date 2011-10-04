@@ -1321,10 +1321,8 @@ namespace Dhpoware
         /// <param name="direction">The movement direction.</param>
         private void GetMovementDirection(out Vector3 direction)
         {
-            direction.X = 0.0f;
-            direction.Y = 0.0f;
-            direction.Z = 0.0f;
 
+            direction = Vector3.Zero;
 
             // if we don't have access to the keyboard then do nothing here.
             if (!m_keyboardInputEnabled)
