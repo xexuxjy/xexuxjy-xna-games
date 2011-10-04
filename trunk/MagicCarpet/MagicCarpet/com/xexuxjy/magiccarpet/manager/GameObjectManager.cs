@@ -75,6 +75,7 @@ namespace com.xexuxjy.magiccarpet.manager
             {
                 // cleanup may already have been called.
                 gameObject.Cleanup();
+                Game.Components.Remove(gameObject);
                 m_gameObjectList.Remove(gameObject);
             }
             m_gameObjectListRemove.Clear();
@@ -92,6 +93,7 @@ namespace com.xexuxjy.magiccarpet.manager
                     results.Add(gameObject);
                 }
             }
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

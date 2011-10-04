@@ -50,7 +50,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void ActionComplete(BaseAction baseAction)
         {
-
+            
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -61,8 +61,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_actionPool = new ActionPool(this);
             m_actionPool.Initialize();
 
+            m_spellPool = new SpellPool(this);
+            m_spellPool.Initialize();
 
             m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
+
+            BuildCollisionObject();
+            
             base.Initialize();
         }
         
@@ -74,13 +79,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             
             m_actionPool.Update(gameTime);
 
-            foreach (Spell spell in m_activeSpells)
-            {
-                spell.Update(gameTime);
-            }
+            m_spellPool.Update(gameTime);
 
             // no acceleration)
-            if (MathUtil.CompareFloat(TargetSpeed, Speed))
+            if (!MathUtil.CompareFloat(TargetSpeed, Speed))
             {
                 Speed = TargetSpeed;
             }
@@ -100,16 +102,24 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void Cleanup()
         {
+            if (!m_awaitingRemoval)
+            {
+                if (m_collisionObject != null)
+                {
+                    Globals.CollisionManager.RemoveFromWorld(m_collisionObject);
+                    m_collisionObject = null;
+                }
 
-            Globals.GameObjectManager.RemoveGameObject(this);
+                Globals.GameObjectManager.RemoveGameObject(this);
+                m_awaitingRemoval = true;
+            }
         }
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         protected virtual void BuildCollisionObject()
         {
         }
-
-
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -305,45 +315,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell(SpellType spellType,Vector3 startPosition,Vector3 targetPosition)
-        {
-            if (CanCastSpell(spellType))
-            {
-                SpellTemplate template;
-                m_spellTemplates.TryGetValue(spellType, out template);
-                GameObjectAttribute mana = GetAttribute(GameObjectAttributeType.Mana);
-                mana.CurrentValue -= template.ManaCost;
-                // Todo - factory or similar to create object
-                Spell spell = new Turbo(Game);
-                spell.Initialize(template, this);
-                m_activeSpells.Add(spell);
-                spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);
-            }
-        }
-
-        void spell_SpellComplete(Spell spell)
-        {
-            SpellTemplate spellTemplate = spell.SpellTemplate;
-
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public bool CanCastSpell(SpellType spellType)
-        {
-            bool result = false;
-            SpellTemplate template;
-            m_spellTemplates.TryGetValue(spellType, out template);
-            if (template != null && template.Available)
-            {
-                GameObjectAttribute mana = GetAttribute(GameObjectAttributeType.Mana);
-                if (mana.CurrentValue > template.ManaCost)
-                {
-                    result = true;
-                }
-            }
-            return result;
-        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -356,7 +327,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void Die()
         {
-            StartAction(new ActionDie(this));
+            QueueAction(new ActionDie(this));
 
         }
 
@@ -377,18 +348,27 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void StartAction(BaseAction baseAction)
+        public virtual void QueueAction(BaseAction baseAction)
         {
-            m_actionPool.StartAction(baseAction);
+            m_actionPool.QueueAction(baseAction);
         }
-
-        public virtual void StartAction(ActionState actionState)
-        {
-            m_actionPool.StartAction(actionState);
-        }
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void ClearAction()
+        {
+            m_actionPool.ClearAction();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 targetPosition)
+        {
+            m_spellPool.CastSpell(spellType, startPosition, targetPosition);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public Vector3 WorldToLocal(Vector3 worldPoint)
         {
@@ -449,13 +429,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public delegate void DamagedHandler(GameObject sender, EventArgs e);
         public event DamagedHandler Damaged;
 
-        public delegate void SpellCastHandler(GameObject gameObject, Spell spell);
-        public event SpellCastHandler SpellCast;
-
-
         // And others
-        private List<Spell> m_activeSpells = new List<Spell>();
-        private Dictionary<SpellType, SpellTemplate> m_spellTemplates = new Dictionary<SpellType, SpellTemplate>();
 
         private Dictionary<GameObjectAttributeType, GameObjectAttribute> m_attributes = new Dictionary<GameObjectAttributeType, GameObjectAttribute>();
 
@@ -477,7 +451,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected float m_speed;
         protected float m_targetSpeed;
 
-
+        protected bool m_awaitingRemoval;
 
         protected Matrix m_scaleTransform;
         protected Model m_model;
@@ -486,6 +460,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
         private ActionPool m_actionPool;
+        private SpellPool m_spellPool;
 
         public static int s_idCounter = 0;
     }
