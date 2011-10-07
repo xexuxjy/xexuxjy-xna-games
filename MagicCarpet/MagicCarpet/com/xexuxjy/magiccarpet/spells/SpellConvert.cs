@@ -6,6 +6,7 @@ using com.xexuxjy.magiccarpet.interfaces;
 using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.terrain;
+using BulletXNA.BulletCollision;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
@@ -65,6 +66,22 @@ namespace com.xexuxjy.magiccarpet.spells
             }
         
         }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        protected override void BuildCollisionObject()
+        {
+            CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.spell;
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.manaball | GameObjectType.terrain);
+
+            //m_collisionObject = new CollisionObject();
+            //m_collisionObject.SetCollisionShape(s_collisionShape);
+
+            //Globals.CollisionManager.AddToWorld(m_collisionObject,collisionFlags,collisionMask);
+
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
+
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }

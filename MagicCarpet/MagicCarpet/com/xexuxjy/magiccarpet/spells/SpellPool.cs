@@ -14,7 +14,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
             m_owner = owner;
             // manaCost,castTime,cooldownTime,duration
-            InitializeTemplate(SpellType.Convert,5,0.5f,1f,1f);
+            InitializeTemplate(SpellType.Convert,5,0.5f,1f,10f);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -68,6 +68,14 @@ namespace com.xexuxjy.magiccarpet.collision
             ///step the simulation
             m_dynamicsWorld.StepSimulation(ms, 1);
             m_dynamicsWorld.DebugDrawWorld();
+
+
+            int manifolds = m_dynamicsWorld.GetDispatcher().GetNumManifolds();
+            if (manifolds > 0)
+            {
+                int ibreak = 0;
+            }
+
             base.Update(gameTime);
         }
 
@@ -81,6 +89,20 @@ namespace com.xexuxjy.magiccarpet.collision
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer)
+        {
+            return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, CollisionFilterGroups.StaticFilter,(CollisionFilterGroups.AllFilter ^ CollisionFilterGroups.StaticFilter));
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        {
+            return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, filterGroup, filterMask);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
 
             Debug.Assert((shape == null || shape.GetShapeType() != BroadphaseNativeTypes.INVALID_SHAPE_PROXYTYPE));
@@ -104,12 +126,16 @@ namespace com.xexuxjy.magiccarpet.collision
 
             RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, motionState, shape, localInertia);
 
+
             RigidBody body = new RigidBody(cInfo);
+            // disable all gravity for now?
+            body.SetFlags(body.GetFlags() | RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
+            body.SetActivationState(ActivationState.DISABLE_DEACTIVATION);
             body.SetUserPointer(userPointer);
 
             if (addToWorld)
             {
-                m_dynamicsWorld.AddRigidBody(body);
+                m_dynamicsWorld.AddRigidBody(body,filterGroup,filterMask);
             }
 
             return body;
@@ -120,6 +146,13 @@ namespace com.xexuxjy.magiccarpet.collision
         public void AddToWorld(CollisionObject collisionObject)
         {
             m_dynamicsWorld.AddCollisionObject(collisionObject);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void AddToWorld(CollisionObject collisionObject,CollisionFilterGroups group,CollisionFilterGroups mask)
+        {
+            m_dynamicsWorld.AddCollisionObject(collisionObject,group,mask);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
