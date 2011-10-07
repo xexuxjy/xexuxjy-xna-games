@@ -35,6 +35,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

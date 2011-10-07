@@ -80,9 +80,20 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             // Should really 
             CollisionShape collisionShape = new HeightfieldTerrainShape(Globals.WorldWidth, Globals.WorldWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
-            m_collisionObject = new CollisionObject();
-            m_collisionObject.SetCollisionShape(collisionShape);
-            Globals.CollisionManager.AddToWorld(m_collisionObject);
+            CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)GameObjectType.spell;
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
+            
+            //m_collisionObject = new CollisionObject();
+            //m_collisionObject.SetCollisionShape(collisionShape);
+            //m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+
+
+            //CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
+            //CollisionFilterGroups collisionMask = (CollisionFilterGroups)GameObjectType.spell;
+
+
+            //Globals.CollisionManager.AddToWorld(m_collisionObject,collisionFlags,collisionMask);
             //m_collisionObject = 
         }
 

@@ -218,6 +218,7 @@ namespace com.xexuxjy.magiccarpet.spells
         public override void Cleanup()
         {
             SpellComplete(this);
+            base.Cleanup();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

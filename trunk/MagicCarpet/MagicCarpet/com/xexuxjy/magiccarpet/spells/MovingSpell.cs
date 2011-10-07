@@ -28,10 +28,13 @@ namespace com.xexuxjy.magiccarpet.spells
 
         protected override void BuildCollisionObject()
         {
-            m_collisionObject = new CollisionObject();
-            m_collisionObject.SetCollisionShape(s_collisionShape);
-            m_collisionObject.SetUserPointer(this);
-            Globals.CollisionManager.AddToWorld(m_collisionObject);
+            //m_collisionObject = new CollisionObject();
+            //m_collisionObject.SetCollisionShape(s_collisionShape);
+            //m_collisionObject.SetUserPointer(this);
+            //m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() & (~CollisionFlags.CF_STATIC_OBJECT));
+
+            //Globals.CollisionManager.AddToWorld(m_collisionObject);
+            //m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this);
         }
         
         
@@ -42,7 +45,7 @@ namespace com.xexuxjy.magiccarpet.spells
             Position = position;
             Direction = direction;
 
-            m_motionState.SetWorldTransform(Matrix.CreateTranslation(position));
+            //m_motionState.SetWorldTransform(Matrix.CreateTranslation(position));
             TargetSpeed = s_defaultSpellSpeed;
         }
 
