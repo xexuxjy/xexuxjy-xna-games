@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System.Reflection;
 using Microsoft.Xna.Framework.Input;
 using com.xexuxjy.magiccarpet.gameobjects;
+using com.xexuxjy.magiccarpet.spells;
 
 namespace com.xexuxjy.magiccarpet.util
 {
@@ -72,6 +73,39 @@ namespace com.xexuxjy.magiccarpet.util
                         {
                             Globals.DebugObjectManager.NextObject();
                         }
+                        break;
+                    }
+                case Keys.NumPad1:
+                case Keys.D1:
+                    {
+                        Globals.Player.SelectedSpell1 = SpellType.Convert;
+                        break;
+                    }
+                case Keys.NumPad2:
+                case Keys.D2:
+                    {
+                        Globals.Player.SelectedSpell1 = SpellType.Fireball;
+                        break;
+                    }
+                case Keys.NumPad3:
+                case Keys.D3:
+
+                    {
+                        Globals.Player.SelectedSpell1 = SpellType.Lower;
+                        break;
+                    }
+                case Keys.NumPad4:
+                case Keys.D4:
+
+                    {
+                        Globals.Player.SelectedSpell1 = SpellType.Raise;
+                        break;
+                    }
+                case Keys.NumPad5:
+                case Keys.D5:
+
+                    {
+                        Globals.Player.SelectedSpell1 = SpellType.Castle;
                         break;
                     }
 

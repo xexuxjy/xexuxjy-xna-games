@@ -67,10 +67,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
 
             BuildCollisionObject();
-            
+            SetStartAttributes();            
             base.Initialize();
         }
         
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual void SetStartAttributes()
+        {
+            m_attributes[GameObjectAttributeType.Health] = new GameObjectAttribute(GameObjectAttributeType.Health, 100);
+            m_attributes[GameObjectAttributeType.Mana] = new GameObjectAttribute(GameObjectAttributeType.Mana, 100);
+        }
+
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override void Update(GameTime gameTime)
@@ -323,6 +332,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return m_attributes[type];
         }
 
+        public void SetAttribute(GameObjectAttributeType type,float value)
+        {
+            m_attributes[type].BaseValue = value;
+        }
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void Die()
@@ -362,9 +375,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 targetPosition)
+        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
         {
-            m_spellPool.CastSpell(spellType, startPosition, targetPosition);
+            m_spellPool.CastSpell(spellType, startPosition, direction);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

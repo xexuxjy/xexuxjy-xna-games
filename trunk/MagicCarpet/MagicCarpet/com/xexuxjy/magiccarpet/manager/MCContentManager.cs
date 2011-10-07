@@ -29,6 +29,10 @@ namespace com.xexuxjy.magiccarpet.manager
             m_manaBallModel = m_balloonModel;
             m_dictionary[GameObjectType.manaball] = m_manaBallModel;
 
+            m_spellModel = m_balloonModel;
+            m_dictionary[GameObjectType.spell] = m_spellModel;
+
+
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
             m_basicEffect = new BasicEffect(m_graphicsDevice);
 
@@ -36,6 +40,8 @@ namespace com.xexuxjy.magiccarpet.manager
             RemapModel(m_castleModel, m_basicEffect);
             RemapModel(m_balloonModel, m_basicEffect);
             RemapModel(m_manaBallModel, m_basicEffect);
+            RemapModel(m_spellModel, m_basicEffect);
+
         }
 
         public Model ModelForObjectType(GameObjectType gameObjectType)
@@ -78,6 +84,7 @@ namespace com.xexuxjy.magiccarpet.manager
         private BasicEffect m_basicEffect;
 
 
+        private Model m_spellModel;
         private Model m_castleModel;
         private Model m_balloonModel;
         private Model m_manaBallModel;

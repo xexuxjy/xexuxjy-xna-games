@@ -77,6 +77,8 @@ namespace com.xexuxjy.magiccarpet
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician,new Vector3(0,10,0));
+            Globals.DebugObjectManager.DebugObject = Globals.Player;
 
             Components.Add(camera);
             //Components.Add(Globals.Terrain);

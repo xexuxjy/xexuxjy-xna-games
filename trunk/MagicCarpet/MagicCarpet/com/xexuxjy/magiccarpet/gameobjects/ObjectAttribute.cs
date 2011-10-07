@@ -9,9 +9,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     public enum GameObjectAttributeType
     {
         Health,
-        MaxHealth,
         Mana,
-        MaxMana,
         Speed
     }
 
@@ -146,7 +144,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
     public class GameObjectAttribute
     {
-
+        public GameObjectAttribute(GameObjectAttributeType attributeType, float startValue)
+        {
+            AttributeType = attributeType;
+            BaseValue = startValue;
+            CurrentValue = startValue;
+        }
 
         public GameObjectAttributeType AttributeType
         {

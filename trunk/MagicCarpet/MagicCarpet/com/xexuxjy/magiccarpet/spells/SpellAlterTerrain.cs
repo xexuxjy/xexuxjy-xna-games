@@ -8,12 +8,12 @@ namespace com.xexuxjy.magiccarpet.spells
 {
     public class SpellAlterTerrain : MovingSpell
     {
-        public SpellAlterTerrain(GameObject owner)
+        public SpellAlterTerrain(GameObject owner,bool up)
             : base(owner)
         {
-
+            m_up = up;
 
         }
-
+        private bool m_up;
     }
 }
