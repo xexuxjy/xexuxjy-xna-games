@@ -75,6 +75,7 @@ namespace com.xexuxjy.magiccarpet
         // Debug Text Positions
         public static Vector3 DebugTextCamera = new Vector3(10, 10, 0);
         public static Vector3 DebugTextFPS = new Vector3(10, 20, 0);
+        public static Vector3 DebugTextPlayer = new Vector3(10, 30, 0);
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,6 +120,7 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public static Magician Player;
         
         public static ICamera Camera;
         public static Terrain Terrain;

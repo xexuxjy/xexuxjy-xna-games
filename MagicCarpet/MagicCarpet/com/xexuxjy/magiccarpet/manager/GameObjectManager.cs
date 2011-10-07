@@ -35,6 +35,11 @@ namespace com.xexuxjy.magiccarpet.manager
                         gameObject = new Castle(startPosition, Game);
                         break;
                     }
+                case GameObjectType.magician:
+                    {
+                        gameObject = new Magician(startPosition, Game);
+                        break;
+                    }
             }
 
 

@@ -11,11 +11,24 @@ namespace com.xexuxjy.magiccarpet.spells
     {
         public SpellPool(GameObject owner)
         {
-            m_owner = owner;
 
+            m_owner = owner;
+            // manaCost,castTime,cooldownTime,duration
+            InitializeTemplate(SpellType.Convert,5,0.5f,1f,1f);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void InitializeTemplate(SpellType spellType,int manaCost,float castTime, float cooldownTime,float duration)
+    {
+        SpellTemplate template = new SpellTemplate(spellType,manaCost,castTime,cooldownTime,duration);
+        m_updateables.Add(template);
+        m_spellTemplates[spellType] = template;
+    }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
         public void Initialize()
         {
@@ -25,17 +38,15 @@ namespace com.xexuxjy.magiccarpet.spells
 
         public virtual void Update(GameTime gameTime)
         {
-            foreach (Spell spell in m_activeSpells)
+            foreach (IUpdateable updateable in m_updateables)
             {
-                spell.Update(gameTime);
+                updateable.Update(gameTime);
             }
-
-
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 targetPosition)
+        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
         {
             if (CanCastSpell(spellType))
             {
@@ -67,9 +78,14 @@ namespace com.xexuxjy.magiccarpet.spells
                             spell = new SpellHeal(m_owner);
                             break;
                         }
-                    case (SpellType.LowerRaise):
+                    case (SpellType.Lower):
                         {
-                            spell = new SpellAlterTerrain(m_owner);
+                            spell = new SpellAlterTerrain(m_owner,false);
+                            break;
+                        }
+                    case (SpellType.Raise):
+                        {
+                            spell = new SpellAlterTerrain(m_owner, true);
                             break;
                         }
                     case (SpellType.RubberBand):
@@ -92,13 +108,11 @@ namespace com.xexuxjy.magiccarpet.spells
                 spell.Initialize(template);
                 if (spell is MovingSpell)
                 {
-                    Vector3 direction = targetPosition - startPosition;
-                    direction.Normalize();
                     ((MovingSpell)spell).SetInitialPositionAndDirection(startPosition, direction);
                 }
 
 
-                m_activeSpells.Add(spell);
+                m_updateables.Add(spell);
                 spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);
             }
         }
@@ -134,7 +148,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
 
         private GameObject m_owner;
-        private List<Spell> m_activeSpells = new List<Spell>();
+        private List<IUpdateable> m_updateables = new List<IUpdateable>();
         private Dictionary<SpellType, SpellTemplate> m_spellTemplates = new Dictionary<SpellType, SpellTemplate>();
 
         public delegate void SpellCastHandler(GameObject gameObject, Spell spell);

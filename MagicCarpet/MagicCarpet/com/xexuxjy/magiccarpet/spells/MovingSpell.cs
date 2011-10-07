@@ -39,7 +39,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         public void SetInitialPositionAndDirection(Vector3 position, Vector3 direction)
         {
-            StartPosition = position;
+            Position = position;
             Direction = direction;
 
             m_motionState.SetWorldTransform(Matrix.CreateTranslation(position));
@@ -68,37 +68,15 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3 StartPosition
+        public GameObject GetGameObject()
         {
-            get { return m_startPosition; }
-            set { m_startPosition = value; }
+            return this;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public Vector3 Direction
-        {
-            get { return m_direction; }
-            set { m_direction = value; }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public float Speed
-        {
-            get { return m_speed; }
-            set { m_speed = value; }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
         protected static CollisionShape s_collisionShape = new SphereShape(0.2f);
         protected const float s_defaultSpellSpeed = 5f;
-
-        private Vector3 m_startPosition;
-        private Vector3 m_direction;
-        private float m_speed;
 
 
     }

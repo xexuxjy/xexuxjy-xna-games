@@ -46,22 +46,16 @@ namespace com.xexuxjy.magiccarpet.util
 
             if ( leftReleased || rightReleased)
             {
-                float peakHeight = leftReleased ? 10 : -10;
-                int rayLength = 100;
-                int normalLength = 10;
                 Vector3 startPos = Globals.Camera.Position;
                 Vector3 direction = Globals.Camera.ViewDirection;
-                Vector3 endPos = startPos + (direction * rayLength);
-
-                Vector3 collisionPoint = Vector3.Zero;
-                Vector3 collisionNormal = Vector3.Zero;
-
-                if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                if(leftReleased)
                 {
-                    Vector3 normalStart = collisionPoint;
-                    Globals.Terrain.AddPeak(normalStart, peakHeight);
+                    Globals.Player.CastSpell1(startPos, direction);
                 }
-
+                if(rightReleased)
+                {
+                    Globals.Player.CastSpell2(startPos,direction);
+                }
             }
 
             // add something to draw and test collision?

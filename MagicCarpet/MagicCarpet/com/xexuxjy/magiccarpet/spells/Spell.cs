@@ -5,17 +5,20 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.gameobjects;
+using System.Diagnostics;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
 
     public enum SpellType
     {
+        None,
         Castle,
         Convert,
         Fireball,
         Heal,
-        LowerRaise,
+        Lower,
+        Raise,
         RubberBand,
         SwarmOfBees,
         Turbo
@@ -23,27 +26,67 @@ namespace com.xexuxjy.magiccarpet.spells
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public class SpellTemplate
+    public class SpellTemplate : IUpdateable
     {
+
+        public SpellTemplate(SpellType spellType,int manaCost, float castTime, float cooldownTime, float duration)
+        {
+            m_spellType = spellType;
+            m_manaCost = manaCost;
+            m_castTime = castTime;
+            m_cooldownTime = cooldownTime;
+            m_duration = duration;
+            m_spellTemplateState = SpellTemplateState.Available;
+        }
+
         private int m_manaCost;
+
+
+        public void Cast(Spell spell)
+        {
+            Debug.Assert(Spell == null);
+            Spell = spell;
+            GameTime gameTime = new GameTime();
+            m_lastCastTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            m_spellTemplateState = SpellTemplateState.Casting;
+        }
 
         public void Update(GameTime gameTime)
         {
-
-
-
+            if (m_spellTemplateState == SpellTemplateState.Casting)
+            {
+                // spell cast time complete , start spell and allow cooldown.
+                if (gameTime.TotalGameTime.TotalSeconds - m_lastCastTime > m_castTime)
+                {
+                    Spell.Start();
+                    Spell = null;
+                    if (m_cooldownTime > 0f)
+                    {
+                        m_spellTemplateState = SpellTemplateState.Cooldown;
+                        m_lastCastTime = (float)gameTime.TotalGameTime.TotalSeconds;
+                    }
+                    else
+                    {
+                        m_spellTemplateState = SpellTemplateState.Available;
+                    }
+                }
+            }
+            else if (m_spellTemplateState == SpellTemplateState.Cooldown)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds - m_lastCastTime > m_cooldownTime)
+                {
+                    m_spellTemplateState = SpellTemplateState.Available;
+                }
+            }
         }
 
         public bool Available
         {
             get
             {
-                return m_available;
+                return m_spellTemplateState == SpellTemplateState.Available;
             }
         }
-
-        private bool m_available;
-
 
         public int ManaCost
         {
@@ -87,6 +130,36 @@ namespace com.xexuxjy.magiccarpet.spells
           set { m_spellType = value; }
         }
 
+
+        public bool Enabled
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public event EventHandler<EventArgs> EnabledChanged;
+
+        public int UpdateOrder
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public enum SpellTemplateState
+        {
+            Available,
+            Casting,
+            Cooldown
+        }
+
+        public Spell Spell
+        {
+            get { return m_spellToCast; }
+            set { m_spellToCast = value; }
+        }
+
+        private Spell m_spellToCast;
+        private SpellTemplateState m_spellTemplateState;
+
+        public event EventHandler<EventArgs> UpdateOrderChanged;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -103,6 +176,13 @@ namespace com.xexuxjy.magiccarpet.spells
             m_spellTemplate = spellTemplate;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // called by the spell template when the cast time is complete.
+        public void Start()
+        {
+
+
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
