@@ -76,6 +76,8 @@ namespace com.xexuxjy.magiccarpet.collision
                 int ibreak = 0;
             }
 
+            m_dynamicsWorld.DebugDrawWorld();
+
             base.Update(gameTime);
         }
 

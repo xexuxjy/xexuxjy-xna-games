@@ -152,6 +152,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected virtual void DrawEffect(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
         {
+            return;
             if (m_model != null)
             {
                 //Matrix scale = Matrix.CreateScale(modelScalingData.scale);
