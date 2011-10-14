@@ -91,9 +91,16 @@ namespace com.xexuxjy.magiccarpet.collision
 			        ManifoldPoint pt = contactManifold.GetContactPoint(j);
 			        if (pt.GetDistance()<0.0f)
 			        {
-				        Vector3 ptA = pt.GetPositionWorldOnA();
-				        Vector3 ptB = pt.GetPositionWorldOnB();
-                        Vector3 normalOnB = pt.m_normalWorldOnB;
+                        ICollideable user0 = obA.GetUserPointer() as ICollideable;
+                        ICollideable user1 = obB.GetUserPointer() as ICollideable;
+
+                        if (user0 != null && user1 != null)
+                        {
+                            // need to decide wether to do extra filtering here not?
+                            // make sure that none of thse callbacks stores the point as they will be recycled.
+                            user0.ProcessCollision(user1, pt);
+                            user1.ProcessCollision(user0, pt);
+                        }
 			        }
 		        }
 	        }

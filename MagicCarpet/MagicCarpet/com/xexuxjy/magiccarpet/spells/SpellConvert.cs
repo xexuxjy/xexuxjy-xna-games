@@ -51,7 +51,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void ProcessCollision(ICollideable partner)
+        public override void ProcessCollision(ICollideable partner,ManifoldPoint manifoldPoint)
         {
             // Double check?
             if (ShouldCollideWith(partner))
@@ -66,6 +66,7 @@ namespace com.xexuxjy.magiccarpet.spells
             }
         
         }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         protected override void BuildCollisionObject()
