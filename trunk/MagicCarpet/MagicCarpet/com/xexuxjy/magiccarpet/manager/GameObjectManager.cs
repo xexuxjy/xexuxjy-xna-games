@@ -80,6 +80,9 @@ namespace com.xexuxjy.magiccarpet.manager
             {
                 // cleanup may already have been called.
                 gameObject.Cleanup();
+                Globals.CollisionManager.RemoveFromWorld(gameObject.CollisionObject);
+                
+
                 Game.Components.Remove(gameObject);
                 m_gameObjectList.Remove(gameObject);
             }

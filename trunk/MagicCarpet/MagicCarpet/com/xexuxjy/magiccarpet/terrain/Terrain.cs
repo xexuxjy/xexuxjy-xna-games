@@ -13,10 +13,11 @@ using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA.BulletCollision;
+using com.xexuxjy.magiccarpet.interfaces;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
-	public class Terrain : GameObject
+    public class Terrain : GameObject, ICollideable
 	{
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -947,7 +948,27 @@ namespace com.xexuxjy.magiccarpet.terrain
         Texture2D m_noiseTexture;
 
         private Random m_terrainRandom;
-	}
+
+        public int GetCollisionMask()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ShouldCollideWith(ICollideable partner)
+        {
+            return true;
+        }
+
+        public void ProcessCollision(ICollideable partner, ManifoldPoint manifoldPoint)
+        {
+            // terrain shouldn't do anything. up to other objects to collide.
+        }
+
+        public GameObject GetGameObject()
+        {
+            return this;
+        }
+    }
 
     public struct PosOnlyVertex : IVertexType
     {

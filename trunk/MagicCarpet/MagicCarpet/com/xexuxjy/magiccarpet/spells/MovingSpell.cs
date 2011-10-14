@@ -65,7 +65,7 @@ namespace com.xexuxjy.magiccarpet.spells
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        public virtual void ProcessCollision(ICollideable partner)
+        public virtual void ProcessCollision(ICollideable partner,ManifoldPoint manifoldPoint)
         {
         }
 

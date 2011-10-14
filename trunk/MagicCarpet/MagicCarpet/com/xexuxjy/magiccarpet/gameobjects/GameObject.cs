@@ -113,12 +113,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             if (!m_awaitingRemoval)
             {
-                if (m_collisionObject != null)
-                {
-                    Globals.CollisionManager.RemoveFromWorld(m_collisionObject);
-                    m_collisionObject = null;
-                }
-
                 Globals.GameObjectManager.RemoveGameObject(this);
                 m_awaitingRemoval = true;
             }
@@ -126,6 +120,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public CollisionObject CollisionObject
+        {
+            get { return m_collisionObject; }
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+        
         protected virtual void BuildCollisionObject()
         {
         }
@@ -299,13 +301,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get { return m_targetSpeed; }
             set { m_targetSpeed = value; }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public CollisionObject CollisionObject
-        {
-            get { return m_collisionObject; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
