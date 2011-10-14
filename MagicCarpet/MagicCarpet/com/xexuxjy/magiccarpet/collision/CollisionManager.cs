@@ -69,16 +69,34 @@ namespace com.xexuxjy.magiccarpet.collision
             m_dynamicsWorld.StepSimulation(ms, 1);
             m_dynamicsWorld.DebugDrawWorld();
 
-
-            int manifolds = m_dynamicsWorld.GetDispatcher().GetNumManifolds();
-            if (manifolds > 0)
-            {
-                int ibreak = 0;
-            }
-
-            m_dynamicsWorld.DebugDrawWorld();
-
+            ProcessCollisions();
             base.Update(gameTime);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        protected void ProcessCollisions()
+        {
+            IDispatcher dispatcher = m_dynamicsWorld.GetDispatcher();
+            int numManifolds = dispatcher.GetNumManifolds();
+	        for (int i=0;i<numManifolds;i++)
+	        {
+                PersistentManifold contactManifold = dispatcher.GetManifoldByIndexInternal(i);
+		        CollisionObject obA = (contactManifold.GetBody0() as CollisionObject);
+		        CollisionObject obB = (contactManifold.GetBody1() as CollisionObject);
+	
+		        int numContacts = contactManifold.GetNumContacts();
+		        for (int j=0;j<numContacts;j++)
+		        {
+			        ManifoldPoint pt = contactManifold.GetContactPoint(j);
+			        if (pt.GetDistance()<0.0f)
+			        {
+				        Vector3 ptA = pt.GetPositionWorldOnA();
+				        Vector3 ptB = pt.GetPositionWorldOnB();
+                        Vector3 normalOnB = pt.m_normalWorldOnB;
+			        }
+		        }
+	        }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

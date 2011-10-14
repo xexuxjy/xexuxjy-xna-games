@@ -77,8 +77,9 @@ namespace com.xexuxjy.magiccarpet.spells
             //m_collisionObject.SetCollisionShape(s_collisionShape);
 
             //Globals.CollisionManager.AddToWorld(m_collisionObject,collisionFlags,collisionMask);
-
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
+            // needs to be kinematic to preserve and use motion states?
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
+            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
 
         }
 
