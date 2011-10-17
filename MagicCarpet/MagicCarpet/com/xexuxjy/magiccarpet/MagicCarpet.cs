@@ -139,19 +139,10 @@ namespace com.xexuxjy.magiccarpet
             GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
-            // do these last.
-            if (Globals.DebugDraw != null)
-            {
-                Matrix view = Globals.Camera.ViewMatrix;
-                Matrix projection = Globals.Camera.ProjectionMatrix;
-                
-                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderDebugLines(gameTime, ref view, ref projection);
-                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderOthers(gameTime, ref view, ref projection);
-                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderStandard(gameTime, ref view, ref projection, false);
-
-            }
-            // TODO: Add your drawing code here
+            Globals.CollisionManager.Draw(gameTime);
 
         }
+
+
     }
 }
