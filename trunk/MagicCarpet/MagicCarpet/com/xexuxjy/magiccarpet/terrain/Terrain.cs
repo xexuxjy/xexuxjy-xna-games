@@ -210,24 +210,15 @@ namespace com.xexuxjy.magiccarpet.terrain
             UpdateHeightMapTexture();
             Matrix worldMatrix = Matrix.Identity;
 
-            float a = (int)Math.Pow(3, m_numLevels);
-            a *= (m_blockSize * 3);
-            a *= -0.5f;
-
-            //worldMatrix = Matrix.CreateTranslation(new Vector3(a, 0, a));
-
             Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
 
             Game.GraphicsDevice.Indices = m_blockIndexBuffer;
             Game.GraphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
-            float oneOverTextureWidth = 1f/1024f;
-            m_effect.Parameters["ZScaleFactor"].SetValue(0.1f);
-
-            float maxHeight = 100;
+            float oneOverTextureWidth = 1f/Globals.WorldWidth;
+            m_effect.Parameters["ZScaleFactor"].SetValue(1.0f);
 
             float maxSpan2 = (float)Math.Pow(3, m_numLevels) * m_blockVertices;
-
 
             // need to figure out a window on the height map texture.
             float visibleTerrainFraction = 1.0f;
@@ -253,60 +244,51 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                 // need apply on inner level to make sure latest vals copied across
                 pass.Apply();
-                Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
 
+                int numSpans = Globals.WorldWidth / m_blockSize;
+                Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
 
-                for (int level = 0; level < m_numLevels; ++level)
+                Vector3 startPosition = new Vector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
+
+                for(int j=0;j<numSpans;++j)
                 {
-                    m_effect.Parameters["BlockColor"].SetValue(ColorForRing(level));
-                    Vector3 blockSize = new Vector3(m_blockSize,0,m_blockSize);
-                    blockSize *= scale;
-
-                    lastStartPosition -= blockSize;
-
-                    for (int j = 0; j < 3; ++j)
+                    for(int i=0;i<numSpans;++i)
                     {
-                        for (int k = 0; k < 3; ++k)
+                        position = new Vector3((m_blockSize) * i, 0, (m_blockSize) * j);
+
+                        position += startPosition;
+
+                        Vector3 minbb = new Vector3(position.X, -Globals.WorldHeight, position.Z);
+                        Vector3 maxbb = minbb + blockSize;
+                        maxbb.Y = Globals.WorldHeight;
+
+                        BoundingBox bb = new BoundingBox(minbb,maxbb);
+
+                        if (bb.Max.X > maxPos.X)
                         {
-                            // skip center
-                            if (!(j == 1 && k == 1))
-                            {
-                                position = new Vector3((m_blockSize) * k,0,(m_blockSize)*j);
-                                position *= scale;
-                                position += lastStartPosition;
-
-                                BoundingBox bb = new BoundingBox(position,position+blockSize);
-
-                                if (bb.Max.X > maxPos.X)
-                                {
-                                    maxPos.X = bb.Max.X;
-                                }
-
-                                if (bb.Max.Z > maxPos.Z)
-                                {
-                                    maxPos.Z = bb.Max.Z;
-                                }
-
-                                if (boundingFrustrum.Intersects(bb))
-                                {
-                                    m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scale.X, scale.Z, position.X, position.Z));
-                                    m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, 0, 0));
-
-                                    // need apply on inner level to make sure latest vals copied across
-                                    pass.Apply();
-                                    Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
-
-                                }
-                                else
-                                {
-                                    int ibreak = 0;
-                                }
-                            }
+                            maxPos.X = bb.Max.X;
                         }
-                    }
-                    scale *= new Vector3(3, 1, 3);
 
+                        if (bb.Max.Z > maxPos.Z)
+                        {
+                            maxPos.Z = bb.Max.Z;
+                        }
+
+                        //if (boundingFrustrum.Intersects(bb))
+                        {
+                            m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scale.X, scale.Z, position.X, position.Z));
+                            m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, 0, 0));
+
+                            // need apply on inner level to make sure latest vals copied across
+                            pass.Apply();
+                            Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
+
+                        }
+
+                    }
                 }
+
+                Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
             }
         }
 
@@ -362,7 +344,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void AddPeak(float x, float y, float height)
         {
             float defaultRadius = 10.0f;
-            float maxHeight = 20.0f;
+            float maxHeight = 5.0f;
             AddPeak(x, y, defaultRadius, height, maxHeight);
         }
 
@@ -375,108 +357,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainUpdaters.Add(terrainUpdate);
         }		
         ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        //public void AddPeak(Vector3 position, float innerRadius, float outerRadius,float height,float maxHeight)
-        //{
-        //    float x = position.X;
-        //    float y = position.Z;
-        //    int innerLeftBound = (int)System.Math.Max(0, x - innerRadius);
-        //    int innerRightBound = (int)System.Math.Min(Width, x + innerRadius);
-        //    int innerUpBound = (int)System.Math.Max(0, y - innerRadius);
-        //    int innerDownBound = (int)System.Math.Min(Breadth, y + innerRadius);
-
-        //    int outerLeftBound = (int)System.Math.Max(0, x - outerRadius);
-        //    int outerRightBound = (int)System.Math.Min(Width, x + outerRadius);
-        //    int outerUpBound = (int)System.Math.Max(0, y - outerRadius);
-        //    int outerDownBound = (int)System.Math.Min(Breadth, y + outerRadius);
-
-        //    float innerSquared = innerRadius * innerRadius;
-
-        //    // figure gradient.
-        //    float gradient = 1f - ((outerRadius - innerRadius) / outerRadius);
-        //    for (int i = outerLeftBound; i < outerRightBound; ++i)
-        //    {
-        //        for (int j = outerUpBound; j < outerDownBound; ++i)
-        //        {
-        //            TerrainSquare terrainSquare = GetTerrainSquareAtPoint(i, j);
-        //            // for now only land squares can have their height changed in this way.
-        //            if (terrainSquare.Type != TerrainType.immovable)
-        //            {
-        //                Vector2 lengthVector = new Vector2(Math.Abs(i - position.X), Math.Abs(j - position.Z));
-        //                float distance = lengthVector.Length();
-        //                float lerpValue = 1.0f - MathHelper.Lerp(outerRadius, innerRadius, distance);
-        //                float oldHeight = GetHeightAtPoint(i, j, true);
-        //                //float oldHeight = getHeightAtPoint(i, j);
-        //                float newHeight = oldHeight + (height * lerpValue);
-        //                newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
-        //                SetHeightAtPoint(i, j, newHeight);
-        //                SetTerrainType(terrainSquare, newHeight);
-        //                Vector3 point = new Vector3(i, 0.0f, j);
-        //                foreach (TerrainSection section in m_terrainSectionGrid)
-        //                {
-        //                    if (section.ContainsPoint(point))
-        //                    {
-        //                        section.SetDirty();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        //public virtual void UpdatePeak(float x, float y, float radius, float height, float maxHeight)
-        //{
-        //    int leftBound = (int)System.Math.Max(0, x - radius);
-        //    int rightBound = (int)System.Math.Min(Width, x + radius);
-        //    int upBound = (int)System.Math.Max(0, y - radius);
-        //    int downBound = (int)System.Math.Min(Breadth, y + radius);
-
-
-        //    float floatRadius = radius;
-
-        //    for (int i = leftBound; i < rightBound; ++i)
-        //    {
-        //        for (int j = upBound; j < downBound; ++j)
-        //        {
-        //            TerrainSquare terrainSquare = GetTerrainSquareAtPoint(i, j);
-        //            // for now only land squares can have their height changed in this way.
-        //            if (terrainSquare.Type != TerrainType.immovable)
-        //            {
-        //                Vector2 vec2;
-        //                vec2.X = System.Math.Abs(i - x);
-        //                vec2.Y = System.Math.Abs(j - y);
-        //                float distance = vec2.Length();
-        //                float lerpValue = 1.0f - MathHelper.Lerp(0.0f, floatRadius, distance);
-        //                // play with lerp value to smooth the terrain?
-        //                //                          lerpValue = (float)Math.Sqrt(lerpValue);
-        //                //lerpValue *= lerpValue;
-        //                //                        lerpValue *= lerpValue;
-
-        //                // ToDo - fractal hill generation.
-
-        //                float oldHeight = GetHeightAtPoint(i, j, true);
-        //                //float oldHeight = getHeightAtPoint(i, j);
-        //                float newHeight = oldHeight + (height * lerpValue);
-        //                newHeight = MathHelper.Clamp(-maxHeight, newHeight, maxHeight);
-        //                SetHeightAtPoint(i, j, newHeight);
-        //                SetTerrainType(terrainSquare, newHeight);
-        //                Vector3 point = new Vector3(i, 0.0f, j);
-        //                foreach (TerrainSection section in m_terrainSectionGrid)
-        //                {
-        //                    if (section.ContainsPoint(point))
-        //                    {
-        //                        section.SetDirty();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-
 
         public virtual float GetHeightAtPointWorld(Vector3 point)
         {
@@ -780,8 +660,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             result.Z = position.Z + (sign * ((float)m_terrainRandom.NextDouble() * distance));
 
             // make sure it fits in bounds.
-            result.X = MathHelper.Clamp(0.0f,result.X,Width);
-            result.Z = MathHelper.Clamp(0.0f, result.Z, Width);
+            result.X = MathHelper.Clamp(result.X,0.0f,Width);
+            result.Z = MathHelper.Clamp(result.Z,0.0f, Width);
 
             return result;
         }
@@ -881,7 +761,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                                 float currentHeight = m_terrain.GetHeightAtPointLocal(i, j);
                                 //float oldHeight = getHeightAtPoint(i, j);
                                 float newHeight = currentHeight + (m_updateDeflection * lerpValue);
-                                newHeight = MathHelper.Clamp(-m_terrain.s_maxTerrainHeight, newHeight, m_terrain.s_maxTerrainHeight);
+                                newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight,Globals.WorldHeight);
                                 m_terrain.SetHeightAtPointLocal(i, j, newHeight);
                             }
                         }
@@ -934,9 +814,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         // the amount of space the terrain can move in a second.
         private float s_terrainMoveTime = 0.5f;
-        private float s_maxTerrainHeight = 20f;
 
-        const int m_numLevels = 2;
+        const int m_numLevels = 1;
         const int m_blockVertices = 65;
         const int m_blockSize = m_blockVertices - 1;
         VertexBuffer m_blockVertexBuffer;

@@ -9,6 +9,7 @@ using BulletXNA.LinearMath;
 using System.Diagnostics;
 using BulletXNA;
 using com.xexuxjy.magiccarpet.interfaces;
+using BulletXNADemos.Demos;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
@@ -198,7 +199,10 @@ namespace com.xexuxjy.magiccarpet.collision
             if (m_dynamicsWorld != null)
             {
                 callback = new ClosestRayResultCallback(startPos, endPos);
+                callback.m_collisionFilterMask = (CollisionFilterGroups)(-1);
+                callback.m_collisionFilterGroup = (CollisionFilterGroups)( -1);
                 m_dynamicsWorld.RayTest(ref startPos, ref endPos, callback);
+                
             }
             if (callback != null)
             {
@@ -212,6 +216,81 @@ namespace com.xexuxjy.magiccarpet.collision
             return false;
         }
 
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void Draw(GameTime gameTime)
+        {
+            // do these last.
+            if (Globals.DebugDraw != null)
+            {
+                Matrix m = Matrix.Identity;
+                Matrix rot = Matrix.Identity;
+                int numObjects = m_dynamicsWorld.GetNumCollisionObjects();
+                Vector3 wireColor = new Vector3(1, 0, 0);
+
+                Matrix view = Globals.Camera.ViewMatrix;
+                Matrix projection = Globals.Camera.ProjectionMatrix;
+
+
+                for (int i = 0; i < numObjects; i++)
+                {
+                    CollisionObject colObj = m_dynamicsWorld.GetCollisionObjectArray()[i];
+                    RigidBody body = RigidBody.Upcast(colObj);
+                    if (body != null && body.GetMotionState() != null)
+                    {
+                        DefaultMotionState myMotionState = (DefaultMotionState)body.GetMotionState();
+                        //myMotionState.m_graphicsWorldTrans.getOpenGLMatrix(m);
+                        m = myMotionState.m_graphicsWorldTrans;
+                        rot = MathUtil.BasisMatrix(ref myMotionState.m_graphicsWorldTrans);
+                    }
+                    else
+                    {
+                        //colObj.getWorldTransform().getOpenGLMatrix(m);
+                        rot = MathUtil.BasisMatrix(colObj.GetWorldTransform());
+                    }
+                    wireColor = new Vector3(1.0f, 1.0f, 0.5f); //wants deactivation
+                    if ((i & 1) != 0) wireColor = new Vector3(0f, 0f, 1f);
+                    ///color differently for active, sleeping, wantsdeactivation states
+                    if (colObj.GetActivationState() == ActivationState.ACTIVE_TAG) //active
+                    {
+                        if ((i & 1) != 0)
+                        {
+                            wireColor += new Vector3(1f, 0f, 0f);
+                        }
+                        else
+                        {
+                            wireColor += new Vector3(.5f, 0f, 0f);
+                        }
+                    }
+                    if (colObj.GetActivationState() == ActivationState.ISLAND_SLEEPING) //ISLAND_SLEEPING
+                    {
+                        if ((i & 1) != 0)
+                        {
+                            wireColor += new Vector3(0f, 1f, 0f);
+                        }
+                        else
+                        {
+                            wireColor += new Vector3(0f, 05f, 0f);
+                        }
+                    }
+
+                    Vector3 aabbMin, aabbMax;
+                    m_dynamicsWorld.GetBroadphase().GetBroadphaseAabb(out aabbMin, out aabbMax);
+
+                    aabbMin -= MathUtil.MAX_VECTOR;
+                    aabbMax += MathUtil.MAX_VECTOR;
+
+                    ((XNA_ShapeDrawer)Globals.DebugDraw).DrawXNA(ref m, colObj.GetCollisionShape(), ref wireColor, Globals.DebugDraw.GetDebugMode(), ref aabbMin, ref aabbMax, ref view, ref projection);
+
+                }
+
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderDebugLines(gameTime, ref view, ref projection);
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderOthers(gameTime, ref view, ref projection);
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderStandard(gameTime, ref view, ref projection, false);
+
+            }
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
