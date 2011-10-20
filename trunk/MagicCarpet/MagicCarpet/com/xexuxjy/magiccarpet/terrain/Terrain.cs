@@ -50,8 +50,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void LoadOrCreateHeighMap(String textureName)
         {
-            m_heightMap = new float[Globals.WorldWidth * Globals.WorldWidth];
-            m_heightMapTexture = new Texture2D(Game.GraphicsDevice, Globals.WorldWidth, Globals.WorldWidth, false, SurfaceFormat.Single);
+            m_heightMap = new float[(Globals.WorldWidth+1) * (Globals.WorldWidth+1)];
+            m_heightMapTexture = new Texture2D(Game.GraphicsDevice, Globals.WorldWidth+1, Globals.WorldWidth+1, false, SurfaceFormat.Single);
 
 
             if (!String.IsNullOrEmpty(textureName))
@@ -113,7 +113,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             Vector3 lightDirection = new Vector3(0.5f,-1,0.5f);
             lightDirection.Normalize();
             Vector3 ambientLight = new Vector3(0.2f);
-            Vector3 directionalLight = new Vector3(1f);
+            Vector3 directionalLight = new Vector3(0.2f);
 
             //m_effect.Parameters["LightDirection"].SetValue(lightDirection);
             m_effect.Parameters["AmbientLight"].SetValue(ambientLight);
@@ -131,9 +131,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             //buildLandscape();
             LoadOrCreateHeighMap(null);
-            //BuildTestTerrain1();
+            BuildTestTerrain1();
             //BuildSectionRenderers();
-            BuildLandscape();
+            //BuildLandscape();
             base.Initialize();
         
         }
@@ -195,7 +195,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 //catch (System.Exception ex)
                 //{
                 //}
-                m_heightMapTexture = new Texture2D(Game.GraphicsDevice, Globals.WorldWidth, Globals.WorldWidth, false, SurfaceFormat.Single);
+                m_heightMapTexture = new Texture2D(Game.GraphicsDevice, Globals.WorldWidth+1, Globals.WorldWidth+1, false, SurfaceFormat.Single);
                 m_heightMapTexture.SetData<Single>(m_heightMap);
 
                 m_effect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
@@ -208,7 +208,6 @@ namespace com.xexuxjy.magiccarpet.terrain
         public override void Draw(GameTime gameTime)
         {
             UpdateHeightMapTexture();
-            Matrix worldMatrix = Matrix.Identity;
 
             Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
@@ -216,68 +215,43 @@ namespace com.xexuxjy.magiccarpet.terrain
             Game.GraphicsDevice.Indices = m_blockIndexBuffer;
             Game.GraphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
             float oneOverTextureWidth = 1f/Globals.WorldWidth;
-            m_effect.Parameters["ZScaleFactor"].SetValue(1.0f);
 
-            float maxSpan2 = (float)Math.Pow(3, m_numLevels) * m_blockVertices;
-
-            // need to figure out a window on the height map texture.
-            float visibleTerrainFraction = 1.0f;
-            m_effect.Parameters["TerrainTextureWindow"].SetValue(new Vector2(0, 0));
-            maxSpan2 *= visibleTerrainFraction;
+            //float maxSpan2 = (float)Math.Pow(3, m_numLevels) * m_blockVertices;
+            float maxSpan2 = Globals.WorldWidth;
 
             m_effect.Parameters["OneOverMaxExtents"].SetValue(1 / maxSpan2);
-
 
             Vector3 maxPos = Vector3.Zero;
 
             Vector3 lastStartPosition = Vector3.Zero;
 
+            int numSpans = Globals.WorldWidth / m_blockSize;
+            Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
+            Vector3 startPosition = new Vector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
 
             foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
             {
-                // Draw Center
-                Vector3 position = Vector3.Zero;
-                Vector3 scale = new Vector3(1, 1, 1);
-                m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scale.X, scale.Z, position.X, position.Z));
-                Matrix transform = worldMatrix * viewProjection;
-                m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
-
-                // need apply on inner level to make sure latest vals copied across
-                pass.Apply();
-
-                int numSpans = Globals.WorldWidth / m_blockSize;
-                Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
-
-                Vector3 startPosition = new Vector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
-
                 for(int j=0;j<numSpans;++j)
                 {
                     for(int i=0;i<numSpans;++i)
                     {
-                        position = new Vector3((m_blockSize) * i, 0, (m_blockSize) * j);
+                        Vector3 localPosition = new Vector3((m_blockSize) * i, 0, (m_blockSize) * j);
 
-                        position += startPosition;
+                        Vector3 worldPosition = localPosition + startPosition;
 
-                        Vector3 minbb = new Vector3(position.X, -Globals.WorldHeight, position.Z);
+                        Vector3 minbb = new Vector3(worldPosition.X, -Globals.WorldHeight, worldPosition.Z);
                         Vector3 maxbb = minbb + blockSize;
                         maxbb.Y = Globals.WorldHeight;
 
                         BoundingBox bb = new BoundingBox(minbb,maxbb);
 
-                        if (bb.Max.X > maxPos.X)
-                        {
-                            maxPos.X = bb.Max.X;
-                        }
-
-                        if (bb.Max.Z > maxPos.Z)
-                        {
-                            maxPos.Z = bb.Max.Z;
-                        }
-
                         //if (boundingFrustrum.Intersects(bb))
                         {
-                            m_effect.Parameters["ScaleFactor"].SetValue(new Vector4(scale.X, scale.Z, position.X, position.Z));
-                            m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, 0, 0));
+                            Matrix transform = Matrix.CreateTranslation(worldPosition) * viewProjection;
+                            //Matrix transform = viewProjection * Matrix.CreateTranslation(worldPosition);
+                            //Matrix transform = viewProjection;
+                            m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
+                            m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, localPosition.X, localPosition.Z));
 
                             // need apply on inner level to make sure latest vals copied across
                             pass.Apply();
@@ -689,7 +663,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             {
                 for (int x = 0; x < Globals.WorldWidth / 2; ++x)
                 {
-                    m_heightMap[(z * Globals.WorldWidth) + x] = 20.0f;
+                    m_heightMap[(z * Globals.WorldWidth) + x] = 3.0f;
                 }
             }
             UpdateHeightMap();
@@ -816,7 +790,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         private float s_terrainMoveTime = 0.5f;
 
         const int m_numLevels = 1;
-        const int m_blockVertices = 65;
+        const int m_blockVertices = 33;
         const int m_blockSize = m_blockVertices - 1;
         VertexBuffer m_blockVertexBuffer;
         IndexBuffer m_blockIndexBuffer;
