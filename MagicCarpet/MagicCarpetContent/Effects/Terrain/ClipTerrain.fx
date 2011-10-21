@@ -96,22 +96,6 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 
 	output.normal = normalize(cross((c2-c0), (c1-c0)));
     
-/*
-	float2 uv1 = float2(((worldPos.x+ScaleFactor.x) * OneOverMaxExtents)+0.5,(worldPos.y * OneOverMaxExtents)+0.5);
-	float2 uv2 = float2((worldPos.x * OneOverMaxExtents)+0.5,((worldPos.y+ScaleFactor.y) * OneOverMaxExtents)+0.5);
-
-    float xplus1 = tex2Dlod(ElevationSampler, float4(uv1, 0, 1));
-	float yplus1 = tex2Dlod(ElevationSampler, float4(uv2, 0, 1));
-
-	float3 c0 = float3(worldPos.x,xy,worldPos.y);
-	float3 c1 = float3(worldPos.x+ScaleFactor.x,xplus1,worldPos.y);
-	float3 c2 = float3(worldPos.x,yplus1,worldPos.y+ScaleFactor.y);
-
-	output.normal = normalize(cross((c2-c0), (c1-c0)));
-	*/
-//	output.normal = float3(0,1,0);
-
-    
     output.pos = mul(float4(worldPos.x, height,worldPos.y, 1), WorldViewProjMatrix);
     output.uv = uv;
 	output.noiseuv = float2(worldPos.x/10.0,worldPos.y/10.0);
