@@ -243,7 +243,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         //if (boundingFrustrum.Intersects(bb))
                         {
-                            Matrix transform = Matrix.CreateTranslation(worldPosition) * viewProjection;
+                            Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
                             //Matrix transform = viewProjection * Matrix.CreateTranslation(worldPosition);
                             //Matrix transform = viewProjection;
                             m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
