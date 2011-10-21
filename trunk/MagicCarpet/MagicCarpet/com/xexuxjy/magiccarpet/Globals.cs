@@ -80,7 +80,7 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public const int WorldWidth = 8;//1024;
+        public const int WorldWidth = 32;//1024;
         public const int WorldHeight = 3;
 
         public static Vector3 worldMinPos = new Vector3(-WorldWidth/2, -WorldHeight, -WorldWidth/2);
