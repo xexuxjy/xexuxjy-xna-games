@@ -50,8 +50,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void LoadOrCreateHeighMap(String textureName)
         {
-            m_heightMap = new float[(Globals.WorldWidth+1) * (Globals.WorldWidth+1)];
-            m_heightMapTexture = new Texture2D(Game.GraphicsDevice, Globals.WorldWidth+1, Globals.WorldWidth+1, false, SurfaceFormat.Single);
+            m_heightMap = new float[m_textureWidth * m_textureWidth];
+            m_heightMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Single);
 
 
             if (!String.IsNullOrEmpty(textureName))
@@ -80,7 +80,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         protected override void BuildCollisionObject()
         {
             // Should really 
-            CollisionShape collisionShape = new HeightfieldTerrainShape(Globals.WorldWidth, Globals.WorldWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
+            CollisionShape collisionShape = new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)GameObjectType.spell;
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
@@ -195,7 +195,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 //catch (System.Exception ex)
                 //{
                 //}
-                m_heightMapTexture = new Texture2D(Game.GraphicsDevice, Globals.WorldWidth+1, Globals.WorldWidth+1, false, SurfaceFormat.Single);
+                m_heightMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Single);
                 m_heightMapTexture.SetData<Single>(m_heightMap);
 
                 m_effect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
@@ -214,14 +214,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             Game.GraphicsDevice.Indices = m_blockIndexBuffer;
             Game.GraphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
-            float oneOverTextureWidth = 1f/Globals.WorldWidth;
+            //float oneOverTextureWidth = 1f/m_textureWidth;
+            float oneOverTextureWidth = 1f / (m_textureWidth-1);
 
-            //float maxSpan2 = (float)Math.Pow(3, m_numLevels) * m_blockVertices;
-            float maxSpan2 = Globals.WorldWidth;
-
-            m_effect.Parameters["OneOverMaxExtents"].SetValue(1 / maxSpan2);
-
-            Vector3 maxPos = Vector3.Zero;
+            //Vector3 maxPos = Vector3.Zero;
 
             Vector3 lastStartPosition = Vector3.Zero;
 
@@ -354,8 +350,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void SetHeightAtPointLocal(int localX,int localZ,float height)
         {
-            Debug.Assert(localX >= 0 && localX < Globals.WorldWidth);
-            Debug.Assert(localZ >= 0 && localZ < Globals.WorldWidth);
+            Debug.Assert(localX >= 0 && localX <= Globals.WorldWidth);
+            Debug.Assert(localZ >= 0 && localZ <= Globals.WorldWidth);
             m_heightMap[(localZ * Globals.WorldWidth) + localX] = height;
         }
 
@@ -373,8 +369,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public virtual float GetHeightAtPointLocal(int localX, int localZ)
         {
-            Debug.Assert(localX >= 0 && localX < Globals.WorldWidth);
-            Debug.Assert(localZ >= 0 && localZ < Globals.WorldWidth);
+            Debug.Assert(localX >= 0 && localX <= Globals.WorldWidth);
+            Debug.Assert(localZ >= 0 && localZ <= Globals.WorldWidth);
             return m_heightMap[(localZ * Globals.WorldWidth) + localX];
         }
 
@@ -659,11 +655,11 @@ namespace com.xexuxjy.magiccarpet.terrain
         // simple terrain with two levels
         public void BuildTestTerrain1()
         {
-            for (int z = 0; z < Globals.WorldWidth; ++z)
+            for (int z = 0; z < m_textureWidth; ++z)
             {
-                for (int x = 0; x < Globals.WorldWidth / 2; ++x)
+                for (int x = 0; x < m_textureWidth / 2; ++x)
                 {
-                    m_heightMap[(z * Globals.WorldWidth) + x] = 3.0f;
+                    m_heightMap[(z * m_textureWidth) + x] = 3.0f;
                 }
             }
             UpdateHeightMap();
@@ -715,10 +711,9 @@ namespace com.xexuxjy.magiccarpet.terrain
                 if (m_currentTime < m_totalTime)
                 {
                     float floatRadius2 = m_radius * m_radius;
-
-                    for (int i = m_minX; i < m_maxX; i++)
+                    for (int j = m_minZ; j < m_maxZ; j++)
                     {
-                        for (int j = m_minZ; j < m_maxZ; j++)
+                        for (int i = m_minX; i < m_maxX; i++)
                         {
                             Vector3 worldPoint = new Vector3(i, 0, j);
                             Vector3 diff = worldPoint - m_positionLocal;
@@ -790,8 +785,10 @@ namespace com.xexuxjy.magiccarpet.terrain
         private float s_terrainMoveTime = 0.5f;
 
         const int m_numLevels = 1;
-        const int m_blockVertices = 33;
+        const int m_blockVertices = 9;
         const int m_blockSize = m_blockVertices - 1;
+        const int m_textureWidth = Globals.WorldWidth + 1;
+        
         VertexBuffer m_blockVertexBuffer;
         IndexBuffer m_blockIndexBuffer;
         Effect m_effect;
