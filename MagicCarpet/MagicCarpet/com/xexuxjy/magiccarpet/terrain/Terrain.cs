@@ -110,17 +110,13 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_effect.Parameters["BaseTexture"].SetValue(m_baseTexture);
             m_effect.Parameters["NoiseTexture"].SetValue(m_noiseTexture);
 
-            Vector3 lightDirection = new Vector3(0.5f,-1,0.5f);
-            lightDirection.Normalize();
-            Vector3 ambientLight = new Vector3(0.2f);
-            Vector3 directionalLight = new Vector3(0.2f);
+            Vector3 ambientLight = new Vector3(0.3f);
+            Vector3 directionalLight = new Vector3(0.5f);
 
-            //m_effect.Parameters["LightDirection"].SetValue(lightDirection);
             m_effect.Parameters["AmbientLight"].SetValue(ambientLight);
             m_effect.Parameters["DirectionalLight"].SetValue(directionalLight);
+            m_effect.Parameters["LightPosition"].SetValue(new Vector3(0, 40, 0));
 
-
-            m_effect.Parameters["LightPosition"].SetValue(new Vector3(1000, 40, 1000));
 
             BuildVertexBuffers();
 
@@ -131,9 +127,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             //buildLandscape();
             LoadOrCreateHeighMap(null);
-            BuildTestTerrain1();
+            //BuildTestTerrain1();
             //BuildSectionRenderers();
-            //BuildLandscape();
+            BuildLandscape();
             base.Initialize();
         
         }
@@ -241,7 +237,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         BoundingBox bb = new BoundingBox(minbb,maxbb);
 
-                        //if (boundingFrustrum.Intersects(bb))
+                        if (boundingFrustrum.Intersects(bb))
                         {
                             Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
                             //Matrix transform = viewProjection * Matrix.CreateTranslation(worldPosition);
@@ -253,6 +249,10 @@ namespace com.xexuxjy.magiccarpet.terrain
                             pass.Apply();
                             Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
 
+                        }
+                        else
+                        {
+                            int ibreak = 0;
                         }
 
                     }
@@ -381,7 +381,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 		{
             int counter = 0;
             int increment = 1;
-            int maxHills = 1000;
+            int maxHills = 10;
             int maxInstanceHeight = 10;
             int maxOverallHeight = 20;
             int maxRadius = 20;
@@ -785,7 +785,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         private float s_terrainMoveTime = 0.5f;
 
         const int m_numLevels = 1;
-        const int m_blockVertices = 9;
+        const int m_blockVertices = 33;
         const int m_blockSize = m_blockVertices - 1;
         const int m_textureWidth = Globals.WorldWidth + 1;
         

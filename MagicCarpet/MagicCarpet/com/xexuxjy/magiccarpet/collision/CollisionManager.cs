@@ -281,7 +281,7 @@ namespace com.xexuxjy.magiccarpet.collision
                     aabbMin -= MathUtil.MAX_VECTOR;
                     aabbMax += MathUtil.MAX_VECTOR;
 
-                    ((XNA_ShapeDrawer)Globals.DebugDraw).DrawXNA(ref m, colObj.GetCollisionShape(), ref wireColor, Globals.DebugDraw.GetDebugMode(), ref aabbMin, ref aabbMax, ref view, ref projection);
+                    //((XNA_ShapeDrawer)Globals.DebugDraw).DrawXNA(ref m, colObj.GetCollisionShape(), ref wireColor, Globals.DebugDraw.GetDebugMode(), ref aabbMin, ref aabbMax, ref view, ref projection);
 
                 }
 

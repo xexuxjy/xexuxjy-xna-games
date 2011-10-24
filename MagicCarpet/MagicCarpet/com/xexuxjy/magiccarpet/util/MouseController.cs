@@ -82,7 +82,8 @@ namespace com.xexuxjy.magiccarpet.util
                         Vector3 location = Globals.DebugTextCamera;
                         Vector3 colour = new Vector3(1, 1, 1);
 
-                        if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                        //if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                        if(false)
                         {
                             Globals.cameraHasGroundContact = true;
                             Globals.cameraGroundContactPoint = collisionPoint;
