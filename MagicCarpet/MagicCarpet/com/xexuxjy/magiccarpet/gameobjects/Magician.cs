@@ -46,7 +46,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
 
-        private SpellType m_selectedSpell1 = SpellType.Convert;
+        private SpellType m_selectedSpell1 = SpellType.Castle;
         private SpellType m_selectedSpell2 = SpellType.Raise;
 
 

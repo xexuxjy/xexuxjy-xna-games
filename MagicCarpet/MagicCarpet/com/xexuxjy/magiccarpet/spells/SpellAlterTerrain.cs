@@ -49,7 +49,6 @@ namespace com.xexuxjy.magiccarpet.spells
             // Double check?
             if (ShouldCollideWith(partner))
             {
-                // only 2 valid things should be manaballs and terrain.
                 if (partner is Terrain)
                 {
                     Vector3 collisionPointWorld = manifoldPoint.GetPositionWorldOnA();
