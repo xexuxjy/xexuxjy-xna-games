@@ -154,7 +154,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected virtual void DrawEffect(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
         {
-            return;
+            //return;
             if (m_model != null)
             {
                 //Matrix scale = Matrix.CreateScale(modelScalingData.scale);
@@ -167,7 +167,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     {
                         basicEffect.View = view;
                         basicEffect.Projection = projection;
-                        basicEffect.World = transforms[mesh.ParentBone.Index] * world;
+                        basicEffect.World = transforms[mesh.ParentBone.Index] * m_scaleTransform * world;
                     }
                     mesh.Draw();
                 }
@@ -312,7 +312,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 if (value != m_owner)
                 {
-                    OwnerChanged(m_owner, value);
+                    if (OwnerChanged != null)
+                    {
+                        OwnerChanged(m_owner, value);
+                    }
                 }
                 m_owner = value; 
             }

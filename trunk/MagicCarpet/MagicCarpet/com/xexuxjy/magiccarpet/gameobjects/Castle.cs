@@ -114,21 +114,23 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             int width = CastleSizes[size];
 
             Vector3 startPos = Position;
-            startPos -= new Vector3(-width / 2, 0, -width / 2);
+            startPos += new Vector3(-width / 2, 0, -width / 2);
 
 
-            for (int i = 0; i < width; ++i)
+            for (int j = 0; j < width; ++j)
             {
-                for (int j = 0; j < width; ++j)
+                for (int i = 0; i < width; ++i)
                 {
                     Vector3 point = startPos + new Vector3(i, 0, j);
                     point.Y = m_initialHeight;
+                    //point.Y = 0f;
                     Globals.Terrain.SetHeightAtPointWorld(ref point);
                     Globals.Terrain.SetTerrainTypeAndOccupier(point, TerrainType.castle,this);
                 }
             }
 
-            m_scaleTransform = Matrix.CreateScale(width, 2, width);
+            Globals.Terrain.UpdateHeightMap();
+            m_scaleTransform = Matrix.CreateScale(width/2, 2, width/2);
         }
         
         
@@ -150,8 +152,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override String DebugText
+        {
+            get
+            {
+                return String.Format("Castle Id [{0}] Pos[{1}] Level[{2}] Mana[{3}].", Id, Position, Level, StoredMana);
+            }
+
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         // Different castle sizes.
-        public static int[] CastleSizes = new int[]{2,4,6};
+        public static int[] CastleSizes = new int[]{4,8,16};
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -211,7 +225,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
             
             }
-
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
