@@ -381,12 +381,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public Vector3 WorldToLocal(Vector3 worldPoint)
         {
-            return ( worldPoint - m_boundingBox.Min);
-
+            return (worldPoint - m_boundingBox.Min);
+            //Matrix m;
+            //m_motionState.GetWorldTransform(out m);
+            //m = Matrix.Invert(m);
+            //return Vector3.Transform(worldPoint, m);
         }
 
         public Vector3 LocalToWorld(Vector3 localPoint)
         {
+            //Matrix m;
+            //m_motionState.GetWorldTransform(out m);
+            ////m = Matrix.Invert(m);
+            //return Vector3.Transform(localPoint, m);
             return (localPoint + m_boundingBox.Min);
         }
 

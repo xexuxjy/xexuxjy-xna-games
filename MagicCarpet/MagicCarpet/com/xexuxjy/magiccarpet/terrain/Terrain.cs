@@ -314,13 +314,12 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void AddPeak(float x, float y, float height)
         {
             float defaultRadius = 10.0f;
-            float maxHeight = 5.0f;
-            AddPeak(x, y, defaultRadius, height, maxHeight);
+            AddPeak(x, y, defaultRadius, height);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void AddPeak(float x, float z, float radius, float height, float maxHeight)
+        public virtual void AddPeak(float x, float z, float radius, float height)
         {
 
             TerrainUpdater terrainUpdate = new TerrainUpdater(new Vector3(x, 0, z), radius, s_terrainMoveTime, height, this);
@@ -352,7 +351,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             Debug.Assert(localX >= 0 && localX <= Globals.WorldWidth);
             Debug.Assert(localZ >= 0 && localZ <= Globals.WorldWidth);
-            m_heightMap[(localZ * Globals.WorldWidth) + localX] = height;
+            //m_heightMap[(localZ * Globals.WorldWidth) + localX] = height;
+            m_heightMap[(localZ * m_textureWidth)+localX] = height;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -371,7 +371,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             Debug.Assert(localX >= 0 && localX <= Globals.WorldWidth);
             Debug.Assert(localZ >= 0 && localZ <= Globals.WorldWidth);
-            return m_heightMap[(localZ * Globals.WorldWidth) + localX];
+            //return m_heightMap[(localZ * Globals.WorldWidth) + localX];
+            return m_heightMap[(localZ * m_textureWidth) + localX];
         }
 
 
@@ -383,7 +384,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             int increment = 1;
             int maxHills = 10;
             int maxInstanceHeight = 10;
-            int maxOverallHeight = 20;
             int maxRadius = 20;
             int currentHills = 0;
             while (currentHills++ < maxHills)
@@ -406,7 +406,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 {
                     height = -height;
                 }
-                AddPeak(xpos, ypos, radius, height, maxOverallHeight);
+                AddPeak(xpos, ypos, radius, height);
             }
 
             UpdateHeightMap();
@@ -730,6 +730,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                                 float currentHeight = m_terrain.GetHeightAtPointLocal(i, j);
                                 //float oldHeight = getHeightAtPoint(i, j);
                                 float newHeight = currentHeight + (m_updateDeflection * lerpValue);
+
                                 newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight,Globals.WorldHeight);
                                 m_terrain.SetHeightAtPointLocal(i, j, newHeight);
                             }
@@ -781,8 +782,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         private float m_minIslandSize = 5.0f;
         private float m_maxIslandSize = 15.0f;
 
-        // the amount of space the terrain can move in a second.
-        private float s_terrainMoveTime = 0.5f;
+        // the time taken for the complete terrain move.
+        private float s_terrainMoveTime = 5.0f;
 
         const int m_numLevels = 1;
         const int m_blockVertices = 33;
