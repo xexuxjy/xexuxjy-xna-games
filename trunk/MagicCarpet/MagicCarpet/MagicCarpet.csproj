@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionDie.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindCastle.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindLocation.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindManaball.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionIdle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionLoad.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Monster.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\GameObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObjectType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Magician.cs" />

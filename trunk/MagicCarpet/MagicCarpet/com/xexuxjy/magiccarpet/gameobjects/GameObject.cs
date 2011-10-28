@@ -102,9 +102,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 Vector3 movement = Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Position += movement;
-
-
             }
+
+            // no health left so die.
+            if (m_attributes[GameObjectAttributeType.Health].CurrentValue <= 0.0f)
+            {
+                Die();
+            }
+
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -436,6 +442,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             TargetSpeed = 0f;
         }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void DoDamage(float points)
+        {
+            m_attributes[GameObjectAttributeType.Health].CurrentValue -= points;
+            Damaged(this, null);
+        }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Delegates and events

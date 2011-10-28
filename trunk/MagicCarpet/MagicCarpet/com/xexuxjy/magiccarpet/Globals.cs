@@ -90,6 +90,8 @@ namespace com.xexuxjy.magiccarpet
 
         public static Vector3 gravity = new Vector3(0f, -9.8f, 0f);
 
+        public static Random random = new Random();
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

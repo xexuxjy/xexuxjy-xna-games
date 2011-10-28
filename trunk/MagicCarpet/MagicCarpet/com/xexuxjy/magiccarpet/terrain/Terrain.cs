@@ -121,7 +121,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             BuildVertexBuffers();
 
 
-            m_terrainRandom = new Random();
+            Globals.random = new Random();
 
             InitialiseWorldGrid();
 
@@ -397,11 +397,11 @@ namespace com.xexuxjy.magiccarpet.terrain
                     increment = 1;
                 }
                 counter += increment;
-                int xpos = (int)((float)m_terrainRandom.NextDouble() * Width);
-                int ypos = (int)((float)m_terrainRandom.NextDouble() * Breadth);
-                float radius = ((float)m_terrainRandom.NextDouble() * maxRadius);
-                float height = ((float)m_terrainRandom.NextDouble() * maxInstanceHeight);
-                bool up = (float)m_terrainRandom.NextDouble() > 0.5;
+                int xpos = (int)((float)Globals.random.NextDouble() * Width);
+                int ypos = (int)((float)Globals.random.NextDouble() * Breadth);
+                float radius = ((float)Globals.random.NextDouble() * maxRadius);
+                float height = ((float)Globals.random.NextDouble() * maxInstanceHeight);
+                bool up = (float)Globals.random.NextDouble() > 0.5;
                 if (!up)
                 {
                     height = -height;
@@ -612,8 +612,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         public Vector3 GetRandomWorldPositionXZ()
         {
             Vector3 result = new Vector3();
-            result.X = ((float)m_terrainRandom.NextDouble() * Width);
-            result.Z = ((float)m_terrainRandom.NextDouble() * Breadth);
+            result.X = ((float)Globals.random.NextDouble() * Width);
+            result.Z = ((float)Globals.random.NextDouble() * Breadth);
             result.Y = GetHeightAtPointLocal((int)result.X, (int)result.Z);
 
 
@@ -625,9 +625,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         public Vector3 GetRandomWorldPositionXZWithRange(Vector3 position,float distance)
         {
             Vector3 result = new Vector3();
-            float sign = m_terrainRandom.NextDouble() > 0.5f ? 1.0f:-1.0f;
-            result.X = position.X + (sign * ((float)m_terrainRandom.NextDouble() * distance));
-            result.Z = position.Z + (sign * ((float)m_terrainRandom.NextDouble() * distance));
+            float sign = Globals.random.NextDouble() > 0.5f ? 1.0f:-1.0f;
+            result.X = position.X + (sign * ((float)Globals.random.NextDouble() * distance));
+            result.Z = position.Z + (sign * ((float)Globals.random.NextDouble() * distance));
 
             // make sure it fits in bounds.
             result.X = MathHelper.Clamp(result.X,0.0f,Width);
@@ -797,8 +797,6 @@ namespace com.xexuxjy.magiccarpet.terrain
         Texture2D m_heightMapTexture;
         Texture2D m_baseTexture;
         Texture2D m_noiseTexture;
-
-        private Random m_terrainRandom;
 
         public int GetCollisionMask()
         {

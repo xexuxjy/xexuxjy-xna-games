@@ -110,9 +110,18 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public Vector3 TargetLocation
+        {
+            get { return m_targetLocation; }
+            set { m_targetLocation = value; }
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         private ActionPool m_actionPool;
         private GameObject m_owner; 
         private GameObject m_target;
+        private Vector3 m_targetLocation;
         private ActionState m_actionState;
         private float m_duration;
         private float m_currentTime;
