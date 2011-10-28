@@ -23,6 +23,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        /************************************************************************/
+        /* 
+         * if we're not doing anything, then 
+         *  look to see if there is anything nearby that poses a threat
+         *  
+         * if there is then start attacking it
+         * 
+         * if there isn't then find somewhere else to go
+         
+         */
+        /************************************************************************/
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -73,11 +85,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         break;
                     }
+                case(ActionState.Dieing):
+                    {
+                        // when we've finished dieing then we want to spawn a manaball here.
+                        Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, Position);
+                        break;
+                    }
 
                 default:
                     break;
             }
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

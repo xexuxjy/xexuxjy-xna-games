@@ -29,6 +29,10 @@ namespace com.xexuxjy.magiccarpet
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         DebugDrawModes m_debugDrawMode;
+
+
+        static bool droppedInitialManaBalls = false;
+
         public MagicCarpet()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -88,7 +92,7 @@ namespace com.xexuxjy.magiccarpet
             Components.Add(Globals.SimpleConsole);
             Components.Add(Globals.DebugObjectManager);
             Components.Add(Globals.GameObjectManager);
-            
+
             base.Initialize();
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +131,20 @@ namespace com.xexuxjy.magiccarpet
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+
+            if (!droppedInitialManaBalls)
+            {
+                // drop a load of manaballs?
+                int numManaballs = 40;
+                for (int i = 0; i < numManaballs; ++i)
+                {
+                    Vector3 spawnPos = Globals.Terrain.GetRandomWorldPositionXZ();
+                    spawnPos.Y = 20f;
+                    Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, spawnPos);
+                }
+                droppedInitialManaBalls = true;
+            }
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
