@@ -25,7 +25,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected override void BuildCollisionObject()
+        public override void BuildCollisionObject()
         {
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.spell;
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.terrain);

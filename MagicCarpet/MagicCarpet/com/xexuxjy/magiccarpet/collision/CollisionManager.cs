@@ -24,7 +24,7 @@ namespace com.xexuxjy.magiccarpet.collision
             ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
             m_dispatcher = new CollisionDispatcher(m_collisionConfiguration);
 
-            BulletGlobals.gContactAddedCallback = new CustomMaterialCombinerCallback();
+            //BulletGlobals.gContactAddedCallback = new CustomMaterialCombinerCallback();
 
             m_broadphase = new DbvtBroadphase();
             IOverlappingPairCache pairCache = null;
@@ -70,7 +70,12 @@ namespace com.xexuxjy.magiccarpet.collision
             m_dynamicsWorld.DebugDrawWorld();
 
             ProcessCollisions();
+
+            String debugText = String.Format("CollisionManager Objects[{0}] Constraints[{1}] Pairs[{2}] Manifolds[{3}].", m_dynamicsWorld.GetNumCollisionObjects(), m_dynamicsWorld.GetNumConstraints(), m_broadphase.GetOverlappingPairCache().GetNumOverlappingPairs(), m_dispatcher.GetNumManifolds());
+            Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, Vector3.One);
+
             base.Update(gameTime);
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

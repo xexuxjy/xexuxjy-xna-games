@@ -36,6 +36,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
             m_basicEffect = new BasicEffect(m_graphicsDevice);
+            m_basicEffect.TextureEnabled = true;
 
 
             RemapModel(m_castleModel, m_basicEffect);
@@ -56,7 +57,7 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             if (!m_colorMap.ContainsKey(color))
             {
-                Texture2D newTexture = new Texture2D(Globals.GraphicsDevice, 1, 1);
+                Texture2D newTexture = new Texture2D(m_graphicsDevice, 1, 1);
                 Color[] colorData = new Color[1];
                 newTexture.GetData<Color>(colorData);
                 colorData[0] = new Color(color);

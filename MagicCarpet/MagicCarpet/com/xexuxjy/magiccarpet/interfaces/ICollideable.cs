@@ -9,7 +9,7 @@ namespace com.xexuxjy.magiccarpet.interfaces
 {
     public interface ICollideable
     {
-        int GetCollisionMask();
+        void BuildCollisionObject();
         bool ShouldCollideWith(ICollideable partner);
         void ProcessCollision(ICollideable partner,ManifoldPoint manifoldPont);
         GameObject GetGameObject();

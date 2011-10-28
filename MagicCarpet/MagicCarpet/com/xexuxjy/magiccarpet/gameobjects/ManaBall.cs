@@ -35,7 +35,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected override void BuildCollisionObject()
+        public override void BuildCollisionObject()
         {
             if (s_collisionShape == null)
             {

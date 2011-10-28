@@ -76,6 +76,7 @@ namespace com.xexuxjy.magiccarpet
         public static Vector3 DebugTextCamera = new Vector3(10, 10, 0);
         public static Vector3 DebugTextFPS = new Vector3(10, 20, 0);
         public static Vector3 DebugTextPlayer = new Vector3(10, 30, 0);
+        public static Vector3 DebugTextCollisionManager = new Vector3(10, 40, 0);
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

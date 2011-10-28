@@ -77,7 +77,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected override void BuildCollisionObject()
+        public override void BuildCollisionObject()
         {
             // Should really 
             CollisionShape collisionShape = new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
@@ -843,16 +843,6 @@ namespace com.xexuxjy.magiccarpet.terrain
         public bool ShouldCollideWith(ICollideable partner)
         {
             return true;
-        }
-
-        public void ProcessCollision(ICollideable partner, ManifoldPoint manifoldPoint)
-        {
-            // terrain shouldn't do anything. up to other objects to collide.
-        }
-
-        public GameObject GetGameObject()
-        {
-            return this;
         }
     }
 

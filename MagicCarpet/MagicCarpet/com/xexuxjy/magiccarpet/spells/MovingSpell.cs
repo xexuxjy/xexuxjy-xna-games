@@ -26,7 +26,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected override void BuildCollisionObject()
+        public override void BuildCollisionObject()
         {
             //m_collisionObject = new CollisionObject();
             //m_collisionObject.SetCollisionShape(s_collisionShape);
@@ -47,33 +47,6 @@ namespace com.xexuxjy.magiccarpet.spells
 
             //m_motionState.SetWorldTransform(Matrix.CreateTranslation(position));
             TargetSpeed = s_defaultSpellSpeed;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public virtual int GetCollisionMask()
-        {
-            return 0;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        public virtual bool ShouldCollideWith(ICollideable partner)
-        {
-            return false;
-        }
-        
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        public virtual void ProcessCollision(ICollideable partner,ManifoldPoint manifoldPoint)
-        {
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public GameObject GetGameObject()
-        {
-            return this;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
