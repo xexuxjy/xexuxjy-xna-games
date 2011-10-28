@@ -8,15 +8,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipTerrainDemo", "ClipTerr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipTerrainDemoContent", "ClipTerrainDemo\ClipTerrainDemoContent\ClipTerrainDemoContent.contentproj", "{EA344496-F027-434A-A423-36E985B65C7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNA-Windows", "..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj", "{4E1937EE-3139-44CB-989D-F050BC099CE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNA-Windows", "..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj", "{4E1937EE-3139-44CB-989D-F050BC099CE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemos-Windows", "..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj", "{3E64761A-AC83-4C76-93BE-475F95165560}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemos-Windows", "..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj", "{3E64761A-AC83-4C76-93BE-475F95165560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemoContent", "..\..\bullet-xna\trunk\BulletXNADemos\Content\BulletXNADemoContent.contentproj", "{19F18FB0-6BA5-4076-9E7E-934437CAC410}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletXNADemoContent", "..\..\..\bullet-xna\trunk\BulletXNADemos\Content\BulletXNADemoContent.contentproj", "{19F18FB0-6BA5-4076-9E7E-934437CAC410}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of BulletXNA-Windows", "..\..\bullet-xna\trunk\BulletXNA\Xbox 360 Copy of BulletXNA-Windows.csproj", "{111A59DD-818A-4B33-8CAD-5B3BF017B8A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of BulletXNA-Windows", "..\..\..\bullet-xna\trunk\BulletXNA\Xbox 360 Copy of BulletXNA-Windows.csproj", "{111A59DD-818A-4B33-8CAD-5B3BF017B8A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of BulletXNADemos-Windows", "..\..\bullet-xna\trunk\BulletXNADemos\Xbox 360 Copy of BulletXNADemos-Windows.csproj", "{85F1CF37-B3D4-4021-9DB7-0D7F5C8FFC8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of BulletXNADemos-Windows", "..\..\..\bullet-xna\trunk\BulletXNADemos\Xbox 360 Copy of BulletXNADemos-Windows.csproj", "{85F1CF37-B3D4-4021-9DB7-0D7F5C8FFC8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of MagicCarpet", "MagicCarpet\Xbox 360 Copy of MagicCarpet.csproj", "{9A434EB5-59A7-4FE6-B042-4070D4E10F6F}"
 EndProject

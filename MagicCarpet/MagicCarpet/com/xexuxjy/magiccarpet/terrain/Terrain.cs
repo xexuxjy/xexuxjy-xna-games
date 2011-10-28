@@ -82,7 +82,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             // Should really 
             CollisionShape collisionShape = new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
-            CollisionFilterGroups collisionMask = (CollisionFilterGroups)GameObjectType.spell;
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell|GameObjectType.manaball);
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
             
             //m_collisionObject = new CollisionObject();
@@ -382,9 +382,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 		{
             int counter = 0;
             int increment = 1;
-            int maxHills = 10;
+            int maxHills = 1000;
             int maxInstanceHeight = 10;
-            int maxRadius = 20;
+            int maxRadius = 30;
             int currentHills = 0;
             while (currentHills++ < maxHills)
             {
@@ -406,7 +406,9 @@ namespace com.xexuxjy.magiccarpet.terrain
                 {
                     height = -height;
                 }
-                AddPeak(xpos, ypos, radius, height);
+                
+
+                TerrainUpdater.ApplyImmediate(new Vector3(xpos,0, ypos), radius, height,this);
             }
 
             UpdateHeightMap();
@@ -704,6 +706,41 @@ namespace com.xexuxjy.magiccarpet.terrain
                 m_maxZ = (int)System.Math.Min(Globals.WorldWidth, position.Z + radius);
             }
 
+
+            public static void ApplyImmediate(Vector3 position, float radius, float totalDeflection, Terrain terrain)
+            {
+                int minX = (int)System.Math.Max(0, position.X - radius);
+                int maxX = (int)System.Math.Min(Globals.WorldWidth, position.X + radius);
+                int minZ = (int)System.Math.Max(0, position.Z - radius);
+                int maxZ = (int)System.Math.Min(Globals.WorldWidth, position.Z + radius);
+
+                float floatRadius2 = radius * radius;
+                for (int j = minZ; j < maxZ; j++)
+                {
+                    for (int i = minX; i < maxX; i++)
+                    {
+                        Vector3 worldPoint = new Vector3(i, 0, j);
+                        Vector3 diff = worldPoint - position;
+                        float diffLength2 = diff.LengthSquared();
+                        if (diffLength2 < floatRadius2)
+                        {
+                            float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
+                            // play with lerp value to smooth the terrain?
+                            //                          lerpValue = (float)Math.Sqrt(lerpValue);
+                            //lerpValue *= lerpValue;
+                            //                        lerpValue *= lerpValue;
+
+                            // ToDo - fractal hill generation.
+                            float currentHeight = terrain.GetHeightAtPointLocal(i, j);
+                            //float oldHeight = getHeightAtPoint(i, j);
+                            float newHeight = currentHeight + (totalDeflection * lerpValue);
+
+                            newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight, Globals.WorldHeight);
+                            terrain.SetHeightAtPointLocal(i, j, newHeight);
+                        }
+                    }
+                }
+            }
 
 
             public void ApplyToTerrain()

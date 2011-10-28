@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BulletXNA.BulletCollision;
+using BulletXNA.BulletDynamics;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -27,6 +28,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         protected override void BuildCollisionObject()
         {
             if (s_collisionShape == null)
@@ -34,8 +42,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 s_collisionShape = new SphereShape(0.5f);
             }
 
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(2f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
+            RigidBody rb = (RigidBody)m_collisionObject;
+            rb.SetFlags(rb.GetFlags() &~ RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
+            rb.SetActivationState(ActivationState.ACTIVE_TAG);
+            rb.SetDamping(0.5f, 0.1f);
+            // set a custom material here as we want a fairly damped response.
+            //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 
+            //m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
