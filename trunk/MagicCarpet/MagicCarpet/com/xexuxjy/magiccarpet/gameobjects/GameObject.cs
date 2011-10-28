@@ -12,10 +12,11 @@ using com.xexuxjy.utils.debug;
 using Dhpoware;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using com.xexuxjy.magiccarpet.interfaces;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
-    public abstract class GameObject : DrawableGameComponent , IDebuggable
+    public abstract class GameObject : DrawableGameComponent , IDebuggable,ICollideable
 	{
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +135,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         
-        protected virtual void BuildCollisionObject()
+        public virtual void BuildCollisionObject()
         {
         }
 
@@ -165,15 +166,23 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 //Matrix scale = Matrix.CreateScale(modelScalingData.scale);
                 Matrix[] transforms = new Matrix[m_model.Bones.Count];
-                BasicEffect basicEffect = Globals.MCContentManager.BasicEffect;
+                //BasicEffect basicEffect = Globals.MCContentManager.BasicEffect;
                 foreach (ModelMesh mesh in m_model.Meshes)
                 {
                     m_model.CopyAbsoluteBoneTransformsTo(transforms);
                     foreach (Effect effect in mesh.Effects)
                     {
+                        BasicEffect basicEffect = (BasicEffect)effect;
                         basicEffect.View = view;
                         basicEffect.Projection = projection;
                         basicEffect.World = transforms[mesh.ParentBone.Index] * m_scaleTransform * world;
+
+                        
+                        // cheat for now.
+                        Vector3 colour = Owner != null ? new Vector3(1,0,0) : new Vector3(1,1,1);
+                        basicEffect.Texture = Globals.MCContentManager.GetTexture(ref colour);
+
+
                     }
                     mesh.Draw();
                 }
@@ -452,6 +461,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             Damaged(this, null);
         }
 
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual bool ShouldCollideWith(ICollideable partner)
+        {
+            return false;
+        }
+
+        public virtual void ProcessCollision(ICollideable partner, ManifoldPoint manifoldPont)
+        {
+        }
+
+        public virtual GameObject GetGameObject()
+        {
+            return this;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Delegates and events

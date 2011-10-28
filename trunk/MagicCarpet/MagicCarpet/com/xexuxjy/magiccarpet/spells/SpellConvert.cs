@@ -44,13 +44,6 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override int GetCollisionMask()
-        {
-            return 0;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
         public override void ProcessCollision(ICollideable partner,ManifoldPoint manifoldPoint)
         {
             // Double check?
@@ -69,7 +62,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected override void BuildCollisionObject()
+        public override void BuildCollisionObject()
         {
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.spell;
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.manaball | GameObjectType.terrain);
