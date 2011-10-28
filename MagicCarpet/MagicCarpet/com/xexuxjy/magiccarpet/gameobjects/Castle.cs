@@ -131,6 +131,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             Globals.Terrain.UpdateHeightMap();
             m_scaleTransform = Matrix.CreateScale(width/2, 2, width/2);
+            
+            CreateBalloon();
         }
         
         
@@ -160,6 +162,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
         }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // when a castle is created it should also create a balloon?
+
+        public void CreateBalloon()
+        {
+            GameObject gameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.balloon, Position);
+            gameObject.Owner = Owner;
+        }
+
+
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,6 +243,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+            
             Vector3 m_position;
             float m_cooldownTime;
             float m_damage;

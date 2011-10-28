@@ -16,6 +16,7 @@ namespace com.xexuxjy.magiccarpet.manager
             m_contentManager = game.Content;
             m_graphicsDevice = game.GraphicsDevice;
             m_dictionary = new Dictionary<GameObjectType, Model>();
+            m_colorMap = new Dictionary<Vector3, Texture2D>();
         }
 
         public void LoadContent()
@@ -50,6 +51,22 @@ namespace com.xexuxjy.magiccarpet.manager
             m_dictionary.TryGetValue(gameObjectType, out model);
             return model;
         }
+
+        public Texture2D GetTexture(ref Vector3 color)
+        {
+            if (!m_colorMap.ContainsKey(color))
+            {
+                Texture2D newTexture = new Texture2D(Globals.GraphicsDevice, 1, 1);
+                Color[] colorData = new Color[1];
+                newTexture.GetData<Color>(colorData);
+                colorData[0] = new Color(color);
+                newTexture.SetData(colorData);
+                m_colorMap[color] = newTexture;
+            }
+            return m_colorMap[color];
+        }
+
+
 
 
         public void Initialize()
@@ -92,6 +109,8 @@ namespace com.xexuxjy.magiccarpet.manager
         private SpriteFont m_debugFont;
 
         private Dictionary<GameObjectType, Model> m_dictionary;
+        private Dictionary<Vector3, Texture2D> m_colorMap;
+
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;
     }

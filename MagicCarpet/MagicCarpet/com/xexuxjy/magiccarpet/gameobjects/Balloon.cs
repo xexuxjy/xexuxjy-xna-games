@@ -24,12 +24,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -91,7 +85,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         Debug.Assert(manaball != null);
                         m_currentLoad += manaball.ManaValue;
                         // loaded now so remove object.
-                        manaball.Cleanup();
+                        manaball.Die();
                         if (Full)
                         {
                             QueueAction(new ActionFindCastle(this, null, s_castleSearchRadius));

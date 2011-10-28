@@ -41,6 +41,10 @@ namespace com.xexuxjy.magiccarpet.spells
                 if (partner is Terrain)
                 {
                     Vector3 collisionPointWorld = manifoldPoint.GetPositionWorldOnA();
+
+                    // adjust to nearest integer.
+                    Vector3 roundedPoint = new Vector3((float)Math.Round(collisionPointWorld.X), collisionPointWorld.Y, (float)Math.Round(collisionPointWorld.Z));
+
                     if (Castle.CanPlaceSize(collisionPointWorld, 0))
                     {
                         Castle castle = (Castle)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.castle,collisionPointWorld);
