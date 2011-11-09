@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MagicCarpet.com.xexuxjy.magiccarpet.actions
+namespace com.xexuxjy.magiccarpet.actions
 {
-    class ActionNone
+    public class ActionNone
     {
     }
 }

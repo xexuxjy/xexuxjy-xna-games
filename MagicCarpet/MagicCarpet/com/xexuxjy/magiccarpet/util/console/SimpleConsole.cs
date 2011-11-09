@@ -10,11 +10,12 @@ using System.IO;
 using com.xexuxjy.magiccarpet.gameobjects;
 using BulletXNA;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.interfaces;
 
 namespace com.xexuxjy.utils.console
 {
     // acts as a command processor?
-    public class SimpleConsole : DebugWindow
+    public class SimpleConsole : DebugWindow , IKeyboardCallback
     {
         public SimpleConsole(Game game,IDebugDraw debugDraw)
             : base("SimpleConsole",game,debugDraw)
@@ -306,7 +307,7 @@ namespace com.xexuxjy.utils.console
         private void BuildTexture()
         {
             m_consoleHeight = (Globals.MCContentManager.DebugFont.LineSpacing * 2) + 3;
-            m_texture = new Texture2D(GraphicsDevice, m_consoleWidth, m_consoleHeight);
+            m_texture = new Texture2D(Game.GraphicsDevice, m_consoleWidth, m_consoleHeight);
             uint[] textureData = new uint[m_consoleWidth * m_consoleHeight];
             Array.Clear(textureData, 0, textureData.Length);
             m_texture.GetData<uint>(textureData);
@@ -411,7 +412,7 @@ namespace com.xexuxjy.utils.console
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void KeyEvent(Keys key)
+        public virtual void KeyboardCallback(Keys key, bool released, ref KeyboardState newState, ref KeyboardState oldState)
         {
             char c = (char)key;
             if (IsValidChar(c))

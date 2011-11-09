@@ -18,6 +18,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.utils.console;
 using com.xexuxjy.magiccarpet.manager;
 using com.xexuxjy.utils.debug;
+using GameStateManagement;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -28,7 +29,6 @@ namespace com.xexuxjy.magiccarpet
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        DebugDrawModes m_debugDrawMode;
 
 
         static bool droppedInitialManaBalls = false;
@@ -37,7 +37,6 @@ namespace com.xexuxjy.magiccarpet
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
 
         }
 
@@ -51,47 +50,12 @@ namespace com.xexuxjy.magiccarpet
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            CameraComponent camera = new CameraComponent(this);
-            Globals.Camera = camera;
+            Globals.ScreenManager = new ScreenManager(this);
+            Globals.ScreenManager.AddScreen(new BackgroundScreen(), null);
+            Globals.ScreenManager.AddScreen(new MainMenuScreen(), null);
+            Globals.ScreenManager.AddScreen(new GameplayScreen(), null);
 
-            Globals.DebugDraw = new XNA_ShapeDrawer(this);
-            Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
-            if (Globals.DebugDraw != null)
-            {
-                Globals.DebugDraw.LoadContent();
-            }
 
-            Globals.CollisionManager = new CollisionManager(this,Globals.worldMinPos,Globals.worldMaxPos);
-            Components.Add(Globals.CollisionManager);
-
-            Globals.Terrain = new Terrain(Vector3.Zero, this);
-
-            Globals.GameObjectManager = new GameObjectManager(this);
-
-            Globals.SimpleConsole = new SimpleConsole(this,Globals.DebugDraw);
-            Globals.SimpleConsole.Enabled = false;
-
-            Globals.MCContentManager = new MCContentManager(this);
-            Globals.MCContentManager.Initialize();
-
-            Globals.DebugObjectManager = new DebugObjectManager(this,Globals.DebugDraw);
-            Globals.DebugObjectManager.Enabled = true;
-
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician,new Vector3(0,10,0));
-            Globals.DebugObjectManager.DebugObject = Globals.Player;
-
-            Components.Add(camera);
-            //Components.Add(Globals.Terrain);
-            Components.Add(new KeyboardController(this));
-            Components.Add(new MouseController(this));
-            Components.Add(new FrameRateCounter(this,Globals.DebugTextFPS,Globals.DebugDraw));
-            Components.Add(Globals.SimpleConsole);
-            Components.Add(Globals.DebugObjectManager);
-            Components.Add(Globals.GameObjectManager);
 
             base.Initialize();
         }

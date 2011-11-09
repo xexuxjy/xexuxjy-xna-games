@@ -31,11 +31,6 @@ namespace com.xexuxjy.utils.debug
                 }
                 DebugDraw.DrawText(outputString, m_debugWindowPosition, Vector3.One);
             }
-            //SpriteFont font = Globals.debugFont;
-            //SpriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState, Matrix.Identity);
-            //SpriteBatch.DrawString(font, outputString, new Vector2(0f, 0f), Microsoft.Xna.Framework.Graphics.Color.Yellow);
-            //SpriteBatch.End();
-
         }
 
         public void NextObject()
