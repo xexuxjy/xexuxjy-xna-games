@@ -76,6 +76,20 @@
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Monster.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\ScreenManager\GameScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\ScreenManager\InputState.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\ScreenManager\ScreenManager.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\BackgroundScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\GameplayScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\LoadingScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\MainMenuScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\MenuEntry.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\MenuScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\MessageBoxScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\OptionsMenuScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\PauseMenuScreen.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\PlayerIndexEventArgs.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\interfaces\IKeyboardCallback.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\GameObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObjectType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Magician.cs" />
@@ -181,6 +195,7 @@
     <Reference Include="Microsoft.Xna.Framework.Graphics">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Input.Touch, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Net">
       <Private>False</Private>
     </Reference>

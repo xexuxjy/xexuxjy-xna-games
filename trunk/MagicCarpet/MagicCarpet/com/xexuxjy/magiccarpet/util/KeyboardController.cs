@@ -34,7 +34,7 @@ namespace com.xexuxjy.magiccarpet.util
             // forward commands onto the game console
             if (Globals.SimpleConsole.Enabled && released)
             {
-                Globals.SimpleConsole.KeyEvent(key);
+                Globals.SimpleConsole.KeyboardCallback(key,released,ref newState,ref oldState);
             }
 
 

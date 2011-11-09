@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA.LinearMath;
+using GameStateManagement;
 namespace com.xexuxjy.magiccarpet.debug
 {
     /// <summary>
@@ -32,6 +33,8 @@ namespace com.xexuxjy.magiccarpet.debug
             set { m_debugDraw = value; }
         }
 
+
+        private bool m_enabled;
         private string m_id;
         private Vector2 m_screenPosition;
         private IDebugDraw m_debugDraw;
