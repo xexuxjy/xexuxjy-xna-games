@@ -67,7 +67,8 @@ namespace GameStateManagement
             // it would take longer to load. We simulate that by delaying for a
             // while, giving you a chance to admire the beautiful loading screen.
             // TODO: Add your initialization logic here
-            CameraComponent camera = new CameraComponent(ScreenManager.Game);
+            CameraComponent camera = new CameraComponent(ScreenManager.Game); 	
+
             Globals.Camera = camera;
 
             Globals.DebugDraw = new XNA_ShapeDrawer(ScreenManager.Game);
@@ -79,8 +80,6 @@ namespace GameStateManagement
 
             Globals.CollisionManager = new CollisionManager(ScreenManager.Game, Globals.worldMinPos, Globals.worldMaxPos);
             m_componentCollection.Add(Globals.CollisionManager);
-
-            Globals.Terrain = new Terrain(Vector3.Zero, ScreenManager.Game);
 
             Globals.GameObjectManager = new GameObjectManager(ScreenManager.Game);
 
@@ -94,18 +93,21 @@ namespace GameStateManagement
             Globals.DebugObjectManager.Enabled = true;
 
 
+            Globals.Terrain = new Terrain(Vector3.Zero, ScreenManager.Game);
+
+
             Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
             Globals.DebugObjectManager.DebugObject = Globals.Player;
 
             m_componentCollection.Add(camera);
 
-            m_componentCollection.Add(new KeyboardController(ScreenManager.Game));
-            m_componentCollection.Add(new MouseController(ScreenManager.Game));
+            m_keyboardController = new KeyboardController();
+            m_mouseController = new MouseController();
+
             m_componentCollection.Add(new FrameRateCounter(ScreenManager.Game, Globals.DebugTextFPS, Globals.DebugDraw));
             m_componentCollection.Add(Globals.SimpleConsole);
             m_componentCollection.Add(Globals.DebugObjectManager);
             m_componentCollection.Add(Globals.GameObjectManager);
-            m_componentCollection.Add(Globals.ScreenManager);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -180,8 +182,8 @@ namespace GameStateManagement
             {
                 throw new ArgumentNullException("input");
             }
-
-
+            m_mouseController.HandleInput(input);
+            m_keyboardController.HandleInput(input);
 
         }
 
@@ -218,6 +220,9 @@ namespace GameStateManagement
 
         Random random = new Random();
 
+        MouseController m_mouseController;
+        KeyboardController m_keyboardController;   
+ 
         static bool droppedInitialManaBalls = false;
 
         float pauseAlpha;

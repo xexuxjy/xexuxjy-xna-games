@@ -48,8 +48,8 @@ namespace com.xexuxjy.magiccarpet
         protected override void Initialize()
         {
             Globals.ScreenManager = new ScreenManager(this);
-            //Globals.ScreenManager.AddScreen(new BackgroundScreen(), null);
-            //Globals.ScreenManager.AddScreen(new MainMenuScreen(), null);
+            Globals.ScreenManager.AddScreen(new BackgroundScreen(), null);
+            Globals.ScreenManager.AddScreen(new MainMenuScreen(), null);
             Globals.ScreenManager.AddScreen(new GameplayScreen(), null);
             Components.Add(Globals.ScreenManager);
              
