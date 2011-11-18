@@ -7,29 +7,29 @@ using System.Reflection;
 using Microsoft.Xna.Framework.Input;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.magiccarpet.spells;
+using GameStateManagement;
 
 namespace com.xexuxjy.magiccarpet.util
 {
-    public class KeyboardController : GameComponent
+    public class KeyboardController 
     {
-        public KeyboardController(Game game)
-            : base(game)
+        public KeyboardController()
         {
 
         }
 
         //----------------------------------------------------------------------------------------------
 
-        public override void Update(GameTime gameTime)
+        public void HandleInput(InputState inputState)
         {
             KeyboardState currentState = Keyboard.GetState();
-            GenerateKeyEvents(ref m_lastKeyboardState, ref currentState, gameTime);
+            GenerateKeyEvents(ref inputState.LastKeyboardStates[0], ref inputState.CurrentKeyboardStates[0]);
             m_lastKeyboardState = currentState;
         }
 
         //----------------------------------------------------------------------------------------------
 
-        public virtual void KeyboardCallback(Keys key, GameTime gameTime, bool released, ref KeyboardState newState, ref KeyboardState oldState)
+        public virtual void KeyboardCallback(Keys key, bool released, ref KeyboardState newState, ref KeyboardState oldState)
         {
             // forward commands onto the game console
             if (Globals.SimpleConsole.Enabled && released)
@@ -42,7 +42,7 @@ namespace com.xexuxjy.magiccarpet.util
             {
                 case Keys.Escape:
                     {
-                        Game.Exit();
+                        Globals.GameObjectManager.Game.Exit();
                         break;
                     }
                 case Keys.OemTilde:
@@ -149,14 +149,14 @@ namespace com.xexuxjy.magiccarpet.util
         }
 
         static Enum[] keysEnumValues = GetEnumValues(typeof(Keys));
-        private void GenerateKeyEvents(ref KeyboardState old, ref KeyboardState current, GameTime gameTime)
+        private void GenerateKeyEvents(ref KeyboardState old, ref KeyboardState current)
         {
             foreach (Keys key in keysEnumValues)
             {
                 bool released = WasReleased(ref old, ref current, key);
                 if (released || IsHeldKey(ref current, key))
                 {
-                    KeyboardCallback(key, gameTime, released, ref current, ref old);
+                    KeyboardCallback(key, released, ref current, ref old);
                 }
             }
         }

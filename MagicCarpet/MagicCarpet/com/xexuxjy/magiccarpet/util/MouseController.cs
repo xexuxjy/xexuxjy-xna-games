@@ -2,46 +2,23 @@
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using GameStateManagement;
 
 namespace com.xexuxjy.magiccarpet.util
 {
-    public class MouseController : GameComponent
+    public class MouseController 
     {
-        public MouseController(Game game)
-            : base(game)
+        public MouseController()
         {
 
         }
 
         //----------------------------------------------------------------------------------------------
 
-        public override void Update(GameTime gameTime)
+        public void HandleInput(InputState inputState)
         {
-            //MouseState mouseState = Mouse.GetState();
-            ////GenerateMouseEvents(ref m_lastMouseState, ref mouseState);
-
-            //float mouseSpeedScape = 0.1f;
-            //float scale = Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds * mouseSpeedScape;
-
-            //float xdiff = (mouseState.X - m_lastMouseState.X) * scale;
-            //if (!MathHelperExtension.CompareFloat(xdiff, 0f))
-            //{
-            //    Globals.Camera.Yaw += xdiff;
-            //}
-
-
-            //float ydiff = (mouseState.Y - m_lastMouseState.Y) * scale * (m_invertY?1:-1);
-            //if (!MathHelperExtension.CompareFloat(ydiff, 0f))
-            //{
-            //    Globals.Camera.Pitch += ydiff;
-            //}
-            //// set mouse back to center
-            //Rectangle r = Game.Window.ClientBounds;
-            //Mouse.SetPosition((r.Width / 2), (r.Height / 2));
-            MouseState mouseState = Mouse.GetState();
-
-            bool leftReleased = WasReleased(ref m_lastMouseState, ref mouseState, 0);
-            bool rightReleased = WasReleased(ref m_lastMouseState, ref mouseState, 2);
+            bool leftReleased = WasReleased(ref inputState.LastMouseState, ref inputState.CurrentMouseState, 0);
+            bool rightReleased = WasReleased(ref inputState.LastMouseState, ref inputState.CurrentMouseState, 2);
 
 
             if ( leftReleased || rightReleased)
@@ -105,9 +82,6 @@ namespace com.xexuxjy.magiccarpet.util
                 }
 
             }
-
-            m_lastMouseState = mouseState;
-
         }
 
 
@@ -139,7 +113,6 @@ namespace com.xexuxjy.magiccarpet.util
         //}
 
 
-        MouseState m_lastMouseState;
         bool m_invertY = false;
     }
 }
