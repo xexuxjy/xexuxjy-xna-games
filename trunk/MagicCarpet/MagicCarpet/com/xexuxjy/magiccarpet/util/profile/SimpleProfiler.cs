@@ -4,11 +4,11 @@ using System.Text;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using com.xexuxjy.magiccarpet.debug;
 using com.xexuxjy.magiccarpet;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.util.debug;
 
-namespace com.xexuxjy.utils.profile
+namespace com.xexuxjy.magiccarpet.util.profile
 {
     public class SimpleProfiler : DebugWindow
     {

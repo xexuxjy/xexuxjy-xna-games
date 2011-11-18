@@ -10,12 +10,12 @@ using com.xexuxjy.magiccarpet.collision;
 using BulletXNADemos.Demos;
 using Dhpoware;
 using com.xexuxjy.magiccarpet.gameobjects;
-using com.xexuxjy.utils.debug;
 using Microsoft.Xna.Framework.Graphics;
-using com.xexuxjy.utils.profile;
-using com.xexuxjy.utils.console;
+using com.xexuxjy.magiccarpet.util.profile;
+using com.xexuxjy.magiccarpet.util.console;
 using com.xexuxjy.magiccarpet.manager;
 using GameStateManagement;
+using com.xexuxjy.magiccarpet.util.debug;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -138,6 +138,8 @@ namespace com.xexuxjy.magiccarpet
         public static GraphicsDevice GraphicsDevice;
         public static SimpleConsole SimpleConsole;
         public static MCContentManager MCContentManager;
+        public static EventLogger EventLogger;
+
 
         public static ScreenManager ScreenManager;
 

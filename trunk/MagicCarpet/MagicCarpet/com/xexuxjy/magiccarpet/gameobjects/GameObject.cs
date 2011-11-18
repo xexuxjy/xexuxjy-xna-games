@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.spells;
 using com.xexuxjy.magiccarpet.actions;
-using com.xexuxjy.utils.debug;
 using Dhpoware;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.interfaces;
 using GameStateManagement;
+using com.xexuxjy.magiccarpet.util.debug;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
@@ -37,6 +37,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             m_gameObjectType = gameObjectType;
             m_motionState = new DefaultMotionState(Matrix.CreateTranslation(startPosition), Matrix.Identity);
+            m_id = "" + (++s_idCounter);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA.LinearMath;
 using GameStateManagement;
-namespace com.xexuxjy.magiccarpet.debug
+namespace com.xexuxjy.magiccarpet.util.debug
 {
     /// <summary>
     ///  Provides a base for the different debug window type classes (profiler, console, etc)

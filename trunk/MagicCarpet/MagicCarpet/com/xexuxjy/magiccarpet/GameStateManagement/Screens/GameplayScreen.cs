@@ -18,14 +18,14 @@ using com.xexuxjy.magiccarpet;
 using com.xexuxjy.magiccarpet.util;
 using BulletXNADemos.Demos;
 using com.xexuxjy.magiccarpet.gameobjects;
-using com.xexuxjy.utils.debug;
-using com.xexuxjy.utils.console;
 using com.xexuxjy.magiccarpet.manager;
 using com.xexuxjy.magiccarpet.terrain;
 using Dhpoware;
 using com.xexuxjy.magiccarpet.collision;
 using BulletXNA.LinearMath;
 using System.Collections.Generic;
+using com.xexuxjy.magiccarpet.util.console;
+using com.xexuxjy.magiccarpet.util.debug;
 #endregion
 
 namespace GameStateManagement

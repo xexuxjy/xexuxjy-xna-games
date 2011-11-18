@@ -127,6 +127,13 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public bool Initialized
+        {
+            get { return m_initialized; }
+            set { m_initialized = value; }
+        }
+
+
         private ActionPool m_actionPool;
         private GameObject m_owner; 
         private GameObject m_target;
@@ -135,6 +142,8 @@ namespace com.xexuxjy.magiccarpet.actions
         private float m_duration;
         private float m_currentTime;
         private bool m_started;
+        private bool m_initialized;
+
 
         public bool Enabled
         {
