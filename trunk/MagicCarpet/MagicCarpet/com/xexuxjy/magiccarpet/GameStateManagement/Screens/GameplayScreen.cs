@@ -25,6 +25,7 @@ using com.xexuxjy.magiccarpet.terrain;
 using Dhpoware;
 using com.xexuxjy.magiccarpet.collision;
 using BulletXNA.LinearMath;
+using System.Collections.Generic;
 #endregion
 
 namespace GameStateManagement
@@ -34,7 +35,7 @@ namespace GameStateManagement
     /// placeholder to get the idea across: you'll probably want to
     /// put some more interesting gameplay in here!
     /// </summary>
-    class GameplayScreen : GameScreen
+    public class GameplayScreen : GameScreen
     {
         #region Initialization
 
@@ -67,47 +68,47 @@ namespace GameStateManagement
             // it would take longer to load. We simulate that by delaying for a
             // while, giving you a chance to admire the beautiful loading screen.
             // TODO: Add your initialization logic here
-            CameraComponent camera = new CameraComponent(ScreenManager.Game); 	
+            CameraComponent camera = new CameraComponent(Globals.Game); 	
 
             Globals.Camera = camera;
 
-            Globals.DebugDraw = new XNA_ShapeDrawer(ScreenManager.Game);
+            Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
             Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
             if (Globals.DebugDraw != null)
             {
                 Globals.DebugDraw.LoadContent();
             }
 
-            Globals.CollisionManager = new CollisionManager(ScreenManager.Game, Globals.worldMinPos, Globals.worldMaxPos);
-            m_componentCollection.Add(Globals.CollisionManager);
+            Globals.CollisionManager = new CollisionManager(Globals.worldMinPos, Globals.worldMaxPos);
+            AddComponent(Globals.CollisionManager);
 
-            Globals.GameObjectManager = new GameObjectManager(ScreenManager.Game);
+            Globals.GameObjectManager = new GameObjectManager(this);
+            AddComponent(Globals.GameObjectManager);
 
-            Globals.SimpleConsole = new SimpleConsole(ScreenManager.Game, Globals.DebugDraw);
+            Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
             Globals.SimpleConsole.Enabled = false;
+            AddComponent(Globals.SimpleConsole);
 
-            Globals.MCContentManager = new MCContentManager(ScreenManager.Game);
+
+            Globals.MCContentManager = new MCContentManager();
             Globals.MCContentManager.Initialize();
 
             Globals.DebugObjectManager = new DebugObjectManager(ScreenManager.Game, Globals.DebugDraw);
             Globals.DebugObjectManager.Enabled = true;
+            AddComponent(Globals.DebugObjectManager);
 
 
-            Globals.Terrain = new Terrain(Vector3.Zero, ScreenManager.Game);
-
+            Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain,Vector3.Zero);
 
             Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
             Globals.DebugObjectManager.DebugObject = Globals.Player;
 
-            m_componentCollection.Add(camera);
+            AddComponent(camera);
 
             m_keyboardController = new KeyboardController();
             m_mouseController = new MouseController();
 
-            m_componentCollection.Add(new FrameRateCounter(ScreenManager.Game, Globals.DebugTextFPS, Globals.DebugDraw));
-            m_componentCollection.Add(Globals.SimpleConsole);
-            m_componentCollection.Add(Globals.DebugObjectManager);
-            m_componentCollection.Add(Globals.GameObjectManager);
+            AddComponent(new FrameRateCounter(ScreenManager.Game, Globals.DebugTextFPS, Globals.DebugDraw));
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -196,7 +197,34 @@ namespace GameStateManagement
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
-            Globals.CollisionManager.Draw(gameTime);
+            //Globals.CollisionManager.Draw(gameTime);
+
+            m_drawableList.Clear();
+            foreach (GameComponent gameComponent in m_componentCollection)
+            {
+                IDrawable drawable = gameComponent as IDrawable;
+                if (drawable != null)
+                {
+                    m_drawableList.Add(drawable);
+                }
+            }
+            IList<GameObject> gameObjectManagerComponents = Globals.GameObjectManager.DebugObjectList;
+            foreach (GameComponent gameComponent in gameObjectManagerComponents)
+            {
+                IDrawable drawable = gameComponent as IDrawable;
+                if (drawable != null)
+                {
+                    m_drawableList.Add(drawable);
+                }
+            }
+
+            m_drawableList.Sort(drawComparator);
+
+            foreach (IDrawable drawable in m_drawableList)
+            {
+                drawable.Draw(gameTime);
+            }
+
 
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0 || pauseAlpha > 0)
@@ -208,6 +236,35 @@ namespace GameStateManagement
         }
 
 
+        static Comparison<IDrawable> drawComparator = new Comparison<IDrawable>(DrawableSortPredicate);
+        private static int DrawableSortPredicate(IDrawable lhs, IDrawable rhs)
+        {
+            int result = lhs.DrawOrder - rhs.DrawOrder ;
+            return result;
+        }
+
+        public void AddComponent(GameComponent gameComponent)
+        {
+            m_componentCollection.Add(gameComponent);
+            IDrawable drawable = gameComponent as IDrawable;
+            if (drawable != null)
+            {
+                m_drawableList.Add(drawable);
+            }
+        }
+
+        public void RemoveComponent(GameComponent gameComponent)
+        {
+            m_componentCollection.Remove(gameComponent);
+            IDrawable drawable = gameComponent as IDrawable;
+            if (drawable != null)
+            {
+                m_drawableList.Remove(drawable);
+            }
+        }
+
+
+
         #endregion
         #region Fields
 
@@ -217,6 +274,7 @@ namespace GameStateManagement
         DebugDrawModes m_debugDrawMode;
 
         GameComponentCollection m_componentCollection = new GameComponentCollection();
+        List<IDrawable> m_drawableList = new List<IDrawable>();
 
         Random random = new Random();
 

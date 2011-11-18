@@ -9,8 +9,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 {
     public class Magician : GameObject
     {
-        public Magician(Vector3 startPosition, Game game)
-            : base(startPosition, game, GameObjectType.magician)
+        public Magician(Vector3 startPosition)
+            : base(startPosition, GameObjectType.magician)
         {
         }
 

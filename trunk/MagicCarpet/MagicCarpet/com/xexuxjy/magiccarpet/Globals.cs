@@ -94,6 +94,8 @@ namespace com.xexuxjy.magiccarpet
 
         public static Random random = new Random();
 
+        public static int GUI_DRAW_ORDER = 2;
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -139,6 +141,7 @@ namespace com.xexuxjy.magiccarpet
 
         public static ScreenManager ScreenManager;
 
+        public static Game Game;
 
         public const float STEPSIZEROTATE = (float)Math.PI/ 3f; // 60 deg a second
         public const float STEPSIZETRANSLATE = 20f; 

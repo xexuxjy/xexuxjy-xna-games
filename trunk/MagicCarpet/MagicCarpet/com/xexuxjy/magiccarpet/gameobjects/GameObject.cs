@@ -13,6 +13,7 @@ using Dhpoware;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.interfaces;
+using GameStateManagement;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
@@ -21,23 +22,21 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject(Game game,GameObjectType gameObjectType)
-            : base(game)
+        public GameObject(GameObjectType gameObjectType)
+            : base(Globals.Game)
         {
             m_gameObjectType = gameObjectType;
             m_motionState = new DefaultMotionState();
-            game.Components.Add(this);
             m_id = "" + (++s_idCounter);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject(Vector3 startPosition, Game game,GameObjectType gameObjectType)
-            : base(game)
+        public GameObject(Vector3 startPosition, GameObjectType gameObjectType)
+            : base(Globals.Game)
         {
             m_gameObjectType = gameObjectType;
             m_motionState = new DefaultMotionState(Matrix.CreateTranslation(startPosition), Matrix.Identity);
-            game.Components.Add(this);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

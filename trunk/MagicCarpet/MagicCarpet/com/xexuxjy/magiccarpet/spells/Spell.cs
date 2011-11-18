@@ -166,7 +166,7 @@ namespace com.xexuxjy.magiccarpet.spells
     public abstract class Spell : GameObject
     {
         public Spell(GameObject owner)
-            : base(owner.Game,GameObjectType.spell)
+            : base(GameObjectType.spell)
         {
             Owner = owner;
         }

@@ -11,10 +11,10 @@ namespace com.xexuxjy.magiccarpet.manager
 {
     public class MCContentManager
     {
-        public MCContentManager(Game game)
+        public MCContentManager()
         {
-            m_contentManager = game.Content;
-            m_graphicsDevice = game.GraphicsDevice;
+            m_contentManager = Globals.Game.Content;
+            m_graphicsDevice = Globals.Game.GraphicsDevice;
             m_dictionary = new Dictionary<GameObjectType, Model>();
             m_colorMap = new Dictionary<Vector3, Texture2D>();
         }

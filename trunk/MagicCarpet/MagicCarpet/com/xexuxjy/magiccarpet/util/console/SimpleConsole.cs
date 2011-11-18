@@ -17,8 +17,8 @@ namespace com.xexuxjy.utils.console
     // acts as a command processor?
     public class SimpleConsole : DebugWindow , IKeyboardCallback
     {
-        public SimpleConsole(Game game,IDebugDraw debugDraw)
-            : base("SimpleConsole",game,debugDraw)
+        public SimpleConsole(IDebugDraw debugDraw)
+            : base("SimpleConsole",Globals.Game,debugDraw)
         {
             m_commandBuffer = new CommandBuffer(10);
             m_commandLine = new StringBuilder();

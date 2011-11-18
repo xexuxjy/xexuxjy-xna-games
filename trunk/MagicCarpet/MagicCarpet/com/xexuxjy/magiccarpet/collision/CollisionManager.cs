@@ -13,10 +13,10 @@ using BulletXNADemos.Demos;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
-    public class CollisionManager : GameComponent
+    public class CollisionManager : DrawableGameComponent
     {
-        public CollisionManager(Game game, Vector3 worldMin, Vector3 worldMax)
-            : base(game)
+        public CollisionManager(Vector3 worldMin, Vector3 worldMax)
+            : base(Globals.Game)
         {
             //game.Components.Add(this);
             m_collisionConfiguration = new DefaultCollisionConfiguration();
@@ -39,6 +39,8 @@ namespace com.xexuxjy.magiccarpet.collision
             m_dynamicsWorld = new DiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_constraintSolver, m_collisionConfiguration);
 
             m_dynamicsWorld.SetGravity(ref m_gravity);
+
+            DrawOrder = Globals.GUI_DRAW_ORDER;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -223,7 +225,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             // do these last.
             if (Globals.DebugDraw != null)
