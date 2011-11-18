@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\x86\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WINDOWS;LOG_EVENT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>
@@ -61,6 +61,9 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
@@ -174,6 +177,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugTextBuilder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugWindow.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\IDebuggable.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\debug\EventLogger.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MouseController.cs" />

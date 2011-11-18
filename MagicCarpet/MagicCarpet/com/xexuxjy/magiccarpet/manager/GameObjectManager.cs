@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.gameobjects;
-using com.xexuxjy.utils.debug;
+
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.terrain;
 

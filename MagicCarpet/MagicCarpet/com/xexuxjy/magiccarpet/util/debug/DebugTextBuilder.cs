@@ -6,7 +6,7 @@ using System.Xml;
 using System.IO;
 using BulletXNA;
 
-namespace com.xexuxjy.magiccarpet.utils
+namespace com.xexuxjy.magiccarpet.util.debug
 {
     /// <summary>
     ///  Provides a friendlier way of building the xml tree node string for debug info

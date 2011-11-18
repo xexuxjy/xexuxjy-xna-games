@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using com.xexuxjy.utils.debug;
-using com.xexuxjy.magiccarpet.debug;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.magiccarpet;
 
-namespace com.xexuxjy.utils.debug
+namespace com.xexuxjy.magiccarpet.util.debug
 {
     public class DebugObjectManager : DebugWindow
     {

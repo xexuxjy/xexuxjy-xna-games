@@ -5,14 +5,14 @@ using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using com.xexuxjy.magiccarpet.debug;
 using System.IO;
 using com.xexuxjy.magiccarpet.gameobjects;
 using BulletXNA;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.interfaces;
+using com.xexuxjy.magiccarpet.util.debug;
 
-namespace com.xexuxjy.utils.console
+namespace com.xexuxjy.magiccarpet.util.console
 {
     // acts as a command processor?
     public class SimpleConsole : DebugWindow , IKeyboardCallback

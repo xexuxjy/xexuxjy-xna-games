@@ -15,10 +15,10 @@ using BulletXNADemos.Demos;
 using Dhpoware;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.gameobjects;
-using com.xexuxjy.utils.console;
 using com.xexuxjy.magiccarpet.manager;
-using com.xexuxjy.utils.debug;
 using GameStateManagement;
+using com.xexuxjy.magiccarpet.util.debug;
+
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -33,7 +33,7 @@ namespace com.xexuxjy.magiccarpet
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
+            Globals.EventLogger = new EventLogger();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

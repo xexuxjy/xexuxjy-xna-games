@@ -114,7 +114,16 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public void QueueAction(BaseAction baseAction)
         {
+            if (!baseAction.Initialized)
+            {
+                baseAction.Initialize();
+            }
             m_actionQueue.Enqueue(baseAction);
+
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] QueueAction [{2}].", m_owner.Id, m_owner.GameObjectType, baseAction.ActionState));
+#endif
+
         }
 
 

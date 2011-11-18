@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace com.xexuxjy.utils.debug
+namespace com.xexuxjy.magiccarpet.util.debug
 {
     public interface IDebuggable
     {
