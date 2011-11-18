@@ -129,7 +129,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             LoadOrCreateHeighMap(null);
             //BuildTestTerrain1();
             //BuildSectionRenderers();
-            BuildLandscape();
+            //BuildLandscape();
             base.Initialize();
         
         }

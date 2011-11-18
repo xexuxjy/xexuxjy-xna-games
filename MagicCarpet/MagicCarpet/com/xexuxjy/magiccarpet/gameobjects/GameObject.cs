@@ -384,11 +384,17 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void ClearAction()
         {
-            m_actionPool.ClearAction();
+            m_actionPool.ClearCurrentAction();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void ClearAllActions()
+        {
+            m_actionPool.ClearAllActions();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
         {
             m_spellPool.CastSpell(spellType, startPosition, direction);
