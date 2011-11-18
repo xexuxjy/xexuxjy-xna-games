@@ -44,7 +44,6 @@ namespace com.xexuxjy.magiccarpet.actions
         protected void ActionComplete()
         {
             InternalComplete();
-            m_actionPool.CompleteAction(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +117,16 @@ namespace com.xexuxjy.magiccarpet.actions
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool Started
+        {
+            get { return m_started; }
+            set { m_started = value; }
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private ActionPool m_actionPool;
         private GameObject m_owner; 
         private GameObject m_target;
@@ -125,6 +134,7 @@ namespace com.xexuxjy.magiccarpet.actions
         private ActionState m_actionState;
         private float m_duration;
         private float m_currentTime;
+        private bool m_started;
 
         public bool Enabled
         {

@@ -26,54 +26,32 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void StartAction(BaseAction baseAction)
+        public BaseAction CurrentAction
         {
-            Debug.Assert(!m_startingAction);
-            if (m_currentAction != null && baseAction.ActionState == m_currentAction.ActionState)
+            get
             {
-                return;
+                return m_actionQueue.Count > 0 ? m_actionQueue.Peek() : null;
             }
-            
-            m_startingAction = true;
+        }
 
-            if (m_currentAction != null)
-            {
-                CompleteAction(m_currentAction);
-                m_currentAction = null;
-            }
 
-            Debug.Assert(m_currentAction == null);
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void StartAction(BaseAction baseAction)
+        {
             Debug.Assert(baseAction != null);
+            Debug.Assert(!baseAction.Started);
 
-            m_currentAction = baseAction;
-
+            baseAction.Started = true;
             m_owner.ActionStarted(baseAction);
-            m_startingAction = false;
-
-        }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public virtual void StartAction(ActionState actionState)
-        {
-            // new action
-            BaseAction baseAction = null;
-            if (actionState == ActionState.Idle)
-            {
-                baseAction = new ActionIdle(m_owner);
-            }
-
-
-            QueueAction(baseAction);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CompleteAction(BaseAction baseAction)
+        private void CompleteAction(BaseAction baseAction)
         {
+            Debug.Assert(baseAction.Complete);
             m_owner.ActionComplete(baseAction);
-            m_currentAction = null;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,9 +62,16 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void ClearAction()
+        public void ClearCurrentAction()
         {
-            CompleteAction(m_currentAction);
+            CompleteAction(CurrentAction);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void ClearAllActions()
+        {
+            m_actionQueue.Clear();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,21 +80,21 @@ namespace com.xexuxjy.magiccarpet.actions
         {
             // should always be some form of action
             //Debug.Assert(m_currentAction != null);
-            if (m_currentAction != null)
+            if (CurrentAction != null)
             {
-                m_currentAction.Update(gameTime);
-            }
-            else
-            {
-                // if we have another one, then go for it.
-                if (m_nextAction != null)
+                if (!CurrentAction.Started)
                 {
-                    StartAction(m_nextAction);
-                    m_nextAction = null;
+                    StartAction(CurrentAction);
+                }
+
+                CurrentAction.Update(gameTime);
+
+                if (CurrentAction.Complete)
+                {
+                    BaseAction completedAction = m_actionQueue.Dequeue();
+                    CompleteAction(completedAction);
                 }
             }
-
-
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,9 +103,10 @@ namespace com.xexuxjy.magiccarpet.actions
         {
             get 
             {
-                ActionState current = m_currentAction != null ? m_currentAction.ActionState : ActionState.None;
-                ActionState next = m_nextAction != null ? m_nextAction.ActionState : ActionState.None;
-                return current != ActionState.None ? current : next;
+                ActionState current = CurrentAction != null ? CurrentAction.ActionState : ActionState.None;
+                //ActionState next = m_nextAction != null ? m_nextAction.ActionState : ActionState.None;
+                //return current != ActionState.None ? current : next;
+                return current;
             }
         }
 
@@ -128,15 +114,13 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public void QueueAction(BaseAction baseAction)
         {
-            Debug.Assert(m_nextAction == null);
-            m_nextAction = baseAction;
+            m_actionQueue.Enqueue(baseAction);
         }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private BaseAction m_currentAction;
-        private BaseAction m_nextAction;
+        private Queue<BaseAction> m_actionQueue = new Queue<BaseAction>();
 
         private GameObject m_owner;
         private bool m_startingAction;
