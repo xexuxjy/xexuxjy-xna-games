@@ -13,6 +13,7 @@ namespace com.xexuxjy.magiccarpet.debug
         {
             Id = id;
             m_debugDraw = debugDraw;
+            DrawOrder = Globals.GUI_DRAW_ORDER; 
         }
 
         public Vector2 ScreenPosition

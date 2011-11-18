@@ -21,8 +21,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 	{
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Terrain(Vector3 position,Game game)
-            : base(position, game,GameObjectType.terrain)
+        public Terrain(Vector3 position)
+            : base(position, GameObjectType.terrain)
         {
         }
 

@@ -10,9 +10,9 @@ namespace com.xexuxjy.magiccarpet
         /// </summary>
         static void Main(string[] args)
         {
-            using (MagicCarpet game = new MagicCarpet())
+            using (Globals.Game = new MagicCarpet())
             {
-                game.Run();
+                Globals.Game.Run();
             }
         }
     }

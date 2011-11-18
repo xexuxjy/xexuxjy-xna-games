@@ -7,20 +7,21 @@ using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.actions;
 using System.Diagnostics;
 using BulletXNA;
+using GameStateManagement;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
     public class Balloon : GameObject
     {
-        public Balloon(Game game)
-            : base(game,GameObjectType.balloon)
+        public Balloon()
+            : base(GameObjectType.balloon)
         {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Balloon(Vector3 startPosition, Game game)
-            : base(startPosition,game,GameObjectType.balloon)
+        public Balloon(Vector3 startPosition)
+            : base(startPosition,GameObjectType.balloon)
         {
         }
 

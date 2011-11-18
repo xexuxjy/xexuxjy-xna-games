@@ -4,20 +4,21 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.actions;
+using GameStateManagement;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
     public class Monster : GameObject
     {
-        public Monster(Game game)
-            : base(game,GameObjectType.monster)
+        public Monster()
+            : base(GameObjectType.monster)
         {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Monster(Vector3 startPosition, Game game)
-            : base(startPosition,game,GameObjectType.monster)
+        public Monster(Vector3 startPosition)
+            : base(startPosition,GameObjectType.monster)
         {
         }
 

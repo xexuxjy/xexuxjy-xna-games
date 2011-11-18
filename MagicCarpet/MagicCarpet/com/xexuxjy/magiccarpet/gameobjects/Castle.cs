@@ -7,20 +7,21 @@ using com.xexuxjy.magiccarpet.terrain;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.magiccarpet.spells;
+using GameStateManagement;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
     public class Castle : GameObject
     {
-        public Castle(Game game)
-            : base(game, GameObjectType.castle)
+        public Castle()
+            : base(GameObjectType.castle)
         {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Castle(Vector3 position, Game game)
-            : base(position, game,GameObjectType.castle)
+        public Castle(Vector3 position)
+            : base(position, GameObjectType.castle)
         {
             m_initialHeight = position.Y;
         }

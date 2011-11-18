@@ -38,6 +38,9 @@ namespace GameStateManagement
         SpriteFont font;
         Texture2D blankTexture;
 
+        GameplayScreen gameplayScreen;
+
+
         bool isInitialized;
 
         bool traceEnabled;
@@ -238,6 +241,11 @@ namespace GameStateManagement
         /// </summary>
         public void AddScreen(GameScreen screen, PlayerIndex? controllingPlayer)
         {
+            if (screen is GameplayScreen)
+            {
+                gameplayScreen = (GameplayScreen)screen;
+            }
+
             screen.ControllingPlayer = controllingPlayer;
             screen.ScreenManager = this;
             screen.IsExiting = false;
@@ -290,7 +298,6 @@ namespace GameStateManagement
         {
             return screens.ToArray();
         }
-
 
         /// <summary>
         /// Helper draws a translucent black fullscreen sprite, used for fading

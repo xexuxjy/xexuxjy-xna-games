@@ -28,7 +28,6 @@ namespace com.xexuxjy.magiccarpet
     public class MagicCarpet : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
         public MagicCarpet()
         {

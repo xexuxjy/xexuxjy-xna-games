@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.utils.debug;
+using GameStateManagement;
+using com.xexuxjy.magiccarpet.terrain;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
-    public class GameObjectManager : GameComponent
+    public class GameObjectManager : DrawableGameComponent
     {
-        public GameObjectManager(Game game)
-            : base(game)
+        public GameObjectManager(GameplayScreen gameplayScreen)
+            : base(Globals.Game)
         {
+            m_gameplayScreen = gameplayScreen;
         }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -22,28 +26,31 @@ namespace com.xexuxjy.magiccarpet.manager
             {
                 case GameObjectType.manaball:
                     {
-                        gameObject = new ManaBall(startPosition, Game);
+                        gameObject = new ManaBall(startPosition);
                         break;
                     }
                 case GameObjectType.balloon:
                     {
-                        gameObject = new Balloon(startPosition, Game);
+                        gameObject = new Balloon(startPosition);
                         break;
                     }
                 case GameObjectType.castle:
                     {
-                        gameObject = new Castle(startPosition, Game);
+                        gameObject = new Castle(startPosition);
                         break;
                     }
                 case GameObjectType.magician:
                     {
-                        gameObject = new Magician(startPosition, Game);
+                        gameObject = new Magician(startPosition);
                         break;
                     }
+                case GameObjectType.terrain:
+                    {
+                        gameObject = new Terrain(startPosition);
+                        break;
+                    }
+
             }
-
-
-
 
             if (gameObject != null)
             {
@@ -58,7 +65,6 @@ namespace com.xexuxjy.magiccarpet.manager
         public void RemoveGameObject(GameObject gameObject)
         {
             m_gameObjectListRemove.Add(gameObject);
-
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,9 +87,6 @@ namespace com.xexuxjy.magiccarpet.manager
                 // cleanup may already have been called.
                 gameObject.Cleanup();
                 Globals.CollisionManager.RemoveFromWorld(gameObject.CollisionObject);
-                
-
-                Game.Components.Remove(gameObject);
                 m_gameObjectList.Remove(gameObject);
             }
             m_gameObjectListRemove.Clear();
@@ -185,7 +188,7 @@ namespace com.xexuxjy.magiccarpet.manager
         private IList<GameObject> m_gameObjectListAdd = new List<GameObject>();
         private IList<GameObject> m_gameObjectList = new List<GameObject>();
         private IList<GameObject> m_gameObjectListRemove = new List<GameObject>();
-
+        private GameplayScreen m_gameplayScreen;
     }
 
     public class DistanceSorter : IComparer<GameObject>
