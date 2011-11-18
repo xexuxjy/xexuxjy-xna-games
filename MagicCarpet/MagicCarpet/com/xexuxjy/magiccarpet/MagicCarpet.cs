@@ -30,9 +30,6 @@ namespace com.xexuxjy.magiccarpet
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-
-        static bool droppedInitialManaBalls = false;
-
         public MagicCarpet()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -51,11 +48,11 @@ namespace com.xexuxjy.magiccarpet
         protected override void Initialize()
         {
             Globals.ScreenManager = new ScreenManager(this);
-            Globals.ScreenManager.AddScreen(new BackgroundScreen(), null);
-            Globals.ScreenManager.AddScreen(new MainMenuScreen(), null);
+            //Globals.ScreenManager.AddScreen(new BackgroundScreen(), null);
+            //Globals.ScreenManager.AddScreen(new MainMenuScreen(), null);
             Globals.ScreenManager.AddScreen(new GameplayScreen(), null);
-
-
+            Components.Add(Globals.ScreenManager);
+             
 
             base.Initialize();
         }
@@ -96,35 +93,8 @@ namespace com.xexuxjy.magiccarpet
 
             base.Update(gameTime);
 
-            if (!droppedInitialManaBalls)
-            {
-                // drop a load of manaballs?
-                int numManaballs = 40;
-                for (int i = 0; i < numManaballs; ++i)
-                {
-                    Vector3 spawnPos = Globals.Terrain.GetRandomWorldPositionXZ();
-                    spawnPos.Y = 20f;
-                    Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, spawnPos);
-                }
-                droppedInitialManaBalls = true;
-            }
 
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            base.Draw(gameTime);
-
-            Globals.CollisionManager.Draw(gameTime);
-
-        }
-
-
-    }
+   }
 }

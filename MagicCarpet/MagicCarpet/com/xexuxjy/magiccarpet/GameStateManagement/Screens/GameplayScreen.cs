@@ -61,7 +61,7 @@ namespace GameStateManagement
 
             m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
 
-            m_gameFont = m_content.Load<SpriteFont>("gamefont");
+            m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
             // A real game would probably have more content than this sample, so
             // it would take longer to load. We simulate that by delaying for a
@@ -152,6 +152,21 @@ namespace GameStateManagement
                     gameComponent.Update(gameTime);
                 }
             }
+
+
+            if (!droppedInitialManaBalls)
+            {
+                // drop a load of manaballs?
+                int numManaballs = 40;
+                for (int i = 0; i < numManaballs; ++i)
+                {
+                    Vector3 spawnPos = Globals.Terrain.GetRandomWorldPositionXZ();
+                    spawnPos.Y = 20f;
+                    Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, spawnPos);
+                }
+                droppedInitialManaBalls = true;
+            }
+
         }
 
 
@@ -202,6 +217,8 @@ namespace GameStateManagement
         GameComponentCollection m_componentCollection = new GameComponentCollection();
 
         Random random = new Random();
+
+        static bool droppedInitialManaBalls = false;
 
         float pauseAlpha;
 
