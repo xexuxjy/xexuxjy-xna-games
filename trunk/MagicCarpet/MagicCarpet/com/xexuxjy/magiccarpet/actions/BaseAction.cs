@@ -21,7 +21,7 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public virtual void Initialize()
         {
-         
+            m_initialized = true; 
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace com.xexuxjy.magiccarpet.actions
                 float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 m_currentTime += elapsedSeconds;
             }
-            else
+            if(Complete)
             {
                 ActionComplete();
             }

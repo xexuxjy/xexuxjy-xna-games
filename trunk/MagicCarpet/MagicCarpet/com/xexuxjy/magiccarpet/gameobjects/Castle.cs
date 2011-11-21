@@ -8,6 +8,7 @@ using System.Diagnostics;
 using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.magiccarpet.spells;
 using GameStateManagement;
+using BulletXNA.BulletCollision;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -24,22 +25,29 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             : base(position, GameObjectType.castle)
         {
             m_initialHeight = position.Y;
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void Initialize()
+        public override void BuildCollisionObject()
         {
-            // got to terrain and flatten a square of appropriate size;
-            Vector3 halfExtents = new Vector3(CastleSizes[Level], 5, CastleSizes[Level]);
-            halfExtents *= 0.5f;
-            m_boundingBox = new BoundingBox(Position - halfExtents, Position + halfExtents);
-            base.Initialize();
-
+            Vector3 halfExtents = new Vector3(CastleSizes[Level]/2, GetStartOffsetHeight(), CastleSizes[Level]/2);
+           
+            CollisionShape cs = new BoxShape(ref halfExtents);
+            float mass = 0f;
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override float GetStartOffsetHeight()
+        {
+            return 2.5f;
+        }
+        
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public override void Update(GameTime gameTime)
         {
             foreach (Turret turret in m_turrets)
@@ -131,7 +139,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
             Globals.Terrain.UpdateHeightMap();
-            m_scaleTransform = Matrix.CreateScale(width/2, 2, width/2);
+            m_scaleTransform = Matrix.CreateScale(width/2, GetStartOffsetHeight(), width/2);
             
             CreateBalloon();
         }

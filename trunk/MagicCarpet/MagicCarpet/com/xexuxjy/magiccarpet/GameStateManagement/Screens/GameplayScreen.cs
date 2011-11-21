@@ -160,7 +160,7 @@ namespace GameStateManagement
             if (!droppedInitialManaBalls)
             {
                 // drop a load of manaballs?
-                int numManaballs = 40;
+                int numManaballs = 0;
                 for (int i = 0; i < numManaballs; ++i)
                 {
                     Vector3 spawnPos = Globals.Terrain.GetRandomWorldPositionXZ();

@@ -109,6 +109,8 @@ namespace com.xexuxjy.magiccarpet.spells
                         }
                 }
 
+                Globals.GameObjectManager.AddGameObject(spell);
+
                 spell.Initialize(template);
                 if (spell is MovingSpell)
                 {
@@ -116,7 +118,6 @@ namespace com.xexuxjy.magiccarpet.spells
                 }
 
 
-                m_updateables.Add(spell);
                 spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);
             }
         }

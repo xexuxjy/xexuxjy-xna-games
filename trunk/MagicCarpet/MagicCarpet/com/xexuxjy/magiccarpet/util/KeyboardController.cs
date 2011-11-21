@@ -42,7 +42,7 @@ namespace com.xexuxjy.magiccarpet.util
             {
                 case Keys.Escape:
                     {
-                        Globals.GameObjectManager.Game.Exit();
+                        Globals.Game.OverrideExit();
                         break;
                     }
                 case Keys.OemTilde:

@@ -44,6 +44,10 @@ namespace com.xexuxjy.magiccarpet.actions
 
             baseAction.Started = true;
             m_owner.ActionStarted(baseAction);
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] StartAction [{2}].", m_owner.Id, m_owner.GameObjectType, baseAction));
+#endif
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +55,11 @@ namespace com.xexuxjy.magiccarpet.actions
         private void CompleteAction(BaseAction baseAction)
         {
             Debug.Assert(baseAction.Complete);
+            
             m_owner.ActionComplete(baseAction);
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] CompleteAction [{2}].", m_owner.Id, m_owner.GameObjectType, baseAction));
+#endif
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +80,11 @@ namespace com.xexuxjy.magiccarpet.actions
         public void ClearAllActions()
         {
             m_actionQueue.Clear();
+
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] ClearAllAction [{2}].", m_owner.Id, m_owner.GameObjectType));
+#endif
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

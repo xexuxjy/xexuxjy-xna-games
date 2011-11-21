@@ -35,11 +35,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override float GetStartOffsetHeight()
+        {
+            return 0.5f;
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public override void BuildCollisionObject()
         {
             if (s_collisionShape == null)
             {
-                s_collisionShape = new SphereShape(0.5f);
+                s_collisionShape = new SphereShape(GetStartOffsetHeight());
             }
 
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(2f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
@@ -47,6 +55,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             rb.SetFlags(rb.GetFlags() &~ RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
             rb.SetActivationState(ActivationState.ACTIVE_TAG);
             rb.SetDamping(0.5f, 0.1f);
+
             // set a custom material here as we want a fairly damped response.
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 
