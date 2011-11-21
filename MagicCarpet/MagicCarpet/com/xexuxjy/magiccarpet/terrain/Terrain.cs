@@ -32,7 +32,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 		{
 			get
 			{
-				return (int)(m_boundingBox.Max.X - m_boundingBox.Min.X);
+                return (int)(BoundingBox.Max.X - BoundingBox.Min.X);
 			}
 		}
         
@@ -42,7 +42,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 		{
 			get
 			{
-				return (int)(m_boundingBox.Max.Z - m_boundingBox.Min.Z);
+                return (int)(BoundingBox.Max.Z - BoundingBox.Min.Z);
 			}
         }
 
@@ -292,7 +292,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 		
 		protected virtual void InitialiseWorldGrid()
 		{
-            m_boundingBox = new BoundingBox(Position+Globals.worldMinPos,Position+Globals.worldMaxPos);
+            //m_boundingBox = new BoundingBox(Position+Globals.worldMinPos,Position+Globals.worldMaxPos);
             m_terrainSquareGrid = new TerrainSquare[Globals.WorldWidth * Globals.WorldWidth];
             for (int i = 0; i < m_terrainSquareGrid.Length; ++i)
             {
@@ -467,7 +467,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public TerrainSquare GetTerrainSquareAtPointWorld(ref Vector3 worldPoint)
         {
-            Vector3 local = worldPoint - m_boundingBox.Min;
+            Vector3 local = worldPoint - BoundingBox.Min;
             int localX = (int)local.X;
             int localZ = (int)local.Z;
             return GetTerrainSquareAtPointLocal(localX, localZ);

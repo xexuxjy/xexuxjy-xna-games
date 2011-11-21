@@ -36,8 +36,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             : base(Globals.Game)
         {
             m_gameObjectType = gameObjectType;
+
+            startPosition.Y += GetStartOffsetHeight();
+
             m_motionState = new DefaultMotionState(Matrix.CreateTranslation(startPosition), Matrix.Identity);
             m_id = "" + (++s_idCounter);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual float GetStartOffsetHeight()
+        {
+            return 0f;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -149,12 +159,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // only one of these should be active.
 
             DrawEffect(Game.GraphicsDevice, camera.ViewMatrix, WorldTransform, camera.ProjectionMatrix);
-
-            //DrawDebugAxes(Game.GraphicsDevice);
-            //if (ShouldDrawBoundingBox())
-            //{
-            //    DrawBoundingBox(Game.GraphicsDevice);
-            //}
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -164,9 +168,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //return;
             if (m_model != null)
             {
-                //Matrix scale = Matrix.CreateScale(modelScalingData.scale);
                 Matrix[] transforms = new Matrix[m_model.Bones.Count];
-                //BasicEffect basicEffect = Globals.MCContentManager.BasicEffect;
                 foreach (ModelMesh mesh in m_model.Meshes)
                 {
                     m_model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -286,11 +288,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get 
             {
-                 return m_boundingBox; 
-            }
-            set 
-            { 
-                m_boundingBox = value; 
+                Vector3 min, max;
+                BoundingBox bb = new BoundingBox();
+                if (m_collisionObject != null)
+                {
+                    m_collisionObject.GetCollisionShape().GetAabb(Matrix.Identity, out min, out max);
+                    bb = new BoundingBox(min, max);
+                }
+                return bb; 
             }
         }
 
@@ -405,7 +410,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public Vector3 WorldToLocal(Vector3 worldPoint)
         {
-            return (worldPoint - m_boundingBox.Min);
+            return (worldPoint - BoundingBox.Min);
             //Matrix m;
             //m_motionState.GetWorldTransform(out m);
             //m = Matrix.Invert(m);
@@ -418,7 +423,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //m_motionState.GetWorldTransform(out m);
             ////m = Matrix.Invert(m);
             //return Vector3.Transform(localPoint, m);
-            return (localPoint + m_boundingBox.Min);
+            return (localPoint + BoundingBox.Min);
         }
 
 
@@ -504,8 +509,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
  
         protected GameObject m_owner; // if this is owned by another entitiy (e.g. manaballs,castles, balloons owned by magicians)
 
-        protected BoundingBox m_boundingBox;
- 
         protected Color m_badgeColor; // represents the color for multiplayer type stuff.
 
         protected GameObjectType m_gameObjectType;

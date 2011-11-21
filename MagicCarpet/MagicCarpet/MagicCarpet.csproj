@@ -189,11 +189,11 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
+    <ProjectReference Include="..\..\..\bullet-xna\trunk\BulletXNADemos\BulletXNADemos-Windows.csproj">
       <Project>{3E64761A-AC83-4C76-93BE-475F95165560}</Project>
       <Name>BulletXNADemos-Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
+    <ProjectReference Include="..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
       <Project>{4E1937EE-3139-44CB-989D-F050BC099CE6}</Project>
       <Name>BulletXNA-Windows</Name>
     </ProjectReference>
@@ -231,7 +231,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="config\App.config" />
     <None Include="Scripts\LEVEL1.mc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="logs\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

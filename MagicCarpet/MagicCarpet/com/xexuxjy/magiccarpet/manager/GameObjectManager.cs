@@ -54,10 +54,17 @@ namespace com.xexuxjy.magiccarpet.manager
 
             if (gameObject != null)
             {
+                AddGameObject(gameObject);
                 gameObject.Initialize();
-                m_gameObjectListAdd.Add(gameObject);
             }
             return gameObject;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void AddGameObject(GameObject gameObject)
+        {
+            m_gameObjectListAdd.Add(gameObject);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

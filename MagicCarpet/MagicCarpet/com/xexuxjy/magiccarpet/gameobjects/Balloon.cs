@@ -129,7 +129,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     }
                 case(ActionState.Travelling):
                     {
-                        Owner.TargetSpeed = 0f;
+                        TargetSpeed = 0f;
 
                         if (action.Target.GameObjectType == GameObjectType.castle)
                         {

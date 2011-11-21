@@ -169,10 +169,12 @@ namespace com.xexuxjy.magiccarpet.spells
             : base(GameObjectType.spell)
         {
             Owner = owner;
+            DrawOrder = 2;
         }
 
         public virtual void Initialize(SpellTemplate spellTemplate)
         {
+            base.Initialize();
             m_spellTemplate = spellTemplate;
         }
 
