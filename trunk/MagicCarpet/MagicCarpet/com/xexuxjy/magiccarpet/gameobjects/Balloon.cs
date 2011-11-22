@@ -104,7 +104,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         CurrentLoad = 0f;
                         break;
                     }
-                case (ActionState.Dead):
+                case (ActionState.Dieing):
                     {
                         // drop current load as series of mana balls
                         // then remove ourselves from the game.

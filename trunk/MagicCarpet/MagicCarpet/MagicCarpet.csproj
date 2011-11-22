@@ -112,8 +112,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionAttackMelee.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionAttackRange.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionDie.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindCastle.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindEnemy.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindLocation.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindManaball.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionIdle.cs" />
@@ -178,6 +181,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugWindow.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\IDebuggable.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\EventLogger.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\GameUtil.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MouseController.cs" />

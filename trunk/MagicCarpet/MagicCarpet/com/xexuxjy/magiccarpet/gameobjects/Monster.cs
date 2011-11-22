@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.actions;
 using GameStateManagement;
+using com.xexuxjy.magiccarpet.spells;
+using com.xexuxjy.magiccarpet.util;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -55,46 +57,60 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             switch (action.ActionState)
             {
-                case (ActionState.Dead):
-                    {
-                        // drop current load as series of mana balls
-                        // then remove ourselves from the game.
-                        Cleanup();
-                        break;
-                    }
                 case (ActionState.Searching):
                     {
+                        // Decide what to do
+
+
+
                         QueueAction(new ActionTravel(Owner, null, action.TargetLocation, s_monsterSpeed));                           
                         break;
                     }
                 case (ActionState.Idle):
                     {
-                        QueueAction(new ActionFindManaball(this, null, s_searchRadius));
+
+
+
                         break;
                     }
+                case(ActionState.AttackingMelee):
+                    {
+                        if (action.Target.Alive && GameUtil.InRange(Owner,action.Target,s_monsterMeleeRange))
+                        {
+                            QueueAction(new ActionAttackRange(Owner, action.Target, s_monsterMeleeRange, s_monsterRangeDamage, SpellType.Fireball));
+                        }
+                        break;
+                    }
+                case (ActionState.AttackingRange):
+                    {
+                        // if we've finished attacking at range. then we need to see if 
+                        // our target is dead or if we should do something else.
+
+                        if (action.Target.Alive && GameUtil.InRange(Owner,action.Target,s_monsterRangeDamage))
+                        {
+                            QueueAction(new ActionAttackRange(Owner, action.Target, s_monsterRangeRange,s_monsterRangeDamage, SpellType.Fireball));
+                        }
+                        break;
+                    }
+
                 case (ActionState.Travelling):
                     {
-                        Owner.TargetSpeed = 0f;
-
-                        if (action.Target.GameObjectType == GameObjectType.castle)
-                        {
-                            QueueAction(new ActionUnload(this, action.Target));
-                        }
-                        else if (action.Target.GameObjectType == GameObjectType.manaball)
-                        {
-                            QueueAction(new ActionLoad(this, action.Target));
-                        }
+                        TargetSpeed = 0f;
                         break;
                     }
                 case(ActionState.Dieing):
                     {
                         // when we've finished dieing then we want to spawn a manaball here.
                         Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, Position);
+                        Cleanup();
                         break;
                     }
 
                 default:
-                    break;
+                    {
+                        QueueAction(new ActionIdle(this));
+                        break;
+                    }
             }
         }
 
@@ -106,5 +122,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private GameObject m_currentTarget;
         private const float s_searchRadius = 50f;
         private const float s_monsterSpeed = 5f;
+        private const float s_monsterMeleeRange = 0.5f;
+        private const float s_monsterMeleeDamage = 5f;
+
+        private const float s_monsterRangeRange = 5f;
+        private const float s_monsterRangeDamage = 5f;
     }
 }

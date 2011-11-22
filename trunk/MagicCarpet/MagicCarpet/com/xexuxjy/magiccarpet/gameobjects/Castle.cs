@@ -224,6 +224,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     if (m_actionState == ActionState.Idle)
                     {
                         m_actionState = ActionState.Searching;
+#if LOG_EVENT
+                        Globals.EventLogger.LogEvent(String.Format("Turret[{0}] Searching for target.", m_castle.Id));
+#endif
                         List<GameObject> searchResults = new List<GameObject>();
                         GameObjectType searchMask = GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster;
                         Globals.GameObjectManager.FindObjects(searchMask, m_position, turretSearchRadius, null, searchResults);
@@ -235,9 +238,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         else
                         {
+
                             // nearest target is first in list.
                             GameObject targetObject = searchResults[0];
-                            m_actionState = ActionState.Attacking;
+#if LOG_EVENT
+                            Globals.EventLogger.LogEvent(String.Format("Turret[{0}] AttackingRange[{1}][{2}].", m_castle.Id, targetObject.GameObjectType,targetObject.Id));
+#endif
+                            m_actionState = ActionState.AttackingRange;
                             m_cooldownTime = attackFrequency;
                             m_castle.CastSpell(SpellType.Fireball,m_position,targetObject.Position);
                         }
