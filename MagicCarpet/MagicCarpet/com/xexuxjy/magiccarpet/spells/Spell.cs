@@ -219,6 +219,10 @@ namespace com.xexuxjy.magiccarpet.spells
 
         public override void Cleanup()
         {
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("SpellComplete[{0}][{1}][{2}].", Id,m_owner.Id, SpellType));
+#endif
+
             SpellComplete(this);
             base.Cleanup();
         }

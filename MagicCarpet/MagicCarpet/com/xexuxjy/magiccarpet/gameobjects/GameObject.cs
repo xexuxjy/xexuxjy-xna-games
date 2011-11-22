@@ -90,9 +90,60 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_attributes[GameObjectAttributeType.Mana] = new GameObjectAttribute(GameObjectAttributeType.Mana, 100);
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public float Health
+        {
+            get
+            {
+                return m_attributes[GameObjectAttributeType.Health].CurrentValue;
+            }
+
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public float MaxHealth
+        {
+            get
+            {
+                return m_attributes[GameObjectAttributeType.Health].MaxValue;
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public float Mana
+        {
+            get
+            {
+                return m_attributes[GameObjectAttributeType.Mana].CurrentValue;
+            }
+
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public float MaxMana
+        {
+            get
+            {
+                return m_attributes[GameObjectAttributeType.Mana].MaxValue;
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public bool Alive
+        {
+            get
+            {
+                return Health > 0f;
+            }
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -124,6 +175,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public bool IsAlive()
+        {
+            return Health > 0f;
+        }
+        
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public virtual void Cleanup()
@@ -453,7 +511,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public bool Active()
         {
-            return CurrentActionState != ActionState.Dead && CurrentActionState != ActionState.Dieing;
+            return CurrentActionState != ActionState.Dieing;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

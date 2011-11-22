@@ -14,7 +14,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
             m_owner = owner;
             // manaCost,castTime,cooldownTime,duration
-            InitializeTemplate(SpellType.Convert,5,0.5f,1f,10f);
+            InitializeTemplate(SpellType.Convert, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Lower, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Raise, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Castle, 5, 0.5f, 1f, 10f);
@@ -23,12 +23,12 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void InitializeTemplate(SpellType spellType,int manaCost,float castTime, float cooldownTime,float duration)
-    {
-        SpellTemplate template = new SpellTemplate(spellType,manaCost,castTime,cooldownTime,duration);
-        m_updateables.Add(template);
-        m_spellTemplates[spellType] = template;
-    }
+        private void InitializeTemplate(SpellType spellType, int manaCost, float castTime, float cooldownTime, float duration)
+        {
+            SpellTemplate template = new SpellTemplate(spellType, manaCost, castTime, cooldownTime, duration);
+            m_updateables.Add(template);
+            m_spellTemplates[spellType] = template;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@ namespace com.xexuxjy.magiccarpet.spells
                         }
                     case (SpellType.Lower):
                         {
-                            spell = new SpellAlterTerrain(m_owner,false);
+                            spell = new SpellAlterTerrain(m_owner, false);
                             break;
                         }
                     case (SpellType.Raise):
@@ -116,6 +116,10 @@ namespace com.xexuxjy.magiccarpet.spells
                 {
                     ((MovingSpell)spell).SetInitialPositionAndDirection(startPosition, direction);
                 }
+
+#if LOG_EVENT
+                Globals.EventLogger.LogEvent(String.Format("CastSpell[{0}][{1}][{2}].", spell.Id,m_owner.Id, spell.SpellType));
+#endif
 
 
                 spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);

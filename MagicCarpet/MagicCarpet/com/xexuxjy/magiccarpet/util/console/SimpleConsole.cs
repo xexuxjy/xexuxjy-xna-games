@@ -233,15 +233,24 @@ namespace com.xexuxjy.magiccarpet.util.console
                         }
                         else if (commandDetails.Name.Equals("load"))
                         {
-                            List<String> commands = new List<String>();
-                            StreamReader reader = new StreamReader("../../../Scripts/" + args[0] + ".mc");
-                            while (reader.EndOfStream == false)
+                            try
                             {
-                                commands.Add(reader.ReadLine().ToLower());
+                                List<String> commands = new List<String>();
+                                using(StreamReader reader = new StreamReader("../../../Scripts/" + args[0] + ".mc"))
+                                {
+                                    while (reader.EndOfStream == false)
+                                    {
+                                        commands.Add(reader.ReadLine().ToLower());
+                                    }
+                                    foreach (String commandLine in commands)
+                                    {
+                                        ProcessCommand(commandLine);
+                                    }
+                                }
                             }
-                            foreach (String commandLine in commands)
+                            catch (System.Exception ex)
                             {
-                                ProcessCommand(commandLine);
+                                result = "unable to load script.";
                             }
                         }
                         else if (commandDetails.Name.Equals("help"))

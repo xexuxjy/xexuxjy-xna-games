@@ -42,7 +42,7 @@ namespace com.xexuxjy.magiccarpet.actions
             Debug.Assert(baseAction != null);
             Debug.Assert(!baseAction.Started);
 
-            baseAction.Started = true;
+            baseAction.Start();
             m_owner.ActionStarted(baseAction);
 #if LOG_EVENT
             Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] StartAction [{2}].", m_owner.Id, m_owner.GameObjectType, baseAction));
@@ -91,8 +91,11 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public void Update(GameTime gameTime)
         {
-            // should always be some form of action
-            //Debug.Assert(m_currentAction != null);
+
+            // check health and see if we should flee?
+
+
+
             if (CurrentAction != null)
             {
                 if (!CurrentAction.Started)

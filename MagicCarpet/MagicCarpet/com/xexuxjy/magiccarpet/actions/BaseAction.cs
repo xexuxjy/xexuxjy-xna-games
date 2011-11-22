@@ -25,17 +25,26 @@ namespace com.xexuxjy.magiccarpet.actions
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void Start()
+        {
+            m_started = true;
+        }
         
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public virtual void Update(GameTime gameTime)
         {
-            if (!Complete)
+            if (Started)
             {
-                float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                m_currentTime += elapsedSeconds;
-            }
-            if(Complete)
-            {
-                ActionComplete();
+                if (!Complete)
+                {
+                    float elapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    m_currentTime += elapsedSeconds;
+                }
+                if (Complete)
+                {
+                    ActionComplete();
+                }
             }
 
         }
@@ -121,7 +130,6 @@ namespace com.xexuxjy.magiccarpet.actions
         public bool Started
         {
             get { return m_started; }
-            set { m_started = value; }
         }
 
 
@@ -167,14 +175,16 @@ namespace com.xexuxjy.magiccarpet.actions
         None,
         Idle,
         Moving,
+        Turning,
         Loading,
         Unloading,
         Casting,
         Dieing,
-        Dead,
-        Attacking,
+        AttackingMelee,
+        AttackingRange,
         Searching,
-        Travelling
+        Travelling,
+        Fleeing
 
     }
 
