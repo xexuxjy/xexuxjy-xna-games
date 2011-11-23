@@ -36,6 +36,9 @@ namespace com.xexuxjy.magiccarpet.manager
             m_monsterModel = m_contentManager.Load<Model>("unitcone");
             m_dictionary[GameObjectType.monster] = m_monsterModel;
 
+            m_magicianModel = m_contentManager.Load<Model>("unitcylinder");
+            m_dictionary[GameObjectType.monster] = m_magicianModel;
+
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
             m_basicEffect = new BasicEffect(m_graphicsDevice);
@@ -110,6 +113,7 @@ namespace com.xexuxjy.magiccarpet.manager
         private Model m_balloonModel;
         private Model m_manaBallModel;
         private Model m_monsterModel;
+        private Model m_magicianModel;
 
 
         private SpriteFont m_debugFont;

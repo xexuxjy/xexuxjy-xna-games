@@ -45,9 +45,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 QueueAction(new ActionIdle(this));
             }
-            else if (ActionState == ActionState.Moving)
-            {
-            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
