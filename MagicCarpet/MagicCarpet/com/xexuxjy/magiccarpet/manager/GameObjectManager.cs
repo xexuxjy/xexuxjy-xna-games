@@ -18,8 +18,15 @@ namespace com.xexuxjy.magiccarpet.manager
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
         public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, Vector3 startPosition)
+        {
+            return CreateAndInitialiseGameObject(gameObjectType, startPosition, null);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+        public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, Vector3 startPosition,Dictionary<String,String> properties)
         {
             GameObject gameObject = null;
             switch (gameObjectType)
@@ -49,8 +56,25 @@ namespace com.xexuxjy.magiccarpet.manager
                         gameObject = new Terrain(startPosition);
                         break;
                     }
+                case GameObjectType.monster:
+                    {
+                        gameObject = new Monster(startPosition);
+                        break;
+                    }
 
             }
+
+            if (properties != null)
+            {
+                SetObjectProperties(gameObject, properties);
+            }
+
+
+
+
+
+
+
 
             if (gameObject != null)
             {
@@ -189,6 +213,19 @@ namespace com.xexuxjy.magiccarpet.manager
             return null;
         }
         
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        public void SetObjectProperties(GameObject gameObject, Dictionary<String,String> properties)
+        {
+            // need to figure out what a reasonable set of properties could be...
+
+            // owner - handy for spawning things belonging to magicians?
+
+        }
+
+
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         
         private Dictionary<String, GameObject> m_gameObjectMap = new Dictionary<string, GameObject>();

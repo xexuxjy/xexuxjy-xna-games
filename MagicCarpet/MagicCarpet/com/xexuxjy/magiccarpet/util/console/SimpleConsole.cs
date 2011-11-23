@@ -48,7 +48,7 @@ namespace com.xexuxjy.magiccarpet.util.console
         private void ProcessCommand(String command)
         {
             // commands are space delimited.
-            String[] tokens = command.Split(s_splitChars);
+            String[] tokens = command.Split(s_commandSplitChars);
             m_outputLine.Clear();
             m_outputLine.Append(DoProcess(tokens));
         }
@@ -92,19 +92,26 @@ namespace com.xexuxjy.magiccarpet.util.console
                     {
                         if (commandDetails.Name.Equals("spawn"))
                         {
-                            if (args.Length == 1)
+                            Vector3 spawnPosition = Vector3.Zero;
+                            GameObjectType objectType = GetGameObjectType(args, 0);
+                            Dictionary<String, String> properties = null;
+
+                            if (args.Length > 1)
                             {
-                                result = SpawnEntity(GetGameObjectType(args, 0));
-                            }
-                            if (args.Length == 4)
-                            {
-                                GameObjectType entityType = GetGameObjectType(args, 0);
-                                Vector3? position = GetVector(args, 1);
+                                Vector3? position = GetVector(args[1]);
                                 if (position.HasValue)
                                 {
-                                    result = SpawnEntity(entityType, position.Value);
+                                    spawnPosition = position.Value;
                                 }
                             }
+
+                            if (args.Length > 2)
+                            {
+                                properties = GetProperties(args[2]);
+                            }
+
+                            result = SpawnEntity(objectType, spawnPosition,properties);
+
                         }
                         else if (commandDetails.Name.Equals("setcastlelevel"))
                         {
@@ -138,7 +145,7 @@ namespace com.xexuxjy.magiccarpet.util.console
                             GameObject GameObject = Globals.GameObjectManager.GetObject(args[0]);
                             if (GameObject != null)
                             {
-                                Vector3? position = GetVector(args, 1);
+                                Vector3? position = GetVector(args[1]);
                                 if (position.HasValue)
                                 {
                                     GameObject.Position = position.Value;
@@ -183,11 +190,11 @@ namespace com.xexuxjy.magiccarpet.util.console
                         }
                         else if (commandDetails.Name.Equals("alterterrain"))
                         {
-                            Vector3? position = GetVector(args, 1);
+                            Vector3? position = GetVector(args[1]);
                             if (position.HasValue)
                             {
-                                float radius = float.Parse(args[4]);
-                                float height = float.Parse(args[5]);
+                                float radius = float.Parse(args[2]);
+                                float height = float.Parse(args[3]);
                                 //Globals.simpleTerrain.alterTerrain(position.Value, radius, height);
                             }
                         }
@@ -240,7 +247,12 @@ namespace com.xexuxjy.magiccarpet.util.console
                                 {
                                     while (reader.EndOfStream == false)
                                     {
-                                        commands.Add(reader.ReadLine().ToLower());
+                                        String dataLine = reader.ReadLine().ToLower();
+                                        if (dataLine.StartsWith("#"))
+                                        {
+                                            continue;
+                                        }
+                                        commands.Add(dataLine);
                                     }
                                     foreach (String commandLine in commands)
                                     {
@@ -279,19 +291,12 @@ namespace com.xexuxjy.magiccarpet.util.console
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private string SpawnEntity(GameObjectType entityType)
-        {
-            return SpawnEntity(entityType, new Vector3(0, 0, 0));
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private string SpawnEntity(GameObjectType entityType, Vector3 position)
+        private string SpawnEntity(GameObjectType entityType, Vector3 position,Dictionary<String,String> properties)
         {
             GameObject GameObject = null;
             try
             {
-                GameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(entityType, position);
+                GameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(entityType, position,properties);
             }
             catch (System.ArgumentException ae)
             {
@@ -393,19 +398,21 @@ namespace com.xexuxjy.magiccarpet.util.console
         public void DropRandomManaBall()
         {
             Vector3 position = Globals.Terrain.GetRandomWorldPositionXZ();
-            SpawnEntity(GameObjectType.manaball, position);
+            SpawnEntity(GameObjectType.manaball, position,null);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3? GetVector(String[] args, int startIndex)
+        public Vector3? GetVector(String args)
         {
+            String[] tokens = args.Split(s_subcommandSplitChars);
+
             Vector3? result = null;
-            if (args.Length >= startIndex + 2)
+            if (tokens.Length == 3)
             {
-                float x = float.Parse(args[startIndex]);
-                float y = float.Parse(args[startIndex + 1]);
-                float z = float.Parse(args[startIndex + 2]);
+                float x = float.Parse(tokens[0]);
+                float y = float.Parse(tokens[1]);
+                float z = float.Parse(tokens[2]);
                 result = new Vector3(x, y, z);
             }
             return result;
@@ -413,6 +420,22 @@ namespace com.xexuxjy.magiccarpet.util.console
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public Dictionary<String,String> GetProperties(String args)
+        {
+            String[] tokens = args.Split(s_subcommandSplitChars);
+            Dictionary<String, String> result = new Dictionary<String, String>();
+            for (int i = 0; i < tokens.Length; ++i)
+            {
+                int equalsIndex = tokens[i].IndexOf('=');
+                String key = tokens[i].Substring(0,equalsIndex);
+                String value = tokens[i].Substring(equalsIndex+1,tokens[i].Length - equalsIndex -1);
+
+                result[key] = value;
+            }
+            return result;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public void ClearCommandLine()
         {
             m_commandLine.Clear();
@@ -424,6 +447,13 @@ namespace com.xexuxjy.magiccarpet.util.console
         public virtual void KeyboardCallback(Keys key, bool released, ref KeyboardState newState, ref KeyboardState oldState)
         {
             char c = (char)key;
+            // hacky
+            if (key == Keys.OemComma)
+            {
+                c = ',';
+            }
+            
+            
             if (IsValidChar(c))
             {
                 if (key == Keys.Up || key == Keys.Down)
@@ -474,13 +504,13 @@ namespace com.xexuxjy.magiccarpet.util.console
         public void RegisterCommands()
         {
             String id = "spawn";
-            m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{1,4}));
+            m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{1,2,3}));
             id = "setcastlelevel";
             m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{2}));
             id = "getposition";
             m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{1}));
             id = "setposition";
-            m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{4}));
+            m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{2}));
             id = "setdebug";
             m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{1}));
             id = "setcamerafollow";
@@ -583,7 +613,9 @@ namespace com.xexuxjy.magiccarpet.util.console
         private int m_consoleWidth = 800;
         private Queue<String> m_commandQueue;
         
-        private static char[] s_splitChars = { ' ' };
+        private static char[] s_commandSplitChars = { ' ' };
+        private static char[] s_subcommandSplitChars = { ',' };
+
         private static String SUCCESS = "Ok";
         private static String s_commandLinePrefix = ">>";
     }
