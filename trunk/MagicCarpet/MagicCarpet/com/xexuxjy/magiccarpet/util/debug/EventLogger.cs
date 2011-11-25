@@ -17,7 +17,7 @@ namespace com.xexuxjy.magiccarpet.util.debug
         public void LogEvent(String eventDetails)
         {
 #if WINDOWS
-            m_streamWriter.WriteLine(eventDetails);
+            m_streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff")+" : "+eventDetails);
 #endif
         }
 
