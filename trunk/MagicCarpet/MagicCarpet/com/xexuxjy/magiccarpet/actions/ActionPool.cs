@@ -142,6 +142,21 @@ namespace com.xexuxjy.magiccarpet.actions
 
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool QueueContainsAction(ActionState actionState)
+        {
+            bool found = false;
+            foreach (BaseAction action in m_actionQueue)
+            {
+                if (action.ActionState == actionState)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

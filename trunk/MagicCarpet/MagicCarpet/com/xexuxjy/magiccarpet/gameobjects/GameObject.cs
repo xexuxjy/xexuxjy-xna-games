@@ -232,6 +232,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     m_model.CopyAbsoluteBoneTransformsTo(transforms);
                     foreach (Effect effect in mesh.Effects)
                     {
+
                         BasicEffect basicEffect = (BasicEffect)effect;
                         basicEffect.View = view;
                         basicEffect.Projection = projection;
@@ -417,8 +418,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void Die()
         {
-            QueueAction(new ActionDie(this));
-
+            if (!QueueContainsAction(ActionState.Dieing))
+            {
+                QueueAction(new ActionDie(this));
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,6 +441,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public bool QueueContainsAction(ActionState actionState)
+        {
+            return m_actionPool.QueueContainsAction(actionState);
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         public virtual void QueueAction(BaseAction baseAction)
         {
             m_actionPool.QueueAction(baseAction);
@@ -527,7 +538,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public virtual void DoDamage(float points)
         {
             m_attributes[GameObjectAttributeType.Health].CurrentValue -= points;
-            Damaged(this, null);
+            if (Damaged != null)
+            {
+                Damaged(this, null);
+            }
         }
 
 
@@ -538,8 +552,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return false;
         }
 
-        public virtual void ProcessCollision(ICollideable partner, ManifoldPoint manifoldPont)
+        public virtual bool ProcessCollision(ICollideable partner, ManifoldPoint manifoldPont)
         {
+            return false;
         }
 
         public virtual GameObject GetGameObject()

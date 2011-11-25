@@ -11,7 +11,7 @@ namespace com.xexuxjy.magiccarpet.interfaces
     {
         void BuildCollisionObject();
         bool ShouldCollideWith(ICollideable partner);
-        void ProcessCollision(ICollideable partner,ManifoldPoint manifoldPont);
+        bool ProcessCollision(ICollideable partner,ManifoldPoint manifoldPont);
         GameObject GetGameObject();
     }
 }

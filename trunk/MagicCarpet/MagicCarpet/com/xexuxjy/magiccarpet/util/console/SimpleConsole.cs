@@ -240,30 +240,7 @@ namespace com.xexuxjy.magiccarpet.util.console
                         }
                         else if (commandDetails.Name.Equals("load"))
                         {
-                            try
-                            {
-                                List<String> commands = new List<String>();
-                                using(StreamReader reader = new StreamReader("../../../Scripts/" + args[0] + ".mc"))
-                                {
-                                    while (reader.EndOfStream == false)
-                                    {
-                                        String dataLine = reader.ReadLine().ToLower();
-                                        if (dataLine.StartsWith("#"))
-                                        {
-                                            continue;
-                                        }
-                                        commands.Add(dataLine);
-                                    }
-                                    foreach (String commandLine in commands)
-                                    {
-                                        ProcessCommand(commandLine);
-                                    }
-                                }
-                            }
-                            catch (System.Exception ex)
-                            {
-                                result = "unable to load script.";
-                            }
+                            result = LoadScript(args[0]);
                         }
                         else if (commandDetails.Name.Equals("help"))
                         {
@@ -285,6 +262,39 @@ namespace com.xexuxjy.magiccarpet.util.console
             else
             {
                 result = String.Format("Unable to find command {0}.", command);
+            }
+            return result;
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public String LoadScript(String name)
+        {
+            String result = "";
+            try
+            {
+                List<String> commands = new List<String>();
+                using (StreamReader reader = new StreamReader("../../../Scripts/" + name + ".mc"))
+                {
+                    while (reader.EndOfStream == false)
+                    {
+                        String dataLine = reader.ReadLine().ToLower();
+                        if (dataLine.StartsWith("#") || String.IsNullOrWhiteSpace(dataLine))
+                        {
+                            continue;
+                        }
+                        commands.Add(dataLine);
+                    }
+                    foreach (String commandLine in commands)
+                    {
+                        ProcessCommand(commandLine);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                result = "unable to load script.";
             }
             return result;
         }

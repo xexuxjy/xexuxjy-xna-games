@@ -100,8 +100,8 @@ namespace GameStateManagement
 
             Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain,Vector3.Zero);
 
-            Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
-            Globals.DebugObjectManager.DebugObject = Globals.Player;
+            //Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
+            //Globals.DebugObjectManager.DebugObject = Globals.Player;
 
             AddComponent(camera);
 
@@ -154,6 +154,12 @@ namespace GameStateManagement
                 {
                     gameComponent.Update(gameTime);
                 }
+            }
+
+            if (initialScript != null && !loadedInitialScript)
+            {
+                loadedInitialScript = true;
+                Globals.SimpleConsole.LoadScript(initialScript);
             }
 
 
@@ -220,6 +226,11 @@ namespace GameStateManagement
 
             m_drawableList.Sort(drawComparator);
 
+
+            // reset the blendstats as spritebatch probably trashed them.
+            Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
             foreach (IDrawable drawable in m_drawableList)
             {
                 drawable.Draw(gameTime);
@@ -282,7 +293,8 @@ namespace GameStateManagement
         KeyboardController m_keyboardController;   
  
         static bool droppedInitialManaBalls = false;
-
+        static bool loadedInitialScript = false;
+        static String initialScript = "level2";
         float pauseAlpha;
 
         #endregion

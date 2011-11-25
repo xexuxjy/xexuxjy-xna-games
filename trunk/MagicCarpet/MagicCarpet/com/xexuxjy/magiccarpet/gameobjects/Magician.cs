@@ -14,6 +14,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
         }
 
+        public override float GetStartOffsetHeight()
+        {
+            return 0.5f;
+        }
+
+
         public SpellType SelectedSpell1
         {
             get { return m_selectedSpell1; }

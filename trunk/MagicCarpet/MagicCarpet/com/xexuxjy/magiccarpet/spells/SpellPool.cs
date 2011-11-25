@@ -18,8 +18,13 @@ namespace com.xexuxjy.magiccarpet.spells
             InitializeTemplate(SpellType.Lower, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Raise, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Castle, 5, 0.5f, 1f, 10f);
+            InitializeTemplate(SpellType.Fireball, 5, 0.5f, 1f, 10f);
 
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

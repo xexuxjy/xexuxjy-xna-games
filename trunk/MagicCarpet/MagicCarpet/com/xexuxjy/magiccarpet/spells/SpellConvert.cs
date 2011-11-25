@@ -44,8 +44,9 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void ProcessCollision(ICollideable partner,ManifoldPoint manifoldPoint)
+        public override bool ProcessCollision(ICollideable partner,ManifoldPoint manifoldPoint)
         {
+            bool didCollide = false;
             // Double check?
             if (ShouldCollideWith(partner))
             {
@@ -54,9 +55,11 @@ namespace com.xexuxjy.magiccarpet.spells
                 {
                     GameObject target = partner.GetGameObject();
                     target.Owner = Owner;
+                    didCollide = true;
                 }
                 Cleanup();
             }
+            return true;
         
         }
 

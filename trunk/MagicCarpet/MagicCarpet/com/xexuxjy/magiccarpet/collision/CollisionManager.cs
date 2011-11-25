@@ -103,8 +103,6 @@ namespace com.xexuxjy.magiccarpet.collision
 
                         if (user0 != null && user1 != null)
                         {
-                            // need to decide wether to do extra filtering here not?
-                            // make sure that none of thse callbacks stores the point as they will be recycled.
                             user0.ProcessCollision(user1, pt);
                             user1.ProcessCollision(user0, pt);
                         }
@@ -164,7 +162,7 @@ namespace com.xexuxjy.magiccarpet.collision
             RigidBody body = new RigidBody(cInfo);
             // disable all gravity for now?
             body.SetFlags(body.GetFlags() | RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
-            body.SetActivationState(ActivationState.DISABLE_DEACTIVATION);
+            //body.SetActivationState(ActivationState.DISABLE_DEACTIVATION);
             body.SetUserPointer(userPointer);
             body.SetGravity(ref m_gravity);
             if (addToWorld)

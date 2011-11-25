@@ -19,8 +19,8 @@ namespace com.xexuxjy.magiccarpet.actions
         {
             List<GameObject> searchResults = new List<GameObject>();
             GameObjectType searchMask = GameObjectType.manaball;
-            //Globals.GameObjectManager.FindObjects(searchMask, Owner.Position, m_searchRadius, Owner, searchResults);
-            Globals.GameObjectManager.FindObjects(searchMask, Owner.Position, m_searchRadius, null, searchResults);
+            Globals.GameObjectManager.FindObjectsForOwner(searchMask, Owner.Position, m_searchRadius, Owner, searchResults);
+
             if (searchResults.Count > 0)
             {
                 Target = searchResults[0];

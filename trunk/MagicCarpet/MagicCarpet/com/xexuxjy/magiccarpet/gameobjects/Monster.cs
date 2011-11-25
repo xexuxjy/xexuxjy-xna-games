@@ -7,6 +7,7 @@ using com.xexuxjy.magiccarpet.actions;
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.spells;
 using com.xexuxjy.magiccarpet.util;
+using BulletXNA.BulletCollision;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -23,6 +24,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             : base(startPosition,GameObjectType.monster)
         {
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void BuildCollisionObject()
+        {
+            CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.monster;
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.terrain | GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster | GameObjectType.castle | GameObjectType.spell);
+
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), new SphereShape(s_radius), m_motionState, true, this, collisionFlags, collisionMask);
+            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+            m_scaleTransform = Matrix.CreateScale(s_radius);
+
+        }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -124,5 +139,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         private const float s_monsterRangeRange = 5f;
         private const float s_monsterRangeDamage = 5f;
+
+        private const float s_radius = 0.5f;
     }
 }
