@@ -64,23 +64,19 @@ namespace com.xexuxjy.magiccarpet.manager
 
             }
 
-            if (properties != null)
-            {
-                SetObjectProperties(gameObject, properties);
-            }
-
-
-
-
-
-
-
 
             if (gameObject != null)
             {
                 AddGameObject(gameObject);
                 gameObject.Initialize();
             }
+
+            if (properties != null)
+            {
+                SetObjectProperties(gameObject, properties);
+            }
+
+
             return gameObject;
         }
 
@@ -89,6 +85,11 @@ namespace com.xexuxjy.magiccarpet.manager
         public void AddGameObject(GameObject gameObject)
         {
             m_gameObjectListAdd.Add(gameObject);
+
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("AddObject[{0}][{1}].", gameObject.Id, gameObject.GameObjectType));
+#endif
+ 
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,6 +97,9 @@ namespace com.xexuxjy.magiccarpet.manager
         public void RemoveGameObject(GameObject gameObject)
         {
             m_gameObjectListRemove.Add(gameObject);
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("RemoveObject[{0}][{1}].", gameObject.Id, gameObject.GameObjectType));
+#endif
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,10 +147,10 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public void FindObjects(GameObjectType typeMask, Vector3 position, float radius, List<GameObject> results)
         {
-            FindObjects(typeMask, position, radius, null, results);
+            FindObjectsExcludeOwner(typeMask, position, radius, null, results);
         }
 
-        public void FindObjects(GameObjectType typeMask, Vector3 position, float radius, GameObject owner, List<GameObject> results)
+        public void FindObjectsForOwner(GameObjectType typeMask, Vector3 position, float radius, GameObject owner, List<GameObject> results)
         {
             float radiusSq = radius * radius;
             foreach (GameObject gameObject in m_gameObjectList)
@@ -157,6 +161,30 @@ namespace com.xexuxjy.magiccarpet.manager
                 {
                     // check and see if it's the owning entity if appropriate
                     if (owner == null || (gameObject.Owner == owner))
+                    {
+                        if ((gameObject.Position - position).LengthSquared() <= radiusSq)
+                        {
+                            results.Add(gameObject);
+                        }
+                    }
+                }
+            }
+            results.Sort(new DistanceSorter(position));
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void FindObjectsExcludeOwner(GameObjectType typeMask, Vector3 position, float radius, GameObject owner, List<GameObject> results)
+        {
+            float radiusSq = radius * radius;
+            foreach (GameObject gameObject in m_gameObjectList)
+            {
+                // if it's the sort of object we're interested in
+                GameObjectType gameObjectType = gameObject.GameObjectType;
+                if ((gameObjectType & typeMask) > 0)
+                {
+                    // check and see if it's the owning entity if appropriate
+                    if (owner == null || (gameObject.Owner != owner && gameObject != owner))
                     {
                         if ((gameObject.Position - position).LengthSquared() <= radiusSq)
                         {
@@ -205,30 +233,73 @@ namespace com.xexuxjy.magiccarpet.manager
             get { return m_gameObjectList; }
         }
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public GameObject GetObject(String id)
         {
-            return null;
+            GameObject result = null;
+            // brute force search for now.
+            foreach(GameObject gameObject in m_gameObjectList)
+            {
+                if (gameObject.Id == id)
+                {
+                    result = gameObject;
+                    break;
+                }
+            }
+
+            // check the add list
+            if (result == null)
+            {
+
+                foreach (GameObject gameObject in m_gameObjectListAdd)
+                {
+                    if (gameObject.Id == id)
+                    {
+                        result = gameObject;
+                        break;
+                    }
+                }
+            }
+            return result;
         }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
         public void SetObjectProperties(GameObject gameObject, Dictionary<String,String> properties)
         {
-            // need to figure out what a reasonable set of properties could be...
+            String value = null;
 
-            // owner - handy for spawning things belonging to magicians?
+            if (properties.TryGetValue("id", out value))
+            {
+                gameObject.Id = value;
+
+                if (value == "Player1")
+                {
+                    Globals.Player = (Magician)gameObject;
+                }
+
+            }
+
+            if(properties.TryGetValue("ownerid",out value))
+            {
+                // find owner.
+                GameObject owner = GetObject(value);
+                gameObject.Owner = owner;
+            }
+
+            if(properties.TryGetValue("castlelevel",out value))
+            {
+                Castle castle =  gameObject as Castle;
+                int level = int.Parse(value);
+                castle.GrowToSize(level);
+
+            }
 
         }
 
-
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        private Dictionary<String, GameObject> m_gameObjectMap = new Dictionary<string, GameObject>();
         private IList<GameObject> m_gameObjectListAdd = new List<GameObject>();
         private IList<GameObject> m_gameObjectList = new List<GameObject>();
         private IList<GameObject> m_gameObjectListRemove = new List<GameObject>();

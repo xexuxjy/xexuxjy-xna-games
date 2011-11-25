@@ -37,18 +37,20 @@ namespace com.xexuxjy.magiccarpet.manager
             m_dictionary[GameObjectType.monster] = m_monsterModel;
 
             m_magicianModel = m_contentManager.Load<Model>("unitcylinder");
-            m_dictionary[GameObjectType.monster] = m_magicianModel;
+            m_dictionary[GameObjectType.magician] = m_magicianModel;
 
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
             m_basicEffect = new BasicEffect(m_graphicsDevice);
             m_basicEffect.TextureEnabled = true;
 
-
             RemapModel(m_castleModel, m_basicEffect);
             RemapModel(m_balloonModel, m_basicEffect);
             RemapModel(m_manaBallModel, m_basicEffect);
             RemapModel(m_spellModel, m_basicEffect);
+            RemapModel(m_magicianModel, m_basicEffect);
+            RemapModel(m_monsterModel, m_basicEffect);
+
 
         }
 

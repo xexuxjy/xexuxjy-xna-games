@@ -27,11 +27,17 @@ namespace com.xexuxjy.magiccarpet.util
                 Vector3 direction = Globals.Camera.ViewDirection;
                 if(leftReleased)
                 {
-                    Globals.Player.CastSpell1(startPos, direction);
+                    if (Globals.Player != null)
+                    {
+                        Globals.Player.CastSpell1(startPos, direction);
+                    }
                 }
                 if(rightReleased)
                 {
-                    Globals.Player.CastSpell2(startPos,direction);
+                    if (Globals.Player != null)
+                    {
+                        Globals.Player.CastSpell2(startPos, direction);
+                    }
                 }
             }
 

@@ -29,7 +29,7 @@ namespace com.xexuxjy.magiccarpet.actions
                 searchMask = GameObjectType.magician | GameObjectType.balloon | GameObjectType.castle | GameObjectType.monster;
             }
           
-            Globals.GameObjectManager.FindObjects(searchMask, Owner.Position, m_searchRadius, Owner, searchResults);
+            Globals.GameObjectManager.FindObjectsExcludeOwner(searchMask, Owner.Position, m_searchRadius, Owner, searchResults);
             if (searchResults.Count > 0)
             {
                 Target = searchResults[0];

@@ -51,7 +51,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        protected static CollisionShape s_collisionShape = new SphereShape(0.2f);
+        protected static CollisionShape s_collisionShape = new SphereShape(Spell.s_objectSize);
         protected const float s_defaultSpellSpeed = 5f;
 
 

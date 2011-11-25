@@ -12,6 +12,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public ActionDie(GameObject owner)
             : base(owner, null, ActionState.Dieing)
         {
+            int ibreak = 0;
         }
 
     }

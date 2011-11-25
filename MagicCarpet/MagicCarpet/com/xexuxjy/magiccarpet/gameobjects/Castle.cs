@@ -9,6 +9,7 @@ using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.magiccarpet.spells;
 using GameStateManagement;
 using BulletXNA.BulletCollision;
+using com.xexuxjy.magiccarpet.util;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -26,6 +27,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             m_initialHeight = position.Y;
 
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            GrowToSize(0);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +132,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             int width = CastleSizes[size];
 
             Vector3 startPos = Position;
-            startPos += new Vector3(-width / 2, 0, -width / 2);
+            Vector3 offset = new Vector3(width / 2, 0, width / 2);
+            startPos -= offset;
 
 
             for (int j = 0; j < width; ++j)
@@ -141,6 +151,29 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             Globals.Terrain.UpdateHeightMap();
             m_scaleTransform = Matrix.CreateScale(width/2, GetStartOffsetHeight(), width/2);
             
+
+            Vector3 turretPos0 = new Vector3(Position.X-offset.X,Position.Y, Position.Z-offset.Z);
+            Vector3 turretPos1 = new Vector3(Position.X+offset.X,Position.Y, Position.Z-offset.Z);
+            Vector3 turretPos2 = new Vector3(Position.X-offset.X,Position.Y, Position.Z+offset.Z);
+            Vector3 turretPos3 = new Vector3(Position.X+offset.X,Position.Y, Position.Z+offset.Z);
+            
+            // clear or move turrets?
+            if (m_turrets.Count == 0)
+            {
+                m_turrets.Add(new Turret(0,this, turretPos0));
+                m_turrets.Add(new Turret(1, this, turretPos1));
+                m_turrets.Add(new Turret(2, this, turretPos2));
+                m_turrets.Add(new Turret(3, this, turretPos3));
+            }
+            else
+            {
+                m_turrets[0].Position = turretPos0;
+                m_turrets[1].Position = turretPos1;
+                m_turrets[2].Position = turretPos2;
+                m_turrets[3].Position = turretPos3;
+
+            }
+
             CreateBalloon();
         }
         
@@ -175,12 +208,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // when a castle is created it should also create a balloon?
+        // when a castle is created it should also create a balloon? - maybe but needs to be deferred past
+        // an update loop.
 
         public void CreateBalloon()
         {
-            GameObject gameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.balloon, Position);
-            gameObject.Owner = Owner;
+            //GameObject gameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.balloon, Position);
+            //gameObject.Owner = Owner;
         }
 
 
@@ -189,22 +223,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Different castle sizes.
-        public static int[] CastleSizes = new int[]{4,8,16};
+        public static int[] CastleSizes = new int[]{4,6,10};
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private class Turret
         {
 
-            public Turret(Castle castle,Vector3 position)
+            public Turret(int turretId,Castle castle,Vector3 position)
             {
+                m_turretId = turretId;
                 m_position = position;
                 m_castle = castle;
-            }
-
-            public void Initialize()
-            {
-
+                m_actionState = ActionState.Idle;
             }
 
             public void Update(GameTime gameTime)
@@ -215,6 +246,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     // busy doing something . need to wait.
                     m_cooldownTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                     m_cooldownTime = Math.Max(m_cooldownTime, 0f);
+
+                    // reset state
+                    if (m_cooldownTime == 0.0f)
+                    {
+                        m_actionState = ActionState.Idle;
+                    }
+
                 }
                 else
                 {
@@ -225,11 +263,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     {
                         m_actionState = ActionState.Searching;
 #if LOG_EVENT
-                        Globals.EventLogger.LogEvent(String.Format("Turret[{0}] Searching for target.", m_castle.Id));
+                        Globals.EventLogger.LogEvent(String.Format("Turret[{0}][{1}] Searching for target.", m_castle.Id,m_turretId));
 #endif
                         List<GameObject> searchResults = new List<GameObject>();
                         GameObjectType searchMask = GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster;
-                        Globals.GameObjectManager.FindObjects(searchMask, m_position, turretSearchRadius, null, searchResults);
+                        Globals.GameObjectManager.FindObjectsExcludeOwner(searchMask, m_position, turretSearchRadius, m_castle.Owner, searchResults);
 
                         if (searchResults.Count == 0)
                         {
@@ -242,11 +280,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                             // nearest target is first in list.
                             GameObject targetObject = searchResults[0];
 #if LOG_EVENT
-                            Globals.EventLogger.LogEvent(String.Format("Turret[{0}] AttackingRange[{1}][{2}].", m_castle.Id, targetObject.GameObjectType,targetObject.Id));
+                            Globals.EventLogger.LogEvent(String.Format("Turret[{0}][{1}] AttackingRange[{2}][{3}].", m_castle.Id, m_turretId,targetObject.GameObjectType,targetObject.Id));
 #endif
                             m_actionState = ActionState.AttackingRange;
                             m_cooldownTime = attackFrequency;
-                            m_castle.CastSpell(SpellType.Fireball,m_position,targetObject.Position);
+
+
+                            m_castle.CastSpell(SpellType.Fireball,m_position,GameUtil.DirectionToTarget(m_position,targetObject));
                         }
                     }
                 }
@@ -259,9 +299,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+            public Vector3 Position
+            {
+                get { return m_position; }
+                set { m_position = value; }
+            }
 
 
-            
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            int m_turretId;   
             Vector3 m_position;
             float m_cooldownTime;
             float m_damage;

@@ -169,13 +169,13 @@ namespace com.xexuxjy.magiccarpet.spells
             : base(GameObjectType.spell)
         {
             Owner = owner;
-            DrawOrder = 2;
         }
 
         public virtual void Initialize(SpellTemplate spellTemplate)
         {
             base.Initialize();
             m_spellTemplate = spellTemplate;
+            m_scaleTransform = Matrix.CreateScale(s_objectSize);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,6 +242,8 @@ namespace com.xexuxjy.magiccarpet.spells
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public const float s_objectSize = 0.2f;
 
         public delegate void SpellCompleteHandler(Spell spell);
         public event SpellCompleteHandler SpellComplete;

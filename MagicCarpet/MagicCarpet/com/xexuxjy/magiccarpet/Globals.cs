@@ -95,6 +95,9 @@ namespace com.xexuxjy.magiccarpet
         public static Random random = new Random();
 
         public static int GUI_DRAW_ORDER = 2;
+        public static int TERRAIN_DRAW_ORDER = 1;
+        public static int NORMAL_DRAW_ORDER = 1;
+
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
