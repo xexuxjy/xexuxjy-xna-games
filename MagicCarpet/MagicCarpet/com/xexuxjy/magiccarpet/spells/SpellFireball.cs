@@ -7,6 +7,7 @@ using BulletXNA.BulletCollision;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.interfaces;
 using com.xexuxjy.magiccarpet.terrain;
+using com.xexuxjy.magiccarpet.combat;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
@@ -57,8 +58,8 @@ namespace com.xexuxjy.magiccarpet.spells
             {
                 if (!(partner is Terrain))
                 {
-                    // look at doing this through attributes rather then specific call.
-                    partner.GetGameObject().DoDamage(m_damage);
+                    // do damge based on owner of spell.
+                    partner.GetGameObject().Damaged(new DamageData(Owner,m_damage));
                 }
                 Cleanup();
             }

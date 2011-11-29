@@ -11,6 +11,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.spells;
 using com.xexuxjy.magiccarpet.util;
+using com.xexuxjy.magiccarpet.combat;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -29,7 +30,7 @@ namespace com.xexuxjy.magiccarpet.actions
             base.Start();
             if (GameUtil.InRange(Owner, Target, m_attackRange))
             {
-                Target.DoDamage(m_meleeDamage);
+                Target.Damaged(new DamageData(Owner,m_meleeDamage));
             }
         }
 

@@ -10,7 +10,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
     {
         Health,
         Mana,
-        Speed
+        Speed,
+        NumTypes
     }
 
     public enum GameObjectAttributeModifierEffectDuration
@@ -144,6 +145,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
     public class GameObjectAttribute
     {
+        // object array ctor.
+        public GameObjectAttribute() { }
         public GameObjectAttribute(GameObjectAttributeType attributeType, float startValue)
         {
             AttributeType = attributeType;
