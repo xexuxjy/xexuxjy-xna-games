@@ -8,6 +8,7 @@ using GameStateManagement;
 using com.xexuxjy.magiccarpet.spells;
 using com.xexuxjy.magiccarpet.util;
 using BulletXNA.BulletCollision;
+using com.xexuxjy.magiccarpet.combat;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -128,6 +129,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void Damaged(DamageData damageData)
+        {
+            base.Damaged(damageData);
+
+            if (GetAttributePercentage(GameObjectAttributeType.Health) < 0.25f)
+            {
+                // if we're being attacked and damaged then run away if we're below 1/4 health.
+                // FIXME - shouldn't really clear action if we're dead / dieing?
+                m_actionPool.ClearAllActions(); 
+                QueueAction(new ActionFlee(this, GetFleeDirection()));
+            }
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

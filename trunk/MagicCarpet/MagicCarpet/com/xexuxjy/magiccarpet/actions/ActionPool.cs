@@ -79,10 +79,13 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public void ClearAllActions()
         {
+            // FIXME - this shouldn't clear a death action?
             m_actionQueue.Clear();
 
+
+
 #if LOG_EVENT
-            Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] ClearAllAction [{2}].", m_owner.Id, m_owner.GameObjectType));
+            Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] ClearAllAction .", m_owner.Id, m_owner.GameObjectType));
 #endif
 
         }

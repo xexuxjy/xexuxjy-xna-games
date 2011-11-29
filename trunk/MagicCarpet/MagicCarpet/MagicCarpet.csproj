@@ -119,6 +119,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindEnemy.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindLocation.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindManaball.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFlee.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionIdle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionLoad.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionPool.cs" />
@@ -129,6 +130,8 @@
     <Compile Include="com\xexuxjy\magiccarpet\camera\DHPCameraComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\combat\DamageData.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\combat\ThreatData.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Monster.cs" />

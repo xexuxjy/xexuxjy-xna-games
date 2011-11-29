@@ -14,13 +14,21 @@ using System.Diagnostics;
 using com.xexuxjy.magiccarpet.interfaces;
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.util.debug;
+using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.util;
+using com.xexuxjy.magiccarpet.combat;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
-    public abstract class GameObject : DrawableGameComponent , IDebuggable,ICollideable
-	{
+    public class GameObject : DrawableGameComponent, IDebuggable, ICollideable
+    {
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // no-arg ctor for list classes
+        public GameObject()
+            : base(Globals.Game)
+        {
+        }
 
         public GameObject(GameObjectType gameObjectType)
             : base(Globals.Game)
@@ -61,7 +69,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void ActionComplete(BaseAction baseAction)
         {
-            
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -78,25 +86,39 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
 
             BuildCollisionObject();
-            SetStartAttributes();            
+            SetStartAttributes();
             base.Initialize();
         }
-        
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public virtual void SetStartAttributes()
         {
-            m_attributes[GameObjectAttributeType.Health] = new GameObjectAttribute(GameObjectAttributeType.Health, 100);
-            m_attributes[GameObjectAttributeType.Mana] = new GameObjectAttribute(GameObjectAttributeType.Mana, 100);
+            m_attributes[(int)GameObjectAttributeType.Health] = new GameObjectAttribute(GameObjectAttributeType.Health, 100);
+            m_attributes[(int)GameObjectAttributeType.Mana] = new GameObjectAttribute(GameObjectAttributeType.Mana, 100);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public float GetAttributePercentage(GameObjectAttributeType attributeType)
+        {
+            float max = m_attributes[(int)attributeType].MaxValue;
+            float current = m_attributes[(int)attributeType].CurrentValue;
+            float result = 0f;
+            if (max > 0f)
+            {
+                result = current / max;
+            }
+            return result;
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
         public float Health
         {
             get
             {
-                return m_attributes[GameObjectAttributeType.Health].CurrentValue;
+                return m_attributes[(int)GameObjectAttributeType.Health].CurrentValue;
             }
 
         }
@@ -107,7 +129,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                return m_attributes[GameObjectAttributeType.Health].MaxValue;
+                return m_attributes[(int)GameObjectAttributeType.Health].MaxValue;
             }
         }
 
@@ -117,7 +139,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                return m_attributes[GameObjectAttributeType.Mana].CurrentValue;
+                return m_attributes[(int)GameObjectAttributeType.Mana].CurrentValue;
             }
 
         }
@@ -128,7 +150,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                return m_attributes[GameObjectAttributeType.Mana].MaxValue;
+                return m_attributes[(int)GameObjectAttributeType.Mana].MaxValue;
             }
         }
 
@@ -147,7 +169,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            
+
             m_actionPool.Update(gameTime);
 
             m_spellPool.Update(gameTime);
@@ -167,7 +189,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
             // no health left so die.
-            if (m_attributes[GameObjectAttributeType.Health].CurrentValue <= 0.0f)
+            if (Health <= 0.0f)
             {
                 Die();
             }
@@ -181,7 +203,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             return Health > 0f;
         }
-        
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public virtual void Cleanup()
@@ -202,7 +224,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
-        
+
         public virtual void BuildCollisionObject()
         {
         }
@@ -238,9 +260,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         basicEffect.Projection = projection;
                         basicEffect.World = transforms[mesh.ParentBone.Index] * m_scaleTransform * world;
 
-                        
+
                         // cheat for now.
-                        Vector3 colour = Owner != null ? new Vector3(1,0,0) : new Vector3(1,1,1);
+                        Vector3 colour = Owner != null ? new Vector3(1, 0, 0) : new Vector3(1, 1, 1);
                         basicEffect.Texture = Globals.MCContentManager.GetTexture(ref colour);
 
 
@@ -251,7 +273,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
-        
+
         public virtual void DrawDebugAxes(GraphicsDevice graphicsDevice)
         {
 
@@ -266,15 +288,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         [DescriptionAttribute("Position in the world")]
-		virtual public Vector3 Position
-		{
-            get 
+        virtual public Vector3 Position
+        {
+            get
             {
                 Matrix m;
                 m_motionState.GetWorldTransform(out m);
                 return m.Translation;
             }
-            set 
+            set
             {
                 Matrix m;
                 m_motionState.GetWorldTransform(out m);
@@ -312,18 +334,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         [DescriptionAttribute("Spawn Position in the world")]
         virtual public Vector3 SpawnPosition
         {
-            get{return m_spawnPosition;}
-            set{m_spawnPosition = value;}
+            get { return m_spawnPosition; }
+            set { m_spawnPosition = value; }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
- 
+
         [DescriptionAttribute("Id")]
-		virtual public System.String Id
-		{
-			get{return m_id;}
-            set{m_id = value;}
-		}
+        virtual public System.String Id
+        {
+            get { return m_id; }
+            set { m_id = value; }
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -345,7 +367,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public BoundingBox BoundingBox
         {
-            get 
+            get
             {
                 Vector3 min, max;
                 BoundingBox bb = new BoundingBox();
@@ -354,7 +376,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     m_collisionObject.GetCollisionShape().GetAabb(Matrix.Identity, out min, out max);
                     bb = new BoundingBox(min, max);
                 }
-                return bb; 
+                return bb;
             }
         }
 
@@ -387,7 +409,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public GameObject Owner
         {
             get { return m_owner; }
-            set 
+            set
             {
                 if (value != m_owner)
                 {
@@ -396,7 +418,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         OwnerChanged(m_owner, value);
                     }
                 }
-                m_owner = value; 
+                m_owner = value;
             }
         }
 
@@ -407,12 +429,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public GameObjectAttribute GetAttribute(GameObjectAttributeType type)
         {
-            return m_attributes[type];
+            return m_attributes[(int)type];
         }
 
-        public void SetAttribute(GameObjectAttributeType type,float value)
+        public void SetAttribute(GameObjectAttributeType type, float value)
         {
-            m_attributes[type].BaseValue = value;
+            m_attributes[(int)type].BaseValue = value;
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -448,7 +470,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
         public virtual void QueueAction(BaseAction baseAction)
         {
             m_actionPool.QueueAction(baseAction);
@@ -535,13 +557,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual void DoDamage(float points)
+        public virtual void Damaged(DamageData damageData)
         {
-            m_attributes[GameObjectAttributeType.Health].CurrentValue -= points;
-            if (Damaged != null)
-            {
-                Damaged(this, null);
-            }
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] Damaged [{2}][{3}][{4}].", Id, GameObjectType, damageData.m_damager.Id, damageData.m_damager.GameObjectType, damageData.m_damage));
+#endif
+
+
+            m_attributes[(int)GameObjectAttributeType.Health].CurrentValue -= damageData.m_damage;
+
+            // got hit so update our threat lists
+            AddOrUpdateThreat(damageData.m_damager);
+
         }
 
 
@@ -562,24 +589,155 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return this;
         }
 
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void UpdateThreats()
+        {
+            for (int i = 0; i < m_recentThreats.Count; ++i)
+            {
+                if (m_recentThreats[i].m_threatLevel > 0)
+                {
+                    ThreatData.UpdateThreatLevel(ref m_recentThreats.GetRawArray()[i], -ThreatData.s_threatDecay);
+                }
+            }
+
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void AddOrUpdateThreat(GameObject gameObject)
+        {
+
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] AddThreat [{2}][{3}].", Id, GameObjectType, gameObject.Id, gameObject.GameObjectType));
+#endif
+
+            int index = FindThreatIndex(gameObject);
+            if (index >= 0)
+            {
+                ThreatData.UpdateThreatLevel(ref m_recentThreats.GetRawArray()[index], ThreatData.s_threatIncrement);
+            }
+            else
+            {
+                m_recentThreats.Add(new ThreatData(gameObject, ThreatData.s_initialThreatLevel, 0));
+            }
+
+
+
+
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        protected int FindThreatIndex(GameObject gameObject)
+        {
+            int index = -1;
+            for (int i = 0; i < m_recentThreats.Count; ++i)
+            {
+                if (m_recentThreats[i].m_gameObject == gameObject)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        public void RemoveThreat(GameObject gameObject)
+        {
+
+            int index = FindThreatIndex(gameObject);
+            if (index >= 0)
+            {
+#if LOG_EVENT
+                Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] RemoveThreat [{2}][{3}].", Id, GameObjectType, gameObject.Id, gameObject.GameObjectType));
+#endif
+                m_recentThreats.RemoveAt(index);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // These are pseudo-events but not going to bother registering listeners and will brute force it.
+        public void WorldObjectAdded(GameObject gameObject)
+        {
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void WorldObjectRemoved(GameObject gameObject)
+        {
+            RemoveThreat(gameObject);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public Vector3 GetFleeDirection()
+        {
+            // find out which is the 
+            float totalThreatLevel = 0f;
+            Vector3 threatDirection = Vector3.Zero;
+
+            foreach (ThreatData threatData in m_recentThreats)
+            {
+                totalThreatLevel += threatData.m_threatLevel;
+            }
+
+            // if we have a threat level.
+            if (totalThreatLevel > 0)
+            {
+
+                // now go through and find the direction of greatest threat?
+                foreach (ThreatData threatData in m_recentThreats)
+                {
+                    float contribution = (float)threatData.m_threatLevel / totalThreatLevel;
+                    threatDirection += (GameUtil.DirectionToTarget(this, threatData.m_gameObject) * contribution);
+                }
+                // flee away from the area of greatest threats...
+                threatDirection.Y = 0f;
+                threatDirection = -threatDirection;
+            }
+            if (MathUtil.FuzzyZero(threatDirection.LengthSquared()))
+            {
+                // either equal threats around us or no threats, in which case chose random direction
+                Vector3 randomPosition = Globals.Terrain.GetRandomWorldPositionXZ();
+                threatDirection = GameUtil.DirectionToTarget(this, randomPosition);
+            }
+            threatDirection.Normalize();
+
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] FleeDirection [{2}].", Id, GameObjectType, threatDirection));
+#endif
+            return threatDirection;
+
+
+
+        }
+
+
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // Delegates and events
 
 
+        public ObjectArray<ThreatData> m_recentThreats = new ObjectArray<ThreatData>();
 
-        public delegate void OwnerChangedHandler(GameObject oldOwner,GameObject newOwner);
+
+
+        public delegate void OwnerChangedHandler(GameObject oldOwner, GameObject newOwner);
         public event OwnerChangedHandler OwnerChanged;
 
-        public delegate void DamagedHandler(GameObject sender, EventArgs e);
-        public event DamagedHandler Damaged;
+        //public delegate void DamagedHandler(GameObject sender, EventArgs e);
+        //public event DamagedHandler Damaged;
 
         // And others
 
-        private Dictionary<GameObjectAttributeType, GameObjectAttribute> m_attributes = new Dictionary<GameObjectAttributeType, GameObjectAttribute>();
+        private ObjectArray<GameObjectAttribute> m_attributes = new ObjectArray<GameObjectAttribute>();
 
         protected String m_id;
         protected Vector3 m_spawnPosition; // where the object starts in the world, used by AI
- 
+
         protected GameObject m_owner; // if this is owned by another entitiy (e.g. manaballs,castles, balloons owned by magicians)
 
         protected Color m_badgeColor; // represents the color for multiplayer type stuff.
@@ -601,8 +759,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected bool m_debugEnabled;
 
 
-        private ActionPool m_actionPool;
-        private SpellPool m_spellPool;
+        protected ActionPool m_actionPool;
+        protected SpellPool m_spellPool;
 
         public static int s_idCounter = 0;
     }

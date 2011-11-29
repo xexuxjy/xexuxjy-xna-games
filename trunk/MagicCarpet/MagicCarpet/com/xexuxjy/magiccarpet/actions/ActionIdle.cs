@@ -11,12 +11,9 @@ namespace com.xexuxjy.magiccarpet.actions
         public ActionIdle(GameObject owner)
             : base(owner, null, ActionState.Idle)
         {
+            Duration = s_idleDuration;
         }
 
-        public override void Initialize()
-        {
-            Duration = 1f;
-            base.Initialize();
-        }
+        const float s_idleDuration = 2f;
     }
 }

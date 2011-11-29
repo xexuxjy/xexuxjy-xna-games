@@ -23,5 +23,12 @@ namespace com.xexuxjy.magiccarpet.util
         {
             return Vector3.Normalize(target.Position - source);
         }
+
+        public static Vector3 DirectionToTarget(GameObject source, Vector3 target)
+        {
+            return Vector3.Normalize(target - source.Position);
+        }
+
+
     }
 }

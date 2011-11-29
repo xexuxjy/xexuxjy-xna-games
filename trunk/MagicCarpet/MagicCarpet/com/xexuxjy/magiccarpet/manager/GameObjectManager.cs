@@ -5,6 +5,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.terrain;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -86,6 +87,7 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             m_gameObjectListAdd.Add(gameObject);
 
+
 #if LOG_EVENT
             Globals.EventLogger.LogEvent(String.Format("AddObject[{0}][{1}].", gameObject.Id, gameObject.GameObjectType));
 #endif
@@ -110,6 +112,16 @@ namespace com.xexuxjy.magiccarpet.manager
             {
                 m_gameObjectList.Add(gameObject);
             }
+
+            foreach (GameObject newGameObject in m_gameObjectListAdd)
+            {
+                foreach (GameObject gameObject in m_gameObjectList)
+                {
+                    gameObject.WorldObjectAdded(newGameObject);
+                }
+            }
+
+
             m_gameObjectListAdd.Clear();
 
             foreach (GameObject gameObject in m_gameObjectList)
@@ -117,12 +129,16 @@ namespace com.xexuxjy.magiccarpet.manager
                 gameObject.Update(gameTime);
             }
 
-            foreach (GameObject gameObject in m_gameObjectListRemove)
+            foreach (GameObject removedGameObject in m_gameObjectListRemove)
             {
                 // cleanup may already have been called.
-                gameObject.Cleanup();
-                Globals.CollisionManager.RemoveFromWorld(gameObject.CollisionObject);
-                m_gameObjectList.Remove(gameObject);
+                removedGameObject.Cleanup();
+                Globals.CollisionManager.RemoveFromWorld(removedGameObject.CollisionObject);
+                m_gameObjectList.Remove(removedGameObject);
+                foreach (GameObject gameObject in m_gameObjectList)
+                {
+                    gameObject.WorldObjectRemoved(removedGameObject);
+                }
             }
             m_gameObjectListRemove.Clear();
     
@@ -299,10 +315,10 @@ namespace com.xexuxjy.magiccarpet.manager
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        private IList<GameObject> m_gameObjectListAdd = new List<GameObject>();
-        private IList<GameObject> m_gameObjectList = new List<GameObject>();
-        private IList<GameObject> m_gameObjectListRemove = new List<GameObject>();
+
+        private ObjectArray<GameObject> m_gameObjectListAdd = new ObjectArray<GameObject>();
+        private ObjectArray<GameObject> m_gameObjectList = new ObjectArray<GameObject>();
+        private ObjectArray<GameObject> m_gameObjectListRemove = new ObjectArray<GameObject>();
         private GameplayScreen m_gameplayScreen;
     }
 
