@@ -24,12 +24,9 @@ namespace com.xexuxjy.magiccarpet.actions
             Vector3 newPosition = new Vector3((float)Math.Cos(randomAngle), 0, (float)Math.Sin(randomAngle));
             newPosition *= m_searchRadius;
 
-            TargetLocation = Owner.Position += newPosition;
+            TargetLocation = Owner.Position + newPosition;
         
         }
         private float m_searchRadius;
-
-
-
     }
 }

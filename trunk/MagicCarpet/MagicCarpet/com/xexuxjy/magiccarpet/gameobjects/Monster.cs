@@ -73,24 +73,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Searching):
                     {
                         // Decide what to do
-
-
-
-                        QueueAction(new ActionTravel(Owner, null, action.TargetLocation, s_monsterSpeed));                           
+                        QueueAction(new ActionTravel(this, null, action.TargetLocation, s_monsterSpeed));                           
                         break;
                     }
                 case (ActionState.Idle):
                     {
-
-
-
+                        QueueAction(new ActionFindLocation(this, s_searchRadius));
                         break;
                     }
                 case(ActionState.AttackingMelee):
                     {
                         if (action.Target.Alive && GameUtil.InRange(Owner,action.Target,s_monsterMeleeRange))
                         {
-                            QueueAction(new ActionAttackRange(Owner, action.Target, s_monsterMeleeRange, s_monsterRangeDamage, SpellType.Fireball));
+                            QueueAction(new ActionAttackMelee(this, action.Target, s_monsterMeleeRange, s_monsterMeleeDamage));
                         }
                         break;
                     }
@@ -101,7 +96,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                         if (action.Target.Alive && GameUtil.InRange(Owner,action.Target,s_monsterRangeDamage))
                         {
-                            QueueAction(new ActionAttackRange(Owner, action.Target, s_monsterRangeRange,s_monsterRangeDamage, SpellType.Fireball));
+                            QueueAction(new ActionAttackRange(this, action.Target, s_monsterRangeRange,s_monsterRangeDamage, SpellType.Fireball));
                         }
                         break;
                     }
