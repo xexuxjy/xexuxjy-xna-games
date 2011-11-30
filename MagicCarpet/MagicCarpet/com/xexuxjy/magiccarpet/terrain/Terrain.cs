@@ -129,9 +129,12 @@ namespace com.xexuxjy.magiccarpet.terrain
             LoadOrCreateHeighMap(null);
             //BuildTestTerrain1();
             //BuildSectionRenderers();
-            //BuildLandscape();
             base.Initialize();
-        
+
+            // build landscape afterwards as we need collision object for BB.
+            BuildLandscape();
+
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,7 +295,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 		
 		protected virtual void InitialiseWorldGrid()
 		{
-            //m_boundingBox = new BoundingBox(Position+Globals.worldMinPos,Position+Globals.worldMaxPos);
             m_terrainSquareGrid = new TerrainSquare[Globals.WorldWidth * Globals.WorldWidth];
             for (int i = 0; i < m_terrainSquareGrid.Length; ++i)
             {

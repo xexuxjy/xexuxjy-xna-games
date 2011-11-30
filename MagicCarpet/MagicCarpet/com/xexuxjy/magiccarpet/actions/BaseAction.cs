@@ -71,7 +71,7 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public bool Complete
+        public virtual bool Complete
         {
             get { return m_currentTime >= m_duration; }
         }

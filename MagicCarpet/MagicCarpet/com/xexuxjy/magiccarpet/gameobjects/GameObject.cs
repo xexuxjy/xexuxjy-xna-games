@@ -303,6 +303,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 Vector3 clampedValue = value;
                 Globals.Terrain.ClampToTerrain(ref clampedValue);
+
+                float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
+                clampedValue.Y = height + GetStartOffsetHeight();
+
                 m.Translation = clampedValue;
                 m_motionState.SetWorldTransform(ref m);
             }

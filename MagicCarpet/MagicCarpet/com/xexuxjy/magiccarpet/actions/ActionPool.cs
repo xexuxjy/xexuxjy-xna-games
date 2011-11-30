@@ -95,15 +95,16 @@ namespace com.xexuxjy.magiccarpet.actions
         public void Update(GameTime gameTime)
         {
 
-            // check health and see if we should flee?
-
-
-
             if (CurrentAction != null)
             {
                 if (!CurrentAction.Started)
                 {
                     StartAction(CurrentAction);
+                }
+
+                if (m_owner is Monster && CurrentAction is ActionTravel)
+                {
+                    int ibreak = 0;
                 }
 
                 CurrentAction.Update(gameTime);

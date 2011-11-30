@@ -15,7 +15,12 @@ namespace com.xexuxjy.magiccarpet.actions
         {
             m_position = position;
             m_speed = speed;
-            owner.TargetSpeed = m_speed;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            Owner.TargetSpeed = m_speed;
         }
 
         public override void Update(GameTime gameTime)
@@ -27,27 +32,42 @@ namespace com.xexuxjy.magiccarpet.actions
             }
             else
             {
-                Vector3 currentPosition = Owner.Position;
-                Vector3 targetPosition = (Target != null) ? Target.Position : m_position;
-
-                float dist2 = MathUtil.Vector3Distance2XZ(currentPosition, targetPosition);
-                if (dist2 <= s_nearnessCheck)
+                if (Complete)
                 {
                     ActionComplete();
                 }
                 else
                 {
+                    Vector3 currentPosition = Owner.Position;
+                    Vector3 targetPosition = (Target != null) ? Target.Position : m_position;
+
                     // 
                     Vector3 direction = targetPosition - currentPosition;
                     direction.Y = 0;
+                    direction.Normalize();
                     Owner.Direction = direction;
                 }
             }
         }
 
+
+
         protected override void InternalComplete()
         {
             Owner.TargetSpeed = 0f;
+        }
+
+        public override bool Complete
+        {
+            get
+            {
+                Vector3 currentPosition = Owner.Position;
+                Vector3 targetPosition = (Target != null) ? Target.Position : m_position;
+
+                float dist2 = MathUtil.Vector3Distance2XZ(currentPosition, targetPosition);
+                return (dist2 <= s_nearnessCheck);
+            }
+
         }
 
 
