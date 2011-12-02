@@ -238,11 +238,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="config\App.config" />
     <None Include="Scripts\LEVEL1.mc" />
     <None Include="Scripts\LEVEL2.mc" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="config\" />
     <Folder Include="logs\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

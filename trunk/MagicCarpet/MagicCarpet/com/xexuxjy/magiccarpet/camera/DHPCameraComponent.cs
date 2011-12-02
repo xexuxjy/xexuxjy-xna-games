@@ -25,6 +25,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using com.xexuxjy.magiccarpet;
+using GameStateManagement;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace Dhpoware
 {
@@ -39,7 +41,8 @@ namespace Dhpoware
     {
     #region Public Methods
 
-        /// <summary>
+        void HandleInput(InputState input);
+    /// <summary>
         /// Builds a look at style viewing matrix using the camera's current
         /// world position, and its current local y axis.
         /// </summary>
@@ -196,6 +199,23 @@ namespace Dhpoware
             get;
         }
 
+        Dhpoware.Camera.Behavior CurrentBehavior
+        {
+            get;
+            set;
+        }
+
+        GameObject FollowTarget
+        {
+            get;
+            set;
+        }
+
+        bool ClipToWorld
+        {
+            set;
+        }
+
         void EnableKeyboardInput();
         void DisableKeyboardInput();
 
@@ -242,6 +262,8 @@ namespace Dhpoware
         private Behavior behavior;
         private bool preferTargetYAxisOrbiting;
 
+        private bool clipToWorld;
+
         private float fovx;
         private float aspectRatio;
         private float znear;
@@ -268,8 +290,8 @@ namespace Dhpoware
         private Vector3 savedEye;
         private float savedAccumPitchDegrees;
 
-        // Allow us to take control away from the camera for the console.
-        private bool m_keyboardInputEnabled = true;
+        private InputState inputState;
+        private bool m_keyboardInputEnabled;
 
     #region Public Methods
 
@@ -307,6 +329,13 @@ namespace Dhpoware
             savedOrientation = orientation;
             savedAccumPitchDegrees = 0.0f;
         }
+
+
+        public void HandleInput(InputState input)
+        {
+            inputState = input;
+        }
+
 
         /// <summary>
         /// Builds a look at style viewing matrix.
@@ -402,12 +431,33 @@ namespace Dhpoware
                 forwards = viewDir;
             }
 
-            eye += xAxis * dx;
-            eye += WORLD_Y_AXIS * dy;
-            eye += forwards * dz;
 
-            Position = eye;
+            Vector3 start = eye;
+            Vector3 end = start;
+            end += xAxis * dx;
+            end += WORLD_Y_AXIS * dy;
+            end += forwards * dz;
+            ApplyClipToWorld(ref start, ref end);
+
+            Position = end;
         }
+
+        private void ApplyClipToWorld(ref Vector3 start, ref Vector3 end)
+        {
+            // check to see if we're allowed to move through the terrain in the direction proposed!
+            if (clipToWorld)
+            {
+                Vector3 collisionPoint = start;
+                Vector3 collisionNormal = Vector3.Up;
+
+                // if we hit something then reset the movement
+                if (Globals.CollisionManager.CastCameraGroundRay(start, end, ref collisionPoint, ref collisionNormal))
+                {
+                    end = start;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Moves the camera the specified distance in the specified direction.
@@ -423,9 +473,11 @@ namespace Dhpoware
                 return;
             }
 
-            eye.X += direction.X * distance.X;
-            eye.Y += direction.Y * distance.Y;
-            eye.Z += direction.Z * distance.Z;
+            Vector3 start = eye;
+            Vector3 end = eye + (direction * distance);
+            ApplyClipToWorld(ref start, ref end);
+
+            eye = end;
 
             UpdateViewMatrix();
         }
@@ -992,6 +1044,21 @@ namespace Dhpoware
             get { return zAxis; }
         }
 
+        public GameObject FollowTarget
+        {
+            get { return null; }
+            set { }
+        }
+
+        public bool ClipToWorld
+        {
+            set
+            {
+                clipToWorld = value;
+            }
+        }
+
+
     #endregion
     }
 
@@ -1089,11 +1156,10 @@ namespace Dhpoware
         private Vector2[] mouseMovement;
         private Vector2[] mouseSmoothingCache;
         private Vector2 smoothedMouseMovement;
-        private MouseState currentMouseState;
-        private MouseState previousMouseState;
-        private KeyboardState currentKeyboardState;
+        private InputState inputState;
         private Dictionary<Actions, Keys> actionKeys;
         private bool m_keyboardInputEnabled = true;
+        private bool clipToWorld = true;
     
     #region Public Methods
 
@@ -1267,8 +1333,8 @@ namespace Dhpoware
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            UpdateInput();
             UpdateCamera(gameTime);
+
         }
 
         /// <summary>
@@ -1326,14 +1392,14 @@ namespace Dhpoware
             direction = Vector3.Zero;
 
             // if we don't have access to the keyboard then do nothing here.
-            if (!m_keyboardInputEnabled)
+            if (!m_keyboardInputEnabled || inputState == null)
             {
                 return;
             }
 
 
-            if (currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveForwardsPrimary]) ||
-                currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveForwardsAlternate]))
+            if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveForwardsPrimary]) ||
+                inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveForwardsAlternate]))
             {
                 if (!movingAlongNegZ)
                 {
@@ -1348,8 +1414,8 @@ namespace Dhpoware
                 movingAlongNegZ = false;
             }
 
-            if (currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveBackwardsPrimary]) ||
-                currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveBackwardsAlternate]))
+            if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveBackwardsPrimary]) ||
+                inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveBackwardsAlternate]))
             {
                 if (!movingAlongPosZ)
                 {
@@ -1364,8 +1430,8 @@ namespace Dhpoware
                 movingAlongPosZ = false;
             }
 
-            if (currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveUpPrimary]) ||
-                currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveUpAlternate]))
+            if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveUpPrimary]) ||
+                inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveUpAlternate]))
             {
                 if (!movingAlongPosY)
                 {
@@ -1380,8 +1446,8 @@ namespace Dhpoware
                 movingAlongPosY = false;
             }
 
-            if (currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveDownPrimary]) ||
-                currentKeyboardState.IsKeyDown(actionKeys[Actions.MoveDownAlternate]))
+            if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveDownPrimary]) ||
+                inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveDownAlternate]))
             {
                 if (!movingAlongNegY)
                 {
@@ -1400,8 +1466,8 @@ namespace Dhpoware
             {
             case Camera.Behavior.FirstPerson:
             case Camera.Behavior.Spectator:
-                if (currentKeyboardState.IsKeyDown(actionKeys[Actions.StrafeRightPrimary]) ||
-                    currentKeyboardState.IsKeyDown(actionKeys[Actions.StrafeRightAlternate]))
+                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightPrimary]) ||
+                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightAlternate]))
                 {
                     if (!movingAlongPosX)
                     {
@@ -1416,8 +1482,8 @@ namespace Dhpoware
                     movingAlongPosX = false;
                 }
 
-                if (currentKeyboardState.IsKeyDown(actionKeys[Actions.StrafeLeftPrimary]) ||
-                    currentKeyboardState.IsKeyDown(actionKeys[Actions.StrafeLeftAlternate]))
+                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeLeftPrimary]) ||
+                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeLeftAlternate]))
                 {
                     if (!movingAlongNegX)
                     {
@@ -1435,8 +1501,8 @@ namespace Dhpoware
                 break;
 
             case Camera.Behavior.Flight:
-                if (currentKeyboardState.IsKeyDown(actionKeys[Actions.FlightYawLeftPrimary]) ||
-                    currentKeyboardState.IsKeyDown(actionKeys[Actions.FlightYawLeftAlternate]))
+                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawLeftPrimary]) ||
+                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawLeftAlternate]))
                 {
                     if (!movingAlongPosX)
                     {
@@ -1451,8 +1517,8 @@ namespace Dhpoware
                     movingAlongPosX = false;
                 }
 
-                if (currentKeyboardState.IsKeyDown(actionKeys[Actions.FlightYawRightPrimary]) ||
-                    currentKeyboardState.IsKeyDown(actionKeys[Actions.FlightYawRightAlternate]))
+                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawRightPrimary]) ||
+                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawRightAlternate]))
                 {
                     if (!movingAlongNegX)
                     {
@@ -1469,8 +1535,8 @@ namespace Dhpoware
                 break;
 
             case Camera.Behavior.Orbit:
-                if (currentKeyboardState.IsKeyDown(actionKeys[Actions.OrbitRollLeftPrimary]) ||
-                    currentKeyboardState.IsKeyDown(actionKeys[Actions.OrbitRollLeftAlternate]))
+                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollLeftPrimary]) ||
+                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollLeftAlternate]))
                 {
                     if (!movingAlongPosX)
                     {
@@ -1485,8 +1551,8 @@ namespace Dhpoware
                     movingAlongPosX = false;
                 }
 
-                if (currentKeyboardState.IsKeyDown(actionKeys[Actions.OrbitRollRightPrimary]) ||
-                    currentKeyboardState.IsKeyDown(actionKeys[Actions.OrbitRollRightAlternate]))
+                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollRightPrimary]) ||
+                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollRightAlternate]))
                 {
                     if (!movingAlongNegX)
                     {
@@ -1518,8 +1584,8 @@ namespace Dhpoware
         /// </returns>
         private float GetMouseWheelDirection()
         {
-            int currentWheelValue = currentMouseState.ScrollWheelValue;
-            int previousWheelValue = previousMouseState.ScrollWheelValue;
+            int currentWheelValue = inputState.CurrentMouseState.ScrollWheelValue;
+            int previousWheelValue = inputState.LastMouseState.ScrollWheelValue;
 
             if (currentWheelValue > previousWheelValue)
                 return -1.0f;
@@ -1624,8 +1690,8 @@ namespace Dhpoware
         /// </summary>
         private void ResetMouse()
         {
-            currentMouseState = Mouse.GetState();
-            previousMouseState = currentMouseState;
+            inputState.CurrentMouseState = Mouse.GetState();
+            inputState.LastMouseState = inputState.CurrentMouseState;
 
             for (int i = 0; i < mouseMovement.Length; ++i)
                 mouseMovement[i] = Vector2.Zero;
@@ -1643,8 +1709,8 @@ namespace Dhpoware
 
             int centerX = clientBounds.Width / 2;
             int centerY = clientBounds.Height / 2;
-            int deltaX = centerX - currentMouseState.X;
-            int deltaY = centerY - currentMouseState.Y;
+            int deltaX = centerX - inputState.CurrentMouseState.X;
+            int deltaY = centerY - inputState.CurrentMouseState.Y;
 
             Mouse.SetPosition(centerX, centerY);
         }
@@ -1670,30 +1736,28 @@ namespace Dhpoware
         /// </summary>
         private void UpdateInput()
         {
-            currentKeyboardState = Keyboard.GetState();
-
-            previousMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
+            inputState.LastMouseState = inputState.CurrentMouseState;
+            inputState.CurrentMouseState = Mouse.GetState();
 
             if (clickAndDragMouseRotation)
             {
                 int deltaX = 0;
                 int deltaY = 0;
 
-                if (currentMouseState.LeftButton == ButtonState.Pressed)
+                if (inputState.CurrentMouseState.LeftButton == ButtonState.Pressed)
                 {
                     switch (CurrentBehavior)
                     {
                     case Camera.Behavior.FirstPerson:
                     case Camera.Behavior.Spectator:
                     case Camera.Behavior.Flight:
-                        deltaX = previousMouseState.X - currentMouseState.X;
-                        deltaY = previousMouseState.Y - currentMouseState.Y;
+                        deltaX = inputState.LastMouseState.X - inputState.CurrentMouseState.X;
+                        deltaY = inputState.LastMouseState.Y - inputState.CurrentMouseState.Y;
                         break;
 
                     case Camera.Behavior.Orbit:
-                        deltaX = currentMouseState.X - previousMouseState.X;
-                        deltaY = currentMouseState.Y - previousMouseState.Y;
+                        deltaX = inputState.CurrentMouseState.X - inputState.LastMouseState.X;
+                        deltaY = inputState.CurrentMouseState.Y - inputState.LastMouseState.Y;
                         break;
                     }
                     
@@ -1707,8 +1771,8 @@ namespace Dhpoware
 
                 int centerX = clientBounds.Width / 2;
                 int centerY = clientBounds.Height / 2;
-                int deltaX = centerX - currentMouseState.X;
-                int deltaY = centerY - currentMouseState.Y;
+                int deltaX = centerX - inputState.CurrentMouseState.X;
+                int deltaY = centerY - inputState.CurrentMouseState.Y;
 
                 Mouse.SetPosition(centerX, centerY);
 
@@ -2161,6 +2225,30 @@ namespace Dhpoware
         {
             get { return camera.ZAxis; }
         }
+
+
+        public GameObject FollowTarget
+        {
+            get { return null; }
+            set { }
+        }
+
+        public void HandleInput(InputState input)
+        {
+            inputState = input;
+            UpdateInput();
+
+        }
+
+        public bool ClipToWorld
+        {
+            set
+            {
+                clipToWorld = value;
+                camera.ClipToWorld = value;
+            }
+        }
+
 
     #endregion
     }

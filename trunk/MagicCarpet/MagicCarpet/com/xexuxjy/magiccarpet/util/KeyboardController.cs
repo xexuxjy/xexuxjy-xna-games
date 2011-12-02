@@ -22,9 +22,7 @@ namespace com.xexuxjy.magiccarpet.util
 
         public void HandleInput(InputState inputState)
         {
-            KeyboardState currentState = Keyboard.GetState();
             GenerateKeyEvents(ref inputState.LastKeyboardStates[0], ref inputState.CurrentKeyboardStates[0]);
-            m_lastKeyboardState = currentState;
         }
 
         //----------------------------------------------------------------------------------------------
@@ -201,10 +199,5 @@ namespace com.xexuxjy.magiccarpet.util
         {
             Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, position);
         }
-
-
-
-        protected KeyboardState m_lastKeyboardState;
-        
     }
 }
