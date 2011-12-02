@@ -10,6 +10,7 @@ using System.Diagnostics;
 using BulletXNA;
 using com.xexuxjy.magiccarpet.interfaces;
 using BulletXNADemos.Demos;
+using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
@@ -195,25 +196,62 @@ namespace com.xexuxjy.magiccarpet.collision
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
+        // a check against terrain only.
+        public bool CastCameraGroundRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
+        {
+            if (m_dynamicsWorld != null)
+            {
+                if (m_groundCallback == null)
+                {
+                    m_groundCallback = new ClosestRayResultCallback(ref startPos, ref endPos);
+                }
+                else
+                {
+                    m_groundCallback.Initialize(ref startPos, ref endPos);
+                }
+
+                m_groundCallback.m_collisionFilterMask = (CollisionFilterGroups)(GameObjectType.terrain);
+                m_groundCallback.m_collisionFilterGroup = (CollisionFilterGroups)(GameObjectType.camera);
+                m_dynamicsWorld.RayTest(ref startPos, ref endPos, m_groundCallback);
+
+            }
+            if (m_groundCallback != null)
+            {
+                if (m_groundCallback.HasHit())
+                {
+                    collisionPoint = m_groundCallback.m_hitPointWorld;
+                    collisionNormal = m_groundCallback.m_hitNormalWorld;
+                    return true;
+                }
+            }
+            return false;
+
+        }
 
 
         public bool CastRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
         {
-            ClosestRayResultCallback callback = null;
             if (m_dynamicsWorld != null)
             {
-                callback = new ClosestRayResultCallback(startPos, endPos);
-                callback.m_collisionFilterMask = (CollisionFilterGroups)(-1);
-                callback.m_collisionFilterGroup = (CollisionFilterGroups)( -1);
-                m_dynamicsWorld.RayTest(ref startPos, ref endPos, callback);
+                if (m_callback == null)
+                {
+                    m_callback = new ClosestRayResultCallback(ref startPos, ref endPos);
+                }
+                else
+                {
+                    m_callback.Initialize(ref startPos, ref endPos);
+                }
+                m_callback.m_collisionFilterMask = (CollisionFilterGroups)(-1);
+                m_callback.m_collisionFilterGroup = (CollisionFilterGroups)( -1);
+                m_dynamicsWorld.RayTest(ref startPos, ref endPos, m_callback);
                 
             }
-            if (callback != null)
+            if (m_callback != null)
             {
-                if (callback.HasHit())
+                if (m_callback.HasHit())
                 {
-                    collisionPoint = callback.m_hitPointWorld;
-                    collisionNormal = callback.m_hitNormalWorld;
+                    collisionPoint = m_callback.m_hitPointWorld;
+                    collisionNormal = m_callback.m_hitNormalWorld;
                     return true;
                 }
             }
@@ -298,6 +336,10 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        protected ClosestRayResultCallback m_callback = null;
+        protected ClosestRayResultCallback m_groundCallback = null;
+
+
         protected IBroadphaseInterface m_broadphase;
         protected CollisionDispatcher m_dispatcher;
         protected IConstraintSolver m_constraintSolver;
@@ -364,6 +406,7 @@ namespace com.xexuxjy.magiccarpet.collision
         }
 
     }
+
 
 
 

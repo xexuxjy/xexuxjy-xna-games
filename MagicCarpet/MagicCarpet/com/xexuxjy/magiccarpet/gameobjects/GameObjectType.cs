@@ -17,6 +17,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         player=32,
         monster=64,
         terrain=128,
+        camera=256,
         NUMTYPES
     }
 }

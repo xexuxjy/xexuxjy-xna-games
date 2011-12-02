@@ -173,13 +173,6 @@ namespace com.xexuxjy.magiccarpet.util.console
                             }
 
                         }
-                        else if (commandDetails.Name.Equals("setcamerafollow"))
-                        {
-                            //GameObject GameObject = Globals.objectSpatialManager.GetObject(args[0]);
-                            //if (GameObject != null)
-                            //{
-                            //    Globals.debugText.
-                        }
                         else if (commandDetails.Name.Equals("viewprofiler"))
                         {
                             Globals.SimpleProfiler.Enabled = !Globals.SimpleProfiler.Enabled;
@@ -255,6 +248,36 @@ namespace com.xexuxjy.magiccarpet.util.console
                         {
                             DropRandomManaBall();
                         }
+                        else if (commandDetails.Name.Equals("camerafollow"))
+                        {
+                            if (Globals.Camera.CurrentBehavior != Dhpoware.Camera.Behavior.Flight)
+                            {
+                                Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.Flight;
+                            }
+
+                            if (args.Length > 0)
+                            {
+                                String followObjectId = args[1];
+                                GameObject gameObject = Globals.GameObjectManager.GetObject(followObjectId);
+                                if (gameObject != null)
+                                {
+                                    Globals.Camera.FollowTarget = gameObject;
+                                }
+                            }
+                            else
+                            {
+                                Globals.Camera.FollowTarget = null;
+                            }
+                        }
+                        else if (commandDetails.Name.Equals("cameraclip"))
+                        {
+                            Globals.Camera.ClipToWorld = true;
+                        }
+                        else if (commandDetails.Name.Equals("camerafree"))
+                        {
+                            Globals.Camera.ClipToWorld = false;
+                        }
+
 
                     }
                 }
@@ -523,8 +546,6 @@ namespace com.xexuxjy.magiccarpet.util.console
             m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{2}));
             id = "setdebug";
             m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{1}));
-            id = "setcamerafollow";
-            m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{1}));
             id = "viewprofiler";
             m_commandDetailsMap.Add(id,new CommandDetails(id,new int[]{0}));
             id = "viewdebug";
@@ -545,6 +566,13 @@ namespace com.xexuxjy.magiccarpet.util.console
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
             id = "droprandommanaball";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
+            id = "camerafollow";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0,1 }));
+            id = "cameraclip";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
+            id = "camerafree";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -68,9 +68,15 @@ namespace GameStateManagement
             // it would take longer to load. We simulate that by delaying for a
             // while, giving you a chance to admire the beautiful loading screen.
             // TODO: Add your initialization logic here
-            CameraComponent camera = new CameraComponent(Globals.Game); 	
-
+            CameraComponent camera = new CameraComponent(Globals.Game);
+            
+            
+            // stop camera going through terrain?
+            camera.ClipToWorld = true;
+            camera.Position = new Vector3(0, 5, 0);
+            
             Globals.Camera = camera;
+            
 
             Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
             Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
@@ -191,6 +197,7 @@ namespace GameStateManagement
             }
             m_mouseController.HandleInput(input);
             m_keyboardController.HandleInput(input);
+            Globals.Camera.HandleInput(input);
 
         }
 

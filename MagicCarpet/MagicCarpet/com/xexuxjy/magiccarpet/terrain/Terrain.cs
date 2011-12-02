@@ -82,7 +82,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             // Should really 
             CollisionShape collisionShape = new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
-            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell|GameObjectType.manaball);
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell|GameObjectType.manaball|GameObjectType.camera);
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
             
             //m_collisionObject = new CollisionObject();
@@ -402,6 +402,13 @@ namespace com.xexuxjy.magiccarpet.terrain
                 int xpos = (int)((float)Globals.random.NextDouble() * Width);
                 int ypos = (int)((float)Globals.random.NextDouble() * Breadth);
                 float radius = ((float)Globals.random.NextDouble() * maxRadius);
+                // don't want too small a radius
+                if (radius < 5f)
+                {
+                    radius = 5f;
+                }
+
+
                 float height = ((float)Globals.random.NextDouble() * maxInstanceHeight);
                 bool up = (float)Globals.random.NextDouble() > 0.5;
                 if (!up)
@@ -730,8 +737,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                             // play with lerp value to smooth the terrain?
                             //                          lerpValue = (float)Math.Sqrt(lerpValue);
                             //lerpValue *= lerpValue;
-                            //                        lerpValue *= lerpValue;
-
+                            lerpValue = (float)Math.Pow(lerpValue, 1.5f);
                             // ToDo - fractal hill generation.
                             float currentHeight = terrain.GetHeightAtPointLocal(i, j);
                             //float oldHeight = getHeightAtPoint(i, j);
