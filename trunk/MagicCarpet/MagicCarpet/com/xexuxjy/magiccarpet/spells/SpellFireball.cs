@@ -60,6 +60,7 @@ namespace com.xexuxjy.magiccarpet.spells
                 {
                     // do damge based on owner of spell.
                     partner.GetGameObject().Damaged(new DamageData(Owner,m_damage));
+
                 }
                 Cleanup();
             }

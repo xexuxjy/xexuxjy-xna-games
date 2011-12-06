@@ -22,6 +22,7 @@ namespace com.xexuxjy.magiccarpet.spells
         public override void Initialize(SpellTemplate spellTemplate)
         {
             base.Initialize(spellTemplate);
+            StickToGround = false;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

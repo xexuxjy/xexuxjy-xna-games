@@ -78,12 +78,30 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     }
                 case (ActionState.Idle):
                     {
-                        QueueAction(new ActionFindLocation(this, s_searchRadius));
+                        // if we've finished an idle then look around for something
+                        // to do.
+
+                        BaseAction newAction;
+                        // need to have a better way of sorting these weights but..
+                        double choice = Globals.random.NextDouble();
+                        if (choice < 0.2)
+                        {
+                            newAction = new ActionIdle(this);
+                        }
+                        else if (choice >= 0.2 && choice < 0.5)
+                        {
+                            newAction = new ActionFindEnemy(this,s_searchRadius);
+                        }
+                        else
+                        {
+                            newAction = new ActionFindLocation(this, s_searchRadius);
+                        }
+                        QueueAction(newAction);
                         break;
                     }
                 case(ActionState.AttackingMelee):
                     {
-                        if (action.Target.Alive && GameUtil.InRange(Owner,action.Target,s_monsterMeleeRange))
+                        if (action.Target.Alive && GameUtil.InRange(this,action.Target,s_monsterMeleeRange))
                         {
                             QueueAction(new ActionAttackMelee(this, action.Target, s_monsterMeleeRange, s_monsterMeleeDamage));
                         }
@@ -94,7 +112,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         // if we've finished attacking at range. then we need to see if 
                         // our target is dead or if we should do something else.
 
-                        if (action.Target.Alive && GameUtil.InRange(Owner,action.Target,s_monsterRangeDamage))
+                        if (action.Target.Alive && GameUtil.InRange(this,action.Target,s_monsterRangeDamage))
                         {
                             QueueAction(new ActionAttackRange(this, action.Target, s_monsterRangeRange,s_monsterRangeDamage, SpellType.Fireball));
                         }
@@ -128,7 +146,33 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Damaged(damageData);
 
-            if (GetAttributePercentage(GameObjectAttributeType.Health) < 0.25f)
+            // if something attacks us then we need to hit back?
+
+            float currentHealthPercentage = GetAttributePercentage(GameObjectAttributeType.Health);
+            float fleeValue = 0.25f;
+
+            if (currentHealthPercentage > fleeValue)
+            {
+                ActionState currentActionState = CurrentActionState;
+                // if we're in a passive state then maybe attack back?
+                if (BaseAction.IsPassive(currentActionState))
+                {
+                    m_actionPool.ClearAllActions(); 
+
+                    if(damageData.m_damager.Alive)
+                    {
+                        if (GameUtil.InRange(this,damageData.m_damager,s_monsterMeleeRange))
+                        {
+                            QueueAction(new ActionAttackMelee(this, damageData.m_damager, s_monsterMeleeRange, s_monsterMeleeDamage));
+                        }
+                        else if (GameUtil.InRange(this, damageData.m_damager, s_monsterRangeDamage))
+                        {
+                            QueueAction(new ActionAttackRange(this, damageData.m_damager, s_monsterRangeRange, s_monsterRangeDamage, SpellType.Fireball));
+                        }
+                    }
+                }
+            }
+            else
             {
                 // if we're being attacked and damaged then run away if we're below 1/4 health.
                 // FIXME - shouldn't really clear action if we're dead / dieing?
@@ -139,13 +183,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private GameObject m_currentTarget;
         private const float s_searchRadius = 50f;
-        private const float s_monsterSpeed = 5f;
+        private const float s_monsterSpeed = 0.1f;
         private const float s_monsterMeleeRange = 0.5f;
         private const float s_monsterMeleeDamage = 5f;
 
-        private const float s_monsterRangeRange = 5f;
+        private const float s_monsterRangeRange = 10f;
         private const float s_monsterRangeDamage = 5f;
 
         private const float s_radius = 0.5f;

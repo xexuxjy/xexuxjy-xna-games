@@ -33,8 +33,13 @@ namespace com.xexuxjy.magiccarpet.actions
             if (searchResults.Count > 0)
             {
                 Target = searchResults[0];
+#if LOG_EVENT
+                Globals.EventLogger.LogEvent(String.Format("ActionFindEnemy[{0}][{1}] Target [{2}][{3}].", Owner.Id, Owner.GameObjectType, Target.Id,Target.GameObjectType));
+#endif
+
             }
         
+
         }
         private float m_searchRadius;
 

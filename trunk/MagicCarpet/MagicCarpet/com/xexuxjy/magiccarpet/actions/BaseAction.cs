@@ -49,8 +49,9 @@ namespace com.xexuxjy.magiccarpet.actions
 
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        protected void ActionComplete()
+        // action completeness states shouldn't automatically add new states to the pool, this
+        // will be done in actionpool update.
+        public void ActionComplete()
         {
             InternalComplete();
         }
@@ -165,26 +166,54 @@ namespace com.xexuxjy.magiccarpet.actions
             get { throw new NotImplementedException(); }
         }
 
+
+        public static bool IsPassive(ActionState state)
+        {
+            return state >= ActionState.None && state <= ActionState.Turning;
+        }
+
+        public static bool IsAttacking(ActionState state)
+        {
+            return state >= ActionState.AttackingMelee && state <= ActionState.AttackingRange;
+        }
+
+        public static bool IsDieing(ActionState state)
+        {
+            return state == ActionState.Dieing;
+        }
+
+        public static bool IsCasting(ActionState state)
+        {
+            return state == ActionState.Casting;
+        }
+
+        public static bool IsLoading(ActionState state)
+        {
+            return state == ActionState.Loading || state == ActionState.Unloading;
+        }
+
+
         public event EventHandler<EventArgs> UpdateOrderChanged;
     }
 
 
 
+
+
     public enum ActionState
     {
-        None,
-        Idle,
-        Moving,
-        Turning,
-        Loading,
-        Unloading,
-        Casting,
-        Dieing,
-        AttackingMelee,
-        AttackingRange,
-        Searching,
-        Travelling,
-        Fleeing
+        None = 0,
+        Idle = 1,
+        Searching = 2,
+        Travelling = 3,
+        Turning = 4,
+        Fleeing = 5,
+        Loading = 6,
+        Unloading = 7,
+        Casting = 8,
+        AttackingMelee= 9,
+        AttackingRange=10,
+        Dieing = 11,
 
     }
 

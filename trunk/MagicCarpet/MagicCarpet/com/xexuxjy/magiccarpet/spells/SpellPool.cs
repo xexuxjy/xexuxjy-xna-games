@@ -168,7 +168,7 @@ namespace com.xexuxjy.magiccarpet.spells
         public delegate void SpellCastHandler(GameObject gameObject, Spell spell);
         public event SpellCastHandler SpellCast;
 
-
+        private const float InfiniteMana = -99f;
 
 
         public bool Enabled

@@ -79,15 +79,42 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public void ClearAllActions()
         {
-            // FIXME - this shouldn't clear a death action?
-            m_actionQueue.Clear();
-
-
 
 #if LOG_EVENT
             Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] ClearAllAction .", m_owner.Id, m_owner.GameObjectType));
 #endif
 
+            BaseAction dieingAction = null;
+            BaseAction action = null;
+            do
+            {
+                action = m_actionQueue.Dequeue();
+                if (BaseAction.IsDieing(action.ActionState))
+                {
+                    // shouldn't have multiple dieing actions
+                    Debug.Assert(dieingAction == null);
+                    dieingAction = action;
+                }
+                else
+                {
+#if LOG_EVENT
+                    Globals.EventLogger.LogEvent(String.Format("Clearing[{0}] Started[{1}] .", action.ActionState, action.Started));
+#endif
+                    if (action.Started)
+                    {
+                        action.ActionComplete();
+                    }
+                }
+
+            } while (m_actionQueue.Count > 0);
+
+            // if we took the death action off then put it back.
+            if (dieingAction != null)
+            {
+                m_actionQueue.Enqueue(dieingAction);
+            }
+
+            
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,16 +129,12 @@ namespace com.xexuxjy.magiccarpet.actions
                     StartAction(CurrentAction);
                 }
 
-                if (m_owner is Monster && CurrentAction is ActionTravel)
-                {
-                    int ibreak = 0;
-                }
-
                 CurrentAction.Update(gameTime);
 
                 if (CurrentAction.Complete)
                 {
                     BaseAction completedAction = m_actionQueue.Dequeue();
+                    //handle setup of next actions
                     CompleteAction(completedAction);
                 }
             }
@@ -138,11 +161,25 @@ namespace com.xexuxjy.magiccarpet.actions
             {
                 baseAction.Initialize();
             }
-            m_actionQueue.Enqueue(baseAction);
+
+            // if current action is not death then allow further actions queued.
+            if (ActionState != ActionState.Dieing)
+            {
 
 #if LOG_EVENT
-            Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] QueueAction [{2}].", m_owner.Id, m_owner.GameObjectType, baseAction.ActionState));
+                Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] QueueAction [{2}].", m_owner.Id, m_owner.GameObjectType, baseAction.ActionState));
 #endif
+
+                m_actionQueue.Enqueue(baseAction);
+            }
+            else
+            {
+                // not adding new action as we're dieing
+#if LOG_EVENT
+                Globals.EventLogger.LogEvent(String.Format("ActionPool[{0}][{1}] QueueAction [{2}] FAILED as dieing.", m_owner.Id, m_owner.GameObjectType, baseAction.ActionState));
+#endif
+            }
+
 
         }
 
