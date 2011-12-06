@@ -25,7 +25,10 @@ namespace com.xexuxjy.magiccarpet.actions
             newPosition *= m_searchRadius;
 
             TargetLocation = Owner.Position + newPosition;
-        
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("ActionFindLocation[{0}][{1}] Target [{2}].", Owner.Id, Owner.GameObjectType, TargetLocation));
+#endif
+
         }
         private float m_searchRadius;
     }

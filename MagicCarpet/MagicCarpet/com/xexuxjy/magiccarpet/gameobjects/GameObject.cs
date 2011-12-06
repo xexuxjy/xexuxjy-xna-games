@@ -69,6 +69,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void ActionComplete(BaseAction baseAction)
         {
+            switch (baseAction.ActionState)
+            {
+                case (ActionState.Dieing):
+                    {
+                        // default behaviour on death is simple cleanup
+                        Cleanup();
+                        break;
+                    }
+            }
 
         }
 
@@ -102,12 +111,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public float GetAttributePercentage(GameObjectAttributeType attributeType)
         {
-            float max = m_attributes[(int)attributeType].MaxValue;
+            float baseVal = m_attributes[(int)attributeType].BaseValue;
             float current = m_attributes[(int)attributeType].CurrentValue;
             float result = 0f;
-            if (max > 0f)
+            if (baseVal > 0f)
             {
-                result = current / max;
+                result = current / baseVal;
             }
             return result;
         }
@@ -217,7 +226,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public CollisionObject CollisionObject
+        public RigidBody CollisionObject
         {
             get { return m_collisionObject; }
         }
@@ -304,14 +313,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 Vector3 clampedValue = value;
                 Globals.Terrain.ClampToTerrain(ref clampedValue);
 
-                float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
-                clampedValue.Y = height + GetStartOffsetHeight();
+                if (StickToGround)
+                {
+                    float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
+                    clampedValue.Y = height + GetStartOffsetHeight();
+                }
 
                 m.Translation = clampedValue;
                 m_motionState.SetWorldTransform(ref m);
             }
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -558,6 +571,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             TargetSpeed = 0f;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool StickToGround
+        {
+            get { return m_stickToGround; }
+            set { m_stickToGround = value; }
+        }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -737,7 +758,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         // And others
 
-        private ObjectArray<GameObjectAttribute> m_attributes = new ObjectArray<GameObjectAttribute>();
+        protected ObjectArray<GameObjectAttribute> m_attributes = new ObjectArray<GameObjectAttribute>();
 
         protected String m_id;
         protected Vector3 m_spawnPosition; // where the object starts in the world, used by AI
@@ -749,7 +770,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected GameObjectType m_gameObjectType;
 
         protected IMotionState m_motionState;
-        protected CollisionObject m_collisionObject;
+        protected RigidBody m_collisionObject;
 
         protected Vector3 m_direction;
         protected float m_speed;
@@ -765,6 +786,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected ActionPool m_actionPool;
         protected SpellPool m_spellPool;
+
+        protected bool m_stickToGround = true;
 
         public static int s_idCounter = 0;
     }

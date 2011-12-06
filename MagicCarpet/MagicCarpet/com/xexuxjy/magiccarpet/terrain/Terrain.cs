@@ -132,7 +132,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             base.Initialize();
 
             // build landscape afterwards as we need collision object for BB.
-            BuildLandscape();
+            //BuildLandscape();
 
 
         }
@@ -261,7 +261,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                     }
                 }
 
-                Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
+                //Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
             }
         }
 

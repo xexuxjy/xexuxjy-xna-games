@@ -10,6 +10,7 @@ using com.xexuxjy.magiccarpet.spells;
 using GameStateManagement;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.util;
+using com.xexuxjy.magiccarpet.combat;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -35,10 +36,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Initialize();
             GrowToSize(0);
+
+            // test value for now.
+            m_storedMana = 500;
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void SetStartAttributes()
+        {
+            m_attributes[(int)GameObjectAttributeType.Health] = new GameObjectAttribute(GameObjectAttributeType.Health, 100);
+            // silly amount of mana.
+            m_attributes[(int)GameObjectAttributeType.Mana] = new GameObjectAttribute(GameObjectAttributeType.Mana, float.MaxValue);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public override void BuildCollisionObject()
         {
             Vector3 halfExtents = new Vector3(CastleSizes[Level]/2, GetStartOffsetHeight(), CastleSizes[Level]/2);
@@ -72,11 +85,46 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Cleanup()
         {
-            m_turrets.Clear();
+            if (m_turrets != null)
+            {
+                m_turrets.Clear();
+            }
+
             m_turrets = null;
             base.Cleanup();
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void ActionComplete(BaseAction action)
+        {
+
+            switch (action.ActionState)
+            {
+                case (ActionState.Dieing):
+                    {
+
+                        // drop mana balls randomly withing our area?
+                        int maxBalls = 10;
+                        int numBalls = 0;
+                        int manaValue = (int)m_storedMana / maxBalls;
+                        if(manaValue == 0)
+                        {
+                            manaValue = 1;
+                        }
+                        for (int i = 0; i < maxBalls; ++i)
+                        {
+                            int radius = CastleSizes[Level];
+                            Vector3 manaBallPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(Position, radius);
+                            ManaBall manaBall = (ManaBall)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, manaBallPosition);
+                            manaBall.ManaValue = manaValue;
+                        }
+
+                        Cleanup();
+                        break;
+                    }
+            }
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -129,6 +177,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public void GrowToSize(int size)
         {
             Debug.Assert(CanPlaceSize(Position,size));
+
+            Level = size;
+
             int width = CastleSizes[size];
 
             Vector3 startPos = Position;
@@ -218,6 +269,21 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // when we're damaged we start losing mana as manaballs. these manaballs should still be 
+        // owner coloured?
+        public override void Damaged(DamageData damageData)
+        {
+            base.Damaged(damageData);
+
+            float damage;
+
+            float currentHealthPercentage = GetAttributePercentage(GameObjectAttributeType.Health);
+
+
+
+
+        }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
