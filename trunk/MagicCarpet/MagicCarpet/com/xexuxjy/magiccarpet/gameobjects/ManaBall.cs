@@ -51,11 +51,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(2f, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
-            RigidBody rb = (RigidBody)m_collisionObject;
-            rb.SetFlags(rb.GetFlags() &~ RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
-            rb.SetActivationState(ActivationState.ACTIVE_TAG);
-            rb.SetDamping(0.5f, 0.1f);
-
+            BeingLoaded = false;
             // set a custom material here as we want a fairly damped response.
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 
@@ -64,6 +60,35 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public bool BeingLoaded
+        {
+            get { return m_beingLoaded; }
+            set
+            {
+                m_beingLoaded = value;
+                if (m_beingLoaded)
+                {
+                    RigidBody rb = (RigidBody)m_collisionObject;
+                    rb.SetFlags(rb.GetFlags() & ~RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
+                    rb.SetActivationState(ActivationState.ACTIVE_TAG);
+                    rb.SetDamping(0.5f, 0.1f);
+                }
+                else
+                {
+                    RigidBody rb = (RigidBody)m_collisionObject;
+                    rb.SetFlags(rb.GetFlags() & ~RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
+                    rb.SetActivationState(ActivationState.ACTIVE_TAG);
+                    rb.SetDamping(0.5f, 0.1f);
+
+                }
+            }
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        
         public float ManaValue
         {
             get { return m_manaValue; }
@@ -74,6 +99,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private float m_manaValue;
+        private bool m_beingLoaded;
 
         protected static CollisionShape s_collisionShape;
     }

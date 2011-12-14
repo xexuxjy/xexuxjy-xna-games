@@ -9,11 +9,11 @@ namespace com.xexuxjy.magiccarpet.actions
 {
     public class ActionFlee : BaseAction
     {
-        public ActionFlee(GameObject owner, Vector3 direction)
+        public ActionFlee(GameObject owner, Vector3 direction,float speed)
             : base(owner, null, ActionState.Fleeing)
         {
             Owner.Direction = direction;
-            Owner.TargetSpeed = s_fleeSpeed;
+            Owner.TargetSpeed = speed;
             Duration = s_fleeDuration;
         }
 
@@ -24,7 +24,5 @@ namespace com.xexuxjy.magiccarpet.actions
 
 
         const float s_fleeDuration = 5f;
-        const float s_fleeSpeed = 10f;
-
     }
 }

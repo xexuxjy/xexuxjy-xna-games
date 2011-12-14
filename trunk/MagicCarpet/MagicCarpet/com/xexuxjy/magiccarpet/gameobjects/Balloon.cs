@@ -8,6 +8,7 @@ using com.xexuxjy.magiccarpet.actions;
 using System.Diagnostics;
 using BulletXNA;
 using GameStateManagement;
+using com.xexuxjy.magiccarpet.combat;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -28,12 +29,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override float GetHoverHeight()
+        {
+            return Globals.s_balloonHoverHeight;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             if (ActionState == ActionState.None)
             {
-                QueueAction(new ActionIdle(this));
+                QueueAction(Globals.ActionPool.GetActionIdle(this));
             }
             else if (ActionState == ActionState.Travelling)
             {
@@ -64,7 +72,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void Load(ManaBall manaBall)
         {
-            QueueAction(new ActionLoad(this,manaBall));
+            QueueAction(Globals.ActionPool.GetActionLoad(this, manaBall));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +97,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         manaball.Die();
                         if (Full)
                         {
-                            QueueAction(new ActionFindCastle(this, null, s_castleSearchRadius));
+                            QueueAction(Globals.ActionPool.GetActionFindCastle(this, null, Globals.s_balloonSearchRadiusCastle));
                         }
 
                         break;
@@ -117,14 +125,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         m_currentTarget = action.Target;
                         if (m_currentTarget != null)
                         {
-                            QueueAction(new ActionTravel(this, m_currentTarget, Vector3.Zero, s_balloonSpeed));
+                            QueueAction(Globals.ActionPool.GetActionTravel(this, m_currentTarget, Vector3.Zero, Globals.s_balloonTravelSpeed));
                         }
 
                         break;
                     }
                 case (ActionState.Idle):
                     {
-                        QueueAction(new ActionFindManaball(this, null, s_balloonSearchRadius));
+                        QueueAction(Globals.ActionPool.GetActionFindManaball(this, null, Globals.s_balloonSearchRadiusManaball));
                         break;
                     }
                 case(ActionState.Travelling):
@@ -133,7 +141,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                         if (action.Target.GameObjectType == GameObjectType.castle)
                         {
-                            QueueAction(new ActionUnload(this, action.Target));
+                            QueueAction(Globals.ActionPool.GetActionUnload(this, action.Target));
                         }
                         else if (action.Target.GameObjectType == GameObjectType.manaball)
                         {
@@ -149,6 +157,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void Damaged(DamageData damageData)
+        {
+            base.Damaged(damageData);
+
+            // if something attacks us then we need to hit back?
+
+            float currentHealthPercentage = GetAttributePercentage(GameObjectAttributeType.Health);
+
+            if (currentHealthPercentage <= Globals.s_balloonFleeHealthPercentage)
+            {
+                m_actionComponent.ClearAllActions();
+                QueueAction(new ActionFlee(this, GetFleeDirection(),Globals.s_balloonFleeSpeed));
+            }
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public float CurrentLoad
         {
             get { return m_currentLoad; }
@@ -161,7 +185,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                return MathUtil.CompareFloat(m_currentLoad, s_maxLoad);
+                return MathUtil.CompareFloat(m_currentLoad, Globals.s_balloonMaxCapacity);
             }
         }
 
@@ -184,10 +208,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private float m_currentLoad;
 
         private GameObject m_currentTarget;
-        private const float s_balloonSearchRadius = 50f;
-        private const float s_castleSearchRadius = 250f;
-        private const float s_balloonSpeed = 5f;
-        private const float s_maxLoad = 100f;
 
 
     }
