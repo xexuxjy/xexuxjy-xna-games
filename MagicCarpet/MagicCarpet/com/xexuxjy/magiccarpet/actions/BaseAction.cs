@@ -12,7 +12,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public BaseAction(GameObject owner, GameObject target,ActionState actionState)
         {
             m_actionState = actionState;
-            m_actionPool = owner.ActionPool;
+            m_actionComponent = owner.ActionComponent;
             m_owner = owner;
             m_target = target;
         }
@@ -143,7 +143,7 @@ namespace com.xexuxjy.magiccarpet.actions
         }
 
 
-        private ActionPool m_actionPool;
+        private ActionComponent m_actionComponent;
         private GameObject m_owner; 
         private GameObject m_target;
         private Vector3 m_targetLocation;

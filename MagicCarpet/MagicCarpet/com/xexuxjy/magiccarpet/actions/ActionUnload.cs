@@ -14,7 +14,7 @@ namespace com.xexuxjy.magiccarpet.actions
         {
             Debug.Assert(owner is Balloon);
             Debug.Assert(target is Castle);
-            Duration = Globals.BalloonUnLoadTime;
+            Duration = Globals.s_balloonUnLoadTime;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             base.Update(gameTime);
             if (ActionState == ActionState.None)
             {
-                QueueAction(new ActionIdle(this));
+                QueueAction(Globals.ActionPool.GetActionIdle(this));
             }
         }
 
@@ -73,7 +73,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Searching):
                     {
                         // Decide what to do
-                        QueueAction(new ActionTravel(this, null, action.TargetLocation, s_monsterSpeed));                           
+                        QueueAction(Globals.ActionPool.GetActionTravel(this, null, action.TargetLocation, Globals.s_monsterTravelSpeed));                           
                         break;
                     }
                 case (ActionState.Idle):
@@ -83,27 +83,27 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                         BaseAction newAction;
                         // need to have a better way of sorting these weights but..
-                        double choice = Globals.random.NextDouble();
+                        double choice = Globals.s_random.NextDouble();
                         if (choice < 0.2)
                         {
-                            newAction = new ActionIdle(this);
+                            newAction = Globals.ActionPool.GetActionIdle(this);
                         }
                         else if (choice >= 0.2 && choice < 0.5)
                         {
-                            newAction = new ActionFindEnemy(this,s_searchRadius);
+                            newAction = Globals.ActionPool.GetActionFindEnemy(this, Globals.s_monsterSearchRadius);
                         }
                         else
                         {
-                            newAction = new ActionFindLocation(this, s_searchRadius);
+                            newAction = Globals.ActionPool.GetActionFindLocation(this, Globals.s_monsterSearchRadius);
                         }
                         QueueAction(newAction);
                         break;
                     }
                 case(ActionState.AttackingMelee):
                     {
-                        if (action.Target.Alive && GameUtil.InRange(this,action.Target,s_monsterMeleeRange))
+                        if (action.Target.Alive && GameUtil.InRange(this,action.Target,Globals.s_monsterMeleeRange))
                         {
-                            QueueAction(new ActionAttackMelee(this, action.Target, s_monsterMeleeRange, s_monsterMeleeDamage));
+                            QueueAction(Globals.ActionPool.GetActionAttackMelee(this, action.Target, Globals.s_monsterMeleeRange, Globals.s_monsterMeleeDamage));
                         }
                         break;
                     }
@@ -112,9 +112,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         // if we've finished attacking at range. then we need to see if 
                         // our target is dead or if we should do something else.
 
-                        if (action.Target.Alive && GameUtil.InRange(this,action.Target,s_monsterRangeDamage))
+                        if (action.Target.Alive && GameUtil.InRange(this, action.Target, Globals.s_monsterRangedDamage))
                         {
-                            QueueAction(new ActionAttackRange(this, action.Target, s_monsterRangeRange,s_monsterRangeDamage, SpellType.Fireball));
+                            QueueAction(Globals.ActionPool.GetActionAttackRange(this, action.Target, Globals.s_monsterRangedRange, Globals.s_monsterRangedDamage, SpellType.Fireball));
                         }
                         break;
                     }
@@ -134,7 +134,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 default:
                     {
-                        QueueAction(new ActionIdle(this));
+                        QueueAction(Globals.ActionPool.GetActionIdle(this));
                         break;
                     }
             }
@@ -149,25 +149,24 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // if something attacks us then we need to hit back?
 
             float currentHealthPercentage = GetAttributePercentage(GameObjectAttributeType.Health);
-            float fleeValue = 0.25f;
 
-            if (currentHealthPercentage > fleeValue)
+            if (currentHealthPercentage > Globals.s_monsterFleeHealthPercentage)
             {
                 ActionState currentActionState = CurrentActionState;
                 // if we're in a passive state then maybe attack back?
                 if (BaseAction.IsPassive(currentActionState))
                 {
-                    m_actionPool.ClearAllActions(); 
+                    m_actionComponent.ClearAllActions(); 
 
                     if(damageData.m_damager.Alive)
                     {
-                        if (GameUtil.InRange(this,damageData.m_damager,s_monsterMeleeRange))
+                        if (GameUtil.InRange(this, damageData.m_damager, Globals.s_monsterMeleeRange))
                         {
-                            QueueAction(new ActionAttackMelee(this, damageData.m_damager, s_monsterMeleeRange, s_monsterMeleeDamage));
+                            QueueAction(Globals.ActionPool.GetActionAttackMelee(this, damageData.m_damager, Globals.s_monsterMeleeRange, Globals.s_monsterMeleeDamage));
                         }
-                        else if (GameUtil.InRange(this, damageData.m_damager, s_monsterRangeDamage))
+                        else if (GameUtil.InRange(this, damageData.m_damager, Globals.s_monsterRangedDamage))
                         {
-                            QueueAction(new ActionAttackRange(this, damageData.m_damager, s_monsterRangeRange, s_monsterRangeDamage, SpellType.Fireball));
+                            QueueAction(Globals.ActionPool.GetActionAttackRange(this, damageData.m_damager, Globals.s_monsterRangedRange, Globals.s_monsterRangedDamage, SpellType.Fireball));
                         }
                     }
                 }
@@ -176,21 +175,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 // if we're being attacked and damaged then run away if we're below 1/4 health.
                 // FIXME - shouldn't really clear action if we're dead / dieing?
-                m_actionPool.ClearAllActions(); 
-                QueueAction(new ActionFlee(this, GetFleeDirection()));
+                ClearAllActions();
+                QueueAction(Globals.ActionPool.GetActionFlee(this, GetFleeDirection(), Globals.s_monsterFleeSpeed));
             }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private const float s_searchRadius = 50f;
-        private const float s_monsterSpeed = 0.1f;
-        private const float s_monsterMeleeRange = 0.5f;
-        private const float s_monsterMeleeDamage = 5f;
-
-        private const float s_monsterRangeRange = 10f;
-        private const float s_monsterRangeDamage = 5f;
-
-        private const float s_radius = 0.5f;
+        const float s_radius = 0.5f;
     }
 }

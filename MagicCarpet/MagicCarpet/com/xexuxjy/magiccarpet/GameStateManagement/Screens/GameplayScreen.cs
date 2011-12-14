@@ -55,6 +55,8 @@ namespace GameStateManagement
         /// </summary>
         public override void LoadContent()
         {
+            Globals.LoadConfig();
+
             if (m_content == null)
             {
                 m_content = new ContentManager(ScreenManager.Game.Services, "Content");
@@ -64,10 +66,8 @@ namespace GameStateManagement
 
             m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
-            // A real game would probably have more content than this sample, so
-            // it would take longer to load. We simulate that by delaying for a
-            // while, giving you a chance to admire the beautiful loading screen.
-            // TODO: Add your initialization logic here
+
+            
             CameraComponent camera = new CameraComponent(Globals.Game);
             
             
@@ -162,10 +162,10 @@ namespace GameStateManagement
                 }
             }
 
-            if (initialScript != null && !loadedInitialScript)
+            if (Globals.s_initialScript != null && !loadedInitialScript)
             {
                 loadedInitialScript = true;
-                Globals.SimpleConsole.LoadScript(initialScript);
+                Globals.SimpleConsole.LoadScript(Globals.s_initialScript);
             }
 
 
@@ -294,17 +294,29 @@ namespace GameStateManagement
         GameComponentCollection m_componentCollection = new GameComponentCollection();
         List<IDrawable> m_drawableList = new List<IDrawable>();
 
-        Random random = new Random();
 
         MouseController m_mouseController;
         KeyboardController m_keyboardController;   
  
         static bool droppedInitialManaBalls = false;
         static bool loadedInitialScript = false;
-        static String initialScript = "level2";
+
         float pauseAlpha;
 
         #endregion
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

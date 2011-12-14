@@ -132,6 +132,10 @@ namespace com.xexuxjy.magiccarpet.manager
             foreach (GameObject removedGameObject in m_gameObjectListRemove)
             {
                 // cleanup may already have been called.
+                if (removedGameObject.Owner != null)
+                {
+                    removedGameObject.Owner.NotifyOwnershipLost(removedGameObject);
+                }
                 removedGameObject.Cleanup();
                 Globals.CollisionManager.RemoveFromWorld(removedGameObject.CollisionObject);
                 m_gameObjectList.Remove(removedGameObject);

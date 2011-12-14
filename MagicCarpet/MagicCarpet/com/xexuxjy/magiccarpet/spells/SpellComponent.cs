@@ -7,9 +7,9 @@ using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.spells
 {
-    public class SpellPool : IUpdateable
+    public class SpellComponent : IUpdateable
     {
-        public SpellPool(GameObject owner)
+        public SpellComponent(GameObject owner)
         {
 
             m_owner = owner;
@@ -21,10 +21,6 @@ namespace com.xexuxjy.magiccarpet.spells
             InitializeTemplate(SpellType.Fireball, 5, 0.5f, 1f, 10f);
 
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

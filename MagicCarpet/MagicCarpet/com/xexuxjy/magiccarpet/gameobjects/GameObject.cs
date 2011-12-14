@@ -60,6 +60,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public virtual float GetHoverHeight()
+        {
+            return 0f;
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public virtual void ActionStarted(BaseAction baseAction)
         {
 
@@ -86,11 +94,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Initialize()
         {
             m_scaleTransform = Matrix.Identity;
-            m_actionPool = new ActionPool(this);
-            m_actionPool.Initialize();
+            m_actionComponent = new ActionComponent(this);
+            m_actionComponent.Initialize();
 
-            m_spellPool = new SpellPool(this);
-            m_spellPool.Initialize();
+            m_spellComponent = new SpellComponent(this);
+            m_spellComponent.Initialize();
 
             m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
 
@@ -179,9 +187,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Update(gameTime);
 
-            m_actionPool.Update(gameTime);
+            m_actionComponent.Update(gameTime);
 
-            m_spellPool.Update(gameTime);
+            m_spellComponent.Update(gameTime);
 
             // no acceleration)
             if (!MathUtil.CompareFloat(TargetSpeed, Speed))
@@ -219,6 +227,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             if (!m_awaitingRemoval)
             {
+                Owner = null;
                 Globals.GameObjectManager.RemoveGameObject(this);
                 m_awaitingRemoval = true;
             }
@@ -316,7 +325,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 if (StickToGround)
                 {
                     float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
-                    clampedValue.Y = height + GetStartOffsetHeight();
+                    clampedValue.Y = height + GetStartOffsetHeight() +  GetHoverHeight();
                 }
 
                 m.Translation = clampedValue;
@@ -368,15 +377,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public ActionState ActionState
         {
-            get { return m_actionPool.ActionState; }
+            get { return m_actionComponent.ActionState; }
         }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public ActionPool ActionPool
+        public ActionComponent ActionComponent
         {
-            get { return m_actionPool; }
+            get { return m_actionComponent; }
         }
 
 
@@ -430,16 +439,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 if (value != m_owner)
                 {
-                    if (OwnerChanged != null)
+                    // Tell the old owner we've gone
+                    if (m_owner != null)
                     {
-                        OwnerChanged(m_owner, value);
+                        m_owner.NotifyOwnershipLost(this);
+                    }
+                    if (value != null)
+                    {
+                        // and let the new one know we exist.
+                        value.NotifyOwnershipGained(this);
                     }
                 }
                 m_owner = value;
             }
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -469,7 +482,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                return m_actionPool.ActionState;
+                return m_actionComponent.ActionState;
             }
             set
             {
@@ -482,7 +495,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public bool QueueContainsAction(ActionState actionState)
         {
-            return m_actionPool.QueueContainsAction(actionState);
+            return m_actionComponent.QueueContainsAction(actionState);
         }
 
 
@@ -490,27 +503,27 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void QueueAction(BaseAction baseAction)
         {
-            m_actionPool.QueueAction(baseAction);
+            m_actionComponent.QueueAction(baseAction);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void ClearAction()
         {
-            m_actionPool.ClearCurrentAction();
+            m_actionComponent.ClearCurrentAction();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public void ClearAllActions()
         {
-            m_actionPool.ClearAllActions();
+            m_actionComponent.ClearAllActions();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
         {
-            m_spellPool.CastSpell(spellType, startPosition, direction);
+            m_spellComponent.CastSpell(spellType, startPosition, direction);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -698,6 +711,27 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public virtual void NotifyOwnershipGained(GameObject gameObject)
+        {
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] Gained Ownership [{2}][{3}].", Id, GameObjectType, gameObject.Id,gameObject.GameObjectType));
+#endif
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void NotifyOwnershipLost(GameObject gameObject)
+        {
+#if LOG_EVENT
+            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] Lost Ownership [{2}][{3}].", Id, GameObjectType, gameObject.Id, gameObject.GameObjectType));
+#endif
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
         public Vector3 GetFleeDirection()
         {
             // find out which is the 
@@ -743,20 +777,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Delegates and events
 
 
         public ObjectArray<ThreatData> m_recentThreats = new ObjectArray<ThreatData>();
 
-
-
-        public delegate void OwnerChangedHandler(GameObject oldOwner, GameObject newOwner);
-        public event OwnerChangedHandler OwnerChanged;
-
-        //public delegate void DamagedHandler(GameObject sender, EventArgs e);
-        //public event DamagedHandler Damaged;
-
-        // And others
+       // And others
 
         protected ObjectArray<GameObjectAttribute> m_attributes = new ObjectArray<GameObjectAttribute>();
 
@@ -783,9 +808,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected bool m_debugEnabled;
 
-
-        protected ActionPool m_actionPool;
-        protected SpellPool m_spellPool;
+        protected ActionComponent m_actionComponent;
+        protected SpellComponent m_spellComponent;
 
         protected bool m_stickToGround = true;
 

@@ -120,9 +120,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             BuildVertexBuffers();
 
-
-            Globals.random = new Random();
-
             InitialiseWorldGrid();
 
             //buildLandscape();
@@ -399,9 +396,9 @@ namespace com.xexuxjy.magiccarpet.terrain
                     increment = 1;
                 }
                 counter += increment;
-                int xpos = (int)((float)Globals.random.NextDouble() * Width);
-                int ypos = (int)((float)Globals.random.NextDouble() * Breadth);
-                float radius = ((float)Globals.random.NextDouble() * maxRadius);
+                int xpos = (int)((float)Globals.s_random.NextDouble() * Width);
+                int ypos = (int)((float)Globals.s_random.NextDouble() * Breadth);
+                float radius = ((float)Globals.s_random.NextDouble() * maxRadius);
                 // don't want too small a radius
                 if (radius < 5f)
                 {
@@ -409,8 +406,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                 }
 
 
-                float height = ((float)Globals.random.NextDouble() * maxInstanceHeight);
-                bool up = (float)Globals.random.NextDouble() > 0.5;
+                float height = ((float)Globals.s_random.NextDouble() * maxInstanceHeight);
+                bool up = (float)Globals.s_random.NextDouble() > 0.5;
                 if (!up)
                 {
                     height = -height;
@@ -623,8 +620,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         public Vector3 GetRandomWorldPositionXZ()
         {
             Vector3 result = new Vector3();
-            result.X = ((float)Globals.random.NextDouble() * Width);
-            result.Z = ((float)Globals.random.NextDouble() * Breadth);
+            result.X = ((float)Globals.s_random.NextDouble() * Width);
+            result.Z = ((float)Globals.s_random.NextDouble() * Breadth);
             result.Y = GetHeightAtPointLocal((int)result.X, (int)result.Z);
 
 
@@ -636,9 +633,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         public Vector3 GetRandomWorldPositionXZWithRange(Vector3 position,float distance)
         {
             Vector3 result = new Vector3();
-            float sign = Globals.random.NextDouble() > 0.5f ? 1.0f:-1.0f;
-            result.X = position.X + (sign * ((float)Globals.random.NextDouble() * distance));
-            result.Z = position.Z + (sign * ((float)Globals.random.NextDouble() * distance));
+            float sign = Globals.s_random.NextDouble() > 0.5f ? 1.0f : -1.0f;
+            result.X = position.X + (sign * ((float)Globals.s_random.NextDouble() * distance));
+            result.Z = position.Z + (sign * ((float)Globals.s_random.NextDouble() * distance));
 
             // make sure it fits in bounds.
             result.X = MathHelper.Clamp(result.X,0.0f,Width);
