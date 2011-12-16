@@ -81,34 +81,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Idle):
                     {
                         // if we don't have a castle then travel to a location and create one.
+                        // need to make sure we don't enqueue this multiple times.
                         if (m_castles.Count == 0)
                         {
-                            QueueAction(Globals.ActionPool.GetActionTravel(this, null, FindCastleLocation(), Globals.s_magicianTravelSpeed));
-                            //QueueAction(new Action
-
-                        }
-
-
-
-                        // look to see if there are any un-converted manaballs in range.
-
-
-                        BaseAction newAction;
-                        // need to have a better way of sorting these weights but..
-                        double choice = Globals.s_random.NextDouble();
-                        if (choice < 0.2)
-                        {
-                            newAction = Globals.ActionPool.GetActionIdle(this);
-                        }
-                        else if (choice >= 0.2 && choice < 0.5)
-                        {
-                            newAction = Globals.ActionPool.GetActionFindEnemy(this, Globals.s_monsterSearchRadius);
+                            Vector3 castlePosition = FindCastleLocation();
+                            QueueAction(Globals.ActionPool.GetActionTravel(this, null, castlePosition, Globals.s_magicianTravelSpeed));
+                            QueueAction(Globals.ActionPool.GetActionCastSpell(this, null, castlePosition, SpellType.Castle));
                         }
                         else
                         {
-                            newAction = Globals.ActionPool.GetActionFindLocation(this, Globals.s_monsterSearchRadius);
+
+                            QueueAction(Globals.ActionPool.GetActionFindManaball(this, null, Globals.s_magicianSearchRadiusManaball));
+                            // look to see if there are any un-converted manaballs in range.
                         }
-                        QueueAction(newAction);
                         break;
                     }
                 case (ActionState.AttackingMelee):
