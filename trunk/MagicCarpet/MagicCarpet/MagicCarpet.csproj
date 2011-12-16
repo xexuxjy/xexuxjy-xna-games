@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionAttackMelee.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionAttackRange.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionCastSpell.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionDie.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindCastle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindEnemy.cs" />

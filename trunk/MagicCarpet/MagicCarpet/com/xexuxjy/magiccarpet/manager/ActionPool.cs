@@ -72,5 +72,11 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             return new ActionTravel(owner, target, position, speed);
         }
+
+        public ActionCastSpell GetActionCastSpell(GameObject owner, GameObject target, Vector3 position, SpellType spellType)
+        {
+            return new ActionCastSpell(owner, target, position, spellType);
+        }
+
     }
 }

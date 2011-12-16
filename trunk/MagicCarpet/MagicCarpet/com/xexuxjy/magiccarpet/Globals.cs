@@ -90,6 +90,8 @@ namespace com.xexuxjy.magiccarpet
 
         public static float s_magicianTravelSpeed = 5f;
         public static float s_magicianFleeSpeed = 10f;
+        public static float s_magicianSearchRadiusManaball = 50f;
+        public static float s_magicianSearchRadiusMonster = 50f;
 
 
 
@@ -287,6 +289,8 @@ namespace com.xexuxjy.magiccarpet
 
             TryReadFloat(configMap, "magician.travel.speed", ref s_magicianTravelSpeed);
             TryReadFloat(configMap, "magician.flee.speed", ref s_magicianFleeSpeed);
+            TryReadFloat(configMap, "magician.search.radius.manaball", ref s_magicianSearchRadiusManaball);
+            TryReadFloat(configMap, "magician.search.radius.monster", ref s_magicianSearchRadiusMonster);
 
 
 
