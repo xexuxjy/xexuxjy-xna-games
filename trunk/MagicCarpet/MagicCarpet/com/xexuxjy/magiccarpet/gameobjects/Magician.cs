@@ -74,8 +74,28 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 case (ActionState.Searching):
                     {
+
                         // Decide what to do
-                        QueueAction(Globals.ActionPool.GetActionTravel(this, null, action.TargetLocation, Globals.s_monsterTravelSpeed));
+                        //QueueAction(Globals.ActionPool.GetActionTravel(this, null, action.TargetLocation, Globals.s_monsterTravelSpeed));
+                        if(action.Target != null)
+                        {
+                            if(action.Target.Alive)
+                            {
+                                if (GameUtil.InRange(this, action.Target, Globals.s_monsterMeleeRange))
+                                {
+                                    QueueAction(Globals.ActionPool.GetActionAttackMelee(this, action.Target, Globals.s_monsterMeleeRange, Globals.s_monsterMeleeDamage));
+                                }
+                                else if (GameUtil.InRange(this, action.Target, Globals.s_monsterRangedDamage))
+                                {
+                                    QueueAction(Globals.ActionPool.GetActionAttackRange(this, action.Target, Globals.s_monsterRangedRange, Globals.s_monsterRangedDamage, SpellType.Fireball));
+                                }
+                                else
+                                {
+                                    //QueueAction(Globals.ActionPool.GetActionTravel());
+                                }
+                            }
+                        }
+
                         break;
                     }
                 case (ActionState.Idle):
@@ -90,9 +110,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         else
                         {
+                            FindData findData = new FindData();
+                            findData.m_owner = this;
+                            findData.m_findMask = GameObjectType.magician | GameObjectType.castle | GameObjectType.balloon | GameObjectType.monster;
+                            findData.m_magicianWeight = 1.0f;
+                            findData.m_monsterWeight = 0.8f;
+                            findData.m_balloonWeight = 0.6f;
+                            findData.m_castleWeight = 0.4f;
 
-                            QueueAction(Globals.ActionPool.GetActionFindManaball(this, null, Globals.s_magicianSearchRadiusManaball));
-                            // look to see if there are any un-converted manaballs in range.
+                            QueueAction(Globals.ActionPool.GetActionFind(findData));
+
                         }
                         break;
                     }

@@ -11,6 +11,7 @@ using GameStateManagement;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.combat;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -23,7 +24,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Castle(Vector3 position)
+        public Castle(IndexedVector3 position)
             : base(position, GameObjectType.castle)
         {
             m_initialHeight = position.Y;
@@ -54,7 +55,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         public override void BuildCollisionObject()
         {
-            Vector3 halfExtents = new Vector3(CastleSizes[Level]/2, GetStartOffsetHeight(), CastleSizes[Level]/2);
+            IndexedVector3 halfExtents = new IndexedVector3(CastleSizes[Level]/2, GetStartOffsetHeight(), CastleSizes[Level]/2);
            
             CollisionShape cs = new BoxShape(ref halfExtents);
             float mass = 0f;
@@ -115,7 +116,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         for (int i = 0; i < maxBalls; ++i)
                         {
                             int radius = CastleSizes[Level];
-                            Vector3 manaBallPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(Position, radius);
+                            IndexedVector3 manaBallPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(Position, radius);
                             ManaBall manaBall = (ManaBall)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, manaBallPosition);
                             manaBall.ManaValue = manaValue;
                         }
@@ -143,20 +144,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
-        public static bool CanPlaceSize(Vector3 position,int size)
+        public static bool CanPlaceSize(IndexedVector3 position,int size)
         {
             // go to the terrain and make sure that there is nothing nearby that will interfere.
             int width = CastleSizes[size];
 
-            Vector3 startPos = position;
-            startPos -= new Vector3(-width / 2, 0, -width / 2);
+            IndexedVector3 startPos = position;
+            startPos -= new IndexedVector3(-width / 2, 0, -width / 2);
 
 
             for (int i = 0; i < width; ++i)
             {
                 for (int j = 0; j < width; ++j)
                 {
-                    Vector3 point = startPos + new Vector3(i,0,j);
+                    IndexedVector3 point = startPos + new IndexedVector3(i,0,j);
                     TerrainSquare square = Globals.Terrain.GetTerrainSquareAtPointWorld(ref point);
                     if (square.Occupier != null)
                     {
@@ -182,8 +183,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             int width = CastleSizes[size];
 
-            Vector3 startPos = Position;
-            Vector3 offset = new Vector3(width / 2, 0, width / 2);
+            IndexedVector3 startPos = Position;
+            IndexedVector3 offset = new IndexedVector3(width / 2, 0, width / 2);
             startPos -= offset;
 
 
@@ -191,7 +192,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 for (int i = 0; i < width; ++i)
                 {
-                    Vector3 point = startPos + new Vector3(i, 0, j);
+                    IndexedVector3 point = startPos + new IndexedVector3(i, 0, j);
                     point.Y = m_initialHeight;
                     //point.Y = 0f;
                     Globals.Terrain.SetHeightAtPointWorld(ref point);
@@ -203,10 +204,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_scaleTransform = Matrix.CreateScale(width/2, GetStartOffsetHeight(), width/2);
             
 
-            Vector3 turretPos0 = new Vector3(Position.X-offset.X,Position.Y, Position.Z-offset.Z);
-            Vector3 turretPos1 = new Vector3(Position.X+offset.X,Position.Y, Position.Z-offset.Z);
-            Vector3 turretPos2 = new Vector3(Position.X-offset.X,Position.Y, Position.Z+offset.Z);
-            Vector3 turretPos3 = new Vector3(Position.X+offset.X,Position.Y, Position.Z+offset.Z);
+            IndexedVector3 turretPos0 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z-offset.Z);
+            IndexedVector3 turretPos1 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z-offset.Z);
+            IndexedVector3 turretPos2 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z+offset.Z);
+            IndexedVector3 turretPos3 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z+offset.Z);
             
             // clear or move turrets?
             if (m_turrets.Count == 0)
@@ -296,7 +297,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private class Turret
         {
 
-            public Turret(int turretId,Castle castle,Vector3 position)
+            public Turret(int turretId,Castle castle,IndexedVector3 position)
             {
                 m_turretId = turretId;
                 m_position = position;
@@ -365,7 +366,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            public Vector3 Position
+            public IndexedVector3 Position
             {
                 get { return m_position; }
                 set { m_position = value; }
@@ -375,7 +376,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
             int m_turretId;   
-            Vector3 m_position;
+            IndexedVector3 m_position;
             float m_cooldownTime;
             float m_damage;
             ActionState m_actionState;

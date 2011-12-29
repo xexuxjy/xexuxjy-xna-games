@@ -6,6 +6,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.magiccarpet.actions;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.spells;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -26,16 +27,27 @@ namespace com.xexuxjy.magiccarpet.manager
             return new ActionDie(owner);
         }
 
-        public ActionFindCastle GetActionFindCastle(GameObject owner, GameObject target, float searchRadius)
+        public ActionFind GetActionFind(FindData findData)
         {
-            return new ActionFindCastle(owner, target, searchRadius);
+            return new ActionFind(findData);
         }
 
-        public ActionFindEnemy GetActionFindEnemy(GameObject owner, float searchRadius)
-        {
-            return new ActionFindEnemy(owner, searchRadius);
 
-        }
+        //public ActionFindCastle GetActionFindCastle(GameObject owner, GameObject target, float searchRadius)
+        //{
+        //    return new ActionFindCastle(owner, target, searchRadius);
+        //}
+
+        //public ActionFindEnemy GetActionFindEnemy(GameObject owner, float searchRadius)
+        //{
+        //    return new ActionFindEnemy(owner, searchRadius);
+
+        //}
+
+        //public ActionFindManaball GetActionFindManaball(GameObject owner, GameObject target, float searchRadius)
+        //{
+        //    return new ActionFindManaball(owner, target,searchRadius);
+        //}
 
         public ActionFindLocation GetActionFindLocation(GameObject owner, float searchRadius)
         {
@@ -43,12 +55,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         }
 
-        public ActionFindManaball GetActionFindManaball(GameObject owner, GameObject target, float searchRadius)
-        {
-            return new ActionFindManaball(owner, target,searchRadius);
-        }
-
-        public ActionFlee GetActionFlee(GameObject owner, Vector3 direction, float speed)
+        public ActionFlee GetActionFlee(GameObject owner, IndexedVector3 direction, float speed)
         {
             return new ActionFlee(owner, direction, speed);
         }
@@ -68,12 +75,12 @@ namespace com.xexuxjy.magiccarpet.manager
             return new ActionUnload(owner, target);
         }
 
-        public ActionTravel GetActionTravel(GameObject owner, GameObject target, Vector3 position, float speed)
+        public ActionTravel GetActionTravel(GameObject owner, GameObject target, IndexedVector3 position, float speed)
         {
             return new ActionTravel(owner, target, position, speed);
         }
 
-        public ActionCastSpell GetActionCastSpell(GameObject owner, GameObject target, Vector3 position, SpellType spellType)
+        public ActionCastSpell GetActionCastSpell(GameObject owner, GameObject target, IndexedVector3 position, SpellType spellType)
         {
             return new ActionCastSpell(owner, target, position, spellType);
         }

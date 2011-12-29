@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -16,7 +17,7 @@ namespace com.xexuxjy.magiccarpet.manager
             m_contentManager = Globals.Game.Content;
             m_graphicsDevice = Globals.Game.GraphicsDevice;
             m_dictionary = new Dictionary<GameObjectType, Model>();
-            m_colorMap = new Dictionary<Vector3, Texture2D>();
+            m_colorMap = new Dictionary<IndexedVector3, Texture2D>();
         }
 
         public void LoadContent()
@@ -61,7 +62,7 @@ namespace com.xexuxjy.magiccarpet.manager
             return model;
         }
 
-        public Texture2D GetTexture(ref Vector3 color)
+        public Texture2D GetTexture(ref IndexedVector3 color)
         {
             if (!m_colorMap.ContainsKey(color))
             {
@@ -121,7 +122,7 @@ namespace com.xexuxjy.magiccarpet.manager
         private SpriteFont m_debugFont;
 
         private Dictionary<GameObjectType, Model> m_dictionary;
-        private Dictionary<Vector3, Texture2D> m_colorMap;
+        private Dictionary<IndexedVector3, Texture2D> m_colorMap;
 
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;

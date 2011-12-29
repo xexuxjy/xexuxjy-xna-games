@@ -114,19 +114,25 @@
   <ItemGroup>
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionAttackMelee.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionAttackRange.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionCastSpell.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionCastSpell.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionDie.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindCastle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindEnemy.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindGameObject.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindLocation.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindManaball.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFlee.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionIdle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionLoad.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionTravel.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionUnload.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\BaseAction.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\FindData.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\camera\DefaultCamera.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\camera\DHPCameraComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />

@@ -16,7 +16,7 @@ namespace com.xexuxjy.magiccarpet.collision
 {
     public class CollisionManager : DrawableGameComponent
     {
-        public CollisionManager(Vector3 worldMin, Vector3 worldMax)
+        public CollisionManager(IndexedVector3 worldMin, IndexedVector3 worldMax)
             : base(Globals.Game)
         {
             //game.Components.Add(this);
@@ -75,7 +75,7 @@ namespace com.xexuxjy.magiccarpet.collision
             ProcessCollisions();
 
             String debugText = String.Format("CollisionManager Objects[{0}] Constraints[{1}] Pairs[{2}] Manifolds[{3}].", m_dynamicsWorld.GetNumCollisionObjects(), m_dynamicsWorld.GetNumConstraints(), m_broadphase.GetOverlappingPairCache().GetNumOverlappingPairs(), m_dispatcher.GetNumManifolds());
-            Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, Vector3.One);
+            Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, IndexedVector3.One);
 
             base.Update(gameTime);
 
@@ -114,28 +114,28 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld,Object userPointer)
+        public RigidBody LocalCreateRigidBody(float mass, IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld,Object userPointer)
         {
             return LocalCreateRigidBody(mass, ref startTransform, shape,motionState, addToWorld,userPointer);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer)
+        public RigidBody LocalCreateRigidBody(float mass, ref IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer)
         {
             return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, CollisionFilterGroups.StaticFilter,(CollisionFilterGroups.AllFilter ^ CollisionFilterGroups.StaticFilter));
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public RigidBody LocalCreateRigidBody(float mass, IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
             return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, filterGroup, filterMask);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public RigidBody LocalCreateRigidBody(float mass, ref IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
 
             Debug.Assert((shape == null || shape.GetShapeType() != BroadphaseNativeTypes.INVALID_SHAPE_PROXYTYPE));
@@ -143,7 +143,7 @@ namespace com.xexuxjy.magiccarpet.collision
             //rigidbody is dynamic if and only if mass is non zero, otherwise static
             bool isDynamic = !MathUtil.CompareFloat(mass, 0f);
 
-            Vector3 localInertia = Vector3.Zero;
+            IndexedVector3 localInertia = IndexedVector3.Zero;
             if (isDynamic)
             {
                 shape.CalculateLocalInertia(mass, out localInertia);
@@ -154,7 +154,7 @@ namespace com.xexuxjy.magiccarpet.collision
             //#ifdef USE_MOTIONSTATE
             if (motionState == null)
             {
-                motionState = new DefaultMotionState(startTransform, Matrix.Identity);
+                motionState = new DefaultMotionState(startTransform, IndexedMatrix.Identity);
             }
 
             RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, motionState, shape, localInertia);
@@ -197,7 +197,7 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         // a check against terrain only.
-        public bool CastCameraGroundRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
+        public bool CastCameraGroundRay(IndexedVector3 startPos, IndexedVector3 endPos, ref IndexedVector3 collisionPoint, ref IndexedVector3 collisionNormal)
         {
             if (m_dynamicsWorld != null)
             {
@@ -229,7 +229,7 @@ namespace com.xexuxjy.magiccarpet.collision
         }
 
 
-        public bool CastRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
+        public bool CastRay(IndexedVector3 startPos, IndexedVector3 endPos, ref IndexedVector3 collisionPoint, ref IndexedVector3 collisionNormal)
         {
             if (m_dynamicsWorld != null)
             {
@@ -266,13 +266,13 @@ namespace com.xexuxjy.magiccarpet.collision
             // do these last.
             if (Globals.DebugDraw != null)
             {
-                Matrix m = Matrix.Identity;
-                Matrix rot = Matrix.Identity;
+                IndexedMatrix m = IndexedMatrix.Identity;
+                IndexedBasisMatrix rot = IndexedBasisMatrix.Identity;
                 int numObjects = m_dynamicsWorld.GetNumCollisionObjects();
-                Vector3 wireColor = new Vector3(1, 0, 0);
+                IndexedVector3 wireColor = new IndexedVector3(1, 0, 0);
 
-                Matrix view = Globals.Camera.ViewMatrix;
-                Matrix projection = Globals.Camera.ProjectionMatrix;
+                IndexedMatrix view = Globals.Camera.ViewMatrix;
+                IndexedMatrix projection = Globals.Camera.ProjectionMatrix;
 
 
                 for (int i = 0; i < numObjects; i++)
@@ -282,42 +282,42 @@ namespace com.xexuxjy.magiccarpet.collision
                     if (body != null && body.GetMotionState() != null)
                     {
                         DefaultMotionState myMotionState = (DefaultMotionState)body.GetMotionState();
-                        //myMotionState.m_graphicsWorldTrans.getOpenGLMatrix(m);
+                        //myMotionState.m_graphicsWorldTrans.getOpenGLIndexedMatrix(m);
                         m = myMotionState.m_graphicsWorldTrans;
-                        rot = MathUtil.BasisMatrix(ref myMotionState.m_graphicsWorldTrans);
+                        rot = myMotionState.m_graphicsWorldTrans._basis;
                     }
                     else
                     {
-                        //colObj.getWorldTransform().getOpenGLMatrix(m);
-                        rot = MathUtil.BasisMatrix(colObj.GetWorldTransform());
+                        //colObj.getWorldTransform().getOpenGLIndexedMatrix(m);
+                        rot = colObj.GetWorldTransform()._basis;
                     }
-                    wireColor = new Vector3(1.0f, 1.0f, 0.5f); //wants deactivation
-                    if ((i & 1) != 0) wireColor = new Vector3(0f, 0f, 1f);
+                    wireColor = new IndexedVector3(1.0f, 1.0f, 0.5f); //wants deactivation
+                    if ((i & 1) != 0) wireColor = new IndexedVector3(0f, 0f, 1f);
                     ///color differently for active, sleeping, wantsdeactivation states
                     if (colObj.GetActivationState() == ActivationState.ACTIVE_TAG) //active
                     {
                         if ((i & 1) != 0)
                         {
-                            wireColor += new Vector3(1f, 0f, 0f);
+                            wireColor += new IndexedVector3(1f, 0f, 0f);
                         }
                         else
                         {
-                            wireColor += new Vector3(.5f, 0f, 0f);
+                            wireColor += new IndexedVector3(.5f, 0f, 0f);
                         }
                     }
                     if (colObj.GetActivationState() == ActivationState.ISLAND_SLEEPING) //ISLAND_SLEEPING
                     {
                         if ((i & 1) != 0)
                         {
-                            wireColor += new Vector3(0f, 1f, 0f);
+                            wireColor += new IndexedVector3(0f, 1f, 0f);
                         }
                         else
                         {
-                            wireColor += new Vector3(0f, 05f, 0f);
+                            wireColor += new IndexedVector3(0f, 05f, 0f);
                         }
                     }
 
-                    Vector3 aabbMin, aabbMax;
+                    IndexedVector3 aabbMin, aabbMax;
                     m_dynamicsWorld.GetBroadphase().GetBroadphaseAabb(out aabbMin, out aabbMax);
 
                     aabbMin -= MathUtil.MAX_VECTOR;
@@ -345,7 +345,7 @@ namespace com.xexuxjy.magiccarpet.collision
         protected IConstraintSolver m_constraintSolver;
         protected DefaultCollisionConfiguration m_collisionConfiguration;
         protected DynamicsWorld m_dynamicsWorld;
-        protected Vector3 m_gravity = new Vector3(0, -10, 0);
+        protected IndexedVector3 m_gravity = new IndexedVector3(0, -10, 0);
     }
 
     public class CustomMaterialCombinerCallback : IContactAddedCallback
