@@ -5,6 +5,7 @@ using System.Text;
 using com.xexuxjy.magiccarpet.gameobjects;
 using BulletXNA;
 using Microsoft.Xna.Framework;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -21,7 +22,7 @@ namespace com.xexuxjy.magiccarpet.actions
         {
             // pick a random point within the search radius?
             float randomAngle = (float) Globals.s_random.NextDouble() * MathUtil.SIMD_2_PI;
-            Vector3 newPosition = new Vector3((float)Math.Cos(randomAngle), 0, (float)Math.Sin(randomAngle));
+            IndexedVector3 newPosition = new Vector3((float)Math.Cos(randomAngle), 0, (float)Math.Sin(randomAngle));
             newPosition *= m_searchRadius;
 
             TargetLocation = Owner.Position + newPosition;

@@ -121,9 +121,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionDie.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFind.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindCastle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindEnemy.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindGameObject.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindLocation.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFindManaball.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFlee.cs" />
