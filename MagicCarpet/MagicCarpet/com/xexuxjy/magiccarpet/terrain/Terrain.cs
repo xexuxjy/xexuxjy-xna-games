@@ -14,6 +14,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.interfaces;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
@@ -21,7 +22,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 	{
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Terrain(Vector3 position)
+        public Terrain(IndexedVector3 position)
             : base(position, GameObjectType.terrain)
         {
         }
@@ -83,7 +84,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             CollisionShape collisionShape = new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell|GameObjectType.manaball|GameObjectType.camera);
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, IndexedMatrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
             
             //m_collisionObject = new CollisionObject();
             //m_collisionObject.SetCollisionShape(collisionShape);
@@ -110,12 +111,12 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_effect.Parameters["BaseTexture"].SetValue(m_baseTexture);
             m_effect.Parameters["NoiseTexture"].SetValue(m_noiseTexture);
 
-            Vector3 ambientLight = new Vector3(0.3f);
-            Vector3 directionalLight = new Vector3(0.5f);
+            IndexedVector3 ambientLight = new IndexedVector3(0.3f);
+            IndexedVector3 directionalLight = new IndexedVector3(0.5f);
 
             m_effect.Parameters["AmbientLight"].SetValue(ambientLight);
             m_effect.Parameters["DirectionalLight"].SetValue(directionalLight);
-            m_effect.Parameters["LightPosition"].SetValue(new Vector3(0, 40, 0));
+            m_effect.Parameters["LightPosition"].SetValue(new IndexedVector3(0, 40, 0));
 
 
             BuildVertexBuffers();
@@ -205,7 +206,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             UpdateHeightMapTexture();
 
-            Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
+            IndexedMatrix viewProjection = Globals.Camera.ViewProjectionMatrix;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
 
             Game.GraphicsDevice.Indices = m_blockIndexBuffer;
@@ -213,13 +214,13 @@ namespace com.xexuxjy.magiccarpet.terrain
             //float oneOverTextureWidth = 1f/m_textureWidth;
             float oneOverTextureWidth = 1f / (m_textureWidth-1);
 
-            //Vector3 maxPos = Vector3.Zero;
+            //IndexedVector3 maxPos = IndexedVector3.Zero;
 
-            Vector3 lastStartPosition = Vector3.Zero;
+            IndexedVector3 lastStartPosition = IndexedVector3.Zero;
 
             int numSpans = Globals.WorldWidth / m_blockSize;
-            Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
-            Vector3 startPosition = new Vector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
+            IndexedVector3 blockSize = new IndexedVector3(m_blockSize, 0, m_blockSize);
+            IndexedVector3 startPosition = new IndexedVector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
 
             foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
             {
@@ -227,22 +228,22 @@ namespace com.xexuxjy.magiccarpet.terrain
                 {
                     for(int i=0;i<numSpans;++i)
                     {
-                        Vector3 localPosition = new Vector3((m_blockSize) * i, 0, (m_blockSize) * j);
+                        IndexedVector3 localPosition = new IndexedVector3((m_blockSize) * i, 0, (m_blockSize) * j);
 
-                        Vector3 worldPosition = localPosition + startPosition;
+                        IndexedVector3 worldPosition = localPosition + startPosition;
 
-                        Vector3 minbb = new Vector3(worldPosition.X, -Globals.WorldHeight, worldPosition.Z);
-                        Vector3 maxbb = minbb + blockSize;
+                        IndexedVector3 minbb = new IndexedVector3(worldPosition.X, -Globals.WorldHeight, worldPosition.Z);
+                        IndexedVector3 maxbb = minbb + blockSize;
                         maxbb.Y = Globals.WorldHeight;
 
                         BoundingBox bb = new BoundingBox(minbb,maxbb);
 
                         if (boundingFrustrum.Intersects(bb))
                         {
-                            Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
-                            //Matrix transform = viewProjection * Matrix.CreateTranslation(worldPosition);
-                            //Matrix transform = viewProjection;
-                            m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
+                            IndexedMatrix transform = IndexedMatrix.CreateTranslation(startPosition) * viewProjection;
+                            //IndexedMatrix transform = viewProjection * IndexedMatrix.CreateTranslation(worldPosition);
+                            //IndexedMatrix transform = viewProjection;
+                            m_effect.Parameters["WorldViewProjIndexedMatrix"].SetValue(transform);
                             m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, localPosition.X, localPosition.Z));
 
                             // need apply on inner level to make sure latest vals copied across
@@ -302,7 +303,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void AddPeak(Vector3 point, float height)
+        public void AddPeak(IndexedVector3 point, float height)
         {
             point = WorldToLocal(point);
             AddPeak(point.X, point.Z, height);
@@ -321,12 +322,12 @@ namespace com.xexuxjy.magiccarpet.terrain
         public virtual void AddPeak(float x, float z, float radius, float height)
         {
 
-            TerrainUpdater terrainUpdate = new TerrainUpdater(new Vector3(x, 0, z), radius, s_terrainMoveTime, height, this);
+            TerrainUpdater terrainUpdate = new TerrainUpdater(new IndexedVector3(x, 0, z), radius, s_terrainMoveTime, height, this);
             m_terrainUpdaters.Add(terrainUpdate);
         }		
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public virtual float GetHeightAtPointWorld(Vector3 point)
+        public virtual float GetHeightAtPointWorld(IndexedVector3 point)
         {
             // straight down
             float result = GetHeightAtPointWorld(point.X, point.Z);
@@ -336,9 +337,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void SetHeightAtPointWorld(ref Vector3 worldPoint)
+        public void SetHeightAtPointWorld(ref IndexedVector3 worldPoint)
         {
-            Vector3 local = WorldToLocal(worldPoint);
+            IndexedVector3 local = WorldToLocal(worldPoint);
             int localX = (int)local.X;
             int localZ = (int)local.Z;
             SetHeightAtPointLocal(localX,localZ,worldPoint.Y);
@@ -358,7 +359,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 		public virtual float GetHeightAtPointWorld(float x, float z)
 		{
-            Vector3 local = WorldToLocal(new Vector3(x,0,z));
+            IndexedVector3 local = WorldToLocal(new IndexedVector3(x,0,z));
             int localX = (int)local.X;
             int localZ = (int)local.Z;
             return GetHeightAtPointLocal(localX, localZ);
@@ -414,7 +415,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 }
                 
 
-                TerrainUpdater.ApplyImmediate(new Vector3(xpos,0, ypos), radius, height,this);
+                TerrainUpdater.ApplyImmediate(new IndexedVector3(xpos,0, ypos), radius, height,this);
             }
 
             UpdateHeightMap();
@@ -433,7 +434,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         //// how much space it will need , flatten the land etc.
         //public void addCastle(Castle theCastle)
         //{
-        //    Vector3 castlePosition = theCastle.Position;
+        //    IndexedVector3 castlePosition = theCastle.Position;
         //    BoundingBox box = theCastle.BoundingBox;
         //    int left = (int)box.Min.X;
         //    int right = (int)box.Max.X;
@@ -455,7 +456,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         //                terrainSquare.Type = TerrainType.castle;
         //            }
         //        }
-        //        Vector3 castlePosition2 = new Vector3();
+        //        IndexedVector3 castlePosition2 = new IndexedVector3();
         //        castlePosition2.X = theCastle.Position.X;
         //        castlePosition2.Z = theCastle.Position.Z;
         //        castlePosition2.Y = height;
@@ -471,9 +472,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public TerrainSquare GetTerrainSquareAtPointWorld(ref Vector3 worldPoint)
+        public TerrainSquare GetTerrainSquareAtPointWorld(ref IndexedVector3 worldPoint)
         {
-            Vector3 local = worldPoint - BoundingBox.Min;
+            IndexedVector3 local = worldPoint - BoundingBox.Min;
             int localX = (int)local.X;
             int localZ = (int)local.Z;
             return GetTerrainSquareAtPointLocal(localX, localZ);
@@ -505,7 +506,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void SetTerrainTypeAndOccupier(Vector3 position, TerrainType terrainType, GameObject occupier)
+        public void SetTerrainTypeAndOccupier(IndexedVector3 position, TerrainType terrainType, GameObject occupier)
         {
             TerrainSquare square = GetTerrainSquareAtPointWorld(ref position);
             square.Type = terrainType;
@@ -560,14 +561,14 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public bool IsPointInTerrain(ref Vector3 point)
+        public bool IsPointInTerrain(ref IndexedVector3 point)
            {
             return ((point.X >= 0.0f && point.X <= Width) && (point.Z >= 0.0f && point.Z <= Breadth));
 
         }        
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void AssertPointInTerrain(ref Vector3 point)
+        public void AssertPointInTerrain(ref IndexedVector3 point)
         {
             //Debug.Assert(isPointInTerrain(ref point), "Point not in terrain");
         }
@@ -617,9 +618,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public Vector3 GetRandomWorldPositionXZ()
+        public IndexedVector3 GetRandomWorldPositionXZ()
         {
-            Vector3 result = new Vector3();
+            IndexedVector3 result = new IndexedVector3();
             result.X = ((float)Globals.s_random.NextDouble() * Width);
             result.Z = ((float)Globals.s_random.NextDouble() * Breadth);
             result.Y = GetHeightAtPointLocal((int)result.X, (int)result.Z);
@@ -630,9 +631,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public Vector3 GetRandomWorldPositionXZWithRange(Vector3 position,float distance)
+        public IndexedVector3 GetRandomWorldPositionXZWithRange(IndexedVector3 position,float distance)
         {
-            Vector3 result = new Vector3();
+            IndexedVector3 result = new IndexedVector3();
             float sign = Globals.s_random.NextDouble() > 0.5f ? 1.0f : -1.0f;
             result.X = position.X + (sign * ((float)Globals.s_random.NextDouble() * distance));
             result.Z = position.Z + (sign * ((float)Globals.s_random.NextDouble() * distance));
@@ -646,9 +647,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void ClampToTerrain(ref Vector3 position)
+        public void ClampToTerrain(ref IndexedVector3 position)
         {
-            Vector3 local = WorldToLocal(position);
+            IndexedVector3 local = WorldToLocal(position);
 
             local.X = MathHelper.Clamp(local.X, 0, Width);
             local.Z = MathHelper.Clamp(local.Z, 0, Width);
@@ -691,7 +692,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         private class TerrainUpdater
         {
-            public TerrainUpdater(Vector3 position, float radius, float totalTime, float totalDeflection,Terrain terrain)
+            public TerrainUpdater(IndexedVector3 position, float radius, float totalTime, float totalDeflection,Terrain terrain)
             {
                 m_terrain = terrain;
                 m_positionLocal = position;
@@ -699,7 +700,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 BoundingBox terrainBB = m_terrain.BoundingBox;
 
                 // need to adjust position based on midpoint of terrain
-                //m_position -= new Vector3(CommonSettings.worldWidth / 2, 0, CommonSettings.worldBreadth / 2);
+                //m_position -= new IndexedVector3(CommonSettings.worldWidth / 2, 0, CommonSettings.worldBreadth / 2);
                 m_radius = radius;
                 m_totalTime = totalTime;
                 m_totalDeflection = totalDeflection;
@@ -713,7 +714,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             }
 
 
-            public static void ApplyImmediate(Vector3 position, float radius, float totalDeflection, Terrain terrain)
+            public static void ApplyImmediate(IndexedVector3 position, float radius, float totalDeflection, Terrain terrain)
             {
                 int minX = (int)System.Math.Max(0, position.X - radius);
                 int maxX = (int)System.Math.Min(Globals.WorldWidth, position.X + radius);
@@ -725,8 +726,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                 {
                     for (int i = minX; i < maxX; i++)
                     {
-                        Vector3 worldPoint = new Vector3(i, 0, j);
-                        Vector3 diff = worldPoint - position;
+                        IndexedVector3 worldPoint = new IndexedVector3(i, 0, j);
+                        IndexedVector3 diff = worldPoint - position;
                         float diffLength2 = diff.LengthSquared();
                         if (diffLength2 < floatRadius2)
                         {
@@ -757,8 +758,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                     {
                         for (int i = m_minX; i < m_maxX; i++)
                         {
-                            Vector3 worldPoint = new Vector3(i, 0, j);
-                            Vector3 diff = worldPoint - m_positionLocal;
+                            IndexedVector3 worldPoint = new IndexedVector3(i, 0, j);
+                            IndexedVector3 diff = worldPoint - m_positionLocal;
                             float diffLength2 = diff.LengthSquared();
                             if (diffLength2 < floatRadius2)
                             {
@@ -796,8 +797,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
             private Terrain m_terrain;
-            private Vector3 m_positionLocal;
-            private Vector3 m_midPoint;
+            private IndexedVector3 m_positionLocal;
+            private IndexedVector3 m_midPoint;
 
             private float m_radius;
             private float m_totalTime;

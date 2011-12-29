@@ -181,7 +181,7 @@ namespace com.xexuxjy.magiccarpet
 
         public static ScreenManager ScreenManager;
 
-        public static MagicCarpet Game;
+        public static Game Game;
 
         public const float STEPSIZEROTATE = (float)Math.PI/ 3f; // 60 deg a second
         public const float STEPSIZETRANSLATE = 20f; 

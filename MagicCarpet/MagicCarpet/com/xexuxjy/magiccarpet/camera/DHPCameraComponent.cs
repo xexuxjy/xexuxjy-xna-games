@@ -27,6 +27,7 @@ using Microsoft.Xna.Framework.Input;
 using com.xexuxjy.magiccarpet;
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.gameobjects;
+using BulletXNA.LinearMath;
 
 namespace Dhpoware
 {
@@ -432,8 +433,8 @@ namespace Dhpoware
             }
 
 
-            Vector3 start = eye;
-            Vector3 end = start;
+            IndexedVector3 start = eye;
+            IndexedVector3 end = start;
             end += xAxis * dx;
             end += WORLD_Y_AXIS * dy;
             end += forwards * dz;
@@ -442,13 +443,13 @@ namespace Dhpoware
             Position = end;
         }
 
-        private void ApplyClipToWorld(ref Vector3 start, ref Vector3 end)
+        private void ApplyClipToWorld(ref IndexedVector3 start, ref IndexedVector3 end)
         {
             // check to see if we're allowed to move through the terrain in the direction proposed!
             if (clipToWorld)
             {
-                Vector3 collisionPoint = start;
-                Vector3 collisionNormal = Vector3.Up;
+                IndexedVector3 collisionPoint = start;
+                IndexedVector3 collisionNormal = IndexedVector3.Up;
 
                 // if we hit something then reset the movement
                 if (Globals.CollisionManager.CastCameraGroundRay(start, end, ref collisionPoint, ref collisionNormal))
@@ -473,8 +474,8 @@ namespace Dhpoware
                 return;
             }
 
-            Vector3 start = eye;
-            Vector3 end = eye + (direction * distance);
+            IndexedVector3 start = eye;
+            IndexedVector3 end = eye + (direction * distance);
             ApplyClipToWorld(ref start, ref end);
 
             eye = end;

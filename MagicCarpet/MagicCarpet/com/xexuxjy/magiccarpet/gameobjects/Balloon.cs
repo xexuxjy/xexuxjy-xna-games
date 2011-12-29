@@ -97,7 +97,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         manaball.Die();
                         if (Full)
                         {
-                            QueueAction(Globals.ActionPool.GetActionFindCastle(this, null, Globals.s_balloonSearchRadiusCastle));
+
+                            QueueAction(Globals.ActionPool.GetActionFind(FindData.GetCastleFindData(this, Globals.s_balloonSearchRadiusCastle)));
                         }
 
                         break;
@@ -132,7 +133,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     }
                 case (ActionState.Idle):
                     {
-                        QueueAction(Globals.ActionPool.GetActionFindManaball(this, null, Globals.s_balloonSearchRadiusManaball));
+                        QueueAction(Globals.ActionPool.GetActionFind(FindData.GetManaballFindData(this, Globals.s_balloonSearchRadiusManaball)));
                         break;
                     }
                 case(ActionState.Travelling):

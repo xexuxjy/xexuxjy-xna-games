@@ -390,7 +390,7 @@ namespace com.xexuxjy.magiccarpet.util.console
                 outputLinePosition.Y += (Globals.MCContentManager.DebugFont.LineSpacing) + 2;
 
 
-                DebugDraw.DrawTexture(m_texture, m_screenPosition, Color.White.ToVector3());
+                //DebugDraw.DrawTexture(m_texture, m_screenPosition, Color.White.ToVector3());
                 if (m_commandLine.Length > 0)
                 {
                     DebugDraw.DrawText(m_commandLine.ToString(), commandLinePosition, Color.White.ToVector3());

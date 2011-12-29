@@ -90,7 +90,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         else if (choice >= 0.2 && choice < 0.5)
                         {
-                            newAction = Globals.ActionPool.GetActionFindEnemy(this, Globals.s_monsterSearchRadius);
+                            newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindEnemy(this, Globals.s_monsterSearchRadius));
                         }
                         else
                         {
@@ -174,7 +174,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             else
             {
                 // if we're being attacked and damaged then run away if we're below 1/4 health.
-                // FIXME - shouldn't really clear action if we're dead / dieing?
                 ClearAllActions();
                 QueueAction(Globals.ActionPool.GetActionFlee(this, GetFleeDirection(), Globals.s_monsterFleeSpeed));
             }
