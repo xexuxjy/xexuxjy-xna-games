@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using com.xexuxjy.magiccarpet.gameobjects;
+using BulletXNA.LinearMath;
+using Microsoft.Xna.Framework;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -18,22 +21,41 @@ namespace com.xexuxjy.magiccarpet.actions
         // new clever version that lets us find a number of objects and give weights to the search?
         protected override void InternalComplete()
         {
-            List<GameObject> searchResults = new List<GameObject>();
-            Globals.GameObjectManager.FindObjectsForOwner(m_findData.m_findMask, Owner.Position, m_findData.m_findRadius, m_findData.m_owner, searchResults);
-            if (searchResults.Count > 0)
+            if (m_findData.m_position.HasValue)
             {
-                int index = 0;
-                float heighestWeight = 0;
-                for (int i = 0; i < searchResults.Count; ++i)
+                // pick a random point within the search radius?
+                float randomAngle = (float)Globals.s_random.NextDouble() * MathUtil.SIMD_2_PI;
+                IndexedVector3 newPosition = new Vector3((float)Math.Cos(randomAngle), 0, (float)Math.Sin(randomAngle));
+                newPosition *= m_findData.m_findRadius;
+
+                TargetLocation = Owner.Position + newPosition;
+#if LOG_EVENT
+                Globals.EventLogger.LogEvent(String.Format("ActionFind : Location [{0}][{1}] TargetLocation [{2}].", Owner.Id, Owner.GameObjectType, TargetLocation));
+#endif
+
+            }
+            else
+            {
+                List<GameObject> searchResults = new List<GameObject>();
+                Globals.GameObjectManager.FindObjectsForOwner(m_findData.m_findMask, Owner.Position, m_findData.m_findRadius, m_findData.m_owner, searchResults);
+                if (searchResults.Count > 0)
                 {
-                    float currentWeight = m_findData.GetWeightForType(searchResults[i].GameObjectType);
-                    if (currentWeight > heighestWeight)
+                    int index = 0;
+                    float heighestWeight = 0;
+                    for (int i = 0; i < searchResults.Count; ++i)
                     {
-                        heighestWeight = currentWeight;
-                        index = i;
+                        float currentWeight = m_findData.GetWeightForType(searchResults[i].GameObjectType);
+                        if (currentWeight > heighestWeight)
+                        {
+                            heighestWeight = currentWeight;
+                            index = i;
+                        }
                     }
+                    Target = searchResults[index];
+#if LOG_EVENT
+                    Globals.EventLogger.LogEvent(String.Format("ActionFind : Object [{0}][{1}] TargetObject [{2}][{3}].", Owner.Id, Owner.GameObjectType, Target.Id, Target.GameObjectType));
+#endif
                 }
-                Target = searchResults[index];
             }
         }
         public FindData m_findData;

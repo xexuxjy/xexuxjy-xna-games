@@ -94,7 +94,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         else
                         {
-                            newAction = Globals.ActionPool.GetActionFindLocation(this, Globals.s_monsterSearchRadius);
+                            newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindLocation(this, Globals.s_monsterSearchRadius));
                         }
                         QueueAction(newAction);
                         break;

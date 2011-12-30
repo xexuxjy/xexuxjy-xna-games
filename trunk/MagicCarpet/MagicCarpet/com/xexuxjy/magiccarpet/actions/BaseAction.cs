@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -119,7 +120,7 @@ namespace com.xexuxjy.magiccarpet.actions
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3 TargetLocation
+        public Vector3? TargetLocation
         {
             get { return m_targetLocation; }
             set { m_targetLocation = value; }
@@ -146,7 +147,7 @@ namespace com.xexuxjy.magiccarpet.actions
         private ActionComponent m_actionComponent;
         private GameObject m_owner; 
         private GameObject m_target;
-        private Vector3 m_targetLocation;
+        private IndexedVector3? m_targetLocation;
         private ActionState m_actionState;
         private float m_duration;
         private float m_currentTime;

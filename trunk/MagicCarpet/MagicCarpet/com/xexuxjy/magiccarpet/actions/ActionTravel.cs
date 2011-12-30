@@ -11,13 +11,13 @@ namespace com.xexuxjy.magiccarpet.actions
 {
     public class ActionTravel : BaseAction
     {
-        public ActionTravel(GameObject owner, GameObject target, IndexedVector3 position, float speed) : 
+        public ActionTravel(GameObject owner, GameObject target, IndexedVector3? position, float speed) : 
             this(owner, target, position, speed, 0f, float.MaxValue)
         {
         }
 
 
-        public ActionTravel(GameObject owner, GameObject target, IndexedVector3 position, float speed,float minDistance,float maxDistance)
+        public ActionTravel(GameObject owner, GameObject target, IndexedVector3? position, float speed,float minDistance,float maxDistance)
             : base(owner, target, ActionState.Travelling)
         {
             m_position = position;
@@ -45,7 +45,7 @@ namespace com.xexuxjy.magiccarpet.actions
             {
 
                 IndexedVector3 currentPosition = Owner.Position;
-                IndexedVector3 targetPosition = (Target != null) ? Target.Position : m_position;
+                IndexedVector3 targetPosition = (Target != null) ? Target.Position : m_position.Value;
                 float dist2 = MathUtil.Vector3Distance2XZ(currentPosition, targetPosition);
 
                 if (dist2 <= s_nearnessCheck + m_minDistance2)
@@ -88,7 +88,7 @@ namespace com.xexuxjy.magiccarpet.actions
         }
 
 
-        private IndexedVector3 m_position;
+        private IndexedVector3? m_position;
         private float m_speed;
         private float m_minDistance2;
         private float m_maxDistance2;

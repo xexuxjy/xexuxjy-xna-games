@@ -1,8 +1,10 @@
 ﻿using com.xexuxjy.magiccarpet.gameobjects;
+using BulletXNA.LinearMath;
 namespace com.xexuxjy.magiccarpet.actions
 {
     public struct FindData
     {
+        public IndexedVector3? m_position;
         public GameObject m_owner;
         public GameObject m_target;
         public GameObjectType m_findMask;
@@ -126,6 +128,15 @@ namespace com.xexuxjy.magiccarpet.actions
 
             findData.m_findRadius = searchRadius;
             findData.m_manaballWeight = 1.0f;
+            return findData;
+        }
+
+        public static FindData GetActionFindLocation(GameObject owner, float findRadius)
+        {
+            FindData findData = new FindData();
+            findData.m_owner = owner;
+            findData.m_position = owner.Position;
+            findData.m_findRadius = findRadius;
             return findData;
         }
 
