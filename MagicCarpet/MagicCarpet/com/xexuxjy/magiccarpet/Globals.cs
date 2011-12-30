@@ -22,6 +22,10 @@ namespace com.xexuxjy.magiccarpet
 {
     public static class Globals
     {
+
+        public static GameObjectType s_attackableObjects = GameObjectType.magician | GameObjectType.castle | GameObjectType.balloon | GameObjectType.player | GameObjectType.monster;
+
+
         // jut test values for now.
         public static float containmentMaxHeight = 100f;
         public static float containmentMinHeight = -100f;
@@ -79,6 +83,8 @@ namespace com.xexuxjy.magiccarpet
         public static float s_monsterRangedRange = 10f;
         public static float s_monsterRangedDamage = 5f;
         public static float s_monsterFleeHealthPercentage = 0.25f;
+        public static float s_monsterMaxFollowRange = 50;
+
 
         public static int s_castleSize1 = 2;
         public static int s_castleSize2 = 4;
@@ -92,6 +98,11 @@ namespace com.xexuxjy.magiccarpet
         public static float s_magicianFleeSpeed = 10f;
         public static float s_magicianSearchRadiusManaball = 50f;
         public static float s_magicianSearchRadiusMonster = 50f;
+        public static float s_magicianMeleeRange = 0.5f;
+        public static float s_magicianMeleeDamage = 5f;
+        public static float s_magicianRangedRange = 10f;
+        public static float s_magicianRangedDamage = 5f;
+        public static float s_magicianMaxFollowRange = 50;
 
 
 
@@ -280,19 +291,22 @@ namespace com.xexuxjy.magiccarpet
             TryReadFloat(configMap, "monster.search.radius", ref s_monsterSearchRadius);
             TryReadFloat(configMap, "monster.travel.speed", ref s_monsterTravelSpeed);
             TryReadFloat(configMap, "monster.flee.speed", ref s_monsterFleeSpeed);
-
             TryReadFloat(configMap, "monster.melee.damage", ref s_monsterMeleeDamage);
             TryReadFloat(configMap, "monster.melee.range", ref s_monsterMeleeRange);
-
             TryReadFloat(configMap, "monster.ranged.damage", ref s_monsterRangedDamage);
             TryReadFloat(configMap, "monster.ranged.range", ref s_monsterRangedRange);
+            TryReadFloat(configMap, "monster.max.follow.range", ref s_monsterMaxFollowRange);
 
-            TryReadFloat(configMap, "magician.travel.speed", ref s_magicianTravelSpeed);
-            TryReadFloat(configMap, "magician.flee.speed", ref s_magicianFleeSpeed);
+
             TryReadFloat(configMap, "magician.search.radius.manaball", ref s_magicianSearchRadiusManaball);
             TryReadFloat(configMap, "magician.search.radius.monster", ref s_magicianSearchRadiusMonster);
-
-
+            TryReadFloat(configMap, "magician.travel.speed", ref s_magicianTravelSpeed);
+            TryReadFloat(configMap, "magician.flee.speed", ref s_magicianFleeSpeed);
+            TryReadFloat(configMap, "magician.melee.damage", ref s_magicianMeleeDamage);
+            TryReadFloat(configMap, "magician.melee.range", ref s_magicianMeleeRange);
+            TryReadFloat(configMap, "magician.ranged.damage", ref s_magicianRangedDamage);
+            TryReadFloat(configMap, "magician.ranged.range", ref s_magicianRangedRange);
+            TryReadFloat(configMap, "magician.max.follow.range", ref s_magicianMaxFollowRange);
 
 
            // TODO - Provide spells Data.

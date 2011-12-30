@@ -17,6 +17,21 @@ namespace com.xexuxjy.magiccarpet.manager
             m_gameplayScreen = gameplayScreen;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static bool IsAttackable(GameObject gameObject)
+        {
+            bool alive = gameObject.IsAlive();
+            if(alive)
+            {
+                GameObjectType gameObjectType = gameObject.GameObjectType;
+                if((gameObjectType & Globals.s_attackableObjects) != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -79,7 +79,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void Unload(Castle castle)
         {
-            QueueAction(new ActionUnload(this,castle));
+            QueueAction(Globals.ActionPool.GetActionUnload(this, castle));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         else if (action.Target.GameObjectType == GameObjectType.manaball)
                         {
-                            QueueAction(new ActionLoad(this, action.Target));
+                            QueueAction(Globals.ActionPool.GetActionLoad(this, action.Target));
                         }
                         break;
                     }
@@ -169,7 +169,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             if (currentHealthPercentage <= Globals.s_balloonFleeHealthPercentage)
             {
                 m_actionComponent.ClearAllActions();
-                QueueAction(new ActionFlee(this, GetFleeDirection(),Globals.s_balloonFleeSpeed));
+                QueueAction(Globals.ActionPool.GetActionFlee(this, GetFleeDirection(), Globals.s_balloonFleeSpeed));
             }
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////

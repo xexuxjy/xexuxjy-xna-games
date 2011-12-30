@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.magiccarpet.combat;
+using System.Diagnostics;
+using com.xexuxjy.magiccarpet.manager;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -75,25 +77,51 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Searching):
                     {
 
-                        // Decide what to do
-                        //QueueAction(Globals.ActionPool.GetActionTravel(this, null, action.TargetLocation, Globals.s_monsterTravelSpeed));
-                        if(action.Target != null)
+                        ActionFind actionFind = action as ActionFind;
+                        Debug.Assert(actionFind != null);
+
+                        if (actionFind.TargetLocation.HasValue)
                         {
+                            // Going to a location so queue that up.
+                            QueueAction(Globals.ActionPool.GetActionTravel(this, null, actionFind.TargetLocation, Globals.s_magicianTravelSpeed));
+                        }
+                        else if(action.Target != null)
+                        {
+                            bool shouldAttack = GameObjectManager.IsAttackable(action.Target);
+
                             if(action.Target.Alive)
                             {
-                                if (GameUtil.InRange(this, action.Target, Globals.s_monsterMeleeRange))
+                                if (shouldAttack)
                                 {
-                                    QueueAction(Globals.ActionPool.GetActionAttackMelee(this, action.Target, Globals.s_monsterMeleeRange, Globals.s_monsterMeleeDamage));
-                                }
-                                else if (GameUtil.InRange(this, action.Target, Globals.s_monsterRangedDamage))
-                                {
-                                    QueueAction(Globals.ActionPool.GetActionAttackRange(this, action.Target, Globals.s_monsterRangedRange, Globals.s_monsterRangedDamage, SpellType.Fireball));
+                                    if (GameUtil.InRange(this, action.Target, Globals.s_magicianMeleeRange))
+                                    {
+                                        QueueAction(Globals.ActionPool.GetActionAttackMelee(this, action.Target, Globals.s_magicianMeleeRange, Globals.s_magicianMeleeDamage));
+                                    }
+                                    else if (GameUtil.InRange(this, action.Target, Globals.s_magicianRangedDamage))
+                                    {
+                                        QueueAction(Globals.ActionPool.GetActionAttackRange(this, action.Target, Globals.s_magicianRangedRange, Globals.s_magicianRangedDamage, SpellType.Fireball));
+                                    }
+                                    else
+                                    {
+                                        // Move towards the target?
+                                        // need something a bit cleverer here , depending on the target
+                                        // have min distance of spell cast range for items?
+                                        QueueAction(Globals.ActionPool.GetActionTravel(this, action.Target, null, Globals.s_magicianTravelSpeed, 0f, Globals.s_magicianMaxFollowRange));
+                                        QueueAction(Globals.ActionPool.GetActionAttackRange(this, action.Target, Globals.s_magicianRangedRange, Globals.s_magicianRangedDamage, SpellType.Fireball));
+                                    }
                                 }
                                 else
                                 {
-                                    //QueueAction(Globals.ActionPool.GetActionTravel());
+                                    // Not an attack. 
+                                    // Move towards it anyway. 
+                                    // clever stuff again to decide what do 
+                                    // e.g. - goto castle to heal, goto manaball to convert
+
+                                    QueueAction(Globals.ActionPool.GetActionTravel(this, action.Target, null, Globals.s_magicianTravelSpeed, 0f, Globals.s_magicianMaxFollowRange));
+
                                 }
                             }
+
                         }
 
                         break;
@@ -110,13 +138,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         else
                         {
+                            // find something useful to do, loko for nearby enemy magicians, then monsters or manaballs, 
                             FindData findData = new FindData();
                             findData.m_owner = this;
-                            findData.m_findMask = GameObjectType.magician | GameObjectType.castle | GameObjectType.balloon | GameObjectType.monster;
+                            findData.m_findMask = GameObjectType.magician | GameObjectType.castle | GameObjectType.balloon | GameObjectType.monster | GameObjectType.manaball;
                             findData.m_magicianWeight = 1.0f;
                             findData.m_monsterWeight = 0.8f;
+                            findData.m_manaballWeight = 0.8f;
                             findData.m_balloonWeight = 0.6f;
                             findData.m_castleWeight = 0.4f;
+
 
                             QueueAction(Globals.ActionPool.GetActionFind(findData));
 

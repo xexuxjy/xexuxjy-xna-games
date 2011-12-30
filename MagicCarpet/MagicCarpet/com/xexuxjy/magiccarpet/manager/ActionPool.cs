@@ -49,11 +49,11 @@ namespace com.xexuxjy.magiccarpet.manager
         //    return new ActionFindManaball(owner, target,searchRadius);
         //}
 
-        public ActionFindLocation GetActionFindLocation(GameObject owner, float searchRadius)
-        {
-            return new ActionFindLocation(owner, searchRadius);
+        //public ActionFindLocation GetActionFindLocation(GameObject owner, float searchRadius)
+        //{
+        //    return new ActionFindLocation(owner, searchRadius);
 
-        }
+        //}
 
         public ActionFlee GetActionFlee(GameObject owner, IndexedVector3 direction, float speed)
         {
@@ -75,12 +75,17 @@ namespace com.xexuxjy.magiccarpet.manager
             return new ActionUnload(owner, target);
         }
 
-        public ActionTravel GetActionTravel(GameObject owner, GameObject target, IndexedVector3 position, float speed)
+        public ActionTravel GetActionTravel(GameObject owner, GameObject target, IndexedVector3? position, float speed)
         {
             return new ActionTravel(owner, target, position, speed);
         }
 
-        public ActionCastSpell GetActionCastSpell(GameObject owner, GameObject target, IndexedVector3 position, SpellType spellType)
+        public ActionTravel GetActionTravel(GameObject owner, GameObject target, IndexedVector3? position, float speed,float minDistance,float maxDistance)
+        {
+            return new ActionTravel(owner, target, position, speed,minDistance,maxDistance);
+        }
+
+        public ActionCastSpell GetActionCastSpell(GameObject owner, GameObject target, IndexedVector3? position, SpellType spellType)
         {
             return new ActionCastSpell(owner, target, position, spellType);
         }
