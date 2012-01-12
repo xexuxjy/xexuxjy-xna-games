@@ -133,7 +133,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     }
                 case (ActionState.Idle):
                     {
-                        QueueAction(Globals.ActionPool.GetActionFind(FindData.GetManaballFindData(this, Globals.s_balloonSearchRadiusManaball)));
+                        FindData findData = FindData.GetManaballFindData(this, Globals.s_balloonSearchRadiusManaball);
+                        findData.m_includeOwner = true;
+
+                        QueueAction(Globals.ActionPool.GetActionFind(findData));
                         break;
                     }
                 case(ActionState.Travelling):

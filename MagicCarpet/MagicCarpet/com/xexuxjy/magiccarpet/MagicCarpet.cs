@@ -86,7 +86,7 @@ namespace com.xexuxjy.magiccarpet
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
             {
-                OverrideExit();
+                Exit();
             }
             // TODO: Add your update logic here
 
@@ -95,10 +95,10 @@ namespace com.xexuxjy.magiccarpet
 
         }
 
-        public void OverrideExit()
+        protected override void EndRun()
         {
             Globals.EventLogger.Dispose();
-            Exit();
+            base.EndRun();
         }
 
    }

@@ -206,7 +206,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             UpdateHeightMapTexture();
 
-            IndexedMatrix viewProjection = Globals.Camera.ViewProjectionMatrix;
+            Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
 
             Game.GraphicsDevice.Indices = m_blockIndexBuffer;
@@ -240,10 +240,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         if (boundingFrustrum.Intersects(bb))
                         {
-                            IndexedMatrix transform = IndexedMatrix.CreateTranslation(startPosition) * viewProjection;
+
+                            Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
                             //IndexedMatrix transform = viewProjection * IndexedMatrix.CreateTranslation(worldPosition);
                             //IndexedMatrix transform = viewProjection;
-                            m_effect.Parameters["WorldViewProjIndexedMatrix"].SetValue(transform);
+                            m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
                             m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, localPosition.X, localPosition.Z));
 
                             // need apply on inner level to make sure latest vals copied across

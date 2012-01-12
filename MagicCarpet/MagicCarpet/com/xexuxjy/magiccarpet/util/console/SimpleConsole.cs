@@ -248,6 +248,16 @@ namespace com.xexuxjy.magiccarpet.util.console
                         {
                             DropRandomManaBall();
                         }
+                        else if (commandDetails.Name.Equals("droprandommanaballs"))
+                        {
+                            int number = int.Parse(args[0]);
+                            Vector3? position = GetVector(args[1]);
+                            if (position.HasValue)
+                            {
+                                float range  = float.Parse(args[2]);
+                                DropRandomManaBalls(number,position.Value,range);
+                            }
+                        }
                         else if (commandDetails.Name.Equals("camerafollow"))
                         {
                             if (Globals.Camera.CurrentBehavior != Dhpoware.Camera.Behavior.Flight)
@@ -434,19 +444,32 @@ namespace com.xexuxjy.magiccarpet.util.console
             SpawnEntity(GameObjectType.manaball, position,null);
         }
 
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3? GetVector(String args)
+        public void DropRandomManaBalls(int number,IndexedVector3 centerPosition,float range)
+        {
+            for (int i = 0; i < number; ++i)
+            {
+                IndexedVector3 ballPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(centerPosition, range);
+                SpawnEntity(GameObjectType.manaball, ballPosition, null);
+            }
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public IndexedVector3? GetVector(String args)
         {
             String[] tokens = args.Split(s_subcommandSplitChars);
 
-            Vector3? result = null;
+            IndexedVector3? result = null;
             if (tokens.Length == 3)
             {
                 float x = float.Parse(tokens[0]);
                 float y = float.Parse(tokens[1]);
                 float z = float.Parse(tokens[2]);
-                result = new Vector3(x, y, z);
+                result = new IndexedVector3(x, y, z);
             }
             return result;
         }
@@ -566,6 +589,8 @@ namespace com.xexuxjy.magiccarpet.util.console
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
             id = "droprandommanaball";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
+            id = "droprandommanaballs";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 3 }));
             id = "camerafollow";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0,1 }));
             id = "cameraclip";

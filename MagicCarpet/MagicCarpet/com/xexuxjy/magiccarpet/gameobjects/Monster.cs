@@ -72,8 +72,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 case (ActionState.Searching):
                     {
+                        ActionFind actionFind = action as ActionFind;
                         // Decide what to do
-                        QueueAction(Globals.ActionPool.GetActionTravel(this, null, action.TargetLocation, Globals.s_monsterTravelSpeed));                           
+                        QueueAction(Globals.ActionPool.GetActionTravel(this, actionFind.Target, action.TargetLocation, Globals.s_monsterTravelSpeed));                           
                         break;
                     }
                 case (ActionState.Idle):

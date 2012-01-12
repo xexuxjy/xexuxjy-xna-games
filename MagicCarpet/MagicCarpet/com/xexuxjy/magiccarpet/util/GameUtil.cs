@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.util
 {
@@ -17,25 +18,25 @@ namespace com.xexuxjy.magiccarpet.util
             BoundingBox obj2BB = obj2.BoundingBox;
 
             // grow one of the boxes by dist and check for intersection?
-            obj2BB.Min -= new Vector3(dist);
-            obj2BB.Max += new Vector3(dist);
+            obj2BB.Min -= new IndexedVector3(dist);
+            obj2BB.Max += new IndexedVector3(dist);
 
             return obj2BB.Contains(obj1BB) != ContainmentType.Disjoint;
         }
 
-        public static Vector3 DirectionToTarget(GameObject source, GameObject target)
+        public static IndexedVector3 DirectionToTarget(GameObject source, GameObject target)
         {
-            return Vector3.Normalize(target.Position - source.Position);
+            return IndexedVector3.Normalize(target.Position - source.Position);
         }
 
-        public static Vector3 DirectionToTarget(Vector3 source, GameObject target)
+        public static IndexedVector3 DirectionToTarget(IndexedVector3 source, GameObject target)
         {
-            return Vector3.Normalize(target.Position - source);
+            return IndexedVector3.Normalize(target.Position - source);
         }
 
-        public static Vector3 DirectionToTarget(GameObject source, Vector3 target)
+        public static IndexedVector3 DirectionToTarget(GameObject source, IndexedVector3 target)
         {
-            return Vector3.Normalize(target - source.Position);
+            return IndexedVector3.Normalize(target - source.Position);
         }
 
 

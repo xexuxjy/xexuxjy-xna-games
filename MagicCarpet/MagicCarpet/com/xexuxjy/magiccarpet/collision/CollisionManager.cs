@@ -41,6 +41,10 @@ namespace com.xexuxjy.magiccarpet.collision
 
             m_dynamicsWorld.SetGravity(ref m_gravity);
 
+            m_ghostPairCallback = new GhostPairCallback();
+            m_dynamicsWorld.GetBroadphase().GetOverlappingPairCache().SetInternalGhostPairCallback(m_ghostPairCallback);	// Needed once to enable ghost objects inside Bullet
+
+
             DrawOrder = Globals.GUI_DRAW_ORDER;
         }
 
@@ -92,7 +96,12 @@ namespace com.xexuxjy.magiccarpet.collision
                 PersistentManifold contactManifold = dispatcher.GetManifoldByIndexInternal(i);
 		        CollisionObject obA = (contactManifold.GetBody0() as CollisionObject);
 		        CollisionObject obB = (contactManifold.GetBody1() as CollisionObject);
-	
+
+                if (obA is GhostObject || obB is GhostObject)
+                {
+                    int ibreak = 0;
+                }
+
 		        int numContacts = contactManifold.GetNumContacts();
 		        for (int j=0;j<numContacts;j++)
 		        {
@@ -172,6 +181,23 @@ namespace com.xexuxjy.magiccarpet.collision
             }
 
             return body;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+        
+        public GhostObject LocalCreateGhostObject(IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        {
+            return LocalCreateGhostObject(ref startTransform, shape, motionState, addToWorld, userPointer, filterGroup, filterMask);
+        }
+
+        public GhostObject LocalCreateGhostObject(ref IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        {
+            GhostObject ghostObject = new GhostObject();
+            ghostObject.SetCollisionShape(shape);
+            ghostObject.SetCollisionFlags(CollisionFlags.CF_NO_CONTACT_RESPONSE);		// We can choose to make it "solid" if we want...
+            ghostObject.SetUserPointer(userPointer);
+            m_dynamicsWorld.AddCollisionObject(ghostObject, filterGroup, filterMask);
+            return ghostObject;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -345,6 +371,7 @@ namespace com.xexuxjy.magiccarpet.collision
         protected IConstraintSolver m_constraintSolver;
         protected DefaultCollisionConfiguration m_collisionConfiguration;
         protected DynamicsWorld m_dynamicsWorld;
+        protected GhostPairCallback m_ghostPairCallback;
         protected IndexedVector3 m_gravity = new IndexedVector3(0, -10, 0);
     }
 

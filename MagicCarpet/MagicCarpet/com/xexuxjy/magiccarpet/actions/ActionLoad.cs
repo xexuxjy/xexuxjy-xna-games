@@ -21,6 +21,7 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public override void Start()
         {
+            base.Start();
             ((ManaBall)Target).BeingLoaded = true;
         }
 
