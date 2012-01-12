@@ -24,6 +24,13 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public float CastTime(SpellType spellType)
+        {
+            return m_spellTemplates[spellType].CastTime;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private void InitializeTemplate(SpellType spellType, int manaCost, float castTime, float cooldownTime, float duration)
         {
             SpellTemplate template = new SpellTemplate(spellType, manaCost, castTime, cooldownTime, duration);

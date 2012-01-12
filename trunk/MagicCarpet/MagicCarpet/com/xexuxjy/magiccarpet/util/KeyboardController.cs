@@ -40,7 +40,6 @@ namespace com.xexuxjy.magiccarpet.util
             {
                 case Keys.Escape:
                     {
-                        //Globals.Game.OverrideExit();
                         Globals.Game.Exit();
                         break;
                     }

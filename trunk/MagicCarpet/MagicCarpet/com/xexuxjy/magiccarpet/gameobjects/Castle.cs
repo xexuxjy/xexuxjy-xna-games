@@ -36,7 +36,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Initialize()
         {
             base.Initialize();
-            GrowToSize(0);
+            //GrowToSize(0);
 
             // test value for now.
             m_storedMana = 500;
@@ -204,27 +204,27 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_scaleTransform = Matrix.CreateScale(width/2, GetStartOffsetHeight(), width/2);
             
 
-            IndexedVector3 turretPos0 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z-offset.Z);
-            IndexedVector3 turretPos1 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z-offset.Z);
-            IndexedVector3 turretPos2 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z+offset.Z);
-            IndexedVector3 turretPos3 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z+offset.Z);
+            //IndexedVector3 turretPos0 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z-offset.Z);
+            //IndexedVector3 turretPos1 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z-offset.Z);
+            //IndexedVector3 turretPos2 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z+offset.Z);
+            //IndexedVector3 turretPos3 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z+offset.Z);
             
-            // clear or move turrets?
-            if (m_turrets.Count == 0)
-            {
-                m_turrets.Add(new Turret(0,this, turretPos0));
-                m_turrets.Add(new Turret(1, this, turretPos1));
-                m_turrets.Add(new Turret(2, this, turretPos2));
-                m_turrets.Add(new Turret(3, this, turretPos3));
-            }
-            else
-            {
-                m_turrets[0].Position = turretPos0;
-                m_turrets[1].Position = turretPos1;
-                m_turrets[2].Position = turretPos2;
-                m_turrets[3].Position = turretPos3;
+            //// clear or move turrets?
+            //if (m_turrets.Count == 0)
+            //{
+            //    m_turrets.Add(new Turret(0,this, turretPos0));
+            //    m_turrets.Add(new Turret(1, this, turretPos1));
+            //    m_turrets.Add(new Turret(2, this, turretPos2));
+            //    m_turrets.Add(new Turret(3, this, turretPos3));
+            //}
+            //else
+            //{
+            //    m_turrets[0].Position = turretPos0;
+            //    m_turrets[1].Position = turretPos1;
+            //    m_turrets[2].Position = turretPos2;
+            //    m_turrets[3].Position = turretPos3;
 
-            }
+            //}
 
             CreateBalloon();
         }
@@ -334,7 +334,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 #endif
                         List<GameObject> searchResults = new List<GameObject>();
                         GameObjectType searchMask = GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster;
-                        Globals.GameObjectManager.FindObjectsExcludeOwner(searchMask, m_position, turretSearchRadius, m_castle.Owner, searchResults);
+                        Globals.GameObjectManager.FindObjects(searchMask, m_position, turretSearchRadius, m_castle.Owner, searchResults,false);
 
                         if (searchResults.Count == 0)
                         {
@@ -396,8 +396,5 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private float m_initialHeight;
 
         private List<Turret> m_turrets = new List<Turret>();
-
-
-
     }
 }

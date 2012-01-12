@@ -6,6 +6,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.spells;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.util;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -13,9 +14,32 @@ namespace com.xexuxjy.magiccarpet.actions
     {
         public ActionCastSpell(GameObject owner, GameObject target, IndexedVector3? targetPosition, SpellType spellType) : base(owner,target,ActionState.Casting)
         {
+            m_spellType = spellType;
+            m_targetPosition = targetPosition;
+            // Check if we can cast this?
+            Duration = owner.SpellComponent.CastTime(spellType);
 
         }
 
+        public override void Start()
+        {
+            base.Start();
+            IndexedVector3 targetDirection = IndexedVector3.Up;
+            if (Target != null)
+            {
+                targetDirection = GameUtil.DirectionToTarget(Owner, Target);
+            }
+            else
+            {
+                targetDirection = GameUtil.DirectionToTarget(Owner, m_targetPosition.Value);
+            }
+            Owner.CastSpell(m_spellType, Owner.Position, targetDirection);
+        }
+
+
+
         private SpellType m_spellType;
+        private IndexedVector3? m_targetPosition;
+
     }
 }

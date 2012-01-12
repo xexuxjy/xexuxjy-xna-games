@@ -182,10 +182,10 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public void FindObjects(GameObjectType typeMask, IndexedVector3 position, float radius, List<GameObject> results)
         {
-            FindObjectsExcludeOwner(typeMask, position, radius, null, results);
+            FindObjects(typeMask, position, radius, null, results,false);
         }
 
-        public void FindObjectsForOwner(GameObjectType typeMask, IndexedVector3 position, float radius, GameObject owner, List<GameObject> results)
+        public void FindObjects(GameObjectType typeMask, IndexedVector3 position, float radius, GameObject owner, List<GameObject> results,bool includeOwner)
         {
             float radiusSq = radius * radius;
             foreach (GameObject gameObject in m_gameObjectList)
@@ -194,8 +194,22 @@ namespace com.xexuxjy.magiccarpet.manager
                 GameObjectType gameObjectType = gameObject.GameObjectType;
                 if ((gameObjectType & typeMask) > 0)
                 {
+                        bool shouldInclude = true;
+                        if (!includeOwner)
+                        {
+                            if (gameObject == owner)
+                            {
+                                shouldInclude = false;
+                            }
+                            if (gameObject.Owner == owner)
+                            {
+                                shouldInclude = false;
+                            }
+
+                        }
+
                     // check and see if it's the owning entity if appropriate
-                    if (owner == null || (gameObject.Owner == owner))
+                    if (owner == null || shouldInclude)
                     {
                         if ((gameObject.Position - position).LengthSquared() <= radiusSq)
                         {
@@ -204,32 +218,35 @@ namespace com.xexuxjy.magiccarpet.manager
                     }
                 }
             }
+            List<GameObject> copy = new List<GameObject>();
+            copy.AddRange(results);
             results.Sort(new DistanceSorter(position));
+            int ibreak = 0;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void FindObjectsExcludeOwner(GameObjectType typeMask, IndexedVector3 position, float radius, GameObject owner, List<GameObject> results)
-        {
-            float radiusSq = radius * radius;
-            foreach (GameObject gameObject in m_gameObjectList)
-            {
-                // if it's the sort of object we're interested in
-                GameObjectType gameObjectType = gameObject.GameObjectType;
-                if ((gameObjectType & typeMask) > 0)
-                {
-                    // check and see if it's the owning entity if appropriate
-                    if (owner == null || (gameObject.Owner != owner && gameObject != owner))
-                    {
-                        if ((gameObject.Position - position).LengthSquared() <= radiusSq)
-                        {
-                            results.Add(gameObject);
-                        }
-                    }
-                }
-            }
-            results.Sort(new DistanceSorter(position));
-        }
+        //public void FindObjectsExcludeOwner(GameObjectType typeMask, IndexedVector3 position, float radius, GameObject owner, List<GameObject> results)
+        //{
+        //    float radiusSq = radius * radius;
+        //    foreach (GameObject gameObject in m_gameObjectList)
+        //    {
+        //        // if it's the sort of object we're interested in
+        //        GameObjectType gameObjectType = gameObject.GameObjectType;
+        //        if ((gameObjectType & typeMask) > 0)
+        //        {
+        //            // check and see if it's the owning entity if appropriate
+        //            if (owner == null || 
+        //            {
+        //                if ((gameObject.Position - position).LengthSquared() <= radiusSq)
+        //                {
+        //                    results.Add(gameObject);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    results.Sort(new DistanceSorter(position));
+        //}
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

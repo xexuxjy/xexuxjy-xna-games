@@ -235,7 +235,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody CollisionObject
+        public CollisionObject CollisionObject
         {
             get { return m_collisionObject; }
         }
@@ -261,32 +261,33 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        protected virtual void DrawEffect(GraphicsDevice graphicsDevice, IndexedMatrix view, IndexedMatrix world, IndexedMatrix projection)
+        protected virtual void DrawEffect(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
         {
             //return;
             if (m_model != null)
             {
-                Matrix[] transforms = new Matrix[m_model.Bones.Count];
                 foreach (ModelMesh mesh in m_model.Meshes)
                 {
-                    m_model.CopyAbsoluteBoneTransformsTo(transforms);
+                    if (m_boneTransforms == null)
+                    {
+                        m_boneTransforms = new Matrix[m_model.Bones.Count];
+                    }
+                    m_model.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
                     foreach (Effect effect in mesh.Effects)
                     {
 
                         BasicEffect basicEffect = (BasicEffect)effect;
                         basicEffect.View = view;
                         basicEffect.Projection = projection;
-                        basicEffect.World = transforms[mesh.ParentBone.Index] * m_scaleTransform.ToMatrix() * world.ToMatrix();
-
+                        basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform.ToMatrix() * world;
 
                         // cheat for now.
                         IndexedVector3 colour = Owner != null ? new IndexedVector3(1, 0, 0) : new IndexedVector3(1, 1, 1);
                         basicEffect.Texture = Globals.MCContentManager.GetTexture(ref colour);
-
-
                     }
                     mesh.Draw();
                 }
+
             }
         }
 
@@ -724,6 +725,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public virtual void NotifyOwnershipLost(GameObject gameObject)
         {
 #if LOG_EVENT
+            if (gameObject is ManaBall)
+            {
+                int ibreak = 0;
+            }
             Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] Lost Ownership [{2}][{3}].", Id, GameObjectType, gameObject.Id, gameObject.GameObjectType));
 #endif
         }
@@ -774,7 +779,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public SpellComponent SpellComponent
+        {
+            get { return m_spellComponent; }
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -795,7 +805,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected GameObjectType m_gameObjectType;
 
         protected IMotionState m_motionState;
-        protected RigidBody m_collisionObject;
+        protected CollisionObject m_collisionObject;
 
         protected IndexedVector3 m_direction;
         protected float m_speed;
@@ -812,6 +822,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected SpellComponent m_spellComponent;
 
         protected bool m_stickToGround = true;
+        protected Matrix[] m_boneTransforms;
+
 
         public static int s_idCounter = 0;
     }

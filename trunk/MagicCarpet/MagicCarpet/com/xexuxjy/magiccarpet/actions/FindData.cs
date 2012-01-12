@@ -9,6 +9,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public GameObject m_target;
         public GameObjectType m_findMask;
         public float m_findRadius ;
+        public bool m_includeOwner;
 
         public float m_magicianWeight ;
         public float m_manaballWeight ;
@@ -18,6 +19,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public float m_playerWeight ;
         public float m_monsterWeight ;
         public float m_terrainWeight ;
+
 
         public float GetTotalWeight()
         {

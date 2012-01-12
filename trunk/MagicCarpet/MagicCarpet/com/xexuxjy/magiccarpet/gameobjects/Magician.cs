@@ -118,7 +118,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                                     // e.g. - goto castle to heal, goto manaball to convert
 
                                     QueueAction(Globals.ActionPool.GetActionTravel(this, action.Target, null, Globals.s_magicianTravelSpeed, 0f, Globals.s_magicianMaxFollowRange));
-
+                                    if (action.Target.GameObjectType == GameObjectType.manaball)
+                                    {
+                                        QueueAction(Globals.ActionPool.GetActionCastSpell(this,action.Target,null,SpellType.Convert));
+                                    }
                                 }
                             }
 
@@ -142,12 +145,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                             FindData findData = new FindData();
                             findData.m_owner = this;
                             findData.m_findMask = GameObjectType.magician | GameObjectType.castle | GameObjectType.balloon | GameObjectType.monster | GameObjectType.manaball;
+                            findData.m_findRadius = Globals.s_magicianSearchRadiusManaball;
                             findData.m_magicianWeight = 1.0f;
                             findData.m_monsterWeight = 0.8f;
                             findData.m_manaballWeight = 0.8f;
                             findData.m_balloonWeight = 0.6f;
                             findData.m_castleWeight = 0.4f;
-
+                            findData.m_includeOwner = false;
 
                             QueueAction(Globals.ActionPool.GetActionFind(findData));
 

@@ -106,6 +106,9 @@ namespace GameStateManagement
 
             Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain,Vector3.Zero);
 
+
+            Globals.ActionPool = new ActionPool();
+
             //Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
             //Globals.DebugObjectManager.DebugObject = Globals.Player;
 
