@@ -18,6 +18,7 @@ namespace com.xexuxjy.magiccarpet.spells
         public SpellConvert(GameObject owner)
             : base(owner)
         {
+           
         }
 
 
@@ -71,10 +72,10 @@ namespace com.xexuxjy.magiccarpet.spells
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.manaball | GameObjectType.terrain);
             float mass = 0.0001f;
             // needs to be kinematic to preserve and use motion states?
-            //m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
-            //m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
-            m_collisionObject = Globals.CollisionManager.LocalCreateGhostObject(Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
-            
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
+            //m_collisionObject = Globals.CollisionManager.LocalCreateGhostObject(Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
+            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

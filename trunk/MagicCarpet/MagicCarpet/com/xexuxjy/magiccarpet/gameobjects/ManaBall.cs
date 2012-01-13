@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using BulletXNA.BulletCollision;
 using BulletXNA.BulletDynamics;
 using BulletXNA.LinearMath;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -56,7 +57,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // set a custom material here as we want a fairly damped response.
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 
-            //m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,19 +74,31 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     rb.SetFlags(rb.GetFlags() & ~RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
                     rb.SetActivationState(ActivationState.ACTIVE_TAG);
                     rb.SetDamping(0.5f, 0.1f);
+                    StickToGround = false;
                 }
                 else
                 {
                     RigidBody rb = (RigidBody)m_collisionObject;
-                    rb.SetFlags(rb.GetFlags() & ~RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
+                    rb.SetFlags(rb.GetFlags() & RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
                     rb.SetActivationState(ActivationState.ACTIVE_TAG);
                     rb.SetDamping(0.5f, 0.1f);
+                    StickToGround = true;
 
                 }
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        protected override void DrawEffect(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
+        {
+            if (BeingLoaded)
+            {
+                IndexedVector3 pos = Position;
+                int ibreak = 0;
+            }
 
+            base.DrawEffect(graphicsDevice, view, world, projection);
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

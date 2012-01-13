@@ -370,7 +370,7 @@ namespace com.xexuxjy.magiccarpet.manager
             float xlen = (x.Position - m_position).LengthSquared();
             float ylen = (y.Position - m_position).LengthSquared();
 
-            return (int)(ylen - xlen);
+            return (int)(xlen - ylen);
         }
 
         private IndexedVector3 m_position;

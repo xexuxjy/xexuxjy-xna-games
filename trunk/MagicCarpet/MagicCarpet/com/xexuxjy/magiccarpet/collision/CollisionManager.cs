@@ -97,27 +97,25 @@ namespace com.xexuxjy.magiccarpet.collision
 		        CollisionObject obA = (contactManifold.GetBody0() as CollisionObject);
 		        CollisionObject obB = (contactManifold.GetBody1() as CollisionObject);
 
-                if (obA is GhostObject || obB is GhostObject)
+                if (obA != null && obB != null)
                 {
-                    int ibreak = 0;
-                }
+                    ICollideable user0 = obA.GetUserPointer() as ICollideable;
+                    ICollideable user1 = obB.GetUserPointer() as ICollideable;
 
-		        int numContacts = contactManifold.GetNumContacts();
-		        for (int j=0;j<numContacts;j++)
-		        {
-			        ManifoldPoint pt = contactManifold.GetContactPoint(j);
-			        if (pt.GetDistance()<0.0f)
-			        {
-                        ICollideable user0 = obA.GetUserPointer() as ICollideable;
-                        ICollideable user1 = obB.GetUserPointer() as ICollideable;
-
-                        if (user0 != null && user1 != null)
+                    if (user0 != null && user0.Active() && user1 != null && user1.Active())
+                    {
+                        int numContacts = contactManifold.GetNumContacts();
+                        for (int j = 0; j < numContacts; j++)
                         {
-                            user0.ProcessCollision(user1, pt);
-                            user1.ProcessCollision(user0, pt);
+                            ManifoldPoint pt = contactManifold.GetContactPoint(j);
+                            if (pt.GetDistance() < 0.0f)
+                            {
+                                user0.ProcessCollision(user1, pt);
+                                user1.ProcessCollision(user0, pt);
+                            }
                         }
-			        }
-		        }
+                    }
+                }
 	        }
         }
 
@@ -219,6 +217,7 @@ namespace com.xexuxjy.magiccarpet.collision
         public void RemoveFromWorld(CollisionObject collisionObject)
         {
             m_dynamicsWorld.RemoveCollisionObject(collisionObject);
+            collisionObject.Cleanup();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
