@@ -250,10 +250,17 @@ namespace com.xexuxjy.magiccarpet.terrain
                             Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
                             //IndexedMatrix transform = viewProjection * IndexedMatrix.CreateTranslation(worldPosition);
                             //IndexedMatrix transform = viewProjection;
+                            m_effect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
                             m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
                             Vector4 scaleFactor = new Vector4(m_oneOver);
                             m_effect.Parameters["ScaleFactor"].SetValue(scaleFactor);
                             m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, localPosition.X, localPosition.Z));
+
+                            m_effect.Parameters["FogEnabled"].SetValue(true);
+                            m_effect.Parameters["FogStart"].SetValue(20);
+                            m_effect.Parameters["FogEnd"].SetValue(200);
+
+
 
                             // need apply on inner level to make sure latest vals copied across
                             pass.Apply();

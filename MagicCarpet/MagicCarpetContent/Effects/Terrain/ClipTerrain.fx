@@ -3,6 +3,8 @@ texture BaseTexture;
 texture NoiseTexture;
 
 uniform matrix WorldViewProjMatrix;
+uniform float3 CameraPosition;
+
 uniform float  ZScaleFactor;
 uniform float4 ScaleFactor;
 uniform float4 FineTextureBlockOrigin;
@@ -19,7 +21,10 @@ float4 BlockColor;
 float OneOverMaxExtents;
 float2 TerrainTextureWindow;
 
-
+bool FogEnabled;
+float FogStart;
+float FogEnd;
+float3 FogColor = float3(0,0.7,0.4);
 
 struct VertexShaderInput
 {
@@ -113,9 +118,23 @@ float DotProduct(float3 lightPos, float3 pos3D, float3 normal)
     return dot(-lightDir, normal);    
 }
 
+/*
+where d is the length of the vector going from the camera to the vertex or pixel.
+
+Then the computed fog factor is used to lerp between the normal color and the fog color:
+
+color.rgb = lerp(color.rgb, FogColor, fogFactor);
+*/
+
+float ComputeFogFactor(float d)
+{
+    return clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
+}
+
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
+
     float3 lightDir = normalize(input.pos3d - float4(LightPosition,0)).xyz;
     float dotResult = dot(-lightDir, input.normal);    
 	float projection = saturate(dotResult);
@@ -128,10 +147,18 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 
 	result = result +(noise * 0.3);
 
+
 	result *= light;
+	
+	// Fog stuff.
+	float distanceFromCamera = length(input.pos3d - CameraPosition);
+	float fogFactor = ComputeFogFactor(distanceFromCamera);
+	result.rgb = lerp(result.rgb,FogColor,fogFactor);
+
 	return result;
 
 }
+
 
 technique Technique1
 {
