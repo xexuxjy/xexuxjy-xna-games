@@ -75,7 +75,6 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     // convert from grid xy to world xy coordinates
     //  ScaleFactor.xy: grid spacing of current level
     //  ScaleFactor.zw: origin of current block within world
-    //float2 worldPos = input.gridPos * ScaleFactor.xy + ScaleFactor.zw;
 	float2 worldPos = input.gridPos+FineTextureBlockOrigin.zw;
                      
     // compute coordinates for vertex texture
@@ -84,16 +83,17 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float2 uv = float2((worldPos)*FineTextureBlockOrigin.xy);
     float height = tex2Dlod(ElevationSampler, float4(uv, 0, 1));
 
+	// need to sample heights at integer values of worldpos x& y then lerp to find average height?
 
-    float2 uv1 = float2((worldPos.x+1)*FineTextureBlockOrigin.x,worldPos.y * FineTextureBlockOrigin.y);
-    float2 uv2 = float2((worldPos.x)*FineTextureBlockOrigin.x,(worldPos.y+1) * FineTextureBlockOrigin.y);
+    float2 uv1 = float2((worldPos.x+ScaleFactor.x)*FineTextureBlockOrigin.x,worldPos.y * FineTextureBlockOrigin.y);
+    float2 uv2 = float2((worldPos.x)*FineTextureBlockOrigin.x,(worldPos.y+ScaleFactor.y) * FineTextureBlockOrigin.y);
 
     float heightxplus1 = tex2Dlod(ElevationSampler, float4(uv1, 0, 1));
 	float heightyplus1 = tex2Dlod(ElevationSampler, float4(uv2, 0, 1));
 
 	float3 c0 = float3(worldPos.x,height,worldPos.y);
-	float3 c1 = float3(worldPos.x+1,heightxplus1,worldPos.y);
-	float3 c2 = float3(worldPos.x,heightyplus1,worldPos.y+1);
+	float3 c1 = float3(worldPos.x+ScaleFactor.x,heightxplus1,worldPos.y);
+	float3 c2 = float3(worldPos.x,heightyplus1,worldPos.y+ScaleFactor.x);
 
 	output.normal = normalize(cross((c2-c0), (c1-c0))).xyz;
 	

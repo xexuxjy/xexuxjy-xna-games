@@ -139,21 +139,26 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void BuildVertexBuffers()
         {
-            PosOnlyVertex[] blockVertices = new PosOnlyVertex[m_blockVertices * m_blockVertices];
-            int[] blockIndices = new int[(m_blockSize) * (m_blockSize) * 6];
+            int adjustedVertices = (m_blockSize * m_multiplier)+ 1;
+            int adjustedIndices = (m_blockSize * m_multiplier);
+            
+
+            PosOnlyVertex[] blockVertices = new PosOnlyVertex[adjustedVertices * adjustedVertices];
+            int[] blockIndices = new int[adjustedIndices * adjustedIndices * 6];
             int indexCounter = 0;
             int vertexCounter = 0;
-            int stride = m_blockVertices;
+            int stride = adjustedVertices;
 
-            for (int y = 0; y < m_blockVertices; ++y)
+
+            for (int y = 0; y < adjustedVertices; ++y)
             {
-                for (int x = 0; x < m_blockVertices; ++x)
+                for (int x = 0; x < adjustedVertices; ++x)
                 {
-                    Vector2 v = new Vector2(x, y);
+                    Vector2 v = new Vector2(x, y) * m_oneOver;
                     PosOnlyVertex vpnt = new PosOnlyVertex(v);
 
                     blockVertices[vertexCounter++] = vpnt;
-                    if (x < m_blockSize && y < m_blockSize)
+                    if (x < adjustedIndices && y < adjustedIndices)
                     {
                         blockIndices[indexCounter++] = (x + (y * stride));
                         blockIndices[indexCounter++] = (x + 1 + (y * stride));
@@ -206,6 +211,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             UpdateHeightMapTexture();
 
+
             Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
 
@@ -245,6 +251,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                             //IndexedMatrix transform = viewProjection * IndexedMatrix.CreateTranslation(worldPosition);
                             //IndexedMatrix transform = viewProjection;
                             m_effect.Parameters["WorldViewProjMatrix"].SetValue(transform);
+                            Vector4 scaleFactor = new Vector4(m_oneOver);
+                            m_effect.Parameters["ScaleFactor"].SetValue(scaleFactor);
                             m_effect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, localPosition.X, localPosition.Z));
 
                             // need apply on inner level to make sure latest vals copied across
@@ -830,10 +838,13 @@ namespace com.xexuxjy.magiccarpet.terrain
         private float s_terrainMoveTime = 5.0f;
 
         const int m_numLevels = 1;
-        const int m_blockVertices = 33;
-        const int m_blockSize = m_blockVertices - 1;
+        const int m_blockSize = 32;
         const int m_textureWidth = Globals.WorldWidth + 1;
-        
+
+        const int m_multiplier = 4;
+        const float m_oneOver = 1f / (float)(m_multiplier);
+
+
         VertexBuffer m_blockVertexBuffer;
         IndexBuffer m_blockIndexBuffer;
         Effect m_effect;
