@@ -63,6 +63,7 @@ namespace com.xexuxjy.magiccarpet
         /// </summary>
         protected override void LoadContent()
         {
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
