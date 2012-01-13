@@ -575,7 +575,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public bool Active()
         {
-            return CurrentActionState != ActionState.Dieing;
+            return !m_awaitingRemoval && CurrentActionState != ActionState.Dieing;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -725,10 +725,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public virtual void NotifyOwnershipLost(GameObject gameObject)
         {
 #if LOG_EVENT
-            if (gameObject is ManaBall)
-            {
-                int ibreak = 0;
-            }
             Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] Lost Ownership [{2}][{3}].", Id, GameObjectType, gameObject.Id, gameObject.GameObjectType));
 #endif
         }

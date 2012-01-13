@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using com.xexuxjy.magiccarpet.gameobjects;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -17,12 +18,21 @@ namespace com.xexuxjy.magiccarpet.actions
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             base.Update(gameTime);
+            float timeOffset = (float)gameTime.ElapsedGameTime.TotalSeconds * gatherSpeed;
+
+            IndexedVector3 newPos = Target.Position;
+            newPos.Y += timeOffset;
+
+            Target.Position = newPos;
         }
 
         public override void Start()
         {
             base.Start();
             ((ManaBall)Target).BeingLoaded = true;
+
+            gatherSpeed = (Owner.Position.Y - Target.Position.Y) / Duration;
+            int ibreak = 0;
         }
 
         protected override void InternalComplete()
@@ -38,5 +48,8 @@ namespace com.xexuxjy.magiccarpet.actions
             }
 
         }
+
+        float gatherSpeed = 0f;
+
     }
 }

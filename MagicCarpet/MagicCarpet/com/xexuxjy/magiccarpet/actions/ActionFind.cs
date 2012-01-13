@@ -29,6 +29,10 @@ namespace com.xexuxjy.magiccarpet.actions
             {
                 List<GameObject> searchResults = new List<GameObject>();
                 Globals.GameObjectManager.FindObjects(m_findData.m_findMask, Owner.Position, m_findData.m_findRadius, m_findData.m_owner, searchResults,m_findData.m_includeOwner);
+
+                List<float> distances = new List<float>();
+                
+                
                 if (searchResults.Count > 0)
                 {
                     int index = 0;
@@ -36,6 +40,10 @@ namespace com.xexuxjy.magiccarpet.actions
                     for (int i = 0; i < searchResults.Count; ++i)
                     {
                         float currentWeight = m_findData.GetWeightForType(searchResults[i].GameObjectType);
+                        float distance = (Owner.Position - searchResults[i].Position).Length();
+                        distances.Add(distance);
+
+
                         if (currentWeight > heighestWeight)
                         {
                             heighestWeight = currentWeight;

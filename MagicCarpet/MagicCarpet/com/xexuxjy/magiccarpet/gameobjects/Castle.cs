@@ -265,8 +265,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void CreateBalloon()
         {
-            //GameObject gameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.balloon, Position);
-            //gameObject.Owner = Owner;
+            GameObject gameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.balloon, Position);
+            gameObject.Owner = Owner;
         }
 
 
