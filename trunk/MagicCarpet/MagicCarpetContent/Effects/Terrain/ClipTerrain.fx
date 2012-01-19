@@ -141,14 +141,14 @@ float ComputeFogFactor(float d)
 
 float4 ComputeNormalsPS(in float2 uv:TEXCOORD0)
 {
-    float tl = abs(tex2D (ElevationSampler, uv + texelSize * float2(-1, -1)).x);   // top left
-    float  l = abs(tex2D (ElevationSampler, uv + texelSize * float2(-1,  0)).x);   // left
-    float bl = abs(tex2D (ElevationSampler, uv + texelSize * float2(-1,  1)).x);   // bottom left
-    float  t = abs(tex2D (ElevationSampler, uv + texelSize * float2( 0, -1)).x);   // top
-    float  b = abs(tex2D (ElevationSampler, uv + texelSize * float2( 0,  1)).x);   // bottom
-    float tr = abs(tex2D (ElevationSampler, uv + texelSize * float2( 1, -1)).x);   // top right
-    float  r = abs(tex2D (ElevationSampler, uv + texelSize * float2( 1,  0)).x);   // right
-    float br = abs(tex2D (ElevationSampler, uv + texelSize * float2( 1,  1)).x);   // bottom right
+    float tl = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2(-1, -1)).x);   // top left
+    float  l = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2(-1,  0)).x);   // left
+    float bl = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2(-1,  1)).x);   // bottom left
+    float  t = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2( 0, -1)).x);   // top
+    float  b = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2( 0,  1)).x);   // bottom
+    float tr = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2( 1, -1)).x);   // top right
+    float  r = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2( 1,  0)).x);   // right
+    float br = abs(tex2D (ElevationSampler, uv + FineTextureBlockOrigin.x * float2( 1,  1)).x);   // bottom right
 
     // Compute dx using Sobel:
     //           -1 0 1 
