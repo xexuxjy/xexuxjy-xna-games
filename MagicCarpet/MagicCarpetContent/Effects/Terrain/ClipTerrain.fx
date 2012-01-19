@@ -26,6 +26,13 @@ float FogStart;
 float FogEnd;
 float3 FogColor = float3(0,0.7,0.4);
 
+
+// Normal calc stuff based on example at
+// http://www.catalinzima.com/tutorials/4-uses-of-vtf/terrain-morphing/
+
+
+float normalStrength = 8.0f;
+
 struct VertexShaderInput
 {
 	float2 gridPos: TEXCOORD0;
@@ -96,11 +103,11 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float heightxplus1 = tex2Dlod(ElevationSampler, float4(uv1, 0, 1));
 	float heightyplus1 = tex2Dlod(ElevationSampler, float4(uv2, 0, 1));
 
-	float3 c0 = float3(worldPos.x,height,worldPos.y);
-	float3 c1 = float3(worldPos.x+ScaleFactor.x,heightxplus1,worldPos.y);
-	float3 c2 = float3(worldPos.x,heightyplus1,worldPos.y+ScaleFactor.x);
+//	float3 c0 = float3(worldPos.x,height,worldPos.y);
+//	float3 c1 = float3(worldPos.x+ScaleFactor.x,heightxplus1,worldPos.y);
+//	float3 c2 = float3(worldPos.x,heightyplus1,worldPos.y+ScaleFactor.x);
 
-	output.normal = normalize(cross((c2-c0), (c1-c0))).xyz;
+//	output.normal = normalize(cross((c2-c0), (c1-c0))).xyz;
 	
 	//output.normal = float3(0,1,0);
     output.pos = mul(float4(worldPos.x, height,worldPos.y, 1), WorldViewProjMatrix);
@@ -132,11 +139,44 @@ float ComputeFogFactor(float d)
 }
 
 
+float4 ComputeNormalsPS(in float2 uv:TEXCOORD0)
+{
+    float tl = abs(tex2D (ElevationSampler, uv + texelSize * float2(-1, -1)).x);   // top left
+    float  l = abs(tex2D (ElevationSampler, uv + texelSize * float2(-1,  0)).x);   // left
+    float bl = abs(tex2D (ElevationSampler, uv + texelSize * float2(-1,  1)).x);   // bottom left
+    float  t = abs(tex2D (ElevationSampler, uv + texelSize * float2( 0, -1)).x);   // top
+    float  b = abs(tex2D (ElevationSampler, uv + texelSize * float2( 0,  1)).x);   // bottom
+    float tr = abs(tex2D (ElevationSampler, uv + texelSize * float2( 1, -1)).x);   // top right
+    float  r = abs(tex2D (ElevationSampler, uv + texelSize * float2( 1,  0)).x);   // right
+    float br = abs(tex2D (ElevationSampler, uv + texelSize * float2( 1,  1)).x);   // bottom right
+
+    // Compute dx using Sobel:
+    //           -1 0 1 
+    //           -2 0 2
+    //           -1 0 1
+    float dX = tr + 2*r + br -tl - 2*l - bl;
+
+    // Compute dy using Sobel:
+    //           -1 -2 -1 
+    //            0  0  0
+    //            1  2  1
+    float dY = bl + 2*b + br -tl - 2*t - tr;
+
+    // Compute cross-product and renormalize
+    float4 N = float4(normalize(float3(dX, 1.0f / normalStrength, dY)), 1.0f);
+    //convert (-1.0 , 1.0) to (0.0 , 1.0);
+    return N * 0.5f + 0.5f;
+}
+
+
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 
     float3 lightDir = normalize(input.pos3d - float4(LightPosition,0)).xyz;
-    float dotResult = dot(-lightDir, input.normal);    
+    float4 smoothedNormal = ComputeNormalPS(input.uv);
+    
+    
+    float dotResult = dot(-lightDir, smoothedNormal.xyz);    
 	float projection = saturate(dotResult);
 	float3 directionalComponent = DirectionalLight * projection;
 	//float4 light = (AmbientLight + directionalComponent,1);
@@ -158,6 +198,9 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	return result;
 
 }
+
+
+
 
 
 technique Technique1
