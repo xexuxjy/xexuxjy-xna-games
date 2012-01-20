@@ -26,6 +26,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return 0.5f;
         }
 
+        public override float GetHoverHeight()
+        {
+            return 1.0f;
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

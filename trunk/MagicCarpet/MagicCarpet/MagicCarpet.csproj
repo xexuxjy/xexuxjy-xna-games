@@ -170,6 +170,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\manager\SpellPool.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Program.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\DefaultRenderer.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\renderer\ScreenQuad.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\TerrainSectionRenderer.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellAlterTerrain.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellConvert.cs" />

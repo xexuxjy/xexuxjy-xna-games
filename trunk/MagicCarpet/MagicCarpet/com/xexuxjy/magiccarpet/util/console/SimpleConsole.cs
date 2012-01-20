@@ -287,6 +287,10 @@ namespace com.xexuxjy.magiccarpet.util.console
                         {
                             Globals.Camera.ClipToWorld = false;
                         }
+                        else if (commandDetails.Name.Equals("buildrandomlandscape"))
+                        {
+                            Globals.Terrain.BuildRandomLandscape();
+                        }
 
 
                     }
@@ -597,7 +601,8 @@ namespace com.xexuxjy.magiccarpet.util.console
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
             id = "camerafree";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
-
+            id = "buildrandomlandscape";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

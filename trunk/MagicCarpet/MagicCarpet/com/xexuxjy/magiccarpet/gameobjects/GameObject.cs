@@ -326,6 +326,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 if (StickToGround)
                 {
                     float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
+                    if (height > 0f)
+                    {
+                        int ibreak = 0;
+                    }
                     clampedValue.Y = height + GetStartOffsetHeight() +  GetHoverHeight();
                 }
 
