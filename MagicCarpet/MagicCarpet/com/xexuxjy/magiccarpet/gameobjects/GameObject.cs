@@ -817,6 +817,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected Model m_model;
 
         protected bool m_debugEnabled;
+        protected bool m_playerControlled;
+
 
         protected ActionComponent m_actionComponent;
         protected SpellComponent m_spellComponent;
