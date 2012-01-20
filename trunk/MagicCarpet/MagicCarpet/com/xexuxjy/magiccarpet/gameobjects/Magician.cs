@@ -67,9 +67,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (ActionState == ActionState.None)
+            if (!m_playerControlled)
             {
-                QueueAction(Globals.ActionPool.GetActionIdle(this));
+                if (ActionState == ActionState.None)
+                {
+                    QueueAction(Globals.ActionPool.GetActionIdle(this));
+                }
             }
         }
 
@@ -295,13 +298,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
 
-
+        
         private List<Castle> m_castles = new List<Castle>();
         private List<Balloon> m_balloons = new List<Balloon>();
 
 
         private SpellType m_selectedSpell1 = SpellType.Convert;
-        private SpellType m_selectedSpell2 = SpellType.Castle;
+        private SpellType m_selectedSpell2 = SpellType.Raise;
 
 
     }

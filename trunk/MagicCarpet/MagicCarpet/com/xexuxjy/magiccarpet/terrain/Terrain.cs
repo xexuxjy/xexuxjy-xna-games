@@ -20,7 +20,7 @@ using com.xexuxjy.magiccarpet.renderer;
 namespace com.xexuxjy.magiccarpet.terrain
 {
     public class Terrain : GameObject, ICollideable
-	{
+    {
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         public Terrain(IndexedVector3 position)
@@ -31,21 +31,21 @@ namespace com.xexuxjy.magiccarpet.terrain
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         virtual public int Width
-		{
-			get
-			{
+        {
+            get
+            {
                 return (int)(BoundingBox.Max.X - BoundingBox.Min.X);
-			}
-		}
-        
+            }
+        }
+
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        
+
         virtual public int Breadth
-		{
-			get
-			{
+        {
+            get
+            {
                 return (int)(BoundingBox.Max.Z - BoundingBox.Min.Z);
-			}
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,12 +55,11 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_heightMap = new float[m_textureWidth * m_textureWidth];
             m_heightMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Single);
             //m_normalMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Color);
-            m_normalMapRenderTarget = new RenderTarget2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false,SurfaceFormat.Color,DepthFormat.None);
+            m_normalMapRenderTarget = new RenderTarget2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Color, DepthFormat.None);
 
             if (!String.IsNullOrEmpty(textureName))
             {
-                Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\"+textureName);
-                //m_heightMapTexture = new Texture2D(Game.GraphicsDevice, wrongFormatTexture.Width, wrongFormatTexture.Height, false, SurfaceFormat.Single);
+                Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\" + textureName);
                 Color[] colorData = new Color[wrongFormatTexture.Width * wrongFormatTexture.Height];
                 wrongFormatTexture.GetData<Color>(colorData);
 
@@ -71,7 +70,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             }
             UpdateHeightMap();
-            
+
         }
 
 
@@ -81,14 +80,14 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             CollisionShape collisionShape = new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
-            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell|GameObjectType.manaball|GameObjectType.camera);
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera);
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, IndexedMatrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
-            
+
         }
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        
+
         public override void Initialize()
         {
             m_terrainEffect = Game.Content.Load<Effect>("Effects\\Terrain\\ClipTerrain");
@@ -126,9 +125,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void BuildVertexBuffers()
         {
-            int adjustedVertices = (m_blockSize * m_multiplier)+ 1;
+            int adjustedVertices = (m_blockSize * m_multiplier) + 1;
             int adjustedIndices = (m_blockSize * m_multiplier);
-            
+
 
             PosOnlyVertex[] blockVertices = new PosOnlyVertex[adjustedVertices * adjustedVertices];
             int[] blockIndices = new int[adjustedIndices * adjustedIndices * 6];
@@ -170,10 +169,20 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             if (HasTerrainChanged())
             {
-                if (m_heightMapTexture == null)
+                m_normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+                m_terrainEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+
+                // need these here to unset the textures so I can change them.
+                foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
                 {
-                    m_heightMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Single);
+                    pass.Apply();
                 }
+
+                foreach (EffectPass pass in m_normalsEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                }
+
                 m_heightMapTexture.SetData<Single>(m_heightMap);
                 m_terrainEffect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
 
@@ -188,7 +197,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void UpdateNormalMap()
         {
-            m_terrainEffect.Parameters["NormalMapTexture"].SetValue((Texture)null);
+            //m_terrainEffect.Parameters["NormalMapTexture"].SetValue((Texture)null);
 
             int width = m_heightMapTexture.Width;
 
@@ -203,14 +212,16 @@ namespace com.xexuxjy.magiccarpet.terrain
             Matrix projection = Matrix.CreateOrthographicOffCenter(0, width, width, 0, 0, 1);
             Matrix halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
-            m_normalsEffect.Parameters["MatrixTransform"].SetValue(halfPixelOffset * projection); 
+            m_normalsEffect.Parameters["MatrixTransform"].SetValue(halfPixelOffset * projection);
 
             foreach (EffectPass pass in m_normalsEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 m_helperScreenQuad.Draw();
             }
-            
+
+            //m_normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+
             Game.GraphicsDevice.SetRenderTarget(null);
             m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMapRenderTarget);
         }
@@ -228,7 +239,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             Game.GraphicsDevice.Indices = m_blockIndexBuffer;
             Game.GraphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
             //float oneOverTextureWidth = 1f/m_textureWidth;
-            float oneOverTextureWidth = 1f / (m_textureWidth-1);
+            float oneOverTextureWidth = 1f / (m_textureWidth - 1);
 
             //IndexedVector3 maxPos = IndexedVector3.Zero;
 
@@ -237,14 +248,14 @@ namespace com.xexuxjy.magiccarpet.terrain
             int numSpans = Globals.WorldWidth / m_blockSize;
             IndexedVector3 blockSize = new IndexedVector3(m_blockSize, 0, m_blockSize);
             IndexedVector3 startPosition = new IndexedVector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
-            
+
             m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["TileTerrain"];
-            
+
             foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
             {
-                for(int j=0;j<numSpans;++j)
+                for (int j = 0; j < numSpans; ++j)
                 {
-                    for(int i=0;i<numSpans;++i)
+                    for (int i = 0; i < numSpans; ++i)
                     {
                         IndexedVector3 localPosition = new IndexedVector3((m_blockSize) * i, 0, (m_blockSize) * j);
 
@@ -254,14 +265,13 @@ namespace com.xexuxjy.magiccarpet.terrain
                         IndexedVector3 maxbb = minbb + blockSize;
                         maxbb.Y = Globals.WorldHeight;
 
-                        BoundingBox bb = new BoundingBox(minbb,maxbb);
+                        BoundingBox bb = new BoundingBox(minbb, maxbb);
 
                         if (boundingFrustrum.Intersects(bb))
                         {
 
                             Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
-                            //IndexedMatrix transform = viewProjection * IndexedMatrix.CreateTranslation(worldPosition);
-                            //IndexedMatrix transform = viewProjection;
+
                             m_terrainEffect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
                             m_terrainEffect.Parameters["WorldViewProjMatrix"].SetValue(transform);
                             Vector4 scaleFactor = new Vector4(m_oneOver);
@@ -315,17 +325,17 @@ namespace com.xexuxjy.magiccarpet.terrain
             }
         }
 
-		///////////////////////////////////////////////////////////////////////////////////////////////
-		
-		protected virtual void InitialiseWorldGrid()
-		{
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        protected virtual void InitialiseWorldGrid()
+        {
             m_terrainSquareGrid = new TerrainSquare[Globals.WorldWidth * Globals.WorldWidth];
             for (int i = 0; i < m_terrainSquareGrid.Length; ++i)
             {
                 m_terrainSquareGrid[i] = new TerrainSquare();
             }
 
-		}
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -339,7 +349,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void AddPeak(float x, float y, float height)
         {
-            float defaultRadius = 10.0f;
+            float defaultRadius = 5.0f;
             AddPeak(x, y, defaultRadius, height);
         }
 
@@ -350,7 +360,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             TerrainUpdater terrainUpdate = new TerrainUpdater(new IndexedVector3(x, 0, z), radius, s_terrainMoveTime, height, this);
             m_terrainUpdaters.Add(terrainUpdate);
-        }		
+        }
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         public virtual float GetHeightAtPointWorld(IndexedVector3 point)
@@ -368,30 +378,30 @@ namespace com.xexuxjy.magiccarpet.terrain
             IndexedVector3 local = WorldToLocal(worldPoint);
             int localX = (int)local.X;
             int localZ = (int)local.Z;
-            SetHeightAtPointLocal(localX,localZ,worldPoint.Y);
+            SetHeightAtPointLocal(localX, localZ, worldPoint.Y);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void SetHeightAtPointLocal(int localX,int localZ,float height)
+        public void SetHeightAtPointLocal(int localX, int localZ, float height)
         {
             Debug.Assert(localX >= 0 && localX <= Globals.WorldWidth);
             Debug.Assert(localZ >= 0 && localZ <= Globals.WorldWidth);
             //m_heightMap[(localZ * Globals.WorldWidth) + localX] = height;
-            m_heightMap[(localZ * m_textureWidth)+localX] = height;
+            m_heightMap[(localZ * m_textureWidth) + localX] = height;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-		public virtual float GetHeightAtPointWorld(float x, float z)
-		{
-            IndexedVector3 local = WorldToLocal(new IndexedVector3(x,0,z));
+        public virtual float GetHeightAtPointWorld(float x, float z)
+        {
+            IndexedVector3 local = WorldToLocal(new IndexedVector3(x, 0, z));
             int localX = (int)local.X;
             int localZ = (int)local.Z;
             return GetHeightAtPointLocal(localX, localZ);
-		}
+        }
 
-		///////////////////////////////////////////////////////////////////////////////////////////////	
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public virtual float GetHeightAtPointLocal(int localX, int localZ)
         {
@@ -404,8 +414,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public virtual void  BuildRandomLandscape()
-		{
+        public virtual void BuildRandomLandscape()
+        {
             int counter = 0;
             int increment = 1;
             int maxHills = 1000;
@@ -439,21 +449,21 @@ namespace com.xexuxjy.magiccarpet.terrain
                 {
                     height = -height;
                 }
-                
 
-                TerrainUpdater.ApplyImmediate(new IndexedVector3(xpos,0, ypos), radius, height,this);
+
+                TerrainUpdater.ApplyImmediate(new IndexedVector3(xpos, 0, ypos), radius, height, this);
             }
 
             UpdateHeightMap();
-		}
-		
-		///////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public virtual void  ToggleHeightMethod()
-		{
-			m_defaultHeightMethod = !m_defaultHeightMethod;
-		}
-		
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual void ToggleHeightMethod()
+        {
+            m_defaultHeightMethod = !m_defaultHeightMethod;
+        }
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         //// used to put a castle on the land, this will take the center of the castle and figure out 
@@ -486,7 +496,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         //        castlePosition2.X = theCastle.Position.X;
         //        castlePosition2.Z = theCastle.Position.Z;
         //        castlePosition2.Y = height;
-                
+
         //        theCastle.Position = castlePosition2;
         //        m_terrainHasChanged = true;
         //    }
@@ -508,12 +518,12 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public TerrainSquare GetTerrainSquareAtPointLocal(int localX,int localZ)
+        public TerrainSquare GetTerrainSquareAtPointLocal(int localX, int localZ)
         {
             Debug.Assert(localX >= 0 && localX < Globals.WorldWidth);
             Debug.Assert(localZ >= 0 && localZ < Globals.WorldWidth);
-            return m_terrainSquareGrid[(localZ * Globals.WorldWidth)+localX];
-		}
+            return m_terrainSquareGrid[(localZ * Globals.WorldWidth) + localX];
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -542,7 +552,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void SetTerrainTypeOld(TerrainSquare terrainSquare,float val)
+        public void SetTerrainTypeOld(TerrainSquare terrainSquare, float val)
         {
             TerrainType result = TerrainType.water;
             if (val <= -5.0f)
@@ -558,40 +568,40 @@ namespace com.xexuxjy.magiccarpet.terrain
                 result = TerrainType.shallowwater;
             }
             else
-            if (val > 0.0f && val <= 1.0f)
-            {
-                result = TerrainType.beach;
-            }
-            else
-            if (val > 1.0f && val <= 3.0f)
-            {
-                result = TerrainType.grass;
-            }
-            else
-            if (val > 3.0f && val <= 5.0f)
-            {
-                result = TerrainType.grass2;
-            }
-            else
-            if (val > 5.0f && val <= 8.0f)
-            {
-                result = TerrainType.rock;
-            }
-            else
-            if (val > 8.0f)
-            {
-                result = TerrainType.ice;
-            }
+                if (val > 0.0f && val <= 1.0f)
+                {
+                    result = TerrainType.beach;
+                }
+                else
+                    if (val > 1.0f && val <= 3.0f)
+                    {
+                        result = TerrainType.grass;
+                    }
+                    else
+                        if (val > 3.0f && val <= 5.0f)
+                        {
+                            result = TerrainType.grass2;
+                        }
+                        else
+                            if (val > 5.0f && val <= 8.0f)
+                            {
+                                result = TerrainType.rock;
+                            }
+                            else
+                                if (val > 8.0f)
+                                {
+                                    result = TerrainType.ice;
+                                }
             terrainSquare.Type = result;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public bool IsPointInTerrain(ref IndexedVector3 point)
-           {
+        {
             return ((point.X >= 0.0f && point.X <= Width) && (point.Z >= 0.0f && point.Z <= Breadth));
 
-        }        
+        }
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public void AssertPointInTerrain(ref IndexedVector3 point)
@@ -624,7 +634,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             {
                 m_terrainUpdaters.Remove(terrainUpdate);
             }
-            
+
             if (terrainChanged)
             {
                 UpdateHeightMap();
@@ -654,10 +664,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             return LocalToWorld(result);
         }
-        
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public IndexedVector3 GetRandomWorldPositionXZWithRange(IndexedVector3 position,float distance)
+        public IndexedVector3 GetRandomWorldPositionXZWithRange(IndexedVector3 position, float distance)
         {
             IndexedVector3 result = new IndexedVector3();
             float sign = Globals.s_random.NextDouble() > 0.5f ? 1.0f : -1.0f;
@@ -665,8 +675,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             result.Z = position.Z + (sign * ((float)Globals.s_random.NextDouble() * distance));
 
             // make sure it fits in bounds.
-            result.X = MathHelper.Clamp(result.X,0.0f,Width);
-            result.Z = MathHelper.Clamp(result.Z,0.0f, Width);
+            result.X = MathHelper.Clamp(result.X, 0.0f, Width);
+            result.Z = MathHelper.Clamp(result.Z, 0.0f, Width);
 
             return result;
         }
@@ -711,14 +721,14 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public float TerrainMoveTime
         {
-            get{return s_terrainMoveTime;}
+            get { return s_terrainMoveTime; }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         private struct TerrainUpdater
         {
-            public TerrainUpdater(IndexedVector3 position, float radius, float totalTime, float totalDeflection,Terrain terrain)
+            public TerrainUpdater(IndexedVector3 position, float radius, float totalTime, float totalDeflection, Terrain terrain)
             {
                 m_terrain = terrain;
                 m_positionLocal = position;
@@ -791,17 +801,11 @@ namespace com.xexuxjy.magiccarpet.terrain
                             if (diffLength2 < floatRadius2)
                             {
                                 float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
-                                // play with lerp value to smooth the terrain?
-                                //                          lerpValue = (float)Math.Sqrt(lerpValue);
-                                //lerpValue *= lerpValue;
-                                //                        lerpValue *= lerpValue;
-
-                                // ToDo - fractal hill generation.
+                                lerpValue = (float)Math.Pow(lerpValue, 1.5f);
                                 float currentHeight = m_terrain.GetHeightAtPointLocal(i, j);
-                                //float oldHeight = getHeightAtPoint(i, j);
                                 float newHeight = currentHeight + (m_updateDeflection * lerpValue);
 
-                                newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight,Globals.WorldHeight);
+                                newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight, Globals.WorldHeight);
                                 m_terrain.SetHeightAtPointLocal(i, j, newHeight);
                             }
                         }
@@ -842,11 +846,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         private TerrainSquare[] m_terrainSquareGrid;
         private float[] m_heightMap;
- 
+
         private List<TerrainUpdater> m_terrainUpdaters = new List<TerrainUpdater>();
         private List<TerrainUpdater> m_terrainUpdatersRemove = new List<TerrainUpdater>();
 
-		private bool m_defaultHeightMethod = true;
+        private bool m_defaultHeightMethod = true;
         private bool m_terrainHasChanged;
         private float m_maxCoverage = 0.65f;
         private float m_minIslandSize = 5.0f;
@@ -870,7 +874,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         RasterizerState m_rasterizerState;
         Texture2D m_heightMapTexture;
-        
+
         //Texture2D m_normalMapTexture;
         RenderTarget2D m_normalMapRenderTarget;
 

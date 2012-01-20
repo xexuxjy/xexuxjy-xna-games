@@ -291,7 +291,16 @@ namespace com.xexuxjy.magiccarpet.util.console
                         {
                             Globals.Terrain.BuildRandomLandscape();
                         }
+                        else if (commandDetails.Name.Equals("setglobalplayer"))
+                        {
+                            String globalPlayerId = args[0];
+                            GameObject gameObject = Globals.GameObjectManager.GetObject(globalPlayerId);
+                            if (gameObject != null)
+                            {
+                                Globals.Player = gameObject as Magician;
+                            }
 
+                        }
 
                     }
                 }
@@ -603,6 +612,9 @@ namespace com.xexuxjy.magiccarpet.util.console
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
             id = "buildrandomlandscape";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
+            id = "setglobalplayer";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
+            
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
