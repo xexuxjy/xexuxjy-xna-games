@@ -26,6 +26,9 @@ using BulletXNA.LinearMath;
 using System.Collections.Generic;
 using com.xexuxjy.magiccarpet.util.console;
 using com.xexuxjy.magiccarpet.util.debug;
+using com.xexuxjy.magiccarpet.gui;
+using Indiefreaks.Xna.Profiler;
+using Indiefreaks.AOP.Profiler;
 #endregion
 
 namespace GameStateManagement
@@ -66,6 +69,10 @@ namespace GameStateManagement
 
             m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
+
+            //var profilerGameComponent = new ProfilerGameComponent(Globals.Game, "ProfilerFont"); 
+            //ProfilingManager.Run = true; 
+            //AddComponent(profilerGameComponent); 
 
             
             CameraComponent camera = new CameraComponent(Globals.Game);
@@ -119,6 +126,11 @@ namespace GameStateManagement
 
             AddComponent(new FrameRateCounter(ScreenManager.Game, Globals.DebugTextFPS, Globals.DebugDraw));
 
+            Globals.MiniMap = new MiniMap(100,650,10);
+            Globals.MiniMap.Initialize();
+            AddComponent(Globals.MiniMap);
+
+
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
@@ -169,21 +181,6 @@ namespace GameStateManagement
                 loadedInitialScript = true;
                 Globals.SimpleConsole.LoadScript(Globals.s_initialScript);
             }
-
-
-            if (!droppedInitialManaBalls)
-            {
-                // drop a load of manaballs?
-                int numManaballs = 0;
-                for (int i = 0; i < numManaballs; ++i)
-                {
-                    Vector3 spawnPos = Globals.Terrain.GetRandomWorldPositionXZ();
-                    spawnPos.Y = 20f;
-                    Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, spawnPos);
-                }
-                droppedInitialManaBalls = true;
-            }
-
         }
 
 
@@ -300,10 +297,11 @@ namespace GameStateManagement
         MouseController m_mouseController;
         KeyboardController m_keyboardController;   
  
-        static bool droppedInitialManaBalls = false;
         static bool loadedInitialScript = false;
 
         float pauseAlpha;
+
+
 
         #endregion
 

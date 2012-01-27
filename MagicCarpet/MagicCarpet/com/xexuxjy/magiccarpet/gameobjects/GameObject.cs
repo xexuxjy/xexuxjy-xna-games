@@ -788,6 +788,30 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public Color BadgeColor
+        {
+            get
+            {
+                if (m_owner != null)
+                {
+                    return m_owner.BadgeColor;
+                }
+                else
+                {
+                    if (this is Magician)
+                    {
+                        return Color.Blue;
+                    }
+                }
+                return Color.White;
+            }
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
         public ObjectArray<ThreatData> m_recentThreats = new ObjectArray<ThreatData>();
 
