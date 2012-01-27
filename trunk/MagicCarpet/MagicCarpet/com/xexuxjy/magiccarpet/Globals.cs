@@ -17,6 +17,7 @@ using com.xexuxjy.magiccarpet.manager;
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.util.debug;
 using System.IO;
+using com.xexuxjy.magiccarpet.gui;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -189,6 +190,7 @@ namespace com.xexuxjy.magiccarpet
         public static EventLogger EventLogger;
         public static ActionPool ActionPool;
         public static SpellPool SpellPool;
+        public static MiniMap MiniMap;
 
         public static ScreenManager ScreenManager;
 

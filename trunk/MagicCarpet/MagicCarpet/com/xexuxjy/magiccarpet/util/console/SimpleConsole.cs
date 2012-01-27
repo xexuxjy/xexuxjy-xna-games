@@ -298,6 +298,7 @@ namespace com.xexuxjy.magiccarpet.util.console
                             if (gameObject != null)
                             {
                                 Globals.Player = gameObject as Magician;
+                                Globals.MiniMap.SetTrackedObject(Globals.Player);
                             }
 
                         }

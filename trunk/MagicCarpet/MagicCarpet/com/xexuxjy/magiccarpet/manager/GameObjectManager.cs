@@ -356,6 +356,8 @@ namespace com.xexuxjy.magiccarpet.manager
         private ObjectArray<GameObject> m_gameObjectList = new ObjectArray<GameObject>();
         private ObjectArray<GameObject> m_gameObjectListRemove = new ObjectArray<GameObject>();
         private GameplayScreen m_gameplayScreen;
+        public const GameObjectType m_allActiveObjectTypes = GameObjectType.spell | GameObjectType.manaball | GameObjectType.balloon | GameObjectType.castle | GameObjectType.magician | GameObjectType.monster;
+
     }
 
     public class DistanceSorter : IComparer<GameObject>

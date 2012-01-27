@@ -892,6 +892,12 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             return true;
         }
+
+
+        public Texture2D BaseTexture
+        {
+            get { return m_baseTexture; }
+        }
     }
 
     public struct PosOnlyVertex : IVertexType
