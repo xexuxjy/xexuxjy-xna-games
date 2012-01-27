@@ -27,8 +27,6 @@ using System.Collections.Generic;
 using com.xexuxjy.magiccarpet.util.console;
 using com.xexuxjy.magiccarpet.util.debug;
 using com.xexuxjy.magiccarpet.gui;
-using Indiefreaks.Xna.Profiler;
-using Indiefreaks.AOP.Profiler;
 #endregion
 
 namespace GameStateManagement
@@ -126,9 +124,24 @@ namespace GameStateManagement
 
             AddComponent(new FrameRateCounter(ScreenManager.Game, Globals.DebugTextFPS, Globals.DebugDraw));
 
-            Globals.MiniMap = new MiniMap(100,650,10);
-            Globals.MiniMap.Initialize();
-            AddComponent(Globals.MiniMap);
+            //int x = 650;
+            //int y = 10;
+            //int width = 100;
+            //Globals.MiniMap = new MiniMap(x,y,width);
+            //Globals.MiniMap.Initialize();
+            //AddComponent(Globals.MiniMap);
+
+
+            int x = 350;
+            int y = 300;
+            int width = 200;
+            //Globals.MiniMap = new MiniMap(x, y, width);
+            //Globals.MiniMap.Initialize();
+            //AddComponent(Globals.MiniMap);
+
+            SpellSelector spellSelector = new SpellSelector(x, y, width);
+            spellSelector.Initialize();
+            AddComponent(spellSelector);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -198,6 +211,13 @@ namespace GameStateManagement
             m_keyboardController.HandleInput(input);
             Globals.Camera.HandleInput(input);
 
+            foreach (GuiComponent guiComponent in m_guiComponents)
+            {
+                if (guiComponent.HasGuiControl)
+                {
+                    guiComponent.HandleInput(input);
+                }
+            }
         }
 
 
@@ -263,11 +283,18 @@ namespace GameStateManagement
         public void AddComponent(GameComponent gameComponent)
         {
             m_componentCollection.Add(gameComponent);
+
             IDrawable drawable = gameComponent as IDrawable;
             if (drawable != null)
             {
                 m_drawableList.Add(drawable);
             }
+            GuiComponent guiComponent = gameComponent as GuiComponent;
+            if (guiComponent != null)
+            {
+                m_guiComponents.Add(guiComponent);
+            }
+
         }
 
         public void RemoveComponent(GameComponent gameComponent)
@@ -277,6 +304,11 @@ namespace GameStateManagement
             if (drawable != null)
             {
                 m_drawableList.Remove(drawable);
+            }
+            GuiComponent guiComponent = gameComponent as GuiComponent;
+            if (guiComponent != null)
+            {
+                m_guiComponents.Remove(guiComponent);
             }
         }
 
@@ -292,7 +324,7 @@ namespace GameStateManagement
 
         GameComponentCollection m_componentCollection = new GameComponentCollection();
         List<IDrawable> m_drawableList = new List<IDrawable>();
-
+        List<GuiComponent> m_guiComponents = new List<GuiComponent>();
 
         MouseController m_mouseController;
         KeyboardController m_keyboardController;   

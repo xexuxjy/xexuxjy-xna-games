@@ -161,7 +161,10 @@
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\OptionsMenuScreen.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\PauseMenuScreen.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\PlayerIndexEventArgs.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gui\GuiComponent.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gui\PlayerHud.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\MiniMap.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gui\SpellSelector.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\interfaces\IKeyboardCallback.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\ActionPool.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\GameObjectManager.cs" />

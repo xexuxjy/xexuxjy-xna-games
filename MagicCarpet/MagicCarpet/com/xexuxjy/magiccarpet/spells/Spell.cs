@@ -16,12 +16,13 @@ namespace com.xexuxjy.magiccarpet.spells
         Castle,
         Convert,
         Fireball,
-        Heal,
         Lower,
         Raise,
+        Heal,
         RubberBand,
         SwarmOfBees,
-        Turbo
+        Turbo,
+        NumSpellTypes
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
