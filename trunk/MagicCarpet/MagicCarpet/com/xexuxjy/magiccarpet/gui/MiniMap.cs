@@ -11,16 +11,23 @@ using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.gui
 {
-    public class MiniMap : DrawableGameComponent
+    public class MiniMap : GuiComponent
     {
-        public MiniMap(int width,int x,int y) : base(Globals.Game)
+        public MiniMap(int x,int y,int width) : base(x,y,width)
         {
             m_miniMapWidth = width;
             m_gameObjectList = new List<GameObject>(128);
             m_radius = 100.0f;
-            m_bounds = new Rectangle(x, y, width, width);
-            m_zoomLevel = 10;
             m_mapWorldPosition = IndexedVector3.Zero;
+
+            m_halfSpan = Globals.WorldWidth / 2 * m_zoomLevel;
+            m_span = 2 * m_halfSpan;
+
+            m_bounds = new Vector4(m_mapWorldPosition.X - m_halfSpan, m_mapWorldPosition.Z - m_halfSpan, m_span, m_span);
+            m_boundsRect = new Rectangle((int)m_bounds.X, (int)m_bounds.Y, (int)m_bounds.Z, (int)m_bounds.W);
+            m_zoomLevel = 10;
+
+
         }
 
         public override void Initialize()
@@ -52,26 +59,6 @@ namespace com.xexuxjy.magiccarpet.gui
         {
             // draw the terrain   ?? scale issues?
 
-        }
-
-
-        public Vector2 WorldToMap(IndexedVector3 position,int i)
-        {
-            IndexedVector3 mapRelativePosition = position - m_mapWorldPosition;
-
-            float scale = ((float)m_miniMapWidth / (float)Globals.WorldWidth * m_zoomLevel);
-
-            Vector2 screen = new Vector2(mapRelativePosition.X, mapRelativePosition.Z);
-            // center the object in the world
-
-            screen += new Vector2(Globals.WorldWidth / 2, Globals.WorldWidth / 2);
-
-            screen *= scale;
-
-            screen.X += m_bounds.Left;
-            screen.Y += m_bounds.Top;
-
-            return screen;
         }
 
         public Color ColorForObject(GameObject gameObject)
@@ -123,7 +110,19 @@ namespace com.xexuxjy.magiccarpet.gui
             return result;
         }
 
+        // xz coordinates from position against a vector4 as left,top,width,height
+        public bool InBounds(IndexedVector3 position)
+        {
+            if (position.X < m_bounds.X) return false;
+            if (position.Z < m_bounds.Y) return false;
+            if (position.X > m_bounds.X + m_bounds.Z) return false;
+            if (position.Z > m_bounds.Y + m_bounds.W) return false;
+            return true;
+        }
 
+
+         
+ 
         public override void Draw (GameTime gameTime)
         {
             if (m_trackedObject != null)
@@ -133,18 +132,24 @@ namespace com.xexuxjy.magiccarpet.gui
                 Globals.GameObjectManager.FindObjects(GameObjectManager.m_allActiveObjectTypes, m_trackedObject.Position, m_radius, m_trackedObject, m_gameObjectList, true);
 
                 m_spriteBatch.Begin();
-                m_spriteBatch.Draw(m_minimapTexture, m_bounds, Color.White);
+                m_spriteBatch.Draw(m_minimapTexture, m_boundsRect, Color.White);
         
                 int counter = 0;
                 foreach (GameObject gameObject in m_gameObjectList)
                 {
-                    Vector2 position = WorldToMap(gameObject.Position,counter++);
-                    Rectangle? sourceRectangle = SpritePositionForGameObject(gameObject);
-                    Color objectColor = ColorForObject(gameObject);
-
-                    if (sourceRectangle.HasValue)
+                    if (InBounds((gameObject.Position)))
                     {
-                        m_spriteBatch.Draw(m_mapSpriteAtlas, position, sourceRectangle, objectColor);
+                        Vector2 mapPos = new Vector2((gameObject.Position.X + m_halfSpan) / m_span, (gameObject.Position.Z + m_halfSpan) / m_span);
+                        mapPos += m_mapTopCorner;
+
+
+                        Rectangle? sourceRectangle = SpritePositionForGameObject(gameObject);
+                        Color objectColor = ColorForObject(gameObject);
+
+                        if (sourceRectangle.HasValue)
+                        {
+                            m_spriteBatch.Draw(m_mapSpriteAtlas, mapPos, sourceRectangle, objectColor);
+                        }
                     }
 
                 }
@@ -165,13 +170,20 @@ namespace com.xexuxjy.magiccarpet.gui
         private float m_radius;
         private int m_miniMapWidth;
         private int m_spriteWidth = 16;
+        
         private int m_zoomLevel;
-        private Rectangle m_bounds;
+        private int m_halfSpan;
+        private int m_span;
+        private Vector4 m_bounds;
+        private Rectangle m_boundsRect;
         private IndexedVector3 m_mapWorldPosition;
+        private Vector2 m_mapTopCorner;
+
+
+        // need cone texture for facing or something.
 
         private Color[] m_colorDataArray;
         private Texture2D m_minimapTexture;
-        private SpriteBatch m_spriteBatch;
         private GameObject m_trackedObject;
     }
 }

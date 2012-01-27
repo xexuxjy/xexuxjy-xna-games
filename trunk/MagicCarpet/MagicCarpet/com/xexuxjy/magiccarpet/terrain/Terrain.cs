@@ -16,6 +16,7 @@ using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.interfaces;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.renderer;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
@@ -349,7 +350,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void AddPeak(float x, float y, float height)
         {
-            float defaultRadius = 5.0f;
+            float defaultRadius = 15.0f;
             AddPeak(x, y, defaultRadius, height);
         }
 
@@ -357,9 +358,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public virtual void AddPeak(float x, float z, float radius, float height)
         {
+            //TerrainUpdater terrainUpdate = new TerrainUpdater(new IndexedVector3(x, 0, z), radius, s_terrainMoveTime, height, this);
+            //m_terrainUpdaters.Add(terrainUpdate);
+            TerrainUpdater.ApplyImmediate(new IndexedVector3(x, 0, z), radius, height, this);
+            UpdateHeightMap();
 
-            TerrainUpdater terrainUpdate = new TerrainUpdater(new IndexedVector3(x, 0, z), radius, s_terrainMoveTime, height, this);
-            m_terrainUpdaters.Add(terrainUpdate);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -418,9 +421,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             int counter = 0;
             int increment = 1;
-            int maxHills = 1000;
+            int maxHills = Width;
             int maxInstanceHeight = 10;
-            int maxRadius = 30;
+            int maxRadius = 50;
             int currentHills = 0;
             while (currentHills++ < maxHills)
             {
@@ -769,10 +772,14 @@ namespace com.xexuxjy.magiccarpet.terrain
                         if (diffLength2 < floatRadius2)
                         {
                             float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
+                            lerpValue = (float)Math.Pow(lerpValue, 4f);
+                            lerpValue = (float)Math.Sin(MathUtil.SIMD_HALF_PI * lerpValue);
+                            //lerpValue += 1.0f;
+
                             // play with lerp value to smooth the terrain?
                             //                          lerpValue = (float)Math.Sqrt(lerpValue);
                             //lerpValue *= lerpValue;
-                            lerpValue = (float)Math.Pow(lerpValue, 1.5f);
+                            //lerpValue = (float)Math.Pow(lerpValue, 4f);
                             // ToDo - fractal hill generation.
                             float currentHeight = terrain.GetHeightAtPointLocal(i, j);
                             //float oldHeight = getHeightAtPoint(i, j);

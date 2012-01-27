@@ -40,6 +40,7 @@ namespace GameStateManagement
         public MouseState CurrentMouseState;
         public MouseState LastMouseState;
 
+        public PlayerIndex ControllingPlayer;
 
         public readonly bool[] GamePadWasConnected;
 
@@ -64,6 +65,8 @@ namespace GameStateManagement
             LastGamePadStates = new GamePadState[MaxInputs];
 
             GamePadWasConnected = new bool[MaxInputs];
+
+            ControllingPlayer = PlayerIndex.One;
         }
 
 
@@ -198,6 +201,12 @@ namespace GameStateManagement
         /// If this is null, it will accept input from any player. When a button press
         /// is detected, the output playerIndex reports which player pressed it.
         /// </summary>
+        public bool IsNewButtonPress(Buttons button)
+        {
+            PlayerIndex outIndex;
+            return IsNewButtonPress(button, ControllingPlayer, out outIndex);
+        }
+        
         public bool IsNewButtonPress(Buttons button, PlayerIndex? controllingPlayer,
                                                      out PlayerIndex playerIndex)
         {
@@ -295,6 +304,13 @@ namespace GameStateManagement
             return IsNewKeyPress(Keys.Escape, controllingPlayer, out playerIndex) ||
                    IsNewButtonPress(Buttons.Back, controllingPlayer, out playerIndex) ||
                    IsNewButtonPress(Buttons.Start, controllingPlayer, out playerIndex);
+        }
+
+
+
+        public GamePadState CurrentControllingPadState()
+        {
+            return CurrentGamePadStates[(int)ControllingPlayer];
         }
 
 
