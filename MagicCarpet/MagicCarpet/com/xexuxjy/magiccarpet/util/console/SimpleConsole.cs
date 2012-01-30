@@ -291,6 +291,10 @@ namespace com.xexuxjy.magiccarpet.util.console
                         {
                             Globals.Terrain.BuildRandomLandscape();
                         }
+                        else if((commandDetails.Name.Equals("buildfractallandscape"))
+                        {
+                            Globals.Terrain.BuildFractalLandscape();
+                        }
                         else if (commandDetails.Name.Equals("setglobalplayer"))
                         {
                             String globalPlayerId = args[0];
@@ -612,6 +616,8 @@ namespace com.xexuxjy.magiccarpet.util.console
             id = "camerafree";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
             id = "buildrandomlandscape";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
+            id = "buildfractallandscape";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
             id = "setglobalplayer";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
