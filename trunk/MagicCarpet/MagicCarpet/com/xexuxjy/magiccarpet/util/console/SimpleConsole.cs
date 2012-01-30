@@ -291,7 +291,7 @@ namespace com.xexuxjy.magiccarpet.util.console
                         {
                             Globals.Terrain.BuildRandomLandscape();
                         }
-                        else if((commandDetails.Name.Equals("buildfractallandscape"))
+                        else if(commandDetails.Name.Equals("buildfractallandscape"))
                         {
                             Globals.Terrain.BuildFractalLandscape();
                         }

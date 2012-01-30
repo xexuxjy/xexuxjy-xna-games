@@ -27,27 +27,24 @@ namespace com.xexuxjy.magiccarpet.gui
             m_texture = new Texture2D(Game.GraphicsDevice, m_width, m_width, false, SurfaceFormat.Color);
             m_colorData = new Color[m_width * m_width];
         }
-        
 
 
-        public override void Update(GameTime gameTime)
+        public override void CheckAndUpdateTexture()
         {
             if (m_enabled && m_hasGuiControl && m_textureUpdateNeeded)
             {
                 DrawFilledCircle(m_colorData, m_width, m_width / 2, m_width / 2, 50, Color.White, Color.Transparent, true);
                 DrawFilledCircle(m_colorData, m_width, m_width / 2, m_width / 2, 20, Color.Green, Color.Transparent, false);
-                DrawFilledRectangle(m_colorData, m_width, 0, 0, 100, 200, Color.Plum, Color.Transparent, false);
+                //DrawFilledRectangle(m_colorData, m_width, 0, 0, 100, 200, Color.Plum, Color.Transparent, false);
+                DrawBar(50.0f, 100.0f, m_colorData, m_width, 0, 0, 200, 20, Color.Red, Color.Black, false);
+
+
                 m_texture.SetData<Color>(m_colorData);
                 m_textureUpdateNeeded = false;
             }
         }
 
-        public override void Draw(GameTime gameTime)
-        {
-            m_spriteBatch.Begin();
-            m_spriteBatch.Draw(m_texture, m_rectangle, Color.White);
-            m_spriteBatch.End();
-        }
+
             
         public override void HandleInput(InputState inputState)
         {
@@ -128,7 +125,6 @@ namespace com.xexuxjy.magiccarpet.gui
         private SpellType m_selectedSpell1;
         private SpellType m_selectedSpell2;
 
-        private bool m_textureUpdateNeeded;
 
         private Vector2 m_selectorDirection;
     }

@@ -862,6 +862,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         private static void DiamondPass(float[] heightData, int power, int width)
         {
             int jump = (width - 1) / power;
+            float heightMultiplier = 5.0f;
+
 
             for (int x = 0; x < width - jump; x += jump)
             {
@@ -879,7 +881,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         float average = (corner1 + corner2 + corner3 + corner4) / 4.0f;
 
-                        float value = average + (float)((Globals.Random.NextDouble() - 0.5) * 2.0);
+                        float value = average + (float)((Globals.s_random.NextDouble() - 0.5) * heightMultiplier);
 
                         heightData[centerY * width + centerX] = value;
                     }

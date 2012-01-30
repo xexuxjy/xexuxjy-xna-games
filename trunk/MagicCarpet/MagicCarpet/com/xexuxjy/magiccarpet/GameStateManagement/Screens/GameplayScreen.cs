@@ -139,10 +139,19 @@ namespace GameStateManagement
             //Globals.MiniMap.Initialize();
             //AddComponent(Globals.MiniMap);
 
-            SpellSelector spellSelector = new SpellSelector(x, y, width);
-            spellSelector.Initialize();
-            AddComponent(spellSelector);
+            //SpellSelector spellSelector = new SpellSelector(x, y, width);
+            //spellSelector.Initialize();
+            //AddComponent(spellSelector);
 
+            EventWindow eventWindow = new EventWindow(x, y, width);
+            eventWindow.Initialize();
+            AddComponent(eventWindow);
+            int counter = 1;
+            int numLines = 13;
+            for (int i = 0; i < numLines; ++i)
+            {
+                eventWindow.AddEventText("This is line " + counter++);
+            }
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
