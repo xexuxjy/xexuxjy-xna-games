@@ -107,6 +107,12 @@ namespace com.xexuxjy.magiccarpet.manager
             get{return m_debugFont;}
         }
 
+        public SpriteFont EventWindowFont
+        {
+            get { return m_debugFont; }
+        }
+
+
 
         private BasicEffect m_basicEffect;
 

@@ -10,11 +10,9 @@ namespace com.xexuxjy.magiccarpet.gui
         public GuiComponent(int x, int y,int width)
             : base(Globals.Game)
         {
-            m_mapTopCorner = new Vector2(x, y);
+            m_componentTopCorner = new Vector2(x, y);
             m_width = width;
             m_rectangle = new Rectangle(x, y, width, width);
-        
-
         }
 
         public virtual void HandleInput(InputState inputState)
@@ -27,8 +25,21 @@ namespace com.xexuxjy.magiccarpet.gui
             set{m_hasGuiControl = value;}
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            CheckAndUpdateTexture();
+            m_spriteBatch.Begin();
+            m_spriteBatch.Draw(m_texture, m_rectangle, Color.White);
+            m_spriteBatch.End();
+        }
 
-        public static void DrawFilledCircle(Color[] texture, int step,int xPos, int yPos, int radius, Color circleColor, Color backgroundColor, bool clearFirst)
+
+        public virtual void CheckAndUpdateTexture()
+        {
+        }
+
+
+        public static void DrawFilledCircle(Color[] texture, int step,int xPos, int yPos, int radius, Color foregroundColor, Color backgroundColor, bool clearFirst)
         {
             if (clearFirst)
             {
@@ -61,13 +72,13 @@ namespace com.xexuxjy.magiccarpet.gui
                     int xoff = i - xPos;
                     if ((xoff * xoff) + yoff < radiusSq)
                     {
-                        texture[offset + i] = circleColor;
+                        texture[offset + i] = foregroundColor;
                     }
                 }
             }
         }
 
-        public static void DrawFilledRectangle(Color[] texture, int step, int xPos, int yPos, int width,int height, Color circleColor, Color backgroundColor, bool clearFirst)
+        public static void DrawFilledRectangle(Color[] texture, int step, int xPos, int yPos, int width,int height, Color foregroundColor, Color backgroundColor, bool clearFirst)
         {
             if (clearFirst)
             {
@@ -78,13 +89,13 @@ namespace com.xexuxjy.magiccarpet.gui
             }
             // ensure we can draw within the bounds??
             // Work out the minimum step necessary using trigonometry + sine approximation.
-            int startX = xPos - (width/2);
+            int startX = xPos;
             startX = Math.Max(0, startX);
-            int endX = xPos + (width/2);
+            int endX = xPos + (width);
             endX = Math.Min(endX, step);
-            int startY = yPos - (height/2);
+            int startY = yPos;
             startY = Math.Max(0, startY);
-            int endY = yPos + (height/2);
+            int endY = yPos + (height);
             endY = Math.Min(endY, step);
 
             for (int j = startY; j < endY; ++j)
@@ -97,14 +108,28 @@ namespace com.xexuxjy.magiccarpet.gui
                 for (int i = startX; i < endX; ++i)
                 {
                     int xoff = i - xPos;
-                    texture[offset + i] = circleColor;
+                    texture[offset + i] = foregroundColor;
 
                 }
             }
         }
 
+        protected static void DrawBar(float currentVal, float maxVal, Color[] texture, int step, int xPos, int yPos, int width, int height, Color foregroundColor, Color backgroundColor, bool clearFirst)
+        {
+            // draw outline.
+            DrawFilledRectangle(texture, step, xPos, yPos, width, height, foregroundColor, backgroundColor, false);
+            // fill center
+            int borderWidth = 2;
+            DrawFilledRectangle(texture, step, xPos + borderWidth, yPos +borderWidth, width - 2*borderWidth, height - 2*borderWidth, backgroundColor, backgroundColor, false);
+            // draw 'amount;
 
-        protected Vector2 m_mapTopCorner;
+            float fillAmount = currentVal / maxVal;
+            DrawFilledRectangle(texture, step, xPos, yPos, (int)(width * fillAmount), height, foregroundColor, backgroundColor, false);
+        }
+
+
+
+        protected Vector2 m_componentTopCorner;
         protected Rectangle m_rectangle;
         protected SpriteBatch m_spriteBatch;
         protected int m_width;
@@ -113,5 +138,7 @@ namespace com.xexuxjy.magiccarpet.gui
 
         protected bool m_enabled;
         protected bool m_hasGuiControl;
+        protected bool m_textureUpdateNeeded;
+
     }
 }
