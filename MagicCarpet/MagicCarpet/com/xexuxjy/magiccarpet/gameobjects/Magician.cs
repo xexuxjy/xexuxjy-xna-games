@@ -264,7 +264,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
         }
 
-        public override void NotifyOwnershipGained(GameObject gameObject)
+        public override void NotifyOwnershipGained(GameObject gameObject)   
         {
             base.NotifyOwnershipGained(gameObject);
             Castle tryCastle = gameObject as Castle;
