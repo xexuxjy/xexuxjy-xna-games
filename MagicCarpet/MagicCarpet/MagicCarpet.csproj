@@ -163,6 +163,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\Screens\PlayerIndexEventArgs.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\EventWindow.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\GuiComponent.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gui\PerlinTest.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\PlayerHud.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\MiniMap.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\SpellSelector.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\manager\SpellPool.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Program.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\DefaultRenderer.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\renderer\PerlinNoiseGenerator.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\ScreenQuad.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\TerrainSectionRenderer.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellAlterTerrain.cs" />

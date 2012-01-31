@@ -732,7 +732,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void BuildFractalLandscape()
         {
-            m_heightMap = FractalUtil.GetRandomHeightData(m_textureWidth);
+            //m_heightMap = FractalUtil.GetRandomHeightData(m_textureWidth);
+            m_heightMap = new float[m_textureWidth * m_textureWidth];
+            float height = 10.0f;
+            float smoothness = 0.7f;
+            FractalUtil.Fill2DFractArray(m_heightMap, m_textureWidth-1, 1, height, smoothness);
         }
 
 

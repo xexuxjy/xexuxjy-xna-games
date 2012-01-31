@@ -81,7 +81,10 @@ namespace GameStateManagement
             camera.Position = new Vector3(0, 5, 0);
             
             Globals.Camera = camera;
-            
+
+            Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
+
+
 
             Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
             Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
@@ -132,9 +135,12 @@ namespace GameStateManagement
             //AddComponent(Globals.MiniMap);
 
 
-            int x = 350;
-            int y = 300;
-            int width = 200;
+            int x = 100;
+            int y = 100;
+            int width = 400;
+            PerlinTest perlinTest = new PerlinTest(x, y, width);
+            perlinTest.Initialize();
+            AddComponent(perlinTest);
             //Globals.MiniMap = new MiniMap(x, y, width);
             //Globals.MiniMap.Initialize();
             //AddComponent(Globals.MiniMap);
@@ -143,15 +149,21 @@ namespace GameStateManagement
             //spellSelector.Initialize();
             //AddComponent(spellSelector);
 
-            EventWindow eventWindow = new EventWindow(x, y, width);
-            eventWindow.Initialize();
-            AddComponent(eventWindow);
-            int counter = 1;
-            int numLines = 13;
-            for (int i = 0; i < numLines; ++i)
-            {
-                eventWindow.AddEventText("This is line " + counter++);
-            }
+            //EventWindow eventWindow = new EventWindow(x, y, width);
+            //eventWindow.Initialize();
+            //AddComponent(eventWindow);
+            //int counter = 1;
+            //int numLines = 13;
+            //for (int i = 0; i < numLines; ++i)
+            //{
+            //    eventWindow.AddEventText("This is line " + counter++);
+            //}
+
+
+
+
+
+
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -167,6 +179,8 @@ namespace GameStateManagement
         {
             m_content.Unload();
         }
+
+
 
 
         #endregion
