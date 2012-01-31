@@ -108,7 +108,7 @@ namespace MagicCarpet.com.xexuxjy.magiccarpet.util
          * fill1DFractArray - Tessalate an array of values into an
          * approximation of fractal Brownian motion.
          */
-        public void Fill1DFractArray(float[] fa, int size, int seedValue, float heightScale, float h)
+        public static void Fill1DFractArray(float[] fa, int size, int seedValue, float heightScale, float h)
         {
             int i;
             int stride;
@@ -161,7 +161,7 @@ namespace MagicCarpet.com.xexuxjy.magiccarpet.util
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void Fill2DFractArray(float[] fa, int size, int seedValue, float heightScale, float h)
+        public static void Fill2DFractArray(float[] fa, int size, int seedValue, float heightScale, float h)
         {
             int i, j;
             int stride;

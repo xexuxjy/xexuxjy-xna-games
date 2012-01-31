@@ -13,6 +13,7 @@ namespace com.xexuxjy.magiccarpet.gui
             m_componentTopCorner = new Vector2(x, y);
             m_width = width;
             m_rectangle = new Rectangle(x, y, width, width);
+            m_textureUpdateNeeded = true;
         }
 
         public virtual void HandleInput(InputState inputState)

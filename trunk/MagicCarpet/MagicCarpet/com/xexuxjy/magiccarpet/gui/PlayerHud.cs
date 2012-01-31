@@ -13,5 +13,12 @@ namespace com.xexuxjy.magiccarpet.gui
         {
         }
 
+
+
+
+
+        private SpellSelector m_spellSelector;
+        private MiniMap m_miniMap;
+        private EventWindow m_eventWindow;
     }
 }
