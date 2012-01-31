@@ -205,6 +205,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugWindow.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\IDebuggable.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\EventLogger.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\FractalUtil.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\GameUtil.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
