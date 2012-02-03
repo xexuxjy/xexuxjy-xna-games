@@ -19,10 +19,19 @@ namespace com.xexuxjy.magiccarpet.manager
             m_modelDictionary = new Dictionary<GameObjectType, Model>();
             m_colorMap = new Dictionary<IndexedVector3, Texture2D>();
             m_textureDictionary = new Dictionary<string, Texture2D>();
+            m_effectDictionary = new Dictionary<string, Effect>();
         }
 
         public void LoadContent()
         {
+
+            m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects\\Terrain\\ClipTerrain");
+            m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects\\Terrain\\TerrainNormalMap");
+
+            m_textureDictionary["TerrainBase"] = m_contentManager.Load<Texture2D>("Textures\\Terrain\\base");
+            m_textureDictionary["TerrainNoise"] = m_contentManager.Load<Texture2D>("Textures\\Terrain\\noise");
+            
+            
             m_castleModel = m_contentManager.Load<Model>("unitcube");
             //m_castleModel = m_contentManager.Load<Model>("Models/Castle/saintriqT3DS");
             m_modelDictionary[GameObjectType.castle] = m_castleModel;
@@ -55,7 +64,7 @@ namespace com.xexuxjy.magiccarpet.manager
             RemapModel(m_monsterModel, m_basicEffect);
 
 
-            m_textureDictionary.Add("MapSpriteAtlas",m_contentManager.Load<Texture2D>("textures/ui/MapTextureAtlas"));
+            m_textureDictionary["MapSpriteAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/MapTextureAtlas");
 
 
 
@@ -87,6 +96,13 @@ namespace com.xexuxjy.magiccarpet.manager
             return m_textureDictionary[key];
         }
 
+        public Effect GetEffect(String key)
+        {
+            return m_effectDictionary[key];
+        }
+
+        
+        
         public void Initialize()
         {
             LoadContent();
@@ -138,7 +154,8 @@ namespace com.xexuxjy.magiccarpet.manager
         private Dictionary<GameObjectType, Model> m_modelDictionary;
         private Dictionary<String, Texture2D> m_textureDictionary;
         private Dictionary<IndexedVector3, Texture2D> m_colorMap;
-        
+        private Dictionary<String, Effect> m_effectDictionary;
+
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;
     }

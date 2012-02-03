@@ -52,7 +52,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void LoadOrCreateHeighMap(String textureName)
+        public void LoadOrCreateHeightMap(String textureName)
         {
             m_heightMap = new float[m_textureWidth * m_textureWidth];
             m_heightMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Single);
@@ -92,10 +92,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
-            m_terrainEffect = Game.Content.Load<Effect>("Effects\\Terrain\\ClipTerrain");
-            m_normalsEffect = Game.Content.Load<Effect>("Effects\\Terrain\\TerrainNormalMap");
-            m_baseTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\base");
-            m_noiseTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\noise");
+            m_terrainEffect = Globals.MCContentManager.GetEffect("Terrain");
+            m_normalsEffect = Globals.MCContentManager.GetEffect("TerrainNormal");
+            m_baseTexture = Globals.MCContentManager.GetTexture("TerrainBase");
+            m_noiseTexture = Globals.MCContentManager.GetTexture("TerrainNoise");
 
             m_terrainEffect.Parameters["BaseTexture"].SetValue(m_baseTexture);
             m_terrainEffect.Parameters["NoiseTexture"].SetValue(m_noiseTexture);
@@ -118,7 +118,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             InitialiseWorldGrid();
 
-            LoadOrCreateHeighMap(null);
+            LoadOrCreateHeightMap(null);
             base.Initialize();
 
         }
