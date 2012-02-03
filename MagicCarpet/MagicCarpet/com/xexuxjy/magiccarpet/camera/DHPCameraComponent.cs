@@ -57,7 +57,7 @@ namespace Dhpoware
         /// <param name="target">The target position to look at.</param>
         /// <param name="up">The up direction.</param>
         void LookAt(Vector3 eye, Vector3 target, Vector3 up);
-
+        void LookAtSmooth(Vector3 eye, Vector3 target, Vector3 up,float elapsedTimeSec);
         /// <summary>
         /// Moves the camera by dx world units to the left or right; dy
         /// world units upwards or downwards; and dz world units forwards
@@ -243,7 +243,8 @@ namespace Dhpoware
             FirstPerson,
             Spectator,
             Flight,
-            Orbit
+            Orbit,
+            Follow
         };
 
         public const float DEFAULT_FOVX = 90.0f;
@@ -293,6 +294,8 @@ namespace Dhpoware
 
         private InputState inputState;
         private bool m_keyboardInputEnabled;
+
+        private GameObject m_followTarget;
 
     #region Public Methods
 
@@ -358,46 +361,107 @@ namespace Dhpoware
             this.eye = eye;
             this.target = target;
 
-            zAxis = eye - target;
-            zAxis.Normalize();
+            LookatBuildView(ref eye, ref target, ref up, out viewMatrix, out xAxis, out yAxis, out zAxis);
+            accumPitchDegrees = MathHelper.ToDegrees((float)Math.Asin(viewMatrix.M23));
+            Quaternion.CreateFromRotationMatrix(ref viewMatrix, out orientation);
+        }
 
-            viewDir.X = -zAxis.X;
-            viewDir.Y = -zAxis.Y;
-            viewDir.Z = -zAxis.Z;
 
-            Vector3.Cross(ref up, ref zAxis, out xAxis);
-            xAxis.Normalize();
 
-            Vector3.Cross(ref zAxis, ref xAxis, out yAxis);
-            yAxis.Normalize();
-            xAxis.Normalize();
+        public void LookatBuildView(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix oviewMatrix,out Vector3 oxAxis,out Vector3 oyAxis,out Vector3 ozAxis)
+        {
+            Vector3  lzAxis = eye - target;
+            lzAxis.Normalize();
+            ozAxis = lzAxis;
 
-            viewMatrix.M11 = xAxis.X;
-            viewMatrix.M21 = xAxis.Y;
-            viewMatrix.M31 = xAxis.Z;
-            Vector3.Dot(ref xAxis, ref eye, out viewMatrix.M41);
-            viewMatrix.M41 = -viewMatrix.M41;
+            Vector3 lViewDir = -lzAxis;
 
-            viewMatrix.M12 = yAxis.X;
-            viewMatrix.M22 = yAxis.Y;
-            viewMatrix.M32 = yAxis.Z;
-            Vector3.Dot(ref yAxis, ref eye, out viewMatrix.M42);
-            viewMatrix.M42 = -viewMatrix.M42;
+            Vector3.Cross(ref up, ref lzAxis, out oxAxis);
+            oxAxis.Normalize();
 
-            viewMatrix.M13 = zAxis.X;
-            viewMatrix.M23 = zAxis.Y;
-            viewMatrix.M33 = zAxis.Z;
-            Vector3.Dot(ref zAxis, ref eye, out viewMatrix.M43);
-            viewMatrix.M43 = -viewMatrix.M43;
+            Vector3.Cross(ref lzAxis, ref xAxis, out oyAxis);
+            oyAxis.Normalize();
+            oxAxis.Normalize();
 
+            oviewMatrix.M11 = xAxis.X;
+            oviewMatrix.M21 = xAxis.Y;
+            oviewMatrix.M31 = xAxis.Z;
+            Vector3.Dot(ref oxAxis, ref eye, out oviewMatrix.M41);
+            oviewMatrix.M41 = -oviewMatrix.M41;
+
+            oviewMatrix.M12 = oyAxis.X;
+            oviewMatrix.M22 = oyAxis.Y;
+            oviewMatrix.M32 = oyAxis.Z;
+            Vector3.Dot(ref oyAxis, ref eye, out oviewMatrix.M42);
+            oviewMatrix.M42 = -oviewMatrix.M42;
+
+            oviewMatrix.M13 = ozAxis.X;
+            oviewMatrix.M23 = ozAxis.Y;
+            oviewMatrix.M33 = ozAxis.Z;
+            Vector3.Dot(ref ozAxis, ref eye, out oviewMatrix.M43);
+            oviewMatrix.M43 = -oviewMatrix.M43;
+
+            oviewMatrix.M14 = 0.0f;
+            oviewMatrix.M24 = 0.0f;
+            oviewMatrix.M34 = 0.0f;
+            oviewMatrix.M44 = 1.0f;
+
+            //accumPitchDegrees = MathHelper.ToDegrees((float)Math.Asin(viewMatrix.M23));
+            //Quaternion.CreateFromRotationMatrix(ref viewMatrix, out orientation);
+
+
+        }
+
+
+        public void LookAtSmooth(Vector3 eye, Vector3 target, Vector3 up, float elapsedTimeSec)
+        {
+            // get current orientation;
+
+            // get new orientation;
+
+            // should do something clever like rotate around up to get new facing but
+            // for now we'll lerp the orientation
+
+            this.eye = eye;
+            this.target = target;
+
+
+            LookatBuildView(ref eye, ref target, ref up, out viewMatrix, out xAxis, out yAxis, out zAxis);
+
+
+            
+
+            Quaternion existingOrientation;
+            Quaternion.CreateFromRotationMatrix(ref viewMatrix, out existingOrientation);
+
+
+            Matrix newLookat = Matrix.CreateLookAt(eye, target, up);
+            Quaternion newOrientation;
+            Quaternion.CreateFromRotationMatrix(ref newLookat, out newOrientation);
+
+
+            float dotThreshold = 0.99995f;
+
+            float qDot = Quaternion.Dot(existingOrientation, newOrientation);
+
+            float slerpValue = 10 * elapsedTimeSec;
+
+            if (qDot > dotThreshold)
+            {
+                slerpValue = 1.0f;
+            }
+
+
+            Quaternion.Slerp(ref existingOrientation, ref newOrientation, slerpValue,out orientation);
+            viewMatrix = Matrix.CreateFromQuaternion(orientation);
+            viewMatrix.Translation = -eye;
             viewMatrix.M14 = 0.0f;
             viewMatrix.M24 = 0.0f;
             viewMatrix.M34 = 0.0f;
             viewMatrix.M44 = 1.0f;
-
-            accumPitchDegrees = MathHelper.ToDegrees((float)Math.Asin(viewMatrix.M23));
-            Quaternion.CreateFromRotationMatrix(ref viewMatrix, out orientation);
         }
+
+
 
         /// <summary>
         /// Moves the camera by dx world units to the left or right; dy
@@ -445,16 +509,38 @@ namespace Dhpoware
 
         private void ApplyClipToWorld(ref IndexedVector3 start, ref IndexedVector3 end)
         {
-            // check to see if we're allowed to move through the terrain in the direction proposed!
+            // check to see if we're allowed to move through the terrain in the direction proposed
             if (clipToWorld)
             {
                 IndexedVector3 collisionPoint = start;
                 IndexedVector3 collisionNormal = IndexedVector3.Up;
+                IndexedVector3 direction = end - start;
+                float cameraRadius = 0.2f;
 
-                // if we hit something then reset the movement
-                if (Globals.CollisionManager.CastCameraGroundRay(start, end, ref collisionPoint, ref collisionNormal))
+                direction.Normalize();
+                
+                IndexedVector3 adjustedEnd = end +( direction * cameraRadius);
+                
+                // if we hit something then push back along the collision normal
+
+                if (Globals.CollisionManager.CastCameraGroundRay(start, adjustedEnd, ref collisionPoint, ref collisionNormal))
                 {
-                    end = start;
+                    //IndexedVector3 a = new IndexedVector3(0,1,0);
+                    //IndexedVector3 b = new IndexedVector3(1,1,0);
+
+                    //a.Normalize();
+                    //b.Normalize();
+
+                    //float dot1 = IndexedVector3.Dot(a, b);
+
+                    //float directionVCollNormal = IndexedVector3.Dot(direction, collisionNormal);
+
+                    //if (directionVCollNormal < 0f)
+                    {
+                        //float travelDistance = 2f;
+                        IndexedVector3 normalPushBack = collisionNormal * cameraRadius;
+                        end = collisionPoint + normalPushBack;
+                    }
                 }
             }
         }
@@ -1047,8 +1133,8 @@ namespace Dhpoware
 
         public GameObject FollowTarget
         {
-            get { return null; }
-            set { }
+            get { return m_followTarget; }
+            set { m_followTarget = value; }
         }
 
         public bool ClipToWorld
@@ -1161,7 +1247,8 @@ namespace Dhpoware
         private Dictionary<Actions, Keys> actionKeys;
         private bool m_keyboardInputEnabled = true;
         private bool clipToWorld = true;
-    
+        private GameObject m_followTarget;
+
     #region Public Methods
 
         /// <summary>
@@ -1257,6 +1344,7 @@ namespace Dhpoware
             camera.LookAt(target);
         }
 
+
         /// <summary>
         /// Builds a look at style viewing matrix.
         /// </summary>
@@ -1266,6 +1354,12 @@ namespace Dhpoware
         public void LookAt(Vector3 eye, Vector3 target, Vector3 up)
         {
             camera.LookAt(eye, target, up);
+        }
+
+
+        public void LookAtSmooth(Vector3 eye, Vector3 target, Vector3 up, float elapsedTimeSec)
+        {
+            camera.LookAtSmooth(eye, target, up,elapsedTimeSec);
         }
 
         /// <summary>
@@ -1979,7 +2073,27 @@ namespace Dhpoware
                     camera.Zoom(dz, camera.OrbitMinZoom, camera.OrbitMaxZoom);
                     
                 break;
+            case Camera.Behavior.Follow:
+                {
+                    // only makes sense if we have a follow target.
+                    if (FollowTarget != null)
+                    {
+                        IndexedVector3 targetPosition = FollowTarget.Position;
+                        IndexedVector3 targetFacing = FollowTarget.Direction;
+                        if (targetFacing.LengthSquared() > 0)
+                        {
+                            //IndexedVector3 
+                            float offset = 5;
+                            IndexedVector3 eye = targetPosition - (targetFacing * offset);
+                            //camera.LookAtSmooth(eye, targetPosition, Vector3.Up,elapsedTimeSec);
+                            camera.LookAt(eye, targetPosition, Vector3.Up);
+                        }
+                        //camera.Position = targetPosition;
+                        //camera.LookAt(targetPosition);
+                    }
 
+                    break;
+                }
             default:
                 break;
             }
@@ -2230,8 +2344,28 @@ namespace Dhpoware
 
         public GameObject FollowTarget
         {
-            get { return null; }
-            set { }
+            get { return m_followTarget; }
+            set 
+            {
+                m_followTarget = value;
+                if (m_followTarget != null)
+                {
+                    IndexedVector3 targetPosition = FollowTarget.Position;
+                    IndexedVector3 targetFacing = FollowTarget.Direction;
+                    if (targetFacing.LengthSquared() == 0)
+                    {
+                        targetFacing = new IndexedVector3(0, 0, -1);
+                    }
+                    //IndexedVector3 
+                    float offset = 5;
+                    IndexedVector3 eye = targetPosition - (targetFacing * offset);
+                    // jump to immediate facing.
+                    camera.LookAt(eye, targetPosition, Vector3.Up);
+
+                }
+
+
+            }
         }
 
         public void HandleInput(InputState input)

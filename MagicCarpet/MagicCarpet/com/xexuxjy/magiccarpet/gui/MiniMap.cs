@@ -8,6 +8,7 @@ using com.xexuxjy.magiccarpet.renderer;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.magiccarpet.manager;
 using BulletXNA.LinearMath;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.gui
 {
@@ -15,20 +16,14 @@ namespace com.xexuxjy.magiccarpet.gui
     {
         public MiniMap(int x,int y,int width) : base(x,y,width)
         {
-            m_miniMapWidth = width;
             m_gameObjectList = new List<GameObject>(128);
             m_radius = 100.0f;
             m_mapWorldPosition = IndexedVector3.Zero;
-
-            m_halfSpan = Globals.WorldWidth / 2 * m_zoomLevel;
-            m_span = 2 * m_halfSpan;
-
-            m_bounds = new Vector4(m_mapWorldPosition.X - m_halfSpan, m_mapWorldPosition.Z - m_halfSpan, m_span, m_span);
-            m_boundsRect = new Rectangle((int)m_bounds.X, (int)m_bounds.Y, (int)m_bounds.Z, (int)m_bounds.W);
-            m_zoomLevel = 10;
+            Zoom = 1;
 
 
         }
+
 
         public override void Initialize()
         {
@@ -43,16 +38,16 @@ namespace com.xexuxjy.magiccarpet.gui
 
         protected override void LoadContent()
         {
-            m_minimapTexture = new Texture2D(Game.GraphicsDevice, m_miniMapWidth, m_miniMapWidth,false, SurfaceFormat.Color);
-            Color[] colorData = new Color[m_miniMapWidth*m_miniMapWidth];
+            m_texture = new Texture2D(Game.GraphicsDevice, m_width, m_width,false, SurfaceFormat.Color);
+            Color[] colorData = new Color[m_width*m_width];
             for(int i=0;i<colorData.Length;++i)
             {
                 colorData[i] = Color.BlanchedAlmond;
             }
-            m_minimapTexture.SetData<Color>(colorData);
+            m_texture.SetData<Color>(colorData);
 
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            m_mapSpriteAtlas = Game.Content.Load<Texture2D>("textures/ui/MapTextureAtlas");
+            m_mapSpriteAtlas = Globals.MCContentManager.GetTexture("MapSpriteAtlas");
         }
 
         public override void Update(GameTime gameTime)
@@ -132,22 +127,27 @@ namespace com.xexuxjy.magiccarpet.gui
                 Globals.GameObjectManager.FindObjects(GameObjectManager.m_allActiveObjectTypes, m_trackedObject.Position, m_radius, m_trackedObject, m_gameObjectList, true);
 
                 m_spriteBatch.Begin();
-                m_spriteBatch.Draw(m_minimapTexture, m_boundsRect, Color.White);
+                m_spriteBatch.Draw(m_texture, m_rectangle, Color.White);
         
                 int counter = 0;
                 foreach (GameObject gameObject in m_gameObjectList)
                 {
-                    if (InBounds((gameObject.Position)))
+                    Vector3 objectPosition = gameObject.Position;
+                    Vector3 playerRelativePosition = objectPosition - m_trackedObject.Position;
+
+                    if (InBounds((playerRelativePosition)))
                     {
-                        Vector2 mapPos = new Vector2((gameObject.Position.X + m_halfSpan) / m_span, (gameObject.Position.Z + m_halfSpan) / m_span);
-                        mapPos += m_mapTopCorner;
+                        Vector2 mapPos = new Vector2((playerRelativePosition.X + m_halfSpan) / m_span, (playerRelativePosition.Z + m_halfSpan) / m_span);
+                        mapPos *= m_width;
+
+                        mapPos += m_componentTopCorner;
 
 
                         Rectangle? sourceRectangle = SpritePositionForGameObject(gameObject);
-                        Color objectColor = ColorForObject(gameObject);
 
                         if (sourceRectangle.HasValue)
                         {
+                            Color objectColor = ColorForObject(gameObject);
                             m_spriteBatch.Draw(m_mapSpriteAtlas, mapPos, sourceRectangle, objectColor);
                         }
                     }
@@ -163,27 +163,48 @@ namespace com.xexuxjy.magiccarpet.gui
             set { m_radius = value; }
         }
 
+        public void ZoomIn()
+        {
+            Zoom += 1;
+        }
 
+        public void ZoomOut()
+        {
+            Zoom -= 1;
+        }
+
+        public int Zoom
+        {
+            get
+            {
+                return m_zoomLevel;
+            }
+
+            set
+            {
+                m_zoomLevel = MathUtil.Clamp(value, 1, 10);
+                m_halfSpan = Globals.WorldWidth / (2 * m_zoomLevel);
+                m_span = 2 * m_halfSpan;
+
+                m_bounds = new Vector4(m_mapWorldPosition.X - m_halfSpan, m_mapWorldPosition.Z - m_halfSpan, m_span, m_span);
+                m_boundsRect = new Rectangle((int)m_bounds.X, (int)m_bounds.Y, (int)m_bounds.Z, (int)m_bounds.W);
+
+            }
+        }
 
         private Texture2D m_mapSpriteAtlas;
         private List<GameObject> m_gameObjectList;
         private float m_radius;
-        private int m_miniMapWidth;
         private int m_spriteWidth = 16;
         
         private int m_zoomLevel;
         private int m_halfSpan;
         private int m_span;
+
         private Vector4 m_bounds;
         private Rectangle m_boundsRect;
         private IndexedVector3 m_mapWorldPosition;
-        private Vector2 m_mapTopCorner;
 
-
-        // need cone texture for facing or something.
-
-        private Color[] m_colorDataArray;
-        private Texture2D m_minimapTexture;
         private GameObject m_trackedObject;
     }
 }
