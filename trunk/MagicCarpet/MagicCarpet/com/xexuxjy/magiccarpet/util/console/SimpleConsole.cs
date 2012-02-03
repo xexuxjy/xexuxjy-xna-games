@@ -260,14 +260,14 @@ namespace com.xexuxjy.magiccarpet.util.console
                         }
                         else if (commandDetails.Name.Equals("camerafollow"))
                         {
-                            if (Globals.Camera.CurrentBehavior != Dhpoware.Camera.Behavior.Flight)
+                            if (Globals.Camera.CurrentBehavior != Dhpoware.Camera.Behavior.Follow)
                             {
-                                Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.Flight;
+                                Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.Follow;
                             }
 
                             if (args.Length > 0)
                             {
-                                String followObjectId = args[1];
+                                String followObjectId = args[0];
                                 GameObject gameObject = Globals.GameObjectManager.GetObject(followObjectId);
                                 if (gameObject != null)
                                 {
@@ -302,7 +302,10 @@ namespace com.xexuxjy.magiccarpet.util.console
                             if (gameObject != null)
                             {
                                 Globals.Player = gameObject as Magician;
-                                Globals.MiniMap.SetTrackedObject(Globals.Player);
+                                if (Globals.MiniMap != null)
+                                {
+                                    Globals.MiniMap.SetTrackedObject(Globals.Player);
+                                }
                             }
 
                         }
@@ -610,7 +613,7 @@ namespace com.xexuxjy.magiccarpet.util.console
             id = "droprandommanaballs";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 3 }));
             id = "camerafollow";
-            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0,1 }));
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
             id = "cameraclip";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
             id = "camerafree";

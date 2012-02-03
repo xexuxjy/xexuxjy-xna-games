@@ -124,7 +124,24 @@ namespace com.xexuxjy.magiccarpet.util
                         }
                         break;
                     }
-
+                case Keys.OemPlus:
+                case Keys.PageUp:
+                    {
+                        if (Globals.MiniMap != null)
+                        {
+                            Globals.MiniMap.ZoomIn();
+                        }
+                        break;
+                    }
+                case Keys.OemMinus:
+                case Keys.PageDown:
+                    {
+                        if (Globals.MiniMap != null)
+                        {
+                            Globals.MiniMap.ZoomOut();
+                        }
+                        break;
+                    }
 
 
                 //case Keys.W: StepForward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;

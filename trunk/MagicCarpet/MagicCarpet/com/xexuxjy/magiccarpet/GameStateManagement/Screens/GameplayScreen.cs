@@ -125,43 +125,9 @@ namespace GameStateManagement
             m_keyboardController = new KeyboardController();
             m_mouseController = new MouseController();
 
-            AddComponent(new FrameRateCounter(ScreenManager.Game, Globals.DebugTextFPS, Globals.DebugDraw));
 
-            //int x = 650;
-            //int y = 10;
-            //int width = 100;
-            //Globals.MiniMap = new MiniMap(x,y,width);
-            //Globals.MiniMap.Initialize();
-            //AddComponent(Globals.MiniMap);
-
-
-            int x = 100;
-            int y = 100;
-            int width = 400;
-            PerlinTest perlinTest = new PerlinTest(x, y, width);
-            perlinTest.Initialize();
-            AddComponent(perlinTest);
-            //Globals.MiniMap = new MiniMap(x, y, width);
-            //Globals.MiniMap.Initialize();
-            //AddComponent(Globals.MiniMap);
-
-            //SpellSelector spellSelector = new SpellSelector(x, y, width);
-            //spellSelector.Initialize();
-            //AddComponent(spellSelector);
-
-            //EventWindow eventWindow = new EventWindow(x, y, width);
-            //eventWindow.Initialize();
-            //AddComponent(eventWindow);
-            //int counter = 1;
-            //int numLines = 13;
-            //for (int i = 0; i < numLines; ++i)
-            //{
-            //    eventWindow.AddEventText("This is line " + counter++);
-            //}
-
-
-
-
+            m_playerHud = new PlayerHud(this);
+            m_playerHud.Initialise();
 
 
 
@@ -340,6 +306,7 @@ namespace GameStateManagement
         #endregion
         #region Fields
 
+        PlayerHud m_playerHud;
         ContentManager m_content;
         SpriteFont m_gameFont;
 

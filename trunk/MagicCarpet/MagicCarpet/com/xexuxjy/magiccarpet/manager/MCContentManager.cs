@@ -16,29 +16,31 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             m_contentManager = Globals.Game.Content;
             m_graphicsDevice = Globals.Game.GraphicsDevice;
-            m_dictionary = new Dictionary<GameObjectType, Model>();
+            m_modelDictionary = new Dictionary<GameObjectType, Model>();
             m_colorMap = new Dictionary<IndexedVector3, Texture2D>();
+            m_textureDictionary = new Dictionary<string, Texture2D>();
         }
 
         public void LoadContent()
         {
             m_castleModel = m_contentManager.Load<Model>("unitcube");
-            m_dictionary[GameObjectType.castle] = m_castleModel;
+            //m_castleModel = m_contentManager.Load<Model>("Models/Castle/saintriqT3DS");
+            m_modelDictionary[GameObjectType.castle] = m_castleModel;
 
             m_balloonModel = m_contentManager.Load<Model>("unitsphere");
-            m_dictionary[GameObjectType.balloon] = m_balloonModel;
+            m_modelDictionary[GameObjectType.balloon] = m_balloonModel;
 
             m_manaBallModel = m_balloonModel;
-            m_dictionary[GameObjectType.manaball] = m_manaBallModel;
+            m_modelDictionary[GameObjectType.manaball] = m_manaBallModel;
 
             m_spellModel = m_balloonModel;
-            m_dictionary[GameObjectType.spell] = m_spellModel;
+            m_modelDictionary[GameObjectType.spell] = m_spellModel;
 
             m_monsterModel = m_contentManager.Load<Model>("unitcone");
-            m_dictionary[GameObjectType.monster] = m_monsterModel;
+            m_modelDictionary[GameObjectType.monster] = m_monsterModel;
 
             m_magicianModel = m_contentManager.Load<Model>("unitcylinder");
-            m_dictionary[GameObjectType.magician] = m_magicianModel;
+            m_modelDictionary[GameObjectType.magician] = m_magicianModel;
 
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
@@ -53,12 +55,16 @@ namespace com.xexuxjy.magiccarpet.manager
             RemapModel(m_monsterModel, m_basicEffect);
 
 
+            m_textureDictionary.Add("MapSpriteAtlas",m_contentManager.Load<Texture2D>("textures/ui/MapTextureAtlas"));
+
+
+
         }
 
         public Model ModelForObjectType(GameObjectType gameObjectType)
         {
             Model model;
-            m_dictionary.TryGetValue(gameObjectType, out model);
+            m_modelDictionary.TryGetValue(gameObjectType, out model);
             return model;
         }
 
@@ -76,8 +82,10 @@ namespace com.xexuxjy.magiccarpet.manager
             return m_colorMap[color];
         }
 
-
-
+        public Texture2D GetTexture(String key)
+        {
+            return m_textureDictionary[key];
+        }
 
         public void Initialize()
         {
@@ -127,9 +135,10 @@ namespace com.xexuxjy.magiccarpet.manager
 
         private SpriteFont m_debugFont;
 
-        private Dictionary<GameObjectType, Model> m_dictionary;
+        private Dictionary<GameObjectType, Model> m_modelDictionary;
+        private Dictionary<String, Texture2D> m_textureDictionary;
         private Dictionary<IndexedVector3, Texture2D> m_colorMap;
-
+        
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;
     }
