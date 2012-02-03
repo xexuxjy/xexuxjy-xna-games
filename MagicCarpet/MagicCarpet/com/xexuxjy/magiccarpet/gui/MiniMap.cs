@@ -19,7 +19,7 @@ namespace com.xexuxjy.magiccarpet.gui
             m_gameObjectList = new List<GameObject>(128);
             m_radius = 100.0f;
             m_mapWorldPosition = IndexedVector3.Zero;
-            Zoom = 1;
+            Zoom = 5;
 
 
         }
@@ -127,13 +127,39 @@ namespace com.xexuxjy.magiccarpet.gui
                 Globals.GameObjectManager.FindObjects(GameObjectManager.m_allActiveObjectTypes, m_trackedObject.Position, m_radius, m_trackedObject, m_gameObjectList, true);
 
                 m_spriteBatch.Begin();
-                m_spriteBatch.Draw(m_texture, m_rectangle, Color.White);
+                //m_spriteBatch.Draw(m_texture, m_rectangle, Color.White);
+                int textureWidth = Globals.Terrain.BaseTexture.Width;
+
+                Vector3 objectPosition = m_trackedObject.Position;
+
+                Vector2 playerPositionInWorld = new Vector2(objectPosition.X, objectPosition.Z);
+
+                float worldWidth =  Globals.WorldWidth;
+                float halfWidth = worldWidth / 2.0f;
+
+                Vector2 halfOffset = new Vector2(m_halfSpan);
+                Vector2 topLeft = playerPositionInWorld - halfOffset;
+                topLeft += new Vector2(halfWidth);
+                topLeft /= worldWidth;
+
+                Vector2 bottomRight = playerPositionInWorld + halfOffset;
+                bottomRight += new Vector2(halfWidth);
+                bottomRight /= worldWidth;
+
+                topLeft *= textureWidth;
+                bottomRight *= textureWidth;
+                int width = (int)(bottomRight.X - topLeft.X);
+
+                Rectangle terrainTexelRectangle = new Rectangle((int)topLeft.X, (int)topLeft.Y, width, width);
+
+                m_spriteBatch.Draw(Globals.Terrain.BaseTexture, m_rectangle, terrainTexelRectangle, Color.White);
         
                 int counter = 0;
                 foreach (GameObject gameObject in m_gameObjectList)
                 {
-                    Vector3 objectPosition = gameObject.Position;
-                    Vector3 playerRelativePosition = objectPosition - m_trackedObject.Position;
+                    //Vector3 playerRelativePosition = objectPosition - m_trackedObject.Position;
+                    //Vector3 playerRelativePosition = objectPosition - Globals.Camera.Position;
+                    Vector3 playerRelativePosition = Globals.Camera.Position - objectPosition;
 
                     if (InBounds((playerRelativePosition)))
                     {
