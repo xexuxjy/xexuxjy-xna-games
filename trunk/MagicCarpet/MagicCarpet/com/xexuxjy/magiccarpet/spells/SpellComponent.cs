@@ -14,7 +14,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
             m_owner = owner;
             // manaCost,castTime,cooldownTime,duration
-            InitializeTemplate(SpellType.Convert, 5, 0.5f, 1f, 10f);
+            InitializeTemplate(SpellType.Convert, 5, 0.5f, 10f, 10f);
             InitializeTemplate(SpellType.Lower, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Raise, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Castle, 5, 0.5f, 1f, 10f);
@@ -34,7 +34,7 @@ namespace com.xexuxjy.magiccarpet.spells
         private void InitializeTemplate(SpellType spellType, int manaCost, float castTime, float cooldownTime, float duration)
         {
             SpellTemplate template = new SpellTemplate(spellType, manaCost, castTime, cooldownTime, duration);
-            m_updateables.Add(template);
+            m_activeTemplates.Add(template);
             m_spellTemplates[spellType] = template;
         }
 
@@ -50,9 +50,9 @@ namespace com.xexuxjy.magiccarpet.spells
 
         public virtual void Update(GameTime gameTime)
         {
-            foreach (IUpdateable updateable in m_updateables)
+            foreach (SpellTemplate spellTemplate in m_activeTemplates)
             {
-                updateable.Update(gameTime);
+                spellTemplate.Update(gameTime);
             }
         }
 
@@ -120,6 +120,10 @@ namespace com.xexuxjy.magiccarpet.spells
                 Globals.GameObjectManager.AddGameObject(spell);
 
                 spell.Initialize(template);
+                
+                // why is this needed now??
+                template.Cast(spell);
+
                 if (spell is MovingSpell)
                 {
                     ((MovingSpell)spell).SetInitialPositionAndDirection(startPosition, direction);
@@ -132,6 +136,15 @@ namespace com.xexuxjy.magiccarpet.spells
 
                 spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);
             }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public SpellTemplate GetSpellTemplate(SpellType spellType)
+        {
+            SpellTemplate template;
+            m_spellTemplates.TryGetValue(spellType, out template);
+            return template;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +178,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
 
         private GameObject m_owner;
-        private List<IUpdateable> m_updateables = new List<IUpdateable>();
+        private List<SpellTemplate> m_activeTemplates = new List<SpellTemplate>();
         private Dictionary<SpellType, SpellTemplate> m_spellTemplates = new Dictionary<SpellType, SpellTemplate>();
 
         public delegate void SpellCastHandler(GameObject gameObject, Spell spell);

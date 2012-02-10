@@ -14,6 +14,7 @@ namespace com.xexuxjy.magiccarpet.gui
         public PlayerHud(GameplayScreen gamePlayScreen) : base(Globals.Game)
         {
             m_gamePlayScreen = gamePlayScreen;
+         
         }
 
         public void Initialise()
@@ -29,19 +30,35 @@ namespace com.xexuxjy.magiccarpet.gui
             //AddComponent(Globals.MiniMap);
 
 
+            Point playerStatsTopLeft = new Point(100, 100);
+            PlayerStats playerStats = new PlayerStats(playerStatsTopLeft, 200);
+            playerStats.Initialize();
+            m_gamePlayScreen.AddComponent(playerStats);
+
+
+
+
             int x = 600;
             int y = 100;
             int width = 100;
             //PerlinTest perlinTest = new PerlinTest(x, y, width);
             //perlinTest.Initialize();
             //AddComponent(perlinTest);
-            Globals.MiniMap = new MiniMap(x, y, width);
+
+
+
+            Point minimapTopLeft = new Point(600, playerStatsTopLeft.Y);
+            Globals.MiniMap = new MiniMap(minimapTopLeft, width);
             Globals.MiniMap.Initialize();
             m_gamePlayScreen.AddComponent(Globals.MiniMap);
 
-            //SpellSelector spellSelector = new SpellSelector(x, y, width);
-            //spellSelector.Initialize();
-            //AddComponent(spellSelector);
+            Point spellSelectorTopLeft = new Point(300, 300);
+            SpellSelector spellSelector = new SpellSelector(spellSelectorTopLeft, width);
+            spellSelector.Initialize();
+            m_gamePlayScreen.AddComponent(spellSelector);
+
+
+
 
             //EventWindow eventWindow = new EventWindow(x, y, width);
             //eventWindow.Initialize();
@@ -57,7 +74,7 @@ namespace com.xexuxjy.magiccarpet.gui
         }
 
 
-
+        private SpriteBatch m_spriteBatch;
         private GameplayScreen m_gamePlayScreen;
         private SpellSelector m_spellSelector;
         private MiniMap m_miniMap;

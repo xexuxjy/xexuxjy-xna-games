@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using MagicCarpet.com.xexuxjy.magiccarpet.renderer;
+using Microsoft.Xna.Framework;
 
 namespace com.xexuxjy.magiccarpet.gui
 {
     public class PerlinTest : GuiComponent
     {
-        public PerlinTest(int x, int y, int width) : base(x,y,width)
+        public PerlinTest(Point topLeft, int width) : base(topLeft,width)
         {
 
 

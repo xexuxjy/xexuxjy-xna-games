@@ -14,14 +14,19 @@ namespace com.xexuxjy.magiccarpet.gui
 {
     public class MiniMap : GuiComponent
     {
-        public MiniMap(int x,int y,int width) : base(x,y,width)
+        public MiniMap(Point topLeft,int width) : base(topLeft,width)
         {
             m_gameObjectList = new List<GameObject>(128);
             m_radius = 100.0f;
             m_mapWorldPosition = IndexedVector3.Zero;
             Zoom = 5;
+            Globals.TrackedObjectChanged += new Globals.TrackedObjectChangedEventHandler(Globals_TrackedObjectChanged);
 
+        }
 
+        void Globals_TrackedObjectChanged(object sender, GameObject oldObject, GameObject newObject)
+        {
+            m_trackedObject = newObject;
         }
 
 
@@ -141,7 +146,7 @@ namespace com.xexuxjy.magiccarpet.gui
                 Vector2 topLeft = playerPositionInWorld - halfOffset;
                 topLeft += new Vector2(halfWidth);
                 topLeft /= worldWidth;
-
+    
                 Vector2 bottomRight = playerPositionInWorld + halfOffset;
                 bottomRight += new Vector2(halfWidth);
                 bottomRight /= worldWidth;
@@ -166,7 +171,8 @@ namespace com.xexuxjy.magiccarpet.gui
                         Vector2 mapPos = new Vector2((playerRelativePosition.X + m_halfSpan) / m_span, (playerRelativePosition.Z + m_halfSpan) / m_span);
                         mapPos *= m_width;
 
-                        mapPos += m_componentTopCorner;
+                        mapPos.X  += m_componentTopCorner.X;
+                        mapPos.Y += m_componentTopCorner.Y;
 
 
                         Rectangle? sourceRectangle = SpritePositionForGameObject(gameObject);

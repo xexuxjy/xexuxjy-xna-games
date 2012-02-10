@@ -17,7 +17,7 @@ namespace com.xexuxjy.magiccarpet.manager
             m_contentManager = Globals.Game.Content;
             m_graphicsDevice = Globals.Game.GraphicsDevice;
             m_modelDictionary = new Dictionary<GameObjectType, Model>();
-            m_colorMap = new Dictionary<IndexedVector3, Texture2D>();
+            m_colorMap = new Dictionary<Color, Texture2D>();
             m_textureDictionary = new Dictionary<string, Texture2D>();
             m_effectDictionary = new Dictionary<string, Effect>();
         }
@@ -77,18 +77,27 @@ namespace com.xexuxjy.magiccarpet.manager
             return model;
         }
 
-        public Texture2D GetTexture(ref IndexedVector3 color)
+        public Texture2D GetTexture(Color color)
         {
             if (!m_colorMap.ContainsKey(color))
             {
                 Texture2D newTexture = new Texture2D(m_graphicsDevice, 1, 1);
                 Color[] colorData = new Color[1];
-                newTexture.GetData<Color>(colorData);
-                colorData[0] = new Color(color);
+                colorData[0] = color;
                 newTexture.SetData(colorData);
                 m_colorMap[color] = newTexture;
             }
             return m_colorMap[color];
+        
+        
+        
+        
+        }
+
+        public Texture2D GetTexture(ref IndexedVector3 iv3)
+        {
+            Color color = new Color(iv3);
+            return GetTexture(color);
         }
 
         public Texture2D GetTexture(String key)
@@ -153,7 +162,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         private Dictionary<GameObjectType, Model> m_modelDictionary;
         private Dictionary<String, Texture2D> m_textureDictionary;
-        private Dictionary<IndexedVector3, Texture2D> m_colorMap;
+        private Dictionary<Color, Texture2D> m_colorMap;
         private Dictionary<String, Effect> m_effectDictionary;
 
         private ContentManager m_contentManager;

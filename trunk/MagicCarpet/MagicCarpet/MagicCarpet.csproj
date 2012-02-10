@@ -166,6 +166,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\gui\PerlinTest.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\PlayerHud.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\MiniMap.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gui\PlayerStats.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\SpellSelector.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\interfaces\IKeyboardCallback.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\ActionPool.cs" />
