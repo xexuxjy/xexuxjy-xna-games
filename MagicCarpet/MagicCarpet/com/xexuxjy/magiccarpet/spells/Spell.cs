@@ -27,7 +27,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public class SpellTemplate : IUpdateable
+    public class SpellTemplate 
     {
 
         public SpellTemplate(SpellType spellType,int manaCost, float castTime, float cooldownTime, float duration)
@@ -37,57 +37,76 @@ namespace com.xexuxjy.magiccarpet.spells
             m_castTime = castTime;
             m_cooldownTime = cooldownTime;
             m_duration = duration;
-            m_spellTemplateState = SpellTemplateState.Available;
+            State = SpellTemplateState.Available;
         }
-
-        private int m_manaCost;
 
 
         public void Cast(Spell spell)
         {
             Debug.Assert(Spell == null);
+            Debug.Assert(State == SpellTemplateState.Available);
+
             Spell = spell;
-            GameTime gameTime = new GameTime();
-            m_lastCastTime = (float)gameTime.TotalGameTime.TotalSeconds;
-            m_spellTemplateState = SpellTemplateState.Casting;
+            State  = SpellTemplateState.Casting;
         }
 
         public void Update(GameTime gameTime)
         {
-            if (m_spellTemplateState == SpellTemplateState.Casting)
+
+            if (State == SpellTemplateState.Casting || State == SpellTemplateState.Cooldown)
+            {
+                m_currentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            
+            if (State  == SpellTemplateState.Casting)
             {
                 // spell cast time complete , start spell and allow cooldown.
-                if (gameTime.TotalGameTime.TotalSeconds - m_lastCastTime > m_castTime)
+                if (m_currentTime > m_castTime)
                 {
                     Spell.Start();
                     Spell = null;
                     if (m_cooldownTime > 0f)
                     {
-                        m_spellTemplateState = SpellTemplateState.Cooldown;
-                        m_lastCastTime = (float)gameTime.TotalGameTime.TotalSeconds;
+                        State = SpellTemplateState.Cooldown;
                     }
                     else
                     {
-                        m_spellTemplateState = SpellTemplateState.Available;
+                        State = SpellTemplateState.Available;
                     }
                 }
             }
-            else if (m_spellTemplateState == SpellTemplateState.Cooldown)
+            else if (State == SpellTemplateState.Cooldown)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - m_lastCastTime > m_cooldownTime)
+                if (m_currentTime > m_cooldownTime)
                 {
-                    m_spellTemplateState = SpellTemplateState.Available;
+                    State = SpellTemplateState.Available;
                 }
             }
         }
+
+        public float CoolDownPercentage()
+        {
+            float result = 0f;;
+            if (State == SpellTemplateState.Cooldown)
+            {
+                if(m_cooldownTime > 0)
+                {
+                    result = MathHelper.Clamp((m_currentTime / m_cooldownTime),0,1f);
+                }
+            }
+            return result;
+        }
+
 
         public bool Available
         {
             get
             {
-                return m_spellTemplateState == SpellTemplateState.Available;
+                return State == SpellTemplateState.Available;
             }
         }
+
+        private int m_manaCost;
 
         public int ManaCost
         {
@@ -108,15 +127,8 @@ namespace com.xexuxjy.magiccarpet.spells
             get { return m_castTime; }
             set { m_castTime = value; }
         }
-        private float m_lastCastTime;
 
-        public float LastCastTime
-        {
-            get { return m_lastCastTime; }
-            set { m_lastCastTime = value; }
-        }
         private float m_duration;
-
         public float Duration
         {
             get { return m_duration; }
@@ -129,19 +141,6 @@ namespace com.xexuxjy.magiccarpet.spells
         {
           get { return m_spellType; }
           set { m_spellType = value; }
-        }
-
-
-        public bool Enabled
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public event EventHandler<EventArgs> EnabledChanged;
-
-        public int UpdateOrder
-        {
-            get { throw new NotImplementedException(); }
         }
 
         public enum SpellTemplateState
@@ -157,10 +156,22 @@ namespace com.xexuxjy.magiccarpet.spells
             set { m_spellToCast = value; }
         }
 
+
+        public SpellTemplateState State
+        {
+            get { return m_spellTemplateState; }
+            set
+            {
+                m_spellTemplateState = value;
+                // reset time on state change.
+                m_currentTime = 0f;
+            }
+        }
+
         private Spell m_spellToCast;
         private SpellTemplateState m_spellTemplateState;
+        private float m_currentTime;
 
-        public event EventHandler<EventArgs> UpdateOrderChanged;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

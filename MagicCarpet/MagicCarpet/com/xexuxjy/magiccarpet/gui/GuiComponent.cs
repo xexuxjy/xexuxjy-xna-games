@@ -2,17 +2,18 @@
 using GameStateManagement;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.gui
 {
     public abstract class GuiComponent : DrawableGameComponent
     {
-        public GuiComponent(int x, int y,int width)
+        public GuiComponent(Point topLeft,int width)
             : base(Globals.Game)
         {
-            m_componentTopCorner = new Vector2(x, y);
+            m_componentTopCorner = topLeft;
             m_width = width;
-            m_rectangle = new Rectangle(x, y, width, width);
+            m_rectangle = new Rectangle(topLeft.X, topLeft.Y, width, width);
             m_textureUpdateNeeded = true;
         }
 
@@ -79,6 +80,59 @@ namespace com.xexuxjy.magiccarpet.gui
             }
         }
 
+
+        public static void DrawFilledArc(Color[] texture, int step, int xPos, int yPos, int radius, float startAngle, float arcWidth,Color foregroundColor, Color backgroundColor, bool clearFirst)
+        {
+            if (clearFirst)
+            {
+                for (int i = 0; i < texture.Length; ++i)
+                {
+                    texture[i] = backgroundColor;
+                }
+            }
+            // ensure we can draw within the bounds??
+            // Work out the minimum step necessary using trigonometry + sine approximation.
+            int startX = xPos - radius;
+            startX = Math.Max(0, startX);
+            int endX = xPos + radius;
+            endX = Math.Min(endX, step);
+            int startY = yPos - radius;
+            startY = Math.Max(0, startY);
+            int endY = yPos + radius;
+            endY = Math.Min(endY, step);
+
+            int radiusSq = radius * radius;
+            for (int j = startY; j < endY; ++j)
+            {
+
+                int offset = j * step;
+                int yoff = j - yPos;
+                yoff *= yoff;
+
+                for (int i = startX; i < endX; ++i)
+                {
+                    int xoff = i - xPos;
+                    if ((xoff * xoff) + yoff < radiusSq)
+                    {
+                        int a = i - xPos;
+                        int b = j - yPos;
+                        float tan = (float)Math.Atan2(b,a);
+                        // adjust range;
+                        if (tan < 0)
+                        {
+                            tan += MathUtil.SIMD_2_PI;
+                        }
+                        if (tan >= startAngle && tan <= (startAngle + arcWidth))
+                        {
+                            texture[offset + i] = foregroundColor;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
         public static void DrawFilledRectangle(Color[] texture, int step, int xPos, int yPos, int width,int height, Color foregroundColor, Color backgroundColor, bool clearFirst)
         {
             if (clearFirst)
@@ -129,8 +183,8 @@ namespace com.xexuxjy.magiccarpet.gui
         }
 
 
-
-        protected Vector2 m_componentTopCorner;
+        
+        protected Point m_componentTopCorner;
         protected Rectangle m_rectangle;
         protected SpriteBatch m_spriteBatch;
         protected int m_width;

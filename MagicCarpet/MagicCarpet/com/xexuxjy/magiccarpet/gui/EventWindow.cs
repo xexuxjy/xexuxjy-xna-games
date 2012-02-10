@@ -9,8 +9,8 @@ namespace com.xexuxjy.magiccarpet.gui
 {
     public class EventWindow : GuiComponent
     {
-        public EventWindow(int x, int y, int width)
-            : base(x, y, width)
+        public EventWindow(Point topLeft, int width)
+            : base(topLeft, width)
         {
             m_enabled = true;
             m_hasGuiControl = true;
@@ -47,7 +47,9 @@ namespace com.xexuxjy.magiccarpet.gui
                 {
 
                     Vector2 position = new Vector2(0, i * 10);
-                    position += m_componentTopCorner;
+                    position.X += m_componentTopCorner.X;
+                    position.Y += m_componentTopCorner.Y;
+
                     // draw shadowed text
                     m_spriteBatch.DrawString(font, outputLine, position, Color.Black);
                     m_spriteBatch.DrawString(font, outputLine, new Vector2(position.X+1,position.Y+1), Color.White);

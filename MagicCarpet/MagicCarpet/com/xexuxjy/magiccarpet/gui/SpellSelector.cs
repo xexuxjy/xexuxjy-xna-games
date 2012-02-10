@@ -14,7 +14,7 @@ namespace com.xexuxjy.magiccarpet.gui
 {
     public class SpellSelector : GuiComponent
     {
-        public SpellSelector(int x, int y,int width) : base(x,y,width)
+        public SpellSelector(Point topLeft,int width) : base(topLeft,width)
         {
             m_enabled = true;
             m_hasGuiControl = true;
@@ -31,12 +31,21 @@ namespace com.xexuxjy.magiccarpet.gui
 
         public override void CheckAndUpdateTexture()
         {
-            if (m_enabled && m_hasGuiControl && m_textureUpdateNeeded)
+            //if (m_enabled && m_hasGuiControl && m_textureUpdateNeeded)
+            if(m_textureUpdateNeeded)
             {
                 DrawFilledCircle(m_colorData, m_width, m_width / 2, m_width / 2, 50, Color.White, Color.Transparent, true);
-                DrawFilledCircle(m_colorData, m_width, m_width / 2, m_width / 2, 20, Color.Green, Color.Transparent, false);
+
+
+                float arcWidth = MathUtil.SIMD_2_PI / m_spellTypes.Length;
+                float startAngle = m_currentSelected * arcWidth ;
+
+
+
+                DrawFilledArc(m_colorData, m_width, m_width / 2, m_width / 2, 50, startAngle,arcWidth,Color.Blue, Color.Transparent, true);
+                //DrawFilledCircle(m_colorData, m_width, m_width / 2, m_width / 2, 20, Color.Green, Color.Transparent, false);
                 //DrawFilledRectangle(m_colorData, m_width, 0, 0, 100, 200, Color.Plum, Color.Transparent, false);
-                DrawBar(50.0f, 100.0f, m_colorData, m_width, 0, 0, 200, 20, Color.Red, Color.Black, false);
+                //DrawBar(50.0f, 100.0f, m_colorData, m_width, 0, 0, 200, 20, Color.Red, Color.Black, false);
 
 
                 m_texture.SetData<Color>(m_colorData);
@@ -108,6 +117,19 @@ namespace com.xexuxjy.magiccarpet.gui
         }
 
 
+        public override void Update(GameTime gameTime)
+        {
+            m_elapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (m_elapsed > m_updateFrequency)
+            {
+                m_elapsed = 0f;
+                m_currentSelected++;
+                m_currentSelected %= m_spellTypes.Length;
+                m_textureUpdateNeeded = true;
+            }
+        }
+
+
 
         public SpellType SelectedSpell1
         {
@@ -119,6 +141,11 @@ namespace com.xexuxjy.magiccarpet.gui
             get { return m_selectedSpell2; }
         }
 
+
+
+        private float m_updateFrequency = 2f;
+        private float m_elapsed;
+        private int m_currentSelected = 0;
 
         private Magician m_magician;
         private SpellType[] m_spellTypes = new SpellType[] { SpellType.Castle, SpellType.Convert, SpellType.Fireball, SpellType.Lower, SpellType.Raise };

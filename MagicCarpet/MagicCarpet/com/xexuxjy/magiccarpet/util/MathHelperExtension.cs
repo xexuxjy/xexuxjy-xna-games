@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace com.xexuxjy.magiccarpet.util
 {
@@ -18,6 +16,10 @@ namespace com.xexuxjy.magiccarpet.util
         }
 
 
+        public static Point Add(this Point value1, Point value2)
+        {
+            return new Point(value1.X+value2.X,value1.Y+value2.Y);
+        }
 
         public const float Epsilon = 0.0000000001f;
     }

@@ -176,7 +176,7 @@ namespace com.xexuxjy.magiccarpet
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static Magician Player;
-        
+
         public static ICamera Camera;
         public static Terrain Terrain;
         public static IDebugDraw DebugDraw;
@@ -209,29 +209,6 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //public static Keys formsToXNAInput(System.Windows.Forms.Keys key)
-        //{
-        //    if (key == System.Windows.Forms.Keys.Insert)
-        //    {
-        //        return Keys.Insert;
-        //    }
-        //    if (key == System.Windows.Forms.Keys.Delete)
-        //    {
-        //        return Keys.Delete;
-        //    }
-        //    if (key == System.Windows.Forms.Keys.LControlKey)
-        //    {
-        //        return Keys.LeftControl;
-        //    }
-        //    return Keys.Space;
-        //}
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static void LoadConfig()
         {
@@ -346,6 +323,25 @@ namespace com.xexuxjy.magiccarpet
         }
 
 
+        private static GameObject m_trackedObject;
+
+        public static GameObject TrackedObject
+        {
+            get{return m_trackedObject;}
+            set
+            {
+                if(TrackedObjectChanged != null)
+                {
+                    TrackedObjectChanged(null,m_trackedObject,value);
+                    m_trackedObject = value;
+                }
+            }
+        }
+
+
+        public static event TrackedObjectChangedEventHandler TrackedObjectChanged;
+
+        public delegate void TrackedObjectChangedEventHandler(Object sender,GameObject oldObject,GameObject newObject);
 
     }
 }
