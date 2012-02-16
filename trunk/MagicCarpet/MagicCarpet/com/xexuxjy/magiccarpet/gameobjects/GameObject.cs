@@ -104,6 +104,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             BuildCollisionObject();
             SetStartAttributes();
+
+            DrawOrder = Globals.NORMAL_DRAW_ORDER;
+
             base.Initialize();
         }
 

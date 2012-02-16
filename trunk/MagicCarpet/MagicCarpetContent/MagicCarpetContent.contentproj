@@ -275,8 +275,29 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\ui\MapTextureAtlas.png">
-      <Name>MapTextureAtlas</Name>
+    <Compile Include="textures\ui\MiniMapAtlas.png">
+      <Name>MiniMapAtlas</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="textures\ui\MiniMapFrame.png">
+      <Name>MiniMapFrame</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="textures\ui\PlayerFrame.png">
+      <Name>PlayerFrame</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="textures\ui\SpellAtlas.png">
+      <Name>SpellAtlas</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

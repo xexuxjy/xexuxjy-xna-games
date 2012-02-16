@@ -14,6 +14,7 @@ namespace com.xexuxjy.magiccarpet.gui
         public PlayerHud(GameplayScreen gamePlayScreen) : base(Globals.Game)
         {
             m_gamePlayScreen = gamePlayScreen;
+            m_guiComponents = new List<GuiComponent>(10);
          
         }
 
@@ -21,7 +22,7 @@ namespace com.xexuxjy.magiccarpet.gui
         {
 
             m_gamePlayScreen.AddComponent(new FrameRateCounter(Globals.Game, Globals.DebugTextFPS, Globals.DebugDraw));
-
+            m_gamePlayScreen.AddComponent(this);
             //int x = 650;
             //int y = 10;
             //int width = 100;
@@ -30,35 +31,28 @@ namespace com.xexuxjy.magiccarpet.gui
             //AddComponent(Globals.MiniMap);
 
 
-            Point playerStatsTopLeft = new Point(100, 100);
-            PlayerStats playerStats = new PlayerStats(playerStatsTopLeft, 200);
-            playerStats.Initialize();
-            m_gamePlayScreen.AddComponent(playerStats);
+            int inset = 10;
 
+            Point playerStatsTopLeft = new Point(inset, inset);
+            PlayerStats playerStats = new PlayerStats(playerStatsTopLeft, Globals.MCContentManager.GetTexture("PlayerStatsFrame").Width);
+            AddAndInitializeGuiComponent(playerStats);
 
-
-
-            int x = 600;
-            int y = 100;
             int width = 100;
             //PerlinTest perlinTest = new PerlinTest(x, y, width);
             //perlinTest.Initialize();
             //AddComponent(perlinTest);
 
 
+            int miniMapWidth = Globals.MCContentManager.GetTexture("MiniMapFrame").Width;
+            int foo = Globals.GraphicsDeviceManager.PreferredBackBufferWidth - miniMapWidth - inset;
 
-            Point minimapTopLeft = new Point(600, playerStatsTopLeft.Y);
-            Globals.MiniMap = new MiniMap(minimapTopLeft, width);
-            Globals.MiniMap.Initialize();
-            m_gamePlayScreen.AddComponent(Globals.MiniMap);
+            Point minimapTopLeft = new Point(foo, inset);
+            Globals.MiniMap = new MiniMap(minimapTopLeft, miniMapWidth);
+            AddAndInitializeGuiComponent(Globals.MiniMap);
 
             Point spellSelectorTopLeft = new Point(300, 300);
-            SpellSelector spellSelector = new SpellSelector(spellSelectorTopLeft, width);
-            spellSelector.Initialize();
-            m_gamePlayScreen.AddComponent(spellSelector);
-
-
-
+            //SpellSelector spellSelector = new SpellSelector(spellSelectorTopLeft, width);
+            //AddAndInitializeGuiComponent(spellSelector);
 
             //EventWindow eventWindow = new EventWindow(x, y, width);
             //eventWindow.Initialize();
@@ -70,14 +64,42 @@ namespace com.xexuxjy.magiccarpet.gui
             //    eventWindow.AddEventText("This is line " + counter++);
             //}
 
+        }
+
+        public void AddAndInitializeGuiComponent(GuiComponent guiComponent)
+        {
+            guiComponent.Initialize();
+            m_guiComponents.Add(guiComponent);
+        }
+
+        public override void  Update(GameTime gameTime)
+{
+            foreach(GuiComponent guiComponent in m_guiComponents)
+            {
+                guiComponent.Update(gameTime);
+            }
+        }
+
+        public override void  Draw(GameTime gameTime)
+        {
+            foreach(GuiComponent guiComponent in m_guiComponents)
+            {
+                guiComponent.Draw(gameTime);
+            }
+
+            // restore from sprite batch changes.
+            Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
         }
+
+
+
+        private List<GuiComponent> m_guiComponents;
 
 
         private SpriteBatch m_spriteBatch;
         private GameplayScreen m_gamePlayScreen;
         private SpellSelector m_spellSelector;
-        private MiniMap m_miniMap;
-        private EventWindow m_eventWindow;
     }
 }

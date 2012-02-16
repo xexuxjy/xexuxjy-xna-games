@@ -52,7 +52,7 @@ namespace com.xexuxjy.magiccarpet.gui
             m_texture.SetData<Color>(colorData);
 
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            m_mapSpriteAtlas = Globals.MCContentManager.GetTexture("MapSpriteAtlas");
+            m_mapSpriteAtlas = Globals.MCContentManager.GetTexture("MiniMapAtlas");
         }
 
         public override void Update(GameTime gameTime)
@@ -65,49 +65,6 @@ namespace com.xexuxjy.magiccarpet.gui
         {
             return gameObject.BadgeColor;
 
-        }
-
-        public Rectangle? SpritePositionForGameObject(GameObject gameObject)
-        {
-            int xpos = 0;
-            int ypos = 0;
-            bool found = false;
-            Rectangle? result = null;
-            switch (gameObject.GameObjectType)
-            {
-                case (GameObjectType.balloon):
-                    {
-                        xpos = 0;
-                        ypos = 0;
-                        found = true;
-                        break;
-                    }
-                case (GameObjectType.castle):
-                    {
-                        xpos = 1;
-                        ypos = 0;
-                        found = true;
-                        break;
-                    }
-                case (GameObjectType.manaball):
-                    {
-                        xpos = 2;
-                        ypos = 0;
-                        found = true;
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
-
-            }
-
-            if (found)
-            {
-                result = new Rectangle(xpos * m_spriteWidth,ypos * m_spriteWidth,m_spriteWidth,m_spriteWidth);
-            }
-            return result;
         }
 
         // xz coordinates from position against a vector4 as left,top,width,height
@@ -175,7 +132,7 @@ namespace com.xexuxjy.magiccarpet.gui
                         mapPos.Y += m_componentTopCorner.Y;
 
 
-                        Rectangle? sourceRectangle = SpritePositionForGameObject(gameObject);
+                        Rectangle? sourceRectangle = Globals.MCContentManager.MiniMapSpritePositionForGameObject(gameObject);
 
                         if (sourceRectangle.HasValue)
                         {
@@ -227,7 +184,6 @@ namespace com.xexuxjy.magiccarpet.gui
         private Texture2D m_mapSpriteAtlas;
         private List<GameObject> m_gameObjectList;
         private float m_radius;
-        private int m_spriteWidth = 16;
         
         private int m_zoomLevel;
         private int m_halfSpan;

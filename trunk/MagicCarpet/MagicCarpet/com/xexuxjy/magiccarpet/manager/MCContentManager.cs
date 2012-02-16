@@ -7,6 +7,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.spells;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -64,7 +65,10 @@ namespace com.xexuxjy.magiccarpet.manager
             RemapModel(m_monsterModel, m_basicEffect);
 
 
-            m_textureDictionary["MapSpriteAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/MapTextureAtlas");
+            m_textureDictionary["MiniMapAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/MiniMapAtlas");
+            m_textureDictionary["PlayerStatsFrame"] = m_contentManager.Load<Texture2D>("textures/ui/PlayerFrame");
+            m_textureDictionary["MiniMapFrame"] = m_contentManager.Load<Texture2D>("textures/ui/MiniMapFrame");
+            m_textureDictionary["SpellAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/SpellAtlas");
 
 
 
@@ -144,6 +148,122 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             get { return m_debugFont; }
         }
+
+
+
+        public Rectangle? MiniMapSpritePositionForGameObject(GameObject gameObject)
+        {
+            int spriteWidth = 16;
+
+            int xpos = 0;
+            int ypos = 0;
+            bool found = false;
+            Rectangle? result = null;
+            switch (gameObject.GameObjectType)
+            {
+                case (GameObjectType.balloon):
+                    {
+                        xpos = 0;
+                        ypos = 0;
+                        found = true;
+                        break;
+                    }
+                case (GameObjectType.castle):
+                    {
+                        xpos = 1;
+                        ypos = 0;
+                        found = true;
+                        break;
+                    }
+                case (GameObjectType.manaball):
+                    {
+                        xpos = 2;
+                        ypos = 0;
+                        found = true;
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+
+            }
+
+            if (found)
+            {
+                result = new Rectangle(xpos * spriteWidth, ypos * spriteWidth, spriteWidth, spriteWidth);
+            }
+            return result;
+        }
+
+
+        public Rectangle? SpritePositionForSpellType(SpellType spellType)
+        {
+            int spriteWidth = 64;
+
+            int xpos = 0;
+            int ypos = 0;
+            bool found = false;
+            Rectangle? result = null;
+            switch (spellType)
+            {
+                case (SpellType.Raise):
+                    {
+                        xpos = 0;
+                        ypos = 0;
+                        found = true;
+                        break;
+                    }
+                case (SpellType.Lower):
+                    {
+                        xpos = 1;
+                        ypos = 0;
+                        found = true;
+                        break;
+                    }
+                case (SpellType.Fireball):
+                    {
+                        xpos = 2;
+                        ypos = 0;
+                        found = true;
+                        break;
+                    }
+                case (SpellType.Heal):
+                    {
+                        xpos = 3;
+                        ypos = 0;
+                        found = true;
+                        break;
+                    }
+                case (SpellType.Castle):
+                    {
+                        xpos = 0;
+                        ypos = 1;
+                        found = true;
+                        break;
+                    }
+                case (SpellType.Convert):
+                    {
+                        xpos = 1;
+                        ypos = 1;
+                        found = true;
+                        break;
+                    }
+
+                default:
+                    {
+                        break;
+                    }
+
+            }
+
+            if (found)
+            {
+                result = new Rectangle(xpos * spriteWidth, ypos * spriteWidth, spriteWidth, spriteWidth);
+            }
+            return result;
+        }
+
 
 
 
