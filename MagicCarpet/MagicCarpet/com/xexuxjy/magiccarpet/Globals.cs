@@ -144,6 +144,7 @@ namespace com.xexuxjy.magiccarpet
         public static int TERRAIN_DRAW_ORDER = 1;
         public static int NORMAL_DRAW_ORDER = 1;
 
+        public static MiniMap MiniMap;
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,12 +186,12 @@ namespace com.xexuxjy.magiccarpet
         public static DebugObjectManager DebugObjectManager;
         public static SimpleProfiler SimpleProfiler;
         public static GraphicsDevice GraphicsDevice;
+        public static GraphicsDeviceManager GraphicsDeviceManager;
         public static SimpleConsole SimpleConsole;
         public static MCContentManager MCContentManager;
         public static EventLogger EventLogger;
         public static ActionPool ActionPool;
         public static SpellPool SpellPool;
-        public static MiniMap MiniMap;
 
         public static ScreenManager ScreenManager;
 

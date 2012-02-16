@@ -121,6 +121,10 @@ namespace com.xexuxjy.magiccarpet.terrain
             LoadOrCreateHeightMap(null);
             base.Initialize();
 
+            // after init so we get the right draw order.
+            DrawOrder = Globals.TERRAIN_DRAW_ORDER;
+
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////

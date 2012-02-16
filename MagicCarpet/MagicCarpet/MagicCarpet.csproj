@@ -197,6 +197,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellSwarmOfBees.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellTurbo.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\Spell.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\terrain\SkyDome.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\Terrain.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSection.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSquare.cs" />

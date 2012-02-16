@@ -15,6 +15,7 @@ namespace com.xexuxjy.magiccarpet.gui
             m_width = width;
             m_rectangle = new Rectangle(topLeft.X, topLeft.Y, width, width);
             m_textureUpdateNeeded = true;
+            DrawOrder = Globals.GUI_DRAW_ORDER;
         }
 
         public virtual void HandleInput(InputState inputState)

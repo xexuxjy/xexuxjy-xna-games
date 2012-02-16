@@ -27,14 +27,17 @@ namespace com.xexuxjy.magiccarpet
     /// </summary>
     public class MagicCarpet : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
 
         public MagicCarpet()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Globals.GraphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             Globals.EventLogger = new EventLogger();
-        }
+            Globals.GraphicsDeviceManager.PreferredBackBufferWidth = 1024;
+            Globals.GraphicsDeviceManager.PreferredBackBufferHeight = 768;
+ 
+            }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
