@@ -18,6 +18,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         monster=64,
         terrain=128,
         camera=256,
+        skydome=512,
         NUMTYPES
     }
 }

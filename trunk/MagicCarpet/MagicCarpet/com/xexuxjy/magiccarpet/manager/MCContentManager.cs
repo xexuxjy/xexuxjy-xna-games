@@ -26,49 +26,47 @@ namespace com.xexuxjy.magiccarpet.manager
         public void LoadContent()
         {
 
-            m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects\\Terrain\\ClipTerrain");
-            m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects\\Terrain\\TerrainNormalMap");
+            m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
+            m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
 
-            m_textureDictionary["TerrainBase"] = m_contentManager.Load<Texture2D>("Textures\\Terrain\\base");
-            m_textureDictionary["TerrainNoise"] = m_contentManager.Load<Texture2D>("Textures\\Terrain\\noise");
-            
-            
-            m_castleModel = m_contentManager.Load<Model>("unitcube");
+            m_textureDictionary["TerrainBase"] = m_contentManager.Load<Texture2D>("Textures/Terrain/base");
+            m_textureDictionary["TerrainNoise"] = m_contentManager.Load<Texture2D>("Textures/Terrain/noise");
+
+
+            m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("unitcube");
             //m_castleModel = m_contentManager.Load<Model>("Models/Castle/saintriqT3DS");
-            m_modelDictionary[GameObjectType.castle] = m_castleModel;
+            //m_castleModel = m_contentManager.Load<Model>("Models/NewCastle/castle3");
 
-            m_balloonModel = m_contentManager.Load<Model>("unitsphere");
-            m_modelDictionary[GameObjectType.balloon] = m_balloonModel;
+            m_modelDictionary[GameObjectType.balloon] = m_contentManager.Load<Model>("unitsphere");
 
-            m_manaBallModel = m_balloonModel;
-            m_modelDictionary[GameObjectType.manaball] = m_manaBallModel;
+            m_modelDictionary[GameObjectType.manaball] = m_modelDictionary[GameObjectType.balloon];
 
-            m_spellModel = m_balloonModel;
-            m_modelDictionary[GameObjectType.spell] = m_spellModel;
+            m_modelDictionary[GameObjectType.spell] = m_modelDictionary[GameObjectType.balloon]; 
 
-            m_monsterModel = m_contentManager.Load<Model>("unitcone");
-            m_modelDictionary[GameObjectType.monster] = m_monsterModel;
+            m_modelDictionary[GameObjectType.monster] = m_contentManager.Load<Model>("unitcone");
 
-            m_magicianModel = m_contentManager.Load<Model>("unitcylinder");
-            m_modelDictionary[GameObjectType.magician] = m_magicianModel;
+            m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("unitcylinder");
 
+
+            Model m = m_contentManager.Load<Model>("Models/SkyDome/skydome");
+            m_modelDictionary[GameObjectType.skydome] = m;
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
             m_basicEffect = new BasicEffect(m_graphicsDevice);
             m_basicEffect.TextureEnabled = true;
 
-            RemapModel(m_castleModel, m_basicEffect);
-            RemapModel(m_balloonModel, m_basicEffect);
-            RemapModel(m_manaBallModel, m_basicEffect);
-            RemapModel(m_spellModel, m_basicEffect);
-            RemapModel(m_magicianModel, m_basicEffect);
-            RemapModel(m_monsterModel, m_basicEffect);
+            foreach (Model model in m_modelDictionary.Values)
+            {
+                RemapModel(model, m_basicEffect);
+            }
 
 
             m_textureDictionary["MiniMapAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/MiniMapAtlas");
             m_textureDictionary["PlayerStatsFrame"] = m_contentManager.Load<Texture2D>("textures/ui/PlayerFrame");
             m_textureDictionary["MiniMapFrame"] = m_contentManager.Load<Texture2D>("textures/ui/MiniMapFrame");
             m_textureDictionary["SpellAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/SpellAtlas");
+            m_textureDictionary["SpellSelector"] = m_contentManager.Load<Texture2D>("textures/ui/SpellSelector");
+            m_textureDictionary["SkyDome"] = m_contentManager.Load<Texture2D>("Models/SkyDome/SkyDomeTexture");
 
 
 
@@ -270,12 +268,13 @@ namespace com.xexuxjy.magiccarpet.manager
         private BasicEffect m_basicEffect;
 
 
-        private Model m_spellModel;
-        private Model m_castleModel;
-        private Model m_balloonModel;
-        private Model m_manaBallModel;
-        private Model m_monsterModel;
-        private Model m_magicianModel;
+        //private Model m_spellModel;
+        //private Model m_castleModel;
+        //private Model m_balloonModel;
+        //private Model m_manaBallModel;
+        //private Model m_monsterModel;
+        //private Model m_magicianModel;
+        //private Model m_skyDomeModel;
 
 
         private SpriteFont m_debugFont;

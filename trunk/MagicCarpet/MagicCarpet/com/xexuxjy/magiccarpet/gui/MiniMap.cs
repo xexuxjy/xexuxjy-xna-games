@@ -142,6 +142,9 @@ namespace com.xexuxjy.magiccarpet.gui
                     }
 
                 }
+
+                m_spriteBatch.Draw(Globals.MCContentManager.GetTexture("MiniMapFrame"), m_rectangle, Color.White);
+
                 m_spriteBatch.End();
             }
         }

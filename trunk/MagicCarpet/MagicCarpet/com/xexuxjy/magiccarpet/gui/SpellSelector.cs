@@ -24,8 +24,23 @@ namespace com.xexuxjy.magiccarpet.gui
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            m_texture = new Texture2D(Game.GraphicsDevice, m_width, m_width, false, SurfaceFormat.Color);
+            //m_renderTarget = new RenderTarget2D(Globals.Game.GraphicsDevice, m_width, m_width, false, SurfaceFormat.Color, DepthFormat.Depth16);
+            //m_texture = m_renderTarget;
             m_colorData = new Color[m_width * m_width];
+
+            int radius = m_width / 2;
+
+            m_arrowTexture = new Texture2D(Globals.Game.GraphicsDevice, radius, 30);
+            Color[] temp = new Color[m_arrowTexture.Width * m_arrowTexture.Height];
+
+            Color color = Color.White;
+            color.A = 40;
+            for (int i = 0; i < temp.Length; ++i)
+            {
+                temp[i] = color;
+            }
+            m_arrowTexture.SetData<Color>(temp);
+
         }
 
 
@@ -36,22 +51,71 @@ namespace com.xexuxjy.magiccarpet.gui
             {
                 DrawFilledCircle(m_colorData, m_width, m_width / 2, m_width / 2, 50, Color.White, Color.Transparent, true);
 
-
                 float arcWidth = MathUtil.SIMD_2_PI / m_spellTypes.Length;
                 float startAngle = m_currentSelected * arcWidth ;
 
-
-
                 DrawFilledArc(m_colorData, m_width, m_width / 2, m_width / 2, 50, startAngle,arcWidth,Color.Blue, Color.Transparent, true);
-                //DrawFilledCircle(m_colorData, m_width, m_width / 2, m_width / 2, 20, Color.Green, Color.Transparent, false);
-                //DrawFilledRectangle(m_colorData, m_width, 0, 0, 100, 200, Color.Plum, Color.Transparent, false);
-                //DrawBar(50.0f, 100.0f, m_colorData, m_width, 0, 0, 200, 20, Color.Red, Color.Black, false);
-
 
                 m_texture.SetData<Color>(m_colorData);
                 m_textureUpdateNeeded = false;
             }
         }
+
+
+        public override void Draw(GameTime gameTime)
+        {
+            m_spriteBatch.Begin();
+            Texture2D selector = Globals.MCContentManager.GetTexture("SpellSelector");
+            Texture2D spellAtlas = Globals.MCContentManager.GetTexture("SpellAtlas");
+
+            m_spriteBatch.Draw(selector,m_rectangle,Color.White);
+
+
+            int spellWidth = 32;
+            int radius = m_width / 2;
+
+            int numSegments = m_spellTypes.Length;
+            float segmentSpan = MathUtil.SIMD_2_PI / numSegments;
+
+            Vector2 center = new Vector2(m_rectangle.X + radius, m_rectangle.Y + radius);
+            Vector2 spellOffset = new Vector2(spellWidth, spellWidth);
+
+            int spellAdjustedRadius = radius - spellWidth;
+            spellAdjustedRadius -= 10;
+
+
+            for (int i = 0; i < m_spellTypes.Length; ++i)
+            {
+                int x = (int)(Math.Sin(segmentSpan * i) * spellAdjustedRadius);
+                int y = (int)(Math.Cos(segmentSpan * i) * spellAdjustedRadius);
+
+
+                Rectangle? sourceRectangle = Globals.MCContentManager.SpritePositionForSpellType(m_spellTypes[i]);
+
+                if (sourceRectangle.HasValue)
+                {
+                    Vector2 offset = new Vector2(x,y);
+                    Vector2 position = center + offset;
+                    position -= spellOffset;
+                    m_spriteBatch.Draw(spellAtlas, position, sourceRectangle, Color.White);
+                }
+
+//int xPos = (int)player.Position.X;
+// int yPos = (int)player.Position.Y;
+// Vector2 cannonOrigin = new Vector2(11, 50);
+ 
+// spriteBatch.Draw(cannonTexture, new Vector2(xPos + 20, yPos - 10), null, player.Color, player.Angle, cannonOrigin, playerScaling, SpriteEffects.None, 1);
+
+                float arcWidth = MathUtil.SIMD_2_PI / m_spellTypes.Length;
+                float startAngle = m_currentSelected * arcWidth ;
+
+                m_spriteBatch.Draw(m_arrowTexture,center,null,Color.White,startAngle,new Vector2(0,m_arrowTexture.Height/2), 1f,SpriteEffects.None, 1);
+            }
+            m_spriteBatch.End();
+
+        
+        }
+
 
 
             
@@ -151,7 +215,8 @@ namespace com.xexuxjy.magiccarpet.gui
         private SpellType[] m_spellTypes = new SpellType[] { SpellType.Castle, SpellType.Convert, SpellType.Fireball, SpellType.Lower, SpellType.Raise };
         private SpellType m_selectedSpell1;
         private SpellType m_selectedSpell2;
-
+        private RenderTarget2D m_renderTarget;
+        private Texture2D m_arrowTexture;
 
         private Vector2 m_selectorDirection;
     }

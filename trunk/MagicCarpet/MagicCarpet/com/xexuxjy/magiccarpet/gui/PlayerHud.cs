@@ -20,16 +20,11 @@ namespace com.xexuxjy.magiccarpet.gui
 
         public void Initialise()
         {
+            // after init so we get the right draw order.
+            DrawOrder = Globals.GUI_DRAW_ORDER;
 
             m_gamePlayScreen.AddComponent(new FrameRateCounter(Globals.Game, Globals.DebugTextFPS, Globals.DebugDraw));
             m_gamePlayScreen.AddComponent(this);
-            //int x = 650;
-            //int y = 10;
-            //int width = 100;
-            //Globals.MiniMap = new MiniMap(x,y,width);
-            //Globals.MiniMap.Initialize();
-            //AddComponent(Globals.MiniMap);
-
 
             int inset = 10;
 
@@ -51,8 +46,9 @@ namespace com.xexuxjy.magiccarpet.gui
             AddAndInitializeGuiComponent(Globals.MiniMap);
 
             Point spellSelectorTopLeft = new Point(300, 300);
-            //SpellSelector spellSelector = new SpellSelector(spellSelectorTopLeft, width);
-            //AddAndInitializeGuiComponent(spellSelector);
+            width = 300;
+            SpellSelector spellSelector = new SpellSelector(spellSelectorTopLeft, width);
+            AddAndInitializeGuiComponent(spellSelector);
 
             //EventWindow eventWindow = new EventWindow(x, y, width);
             //eventWindow.Initialize();
