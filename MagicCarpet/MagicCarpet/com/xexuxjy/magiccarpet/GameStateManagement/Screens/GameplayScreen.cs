@@ -122,6 +122,10 @@ namespace GameStateManagement
 
             AddComponent(camera);
 
+
+            AddComponent(new SkyDome(),true);
+
+
             m_keyboardController = new KeyboardController();
             m_mouseController = new MouseController();
 
@@ -271,6 +275,11 @@ namespace GameStateManagement
 
         public void AddComponent(GameComponent gameComponent)
         {
+            AddComponent(gameComponent, false);
+        }
+
+        public void AddComponent(GameComponent gameComponent,bool initialise)
+        {
             m_componentCollection.Add(gameComponent);
 
             IDrawable drawable = gameComponent as IDrawable;
@@ -284,6 +293,10 @@ namespace GameStateManagement
                 m_guiComponents.Add(guiComponent);
             }
 
+            if(initialise)
+            {
+                gameComponent.Initialize();
+            }
         }
 
         public void RemoveComponent(GameComponent gameComponent)

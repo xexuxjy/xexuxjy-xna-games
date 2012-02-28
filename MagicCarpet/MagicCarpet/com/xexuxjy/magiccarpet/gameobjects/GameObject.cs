@@ -284,9 +284,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         basicEffect.Projection = projection;
                         basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform.ToMatrix() * world;
 
-                        // cheat for now.
-                        IndexedVector3 colour = Owner != null ? new IndexedVector3(1, 0, 0) : new IndexedVector3(1, 1, 1);
-                        basicEffect.Texture = Globals.MCContentManager.GetTexture(ref colour);
+                        basicEffect.Texture = GetTexture();
                     }
                     mesh.Draw();
                 }
@@ -296,6 +294,17 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public virtual Texture2D GetTexture()
+        {
+            // cheat for now.
+            IndexedVector3 colour = Owner != null ? new IndexedVector3(1, 0, 0) : new IndexedVector3(1, 1, 1);
+            return Globals.MCContentManager.GetTexture(ref colour);
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        
         public virtual void DrawDebugAxes(GraphicsDevice graphicsDevice)
         {
 
@@ -310,7 +319,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         [DescriptionAttribute("Position in the world")]
-        virtual public IndexedVector3 Position
+        public virtual IndexedVector3 Position
         {
             get
             {
@@ -341,12 +350,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public IndexedMatrix WorldTransform
+        public virtual IndexedMatrix WorldTransform
         {
             get
             {

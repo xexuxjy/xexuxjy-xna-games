@@ -35,6 +35,7 @@ namespace com.xexuxjy.magiccarpet
             Globals.EventLogger = new EventLogger();
             Globals.GraphicsDeviceManager.PreferredBackBufferWidth = 1024;
             Globals.GraphicsDeviceManager.PreferredBackBufferHeight = 768;
+            Globals.GraphicsDeviceManager.PreparingDeviceSettings += graphics_PreparingDeviceSettings;
  
             }
 
@@ -54,10 +55,17 @@ namespace com.xexuxjy.magiccarpet
             Globals.ScreenManager.AddScreen(new MainMenuScreen(), null);
             Globals.ScreenManager.AddScreen(new GameplayScreen(), null);
             Components.Add(Globals.ScreenManager);
-             
+
 
             base.Initialize();
         }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            e.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
