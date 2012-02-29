@@ -1708,7 +1708,7 @@ namespace Dhpoware
         /// <param name="e">Ignored.</param>
         private void HandleGameDeactivatedEvent(object sender, EventArgs e)
         {
-            MouseState state = Mouse.GetState();
+            MouseState state = inputState.CurrentMouseState;
 
             savedMousePosX = state.X;
             savedMousePosY = state.Y;
@@ -1785,9 +1785,6 @@ namespace Dhpoware
         /// </summary>
         private void ResetMouse()
         {
-            inputState.CurrentMouseState = Mouse.GetState();
-            inputState.LastMouseState = inputState.CurrentMouseState;
-
             for (int i = 0; i < mouseMovement.Length; ++i)
                 mouseMovement[i] = Vector2.Zero;
 
@@ -1831,9 +1828,6 @@ namespace Dhpoware
         /// </summary>
         private void UpdateInput()
         {
-            inputState.LastMouseState = inputState.CurrentMouseState;
-            inputState.CurrentMouseState = Mouse.GetState();
-
             if (clickAndDragMouseRotation)
             {
                 int deltaX = 0;

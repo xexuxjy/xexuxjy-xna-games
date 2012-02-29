@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using com.xexuxjy.magiccarpet.util.console;
 using com.xexuxjy.magiccarpet.util.debug;
 using com.xexuxjy.magiccarpet.gui;
+using com.xexuxjy.magiccarpet.control;
 #endregion
 
 namespace GameStateManagement
@@ -126,13 +127,11 @@ namespace GameStateManagement
             AddComponent(new SkyDome(),true);
 
 
-            m_keyboardController = new KeyboardController();
-            m_mouseController = new MouseController();
-
-
             m_playerHud = new PlayerHud(this);
             m_playerHud.Initialise();
 
+
+            m_playerController = new PlayerController(m_playerHud);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -200,17 +199,20 @@ namespace GameStateManagement
             {
                 throw new ArgumentNullException("input");
             }
-            m_mouseController.HandleInput(input);
-            m_keyboardController.HandleInput(input);
+
+
+
+            m_playerController.HandleInput(input);
+            m_playerHud.HandleInput(input);
             Globals.Camera.HandleInput(input);
 
-            foreach (GuiComponent guiComponent in m_guiComponents)
-            {
-                if (guiComponent.HasGuiControl)
-                {
-                    guiComponent.HandleInput(input);
-                }
-            }
+            //foreach (GuiComponent guiComponent in m_guiComponents)
+            //{
+            //    if (guiComponent.HasGuiControl)
+            //    {
+            //        guiComponent.HandleInput(input);
+            //    }
+            //}
         }
 
 
@@ -287,11 +289,11 @@ namespace GameStateManagement
             {
                 m_drawableList.Add(drawable);
             }
-            GuiComponent guiComponent = gameComponent as GuiComponent;
-            if (guiComponent != null)
-            {
-                m_guiComponents.Add(guiComponent);
-            }
+            //GuiComponent guiComponent = gameComponent as GuiComponent;
+            //if (guiComponent != null)
+            //{
+            //    m_guiComponents.Add(guiComponent);
+            //}
 
             if(initialise)
             {
@@ -307,11 +309,11 @@ namespace GameStateManagement
             {
                 m_drawableList.Remove(drawable);
             }
-            GuiComponent guiComponent = gameComponent as GuiComponent;
-            if (guiComponent != null)
-            {
-                m_guiComponents.Remove(guiComponent);
-            }
+            //GuiComponent guiComponent = gameComponent as GuiComponent;
+            //if (guiComponent != null)
+            //{
+            //    m_guiComponents.Remove(guiComponent);
+            //}
         }
 
 
@@ -327,16 +329,13 @@ namespace GameStateManagement
 
         GameComponentCollection m_componentCollection = new GameComponentCollection();
         List<IDrawable> m_drawableList = new List<IDrawable>();
-        List<GuiComponent> m_guiComponents = new List<GuiComponent>();
+        //List<GuiComponent> m_guiComponents = new List<GuiComponent>();
 
-        MouseController m_mouseController;
-        KeyboardController m_keyboardController;   
- 
         static bool loadedInitialScript = false;
 
         float pauseAlpha;
 
-
+        private PlayerController m_playerController;
 
         #endregion
 

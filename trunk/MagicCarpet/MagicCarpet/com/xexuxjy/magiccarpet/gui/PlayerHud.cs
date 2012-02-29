@@ -47,8 +47,8 @@ namespace com.xexuxjy.magiccarpet.gui
 
             Point spellSelectorTopLeft = new Point(300, 300);
             width = 300;
-            SpellSelector spellSelector = new SpellSelector(spellSelectorTopLeft, width);
-            AddAndInitializeGuiComponent(spellSelector);
+            m_spellSelector = new SpellSelector(spellSelectorTopLeft, width);
+            AddAndInitializeGuiComponent(m_spellSelector);
 
             //EventWindow eventWindow = new EventWindow(x, y, width);
             //eventWindow.Initialize();
@@ -68,25 +68,52 @@ namespace com.xexuxjy.magiccarpet.gui
             m_guiComponents.Add(guiComponent);
         }
 
-        public override void  Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
 {
             foreach(GuiComponent guiComponent in m_guiComponents)
             {
-                guiComponent.Update(gameTime);
+                if (guiComponent.Enabled)
+                {
+                    guiComponent.Update(gameTime);
+                }
             }
         }
 
-        public override void  Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             foreach(GuiComponent guiComponent in m_guiComponents)
             {
-                guiComponent.Draw(gameTime);
+                if (guiComponent.Visible)
+                {
+                    guiComponent.Draw(gameTime);
+                }
             }
 
             // restore from sprite batch changes.
             Game.GraphicsDevice.BlendState = BlendState.Opaque;
             Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
+        }
+
+        public void HandleInput(InputState inputState)
+        {
+            foreach (GuiComponent guiComponent in m_guiComponents)
+            {
+                if (guiComponent.HasGuiControl)
+                {
+                    guiComponent.HandleInput(inputState);
+                }
+            }
+
+
+        }
+
+
+
+        public void ToggleSpellSelector()
+        {
+            m_spellSelector.Visible = !m_spellSelector.Visible;
+            m_spellSelector.HasGuiControl = m_spellSelector.Visible;
         }
 
 

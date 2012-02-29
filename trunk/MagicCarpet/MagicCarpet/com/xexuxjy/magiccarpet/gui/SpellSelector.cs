@@ -19,6 +19,7 @@ namespace com.xexuxjy.magiccarpet.gui
             m_enabled = true;
             m_hasGuiControl = true;
             m_textureUpdateNeeded = true;
+            Visible = false;
         }
 
         protected override void LoadContent()
@@ -107,9 +108,14 @@ namespace com.xexuxjy.magiccarpet.gui
 // spriteBatch.Draw(cannonTexture, new Vector2(xPos + 20, yPos - 10), null, player.Color, player.Angle, cannonOrigin, playerScaling, SpriteEffects.None, 1);
 
                 float arcWidth = MathUtil.SIMD_2_PI / m_spellTypes.Length;
-                float startAngle = m_currentSelected * arcWidth ;
+                float selectorAngle = m_currentSelected * arcWidth;
 
-                m_spriteBatch.Draw(m_arrowTexture,center,null,Color.White,startAngle,new Vector2(0,m_arrowTexture.Height/2), 1f,SpriteEffects.None, 1);
+                // invert Y here?
+                selectorAngle = GetSelectorAngle();
+                //selectorAngle += MathUtil.SIMD_HALF_PI/2f;
+
+
+                m_spriteBatch.Draw(m_arrowTexture, center, null, Color.White, selectorAngle, new Vector2(0, m_arrowTexture.Height / 2), 1f, SpriteEffects.None, 1);
             }
             m_spriteBatch.End();
 
@@ -123,61 +129,94 @@ namespace com.xexuxjy.magiccarpet.gui
         {
             GamePadState gamePadState = inputState.CurrentControllingPadState();
 
-            m_selectorDirection = gamePadState.ThumbSticks.Left;
+            m_selectorDirection = gamePadState.ThumbSticks.Right;
             m_selectorDirection.Normalize();
             
-            bool spell1Selected =inputState.IsNewButtonPress(Buttons.A);
-            bool spell2Selected =inputState.IsNewButtonPress(Buttons.B);
+            bool spell1Selected =inputState.IsNewButtonPress(Buttons.LeftTrigger);
+            bool spell2Selected =inputState.IsNewButtonPress(Buttons.RightTrigger);
 
             if (spell1Selected)
             {
                 m_selectedSpell1 = GetSelectedSpell();
+                // bit ugly
+                Globals.Player.SelectedSpell1 = m_selectedSpell1;
             }
 
             if (spell2Selected)
             {
                 m_selectedSpell2 = GetSelectedSpell();
+                // bit ugly
+                Globals.Player.SelectedSpell2 = m_selectedSpell2;
             }
 
 
             if (spell1Selected || spell2Selected)
             {
                 // close selector
+                HasGuiControl = false;
+                Visible = false;
             }
 
 
         }
 
+        public float GetSelectorAngle()
+        {
+            // invert Y here?
+            return (float)Math.Atan2(-m_selectorDirection.Y, m_selectorDirection.X);
+        }
+
 
         public SpellType GetSelectedSpell()
         {
-            float selectorAngle = (float)Math.Atan2(m_selectorDirection.Y, m_selectorDirection.X);
-            // simple 4 way selector for now
+            float selectorAngle = GetSelectorAngle();
             int numSegments = m_spellTypes.Length;
             float segmentSpan = MathUtil.SIMD_2_PI / numSegments;
             float halfSegmentSpan = segmentSpan / 2f;
 
-            // rotate selector and adjust
-            selectorAngle -= halfSegmentSpan;
-            if(selectorAngle < 0)
-            {
-                selectorAngle += MathUtil.SIMD_2_PI;
-            }
+            float low  = 0;
+            float high = segmentSpan;
+            int index = -1;
 
-            float lastAngle = 0;
-            int index = 0;
-            for(int i=0;i<numSegments;++i)
+            for (int i = 0; i < numSegments; ++i)
             {
-                float newAngle = segmentSpan * i;
-                if(selectorAngle >= lastAngle && selectorAngle < newAngle)
+                if (selectorAngle >= low && selectorAngle <= high)
                 {
                     index = i;
                     break;
                 }
-                lastAngle = newAngle;
+                low = high;
+                high += segmentSpan;
             }
 
-            return m_spellTypes[index];
+
+            //// rotate selector and adjust
+            //selectorAngle -= halfSegmentSpan;
+            //if(selectorAngle < 0)
+            //{
+            //    selectorAngle += MathUtil.SIMD_2_PI;
+            //}
+
+            //float lastAngle = 0;
+            //int index = 0;
+            //for(int i=0;i<numSegments;++i)
+            //{
+            //    float newAngle = segmentSpan * i;
+            //    if(selectorAngle >= lastAngle && selectorAngle < newAngle)
+            //    {
+            //        index = i;
+            //        break;
+            //    }
+            //    lastAngle = newAngle;
+            //}
+            if (index > -1)
+            {
+                return m_spellTypes[index];
+            }
+            else
+            {
+                return SpellType.None;
+            }
         }
 
 
