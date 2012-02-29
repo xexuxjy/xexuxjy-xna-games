@@ -35,6 +35,8 @@ namespace com.xexuxjy.magiccarpet
         public static bool DebugTextEnabled = true;
         public static bool BulletCollisionEnabled;
         public static bool TerrainCollisionEnabled = true;
+        public static bool MouseEnabled = true;
+
 
 
         public static Keys InsertWayPoint = Keys.Insert;

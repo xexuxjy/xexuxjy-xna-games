@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using com.xexuxjy.magiccarpet.interfaces;
+using com.xexuxjy.magiccarpet;
 #endregion
 
 namespace GameStateManagement
@@ -49,7 +50,7 @@ namespace GameStateManagement
         public readonly List<GestureSample> Gestures = new List<GestureSample>();
 
         #endregion
-
+        
         #region Initialization
 
 
@@ -105,8 +106,11 @@ namespace GameStateManagement
                 Gestures.Add(TouchPanel.ReadGesture());
             }
 
-            LastMouseState = CurrentMouseState;
-            CurrentMouseState = Mouse.GetState();
+            if (Globals.MouseEnabled)
+            {
+                LastMouseState = CurrentMouseState;
+                CurrentMouseState = Mouse.GetState();
+            }
         }
 
         //----------------------------------------------------------------------------------------------

@@ -18,6 +18,11 @@ namespace com.xexuxjy.magiccarpet.util
 
         public void HandleInput(InputState inputState)
         {
+            if(!Globals.MouseEnabled)
+            {
+                return;
+            }
+
             bool leftReleased = WasReleased(ref inputState.LastMouseState, ref inputState.CurrentMouseState, 0);
             bool rightReleased = WasReleased(ref inputState.LastMouseState, ref inputState.CurrentMouseState, 2);
 

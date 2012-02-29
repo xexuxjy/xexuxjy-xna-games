@@ -306,6 +306,18 @@ namespace com.xexuxjy.magiccarpet.util.console
                             }
 
                         }
+                        else if (commandDetails.Name.Equals("mouseenable"))
+                        {
+                            String enabled = args[0];
+                            if (String.Equals("false", enabled, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                Globals.MouseEnabled = false;
+                            }
+                            else
+                            {
+                                Globals.MouseEnabled = true;
+                            }
+                        }
 
                     }
                 }
@@ -620,6 +632,8 @@ namespace com.xexuxjy.magiccarpet.util.console
             id = "buildfractallandscape";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 0 }));
             id = "setglobalplayer";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
+            id = "mouseenable";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
             
         }
