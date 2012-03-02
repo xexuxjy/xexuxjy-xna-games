@@ -42,16 +42,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Models\NewCastle\" />
     <Folder Include="textures\Castle\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Effects\OwnerColour.fx">
       <Name>OwnerColour</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Effects\Terrain\terrain1.fx">
-      <Name>terrain1</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
@@ -295,34 +291,6 @@
       <Name>SpellAtlas</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\NewCastle\castle2.fbx">
-      <Name>castle2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\NewCastle\wallstone.jpg">
-      <Name>wallstone</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\NewCastle\castle3.fbx">
-      <Name>castle3</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\SkyDome\skydome.fbx">
-      <Name>skydome</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>

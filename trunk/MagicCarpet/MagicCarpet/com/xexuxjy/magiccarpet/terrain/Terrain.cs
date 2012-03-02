@@ -18,6 +18,7 @@ using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.renderer;
 using BulletXNA;
 using MagicCarpet.com.xexuxjy.magiccarpet.util;
+using MagicCarpet.com.xexuxjy.magiccarpet.renderer;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
@@ -55,22 +56,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void LoadOrCreateHeightMap(String textureName)
         {
             m_heightMap = new float[m_textureWidth * m_textureWidth];
-            m_heightMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Single);
-            //m_normalMapTexture = new Texture2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Color);
-            m_normalMapRenderTarget = new RenderTarget2D(Game.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Color, DepthFormat.None);
-
-            if (!String.IsNullOrEmpty(textureName))
-            {
-                Texture2D wrongFormatTexture = Game.Content.Load<Texture2D>("Textures\\Terrain\\" + textureName);
-                Color[] colorData = new Color[wrongFormatTexture.Width * wrongFormatTexture.Height];
-                wrongFormatTexture.GetData<Color>(colorData);
-
-                for (int i = 0; i < colorData.Length; ++i)
-                {
-                    m_heightMap[i] = colorData[i].R;
-                }
-
-            }
+            m_heightMapTexture = Globals.MCContentManager.GetTexture("TerrainHeightMap");
+            //m_normalMapTexture = new Texture2D(Globals.GraphicsDevice, m_textureWidth, m_textureWidth, false, SurfaceFormat.Color);
+            m_normalMapRenderTarget = (RenderTarget2D)Globals.MCContentManager.GetTexture("TerrainNormalMap");
             UpdateHeightMap();
 
         }
@@ -119,6 +107,9 @@ namespace com.xexuxjy.magiccarpet.terrain
             InitialiseWorldGrid();
 
             LoadOrCreateHeightMap(null);
+
+            m_treeTexture = Globals.MCContentManager.GetTexture("TreeBillboard");
+
             base.Initialize();
 
             // after init so we get the right draw order.
@@ -163,9 +154,9 @@ namespace com.xexuxjy.magiccarpet.terrain
                 }
             }
 
-            m_blockVertexBuffer = new VertexBuffer(Game.GraphicsDevice, PosOnlyVertex.VertexDeclaration, blockVertices.Length, BufferUsage.None);
+            m_blockVertexBuffer = new VertexBuffer(Globals.GraphicsDevice, PosOnlyVertex.VertexDeclaration, blockVertices.Length, BufferUsage.None);
             m_blockVertexBuffer.SetData<PosOnlyVertex>(blockVertices, 0, blockVertices.Length);
-            m_blockIndexBuffer = new IndexBuffer(Game.GraphicsDevice, IndexElementSize.ThirtyTwoBits, blockIndices.Length, BufferUsage.None);
+            m_blockIndexBuffer = new IndexBuffer(Globals.GraphicsDevice, IndexElementSize.ThirtyTwoBits, blockIndices.Length, BufferUsage.None);
             m_blockIndexBuffer.SetData<int>(blockIndices);
         }
 
@@ -207,13 +198,13 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             int width = m_heightMapTexture.Width;
 
-            Game.GraphicsDevice.SetRenderTarget(m_normalMapRenderTarget);
-            Game.GraphicsDevice.Clear(Color.White);
+            Globals.GraphicsDevice.SetRenderTarget(m_normalMapRenderTarget);
+            Globals.GraphicsDevice.Clear(Color.White);
 
             m_normalsEffect.CurrentTechnique = m_normalsEffect.Techniques["ComputeNormals"];
             m_normalsEffect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
             float texelWidth = 1f / (float)width;
-            m_normalsEffect.Parameters["texelWidth"].SetValue(texelWidth);
+            m_normalsEffect.Parameters["TexelWidth"].SetValue(texelWidth);
 
             Matrix projection = Matrix.CreateOrthographicOffCenter(0, width, width, 0, 0, 1);
             Matrix halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
@@ -228,7 +219,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             //m_normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
 
-            Game.GraphicsDevice.SetRenderTarget(null);
+            Globals.GraphicsDevice.SetRenderTarget(null);
             m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMapRenderTarget);
         }
 
@@ -242,20 +233,34 @@ namespace com.xexuxjy.magiccarpet.terrain
             Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
 
-            Game.GraphicsDevice.Indices = m_blockIndexBuffer;
-            Game.GraphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
             //float oneOverTextureWidth = 1f/m_textureWidth;
-            float oneOverTextureWidth = 1f / (m_textureWidth - 1);
 
             //IndexedVector3 maxPos = IndexedVector3.Zero;
 
             IndexedVector3 lastStartPosition = IndexedVector3.Zero;
 
+            m_terrainEffect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
+            m_terrainEffect.Parameters["FogEnabled"].SetValue(true);
+            m_terrainEffect.Parameters["FogStart"].SetValue(20);
+            m_terrainEffect.Parameters["FogEnd"].SetValue(200);
+            Vector4 scaleFactor = new Vector4(m_oneOver);
+            m_terrainEffect.Parameters["ScaleFactor"].SetValue(scaleFactor);
+            DrawTerrainBlocks(boundingFrustrum,ref viewProjection);
+            DrawTrees(boundingFrustrum, ref viewProjection);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void DrawTerrainBlocks(BoundingFrustum boundingFrustrum,ref Matrix viewProjection)
+        {
             int numSpans = Globals.WorldWidth / m_blockSize;
             IndexedVector3 blockSize = new IndexedVector3(m_blockSize, 0, m_blockSize);
             IndexedVector3 startPosition = new IndexedVector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
+            float oneOverTextureWidth = 1f / (m_textureWidth - 1);
 
             m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["TileTerrain"];
+            Globals.GraphicsDevice.Indices = m_blockIndexBuffer;
+            Globals.GraphicsDevice.SetVertexBuffer(m_blockVertexBuffer);
 
             foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
             {
@@ -278,21 +283,12 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                             Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
 
-                            m_terrainEffect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
                             m_terrainEffect.Parameters["WorldViewProjMatrix"].SetValue(transform);
-                            Vector4 scaleFactor = new Vector4(m_oneOver);
-                            m_terrainEffect.Parameters["ScaleFactor"].SetValue(scaleFactor);
                             m_terrainEffect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, localPosition.X, localPosition.Z));
-
-                            m_terrainEffect.Parameters["FogEnabled"].SetValue(true);
-                            m_terrainEffect.Parameters["FogStart"].SetValue(20);
-                            m_terrainEffect.Parameters["FogEnd"].SetValue(200);
-
-
 
                             // need apply on inner level to make sure latest vals copied across
                             pass.Apply();
-                            Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
+                            Globals.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_blockVertexBuffer.VertexCount, 0, m_blockIndexBuffer.IndexCount / 3);
 
                         }
                         else
@@ -303,31 +299,30 @@ namespace com.xexuxjy.magiccarpet.terrain
                     }
                 }
             }
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector4 ColorForRing(int ring)
+        public void DrawTrees(BoundingFrustum boundingFrustrum,ref Matrix viewProjection)
         {
-            switch (ring)
-            {
-                case (0):
-                    return Color.White.ToVector4();
-                case (1):
-                    return Color.Yellow.ToVector4();
-                case (2):
-                    return Color.Red.ToVector4();
-                case (3):
-                    return Color.Green.ToVector4();
-                case (4):
-                    return Color.Blue.ToVector4();
-                case (5):
-                    return Color.Magenta.ToVector4();
-                case (6):
-                    return Color.Olive.ToVector4();
+            m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["BillboardTrees"];
+            Globals.GraphicsDevice.SetVertexBuffer(m_treeVertexBuffer);
 
-                default:
-                    return Color.Black.ToVector4();
+
+            m_terrainEffect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
+            m_terrainEffect.Parameters["ViewMatrix"].SetValue(Globals.Camera.ViewMatrix);
+            m_terrainEffect.Parameters["ProjectionMatrix"].SetValue(Globals.Camera.ProjectionMatrix);
+            m_terrainEffect.Parameters["AllowedRotDir"].SetValue(new Vector3(0, 1, 0));
+            m_terrainEffect.Parameters["TreeTexture"].SetValue(m_treeTexture);
+
+            foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
+            {
+                int noVertices = m_treeVertexBuffer.VertexCount;
+                int noTriangles = noVertices / 3;
+                pass.Apply();
+                Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
+
             }
         }
 
@@ -668,8 +663,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             result.X = ((float)Globals.s_random.NextDouble() * Width);
             result.Z = ((float)Globals.s_random.NextDouble() * Breadth);
             result.Y = GetHeightAtPointLocal((int)result.X, (int)result.Z);
-
-
             return LocalToWorld(result);
         }
 
@@ -682,11 +675,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             result.X = position.X + (sign * ((float)Globals.s_random.NextDouble() * distance));
             result.Z = position.Z + (sign * ((float)Globals.s_random.NextDouble() * distance));
 
-            // make sure it fits in bounds.
-            result.X = MathHelper.Clamp(result.X, 0.0f, Width);
-            result.Z = MathHelper.Clamp(result.Z, 0.0f, Width);
-
-            return result;
+            return LocalToWorld(result);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -695,8 +684,32 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             IndexedVector3 local = WorldToLocal(position);
 
-            local.X = MathHelper.Clamp(local.X, 0, Width);
-            local.Z = MathHelper.Clamp(local.Z, 0, Width);
+
+            if (Globals.TerrainWrapEnabled)
+            {
+                // wrap the position
+                if (local.X < 0)
+                {
+                    local.X += Width;
+                }
+                if (local.X > Width)
+                {
+                    local.X -= Width;
+                }
+                if (local.Z < 0)
+                {
+                    local.Z += Width;
+                }
+                if (local.Z > Width)
+                {
+                    local.Z -= Width;
+                }
+            }
+            else
+            {
+                local.X = MathHelper.Clamp(local.X, 0, Width);
+                local.Z = MathHelper.Clamp(local.Z, 0, Width);
+            }
 
             position = LocalToWorld(local);
         }
@@ -740,8 +753,88 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_heightMap = new float[m_textureWidth * m_textureWidth];
             float height = 10.0f;
             float smoothness = 0.7f;
-            FractalUtil.Fill2DFractArray(m_heightMap, m_textureWidth-1, 1, height, smoothness);
+            FractalUtil.Fill2DFractArray(m_heightMap, m_textureWidth - 1, 1, height, smoothness);
         }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void BuildTreeMap()
+        {
+            // Based on example by Reimer at http://www.riemers.net/eng/Tutorials/XNA/Csharp/Series4/Region_growing.php
+            int noiseTextureWidth = 128;
+
+            RenderTarget2D treeTarget = new RenderTarget2D(Globals.GraphicsDevice, noiseTextureWidth, noiseTextureWidth);
+            PerlinNoiseGenerator.GeneratePerlinNoise(noiseTextureWidth, treeTarget);
+            Color[] pixels = new Color[noiseTextureWidth * noiseTextureWidth];
+            treeTarget.GetData<Color>(pixels);
+
+            for (int z = 0; z < Globals.WorldWidth; ++z)
+            {
+                for (int x = 0; x < Globals.WorldWidth; ++x)
+                {
+                    float height = GetHeightAtPointLocal(x, z);
+                    if (height > -4 && height < 20)
+                    {
+                        float relZ = (float)z / (float)Globals.WorldWidth;
+                        float relX = (float)x / (float)Globals.WorldWidth;
+
+                        float treeDensity = 0f;
+                        float noiseAtPoint = pixels[(z * noiseTextureWidth) + x].R;
+                        if (noiseAtPoint > 200)
+                        {
+                            treeDensity = 5;
+                        }
+                        else if (noiseAtPoint > 150)
+                        {
+                            treeDensity = 4;
+                        }
+                        else if (noiseAtPoint > 100)
+                        {
+                            treeDensity = 3;
+                        }
+                        else
+                        {
+                            treeDensity = 0;
+                        }
+
+
+                        for (int currDetail = 0; currDetail < treeDensity; currDetail++)
+                        {
+                            float rand1 = (float)Globals.s_random.Next(1000) / 1000.0f;
+                            float rand2 = (float)Globals.s_random.Next(1000) / 1000.0f;
+                            IndexedVector3 treePos = new IndexedVector3((float)x - rand1, height, -(float)z - rand2);
+                            m_treePositions.Add(treePos);
+                        }
+                    }
+
+                }
+
+                CreateBillboardVerticesFromList(m_treePositions, out m_treeVertexBuffer);
+            }
+
+        }
+
+        public void CreateBillboardVerticesFromList(List<IndexedVector3> list,out VertexBuffer vertexBuffer)
+        {
+            VertexPositionTexture[] billboardVertices = new VertexPositionTexture[list.Count * 6];
+            int i = 0;
+            foreach (IndexedVector3 currentV3 in list)
+            {
+                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 0));
+                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 0));
+                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 1));
+
+                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 0));
+                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 1));
+                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 1));
+            }
+
+            vertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionTexture.VertexDeclaration, billboardVertices.Length, BufferUsage.WriteOnly);
+            vertexBuffer.SetData(billboardVertices);
+        }
+
+
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -874,6 +967,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         private List<TerrainUpdater> m_terrainUpdaters = new List<TerrainUpdater>();
         private List<TerrainUpdater> m_terrainUpdatersRemove = new List<TerrainUpdater>();
+        private List<IndexedVector3> m_treePositions = new List<IndexedVector3>();
+
 
         private bool m_defaultHeightMethod = true;
         private bool m_terrainHasChanged;
@@ -897,16 +992,21 @@ namespace com.xexuxjy.magiccarpet.terrain
         Effect m_terrainEffect;
         Effect m_normalsEffect;
 
+        VertexBuffer m_treeVertexBuffer;
+
+
         RasterizerState m_rasterizerState;
         Texture2D m_heightMapTexture;
 
-        //Texture2D m_normalMapTexture;
         RenderTarget2D m_normalMapRenderTarget;
 
         ScreenQuad m_helperScreenQuad;
 
         Texture2D m_baseTexture;
         Texture2D m_noiseTexture;
+        Texture2D m_portalTexture;
+        Texture2D m_treeTexture;
+
 
         public int GetCollisionMask()
         {

@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using com.xexuxjy.magiccarpet.util.console;
 using com.xexuxjy.magiccarpet.util.debug;
 using com.xexuxjy.magiccarpet.gui;
-using com.xexuxjy.magiccarpet.control;
+//using com.xexuxjy.magiccarpet.control;
 #endregion
 
 namespace GameStateManagement
@@ -131,7 +131,7 @@ namespace GameStateManagement
             m_playerHud.Initialise();
 
 
-            m_playerController = new PlayerController(m_playerHud);
+            //m_playerController = new PlayerController(m_playerHud);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -202,7 +202,7 @@ namespace GameStateManagement
 
 
 
-            m_playerController.HandleInput(input);
+            //m_playerController.HandleInput(input);
             m_playerHud.HandleInput(input);
             Globals.Camera.HandleInput(input);
 
@@ -335,7 +335,7 @@ namespace GameStateManagement
 
         float pauseAlpha;
 
-        private PlayerController m_playerController;
+        //private PlayerController m_playerController;
 
         #endregion
 

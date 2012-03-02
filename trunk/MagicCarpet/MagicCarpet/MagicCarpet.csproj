@@ -139,7 +139,6 @@
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionUnload.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\BaseAction.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\FindData.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\camera\DefaultCamera.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\camera\DHPCameraComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
@@ -182,10 +181,8 @@
     <Compile Include="com\xexuxjy\magiccarpet\manager\MCContentManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\SpellPool.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Program.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\renderer\DefaultRenderer.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\PerlinNoiseGenerator.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\ScreenQuad.cs" />
-    <Compile Include="com\xexuxjy\magiccarpet\renderer\TerrainSectionRenderer.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellAlterTerrain.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellConvert.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellFireball.cs" />

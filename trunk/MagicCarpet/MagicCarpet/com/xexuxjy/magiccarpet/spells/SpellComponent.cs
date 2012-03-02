@@ -19,7 +19,9 @@ namespace com.xexuxjy.magiccarpet.spells
             InitializeTemplate(SpellType.Raise, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Castle, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Fireball, 5, 0.5f, 1f, 10f);
-
+            InitializeTemplate(SpellType.Heal, 5, 0.5f, 1f, 10f);
+            InitializeTemplate(SpellType.Turbo, 5, 0.5f, 1f, 10f);
+            InitializeTemplate(SpellType.RubberBand, 5, 0.5f, 1f, 10f);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +36,6 @@ namespace com.xexuxjy.magiccarpet.spells
         private void InitializeTemplate(SpellType spellType, int manaCost, float castTime, float cooldownTime, float duration)
         {
             SpellTemplate template = new SpellTemplate(spellType, manaCost, castTime, cooldownTime, duration);
-            m_activeTemplates.Add(template);
             m_spellTemplates[spellType] = template;
         }
 
@@ -50,7 +51,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         public virtual void Update(GameTime gameTime)
         {
-            foreach (SpellTemplate spellTemplate in m_activeTemplates)
+            foreach (SpellTemplate spellTemplate in m_spellTemplates.Values)
             {
                 spellTemplate.Update(gameTime);
             }
@@ -66,56 +67,8 @@ namespace com.xexuxjy.magiccarpet.spells
                 m_spellTemplates.TryGetValue(spellType, out template);
                 GameObjectAttribute mana = m_owner.GetAttribute(GameObjectAttributeType.Mana);
                 mana.CurrentValue -= template.ManaCost;
-                Spell spell = null;
-                switch (spellType)
-                {
-                    case (SpellType.Castle):
-                        {
-                            spell = new SpellCastle(m_owner);
-                            break;
-                        }
 
-                    case (SpellType.Convert):
-                        {
-                            spell = new SpellConvert(m_owner);
-                            break;
-                        }
-                    case (SpellType.Fireball):
-                        {
-                            spell = new SpellFireball(m_owner);
-                            break;
-                        }
-                    case (SpellType.Heal):
-                        {
-                            spell = new SpellHeal(m_owner);
-                            break;
-                        }
-                    case (SpellType.Lower):
-                        {
-                            spell = new SpellAlterTerrain(m_owner, false);
-                            break;
-                        }
-                    case (SpellType.Raise):
-                        {
-                            spell = new SpellAlterTerrain(m_owner, true);
-                            break;
-                        }
-                    case (SpellType.RubberBand):
-                        {
-                            spell = new SpellRubberband(m_owner);
-                            break;
-                        }
-                    case (SpellType.SwarmOfBees):
-                        {
-                            spell = new SpellSwarmOfBees(m_owner);
-                            break;
-                        }
-                    case (SpellType.Turbo):
-                        {
-                            spell = new SpellTurbo(m_owner);
-                            break;
-                        }
-                }
+                Spell spell = Globals.SpellPool.CreateSpell(spellType, m_owner);
 
                 Globals.GameObjectManager.AddGameObject(spell);
 
@@ -129,12 +82,8 @@ namespace com.xexuxjy.magiccarpet.spells
                     ((MovingSpell)spell).SetInitialPositionAndDirection(startPosition, direction);
                 }
 
-#if LOG_EVENT
-                Globals.EventLogger.LogEvent(String.Format("CastSpell[{0}][{1}][{2}].", spell.Id,m_owner.Id, spell.SpellType));
-#endif
-
-
                 spell.SpellComplete += new Spell.SpellCompleteHandler(spell_SpellComplete);
+                m_activeSpells.Add(spell);
             }
         }
 
@@ -151,8 +100,9 @@ namespace com.xexuxjy.magiccarpet.spells
 
         void spell_SpellComplete(Spell spell)
         {
+            m_activeSpells.Remove(spell);
             SpellTemplate spellTemplate = spell.SpellTemplate;
-
+            Globals.SpellPool.ReleaseSpell(spell);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,10 +125,17 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        // allow gui or whatever to draw active spells. don't store any references to the spells though.
+        public List<Spell> GetActiveSpells()
+        {
+            return m_activeSpells;
+        }
 
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private GameObject m_owner;
-        private List<SpellTemplate> m_activeTemplates = new List<SpellTemplate>();
+        private List<Spell> m_activeSpells = new List<Spell>();
         private Dictionary<SpellType, SpellTemplate> m_spellTemplates = new Dictionary<SpellType, SpellTemplate>();
 
         public delegate void SpellCastHandler(GameObject gameObject, Spell spell);

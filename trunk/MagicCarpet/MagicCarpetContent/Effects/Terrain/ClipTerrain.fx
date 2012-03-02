@@ -2,11 +2,18 @@ texture HeightMapTexture;
 texture BaseTexture;
 texture NoiseTexture;
 texture NormalMapTexture;
+texture TreeTexture;
 
 uniform matrix WorldViewProjMatrix;
+uniform matrix ViewMatrix;
+uniform matrix ProjMatrix;
+uniform matrix WorldMatrix;
+
 uniform float3 CameraPosition;
 
 uniform float  ZScaleFactor;
+uniform float WorldWidth;
+uniform float EdgeFog;
 uniform float4 ScaleFactor;
 uniform float4 FineTextureBlockOrigin;
 uniform float2 AlphaOffset;
@@ -16,6 +23,7 @@ uniform float3 LightPosition;
 uniform float3 LightDirection;
 uniform float3 AmbientLight;
 uniform float3 DirectionalLight;
+uniform float3 AllowedRotDir;
 
 float4 BlockColor;
 float OneOverMaxExtents;
@@ -44,6 +52,21 @@ struct VertexShaderOutput
 	float3 pos3d : TEXCOORD3;
 
 };
+
+
+struct TreeVertexShaderInput
+{
+    vector pos        : POSITION;   
+    float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
+};
+
+struct TreeVertexShaderOutput
+{
+    vector pos        : POSITION;   
+    float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
+	float3 pos3d : TEXCOORD3;
+};
+
 
 uniform sampler ElevationSampler = sampler_state
 {
@@ -87,6 +110,15 @@ uniform sampler NormalMapSamplerPS = sampler_state
     AddressV  = Clamp;
 };
 
+uniform sampler TreeSampler = sampler_state
+{
+    Texture   = (TreeTexture);
+    MipFilter = None;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
 
 float ComputeHeight(float2 uv:TEXCOORD0)
 {
@@ -180,13 +212,76 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	// Fog stuff.
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 	float fogFactor = ComputeFogFactor(distanceFromCamera);
+
+	// do something funky as well to provide fog near the boundaries of the world.
+	if( input.pos3d.x < EdgeFog || input.pos3d.x > WorldWidth - EdgeFog || input.pos3d.z < EdgeFog || input.pos3d.z > WorldWidth - EdgeFog)
+	{
+		fogFactor = 1.0;
+	}
+
 	result.rgb = lerp(result.rgb,FogColor,fogFactor);
+
 
 	return result;
 
 }
 
 
+// Vertex shader for rendering the geometry clipmap
+TreeVertexShaderOutput TreeVertexShaderFunction(TreeVertexShaderInput input)
+{
+	TreeVertexShaderOutput output;
+	float3 worldPos = input.pos;
+                     
+    // compute coordinates for vertex texture
+    //  FineBlockOrig.xy: 1/(w, h) of texture (texelwidth)
+    float2 uv = float2((worldPos)*FineTextureBlockOrigin.xy);
+    float height = ComputeHeight(uv);
+
+	worldPos = float3(worldPos.x, height,worldPos.z);
+
+	float3 center = mul(worldPos, WorldMatrix);
+    float3 eyeVector = center - CameraPosition;
+    float3 upVector = AllowedRotDir;
+    upVector = normalize(upVector);
+    float3 sideVector = cross(eyeVector,upVector);
+    sideVector = normalize(sideVector);
+    float3 finalPosition = center;
+    finalPosition += (input.uv.x-0.5f)*sideVector;
+    finalPosition += (1.5f-input.uv.y*1.5f)*upVector;
+
+    float4 finalPosition4 = float4(finalPosition, 1);
+    float4x4 preViewProjection = mul (ViewMatrix, ProjMatrix);
+
+//    output.pos = mul(float4(worldPos.x, height,worldPos.y, 1), WorldViewProjMatrix);
+	output.pos = mul(finalPosition4, preViewProjection);
+	output.pos3d = output.pos;
+    output.uv= input.uv;
+
+    return output;
+}
+
+
+
+
+float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
+{
+	float4 result = tex2D(TreeSampler, input.uv);
+	// Make sure tree's vanish in the mist as well.
+
+	float distanceFromCamera = length(input.pos3d - CameraPosition);
+	float fogFactor = ComputeFogFactor(distanceFromCamera);
+
+	// do something funky as well to provide fog near the boundaries of the world.
+	if( input.pos3d.x < EdgeFog || input.pos3d.x > WorldWidth - EdgeFog || input.pos3d.z < EdgeFog || input.pos3d.z > WorldWidth - EdgeFog)
+	{
+		fogFactor = 1.0;
+	}
+
+	result.rgb = lerp(result.rgb,FogColor,fogFactor);
+
+    return result;
+}
 
 
 
@@ -199,4 +294,17 @@ technique TileTerrain
         VertexShader = compile vs_3_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 PixelShaderFunction();
     }
+}
+
+
+technique BillboardTrees
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.
+
+        VertexShader = compile vs_3_0 TreeVertexShaderFunction();
+        PixelShader = compile ps_3_0 TreePixelShaderFunction();
+    }
+
 }
