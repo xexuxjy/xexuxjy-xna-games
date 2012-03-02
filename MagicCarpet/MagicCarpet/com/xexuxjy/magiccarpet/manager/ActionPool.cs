@@ -90,5 +90,10 @@ namespace com.xexuxjy.magiccarpet.manager
             return new ActionCastSpell(owner, target, position, spellType);
         }
 
+
+        public void ReleaseAction(BaseAction baseAction)
+        {
+        }
+
     }
 }

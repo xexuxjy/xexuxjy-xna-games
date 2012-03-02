@@ -1,4 +1,4 @@
-float texelWidth;
+float TexelWidth;
 texture HeightMapTexture;
 
 float normalStrength = 8.0f;
@@ -44,23 +44,23 @@ VertexShaderOutput ComputeNormalsVS(VertexShaderInput input)
 float4 ComputeNormalsPS(in VertexShaderOutput input) : COLOR0
 {
 /*
-    float tl = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2(-1, -1)).x);   // top left
-    float  l = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2(-1,  0)).x);   // left
-    float bl = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2(-1,  1)).x);   // bottom left
-    float  t = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 0, -1)).x);   // top
-    float  b = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 0,  1)).x);   // bottom
-    float tr = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 1, -1)).x);   // top right
-    float  r = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 1,  0)).x);   // right
-    float br = abs(tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 1,  1)).x);   // bottom right
+    float tl = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1, -1)).x);   // top left
+    float  l = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  0)).x);   // left
+    float bl = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  1)).x);   // bottom left
+    float  t = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 0, -1)).x);   // top
+    float  b = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 0,  1)).x);   // bottom
+    float tr = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1, -1)).x);   // top right
+    float  r = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1,  0)).x);   // right
+    float br = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1,  1)).x);   // bottom right
 	*/
-    float tl = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2(-1, -1)).x;   // top left
-    float  l = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2(-1,  0)).x;   // left
-    float bl = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2(-1,  1)).x;   // bottom left
-    float  t = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 0, -1)).x;   // top
-    float  b = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 0,  1)).x;   // bottom
-    float tr = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 1, -1)).x;   // top right
-    float  r = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 1,  0)).x;   // right
-    float br = tex2D (NormalMapSamplerPS, input.TexCoord + texelWidth * float2( 1,  1)).x;   // bottom right
+    float tl = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1, -1)).x;   // top left
+    float  l = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  0)).x;   // left
+    float bl = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  1)).x;   // bottom left
+    float  t = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 0, -1)).x;   // top
+    float  b = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 0,  1)).x;   // bottom
+    float tr = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1, -1)).x;   // top right
+    float  r = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1,  0)).x;   // right
+    float br = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1,  1)).x;   // bottom right
 
 
     // Compute dx using Sobel:

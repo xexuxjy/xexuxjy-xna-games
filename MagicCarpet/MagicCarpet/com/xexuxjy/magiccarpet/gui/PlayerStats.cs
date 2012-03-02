@@ -59,14 +59,35 @@ namespace com.xexuxjy.magiccarpet.gui
                 {
                     int spellWidth = 64;
                     Point topLeft = new Point(7, 130);
-                    DrawSpell(magician.SelectedSpell1, topLeft, spellWidth, spellWidth, Color.Yellow);
+                    DrawCoolDown(magician.SelectedSpell1, magician, topLeft, spellWidth);
                     topLeft = new Point(118, 130);
-                    DrawSpell(magician.SelectedSpell2, topLeft, spellWidth, spellWidth, Color.Turquoise);
+                    DrawCoolDown(magician.SelectedSpell2, magician, topLeft, spellWidth);
+
+
+
+                    // Draw the active spells.
+
                 }
                 m_spriteBatch.End();
                 Game.GraphicsDevice.SetRenderTarget(null);
            }
         }
+
+        public void DrawCoolDown(SpellType spellType,Magician magician,Point topLeft,int spellWidth)
+        {
+            SpellTemplate template = magician.SpellComponent.GetSpellTemplate(spellType);
+
+            SpellTemplate.SpellTemplateState templateState = template.State;
+            float drawPercentage = 0f;
+
+            if (templateState == SpellTemplate.SpellTemplateState.Cooldown)
+            {
+                drawPercentage = template.CoolDownPercentage();
+            }
+            DrawSpell(template, topLeft, spellWidth, spellWidth, Color.Yellow, drawPercentage);
+
+        }
+
 
         public void DrawStat(GameObjectAttributeType type, Point topLeft, int width,int height,Color color)
         {
@@ -83,29 +104,24 @@ namespace com.xexuxjy.magiccarpet.gui
         }
 
 
-        public void DrawSpell(SpellType spellType, Point topLeft, int width, int height,Color color)
+        public void DrawSpell(SpellTemplate template, Point topLeft, int width, int height, Color color, float drawPercentage)
         {
-            SpellTemplate template = m_trackedObject.SpellComponent.GetSpellTemplate(spellType);
             if (template != null)
             {
-                //Rectangle rect = new Rectangle(topLeft.X, topLeft.Y, width, height);
-                //m_spriteBatch.Draw(Globals.MCContentManager.GetTexture(color), rect, Color.White);
 
-                Rectangle? sourceRectangle = Globals.MCContentManager.SpritePositionForSpellType(spellType);
+                Rectangle? sourceRectangle = Globals.MCContentManager.SpritePositionForSpellType(template.SpellType);
 
                 if (sourceRectangle.HasValue)
                 {
                     m_spriteBatch.Draw(m_spellSpriteAtlas, new Vector2(topLeft.X,topLeft.Y), sourceRectangle, color);
                 }
 
-                SpellTemplate.SpellTemplateState templateState = template.State;
-                if (templateState == SpellTemplate.SpellTemplateState.Cooldown)
+                if (drawPercentage > 0f)
                 {
-                    float coolDownPercentage = template.CoolDownPercentage();
-                    Rectangle coolDownRect = new Rectangle(topLeft.X, topLeft.Y, width, (int)(height*coolDownPercentage));
+                    Rectangle shadingRect = new Rectangle(topLeft.X, topLeft.Y, width, (int)(height * drawPercentage));
                     Color coolDownColor = Color.Gray;
                     coolDownColor.A = 128;
-                    m_spriteBatch.Draw(Globals.MCContentManager.GetTexture(coolDownColor), coolDownRect, Color.White);
+                    m_spriteBatch.Draw(Globals.MCContentManager.GetTexture(coolDownColor), shadingRect, Color.White);
                 }
             }
         }

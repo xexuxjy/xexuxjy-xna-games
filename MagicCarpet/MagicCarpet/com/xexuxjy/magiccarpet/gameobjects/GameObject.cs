@@ -547,18 +547,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public IndexedVector3 WorldToLocal(IndexedVector3 worldPoint)
         {
             return (worldPoint - BoundingBox.Min);
-            //IndexedMatrix m;
-            //m_motionState.GetWorldTransform(out m);
-            //m = IndexedMatrix.Invert(m);
-            //return IndexedVector3.Transform(worldPoint, m);
         }
 
         public IndexedVector3 LocalToWorld(IndexedVector3 localPoint)
         {
-            //IndexedMatrix m;
-            //m_motionState.GetWorldTransform(out m);
-            ////m = IndexedMatrix.Invert(m);
-            //return IndexedVector3.Transform(localPoint, m);
             return (localPoint + BoundingBox.Min);
         }
 

@@ -202,30 +202,32 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             Globals.Terrain.UpdateHeightMap();
             m_scaleTransform = Matrix.CreateScale(width/2, GetStartOffsetHeight(), width/2);
-            
 
-            //IndexedVector3 turretPos0 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z-offset.Z);
-            //IndexedVector3 turretPos1 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z-offset.Z);
-            //IndexedVector3 turretPos2 = new IndexedVector3(Position.X-offset.X,Position.Y, Position.Z+offset.Z);
-            //IndexedVector3 turretPos3 = new IndexedVector3(Position.X+offset.X,Position.Y, Position.Z+offset.Z);
-            
-            //// clear or move turrets?
-            //if (m_turrets.Count == 0)
-            //{
-            //    m_turrets.Add(new Turret(0,this, turretPos0));
-            //    m_turrets.Add(new Turret(1, this, turretPos1));
-            //    m_turrets.Add(new Turret(2, this, turretPos2));
-            //    m_turrets.Add(new Turret(3, this, turretPos3));
-            //}
-            //else
-            //{
-            //    m_turrets[0].Position = turretPos0;
-            //    m_turrets[1].Position = turretPos1;
-            //    m_turrets[2].Position = turretPos2;
-            //    m_turrets[3].Position = turretPos3;
+            bool enableTurrets = false;
+            if (enableTurrets)
+            {
+                IndexedVector3 turretPos0 = new IndexedVector3(Position.X - offset.X, Position.Y, Position.Z - offset.Z);
+                IndexedVector3 turretPos1 = new IndexedVector3(Position.X + offset.X, Position.Y, Position.Z - offset.Z);
+                IndexedVector3 turretPos2 = new IndexedVector3(Position.X - offset.X, Position.Y, Position.Z + offset.Z);
+                IndexedVector3 turretPos3 = new IndexedVector3(Position.X + offset.X, Position.Y, Position.Z + offset.Z);
 
-            //}
+                // clear or move turrets?
+                if (m_turrets.Count == 0)
+                {
+                    m_turrets.Add(new Turret(0, this, turretPos0));
+                    m_turrets.Add(new Turret(1, this, turretPos1));
+                    m_turrets.Add(new Turret(2, this, turretPos2));
+                    m_turrets.Add(new Turret(3, this, turretPos3));
+                }
+                else
+                {
+                    m_turrets[0].Position = turretPos0;
+                    m_turrets[1].Position = turretPos1;
+                    m_turrets[2].Position = turretPos2;
+                    m_turrets[3].Position = turretPos3;
 
+                }
+            }
             CreateBalloon();
         }
         

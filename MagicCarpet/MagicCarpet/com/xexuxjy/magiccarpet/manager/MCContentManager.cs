@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.spells;
+using System.Diagnostics;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -28,9 +29,6 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
             m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
-
-            m_textureDictionary["TerrainBase"] = m_contentManager.Load<Texture2D>("Textures/Terrain/base");
-            m_textureDictionary["TerrainNoise"] = m_contentManager.Load<Texture2D>("Textures/Terrain/noise");
 
 
             m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("unitcube");
@@ -68,8 +66,11 @@ namespace com.xexuxjy.magiccarpet.manager
             m_textureDictionary["SpellSelector"] = m_contentManager.Load<Texture2D>("textures/ui/SpellSelector");
             m_textureDictionary["SkyDome"] = m_contentManager.Load<Texture2D>("Models/SkyDome/SkyDomeTexture");
 
-
-
+            m_textureDictionary["TerrainBase"] = m_contentManager.Load<Texture2D>("Textures/Terrain/Base");
+            m_textureDictionary["TerrainNoise"] = m_contentManager.Load<Texture2D>("Textures/Terrain/Noise");
+            m_textureDictionary["TerrainHeightMap"] = new Texture2D(Globals.GraphicsDevice, Globals.WorldWidth + 1, Globals.WorldWidth + 1, false, SurfaceFormat.Single);
+            m_textureDictionary["TerrainNormalMap"] = new RenderTarget2D(Globals.GraphicsDevice, Globals.WorldWidth + 1, Globals.WorldWidth + 1, false, SurfaceFormat.Color, DepthFormat.None);
+            m_textureDictionary["TreeBillboard"] = m_contentManager.Load<Texture2D>("Textures/Terrain/TreeBillBoard");
         }
 
         public Model ModelForObjectType(GameObjectType gameObjectType)
@@ -104,6 +105,8 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public Texture2D GetTexture(String key)
         {
+            Debug.Assert(m_textureDictionary.ContainsKey(key));
+            // if it doesn't we should log it?? then replace with dummy pink texture...
             return m_textureDictionary[key];
         }
 

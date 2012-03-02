@@ -55,6 +55,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public void ActionComplete()
         {
             InternalComplete();
+            Globals.ActionPool.ReleaseAction(this);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
