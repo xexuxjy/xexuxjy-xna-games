@@ -115,6 +115,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             // after init so we get the right draw order.
             DrawOrder = Globals.TERRAIN_DRAW_ORDER;
 
+            m_noCullState = new RasterizerState();
+            m_noCullState.CullMode = CullMode.None;
 
         }
 
@@ -158,6 +160,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_blockVertexBuffer.SetData<PosOnlyVertex>(blockVertices, 0, blockVertices.Length);
             m_blockIndexBuffer = new IndexBuffer(Globals.GraphicsDevice, IndexElementSize.ThirtyTwoBits, blockIndices.Length, BufferUsage.None);
             m_blockIndexBuffer.SetData<int>(blockIndices);
+
+            BuildTreeMap();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,7 +234,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             UpdateHeightMapTexture();
 
 
-            Matrix viewProjection = Globals.Camera.ViewProjectionMatrix;
+            Matrix viewProjection = Globals.Camera.Projection * Globals.Camera.View;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
 
             //float oneOverTextureWidth = 1f/m_textureWidth;
@@ -309,12 +313,21 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["BillboardTrees"];
             Globals.GraphicsDevice.SetVertexBuffer(m_treeVertexBuffer);
 
+            RasterizerState oldState = Globals.GraphicsDevice.RasterizerState;
+            Globals.GraphicsDevice.RasterizerState = m_noCullState;
 
-            m_terrainEffect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
-            m_terrainEffect.Parameters["ViewMatrix"].SetValue(Globals.Camera.ViewMatrix);
-            m_terrainEffect.Parameters["ProjectionMatrix"].SetValue(Globals.Camera.ProjectionMatrix);
-            m_terrainEffect.Parameters["AllowedRotDir"].SetValue(new Vector3(0, 1, 0));
+            Vector3 startPosition = Vector3.Zero;//new Vector3(-Globals.WorldWidth / 2f, 0, -Globals.WorldWidth / 2f);
+            Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
+
+            m_terrainEffect.Parameters["WorldViewProjMatrix"].SetValue(transform);
             m_terrainEffect.Parameters["TreeTexture"].SetValue(m_treeTexture);
+         
+            float oneOverTextureWidth = 1f / (m_textureWidth - 1);
+            m_terrainEffect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, 0, 0));
+
+            BlendState oldBlendState = Globals.GraphicsDevice.BlendState;
+            Globals.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
 
             foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
             {
@@ -322,8 +335,10 @@ namespace com.xexuxjy.magiccarpet.terrain
                 int noTriangles = noVertices / 3;
                 pass.Apply();
                 Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
-
             }
+
+            Globals.GraphicsDevice.RasterizerState = oldState;
+            Globals.GraphicsDevice.BlendState = oldBlendState;          
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -764,23 +779,38 @@ namespace com.xexuxjy.magiccarpet.terrain
             // Based on example by Reimer at http://www.riemers.net/eng/Tutorials/XNA/Csharp/Series4/Region_growing.php
             int noiseTextureWidth = 128;
 
-            RenderTarget2D treeTarget = new RenderTarget2D(Globals.GraphicsDevice, noiseTextureWidth, noiseTextureWidth);
+            RenderTarget2D treeTarget = new RenderTarget2D(Globals.GraphicsDevice, noiseTextureWidth, noiseTextureWidth, false,SurfaceFormat.Color, DepthFormat.Depth16);
             PerlinNoiseGenerator.GeneratePerlinNoise(noiseTextureWidth, treeTarget);
             Color[] pixels = new Color[noiseTextureWidth * noiseTextureWidth];
             treeTarget.GetData<Color>(pixels);
-
-            for (int z = 0; z < Globals.WorldWidth; ++z)
+             int[,] noiseData = new int[noiseTextureWidth, noiseTextureWidth];
+            for (int x = 0; x < noiseTextureWidth; x++)
             {
-                for (int x = 0; x < Globals.WorldWidth; ++x)
+                for (int y = 0; y < noiseTextureWidth; y++)
                 {
-                    float height = GetHeightAtPointLocal(x, z);
+                    noiseData[x, y] = pixels[y + x * noiseTextureWidth].R;
+                }
+            }
+
+
+            int stepSize = 4;
+
+
+            Vector3 halfWidth = new Vector3(Globals.WorldWidth, 0, Globals.WorldWidth)/2f;
+
+            for (int z = 0; z < Globals.WorldWidth; z+=stepSize)
+            {
+                for (int x = 0; x < Globals.WorldWidth; x+=stepSize)
+                {
+                    //float height = GetHeightAtPointLocal(x, z);
+                    float height = 0;
                     if (height > -4 && height < 20)
                     {
                         float relZ = (float)z / (float)Globals.WorldWidth;
                         float relX = (float)x / (float)Globals.WorldWidth;
 
                         float treeDensity = 0f;
-                        float noiseAtPoint = pixels[(z * noiseTextureWidth) + x].R;
+                        float noiseAtPoint = noiseData[(int)(relX * noiseTextureWidth), (int)(relZ * noiseTextureWidth)];
                         if (noiseAtPoint > 200)
                         {
                             treeDensity = 5;
@@ -803,35 +833,70 @@ namespace com.xexuxjy.magiccarpet.terrain
                         {
                             float rand1 = (float)Globals.s_random.Next(1000) / 1000.0f;
                             float rand2 = (float)Globals.s_random.Next(1000) / 1000.0f;
-                            IndexedVector3 treePos = new IndexedVector3((float)x - rand1, height, -(float)z - rand2);
+                            float scale = (float)Globals.s_random.NextDouble();
+                            //worldPosition
+                            Vector3 tempPos = new Vector3((float)x - rand1, height, -(float)z - rand2);
+                            tempPos -= halfWidth;
+                            Vector4 treePos = new Vector4(tempPos,scale);
                             m_treePositions.Add(treePos);
                         }
                     }
 
                 }
 
-                CreateBillboardVerticesFromList(m_treePositions, out m_treeVertexBuffer);
             }
+            CreateBillboardVerticesFromList(m_treePositions, out m_treeVertexBuffer);
 
         }
 
-        public void CreateBillboardVerticesFromList(List<IndexedVector3> list,out VertexBuffer vertexBuffer)
+        public void CreateBillboardVerticesFromList(List<Vector4> list,out VertexBuffer vertexBuffer)
         {
-            VertexPositionTexture[] billboardVertices = new VertexPositionTexture[list.Count * 6];
+            VertexPositionScaleTexture[] billboardVertices = new VertexPositionScaleTexture[list.Count * 12];
             int i = 0;
-            foreach (IndexedVector3 currentV3 in list)
-            {
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 0));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 0));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 1));
 
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 0));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 1));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 1));
+            float width = 1f;
+            float height = 10f;
+            // rotate through half to get a checkboard.
+            Matrix rotation = Matrix.CreateRotationY(MathUtil.SIMD_HALF_PI);
+
+            Vector3 left = new Vector3(-width, 0, 0);
+            Vector3 right = new Vector3(width, 0, 0);
+            Vector3 baseUp = new Vector3(0, height, 0);
+
+
+            foreach (Vector4 currentV4 in list)
+            {
+                Vector3 v = new Vector3(currentV4.X,currentV4.Y,currentV4.Z);
+                float scale = currentV4.W;
+                Vector3 up = baseUp * scale;
+
+
+                billboardVertices[i++] = new VertexPositionScaleTexture(v+left, scale,new Vector2(0, 1));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + right , scale, new Vector2(1, 1));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + right + up, scale, new Vector2(1, 0));
+
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + right+up, scale, new Vector2(1, 0));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + left+ up, scale, new Vector2(0, 0));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + left, scale, new Vector2(0, 1));
+
+                
+                billboardVertices[i++] = new VertexPositionScaleTexture(v+Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v+Vector3.TransformNormal(right,  rotation), scale, new Vector2(1, 1));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v+ Vector3.TransformNormal(right + up, rotation), scale, new Vector2(1, 0));
+
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right+up, rotation), scale, new Vector2(1, 0));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left + up, rotation), scale, new Vector2(0, 0));
+                billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
+
             }
 
-            vertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionTexture.VertexDeclaration, billboardVertices.Length, BufferUsage.WriteOnly);
+            vertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionScaleTexture.VertexDeclaration, billboardVertices.Length, BufferUsage.WriteOnly);
             vertexBuffer.SetData(billboardVertices);
+        
+        
+        
+        
+        
         }
 
 
@@ -967,7 +1032,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         private List<TerrainUpdater> m_terrainUpdaters = new List<TerrainUpdater>();
         private List<TerrainUpdater> m_terrainUpdatersRemove = new List<TerrainUpdater>();
-        private List<IndexedVector3> m_treePositions = new List<IndexedVector3>();
+        private List<Vector4> m_treePositions = new List<Vector4>();
 
 
         private bool m_defaultHeightMethod = true;
@@ -979,8 +1044,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         // the time taken for the complete terrain move.
         private float s_terrainMoveTime = 5.0f;
 
-        const int m_numLevels = 1;
-        const int m_blockSize = 32;
+        const int m_blockSize = 256;
         const int m_textureWidth = Globals.WorldWidth + 1;
 
         const int m_multiplier = 1;
@@ -1006,6 +1070,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         Texture2D m_noiseTexture;
         Texture2D m_portalTexture;
         Texture2D m_treeTexture;
+
+        RasterizerState m_noCullState;
 
 
         public int GetCollisionMask()
@@ -1042,6 +1108,35 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
     };
+
+    public struct VertexPositionScaleTexture : IVertexType
+    {
+
+        public VertexPositionScaleTexture(Vector3 v,float s,Vector2 uv)
+        {
+            Position = v;
+            Scale = s;
+            UV = uv;
+        }
+
+        public Vector3 Position;
+        public float Scale;
+        public Vector2 UV;
+
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+            new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
+            new VertexElement(sizeof(float) * 3, VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 0),
+            new VertexElement(sizeof(float) * 4,VertexElementFormat.Vector2,VertexElementUsage.TextureCoordinate,1)
+        );
+
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+    };
+
+
+
+
+
 
 
 }

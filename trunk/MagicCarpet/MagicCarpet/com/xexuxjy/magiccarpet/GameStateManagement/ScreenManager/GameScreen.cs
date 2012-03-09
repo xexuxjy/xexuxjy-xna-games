@@ -317,7 +317,7 @@ namespace GameStateManagement
         /// is only called when the screen is active, and not when some other
         /// screen has taken the focus.
         /// </summary>
-        public virtual void HandleInput(InputState input) { }
+        public virtual void HandleInput(InputState input,GameTime gameTime) { }
 
 
         /// <summary>

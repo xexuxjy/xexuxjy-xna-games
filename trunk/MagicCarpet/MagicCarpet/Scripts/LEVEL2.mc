@@ -11,3 +11,5 @@ droprandommanaballs 10 0,0,0 20
 #setdebug player1
 setglobalplayer player1
 #camerafollow player1
+#mouseenable false
+cameraspeed 50

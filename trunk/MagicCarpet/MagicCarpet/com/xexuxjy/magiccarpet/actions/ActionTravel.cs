@@ -66,7 +66,7 @@ namespace com.xexuxjy.magiccarpet.actions
                     IndexedVector3 direction = targetPosition - currentPosition;
                     direction.Y = 0;
                     direction.Normalize();
-                    Owner.Direction = direction;
+                    Owner.Forward = direction;
                 }
             }
         }

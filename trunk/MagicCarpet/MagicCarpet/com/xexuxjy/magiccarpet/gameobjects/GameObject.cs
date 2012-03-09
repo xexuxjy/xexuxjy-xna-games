@@ -204,7 +204,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // movement here?
             if (Speed > 0)
             {
-                IndexedVector3 movement = Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                IndexedVector3 movement = Forward * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Position += movement;
             }
 
@@ -254,12 +254,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-
-            ICamera camera = Globals.Camera;
-
-            // only one of these should be active.
-
-            DrawEffect(Game.GraphicsDevice, camera.ViewMatrix, WorldTransform, camera.ProjectionMatrix);
+            DrawEffect(Game.GraphicsDevice, Globals.Camera.View, WorldTransform, Globals.Camera.Projection);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -423,10 +418,36 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public IndexedVector3 Direction
+        public IndexedVector3 Forward
         {
-            get { return m_direction; }
-            set { m_direction = value; }
+            get { return WorldTransform.Forward; }
+            set
+            {
+                IndexedVector3 forward = value;
+                forward.Normalize();
+                //Up.Normalize();
+
+                // Re-calculate Right
+                IndexedVector3 right = Vector3.Cross(forward, Up);
+
+                // The same instability may cause the 3 orientation vectors may
+                // also diverge. Either the Up or Direction vector needs to be
+                // re-computed with a cross product to ensure orthagonality
+                IndexedVector3 up = Vector3.Cross(right, forward);
+
+                IndexedBasisMatrix basis = new IndexedBasisMatrix(right, up, forward);
+                IndexedMatrix im = new IndexedMatrix();
+                im._basis = basis;
+                im._origin = Position;
+                WorldTransform = im;
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public IndexedVector3 Up
+        {
+            get { return WorldTransform.Up; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -812,7 +833,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+        public bool PlayerControlled
+        {
+            get { return m_playerControlled; }
+            set { m_playerControlled = value; }
+        }
 
 
         public ObjectArray<ThreatData> m_recentThreats = new ObjectArray<ThreatData>();
@@ -833,7 +858,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected IMotionState m_motionState;
         protected CollisionObject m_collisionObject;
 
-        protected IndexedVector3 m_direction;
         protected float m_speed;
         protected float m_targetSpeed;
 

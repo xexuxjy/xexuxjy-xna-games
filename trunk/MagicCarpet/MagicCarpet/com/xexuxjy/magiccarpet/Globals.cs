@@ -18,6 +18,7 @@ using GameStateManagement;
 using com.xexuxjy.magiccarpet.util.debug;
 using System.IO;
 using com.xexuxjy.magiccarpet.gui;
+using com.xexuxjy.magiccarpet.camera;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -124,15 +125,15 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Debug Text Positions
-        public static Vector3 DebugTextCamera = new Vector3(10, 10, 0);
-        public static Vector3 DebugTextFPS = new Vector3(10, 20, 0);
-        public static Vector3 DebugTextPlayer = new Vector3(10, 30, 0);
-        public static Vector3 DebugTextCollisionManager = new Vector3(10, 40, 0);
+        public static Vector3 DebugTextCamera = new Vector3(10, 400, 0);
+        public static Vector3 DebugTextFPS = new Vector3(10, 420, 0);
+        public static Vector3 DebugTextPlayer = new Vector3(10, 430, 0);
+        public static Vector3 DebugTextCollisionManager = new Vector3(10, 440, 0);
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public const int WorldWidth = 1024;//512;//1024;
+        public const int WorldWidth = 256;//512;//1024;
         public const int WorldHeight = 10;
 
         public static Vector3 worldMinPos = new Vector3(-WorldWidth/2, -WorldHeight, -WorldWidth/2);
@@ -144,6 +145,7 @@ namespace com.xexuxjy.magiccarpet
 
         public static Random s_random = null;
 
+        public static int DEBUG_DRAW_ORDER = 3;
         public static int GUI_DRAW_ORDER = 2;
         public static int TERRAIN_DRAW_ORDER = 1;
         public static int NORMAL_DRAW_ORDER = 1;
@@ -160,7 +162,7 @@ namespace com.xexuxjy.magiccarpet
                 SimpleConsole.Enabled = true;
                 if (Camera != null)
                 {
-                    Camera.DisableKeyboardInput();
+                    //Camera.DisableKeyboardInput();
                 }
             }
         }
@@ -172,7 +174,7 @@ namespace com.xexuxjy.magiccarpet
                 SimpleConsole.Enabled = false;
                 if (Camera != null)
                 {
-                    Camera.EnableKeyboardInput();
+                    //Camera.EnableKeyboardInput();
                 }
             }
 
@@ -182,7 +184,7 @@ namespace com.xexuxjy.magiccarpet
 
         public static Magician Player;
 
-        public static ICamera Camera;
+        public static ChaseCamera Camera;
         public static Terrain Terrain;
         public static IDebugDraw DebugDraw;
         public static CollisionManager CollisionManager;

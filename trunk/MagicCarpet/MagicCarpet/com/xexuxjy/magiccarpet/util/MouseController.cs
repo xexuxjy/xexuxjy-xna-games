@@ -4,19 +4,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.control;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.util
 {
     public class MouseController 
     {
-        public MouseController()
+        public MouseController(PlayerController playerController)
         {
-
+            m_playerController = playerController;
         }
 
         //----------------------------------------------------------------------------------------------
 
-        public void HandleInput(InputState inputState)
+        public void HandleInput(InputState inputState,GameTime gameTime)
         {
             if(!Globals.MouseEnabled)
             {
@@ -27,10 +29,43 @@ namespace com.xexuxjy.magiccarpet.util
             bool rightReleased = WasReleased(ref inputState.LastMouseState, ref inputState.CurrentMouseState, 2);
 
 
+            float pitchChange = inputState.CurrentMouseState.Y - inputState.LastMouseState.Y;
+            float yawChange = inputState.CurrentMouseState.X - inputState.LastMouseState.X;
+
+            if (!MathUtil.FuzzyZero(pitchChange))
+            {
+                if (pitchChange > 0)
+                {
+                    m_playerController.PitchUp(pitchChange);
+                }
+                else
+                {
+                    m_playerController.PitchDown(Math.Abs(pitchChange));
+                }
+            }
+
+            if (!MathUtil.FuzzyZero(yawChange))
+            {
+                if (yawChange > 0)
+                {
+                    m_playerController.YawRight(yawChange);
+                }
+                else
+                {
+                    m_playerController.YawLeft(Math.Abs(yawChange));
+                }
+            }
+
+            // recenter the mouse.
+            Rectangle clientBounds = Globals.Game.Window.ClientBounds;
+            Mouse.SetPosition(clientBounds.Width / 2, clientBounds.Height / 2);
+
+
+
             if ( leftReleased || rightReleased)
             {
                 IndexedVector3 startPos = Globals.Camera.Position;
-                IndexedVector3 direction = Globals.Camera.ViewDirection;
+                IndexedVector3 direction = Globals.Camera.ChaseDirection;
                 if(leftReleased)
                 {
                     if (Globals.Player != null)
@@ -56,7 +91,7 @@ namespace com.xexuxjy.magiccarpet.util
                     int rayLength = 100;
                     int normalLength = 10;
                     IndexedVector3 startPos = Globals.Camera.Position;
-                    IndexedVector3 direction = Globals.Camera.ViewDirection;
+                    IndexedVector3 direction = Globals.Camera.ChaseDirection;
                     IndexedVector3 endPos = startPos + (direction * rayLength);
 
                     IndexedVector3 collisionPoint = IndexedVector3.Zero;
@@ -71,7 +106,8 @@ namespace com.xexuxjy.magiccarpet.util
                         IndexedVector3 location = Globals.DebugTextCamera;
                         IndexedVector3 colour = new IndexedVector3(1, 1, 1);
 
-                        if (false && Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                        //if (false && Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                        if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
                         {
                             Globals.cameraHasGroundContact = true;
                             Globals.cameraGroundContactPoint = collisionPoint;
@@ -125,6 +161,7 @@ namespace com.xexuxjy.magiccarpet.util
         //}
 
 
-        bool m_invertY = false;
+        private bool m_invertY = false;
+        private PlayerController m_playerController;
     }
 }

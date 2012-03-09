@@ -16,17 +16,13 @@ uniform float WorldWidth;
 uniform float EdgeFog;
 uniform float4 ScaleFactor;
 uniform float4 FineTextureBlockOrigin;
-uniform float2 AlphaOffset;
-uniform float2 ViewerPos;
 uniform float  OneOverWidth;
 uniform float3 LightPosition;
 uniform float3 LightDirection;
 uniform float3 AmbientLight;
 uniform float3 DirectionalLight;
-uniform float3 AllowedRotDir;
 
 float4 BlockColor;
-float OneOverMaxExtents;
 float2 TerrainTextureWindow;
 
 bool FogEnabled;
@@ -56,8 +52,9 @@ struct VertexShaderOutput
 
 struct TreeVertexShaderInput
 {
-    vector pos        : POSITION;   
-    float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
+    float3 pos  : POSITION;
+	float scale : TEXCOORD0;   
+    float2 uv	: TEXCOORD1;  // coordinates for normal-map lookup
 };
 
 struct TreeVertexShaderOutput
@@ -138,8 +135,8 @@ float ComputeHeight(float2 uv:TEXCOORD0)
 	float numSamples = 9;
 	float sum1 = c+tl+l+bl+t;
 	float sum2 = b+tr+r+br;
-	//float result = (float)((sum1+sum2) / numSamples);
-	float result = c;
+	float result = (float)((sum1+sum2) / numSamples);
+	//float result = c;
 	
 	return result;
 }
@@ -214,11 +211,12 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float fogFactor = ComputeFogFactor(distanceFromCamera);
 
 	// do something funky as well to provide fog near the boundaries of the world.
+	/*
 	if( input.pos3d.x < EdgeFog || input.pos3d.x > WorldWidth - EdgeFog || input.pos3d.z < EdgeFog || input.pos3d.z > WorldWidth - EdgeFog)
 	{
 		fogFactor = 1.0;
 	}
-
+	*/
 	result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
 
@@ -232,29 +230,27 @@ TreeVertexShaderOutput TreeVertexShaderFunction(TreeVertexShaderInput input)
 {
 	TreeVertexShaderOutput output;
 	float3 worldPos = input.pos;
+	float2 worldPos2 = float2(input.pos.x,input.pos.z);
+	float scale = input.scale;
                      
     // compute coordinates for vertex texture
     //  FineBlockOrig.xy: 1/(w, h) of texture (texelwidth)
-    float2 uv = float2((worldPos)*FineTextureBlockOrigin.xy);
-    float height = ComputeHeight(uv);
+    //float2 uv = float2(worldPos.x + WorldWidth/2,worldPos.z+WorldWidth/2) * FineTextureBlockOrigin.x;
+   
 
-	worldPos = float3(worldPos.x, height,worldPos.z);
+    float2 uv = float2((worldPos2)*FineTextureBlockOrigin.xy);
+    //float height = ComputeHeight(uv);
 
-	float3 center = mul(worldPos, WorldMatrix);
-    float3 eyeVector = center - CameraPosition;
-    float3 upVector = AllowedRotDir;
-    upVector = normalize(upVector);
-    float3 sideVector = cross(eyeVector,upVector);
-    sideVector = normalize(sideVector);
-    float3 finalPosition = center;
-    finalPosition += (input.uv.x-0.5f)*sideVector;
-    finalPosition += (1.5f-input.uv.y*1.5f)*upVector;
+	
+	float height = ComputeHeight(uv);
 
-    float4 finalPosition4 = float4(finalPosition, 1);
-    float4x4 preViewProjection = mul (ViewMatrix, ProjMatrix);
+	
 
-//    output.pos = mul(float4(worldPos.x, height,worldPos.y, 1), WorldViewProjMatrix);
-	output.pos = mul(finalPosition4, preViewProjection);
+	worldPos = float3(worldPos.x, worldPos.y + height,worldPos.z);
+
+	float3 adjustedPos = float3(worldPos.x,worldPos.y + height,worldPos.z);
+
+	output.pos = mul(float4(adjustedPos,1), WorldViewProjMatrix);
 	output.pos3d = output.pos;
     output.uv= input.uv;
 
@@ -271,14 +267,15 @@ float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 	float fogFactor = ComputeFogFactor(distanceFromCamera);
-
+	/*
 	// do something funky as well to provide fog near the boundaries of the world.
 	if( input.pos3d.x < EdgeFog || input.pos3d.x > WorldWidth - EdgeFog || input.pos3d.z < EdgeFog || input.pos3d.z > WorldWidth - EdgeFog)
 	{
 		fogFactor = 1.0;
 	}
+	*/
+	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
-	result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
     return result;
 }

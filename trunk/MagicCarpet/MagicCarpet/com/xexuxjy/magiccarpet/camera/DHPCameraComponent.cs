@@ -542,6 +542,10 @@ namespace Dhpoware
                         end = collisionPoint + normalPushBack;
                     }
                 }
+
+                // wrap around?
+                Globals.Terrain.ClampToTerrain(ref end);
+
             }
         }
 
@@ -1145,7 +1149,6 @@ namespace Dhpoware
             }
         }
 
-
     #endregion
     }
 
@@ -1261,8 +1264,8 @@ namespace Dhpoware
         public CameraComponent(Game game) : base(game)
         {
             camera = new Camera();
-            camera.CurrentBehavior = Camera.Behavior.Spectator;
-
+            //camera.CurrentBehavior = Camera.Behavior.Spectator;
+            camera.CurrentBehavior = Camera.Behavior.FirstPerson;
             movingAlongPosX = false;
             movingAlongNegX = false;
             movingAlongPosY = false;
@@ -2073,7 +2076,7 @@ namespace Dhpoware
                     if (FollowTarget != null)
                     {
                         IndexedVector3 targetPosition = FollowTarget.Position;
-                        IndexedVector3 targetFacing = FollowTarget.Direction;
+                        IndexedVector3 targetFacing = FollowTarget.Forward;
                         if (targetFacing.LengthSquared() > 0)
                         {
                             //IndexedVector3 
@@ -2345,7 +2348,7 @@ namespace Dhpoware
                 if (m_followTarget != null)
                 {
                     IndexedVector3 targetPosition = FollowTarget.Position;
-                    IndexedVector3 targetFacing = FollowTarget.Direction;
+                    IndexedVector3 targetFacing = FollowTarget.Forward;
                     if (targetFacing.LengthSquared() == 0)
                     {
                         targetFacing = new IndexedVector3(0, 0, -1);

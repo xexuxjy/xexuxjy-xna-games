@@ -45,7 +45,7 @@ namespace com.xexuxjy.magiccarpet.collision
             m_dynamicsWorld.GetBroadphase().GetOverlappingPairCache().SetInternalGhostPairCallback(m_ghostPairCallback);	// Needed once to enable ghost objects inside Bullet
 
 
-            DrawOrder = Globals.GUI_DRAW_ORDER;
+            DrawOrder = Globals.DEBUG_DRAW_ORDER;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -63,6 +63,7 @@ namespace com.xexuxjy.magiccarpet.collision
             if (Globals.DebugDraw != null)
             {
                 m_dynamicsWorld.SetDebugDrawer(Globals.DebugDraw);
+
             }
         }
 
@@ -296,8 +297,8 @@ namespace com.xexuxjy.magiccarpet.collision
                 int numObjects = m_dynamicsWorld.GetNumCollisionObjects();
                 IndexedVector3 wireColor = new IndexedVector3(1, 0, 0);
 
-                IndexedMatrix view = Globals.Camera.ViewMatrix;
-                IndexedMatrix projection = Globals.Camera.ProjectionMatrix;
+                IndexedMatrix view = Globals.Camera.View;
+                IndexedMatrix projection = Globals.Camera.Projection;
 
 
                 for (int i = 0; i < numObjects; i++)
