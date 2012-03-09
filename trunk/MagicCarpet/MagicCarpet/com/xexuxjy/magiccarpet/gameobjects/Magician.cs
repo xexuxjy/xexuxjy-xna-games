@@ -9,6 +9,7 @@ using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.magiccarpet.combat;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.manager;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -17,7 +18,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public Magician(Vector3 startPosition)
             : base(startPosition, GameObjectType.magician)
         {
-            PlayerControlled = true;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +34,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            PlayerControlled = true;
+            m_scaleTransform = IndexedMatrix.CreateScale(0.2f);
+
+        }
 
         public SpellType SelectedSpell1
         {
@@ -75,6 +82,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     QueueAction(Globals.ActionPool.GetActionIdle(this));
                 }
             }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -94,6 +94,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Initialize()
         {
             m_scaleTransform = IndexedMatrix.Identity;
+            m_modelTransform = IndexedMatrix.Identity;
+
             m_actionComponent = new ActionComponent(this);
             m_actionComponent.Initialize();
 
@@ -106,6 +108,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             SetStartAttributes();
 
             DrawOrder = Globals.NORMAL_DRAW_ORDER;
+
+
 
             base.Initialize();
         }
@@ -190,9 +194,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Update(gameTime);
 
-            m_actionComponent.Update(gameTime);
+            if (m_actionComponent != null)
+            {
+                m_actionComponent.Update(gameTime);
+            }
 
-            m_spellComponent.Update(gameTime);
+            if (m_spellComponent != null)
+            {
+                m_spellComponent.Update(gameTime);
+            }
 
             // no acceleration)
             if (!MathUtil.CompareFloat(TargetSpeed, Speed))
@@ -209,12 +219,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
             // no health left so die.
-            if (Health <= 0.0f)
+            if (!IsAlive())
             {
                 Die();
             }
-
-
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -231,7 +239,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             if (!m_awaitingRemoval)
             {
                 Owner = null;
-                Globals.GameObjectManager.RemoveGameObject(this);
+                Globals.GameObjectManager.RemoveObject(this);
                 m_awaitingRemoval = true;
             }
         }
@@ -423,23 +431,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             get { return WorldTransform.Forward; }
             set
             {
-                IndexedVector3 forward = value;
-                forward.Normalize();
-                //Up.Normalize();
-
-                // Re-calculate Right
-                IndexedVector3 right = Vector3.Cross(forward, Up);
-
-                // The same instability may cause the 3 orientation vectors may
-                // also diverge. Either the Up or Direction vector needs to be
-                // re-computed with a cross product to ensure orthagonality
-                IndexedVector3 up = Vector3.Cross(right, forward);
-
-                IndexedBasisMatrix basis = new IndexedBasisMatrix(right, up, forward);
-                IndexedMatrix im = new IndexedMatrix();
-                im._basis = basis;
-                im._origin = Position;
-                WorldTransform = im;
+                IndexedMatrix m = WorldTransform;
+                m._basis.SetNewForward(value);
+                WorldTransform = m;
             }
         }
 
@@ -875,7 +869,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected bool m_stickToGround = true;
         protected Matrix[] m_boneTransforms;
-
+        protected IndexedMatrix m_modelTransform;
 
         public static int s_idCounter = 0;
     }

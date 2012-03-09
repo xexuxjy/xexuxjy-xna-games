@@ -2,14 +2,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA.LinearMath;
 using GameStateManagement;
+using com.xexuxjy.magiccarpet.gameobjects;
 namespace com.xexuxjy.magiccarpet.util.debug
 {
     /// <summary>
     ///  Provides a base for the different debug window type classes (profiler, console, etc)
     /// </summary>
-    public class DebugWindow : DrawableGameComponent
+    public class DebugWindow : EmptyGameObject
     {
-        public DebugWindow(string id,Game game,IDebugDraw debugDraw) : base(game)
+        public DebugWindow(string id,IDebugDraw debugDraw)
+            : base(GameObjectType.gui)
+
         {
             Id = id;
             m_debugDraw = debugDraw;

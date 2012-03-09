@@ -43,7 +43,8 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_modelDictionary[GameObjectType.monster] = m_contentManager.Load<Model>("unitcone");
 
-            m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("unitcylinder");
+            //m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("unitcylinder");
+            m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("Models/Magician/magician");
 
 
             Model m = m_contentManager.Load<Model>("Models/SkyDome/skydome");

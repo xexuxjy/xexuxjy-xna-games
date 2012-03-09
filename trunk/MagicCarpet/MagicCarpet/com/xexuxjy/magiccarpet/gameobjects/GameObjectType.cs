@@ -19,6 +19,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         terrain=128,
         camera=256,
         skydome=512,
+        gui=1024,
+        manager = 2048,
         NUMTYPES
     }
 }

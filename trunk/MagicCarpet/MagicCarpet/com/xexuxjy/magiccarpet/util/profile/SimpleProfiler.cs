@@ -12,14 +12,14 @@ namespace com.xexuxjy.magiccarpet.util.profile
 {
     public class SimpleProfiler : DebugWindow
     {
-        public SimpleProfiler(Game game, bool millisecondTimer, IDebugDraw debugDraw)
-            : base("SimpleProfiler", game,debugDraw)
+        public SimpleProfiler(bool millisecondTimer, IDebugDraw debugDraw)
+            : base("SimpleProfiler", debugDraw)
         {
             m_millisecondTimer = millisecondTimer;
             m_profileDictionary = new Dictionary<string, ProfileInformation>();
             m_profileDictionary[m_totalID] = new ProfileInformation(m_totalID,m_millisecondTimer);
 
-            m_texture = new Texture2D(game.GraphicsDevice, s_textureWidth, s_textureHeight);
+            m_texture = new Texture2D(Globals.Game.GraphicsDevice, s_textureWidth, s_textureHeight);
             ScreenPosition = new Vector2(0, 30);
         }
 

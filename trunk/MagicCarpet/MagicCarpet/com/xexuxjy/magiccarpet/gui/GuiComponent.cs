@@ -22,6 +22,11 @@ namespace com.xexuxjy.magiccarpet.gui
         {
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            // empty on purpose.
+        }
+
         public bool HasGuiControl
         {
             get{return m_hasGuiControl;}

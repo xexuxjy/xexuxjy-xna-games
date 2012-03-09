@@ -12,8 +12,8 @@ namespace com.xexuxjy.magiccarpet.util.debug
     public class DebugObjectManager : DebugWindow
     {
 
-        public DebugObjectManager(Game game, IDebugDraw debugDraw)
-            : base("DebugObjectManager", game,debugDraw)
+        public DebugObjectManager(IDebugDraw debugDraw)
+            : base("DebugObjectManager", debugDraw)
         {
 
         }
