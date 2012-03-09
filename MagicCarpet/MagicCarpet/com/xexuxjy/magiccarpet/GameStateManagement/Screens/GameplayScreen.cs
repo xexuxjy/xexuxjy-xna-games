@@ -59,6 +59,11 @@ namespace GameStateManagement
         /// </summary>
         public override void LoadContent()
         {
+
+            Globals.GameObjectManager = new GameObjectManager(this);
+            //Globals.GameObjectManager.AddAndInitializeObject(Globals.GameObjectManager);
+
+
             Globals.LoadConfig();
 
             if (m_content == null)
@@ -72,13 +77,14 @@ namespace GameStateManagement
 
 
             ChaseCamera camera = new ChaseCamera();
-            
+            //make it a very rigid camera
+            camera.Mass = 50f;
+
             // stop camera going through terrain?
             camera.ClipToWorld = true;
             camera.ChasePosition = new Vector3(0, 5, 0);
             
             Globals.Camera = camera;
-
             Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
 
 
@@ -91,26 +97,23 @@ namespace GameStateManagement
             }
 
             Globals.CollisionManager = new CollisionManager(Globals.worldMinPos, Globals.worldMaxPos);
-            AddComponent(Globals.CollisionManager);
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager);
 
-            Globals.GameObjectManager = new GameObjectManager(this);
-            AddComponent(Globals.GameObjectManager);
 
             Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
             Globals.SimpleConsole.Enabled = false;
-            AddComponent(Globals.SimpleConsole);
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole);
 
 
             Globals.MCContentManager = new MCContentManager();
             Globals.MCContentManager.Initialize();
 
-            Globals.DebugObjectManager = new DebugObjectManager(ScreenManager.Game, Globals.DebugDraw);
+            Globals.DebugObjectManager = new DebugObjectManager(Globals.DebugDraw);
             Globals.DebugObjectManager.Enabled = true;
-            AddComponent(Globals.DebugObjectManager);
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.DebugObjectManager);
 
 
             Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain,Vector3.Zero);
-            AddComponent(Globals.Terrain);
 
             Globals.ActionPool = new ActionPool();
 
@@ -119,10 +122,10 @@ namespace GameStateManagement
             //Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
             //Globals.DebugObjectManager.DebugObject = Globals.Player;
 
-            AddComponent(camera);
+            Globals.GameObjectManager.AddAndInitializeObject(camera);
 
 
-            AddComponent(new SkyDome(),true);
+            Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
 
 
             m_playerHud = new PlayerHud(this);
@@ -173,10 +176,7 @@ namespace GameStateManagement
 
             if (IsActive)
             {
-                foreach (GameComponent gameComponent in m_componentCollection)
-                {
-                    gameComponent.Update(gameTime);
-                }
+                Globals.GameObjectManager.Update(gameTime);
             }
 
             if (Globals.s_initialScript != null && !loadedInitialScript)
@@ -228,11 +228,7 @@ namespace GameStateManagement
             Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
             Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            foreach (IDrawable drawable in m_drawableList)
-            {
-                drawable.Draw(gameTime);
-            }
-
+            Globals.GameObjectManager.Draw(gameTime);
 
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0 || pauseAlpha > 0)
@@ -243,45 +239,37 @@ namespace GameStateManagement
             }
         }
 
+        //public void AddComponent(GameComponent gameComponent)
+        //{
+        //    AddComponent(gameComponent, false);
+        //}
 
-        static Comparison<IDrawable> drawComparator = new Comparison<IDrawable>(DrawableSortPredicate);
-        private static int DrawableSortPredicate(IDrawable lhs, IDrawable rhs)
-        {
-            int result = lhs.DrawOrder - rhs.DrawOrder ;
-            return result;
-        }
+        //public void AddComponent(GameComponent gameComponent,bool initialise)
+        //{
+        //    if (initialise)
+        //    {
+        //        gameComponent.Initialize();
+        //    }
 
-        public void AddComponent(GameComponent gameComponent)
-        {
-            AddComponent(gameComponent, false);
-        }
+        //    m_componentCollection.Add(gameComponent);
+        //    IDrawable drawable = gameComponent as IDrawable;
+        //    if (drawable != null)
+        //    {
+        //        m_drawableList.Add(drawable);
+        //        m_drawableList.Sort(drawComparator);
+        //    }
 
-        public void AddComponent(GameComponent gameComponent,bool initialise)
-        {
-            if (initialise)
-            {
-                gameComponent.Initialize();
-            }
+        //}
 
-            m_componentCollection.Add(gameComponent);
-            IDrawable drawable = gameComponent as IDrawable;
-            if (drawable != null)
-            {
-                m_drawableList.Add(drawable);
-                m_drawableList.Sort(drawComparator);
-            }
-
-        }
-
-        public void RemoveComponent(GameComponent gameComponent)
-        {
-            m_componentCollection.Remove(gameComponent);
-            IDrawable drawable = gameComponent as IDrawable;
-            if (drawable != null)
-            {
-                m_drawableList.Remove(drawable);
-            }
-        }
+        //public void RemoveComponent(GameComponent gameComponent)
+        //{
+        //    m_componentCollection.Remove(gameComponent);
+        //    IDrawable drawable = gameComponent as IDrawable;
+        //    if (drawable != null)
+        //    {
+        //        m_drawableList.Remove(drawable);
+        //    }
+        //}
 
 
 
@@ -293,10 +281,6 @@ namespace GameStateManagement
         SpriteFont m_gameFont;
 
         DebugDrawModes m_debugDrawMode;
-
-        GameComponentCollection m_componentCollection = new GameComponentCollection();
-        List<IDrawable> m_drawableList = new List<IDrawable>();
-        //List<GuiComponent> m_guiComponents = new List<GuiComponent>();
 
         static bool loadedInitialScript = false;
 

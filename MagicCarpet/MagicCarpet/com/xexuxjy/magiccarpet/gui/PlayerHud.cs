@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using GameStateManagement;
-using BulletXNADemos.Demos;
+using com.xexuxjy.magiccarpet.gameobjects;
+using com.xexuxjy.util.debug;
 
 namespace com.xexuxjy.magiccarpet.gui
 {
-    public class PlayerHud : DrawableGameComponent
+    public class PlayerHud : GameObject
     {
-        public PlayerHud(GameplayScreen gamePlayScreen) : base(Globals.Game)
+        public PlayerHud(GameplayScreen gamePlayScreen) : base(GameObjectType.gui)
         {
             m_gamePlayScreen = gamePlayScreen;
             m_guiComponents = new List<GuiComponent>(10);
@@ -23,8 +22,8 @@ namespace com.xexuxjy.magiccarpet.gui
             // after init so we get the right draw order.
             DrawOrder = Globals.GUI_DRAW_ORDER;
 
-            m_gamePlayScreen.AddComponent(new FrameRateCounter(Globals.Game, Globals.DebugTextFPS, Globals.DebugDraw));
-            m_gamePlayScreen.AddComponent(this);
+            Globals.GameObjectManager.AddAndInitializeObject(new FrameRateCounter(Globals.DebugTextFPS, Globals.DebugDraw));
+            Globals.GameObjectManager.AddAndInitializeObject(this);
 
             int inset = 10;
 

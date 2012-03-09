@@ -70,7 +70,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
                 Spell spell = Globals.SpellPool.CreateSpell(spellType, m_owner);
 
-                Globals.GameObjectManager.AddGameObject(spell);
+                Globals.GameObjectManager.AddAndInitializeObject(spell,false);
 
                 spell.Initialize(template);
                 

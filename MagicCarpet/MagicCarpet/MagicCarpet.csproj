@@ -148,6 +148,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\control\PlayerController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\EmptyGameObject.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Monster.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\ScreenManager\GameScreen.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\ScreenManager\InputState.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugTextBuilder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugWindow.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\debug\FrameRateCounter.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\IDebuggable.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\EventLogger.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\FractalUtil.cs" />

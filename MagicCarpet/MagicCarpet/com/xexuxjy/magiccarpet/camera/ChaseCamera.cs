@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.gameobjects;
+using BulletXNA.LinearMath;
 
 //-----------------------------------------------------------------------------
 // Based on.
@@ -13,10 +14,10 @@ using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.camera
 {
-    public class ChaseCamera : GameComponent
+    public class ChaseCamera : EmptyGameObject
     {
         public ChaseCamera()
-            : base(Globals.Game)
+            : base(GameObjectType.camera)
         {
         }
 
@@ -25,32 +26,32 @@ namespace com.xexuxjy.magiccarpet.camera
         /// <summary>
         /// Position of object being chased.
         /// </summary>
-        public Vector3 ChasePosition
+        public IndexedVector3 ChasePosition
         {
             get { return chasePosition; }
             set { chasePosition = value; }
         }
-        private Vector3 chasePosition;
+        private IndexedVector3 chasePosition;
 
         /// <summary>
         /// Direction the chased object is facing.
         /// </summary>
-        public Vector3 ChaseDirection
+        public IndexedVector3 ChaseDirection
         {
             get { return chaseDirection; }
             set { chaseDirection = value; }
         }
-        private Vector3 chaseDirection;
+        private IndexedVector3 chaseDirection;
 
         /// <summary>
         /// Chased object's Up vector.
         /// </summary>
-        public Vector3 Up
+        public IndexedVector3 Up
         {
             get { return up; }
             set { up = value; }
         }
-        private Vector3 up = Vector3.Up;
+        private IndexedVector3 up = IndexedVector3.Up;
 
         #endregion
 
@@ -59,17 +60,17 @@ namespace com.xexuxjy.magiccarpet.camera
         /// <summary>
         /// Desired camera position in the chased object's coordinate system.
         /// </summary>
-        public Vector3 DesiredPositionOffset
+        public IndexedVector3 DesiredPositionOffset
         {
             get { return desiredPositionOffset; }
             set { desiredPositionOffset = value; }
         }
-        private Vector3 desiredPositionOffset = new Vector3(0, 2.0f, 2.0f);
+        private IndexedVector3 desiredPositionOffset = new IndexedVector3(0, 0.5f, -2.0f);
 
         /// <summary>
         /// Desired camera position in world space.
         /// </summary>
-        public Vector3 DesiredPosition
+        public IndexedVector3 DesiredPosition
         {
             get
             {
@@ -79,22 +80,22 @@ namespace com.xexuxjy.magiccarpet.camera
                 return desiredPosition;
             }
         }
-        private Vector3 desiredPosition;
+        private IndexedVector3 desiredPosition;
 
         /// <summary>
         /// Look at point in the chased object's coordinate system.
         /// </summary>
-        public Vector3 LookAtOffset
+        public IndexedVector3 LookAtOffset
         {
             get { return lookAtOffset; }
             set { lookAtOffset = value; }
         }
-        private Vector3 lookAtOffset = new Vector3(0, 2.8f, 0);
+        private IndexedVector3 lookAtOffset = new IndexedVector3(0, 0, 4);
 
         /// <summary>
         /// Look at point in world space.
         /// </summary>
-        public Vector3 LookAt
+        public IndexedVector3 LookAt
         {
             get
             {
@@ -104,7 +105,7 @@ namespace com.xexuxjy.magiccarpet.camera
                 return lookAt;
             }
         }
-        private Vector3 lookAt;
+        private IndexedVector3 lookAt;
 
         #endregion
 
@@ -151,23 +152,23 @@ namespace com.xexuxjy.magiccarpet.camera
         /// <summary>
         /// Position of camera in world space.
         /// </summary>
-        public Vector3 Position
+        public IndexedVector3 Position
         {
             get { return position; }
         }
-        private Vector3 position;
+        private IndexedVector3 position;
 
         /// <summary>
         /// Velocity of camera.
         /// </summary>
-        public Vector3 Velocity
+        public IndexedVector3 Velocity
         {
             get { return velocity; }
         }
-        private Vector3 velocity;
+        private IndexedVector3 velocity;
 
 
-        public Vector3 MaxVelocity
+        public IndexedVector3 MaxVelocity
         {
             get{return maxVelocity;}
             set
@@ -176,7 +177,7 @@ namespace com.xexuxjy.magiccarpet.camera
             }
         }
 
-        Vector3 maxVelocity;
+        IndexedVector3 maxVelocity;
         #endregion
 
 
@@ -274,16 +275,14 @@ namespace com.xexuxjy.magiccarpet.camera
         private void UpdateWorldPositions()
         {
             // Construct a matrix to transform from object space to worldspace
-            Matrix transform = Matrix.Identity;
+            IndexedBasisMatrix transform = IndexedBasisMatrix.Identity;
             transform.Forward = ChaseDirection;
             transform.Up = Up;
-            transform.Right = Vector3.Cross(Up, ChaseDirection);
+            transform.Right = IndexedVector3.Cross(Up, ChaseDirection);
 
             // Calculate desired camera properties in world space
-            desiredPosition = ChasePosition +
-                Vector3.TransformNormal(DesiredPositionOffset, transform);
-            lookAt = ChasePosition +
-                Vector3.TransformNormal(LookAtOffset, transform);
+            desiredPosition = ChasePosition +(DesiredPositionOffset * transform);
+            lookAt = ChasePosition + (LookAtOffset * transform);
         }
 
         /// <summary>
@@ -307,7 +306,7 @@ namespace com.xexuxjy.magiccarpet.camera
             UpdateWorldPositions();
 
             // Stop motion
-            velocity = Vector3.Zero;
+            velocity = IndexedVector3.Zero;
 
             // Force desired position
             position = desiredPosition;
@@ -320,7 +319,7 @@ namespace com.xexuxjy.magiccarpet.camera
         /// behind the chased object. The camera's animation is controlled by a simple
         /// physical spring attached to the camera and anchored to the desired position.
         /// </summary>
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (gameTime == null)
                 throw new ArgumentNullException("gameTime");
@@ -330,15 +329,17 @@ namespace com.xexuxjy.magiccarpet.camera
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Calculate spring force
-            Vector3 stretch = position - desiredPosition;
-            Vector3 force = -stiffness * stretch - damping * velocity;
+            IndexedVector3 stretch = position - desiredPosition;
+            IndexedVector3 force = -stiffness * stretch - damping * velocity;
 
             // Apply acceleration
-            Vector3 acceleration = force / mass;
+            IndexedVector3 acceleration = force / mass;
             velocity += acceleration * elapsed;
 
             // Apply velocity
             position += velocity * elapsed;
+
+            position = desiredPosition;
 
             UpdateMatrices();
         }

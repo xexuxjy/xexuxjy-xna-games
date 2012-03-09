@@ -27,10 +27,17 @@ namespace com.xexuxjy.magiccarpet.control
 
         public virtual void HandleInput(InputState inputState,GameTime gameTime)
         {
+            // reset values?
+            m_currentTranslation = IndexedVector3.Zero;
+
             m_mouseController.HandleInput(inputState,gameTime);
             m_keyboardController.HandleInput(inputState,gameTime);
             m_playerHud.HandleInput(inputState);
             //Globals.Camera.HandleInput(inputState);
+
+            // reset to test
+            m_currentYaw = 0;
+            m_currentPitch = 0;
 
 
             if (inputState.IsNewButtonPress(Buttons.Y))
@@ -44,10 +51,17 @@ namespace com.xexuxjy.magiccarpet.control
                 Globals.Player.PlayerControlled = true;
 
 
-                Matrix im = Globals.Player.WorldTransform;
-                Vector3 Up = im.Up;
-                Vector3 Right = im.Right;
-                Vector3 Forward = im.Forward;
+                // adjust position.
+                // need to convert the absolute movements into player relative ones.
+
+                IndexedMatrix im = Globals.Player.WorldTransform;
+                IndexedVector3 up = im.Up;
+                IndexedVector3 right = im.Right;
+                IndexedVector3 forward = im.Forward;
+                IndexedVector3 position = im._origin;
+
+                IndexedVector3 relativeMovement = (right * m_currentTranslation.X) + (up * m_currentTranslation.Y) + (forward * m_currentTranslation.Z);
+
 
                 // Update camera etc?
                 // Correct the X axis steering when the ship is upside down
@@ -58,40 +72,45 @@ namespace com.xexuxjy.magiccarpet.control
 
 
                 // Create rotation matrix from rotation amount
-                Matrix rotationMatrix =
-                    Matrix.CreateFromAxisAngle(Right, m_currentPitch) *
-                    Matrix.CreateRotationY(m_currentYaw);
+                IndexedBasisMatrix rotationMatrix = IndexedBasisMatrix.CreateFromAxisAngle(right, m_currentPitch) *
+                    IndexedBasisMatrix.CreateRotationY(m_currentYaw);
+
 
                 // Rotate orientation vectors
-                Vector3 Direction = Vector3.TransformNormal(Forward, rotationMatrix);
-                Up = Vector3.TransformNormal(Up, rotationMatrix);
+                IndexedVector3 direction = forward * rotationMatrix;
+                up = up * rotationMatrix;
 
                 // Re-normalize orientation vectors
                 // Without this, the matrix transformations may introduce small rounding
                 // errors which add up over time and could destabilize the ship.
-                Direction.Normalize();
-                Up.Normalize();
+                direction.Normalize();
+                up.Normalize();
 
                 // Re-calculate Right
-                Right = Vector3.Cross(Direction, Up);
+                right = IndexedVector3.Cross(direction, up);
 
                 // The same instability may cause the 3 orientation vectors may
                 // also diverge. Either the Up or Direction vector needs to be
                 // re-computed with a cross product to ensure orthagonality
-                Up = Vector3.Cross(Right, Direction);
+                up = Vector3.Cross(right, direction);
 
-                Matrix world = Matrix.Identity;
-                world.Forward = Direction;
-                world.Up = Up;
-                world.Right = Right;
+                IndexedMatrix world = Matrix.Identity;
+                world._basis = new IndexedBasisMatrix(right, up, forward);
+                world._origin = position + relativeMovement;
 
-                Globals.Player.WorldTransform = world;
+                //Globals.Player.WorldTransform = world;
+                Globals.Player.Position += relativeMovement;
 
 
+
+
+                //Globals.Camera.ChasePosition = Globals.Player.Position;
+                //Globals.Camera.ChaseDirection = Globals.Player.Forward;
+                //Globals.Camera.Up = Globals.Player.Up;
                 Globals.Camera.ChasePosition = Globals.Player.Position;
                 Globals.Camera.ChaseDirection = Globals.Player.Forward;
                 Globals.Camera.Up = Globals.Player.Up;
-
+                int ibreak = 0;
             }
         
         
@@ -102,34 +121,37 @@ namespace com.xexuxjy.magiccarpet.control
 
         public void StepForward(float amount)
         {
-
+            m_currentTranslation.Z -= amount;
         }
 
         public void StepBackward(float amount)
         {
+            m_currentTranslation.Z += amount;
 
         }
 
         public void StepLeft(float amount)
         {
+            m_currentTranslation.X -= amount;
 
         }
 
         public void StepRight(float amount)
         {
+            m_currentTranslation.X += amount;
 
         }
 
         public void StepUp(float amount)
         {
+            m_currentTranslation.Y += amount;
 
         }
 
         public void StepDown(float amount)
         {
-
+            m_currentTranslation.Y -= amount;
         }
-
 
         public void YawLeft(float amount)
         {
@@ -157,6 +179,8 @@ namespace com.xexuxjy.magiccarpet.control
 
         private float m_currentYaw;
         private float m_currentPitch;
+        private Vector3 m_currentTranslation;
+
 
         private PlayerHud m_playerHud;
         private MouseController m_mouseController;

@@ -83,8 +83,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
             if (gameObject != null)
             {
-                AddGameObject(gameObject);
-                gameObject.Initialize();
+                AddAndInitializeObject(gameObject,true);
             }
 
             if (properties != null)
@@ -98,20 +97,31 @@ namespace com.xexuxjy.magiccarpet.manager
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void AddGameObject(GameObject gameObject)
+        public void AddAndInitializeObject(GameObject gameObject)
         {
+            AddAndInitializeObject(gameObject, false);
+        }
+
+        public void AddAndInitializeObject(GameObject gameObject,bool initialize)
+        {
+            if (initialize)
+            {
+                gameObject.Initialize();
+            }
             m_gameObjectListAdd.Add(gameObject);
 
+            m_drawableList.Add(gameObject);
+            m_drawableList.Sort(drawComparator);
 
 #if LOG_EVENT
-            Globals.EventLogger.LogEvent(String.Format("AddObject[{0}][{1}].", gameObject.Id, gameObject.GameObjectType));
+                Globals.EventLogger.LogEvent(String.Format("AddObject[{0}][{1}].", gameObject.Id, gameObject.GameObjectType));
 #endif
- 
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void RemoveGameObject(GameObject gameObject)
+        public void RemoveObject(GameObject gameObject)
         {
             m_gameObjectListRemove.Add(gameObject);
 #if LOG_EVENT
@@ -146,6 +156,19 @@ namespace com.xexuxjy.magiccarpet.manager
 
             foreach (GameObject removedGameObject in m_gameObjectListRemove)
             {
+                RemoveObjectInternal(removedGameObject);
+            }
+
+            m_gameObjectListRemove.Clear();
+    
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void RemoveObjectInternal(GameObject removedGameObject)
+        {
+            if (removedGameObject != null)
+            {
                 // cleanup may already have been called.
                 if (removedGameObject.Owner != null)
                 {
@@ -154,14 +177,15 @@ namespace com.xexuxjy.magiccarpet.manager
                 removedGameObject.Cleanup();
                 Globals.CollisionManager.RemoveFromWorld(removedGameObject.CollisionObject);
                 m_gameObjectList.Remove(removedGameObject);
+
                 foreach (GameObject gameObject in m_gameObjectList)
                 {
                     gameObject.WorldObjectRemoved(removedGameObject);
                 }
             }
-            m_gameObjectListRemove.Clear();
-    
         }
+
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -352,9 +376,30 @@ namespace com.xexuxjy.magiccarpet.manager
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private ObjectArray<GameObject> m_gameObjectListAdd = new ObjectArray<GameObject>();
-        private ObjectArray<GameObject> m_gameObjectList = new ObjectArray<GameObject>();
-        private ObjectArray<GameObject> m_gameObjectListRemove = new ObjectArray<GameObject>();
+        public override void Draw(GameTime gameTime)
+        {
+            foreach (IDrawable drawable in m_drawableList)
+            {
+                drawable.Draw(gameTime);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        static Comparison<IDrawable> drawComparator = new Comparison<IDrawable>(DrawableSortPredicate);
+        private static int DrawableSortPredicate(IDrawable lhs, IDrawable rhs)
+        {
+            int result = lhs.DrawOrder - rhs.DrawOrder;
+            return result;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private List<GameObject> m_gameObjectListAdd = new List<GameObject>();
+        private List<GameObject> m_gameObjectList = new List<GameObject>();
+        private List<GameObject> m_gameObjectListRemove = new List<GameObject>();
+        private List<IDrawable> m_drawableList = new List<IDrawable>();
+
         private GameplayScreen m_gameplayScreen;
         public const GameObjectType m_allActiveObjectTypes = GameObjectType.spell | GameObjectType.manaball | GameObjectType.balloon | GameObjectType.castle | GameObjectType.magician | GameObjectType.monster;
 

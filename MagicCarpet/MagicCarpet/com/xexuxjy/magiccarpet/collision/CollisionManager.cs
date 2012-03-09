@@ -14,10 +14,10 @@ using com.xexuxjy.magiccarpet.gameobjects;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
-    public class CollisionManager : DrawableGameComponent
+    public class CollisionManager : EmptyGameObject
     {
         public CollisionManager(IndexedVector3 worldMin, IndexedVector3 worldMax)
-            : base(Globals.Game)
+            : base(GameObjectType.manager)
         {
             //game.Components.Add(this);
             m_collisionConfiguration = new DefaultCollisionConfiguration();
