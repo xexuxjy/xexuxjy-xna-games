@@ -17,6 +17,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public Magician(Vector3 startPosition)
             : base(startPosition, GameObjectType.magician)
         {
+            PlayerControlled = true;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

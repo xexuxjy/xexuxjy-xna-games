@@ -27,6 +27,8 @@ using System.Collections.Generic;
 using com.xexuxjy.magiccarpet.util.console;
 using com.xexuxjy.magiccarpet.util.debug;
 using com.xexuxjy.magiccarpet.gui;
+using com.xexuxjy.magiccarpet.control;
+using com.xexuxjy.magiccarpet.camera;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
@@ -64,22 +66,16 @@ namespace GameStateManagement
                 m_content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
 
-            m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
-
+            //m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
+            m_debugDrawMode = DebugDrawModes.ALL;
             m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
 
-            //var profilerGameComponent = new ProfilerGameComponent(Globals.Game, "ProfilerFont"); 
-            //ProfilingManager.Run = true; 
-            //AddComponent(profilerGameComponent); 
-
-            
-            CameraComponent camera = new CameraComponent(Globals.Game);
-            
+            ChaseCamera camera = new ChaseCamera();
             
             // stop camera going through terrain?
             camera.ClipToWorld = true;
-            camera.Position = new Vector3(0, 5, 0);
+            camera.ChasePosition = new Vector3(0, 5, 0);
             
             Globals.Camera = camera;
 
@@ -114,9 +110,11 @@ namespace GameStateManagement
 
 
             Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain,Vector3.Zero);
-
+            AddComponent(Globals.Terrain);
 
             Globals.ActionPool = new ActionPool();
+
+            Globals.SpellPool = new SpellPool();
 
             //Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
             //Globals.DebugObjectManager.DebugObject = Globals.Player;
@@ -131,7 +129,7 @@ namespace GameStateManagement
             m_playerHud.Initialise();
 
 
-            //m_playerController = new PlayerController(m_playerHud);
+            m_playerController = new PlayerController(m_playerHud);
 
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -193,7 +191,7 @@ namespace GameStateManagement
         /// Lets the game respond to player input. Unlike the Update method,
         /// this will only be called when the gameplay screen is active.
         /// </summary>
-        public override void HandleInput(InputState input)
+        public override void HandleInput(InputState input,GameTime gameTime)
         {
             if (input == null)
             {
@@ -202,9 +200,9 @@ namespace GameStateManagement
 
 
 
-            //m_playerController.HandleInput(input);
-            m_playerHud.HandleInput(input);
-            Globals.Camera.HandleInput(input);
+            m_playerController.HandleInput(input,gameTime);
+            //m_playerHud.HandleInput(input);
+            //Globals.Camera.HandleInput(input);
 
             //foreach (GuiComponent guiComponent in m_guiComponents)
             //{
@@ -224,28 +222,6 @@ namespace GameStateManagement
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
-            //Globals.CollisionManager.Draw(gameTime);
-
-            m_drawableList.Clear();
-            foreach (GameComponent gameComponent in m_componentCollection)
-            {
-                IDrawable drawable = gameComponent as IDrawable;
-                if (drawable != null)
-                {
-                    m_drawableList.Add(drawable);
-                }
-            }
-            IList<GameObject> gameObjectManagerComponents = Globals.GameObjectManager.DebugObjectList;
-            foreach (GameComponent gameComponent in gameObjectManagerComponents)
-            {
-                IDrawable drawable = gameComponent as IDrawable;
-                if (drawable != null)
-                {
-                    m_drawableList.Add(drawable);
-                }
-            }
-
-            m_drawableList.Sort(drawComparator);
 
 
             // reset the blendstats as spritebatch probably trashed them.
@@ -282,23 +258,19 @@ namespace GameStateManagement
 
         public void AddComponent(GameComponent gameComponent,bool initialise)
         {
-            m_componentCollection.Add(gameComponent);
+            if (initialise)
+            {
+                gameComponent.Initialize();
+            }
 
+            m_componentCollection.Add(gameComponent);
             IDrawable drawable = gameComponent as IDrawable;
             if (drawable != null)
             {
                 m_drawableList.Add(drawable);
+                m_drawableList.Sort(drawComparator);
             }
-            //GuiComponent guiComponent = gameComponent as GuiComponent;
-            //if (guiComponent != null)
-            //{
-            //    m_guiComponents.Add(guiComponent);
-            //}
 
-            if(initialise)
-            {
-                gameComponent.Initialize();
-            }
         }
 
         public void RemoveComponent(GameComponent gameComponent)
@@ -309,11 +281,6 @@ namespace GameStateManagement
             {
                 m_drawableList.Remove(drawable);
             }
-            //GuiComponent guiComponent = gameComponent as GuiComponent;
-            //if (guiComponent != null)
-            //{
-            //    m_guiComponents.Remove(guiComponent);
-            //}
         }
 
 
@@ -335,7 +302,7 @@ namespace GameStateManagement
 
         float pauseAlpha;
 
-        //private PlayerController m_playerController;
+        private PlayerController m_playerController;
 
         #endregion
 

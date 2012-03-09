@@ -139,11 +139,13 @@
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionUnload.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\BaseAction.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\FindData.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\camera\ChaseCamera.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\camera\DHPCameraComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\combat\DamageData.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\combat\ThreatData.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\control\PlayerController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Monster.cs" />

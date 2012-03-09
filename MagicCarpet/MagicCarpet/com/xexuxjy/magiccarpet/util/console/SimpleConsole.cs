@@ -260,11 +260,6 @@ namespace com.xexuxjy.magiccarpet.util.console
                         }
                         else if (commandDetails.Name.Equals("camerafollow"))
                         {
-                            if (Globals.Camera.CurrentBehavior != Dhpoware.Camera.Behavior.Follow)
-                            {
-                                Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.Follow;
-                            }
-
                             if (args.Length > 0)
                             {
                                 String followObjectId = args[0];
@@ -318,6 +313,13 @@ namespace com.xexuxjy.magiccarpet.util.console
                                 Globals.MouseEnabled = true;
                             }
                         }
+                        else if (commandDetails.Name.Equals("cameraspeed"))
+                        {
+                            String speed = args[0];
+                            float x = float.Parse(speed);
+                            Globals.Camera.MaxVelocity = new Vector3(x);
+                        }
+
 
                     }
                 }
@@ -634,6 +636,8 @@ namespace com.xexuxjy.magiccarpet.util.console
             id = "setglobalplayer";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
             id = "mouseenable";
+            m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
+            id = "cameraspeed";
             m_commandDetailsMap.Add(id, new CommandDetails(id, new int[] { 1 }));
             
         }

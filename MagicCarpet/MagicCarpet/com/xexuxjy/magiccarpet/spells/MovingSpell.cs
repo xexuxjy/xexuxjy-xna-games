@@ -44,7 +44,7 @@ namespace com.xexuxjy.magiccarpet.spells
         public void SetInitialPositionAndDirection(Vector3 position, Vector3 direction)
         {
             Position = position;
-            Direction = direction;
+            Forward = direction;
 
             //m_motionState.SetWorldTransform(Matrix.CreateTranslation(position));
             TargetSpeed = s_defaultSpellSpeed;

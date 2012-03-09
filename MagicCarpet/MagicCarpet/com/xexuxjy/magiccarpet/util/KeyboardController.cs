@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.Reflection;
@@ -8,26 +7,28 @@ using Microsoft.Xna.Framework.Input;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.magiccarpet.spells;
 using GameStateManagement;
+using com.xexuxjy.magiccarpet.control;
 
 namespace com.xexuxjy.magiccarpet.util
 {
     public class KeyboardController 
     {
-        public KeyboardController()
+        public KeyboardController(PlayerController playerController)
         {
+            m_playerController = playerController;
 
         }
 
         //----------------------------------------------------------------------------------------------
 
-        public void HandleInput(InputState inputState)
+        public void HandleInput(InputState inputState,GameTime gameTime)
         {
-            GenerateKeyEvents(ref inputState.LastKeyboardStates[0], ref inputState.CurrentKeyboardStates[0]);
+            GenerateKeyEvents(ref inputState.LastKeyboardStates[0], ref inputState.CurrentKeyboardStates[0],gameTime);
         }
 
         //----------------------------------------------------------------------------------------------
 
-        public virtual void KeyboardCallback(Keys key, bool released, ref KeyboardState newState, ref KeyboardState oldState)
+        public virtual void KeyboardCallback(Keys key, bool released, ref KeyboardState newState, ref KeyboardState oldState,GameTime gameTime)
         {
             // forward commands onto the game console
             if (Globals.SimpleConsole.Enabled && released)
@@ -35,6 +36,7 @@ namespace com.xexuxjy.magiccarpet.util
                 Globals.SimpleConsole.KeyboardCallback(key,released,ref newState,ref oldState);
             }
 
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             switch (key)
             {
@@ -144,16 +146,16 @@ namespace com.xexuxjy.magiccarpet.util
                     }
 
 
-                //case Keys.W: StepForward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.A: StepLeft((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.S: StepBackward((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.D: StepRight((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.Q: StepUp((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.Z: StepDown((Globals.STEPSIZETRANSLATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.Left: YawLeft((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.Right: YawRight((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.Up: PitchUp((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
-                //case Keys.Down: PitchDown((Globals.STEPSIZEROTATE * (float)gameTime.ElapsedGameTime.TotalSeconds)); break;
+                case Keys.W: m_playerController.StepForward(Globals.STEPSIZETRANSLATE * elapsedTime); break;
+                case Keys.A: m_playerController.StepLeft(Globals.STEPSIZETRANSLATE * elapsedTime); break;
+                case Keys.S: m_playerController.StepBackward(Globals.STEPSIZETRANSLATE * elapsedTime); break;
+                case Keys.D: m_playerController.StepRight(Globals.STEPSIZETRANSLATE * elapsedTime); break;
+                case Keys.Q: m_playerController.StepUp(Globals.STEPSIZETRANSLATE * elapsedTime); break;
+                case Keys.Z: m_playerController.StepDown(Globals.STEPSIZETRANSLATE * elapsedTime); break;
+                case Keys.Left: m_playerController.YawLeft(Globals.STEPSIZEROTATE * elapsedTime); break;
+                case Keys.Right: m_playerController.YawRight(Globals.STEPSIZEROTATE * elapsedTime); break;
+                case Keys.Up: m_playerController.PitchUp(Globals.STEPSIZEROTATE * elapsedTime); break;
+                case Keys.Down: m_playerController.PitchDown(Globals.STEPSIZEROTATE * elapsedTime); break;
                 //case Keys.PageUp: ZoomIn(0.4f); break;
                 //case Keys.PageDown: ZoomOut(0.4f); break;
             }
@@ -182,14 +184,14 @@ namespace com.xexuxjy.magiccarpet.util
         }
 
         static Enum[] keysEnumValues = GetEnumValues(typeof(Keys));
-        private void GenerateKeyEvents(ref KeyboardState old, ref KeyboardState current)
+        private void GenerateKeyEvents(ref KeyboardState old, ref KeyboardState current,GameTime gameTime)
         {
             foreach (Keys key in keysEnumValues)
             {
                 bool released = WasReleased(ref old, ref current, key);
                 if (released || IsHeldKey(ref current, key))
                 {
-                    KeyboardCallback(key, released, ref current, ref old);
+                    KeyboardCallback(key, released, ref current, ref old,gameTime);
                 }
             }
         }
@@ -216,5 +218,7 @@ namespace com.xexuxjy.magiccarpet.util
         {
             Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, position);
         }
+
+        private PlayerController m_playerController;
     }
 }
