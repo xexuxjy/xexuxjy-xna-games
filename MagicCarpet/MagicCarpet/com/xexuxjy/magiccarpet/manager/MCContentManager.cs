@@ -29,6 +29,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
             m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
+            m_effectDictionary["Carpet"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
 
 
             m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("unitcube");

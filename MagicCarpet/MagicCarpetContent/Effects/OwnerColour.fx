@@ -1,77 +1,88 @@
-// Simple shader file for converting pink (unassigned) to player colour
+uniform matrix WorldViewProjMatrix;
+uniform matrix ViewMatrix;
+uniform matrix ProjMatrix;
+uniform matrix WorldMatrix;
 
-	float4x4 worldViewProjection;
-	float4 playerColour;
-	float4 unassignedColour;
-	
-	texture2D baseTexture;
-	sampler baseSampler = sampler_state{Texture = < baseTexture >; MipFilter = LINEAR; MinFilter = LINEAR; MagFilter = LINEAR; ADDRESSU = MIRROR; ADDRESSV = MIRROR;};
-	
-	struct VS_INPUT
-	{
-		float4 ObjectPos: POSITION;
-		float2 TextureCoords: TEXCOORD0;
-		float3 Normal : NORMAL;
-	};
+uniform float TimeStep;
+uniform float Amplitude;
+uniform float Frequency;
 
-	struct VS_OUTPUT 
-	{
-	   float4 ScreenPos:   POSITION;
-	   float2 TextureCoords: TEXCOORD0;
-	};
+uniform vector CameraPosition;
 
-	struct PS_OUTPUT 
-	{
-	   float4 Colour:   COLOR;
-	};
+texture CarpetTexture;
 
-	VS_OUTPUT OwnerColourVS(VS_INPUT In)
+struct CarpetVertexShaderInput
+{
+    float3 pos  : POSITION;
+	float3 normal : NORMAL;   
+    float2 uv	: TEXCOORD0;  // coordinates for normal-map lookup
+};
+
+
+struct CarpetVertexShaderOutput
+{
+    vector pos        : POSITION;   
+    float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
+	float3 pos3d : TEXCOORD1;
+};
+
+
+uniform sampler CarpetSampler = sampler_state
+{
+    Texture   = (CarpetTexture);
+    MipFilter = None;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+
+// Vertex shader for rendering the geometry clipmap
+CarpetVertexShaderOutput CarpetVertexShaderFunction(CarpetVertexShaderInput input)
+{
+	CarpetVertexShaderOutput output;
+
+	// take length 
+
+	//float height = Amplitude * sin((input.pos.z + TimeStep) / Frequency);
+	float height = input.pos.y;
+
+    output.pos = mul(float4(input.pos.x, height,input.pos.z, 1), WorldViewProjMatrix);
+    output.uv = input.uv;
+	output.pos3d = output.pos;
+    return output;
+
+}
+
+
+float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
+{
+	float4 result = tex2D(CarpetSampler, input.uv);
+
+	float distanceFromCamera = length(input.pos3d - CameraPosition);
+	//float fogFactor = ComputeFogFactor(distanceFromCamera);
+	/*
+	// do something funky as well to provide fog near the boundaries of the world.
+	if( input.pos3d.x < EdgeFog || input.pos3d.x > WorldWidth - EdgeFog || input.pos3d.z < EdgeFog || input.pos3d.z > WorldWidth - EdgeFog)
 	{
-	   VS_OUTPUT Out;
-		// we get the input vertex but we need to use that to adjust the height
-		float4 position = In.ObjectPos;
-		Out.ScreenPos = mul(position, worldViewProjection);
-		Out.TextureCoords = In.TextureCoords;
-		return Out;
+		fogFactor = 1.0;
 	}
+	*/
+	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
-	PS_OUTPUT OwnerColourPS(VS_OUTPUT In)
-	{
-		PS_OUTPUT Out;
-		float4 outputColour = tex2D(baseSampler,In.TextureCoords);
-		// Replace the un-assigned color with the new one.
-		// must be a tidier version
-		//if(outputColour == unassignedColour)
-		if(outputColour.r == unassignedColour.r &&
-			outputColour.g == unassignedColour.g &&
-			outputColour.b == unassignedColour.b)
-		{
-			outputColour = playerColour;
-		}
-		// TODO - Lighting.
-		
-		
-		Out.Colour = outputColour;
-		return Out;
-	}
-	
-	
-	//--------------------------------------------------------------//
-	// Technique Section for OwnerColourVS screen transform
-	//--------------------------------------------------------------//
-	technique OwnerColourVSTech
-	{
-	   pass Single_Pass
-	   {
-			//LIGHTING = TRUE;
-			ZENABLE = TRUE;
-			ZWRITEENABLE = TRUE;
-			//ALPHATESTENABLE = TRUE;
-			ALPHABLENDENABLE = FALSE;
 
-			CULLMODE = CCW;
+    return result;
+}
 
-			VertexShader = compile vs_3_0 OwnerColourVS();
-			PixelShader = compile ps_3_0 OwnerColourPS();
-	   }
-	}
+
+technique DrawCarpet
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.
+
+        VertexShader = compile vs_3_0 CarpetVertexShaderFunction();
+        PixelShader = compile ps_3_0 CarpetPixelShaderFunction();
+    }
+}
