@@ -33,6 +33,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 float carpetWidth = 1f;
                 float carpetLength = 1f;
                 float carpetHeightDeflection = 0.05f;
+                float carpetThickness = 0.0001f;
                 int carpetSegments = 99;
                 float segmentStep = carpetLength / carpetSegments;
 
@@ -42,7 +43,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 int counter = 0;
                 float uvStep = 1f / (float)carpetSegments;
 
-                m_carpetVertices = new VertexPositionNormalTexture[carpetSegments * 6];
+                m_carpetVertices = new VertexPositionTexture[carpetSegments * 12];
 
                 for (int i = 0; i < carpetSegments; ++i)
                 {
@@ -56,17 +57,33 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     Vector2 ttl = new Vector2(0, (i+1) * uvStep);
                     Vector2 ttr = new Vector2(1, (i+1) * uvStep);
 
-                    m_carpetVertices[counter++] = new VertexPositionNormalTexture(bl, Vector3.Up, tbl);
-                    m_carpetVertices[counter++] = new VertexPositionNormalTexture(br, Vector3.Up, tbr);
-                    m_carpetVertices[counter++] = new VertexPositionNormalTexture(tl, Vector3.Up, ttl);
+                    // top face of carpet...
+                    m_carpetVertices[counter++] = new VertexPositionTexture(bl,  tbl);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(br,  tbr);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tl,  ttl);
 
-                    m_carpetVertices[counter++] = new VertexPositionNormalTexture(br, Vector3.Up, tbr);
-                    m_carpetVertices[counter++] = new VertexPositionNormalTexture(tr, Vector3.Up, ttr);
-                    m_carpetVertices[counter++] = new VertexPositionNormalTexture(tl, Vector3.Up, ttl);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(br,  tbr);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tr,  ttr);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tl,  ttl);
+
+
+                    // bottom face of carpet...
+
+                    Vector3 bottomOffset = new Vector3(0, -carpetThickness, 0);
+
+
+                    m_carpetVertices[counter++] = new VertexPositionTexture(bl+bottomOffset, tbl);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, tbr);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(br + bottomOffset, ttl);
+
+                    m_carpetVertices[counter++] = new VertexPositionTexture(br + bottomOffset, tbr);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, ttr);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tr + bottomOffset, ttl);
+
 
                 }
 
-                m_carpetVertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionNormalTexture.VertexDeclaration, counter, BufferUsage.WriteOnly);
+                m_carpetVertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionTexture.VertexDeclaration, counter, BufferUsage.WriteOnly);
                 m_carpetVertexBuffer.SetData(m_carpetVertices,0,counter);
 
 
@@ -538,14 +555,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //        int noTriangles = noVertices / 3;
         //        pass.Apply();
         //        //Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
-        //        Globals.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, m_carpetVertices,0, noTriangles);
+        //        Globals.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, m_carpetVertices,0, noTriangles);
         //    }
 
         //}
 
         private Vector4 m_carpetDimensions;
 
-        private VertexPositionNormalTexture[] m_carpetVertices;
+        private VertexPositionTexture[] m_carpetVertices;
         private VertexBuffer m_carpetVertexBuffer;
         private Texture2D m_carpetTexture;
         private Effect m_carpetEffect;

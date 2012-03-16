@@ -292,4 +292,54 @@ namespace com.xexuxjy.magiccarpet.manager
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;
     }
+
+
+    public struct PosOnlyVertex : IVertexType
+    {
+
+        public PosOnlyVertex(Vector2 v)
+        {
+            Position = v;
+        }
+
+        public Vector2 Position;
+
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+            new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0)
+        );
+
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+    };
+
+    public struct VertexPositionScaleTexture : IVertexType
+    {
+
+        public VertexPositionScaleTexture(Vector3 v, float s, Vector2 uv)
+        {
+            Position = v;
+            Scale = s;
+            UV = uv;
+        }
+
+        
+
+        public Vector3 Position;
+        public float Scale;
+        public Vector2 UV;
+
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+            new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
+            new VertexElement(sizeof(float) * 3, VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 0),
+            new VertexElement(sizeof(float) * 4, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 1)
+        );
+
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
+    };
+
+
+
+
+
 }
