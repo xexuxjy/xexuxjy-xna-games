@@ -84,7 +84,7 @@ namespace com.xexuxjy.magiccarpet.gui
             {
                 if (guiComponent.Visible)
                 {
-                    guiComponent.Draw(gameTime);
+                    //guiComponent.Draw(gameTime);
                 }
             }
 

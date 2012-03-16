@@ -41,7 +41,7 @@ namespace com.xexuxjy.magiccarpet.camera
             get { return chaseDirection; }
             set { chaseDirection = value; }
         }
-        private IndexedVector3 chaseDirection;
+        private IndexedVector3 chaseDirection = IndexedVector3.Forward;
 
         /// <summary>
         /// Chased object's Up vector.
@@ -65,7 +65,8 @@ namespace com.xexuxjy.magiccarpet.camera
             get { return desiredPositionOffset; }
             set { desiredPositionOffset = value; }
         }
-        private IndexedVector3 desiredPositionOffset = new IndexedVector3(0, 0.5f, -2.0f);
+        private IndexedVector3 desiredPositionOffset = new IndexedVector3(2, 1f, 0f);
+        //private IndexedVector3 desiredPositionOffset = new IndexedVector3(0, 0, -2.0f);
 
         /// <summary>
         /// Desired camera position in world space.
@@ -90,7 +91,7 @@ namespace com.xexuxjy.magiccarpet.camera
             get { return lookAtOffset; }
             set { lookAtOffset = value; }
         }
-        private IndexedVector3 lookAtOffset = new IndexedVector3(0, 0, 4);
+        private IndexedVector3 lookAtOffset = new IndexedVector3(0, 0, 0);
 
         /// <summary>
         /// Look at point in world space.
@@ -230,20 +231,24 @@ namespace com.xexuxjy.magiccarpet.camera
         /// <summary>
         /// View transform matrix.
         /// </summary>
-        public Matrix View
+        public IndexedMatrix View
         {
             get { return view; }
         }
-        private Matrix view;
+        private IndexedMatrix view;
 
         /// <summary>
         /// Projecton transform matrix.
         /// </summary>
-        public Matrix Projection
+        public IndexedMatrix Projection
         {
-            get { return projection; }
+            get 
+            { 
+                //return projection.ToMatrixProjection(); 
+                return projection;
+            }
         }
-        private Matrix projection;
+        private IndexedMatrix projection;
 
 
         public bool ClipToWorld
@@ -263,6 +268,25 @@ namespace com.xexuxjy.magiccarpet.camera
         }
         private GameObject m_followTarget;
 
+
+        public void Zoom(float amount)
+        {
+            IndexedVector3 offset = DesiredPositionOffset;
+            offset.Normalize();
+
+            // clamp the values a bit.
+
+            float minzoom = 1f;
+            float maxzoom = 100f;
+
+            IndexedVector3 iv = DesiredPositionOffset + (offset * amount);
+            if (iv.Length() >= minzoom && iv.Length() <= maxzoom)
+            {
+                DesiredPositionOffset += offset * amount;
+            }
+        }
+
+
         #endregion
 
 
@@ -278,7 +302,7 @@ namespace com.xexuxjy.magiccarpet.camera
             IndexedBasisMatrix transform = IndexedBasisMatrix.Identity;
             transform.Forward = ChaseDirection;
             transform.Up = Up;
-            transform.Right = IndexedVector3.Cross(Up, ChaseDirection);
+            transform.Right = IndexedVector3.Cross(ChaseDirection,Up);
 
             // Calculate desired camera properties in world space
             desiredPosition = ChasePosition +(DesiredPositionOffset * transform);
@@ -290,8 +314,11 @@ namespace com.xexuxjy.magiccarpet.camera
         /// </summary>
         private void UpdateMatrices()
         {
-            view = Matrix.CreateLookAt(this.Position, this.LookAt, this.Up);
-            projection = Matrix.CreatePerspectiveFieldOfView(FieldOfView,
+            //m_lightView = IndexedMatrix.CreateLookAt(m_lightPosition, target, new IndexedVector3(0, 1, 0));
+            //m_lightProjection = IndexedMatrix.CreatePerspectiveFieldOfView(fov, aspect, 1f, 500f);
+
+            view = IndexedMatrix.CreateLookAt(this.Position, this.LookAt, this.Up);
+            projection = IndexedMatrix.CreatePerspectiveFieldOfView(FieldOfView,
                 AspectRatio, NearPlaneDistance, FarPlaneDistance);
         }
 

@@ -1,6 +1,6 @@
-﻿buildrandomlandscape
+﻿#buildrandomlandscape
 #buildfractallandscape
-spawn magician 2,2,2 id=player1
+spawn magician 0,2,0 id=player1
 #spawn balloon 0,0,0 ownerid=player1
 #spawn castle 0,0,0 ownerid=player1,castlelevel=1
 #droprandommanaballs 10 0,0,0 20
