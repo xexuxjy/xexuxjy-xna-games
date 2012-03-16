@@ -184,6 +184,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\manager\MCContentManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\SpellPool.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Program.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\renderer\LightManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\PerlinNoiseGenerator.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\ScreenQuad.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellAlterTerrain.cs" />

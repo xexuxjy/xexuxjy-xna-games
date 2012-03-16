@@ -12,6 +12,7 @@ using com.xexuxjy.magiccarpet.manager;
 using BulletXNA.LinearMath;
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA;
+using com.xexuxjy.magiccarpet.renderer;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -70,6 +71,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
                 m_carpetEffect = Globals.MCContentManager.GetEffect("Carpet");
+                LightManager.ApplyLightToEffect(m_carpetEffect);
+
                 m_carpetTexture = Globals.MCContentManager.GetTexture(Color.Red);
             }
         }
@@ -162,9 +165,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_carpetEffect.Parameters["CarpetTexture"].SetValue(m_carpetTexture);
 
             float timeScalar = 4f;
+            float frequency = 4f;
             m_carpetMovementOffset += (timeScalar * m_carpetDimensions.W * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            m_carpetEffect.Parameters["Frequency"].SetValue(4f);
+            m_carpetEffect.Parameters["Frequency"].SetValue(frequency);
             m_carpetEffect.Parameters["Amplitude"].SetValue(m_carpetDimensions.Y);
             m_carpetEffect.Parameters["CarpetLength"].SetValue(m_carpetDimensions.Z);
 
@@ -191,6 +195,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             //DrawBasicEffect(gameTime);
 
+            //DrawCarpetNormals(gameTime, frequency, worldMatrix);
 
             //for (int i = 0; i < noTriangles; ++i)
             //{
@@ -223,6 +228,53 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        public void DrawCarpetNormals(GameTime gameTime,float frequency,IndexedMatrix worldMatrix)
+        {
+            float waveLength = m_carpetDimensions.Z/ frequency;
+
+            float counter = 0f;
+
+            for (int i = 0; i < m_carpetVertices.Length; ++i)
+            {
+                IndexedVector3 from = m_carpetVertices[i].Position;
+                float angle = (from.Z + m_carpetMovementOffset) / waveLength;
+                angle *= MathUtil.SIMD_2_PI;
+                float cos = (float)Math.Cos(angle);
+                float sin = (float)Math.Sin(angle);
+                float tan = sin / cos;
+
+
+                float height = sin * m_carpetDimensions.Y;
+                IndexedVector3 pos = new Vector3(from.X, height, from.Z);
+
+                //(1,cos(x))/sqrt(1+(cos(x))^2) = (tx,ty). A unit-length normal is (ty,-tx). 
+                
+                float val = (float)(Math.Cos(angle) / Math.Sqrt( 1+ (Math.Cos(angle) * Math.Cos(angle))));
+                //IndexedVector3 normal = new IndexedVector3(-1, 0,val);
+                //IndexedVector3 normal = new IndexedVector3(-1, 0,val);
+                Vector3 normal = new Vector3(0, sin, -cos);
+
+                normal.Normalize();
+
+                float scale = 0.01f;
+                normal *= scale;
+
+                from = pos;
+
+                IndexedVector3 to = from;
+                to += normal;
+                from = worldMatrix * from;
+                to = worldMatrix * to;
+                Globals.DebugDraw.DrawLine(from, to, new IndexedVector3(0, 0, 0));
+            }
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public override void ActionComplete(BaseAction action)
         {

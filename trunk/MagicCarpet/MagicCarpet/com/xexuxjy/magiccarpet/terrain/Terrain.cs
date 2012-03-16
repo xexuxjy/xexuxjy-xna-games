@@ -88,16 +88,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainEffect.Parameters["BaseTexture"].SetValue(m_baseTexture);
             m_terrainEffect.Parameters["NoiseTexture"].SetValue(m_noiseTexture);
 
-            IndexedVector3 ambientLight = new IndexedVector3(0.1f);
-            IndexedVector3 directionalLight = new IndexedVector3(0.4f);
-
-            m_terrainEffect.Parameters["AmbientLight"].SetValue(ambientLight);
-            m_terrainEffect.Parameters["DirectionalLight"].SetValue(directionalLight);
-            m_terrainEffect.Parameters["LightPosition"].SetValue(new IndexedVector3(0, 40, 0));
-            IndexedVector3 lightDirection = new IndexedVector3(10, -10, 0);
-            lightDirection.Normalize();
-
-            m_terrainEffect.Parameters["LightDirection"].SetValue(lightDirection);
+            LightManager.ApplyLightToEffect(m_terrainEffect);
 
             m_helperScreenQuad = new ScreenQuad(Game);
             m_helperScreenQuad.Initialize();
