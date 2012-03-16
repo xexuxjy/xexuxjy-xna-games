@@ -3,9 +3,12 @@ uniform matrix ViewMatrix;
 uniform matrix ProjMatrix;
 uniform matrix WorldMatrix;
 
-uniform float TimeStep;
+static const float PI = 3.14159265f;
+
+uniform float CarpetMovementOffset;
 uniform float Amplitude;
 uniform float Frequency;
+uniform float CarpetLength;
 
 uniform vector CameraPosition;
 
@@ -21,9 +24,10 @@ struct CarpetVertexShaderInput
 
 struct CarpetVertexShaderOutput
 {
-    vector pos        : POSITION;   
+    float4 pos        : POSITION;   
     float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
 	float3 pos3d : TEXCOORD1;
+	float3 normal : TEXCOORD2;
 };
 
 
@@ -43,14 +47,28 @@ CarpetVertexShaderOutput CarpetVertexShaderFunction(CarpetVertexShaderInput inpu
 {
 	CarpetVertexShaderOutput output;
 
-	// take length 
+	float waveLength = CarpetLength / Frequency;
 
-	//float height = Amplitude * sin((input.pos.z + TimeStep) / Frequency);
-	float height = input.pos.y;
+	float angle = (input.pos.z + CarpetMovementOffset) / waveLength;
 
-    output.pos = mul(float4(input.pos.x, height,input.pos.z, 1), WorldViewProjMatrix);
+	angle = angle * 2 * PI;
+
+	float height = sin(angle) * sin(angle) * Amplitude;
+	//float height = sin(temp) * Amplitude;
+
+	float4 worldPosition = mul(float4(input.pos.x, height,input.pos.z, 1), WorldMatrix);
+    float4 viewPosition = mul(worldPosition, ViewMatrix);
+    output.pos = mul(viewPosition, ProjMatrix);
+
     output.uv = input.uv;
 	output.pos3d = output.pos;
+
+	 //(1,cos(x))/sqrt(1+(cos(x))^2) = (tx,ty). A unit-length normal is (ty,-tx). 
+
+
+
+	output.normal = normal
+
     return output;
 
 }
@@ -58,7 +76,8 @@ CarpetVertexShaderOutput CarpetVertexShaderFunction(CarpetVertexShaderInput inpu
 
 float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
 {
-	float4 result = tex2D(CarpetSampler, input.uv);
+	//float4 result = tex2D(CarpetSampler, input.uv);
+	float4 result = float4(1,0,0,1);
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 	//float fogFactor = ComputeFogFactor(distanceFromCamera);

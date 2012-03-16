@@ -60,7 +60,12 @@ namespace com.xexuxjy.magiccarpet.control
                 IndexedVector3 forward = im.Forward;
                 IndexedVector3 position = im._origin;
 
-                IndexedVector3 relativeMovement = (right * m_currentTranslation.X) + (up * m_currentTranslation.Y) + (forward * m_currentTranslation.Z);
+                //IndexedVector3 relativeMovement = (right * m_currentTranslation.X) + (up * m_currentTranslation.Y) + (forward * m_currentTranslation.Z);
+                if (m_currentTranslation.Length() > 0)
+                {
+                    int ibreak = 0;
+                }
+                IndexedVector3 relativeMovement = m_currentTranslation * im._basis;
 
 
                 // Update camera etc?
@@ -72,31 +77,31 @@ namespace com.xexuxjy.magiccarpet.control
 
 
                 // Create rotation matrix from rotation amount
-                IndexedBasisMatrix rotationMatrix = IndexedBasisMatrix.CreateFromAxisAngle(right, m_currentPitch) *
-                    IndexedBasisMatrix.CreateRotationY(m_currentYaw);
+                //IndexedBasisMatrix rotationMatrix = IndexedBasisMatrix.CreateFromAxisAngle(right, m_currentPitch) *
+                //    IndexedBasisMatrix.CreateRotationY(m_currentYaw);
 
 
-                // Rotate orientation vectors
-                IndexedVector3 direction = forward * rotationMatrix;
-                up = up * rotationMatrix;
+                //// Rotate orientation vectors
+                //IndexedVector3 direction = forward * rotationMatrix;
+                //up = up * rotationMatrix;
 
-                // Re-normalize orientation vectors
-                // Without this, the matrix transformations may introduce small rounding
-                // errors which add up over time and could destabilize the ship.
-                direction.Normalize();
-                up.Normalize();
+                //// Re-normalize orientation vectors
+                //// Without this, the matrix transformations may introduce small rounding
+                //// errors which add up over time and could destabilize the ship.
+                //direction.Normalize();
+                //up.Normalize();
 
-                // Re-calculate Right
-                right = IndexedVector3.Cross(direction, up);
+                //// Re-calculate Right
+                //right = IndexedVector3.Cross(direction, up);
 
                 // The same instability may cause the 3 orientation vectors may
                 // also diverge. Either the Up or Direction vector needs to be
                 // re-computed with a cross product to ensure orthagonality
-                up = Vector3.Cross(right, direction);
+                //up = Vector3.Cross(right, direction);
 
-                IndexedMatrix world = Matrix.Identity;
-                world._basis = new IndexedBasisMatrix(right, up, forward);
-                world._origin = position + relativeMovement;
+                //IndexedMatrix world = Matrix.Identity;
+                //world._basis = new IndexedBasisMatrix(right, up, forward);
+                //world._origin = position + relativeMovement;
 
                 //Globals.Player.WorldTransform = world;
                 Globals.Player.Position += relativeMovement;
@@ -110,7 +115,6 @@ namespace com.xexuxjy.magiccarpet.control
                 Globals.Camera.ChasePosition = Globals.Player.Position;
                 Globals.Camera.ChaseDirection = Globals.Player.Forward;
                 Globals.Camera.Up = Globals.Player.Up;
-                int ibreak = 0;
             }
         
         
@@ -121,12 +125,12 @@ namespace com.xexuxjy.magiccarpet.control
 
         public void StepForward(float amount)
         {
-            m_currentTranslation.Z -= amount;
+            m_currentTranslation.Z += amount;
         }
 
         public void StepBackward(float amount)
         {
-            m_currentTranslation.Z += amount;
+            m_currentTranslation.Z -= amount;
 
         }
 

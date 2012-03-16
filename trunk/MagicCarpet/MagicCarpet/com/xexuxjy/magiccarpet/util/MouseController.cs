@@ -61,6 +61,15 @@ namespace com.xexuxjy.magiccarpet.util
             Mouse.SetPosition(clientBounds.Width / 2, clientBounds.Height / 2);
 
 
+            float scrollWheelChange = (float)(inputState.LastMouseState.ScrollWheelValue -
+                                              inputState.CurrentMouseState.ScrollWheelValue);
+
+            if (!MathUtil.FuzzyZero(scrollWheelChange))
+            {
+                float scrollMultiplier = 0.02f;
+                scrollWheelChange *= scrollMultiplier;
+                Globals.Camera.Zoom(scrollWheelChange);
+            }
 
             if ( leftReleased || rightReleased)
             {

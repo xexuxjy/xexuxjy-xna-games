@@ -21,6 +21,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+        }
+
 
         public override void Update(GameTime gameTime)
         {
