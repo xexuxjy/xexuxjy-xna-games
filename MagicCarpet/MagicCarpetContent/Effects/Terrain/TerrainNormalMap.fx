@@ -43,16 +43,6 @@ VertexShaderOutput ComputeNormalsVS(VertexShaderInput input)
 
 float4 ComputeNormalsPS(in VertexShaderOutput input) : COLOR0
 {
-/*
-    float tl = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1, -1)).x);   // top left
-    float  l = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  0)).x);   // left
-    float bl = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  1)).x);   // bottom left
-    float  t = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 0, -1)).x);   // top
-    float  b = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 0,  1)).x);   // bottom
-    float tr = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1, -1)).x);   // top right
-    float  r = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1,  0)).x);   // right
-    float br = abs(tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2( 1,  1)).x);   // bottom right
-	*/
     float tl = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1, -1)).x;   // top left
     float  l = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  0)).x;   // left
     float bl = tex2D (NormalMapSamplerPS, input.TexCoord + TexelWidth * float2(-1,  1)).x;   // bottom left
@@ -79,7 +69,6 @@ float4 ComputeNormalsPS(in VertexShaderOutput input) : COLOR0
     float4 N = float4(normalize(float3(dX, 1.0f / normalStrength, dY)), 1.0f);
     //convert (-1.0 , 1.0) to (0.0 , 1.0);
     return N * 0.5f + 0.5f;
-	//return float4(0,1,0,0);
 }
 
 technique ComputeNormals

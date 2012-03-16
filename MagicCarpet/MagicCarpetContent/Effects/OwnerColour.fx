@@ -3,6 +3,12 @@ uniform matrix ViewMatrix;
 uniform matrix ProjMatrix;
 uniform matrix WorldMatrix;
 
+uniform float3 LightPosition;
+uniform float3 LightDirection;
+uniform float3 AmbientLight;
+uniform float3 DirectionalLight;
+
+
 static const float PI = 3.14159265f;
 
 uniform float CarpetMovementOffset;
@@ -17,7 +23,6 @@ texture CarpetTexture;
 struct CarpetVertexShaderInput
 {
     float3 pos  : POSITION;
-	float3 normal : NORMAL;   
     float2 uv	: TEXCOORD0;  // coordinates for normal-map lookup
 };
 
@@ -50,24 +55,26 @@ CarpetVertexShaderOutput CarpetVertexShaderFunction(CarpetVertexShaderInput inpu
 	float waveLength = CarpetLength / Frequency;
 
 	float angle = (input.pos.z + CarpetMovementOffset) / waveLength;
-
 	angle = angle * 2 * PI;
 
-	float height = sin(angle) * sin(angle) * Amplitude;
+	float cosAngle = cos(angle);
+	float sinAngle = sin(angle);
+	
+	float3 normal = float3( sinAngle, 0,cosAngle);
+
+	normal = float3(0,sinAngle,cosAngle);
+	normal = normalize(normal);
+
+	float height = sinAngle * Amplitude;
 	//float height = sin(temp) * Amplitude;
 
 	float4 worldPosition = mul(float4(input.pos.x, height,input.pos.z, 1), WorldMatrix);
     float4 viewPosition = mul(worldPosition, ViewMatrix);
     output.pos = mul(viewPosition, ProjMatrix);
 
+	output.normal = mul(normal,WorldMatrix);
     output.uv = input.uv;
 	output.pos3d = output.pos;
-
-	 //(1,cos(x))/sqrt(1+(cos(x))^2) = (tx,ty). A unit-length normal is (ty,-tx). 
-
-
-
-	output.normal = normal
 
     return output;
 
@@ -80,6 +87,21 @@ float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
 	float4 result = float4(1,0,0,1);
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
+
+
+	// lighting
+	float3 lightDir = LightDirection;
+    
+	float4 smoothedNormal = float4(input.normal,0);
+    float dotResult = dot(-lightDir, smoothedNormal.xyz);    
+	dotResult = saturate(dotResult);
+
+	float3 directionalComponent = DirectionalLight * dotResult;
+	float4 light = float4(directionalComponent + AmbientLight,1);
+
+	result *= light;
+
+
 	//float fogFactor = ComputeFogFactor(distanceFromCamera);
 	/*
 	// do something funky as well to provide fog near the boundaries of the world.
