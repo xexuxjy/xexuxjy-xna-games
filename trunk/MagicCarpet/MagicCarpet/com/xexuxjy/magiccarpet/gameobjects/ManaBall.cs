@@ -56,8 +56,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             BeingLoaded = false;
             // set a custom material here as we want a fairly damped response.
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
-
             m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+            // manaballs should be allowed to move and go into sleep tates.
+            m_collisionObject.SetActivationState(ActivationState.ACTIVE_TAG);
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
