@@ -23,7 +23,7 @@ using com.xexuxjy.magiccarpet.manager;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
-    public class Terrain : GameObject, ICollideable
+    public class Terrain : GameObject
     {
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -223,11 +223,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Draw(GameTime gameTime)
         {
-            return;
+            //return;
             UpdateHeightMapTexture();
 
 
-            Matrix viewProjection = Globals.Camera.Projection * Globals.Camera.View;
+            Matrix viewProjection = Globals.Camera.Projection.ToMatrixProjection() * Globals.Camera.View.ToMatrix();
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
 
             //float oneOverTextureWidth = 1f/m_textureWidth;

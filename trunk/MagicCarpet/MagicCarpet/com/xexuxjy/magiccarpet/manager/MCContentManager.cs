@@ -73,6 +73,9 @@ namespace com.xexuxjy.magiccarpet.manager
             m_textureDictionary["TerrainHeightMap"] = new Texture2D(Globals.GraphicsDevice, Globals.WorldWidth + 1, Globals.WorldWidth + 1, false, SurfaceFormat.Single);
             m_textureDictionary["TerrainNormalMap"] = new RenderTarget2D(Globals.GraphicsDevice, Globals.WorldWidth + 1, Globals.WorldWidth + 1, false, SurfaceFormat.Color, DepthFormat.None);
             m_textureDictionary["TreeBillboard"] = m_contentManager.Load<Texture2D>("Textures/Terrain/TreeBillBoard");
+
+            m_textureDictionary["Carpet2"] = m_contentManager.Load<Texture2D>("Textures/Magician/Carpet2");
+        
         }
 
         public Model ModelForObjectType(GameObjectType gameObjectType)

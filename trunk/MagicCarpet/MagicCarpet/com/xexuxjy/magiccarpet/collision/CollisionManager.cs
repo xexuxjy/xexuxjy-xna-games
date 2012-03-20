@@ -75,7 +75,7 @@ namespace com.xexuxjy.magiccarpet.collision
             //ms *= 0.1f;
             ///step the simulation
             m_dynamicsWorld.StepSimulation(ms, 1);
-            m_dynamicsWorld.DebugDrawWorld();
+            //m_dynamicsWorld.DebugDrawWorld();
 
             ProcessCollisions();
 
@@ -292,65 +292,30 @@ namespace com.xexuxjy.magiccarpet.collision
             // do these last.
             if (Globals.DebugDraw != null)
             {
-                IndexedMatrix m = IndexedMatrix.Identity;
-                IndexedBasisMatrix rot = IndexedBasisMatrix.Identity;
-                int numObjects = m_dynamicsWorld.GetNumCollisionObjects();
-                IndexedVector3 wireColor = new IndexedVector3(1, 0, 0);
-
                 IndexedMatrix view = Globals.Camera.View;
                 IndexedMatrix projection = Globals.Camera.Projection;
 
+                m_dynamicsWorld.DebugDrawWorld();
 
-                for (int i = 0; i < numObjects; i++)
+                bool drawGrid = true;
+                if(drawGrid)
                 {
-                    CollisionObject colObj = m_dynamicsWorld.GetCollisionObjectArray()[i];
-                    RigidBody body = RigidBody.Upcast(colObj);
-                    if (body != null && body.GetMotionState() != null)
+                    IndexedVector3 color = new IndexedVector3(1,0,0);
+                    int gridSize = 20;
+                    int gridHeight = 10;
+                    int xStep = 2;
+                    int yStep = 2;
+                    int zStep = 1;
+                    for (int i = 0; i < gridSize; i+=xStep)
                     {
-                        DefaultMotionState myMotionState = (DefaultMotionState)body.GetMotionState();
-                        //myMotionState.m_graphicsWorldTrans.getOpenGLIndexedMatrix(m);
-                        m = myMotionState.m_graphicsWorldTrans;
-                        rot = myMotionState.m_graphicsWorldTrans._basis;
-                    }
-                    else
-                    {
-                        //colObj.getWorldTransform().getOpenGLIndexedMatrix(m);
-                        rot = colObj.GetWorldTransform()._basis;
-                    }
-                    wireColor = new IndexedVector3(1.0f, 1.0f, 0.5f); //wants deactivation
-                    if ((i & 1) != 0) wireColor = new IndexedVector3(0f, 0f, 1f);
-                    ///color differently for active, sleeping, wantsdeactivation states
-                    if (colObj.GetActivationState() == ActivationState.ACTIVE_TAG) //active
-                    {
-                        if ((i & 1) != 0)
+                        for (int j = 0; j < gridHeight; j+=yStep)
                         {
-                            wireColor += new IndexedVector3(1f, 0f, 0f);
-                        }
-                        else
-                        {
-                            wireColor += new IndexedVector3(.5f, 0f, 0f);
+                            IndexedVector3 from = new IndexedVector3(-100, j, i);
+                            IndexedVector3 to = new IndexedVector3(100, j, i);
+
+                            Globals.DebugDraw.DrawLine(from, to, color);
                         }
                     }
-                    if (colObj.GetActivationState() == ActivationState.ISLAND_SLEEPING) //ISLAND_SLEEPING
-                    {
-                        if ((i & 1) != 0)
-                        {
-                            wireColor += new IndexedVector3(0f, 1f, 0f);
-                        }
-                        else
-                        {
-                            wireColor += new IndexedVector3(0f, 05f, 0f);
-                        }
-                    }
-
-                    IndexedVector3 aabbMin, aabbMax;
-                    m_dynamicsWorld.GetBroadphase().GetBroadphaseAabb(out aabbMin, out aabbMax);
-
-                    aabbMin -= MathUtil.MAX_VECTOR;
-                    aabbMax += MathUtil.MAX_VECTOR;
-
-                    //((XNA_ShapeDrawer)Globals.DebugDraw).DrawXNA(ref m, colObj.GetCollisionShape(), ref wireColor, Globals.DebugDraw.GetDebugMode(), ref aabbMin, ref aabbMax, ref view, ref projection);
-
                 }
 
                 ((XNA_ShapeDrawer)Globals.DebugDraw).RenderDebugLines(gameTime, ref view, ref projection);

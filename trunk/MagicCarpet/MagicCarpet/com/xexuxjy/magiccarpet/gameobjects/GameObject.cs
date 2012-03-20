@@ -104,14 +104,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
 
-            BuildCollisionObject();
             SetStartAttributes();
 
             DrawOrder = Globals.NORMAL_DRAW_ORDER;
 
-
-
             base.Initialize();
+
+            // call this here so we've loaded any content?
+            BuildCollisionObject();
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -327,13 +328,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             get
             {
                 IndexedMatrix m;
-                m_motionState.GetWorldTransform(out m);
+                GetMotionState().GetWorldTransform(out m);
                 return m._origin;
             }
             set
             {
                 IndexedMatrix m;
-                m_motionState.GetWorldTransform(out m);
+                GetMotionState().GetWorldTransform(out m);
 
                 IndexedVector3 clampedValue = value;
                 Globals.Terrain.ClampToTerrain(ref clampedValue);
@@ -349,7 +350,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 }
 
                 m._origin = clampedValue;
-                m_motionState.SetWorldTransform(ref m);
+                GetMotionState().SetWorldTransform(ref m);
             }
         }
 
@@ -361,13 +362,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             get
             {
                 IndexedMatrix m;
-                m_motionState.GetWorldTransform(out m);
+                GetMotionState().GetWorldTransform(out m);
                 return m;
             }
             set
             {
                 IndexedMatrix m = value;
-                m_motionState.SetWorldTransform(ref m);
+                GetMotionState().SetWorldTransform(ref m);
             }
         }
 
@@ -833,6 +834,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             set { m_playerControlled = value; }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public IMotionState GetMotionState()
+        {
+            RigidBody rb = m_collisionObject as RigidBody;
+            if (rb != null)
+            {
+                return rb.GetMotionState();
+            }
+            return m_motionState;
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public ObjectArray<ThreatData> m_recentThreats = new ObjectArray<ThreatData>();
 
