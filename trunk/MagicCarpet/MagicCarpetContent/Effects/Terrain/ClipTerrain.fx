@@ -1,15 +1,11 @@
+#include "../Common.fx"
+
 texture HeightMapTexture;
 texture BaseTexture;
 texture NoiseTexture;
 texture NormalMapTexture;
 texture TreeTexture;
 
-uniform matrix WorldViewProjMatrix;
-uniform matrix ViewMatrix;
-uniform matrix ProjMatrix;
-uniform matrix WorldMatrix;
-
-uniform float3 CameraPosition;
 
 uniform float  ZScaleFactor;
 uniform float WorldWidth;
@@ -17,18 +13,10 @@ uniform float EdgeFog;
 uniform float4 ScaleFactor;
 uniform float4 FineTextureBlockOrigin;
 uniform float  OneOverWidth;
-uniform float3 LightPosition;
-uniform float3 LightDirection;
-uniform float3 AmbientLight;
-uniform float3 DirectionalLight;
+
 
 float4 BlockColor;
 float2 TerrainTextureWindow;
-
-bool FogEnabled;
-float FogStart;
-float FogEnd;
-float3 FogColor = float3(0,0.7,0.4);
 
 
 // Normal calc stuff based on example at
@@ -164,25 +152,6 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	output.pos3d = output.pos;
     return output;
 
-}
-
-float DotProduct(float3 lightPos, float3 pos3D, float3 normal)
-{
-    float3 lightDir = normalize(pos3D - lightPos);
-    return dot(-lightDir, normal);    
-}
-
-/*
-where d is the length of the vector going from the camera to the vertex or pixel.
-
-Then the computed fog factor is used to lerp between the normal color and the fog color:
-
-color.rgb = lerp(color.rgb, FogColor, fogFactor);
-*/
-
-float ComputeFogFactor(float d)
-{
-    return clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
 }
 
 
