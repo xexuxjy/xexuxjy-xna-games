@@ -72,7 +72,8 @@ namespace GameStateManagement
             }
 
             //m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
-            m_debugDrawMode = DebugDrawModes.ALL;
+            //m_debugDrawMode = DebugDrawModes.ALL;
+            m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
             m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
 
@@ -97,12 +98,12 @@ namespace GameStateManagement
             }
 
             Globals.CollisionManager = new CollisionManager(Globals.worldMinPos, Globals.worldMaxPos);
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager);
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager,true);
 
 
             Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
             Globals.SimpleConsole.Enabled = false;
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole);
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole,true);
 
 
             Globals.MCContentManager = new MCContentManager();

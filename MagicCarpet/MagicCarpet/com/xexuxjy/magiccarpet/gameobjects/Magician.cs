@@ -13,6 +13,7 @@ using BulletXNA.LinearMath;
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA;
 using com.xexuxjy.magiccarpet.renderer;
+using BulletXNA.BulletCollision;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -32,7 +33,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 float carpetWidth = 1f;
                 float carpetLength = 1f;
-                float carpetHeightDeflection = 0.05f;
+                float carpetHeightDeflection = 0.02f;
                 float carpetThickness = 0.0001f;
                 int carpetSegments = 99;
                 float segmentStep = carpetLength / carpetSegments;
@@ -43,14 +44,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 int counter = 0;
                 float uvStep = 1f / (float)carpetSegments;
 
+                Vector3 carpetWidthOffset = new Vector3(-carpetWidth / 2, 0, -carpetLength/2);
+
                 m_carpetVertices = new VertexPositionTexture[carpetSegments * 12];
 
                 for (int i = 0; i < carpetSegments; ++i)
                 {
-                    Vector3 bl = new Vector3(0, 0, i * segmentStep);
-                    Vector3 br = new Vector3(carpetWidth, 0, i * segmentStep);
-                    Vector3 tl = new Vector3(0, 0, (i+1) * segmentStep);
-                    Vector3 tr = new Vector3(carpetWidth, 0, (i+1) * segmentStep);
+                    Vector3 bl = new Vector3(0, 0, i * segmentStep) + carpetWidthOffset;
+                    Vector3 br = new Vector3(carpetWidth, 0, i * segmentStep) + carpetWidthOffset;
+                    Vector3 tl = new Vector3(0, 0, (i + 1) * segmentStep) + carpetWidthOffset;
+                    Vector3 tr = new Vector3(carpetWidth, 0, (i + 1) * segmentStep) + carpetWidthOffset;
 
                     Vector2 tbl = new Vector2(0, i * uvStep);
                     Vector2 tbr = new Vector2(1, i * uvStep);
@@ -73,12 +76,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
                     m_carpetVertices[counter++] = new VertexPositionTexture(bl+bottomOffset, tbl);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, tbr);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(br + bottomOffset, ttl);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, ttl);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(br + bottomOffset, tbr);
 
                     m_carpetVertices[counter++] = new VertexPositionTexture(br + bottomOffset, tbr);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, ttr);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tr + bottomOffset, ttl);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, ttl);
+                    m_carpetVertices[counter++] = new VertexPositionTexture(tr + bottomOffset, ttr);
 
 
                 }
@@ -90,10 +93,23 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 m_carpetEffect = Globals.MCContentManager.GetEffect("Carpet");
                 LightManager.ApplyLightToEffect(m_carpetEffect);
 
-                m_carpetTexture = Globals.MCContentManager.GetTexture(Color.Red);
+                m_carpetTexture = Globals.MCContentManager.GetTexture("Carpet2");
             }
         }
-        
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void BuildCollisionObject()
+        {
+            Vector3 magicianDimensions = new Vector3(m_carpetDimensions.X, 0.2f, m_carpetDimensions.Z);
+            CollisionShape collisionShape = new BoxShape(magicianDimensions / 2);
+            CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.magician;
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera);
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, IndexedMatrix.CreateTranslation(Position), collisionShape, GetMotionState(), true, this, collisionFlags, collisionMask);
+        }
+
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public override float GetStartOffsetHeight()
@@ -199,6 +215,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_carpetEffect.Parameters["ViewMatrix"].SetValue(Globals.Camera.View.ToMatrix());
             m_carpetEffect.Parameters["ProjMatrix"].SetValue(Globals.Camera.Projection.ToMatrixProjection());
             m_carpetEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
+            Vector3 cameraPosition = Globals.Camera.Position.ToVector3();
+            m_carpetEffect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
 
 
             int noTriangles = m_carpetVertexBuffer.VertexCount / 3;
