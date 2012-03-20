@@ -107,6 +107,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.magician;
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera);
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, IndexedMatrix.CreateTranslation(Position), collisionShape, GetMotionState(), true, this, collisionFlags, collisionMask);
+            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+
         }
 
 
@@ -221,6 +223,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             int noTriangles = m_carpetVertexBuffer.VertexCount / 3;
 
+            m_carpetEffect.CurrentTechnique = m_carpetEffect.Techniques["DrawCarpet"];
+
             foreach (EffectPass pass in m_carpetEffect.CurrentTechnique.Passes)
             {
                 int noVertices = m_carpetVertexBuffer.VertexCount;
@@ -228,85 +232,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
             }
 
-            //DrawBasicEffect(gameTime);
-
-            //DrawCarpetNormals(gameTime, frequency, worldMatrix);
-
-            //for (int i = 0; i < noTriangles; ++i)
-            //{
-            //    int baseIndex = i * 3;
-            //    IndexedVector3 from = m_carpetVertices[baseIndex].Position;
-            //    IndexedVector3 to = m_carpetVertices[baseIndex + 1].Position;
-            //    //from = Vector3.Transform(from,transform);
-            //    //to = Vector3.Transform(to, transform);
-            //    from = worldMatrix * from;
-            //    to = worldMatrix * to;
-            //    Globals.DebugDraw.DrawLine(from,to, new IndexedVector3(0,0,0));
-
-            //    from = m_carpetVertices[baseIndex + 1].Position;
-            //    to = m_carpetVertices[baseIndex + 2].Position;
-            //    //from = Vector3.Transform(from,transform);
-            //    //to = Vector3.Transform(to, transform);
-            //    from = worldMatrix * from;
-            //    to = worldMatrix * to;
-            //    Globals.DebugDraw.DrawLine(from, to, new IndexedVector3(0, 0, 0));
-
-            //    from = m_carpetVertices[baseIndex + 2].Position;
-            //    to = m_carpetVertices[baseIndex].Position;
-            //    //from = Vector3.Transform(from,transform);
-            //    //to = Vector3.Transform(to, transform);
-            //    from = worldMatrix * from;
-            //    to = worldMatrix * to;
-            //    Globals.DebugDraw.DrawLine(from, to, new IndexedVector3(0, 0, 0));
-
-            //}
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        public void DrawCarpetNormals(GameTime gameTime,float frequency,IndexedMatrix worldMatrix)
-        {
-            float waveLength = m_carpetDimensions.Z/ frequency;
-
-            float counter = 0f;
-
-            for (int i = 0; i < m_carpetVertices.Length; ++i)
-            {
-                IndexedVector3 from = m_carpetVertices[i].Position;
-                float angle = (from.Z + m_carpetMovementOffset) / waveLength;
-                angle *= MathUtil.SIMD_2_PI;
-                float cos = (float)Math.Cos(angle);
-                float sin = (float)Math.Sin(angle);
-                float tan = sin / cos;
-
-
-                float height = sin * m_carpetDimensions.Y;
-                IndexedVector3 pos = new Vector3(from.X, height, from.Z);
-
-                //(1,cos(x))/sqrt(1+(cos(x))^2) = (tx,ty). A unit-length normal is (ty,-tx). 
-                
-                float val = (float)(Math.Cos(angle) / Math.Sqrt( 1+ (Math.Cos(angle) * Math.Cos(angle))));
-                //IndexedVector3 normal = new IndexedVector3(-1, 0,val);
-                //IndexedVector3 normal = new IndexedVector3(-1, 0,val);
-                Vector3 normal = new Vector3(0, sin, -cos);
-
-                normal.Normalize();
-
-                float scale = 0.01f;
-                normal *= scale;
-
-                from = pos;
-
-                IndexedVector3 to = from;
-                to += normal;
-                from = worldMatrix * from;
-                to = worldMatrix * to;
-                Globals.DebugDraw.DrawLine(from, to, new IndexedVector3(0, 0, 0));
-            }
-        }
-
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 

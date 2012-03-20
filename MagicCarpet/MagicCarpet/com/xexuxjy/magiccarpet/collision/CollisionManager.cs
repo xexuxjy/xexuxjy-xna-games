@@ -171,7 +171,8 @@ namespace com.xexuxjy.magiccarpet.collision
             RigidBody body = new RigidBody(cInfo);
             // disable all gravity for now?
             body.SetFlags(body.GetFlags() | RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
-            //body.SetActivationState(ActivationState.DISABLE_DEACTIVATION);
+            // most objects should stay live?
+            body.SetActivationState(ActivationState.DISABLE_DEACTIVATION);
             body.SetUserPointer(userPointer);
             body.SetGravity(ref m_gravity);
             if (addToWorld)
