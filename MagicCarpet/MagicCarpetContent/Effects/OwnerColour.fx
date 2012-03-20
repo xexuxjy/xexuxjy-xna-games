@@ -1,22 +1,10 @@
-uniform matrix WorldViewProjMatrix;
-uniform matrix ViewMatrix;
-uniform matrix ProjMatrix;
-uniform matrix WorldMatrix;
-
-uniform float3 LightPosition;
-uniform float3 LightDirection;
-uniform float3 AmbientLight;
-uniform float3 DirectionalLight;
-
-
-static const float PI = 3.14159265f;
+#include "Common.fx"
 
 uniform float CarpetMovementOffset;
 uniform float Amplitude;
 uniform float Frequency;
 uniform float CarpetLength;
 
-uniform vector CameraPosition;
 
 texture CarpetTexture;
 
@@ -83,8 +71,8 @@ CarpetVertexShaderOutput CarpetVertexShaderFunction(CarpetVertexShaderInput inpu
 
 float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
 {
-	//float4 result = tex2D(CarpetSampler, input.uv);
-	float4 result = float4(1,0,0,1);
+	float4 result = tex2D(CarpetSampler, input.uv);
+	//float4 result = float4(1,0,0,1);
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 
@@ -111,6 +99,12 @@ float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
 	}
 	*/
 	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
+
+
+	// alpha blend carpet when it's close to camera?
+	result.a = lerp(result.a,2,5);
+
+
 
 
     return result;
