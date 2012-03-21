@@ -89,20 +89,8 @@ float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
 
 	result *= light;
 
-
-	//float fogFactor = ComputeFogFactor(distanceFromCamera);
-	/*
-	// do something funky as well to provide fog near the boundaries of the world.
-	if( input.pos3d.x < EdgeFog || input.pos3d.x > WorldWidth - EdgeFog || input.pos3d.z < EdgeFog || input.pos3d.z > WorldWidth - EdgeFog)
-	{
-		fogFactor = 1.0;
-	}
-	*/
-	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
-
-
 	// alpha blend carpet when it's close to camera?
-	result.a = lerp(result.a,2,5);
+	//result.a = lerp(result.a,2,5);
 
 
 

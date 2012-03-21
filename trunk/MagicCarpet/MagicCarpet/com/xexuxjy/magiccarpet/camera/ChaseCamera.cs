@@ -68,7 +68,8 @@ namespace com.xexuxjy.magiccarpet.camera
         //private IndexedVector3 desiredPositionOffset = new IndexedVector3(2, 1, 0f);
         //private IndexedVector3 desiredPositionOffset = new IndexedVector3(0, 1, -2.0f);
         private IndexedVector3 desiredPositionOffset = new IndexedVector3(0, 0, -2.0f);
-
+        //private IndexedVector3 desiredPositionOffset = new IndexedVector3(0, 10, -5.0f);
+        //private IndexedVector3 desiredPositionOffset = new IndexedVector3(0, 0,0);
         /// <summary>
         /// Desired camera position in world space.
         /// </summary>

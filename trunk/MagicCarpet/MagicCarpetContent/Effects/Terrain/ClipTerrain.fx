@@ -6,10 +6,7 @@ texture NoiseTexture;
 texture NormalMapTexture;
 texture TreeTexture;
 
-
 uniform float  ZScaleFactor;
-uniform float WorldWidth;
-uniform float EdgeFog;
 uniform float4 ScaleFactor;
 uniform float4 FineTextureBlockOrigin;
 uniform float  OneOverWidth;
@@ -145,7 +142,12 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float2 uv = float2((worldPos)*FineTextureBlockOrigin.xy);
     float height = ComputeHeight(uv);
 
-    output.pos = mul(float4(worldPos.x, height,worldPos.y, 1), WorldViewProjMatrix);
+    //output.pos = mul(float4(worldPos.x, height,worldPos.y, 1), WorldViewProjMatrix);
+
+	float4 worldPosition = mul(float4(worldPos.x, height,worldPos.y, 1), WorldMatrix);
+    float4 viewPosition = mul(worldPosition, ViewMatrix);
+    output.pos = mul(viewPosition, ProjMatrix);
+
 	output.normal = float3(0,1,0);
     output.uv = uv;
 	output.noiseuv = float2(worldPos.x/10.0,worldPos.y/10.0);
@@ -177,7 +179,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	
 	// Fog stuff.
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
-	float fogFactor = ComputeFogFactor(distanceFromCamera);
+	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
 
 	// do something funky as well to provide fog near the boundaries of the world.
 	/*
@@ -219,7 +221,12 @@ TreeVertexShaderOutput TreeVertexShaderFunction(TreeVertexShaderInput input)
 
 	float3 adjustedPos = float3(worldPos.x,worldPos.y + height,worldPos.z);
 
-	output.pos = mul(float4(adjustedPos,1), WorldViewProjMatrix);
+	//output.pos = mul(float4(adjustedPos,1), WorldViewProjMatrix);
+	float4 worldPosition = mul(float4(adjustedPos, 1), WorldMatrix);
+    float4 viewPosition = mul(worldPosition, ViewMatrix);
+    output.pos = mul(viewPosition, ProjMatrix);
+
+
 	output.pos3d = output.pos;
     output.uv= input.uv;
 
@@ -235,14 +242,7 @@ float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
 	// Make sure tree's vanish in the mist as well.
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
-	float fogFactor = ComputeFogFactor(distanceFromCamera);
-	/*
-	// do something funky as well to provide fog near the boundaries of the world.
-	if( input.pos3d.x < EdgeFog || input.pos3d.x > WorldWidth - EdgeFog || input.pos3d.z < EdgeFog || input.pos3d.z > WorldWidth - EdgeFog)
-	{
-		fogFactor = 1.0;
-	}
-	*/
+	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
 	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
 

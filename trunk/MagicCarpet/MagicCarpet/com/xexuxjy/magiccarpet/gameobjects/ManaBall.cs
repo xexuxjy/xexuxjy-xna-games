@@ -52,7 +52,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 s_collisionShape = new SphereShape(GetStartOffsetHeight());
             }
             float mass = 2f;
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, IndexedMatrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
             BeingLoaded = false;
             // set a custom material here as we want a fairly damped response.
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
@@ -95,7 +95,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             if (BeingLoaded)
             {
-                IndexedVector3 pos = Position;
+                Vector3 pos = Position;
                 int ibreak = 0;
             }
 

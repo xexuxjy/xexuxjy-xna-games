@@ -17,7 +17,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
-            m_scaleTransform = IndexedMatrix.CreateScale(10);
+            m_scaleTransform = Matrix.CreateScale(10);
 
         }
 
@@ -38,22 +38,22 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         }
 
-        public override IndexedVector3 Position
+        public override Vector3 Position
         {
             get
             {
-                IndexedVector3 position = Globals.Player.Position;
+                Vector3 position = Globals.Player.Position;
                 position.Y += m_heightOffset;
                 return position;
             }
         }
 
-        public override IndexedMatrix WorldTransform
+        public override Matrix WorldTransform
         {
             get
             {
-                IndexedMatrix im = Globals.Player.WorldTransform;
-                im._origin.Y += m_heightOffset;
+                Matrix im = Globals.Player.WorldTransform;
+                im.Translation += new Vector3(0,m_heightOffset,0);
                 return im;
           
             }

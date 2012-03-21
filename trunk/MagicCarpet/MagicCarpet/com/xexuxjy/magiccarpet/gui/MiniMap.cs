@@ -18,7 +18,7 @@ namespace com.xexuxjy.magiccarpet.gui
         {
             m_gameObjectList = new List<GameObject>(128);
             m_radius = 100.0f;
-            m_mapWorldPosition = IndexedVector3.Zero;
+            m_mapWorldPosition = Vector3.Zero;
             Zoom = 5;
             Globals.TrackedObjectChanged += new Globals.TrackedObjectChangedEventHandler(Globals_TrackedObjectChanged);
 
@@ -68,7 +68,7 @@ namespace com.xexuxjy.magiccarpet.gui
         }
 
         // xz coordinates from position against a vector4 as left,top,width,height
-        public bool InBounds(IndexedVector3 position)
+        public bool InBounds(Vector3 position)
         {
             if (position.X < m_bounds.X) return false;
             if (position.Z < m_bounds.Y) return false;
@@ -194,7 +194,7 @@ namespace com.xexuxjy.magiccarpet.gui
 
         private Vector4 m_bounds;
         private Rectangle m_boundsRect;
-        private IndexedVector3 m_mapWorldPosition;
+        private Vector3 m_mapWorldPosition;
 
         private GameObject m_trackedObject;
     }

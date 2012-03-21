@@ -55,7 +55,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         //}
 
-        public ActionFlee GetActionFlee(GameObject owner, IndexedVector3 direction, float speed)
+        public ActionFlee GetActionFlee(GameObject owner, Vector3 direction, float speed)
         {
             return new ActionFlee(owner, direction, speed);
         }
@@ -75,17 +75,17 @@ namespace com.xexuxjy.magiccarpet.manager
             return new ActionUnload(owner, target);
         }
 
-        public ActionTravel GetActionTravel(GameObject owner, GameObject target, IndexedVector3? position, float speed)
+        public ActionTravel GetActionTravel(GameObject owner, GameObject target, Vector3? position, float speed)
         {
             return new ActionTravel(owner, target, position, speed);
         }
 
-        public ActionTravel GetActionTravel(GameObject owner, GameObject target, IndexedVector3? position, float speed,float minDistance,float maxDistance)
+        public ActionTravel GetActionTravel(GameObject owner, GameObject target, Vector3? position, float speed,float minDistance,float maxDistance)
         {
             return new ActionTravel(owner, target, position, speed,minDistance,maxDistance);
         }
 
-        public ActionCastSpell GetActionCastSpell(GameObject owner, GameObject target, IndexedVector3? position, SpellType spellType)
+        public ActionCastSpell GetActionCastSpell(GameObject owner, GameObject target, Vector3? position, SpellType spellType)
         {
             return new ActionCastSpell(owner, target, position, spellType);
         }

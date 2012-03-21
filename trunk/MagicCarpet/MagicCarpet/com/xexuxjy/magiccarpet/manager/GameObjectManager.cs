@@ -35,14 +35,14 @@ namespace com.xexuxjy.magiccarpet.manager
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, IndexedVector3 startPosition)
+        public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, Vector3 startPosition)
         {
             return CreateAndInitialiseGameObject(gameObjectType, startPosition, null);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
  
-        public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, IndexedVector3 startPosition,Dictionary<String,String> properties)
+        public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, Vector3 startPosition,Dictionary<String,String> properties)
         {
             GameObject gameObject = null;
             switch (gameObjectType)
@@ -204,12 +204,12 @@ namespace com.xexuxjy.magiccarpet.manager
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public void FindObjects(GameObjectType typeMask, IndexedVector3 position, float radius, List<GameObject> results)
+        public void FindObjects(GameObjectType typeMask, Vector3 position, float radius, List<GameObject> results)
         {
             FindObjects(typeMask, position, radius, null, results,false);
         }
 
-        public void FindObjects(GameObjectType typeMask, IndexedVector3 position, float radius, GameObject owner, List<GameObject> results,bool includeOwner)
+        public void FindObjects(GameObjectType typeMask, Vector3 position, float radius, GameObject owner, List<GameObject> results,bool includeOwner)
         {
             float radiusSq = radius * radius;
             foreach (GameObject gameObject in m_gameObjectList)
@@ -250,7 +250,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //public void FindObjectsExcludeOwner(GameObjectType typeMask, IndexedVector3 position, float radius, GameObject owner, List<GameObject> results)
+        //public void FindObjectsExcludeOwner(GameObjectType typeMask, Vector3 position, float radius, GameObject owner, List<GameObject> results)
         //{
         //    float radiusSq = radius * radius;
         //    foreach (GameObject gameObject in m_gameObjectList)
@@ -407,7 +407,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
     public class DistanceSorter : IComparer<GameObject>
     {
-        public DistanceSorter(IndexedVector3 position)
+        public DistanceSorter(Vector3 position)
         {
             m_position = position;
         }
@@ -420,7 +420,7 @@ namespace com.xexuxjy.magiccarpet.manager
             return (int)(xlen - ylen);
         }
 
-        private IndexedVector3 m_position;
+        private Vector3 m_position;
     
 
 }

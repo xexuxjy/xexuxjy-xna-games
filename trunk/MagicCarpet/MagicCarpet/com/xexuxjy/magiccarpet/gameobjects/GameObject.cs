@@ -40,14 +40,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject(IndexedVector3 startPosition, GameObjectType gameObjectType)
+        public GameObject(Vector3 startPosition, GameObjectType gameObjectType)
             : base(Globals.Game)
         {
             m_gameObjectType = gameObjectType;
 
             startPosition.Y += GetStartOffsetHeight();
 
-            m_motionState = new DefaultMotionState(IndexedMatrix.CreateTranslation(startPosition), IndexedMatrix.Identity);
+            m_motionState = new DefaultMotionState(Matrix.CreateTranslation(startPosition), Matrix.Identity);
             m_id = "" + (++s_idCounter);
         }
 
@@ -93,8 +93,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Initialize()
         {
-            m_scaleTransform = IndexedMatrix.Identity;
-            m_modelTransform = IndexedMatrix.Identity;
+            m_scaleTransform = Matrix.Identity;
+            m_modelTransform = Matrix.Identity;
 
             m_actionComponent = new ActionComponent(this);
             m_actionComponent.Initialize();
@@ -215,7 +215,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // movement here?
             if (Speed > 0)
             {
-                IndexedVector3 movement = Forward * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Vector3 movement = Forward * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Position += movement;
             }
 
@@ -263,7 +263,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            DrawEffect(Game.GraphicsDevice, Globals.Camera.View, WorldTransform, Globals.Camera.Projection);
+            DrawEffect(Game.GraphicsDevice, Globals.Camera.ViewMatrix, WorldTransform, Globals.Camera.ViewMatrix);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -286,7 +286,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         BasicEffect basicEffect = (BasicEffect)effect;
                         basicEffect.View = view;
                         basicEffect.Projection = projection;
-                        basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform.ToMatrix() * world;
+                        basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform * world;
 
                         basicEffect.Texture = GetTexture();
                     }
@@ -301,7 +301,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public virtual Texture2D GetTexture()
         {
             // cheat for now.
-            IndexedVector3 colour = Owner != null ? new IndexedVector3(1, 0, 0) : new IndexedVector3(1, 1, 1);
+            Vector3 colour = Owner != null ? new Vector3(1, 0, 0) : new Vector3(1, 1, 1);
             return Globals.MCContentManager.GetTexture(ref colour);
         }
 
@@ -323,20 +323,17 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         [DescriptionAttribute("Position in the world")]
-        public virtual IndexedVector3 Position
+        public virtual Vector3 Position
         {
             get
             {
-                IndexedMatrix m;
-                GetMotionState().GetWorldTransform(out m);
-                return m._origin;
+                return WorldTransform.Translation;
             }
             set
             {
-                IndexedMatrix m;
-                GetMotionState().GetWorldTransform(out m);
+                Matrix m = WorldTransform;
 
-                IndexedVector3 clampedValue = value;
+                Vector3 clampedValue = value;
                 Globals.Terrain.ClampToTerrain(ref clampedValue);
 
                 if (StickToGround)
@@ -349,21 +346,21 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     clampedValue.Y = height + GetStartOffsetHeight() +  GetHoverHeight();
                 }
 
-                m._origin = clampedValue;
-                GetMotionState().SetWorldTransform(ref m);
+                m.Translation = clampedValue;
+                WorldTransform = m;
             }
         }
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public virtual IndexedMatrix WorldTransform
+        public virtual Matrix WorldTransform
         {
             get
             {
                 IndexedMatrix m;
                 GetMotionState().GetWorldTransform(out m);
-                return m;
+                return m.ToMatrix();
             }
             set
             {
@@ -377,7 +374,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         [DescriptionAttribute("Spawn Position in the world")]
-        virtual public IndexedVector3 SpawnPosition
+        virtual public Vector3 SpawnPosition
         {
             get { return m_spawnPosition; }
             set { m_spawnPosition = value; }
@@ -418,7 +415,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 BoundingBox bb = new BoundingBox();
                 if (m_collisionObject != null)
                 {
-                    m_collisionObject.GetCollisionShape().GetAabb(IndexedMatrix.Identity, out min, out max);
+                    m_collisionObject.GetCollisionShape().GetAabb(Matrix.Identity, out min, out max);
                     bb = new BoundingBox(min, max);
                 }
                 return bb;
@@ -427,20 +424,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public IndexedVector3 Forward
+        public Vector3 Forward
         {
             get { return WorldTransform.Forward; }
             set
             {
-                IndexedMatrix m = WorldTransform;
-                m._basis.SetNewForward(value);
+                Matrix m = Matrix.CreateLookAt(Position, Position + value, Up);
                 WorldTransform = m;
             }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public IndexedVector3 Up
+        public Vector3 Up
         {
             get { return WorldTransform.Up; }
         }
@@ -552,7 +548,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        public void CastSpell(SpellType spellType, IndexedVector3 startPosition, IndexedVector3 direction)
+        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
         {
             m_spellComponent.CastSpell(spellType, startPosition, direction);
         }
@@ -560,12 +556,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public IndexedVector3 WorldToLocal(IndexedVector3 worldPoint)
+        public Vector3 WorldToLocal(Vector3 worldPoint)
         {
             return (worldPoint - BoundingBox.Min);
         }
 
-        public IndexedVector3 LocalToWorld(IndexedVector3 localPoint)
+        public Vector3 LocalToWorld(Vector3 localPoint)
         {
             return (localPoint + BoundingBox.Min);
         }
@@ -755,11 +751,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public IndexedVector3 GetFleeDirection()
+        public Vector3 GetFleeDirection()
         {
             // find out which is the 
             float totalThreatLevel = 0f;
-            IndexedVector3 threatDirection = IndexedVector3.Zero;
+            Vector3 threatDirection = Vector3.Zero;
 
             foreach (ThreatData threatData in m_recentThreats)
             {
@@ -783,7 +779,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             if (MathUtil.FuzzyZero(threatDirection.LengthSquared()))
             {
                 // either equal threats around us or no threats, in which case chose random direction
-                IndexedVector3 randomPosition = Globals.Terrain.GetRandomWorldPositionXZ();
+                Vector3 randomPosition = Globals.Terrain.GetRandomWorldPositionXZ();
                 threatDirection = GameUtil.DirectionToTarget(this, randomPosition);
             }
             threatDirection.Normalize();
@@ -856,7 +852,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected ObjectArray<GameObjectAttribute> m_attributes = new ObjectArray<GameObjectAttribute>();
 
         protected String m_id;
-        protected IndexedVector3 m_spawnPosition; // where the object starts in the world, used by AI
+        protected Vector3 m_spawnPosition; // where the object starts in the world, used by AI
 
         protected GameObject m_owner; // if this is owned by another entitiy (e.g. manaballs,castles, balloons owned by magicians)
 
@@ -872,7 +868,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected bool m_awaitingRemoval;
 
-        protected IndexedMatrix m_scaleTransform;
+        protected Matrix m_scaleTransform;
         protected Model m_model;
 
         protected bool m_debugEnabled;
@@ -884,7 +880,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected bool m_stickToGround = true;
         protected Matrix[] m_boneTransforms;
-        protected IndexedMatrix m_modelTransform;
+        protected Matrix m_modelTransform;
 
         public static int s_idCounter = 0;
     }

@@ -148,7 +148,7 @@ namespace com.xexuxjy.magiccarpet.actions
         private ActionComponent m_actionComponent;
         private GameObject m_owner; 
         private GameObject m_target;
-        private IndexedVector3? m_targetLocation;
+        private Vector3? m_targetLocation;
         private ActionState m_actionState;
         private float m_duration;
         private float m_currentTime;
