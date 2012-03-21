@@ -77,15 +77,16 @@ namespace GameStateManagement
             m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
 
-            ChaseCamera camera = new ChaseCamera();
-            //make it a very rigid camera
-            camera.Mass = 50f;
+            //ChaseCamera camera = new ChaseCamera();
+            ////make it a very rigid camera
+            //camera.Mass = 50f;
 
-            // stop camera going through terrain?
-            camera.ClipToWorld = true;
-            camera.ChasePosition = new Vector3(0, 5, 0);
+            //// stop camera going through terrain?
+            //camera.ClipToWorld = true;
+            //camera.ChasePosition = new Vector3(0, 5, 0);
             
-            Globals.Camera = camera;
+            //Globals.Camera = camera;
+            Globals.Camera = new CameraComponent();
             Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
 
 
@@ -123,7 +124,7 @@ namespace GameStateManagement
             //Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
             //Globals.DebugObjectManager.DebugObject = Globals.Player;
 
-            Globals.GameObjectManager.AddAndInitializeObject(camera);
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
 
 
             Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
@@ -223,11 +224,9 @@ namespace GameStateManagement
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
-
-
             // reset the blendstats as spritebatch probably trashed them.
-            Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
-            Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            //Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            //Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             Globals.GameObjectManager.Draw(gameTime);
 

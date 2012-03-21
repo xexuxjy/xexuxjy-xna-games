@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using com.xexuxjy.magiccarpet.gameobjects;
 using BulletXNA.LinearMath;
+using Microsoft.Xna.Framework;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -20,7 +21,7 @@ namespace com.xexuxjy.magiccarpet.actions
             base.Update(gameTime);
             float timeOffset = (float)gameTime.ElapsedGameTime.TotalSeconds * gatherSpeed;
 
-            IndexedVector3 newPos = Target.Position;
+            Vector3 newPos = Target.Position;
             newPos.Y += timeOffset;
 
             Target.Position = newPos;

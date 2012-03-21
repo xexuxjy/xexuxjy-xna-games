@@ -89,8 +89,8 @@ namespace com.xexuxjy.magiccarpet.gui
             }
 
             // restore from sprite batch changes.
-            Game.GraphicsDevice.BlendState = BlendState.Opaque;
-            Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            //Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            //Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
         }
 

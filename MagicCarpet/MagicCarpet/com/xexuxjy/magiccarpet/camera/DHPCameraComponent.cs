@@ -296,6 +296,7 @@ namespace Dhpoware
         private bool m_keyboardInputEnabled;
 
         private GameObject m_followTarget;
+        private Vector3 m_followTargetLookatOffset = new Vector3(0,0.0f,0.0f);
 
     #region Public Methods
 
@@ -497,8 +498,8 @@ namespace Dhpoware
             }
 
 
-            IndexedVector3 start = eye;
-            IndexedVector3 end = start;
+            Vector3 start = eye;
+            Vector3 end = start;
             end += xAxis * dx;
             end += WORLD_Y_AXIS * dy;
             end += forwards * dz;
@@ -507,38 +508,38 @@ namespace Dhpoware
             Position = end;
         }
 
-        private void ApplyClipToWorld(ref IndexedVector3 start, ref IndexedVector3 end)
+        private void ApplyClipToWorld(ref Vector3 start, ref Vector3 end)
         {
             // check to see if we're allowed to move through the terrain in the direction proposed
             if (clipToWorld)
             {
-                IndexedVector3 collisionPoint = start;
-                IndexedVector3 collisionNormal = IndexedVector3.Up;
-                IndexedVector3 direction = end - start;
+                Vector3 collisionPoint = start;
+                Vector3 collisionNormal = Vector3.Up;
+                Vector3 direction = end - start;
                 float cameraRadius = 0.2f;
 
                 direction.Normalize();
                 
-                IndexedVector3 adjustedEnd = end +( direction * cameraRadius);
+                Vector3 adjustedEnd = end +( direction * cameraRadius);
                 
                 // if we hit something then push back along the collision normal
 
                 if (Globals.CollisionManager.CastCameraGroundRay(start, adjustedEnd, ref collisionPoint, ref collisionNormal))
                 {
-                    //IndexedVector3 a = new IndexedVector3(0,1,0);
-                    //IndexedVector3 b = new IndexedVector3(1,1,0);
+                    //Vector3 a = new Vector3(0,1,0);
+                    //Vector3 b = new Vector3(1,1,0);
 
                     //a.Normalize();
                     //b.Normalize();
 
-                    //float dot1 = IndexedVector3.Dot(a, b);
+                    //float dot1 = Vector3.Dot(a, b);
 
-                    //float directionVCollNormal = IndexedVector3.Dot(direction, collisionNormal);
+                    //float directionVCollNormal = Vector3.Dot(direction, collisionNormal);
 
                     //if (directionVCollNormal < 0f)
                     {
                         //float travelDistance = 2f;
-                        IndexedVector3 normalPushBack = collisionNormal * cameraRadius;
+                        Vector3 normalPushBack = collisionNormal * cameraRadius;
                         end = collisionPoint + normalPushBack;
                     }
                 }
@@ -564,8 +565,8 @@ namespace Dhpoware
                 return;
             }
 
-            IndexedVector3 start = eye;
-            IndexedVector3 end = eye + (direction * distance);
+            Vector3 start = eye;
+            Vector3 end = eye + (direction * distance);
             ApplyClipToWorld(ref start, ref end);
 
             eye = end;
@@ -633,6 +634,8 @@ namespace Dhpoware
             {
             case Behavior.FirstPerson:
             case Behavior.Spectator:
+            case Behavior.Follow:
+
                 RotateFirstPerson(headingDegrees, pitchDegrees);
                 break;
 
@@ -720,6 +723,11 @@ namespace Dhpoware
             m_keyboardInputEnabled = false;
         }
 
+        public Vector3 FollowTargetLookAtOffset
+        {
+            get { return m_followTargetLookatOffset; }
+            set { m_followTargetLookatOffset = value; }
+        }
 
 
     #endregion
@@ -746,6 +754,8 @@ namespace Dhpoware
                 {
                 case Behavior.Flight:
                 case Behavior.Spectator:
+                case Behavior.Follow:
+
                     eye.Y = firstPersonYOffset;
                     UpdateViewMatrix();
                     break;
@@ -843,7 +853,7 @@ namespace Dhpoware
 
             orientation = newOrientation;
 
-            if (behavior == Behavior.FirstPerson || behavior == Behavior.Spectator)
+            if (behavior == Behavior.FirstPerson || behavior == Behavior.Spectator || behavior == Behavior.Follow)
                 LookAt(eye, eye + Vector3.Negate(zAxis), WORLD_Y_AXIS);
 
             UpdateViewMatrix();
@@ -954,8 +964,15 @@ namespace Dhpoware
         /// <summary>
         /// Rebuild the view matrix.
         /// </summary>
-        private void UpdateViewMatrix()
+        public void UpdateViewMatrix()
         {
+            if (behavior == Behavior.Follow && FollowTarget != null)
+            {
+                Matrix targetFacing = FollowTarget.WorldTransform;
+                targetFacing.Translation = Vector3.Zero;
+                orientation = Quaternion.CreateFromRotationMatrix(targetFacing);
+            }
+
             Matrix.CreateFromQuaternion(ref orientation, out viewMatrix);
 
             xAxis.X = viewMatrix.M11;
@@ -978,6 +995,15 @@ namespace Dhpoware
                 // to determine the correct distance from the target.
 
                 eye = target + zAxis * orbitOffsetLength;
+            }
+            if (behavior == Behavior.Follow && FollowTarget != null)
+            {
+                Matrix targetFacing = FollowTarget.WorldTransform;
+                target = targetFacing.Translation;
+                targetFacing.Translation = Vector3.Zero;
+                
+                Vector3 offset = Vector3.TransformNormal(m_followTargetLookatOffset, targetFacing);
+                eye = target + offset;
             }
 
             viewMatrix.M41 = -Vector3.Dot(xAxis, eye);
@@ -1162,7 +1188,7 @@ namespace Dhpoware
     /// These actions are defined by the Actions enumeration. Methods are
     /// provided to remap the camera components default bindings.
     /// </summary>
-    public class CameraComponent : GameComponent, ICamera
+    public class CameraComponent : EmptyGameObject, ICamera
     {
         public enum Actions
         {
@@ -1249,8 +1275,11 @@ namespace Dhpoware
         private InputState inputState;
         private Dictionary<Actions, Keys> actionKeys;
         private bool m_keyboardInputEnabled = true;
-        private bool clipToWorld = true;
-        private GameObject m_followTarget;
+
+        //private bool clipToWorld = true;
+        //private GameObject m_followTarget;
+        //private Vector3 m_followTargetLookatOffset = new Vector3(0, 2, -3);
+
 
     #region Public Methods
 
@@ -1261,7 +1290,7 @@ namespace Dhpoware
         /// z axis. An initial perspective projection matrix is created
         /// as well as setting up initial key bindings to the actions.
         /// </summary>
-        public CameraComponent(Game game) : base(game)
+        public CameraComponent() : base(GameObjectType.camera)
         {
             camera = new Camera();
             //camera.CurrentBehavior = Camera.Behavior.Spectator;
@@ -1292,7 +1321,7 @@ namespace Dhpoware
             mouseMovement[1].X = 0.0f;
             mouseMovement[1].Y = 0.0f;
 
-            Rectangle clientBounds = game.Window.ClientBounds;
+            Rectangle clientBounds = Game.Window.ClientBounds;
             float aspect = (float)clientBounds.Width / (float)clientBounds.Height;
 
             Perspective(Camera.DEFAULT_FOVX, aspect, Camera.DEFAULT_ZNEAR, Camera.DEFAULT_ZFAR);
@@ -1432,6 +1461,7 @@ namespace Dhpoware
         {
             base.Update(gameTime);
             UpdateCamera(gameTime);
+            DebugOutput();
 
         }
 
@@ -1564,6 +1594,8 @@ namespace Dhpoware
             {
             case Camera.Behavior.FirstPerson:
             case Camera.Behavior.Spectator:
+            case Camera.Behavior.Follow:
+
                 if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightPrimary]) ||
                     inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightAlternate]))
                 {
@@ -1843,6 +1875,7 @@ namespace Dhpoware
                     case Camera.Behavior.FirstPerson:
                     case Camera.Behavior.Spectator:
                     case Camera.Behavior.Flight:
+                    case Camera.Behavior.Follow:
                         deltaX = inputState.LastMouseState.X - inputState.CurrentMouseState.X;
                         deltaY = inputState.LastMouseState.Y - inputState.CurrentMouseState.Y;
                         break;
@@ -2072,23 +2105,8 @@ namespace Dhpoware
                 break;
             case Camera.Behavior.Follow:
                 {
-                    // only makes sense if we have a follow target.
-                    if (FollowTarget != null)
-                    {
-                        IndexedVector3 targetPosition = FollowTarget.Position;
-                        IndexedVector3 targetFacing = FollowTarget.Forward;
-                        if (targetFacing.LengthSquared() > 0)
-                        {
-                            //IndexedVector3 
-                            float offset = 5;
-                            IndexedVector3 eye = targetPosition - (targetFacing * offset);
-                            //camera.LookAtSmooth(eye, targetPosition, Vector3.Up,elapsedTimeSec);
-                            camera.LookAt(eye, targetPosition, Vector3.Up);
-                        }
-                        //camera.Position = targetPosition;
-                        //camera.LookAt(targetPosition);
-                    }
-
+                    
+                    camera.UpdateViewMatrix();
                     break;
                 }
             default:
@@ -2341,29 +2359,101 @@ namespace Dhpoware
 
         public GameObject FollowTarget
         {
-            get { return m_followTarget; }
+            get { return camera.FollowTarget; }
             set 
             {
-                m_followTarget = value;
-                if (m_followTarget != null)
+                camera.FollowTarget = value;
+                if (camera.FollowTarget != null)
                 {
-                    IndexedVector3 targetPosition = FollowTarget.Position;
-                    IndexedVector3 targetFacing = FollowTarget.Forward;
-                    if (targetFacing.LengthSquared() == 0)
+                    if(camera.CurrentBehavior != Camera.Behavior.Follow)
                     {
-                        targetFacing = new IndexedVector3(0, 0, -1);
+                        camera.CurrentBehavior = Camera.Behavior.Follow;
                     }
-                    //IndexedVector3 
-                    float offset = 5;
-                    IndexedVector3 eye = targetPosition - (targetFacing * offset);
-                    // jump to immediate facing.
-                    camera.LookAt(eye, targetPosition, Vector3.Up);
+                //if (m_followTarget != null)
+                //{
+                //    Vector3 targetPosition = FollowTarget.Position;
+                //    Vector3 targetFacing = FollowTarget.Forward;
+                //    if (targetFacing.LengthSquared() == 0)
+                //    {
+                //        targetFacing = new Vector3(0, 0, -1);
+                //    }
+                //    //Vector3 
+                //    float offset = 5;
+                //    Vector3 eye = targetPosition - (targetFacing * offset);
+                //    // jump to immediate facing.
+                //    camera.LookAt(eye, targetPosition, Vector3.Up);
 
                 }
-
-
             }
         }
+
+        //public Vector3 FollowTargetLookAtOffset
+        //{
+        //    get { return camera.FollowTargetLookatOffset; }
+        //    set { camera.FollowTargetLookatOffset = value; }
+        //}
+
+
+        public void DebugOutput()
+        {
+
+            // add something to draw and test collision?
+            if (true)
+            {
+                if (Globals.CollisionManager != null)
+                {
+
+                    int rayLength = 100;
+                    int normalLength = 10;
+                    Vector3 startPos = Globals.Camera.Position;
+                    Vector3 direction = Globals.Camera.ViewDirection;
+                    Vector3 endPos = startPos + (direction * rayLength);
+
+                    Vector3 collisionPoint = Vector3.Zero;
+                    Vector3 collisionNormal = Vector3.Zero;
+
+                    if (Globals.DebugDraw != null)
+                    {
+                        Vector3 rayColor = new Vector3(1, 1, 1);
+                        Vector3 normalColor = new Vector3(1, 0, 0);
+                        Globals.DebugDraw.DrawLine(startPos, endPos, rayColor);
+
+                        Vector3 location = Globals.DebugTextCamera;
+                        Vector3 colour = new Vector3(1, 1, 1);
+
+                        String baseInfo = String.Format("Camera Pos[{0}] Forward[{1}] Player Pos[{2}] Forward[{3}]. ", startPos, direction,Globals.TrackedObject.Position,Globals.TrackedObject.Forward);
+
+                        //if (false && Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                        if (Globals.CollisionManager.CastRay(startPos, endPos, ref collisionPoint, ref collisionNormal))
+                        {
+                            Globals.cameraHasGroundContact = true;
+                            Globals.cameraGroundContactPoint = collisionPoint;
+                            Globals.cameraGroundContactNormal = collisionNormal;
+
+
+                            Vector3 normalStart = collisionPoint;
+                            Vector3 normalEnd = collisionPoint + (collisionNormal * normalLength);
+                            Globals.DebugDraw.DrawLine(normalStart, normalEnd, normalColor);
+
+                            String rayTestResult = String.Format("Collide[{0}] Normal[{1}]. ", collisionPoint, collisionNormal);
+
+                            Globals.DebugDraw.DrawText(baseInfo+rayTestResult, location, colour);
+
+                        }
+                        else
+                        {
+                            Globals.cameraHasGroundContact = false;
+                            Globals.DebugDraw.DrawText(baseInfo, location, colour);
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+
+
 
         public void HandleInput(InputState input)
         {
@@ -2376,7 +2466,6 @@ namespace Dhpoware
         {
             set
             {
-                clipToWorld = value;
                 camera.ClipToWorld = value;
             }
         }

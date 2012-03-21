@@ -184,7 +184,8 @@ namespace com.xexuxjy.magiccarpet
 
         public static Magician Player;
 
-        public static ChaseCamera Camera;
+        //public static ChaseCamera Camera;
+        public static CameraComponent Camera;
         public static Terrain Terrain;
         public static IDebugDraw DebugDraw;
         public static CollisionManager CollisionManager;

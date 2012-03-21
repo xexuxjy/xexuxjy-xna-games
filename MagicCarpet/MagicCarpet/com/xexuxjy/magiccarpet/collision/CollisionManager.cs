@@ -122,28 +122,28 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld,Object userPointer)
+        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld,Object userPointer)
         {
             return LocalCreateRigidBody(mass, ref startTransform, shape,motionState, addToWorld,userPointer);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, ref IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer)
+        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer)
         {
             return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, CollisionFilterGroups.StaticFilter,(CollisionFilterGroups.AllFilter ^ CollisionFilterGroups.StaticFilter));
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
             return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, filterGroup, filterMask);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, ref IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
 
             Debug.Assert((shape == null || shape.GetShapeType() != BroadphaseNativeTypes.INVALID_SHAPE_PROXYTYPE));
@@ -162,7 +162,7 @@ namespace com.xexuxjy.magiccarpet.collision
             //#ifdef USE_MOTIONSTATE
             if (motionState == null)
             {
-                motionState = new DefaultMotionState(startTransform, IndexedMatrix.Identity);
+                motionState = new DefaultMotionState(startTransform, Matrix.Identity);
             }
 
             RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, motionState, shape, localInertia);
@@ -185,12 +185,12 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         
-        public GhostObject LocalCreateGhostObject(IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public GhostObject LocalCreateGhostObject(Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
             return LocalCreateGhostObject(ref startTransform, shape, motionState, addToWorld, userPointer, filterGroup, filterMask);
         }
 
-        public GhostObject LocalCreateGhostObject(ref IndexedMatrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public GhostObject LocalCreateGhostObject(ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
             GhostObject ghostObject = new GhostObject();
             ghostObject.SetCollisionShape(shape);
@@ -224,30 +224,32 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         // a check against terrain only.
-        public bool CastCameraGroundRay(IndexedVector3 startPos, IndexedVector3 endPos, ref IndexedVector3 collisionPoint, ref IndexedVector3 collisionNormal)
+        public bool CastCameraGroundRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
         {
             if (m_dynamicsWorld != null)
             {
+                IndexedVector3 iv3start = startPos;
+                IndexedVector3 iv3end = endPos;
                 if (m_groundCallback == null)
                 {
-                    m_groundCallback = new ClosestRayResultCallback(ref startPos, ref endPos);
+                    m_groundCallback = new ClosestRayResultCallback(ref iv3start, ref iv3end);
                 }
                 else
                 {
-                    m_groundCallback.Initialize(ref startPos, ref endPos);
+                    m_groundCallback.Initialize(ref iv3start, ref iv3end);
                 }
 
                 m_groundCallback.m_collisionFilterMask = (CollisionFilterGroups)(GameObjectType.terrain);
                 m_groundCallback.m_collisionFilterGroup = (CollisionFilterGroups)(GameObjectType.camera);
-                m_dynamicsWorld.RayTest(ref startPos, ref endPos, m_groundCallback);
+                m_dynamicsWorld.RayTest(ref iv3start, ref iv3end, m_groundCallback);
 
             }
             if (m_groundCallback != null)
             {
                 if (m_groundCallback.HasHit())
                 {
-                    collisionPoint = m_groundCallback.m_hitPointWorld;
-                    collisionNormal = m_groundCallback.m_hitNormalWorld;
+                    collisionPoint = m_groundCallback.m_hitPointWorld.ToVector3();
+                    collisionNormal = m_groundCallback.m_hitNormalWorld.ToVector3();
                     return true;
                 }
             }
@@ -256,29 +258,31 @@ namespace com.xexuxjy.magiccarpet.collision
         }
 
 
-        public bool CastRay(IndexedVector3 startPos, IndexedVector3 endPos, ref IndexedVector3 collisionPoint, ref IndexedVector3 collisionNormal)
+        public bool CastRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
         {
             if (m_dynamicsWorld != null)
             {
+                IndexedVector3 iv3start = startPos;
+                IndexedVector3 iv3end = endPos;
                 if (m_callback == null)
                 {
-                    m_callback = new ClosestRayResultCallback(ref startPos, ref endPos);
+                    m_callback = new ClosestRayResultCallback(ref iv3start, ref iv3end);
                 }
                 else
                 {
-                    m_callback.Initialize(ref startPos, ref endPos);
+                    m_callback.Initialize(ref iv3start, ref iv3end);
                 }
                 m_callback.m_collisionFilterMask = (CollisionFilterGroups)(-1);
                 m_callback.m_collisionFilterGroup = (CollisionFilterGroups)( -1);
-                m_dynamicsWorld.RayTest(ref startPos, ref endPos, m_callback);
+                m_dynamicsWorld.RayTest(ref iv3start, ref iv3end, m_callback);
                 
             }
             if (m_callback != null)
             {
                 if (m_callback.HasHit())
                 {
-                    collisionPoint = m_callback.m_hitPointWorld;
-                    collisionNormal = m_callback.m_hitNormalWorld;
+                    collisionPoint = m_callback.m_hitPointWorld.ToVector3();
+                    collisionNormal = m_callback.m_hitNormalWorld.ToVector3();
                     return true;
                 }
             }
@@ -293,12 +297,12 @@ namespace com.xexuxjy.magiccarpet.collision
             // do these last.
             if (Globals.DebugDraw != null)
             {
-                IndexedMatrix view = Globals.Camera.View;
-                IndexedMatrix projection = Globals.Camera.Projection;
+                Matrix view = Globals.Camera.ViewMatrix;
+                Matrix projection = Globals.Camera.ProjectionMatrix;
 
                 m_dynamicsWorld.DebugDrawWorld();
 
-                bool drawGrid = true;
+                bool drawGrid = false;
                 if(drawGrid)
                 {
                     IndexedVector3 color = new IndexedVector3(1,0,0);
@@ -319,9 +323,9 @@ namespace com.xexuxjy.magiccarpet.collision
                     }
                 }
 
-                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderDebugLines(gameTime, ref view, ref projection);
-                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderOthers(gameTime, ref view, ref projection);
-                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderStandard(gameTime, ref view, ref projection, false);
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderDebugLines(gameTime, view, projection);
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderOthers(gameTime, view, projection);
+                ((XNA_ShapeDrawer)Globals.DebugDraw).RenderStandard(gameTime, view, projection, false);
 
             }
         }

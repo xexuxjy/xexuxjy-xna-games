@@ -91,8 +91,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
                 m_carpetEffect = Globals.MCContentManager.GetEffect("Carpet");
-                LightManager.ApplyLightToEffect(m_carpetEffect);
-
                 m_carpetTexture = Globals.MCContentManager.GetTexture("Carpet2");
             }
         }
@@ -106,7 +104,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             CollisionShape collisionShape = new BoxShape(magicianDimensions / 2);
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.magician;
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera);
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, IndexedMatrix.CreateTranslation(Position), collisionShape, GetMotionState(), true, this, collisionFlags, collisionMask);
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, GetMotionState(), true, this, collisionFlags, collisionMask);
             m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
 
         }
@@ -132,9 +130,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Initialize();
             PlayerControlled = true;
-            m_scaleTransform = IndexedMatrix.CreateScale(0.2f);
+            m_scaleTransform = Matrix.CreateScale(0.2f);
             // after init so we get the right draw order.
             DrawOrder = Globals.GUI_DRAW_ORDER;
+            StickToGround = false;
 
 
         }
@@ -185,18 +184,17 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            IndexedMatrix viewProjection = Globals.Camera.Projection * Globals.Camera.View;
+            Matrix viewProjection = Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix;
             BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
+
+            Globals.MCContentManager.ApplyCommonEffectParameters(m_carpetEffect);
 
 
             Globals.GraphicsDevice.SetVertexBuffer(m_carpetVertexBuffer);
 
             Vector3 startPosition = Position;
-            //Matrix transform = m_scaleTransform.ToMatrix() *  Matrix.CreateTranslation(startPosition) * viewProjection;
-            IndexedMatrix worldMatrix = IndexedMatrix.CreateTranslation(startPosition);
-            IndexedMatrix transform = viewProjection * worldMatrix;
-
-            m_carpetEffect.Parameters["WorldViewProjMatrix"].SetValue(transform.ToMatrixProjection());
+            Matrix worldMatrix = WorldTransform;
+            m_carpetEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
             m_carpetEffect.Parameters["CarpetTexture"].SetValue(m_carpetTexture);
 
             float timeScalar = 4f;
@@ -210,15 +208,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             m_carpetEffect.Parameters["CarpetMovementOffset"].SetValue(m_carpetMovementOffset);
 
-            Matrix view = Globals.Camera.View;
-            Matrix proj = Globals.Camera.Projection;
-
-
-            m_carpetEffect.Parameters["ViewMatrix"].SetValue(Globals.Camera.View.ToMatrix());
-            m_carpetEffect.Parameters["ProjMatrix"].SetValue(Globals.Camera.Projection.ToMatrixProjection());
-            m_carpetEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
-            Vector3 cameraPosition = Globals.Camera.Position.ToVector3();
-            m_carpetEffect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
 
 
             int noTriangles = m_carpetVertexBuffer.VertexCount / 3;
@@ -470,7 +459,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //   // pos.X -= carpetWidth / 2f;
 
             
-        //    IndexedMatrix worldMatrix = IndexedMatrix.CreateTranslation(pos);
+        //    Matrix worldMatrix = Matrix.CreateTranslation(pos);
 
 
 

@@ -55,8 +55,8 @@ namespace com.xexuxjy.util.debug
             frameCounter++;
 
             string fps = string.Format("fps: {0}", frameRate);
-            IndexedVector3 colour = new IndexedVector3(1, 1, 1);
-            m_debugDraw.DrawText(fps, new IndexedVector3(m_location), colour);
+            Vector3 colour = new Vector3(1, 1, 1);
+            m_debugDraw.DrawText(fps, m_location, colour);
         }
     }
 }

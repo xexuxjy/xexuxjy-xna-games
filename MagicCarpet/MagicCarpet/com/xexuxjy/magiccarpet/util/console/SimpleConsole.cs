@@ -313,12 +313,12 @@ namespace com.xexuxjy.magiccarpet.util.console
                                 Globals.MouseEnabled = true;
                             }
                         }
-                        else if (commandDetails.Name.Equals("cameraspeed"))
-                        {
-                            String speed = args[0];
-                            float x = float.Parse(speed);
-                            Globals.Camera.MaxVelocity = new Vector3(x);
-                        }
+                        //else if (commandDetails.Name.Equals("cameraspeed"))
+                        //{
+                        //    String speed = args[0];
+                        //    float x = float.Parse(speed);
+                        //    Globals.Camera.MaxVelocity = new Vector3(x);
+                        //}
 
 
                     }
@@ -479,11 +479,11 @@ namespace com.xexuxjy.magiccarpet.util.console
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void DropRandomManaBalls(int number,IndexedVector3 centerPosition,float range)
+        public void DropRandomManaBalls(int number,Vector3 centerPosition,float range)
         {
             for (int i = 0; i < number; ++i)
             {
-                IndexedVector3 ballPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(centerPosition, range);
+                Vector3 ballPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(centerPosition, range);
                 SpawnEntity(GameObjectType.manaball, ballPosition, null);
             }
         }
@@ -491,17 +491,17 @@ namespace com.xexuxjy.magiccarpet.util.console
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public IndexedVector3? GetVector(String args)
+        public Vector3? GetVector(String args)
         {
             String[] tokens = args.Split(s_subcommandSplitChars);
 
-            IndexedVector3? result = null;
+            Vector3? result = null;
             if (tokens.Length == 3)
             {
                 float x = float.Parse(tokens[0]);
                 float y = float.Parse(tokens[1]);
                 float z = float.Parse(tokens[2]);
-                result = new IndexedVector3(x, y, z);
+                result = new Vector3(x, y, z);
             }
             return result;
         }

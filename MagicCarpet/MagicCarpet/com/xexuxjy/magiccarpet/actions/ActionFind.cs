@@ -67,7 +67,7 @@ namespace com.xexuxjy.magiccarpet.actions
         {
             // pick a random point within the search radius?
             float randomAngle = (float)Globals.s_random.NextDouble() * MathUtil.SIMD_2_PI;
-            IndexedVector3 newPosition = new Vector3((float)Math.Cos(randomAngle), 0, (float)Math.Sin(randomAngle));
+            Vector3 newPosition = new Vector3((float)Math.Cos(randomAngle), 0, (float)Math.Sin(randomAngle));
             newPosition *= m_findData.m_findRadius;
 
             TargetLocation = (m_findData.m_position.HasValue ? m_findData.m_position.Value : m_findData.m_owner.Position) + newPosition;

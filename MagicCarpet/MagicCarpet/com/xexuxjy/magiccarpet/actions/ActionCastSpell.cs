@@ -12,7 +12,7 @@ namespace com.xexuxjy.magiccarpet.actions
 {
     public class ActionCastSpell : BaseAction
     {
-        public ActionCastSpell(GameObject owner, GameObject target, IndexedVector3? targetPosition, SpellType spellType) : base(owner,target,ActionState.Casting)
+        public ActionCastSpell(GameObject owner, GameObject target, Vector3? targetPosition, SpellType spellType) : base(owner,target,ActionState.Casting)
         {
             m_spellType = spellType;
             m_targetPosition = targetPosition;
@@ -24,7 +24,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public override void Start()
         {
             base.Start();
-            IndexedVector3 targetDirection = IndexedVector3.Up;
+            Vector3 targetDirection = Vector3.Up;
             if (Target != null)
             {
                 targetDirection = GameUtil.DirectionToTarget(Owner, Target);
@@ -39,7 +39,7 @@ namespace com.xexuxjy.magiccarpet.actions
 
 
         private SpellType m_spellType;
-        private IndexedVector3? m_targetPosition;
+        private Vector3? m_targetPosition;
 
     }
 }

@@ -1,7 +1,6 @@
 uniform matrix ViewMatrix;
 uniform matrix ProjMatrix;
 uniform matrix WorldMatrix;
-uniform matrix WorldViewProjMatrix;
 
 
 uniform float3 CameraPosition;
@@ -11,11 +10,13 @@ uniform float3 LightDirection;
 uniform float3 AmbientLight;
 uniform float3 DirectionalLight;
 
-bool FogEnabled;
-float FogStart;
-float FogEnd;
-float3 FogColor = float3(0,0.7,0.4);
+uniform bool FogEnabled;
+uniform float FogStart;
+uniform float FogEnd;
+uniform float3 FogColor = float3(0,0.7,0.4);
+uniform float EdgeFog;
 
+uniform float WorldWidth;
 
 static const float PI = 3.14159265f;
 
@@ -33,9 +34,19 @@ Then the computed fog factor is used to lerp between the normal color and the fo
 color.rgb = lerp(color.rgb, FogColor, fogFactor);
 */
 
-float ComputeFogFactor(float d)
+
+float ComputeFogFactor(float d,float3 worldpos)
 {
-    return clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
+    float result = clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
+	float minFog = (-WorldWidth / 2) + EdgeFog;
+	float maxFog = (WorldWidth / 2) - EdgeFog;
+	// provide a foggy band around the edge of the world.
+	if( worldpos.x < minFog || worldpos.x > maxFog || worldpos.z < minFog|| worldpos.z > maxFog)
+	{
+		result = 1.0f;
+	}
+	return result;
+
 }
 
 

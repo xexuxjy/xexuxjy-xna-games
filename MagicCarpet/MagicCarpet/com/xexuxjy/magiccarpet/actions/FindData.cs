@@ -1,10 +1,11 @@
 ﻿using com.xexuxjy.magiccarpet.gameobjects;
 using BulletXNA.LinearMath;
+using Microsoft.Xna.Framework;
 namespace com.xexuxjy.magiccarpet.actions
 {
     public struct FindData
     {
-        public IndexedVector3? m_position;
+        public Vector3? m_position;
         public GameObject m_owner;
         public GameObject m_target;
         public GameObjectType m_findMask;

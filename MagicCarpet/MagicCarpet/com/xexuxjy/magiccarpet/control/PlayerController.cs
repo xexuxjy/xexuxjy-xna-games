@@ -8,6 +8,7 @@ using com.xexuxjy.magiccarpet.gui;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using BulletXNA.LinearMath;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.control
 {
@@ -27,16 +28,22 @@ namespace com.xexuxjy.magiccarpet.control
 
         public virtual void HandleInput(InputState inputState,GameTime gameTime)
         {
+            if (!m_skippedFirst)
+            {
+                m_skippedFirst = true;
+                return;
+            }
+ 
             // reset values?
-            m_currentTranslation = IndexedVector3.Zero;
+            m_currentTranslation = Vector3.Zero;
 
             m_mouseController.HandleInput(inputState,gameTime);
             m_keyboardController.HandleInput(inputState,gameTime);
             m_playerHud.HandleInput(inputState);
-            //Globals.Camera.HandleInput(inputState);
+            Globals.Camera.HandleInput(inputState);
 
             // reset to test
-            m_currentYaw = 0;
+            //m_currentYaw = 0;
             m_currentPitch = 0;
 
 
@@ -49,23 +56,28 @@ namespace com.xexuxjy.magiccarpet.control
             if (Globals.Player != null)
             {
                 Globals.Player.PlayerControlled = true;
+                Globals.Camera.FollowTarget = Globals.Player;
 
 
                 // adjust position.
                 // need to convert the absolute movements into player relative ones.
 
-                IndexedMatrix im = Globals.Player.WorldTransform;
-                IndexedVector3 up = im.Up;
-                IndexedVector3 right = im.Right;
-                IndexedVector3 forward = im.Forward;
-                IndexedVector3 position = im._origin;
+                Matrix im = Globals.Player.WorldTransform;
+                Vector3 up = im.Up;
+                Vector3 right = im.Right;
+                Vector3 forward = im.Forward;
+                Vector3 position = im.Translation;
 
-                //IndexedVector3 relativeMovement = (right * m_currentTranslation.X) + (up * m_currentTranslation.Y) + (forward * m_currentTranslation.Z);
+                //Vector3 relativeMovement = (right * m_currentTranslation.X) + (up * m_currentTranslation.Y) + (forward * m_currentTranslation.Z);
                 if (m_currentTranslation.Length() > 0)
                 {
                     int ibreak = 0;
                 }
-                IndexedVector3 relativeMovement = m_currentTranslation * im._basis;
+                if (m_currentTranslation.Y > 0)
+                {
+                    int ibreak = 0;
+                }
+                Vector3 relativeMovement = Vector3.TransformNormal(m_currentTranslation, im);
 
 
                 // Update camera etc?
@@ -77,44 +89,41 @@ namespace com.xexuxjy.magiccarpet.control
 
 
                 // Create rotation matrix from rotation amount
-                //IndexedBasisMatrix rotationMatrix = IndexedBasisMatrix.CreateFromAxisAngle(right, m_currentPitch) *
-                //    IndexedBasisMatrix.CreateRotationY(m_currentYaw);
+                //Matrix rotationMatrix = Matrix.CreateFromAxisAngle(right, m_currentPitch) *
+                //    Matrix.CreateRotationY(m_currentYaw);
+                Matrix yawMatrix = Matrix.CreateFromAxisAngle(up,m_currentYaw);
+                Matrix pitchMatrix = Matrix.CreateFromAxisAngle(right, m_currentPitch);
 
+                Matrix rotationMatrix = yawMatrix * pitchMatrix;
 
                 //// Rotate orientation vectors
-                //IndexedVector3 direction = forward * rotationMatrix;
-                //up = up * rotationMatrix;
+                Vector3 direction = Vector3.TransformNormal(forward,rotationMatrix);
+                up = Vector3.TransformNormal(up ,rotationMatrix);
 
                 //// Re-normalize orientation vectors
                 //// Without this, the matrix transformations may introduce small rounding
                 //// errors which add up over time and could destabilize the ship.
-                //direction.Normalize();
-                //up.Normalize();
+                direction.Normalize();
+                up.Normalize();
 
                 //// Re-calculate Right
-                //right = IndexedVector3.Cross(direction, up);
+                right = Vector3.Cross(direction, up);
 
                 // The same instability may cause the 3 orientation vectors may
                 // also diverge. Either the Up or Direction vector needs to be
                 // re-computed with a cross product to ensure orthagonality
-                //up = Vector3.Cross(right, direction);
+                up = Vector3.Cross(right, direction);
 
-                //IndexedMatrix world = Matrix.Identity;
-                //world._basis = new IndexedBasisMatrix(right, up, forward);
-                //world._origin = position + relativeMovement;
+                Matrix world = Matrix.Identity;
+                world.Right = right;
+                world.Up = up;
+                world.Forward = direction;
+                world.Translation = position;
 
-                //Globals.Player.WorldTransform = world;
+                 //bit of extra work here.
+                Globals.Player.WorldTransform = world;
                 Globals.Player.Position += relativeMovement;
 
-
-
-
-                //Globals.Camera.ChasePosition = Globals.Player.Position;
-                //Globals.Camera.ChaseDirection = Globals.Player.Forward;
-                //Globals.Camera.Up = Globals.Player.Up;
-                Globals.Camera.ChasePosition = Globals.Player.Position;
-                Globals.Camera.ChaseDirection = Globals.Player.Forward;
-                Globals.Camera.Up = Globals.Player.Up;
             }
         
         
@@ -160,7 +169,7 @@ namespace com.xexuxjy.magiccarpet.control
         public void YawLeft(float amount)
         {
             m_currentYaw -= amount;
-                 
+                
         }
 
         public void YawRight(float amount)
@@ -188,7 +197,9 @@ namespace com.xexuxjy.magiccarpet.control
 
         private PlayerHud m_playerHud;
         private MouseController m_mouseController;
-        private KeyboardController m_keyboardController;   
+        private KeyboardController m_keyboardController;
 
+        private bool m_skippedFirst = false;
+ 
     }
 }

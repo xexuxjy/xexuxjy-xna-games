@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.spells;
 using System.Diagnostics;
+using com.xexuxjy.magiccarpet.renderer;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -102,7 +103,7 @@ namespace com.xexuxjy.magiccarpet.manager
         
         }
 
-        public Texture2D GetTexture(ref IndexedVector3 iv3)
+        public Texture2D GetTexture(ref Vector3 iv3)
         {
             Color color = new Color(iv3);
             return GetTexture(color);
@@ -270,6 +271,19 @@ namespace com.xexuxjy.magiccarpet.manager
             return result;
         }
 
+
+        public void ApplyCommonEffectParameters(Effect effect)
+        {
+            LightManager.ApplyLightToEffect(effect);
+
+            effect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
+            effect.Parameters["ViewMatrix"].SetValue(Globals.Camera.ViewMatrix);
+            effect.Parameters["ProjMatrix"].SetValue(Globals.Camera.ProjectionMatrix);
+
+            effect.Parameters["FogEnabled"].SetValue(true);
+            effect.Parameters["FogStart"].SetValue(20);
+            effect.Parameters["FogEnd"].SetValue(200);
+        }
 
 
 
