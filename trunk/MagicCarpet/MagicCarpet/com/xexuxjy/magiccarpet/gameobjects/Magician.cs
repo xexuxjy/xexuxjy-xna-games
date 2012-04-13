@@ -194,6 +194,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             Vector3 startPosition = Position;
             Matrix worldMatrix = WorldTransform;
+
+            Vector3 forward = WorldTransform.Forward;
+
             m_carpetEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
             m_carpetEffect.Parameters["CarpetTexture"].SetValue(m_carpetTexture);
 

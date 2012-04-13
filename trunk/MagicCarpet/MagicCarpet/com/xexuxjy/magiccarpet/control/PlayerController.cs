@@ -40,11 +40,11 @@ namespace com.xexuxjy.magiccarpet.control
             m_mouseController.HandleInput(inputState,gameTime);
             m_keyboardController.HandleInput(inputState,gameTime);
             m_playerHud.HandleInput(inputState);
-            Globals.Camera.HandleInput(inputState);
+            //Globals.Camera.HandleInput(inputState);
 
             // reset to test
             //m_currentYaw = 0;
-            m_currentPitch = 0;
+            //m_currentPitch = 0;
 
 
             if (inputState.IsNewButtonPress(Buttons.Y))
@@ -68,15 +68,6 @@ namespace com.xexuxjy.magiccarpet.control
                 Vector3 forward = im.Forward;
                 Vector3 position = im.Translation;
 
-                //Vector3 relativeMovement = (right * m_currentTranslation.X) + (up * m_currentTranslation.Y) + (forward * m_currentTranslation.Z);
-                if (m_currentTranslation.Length() > 0)
-                {
-                    int ibreak = 0;
-                }
-                if (m_currentTranslation.Y > 0)
-                {
-                    int ibreak = 0;
-                }
                 Vector3 relativeMovement = Vector3.TransformNormal(m_currentTranslation, im);
 
 
@@ -134,12 +125,12 @@ namespace com.xexuxjy.magiccarpet.control
 
         public void StepForward(float amount)
         {
-            m_currentTranslation.Z += amount;
+            m_currentTranslation += Vector3.Forward * amount;
         }
 
         public void StepBackward(float amount)
         {
-            m_currentTranslation.Z -= amount;
+            m_currentTranslation += Vector3.Backward * amount;
 
         }
 
@@ -166,27 +157,16 @@ namespace com.xexuxjy.magiccarpet.control
             m_currentTranslation.Y -= amount;
         }
 
-        public void YawLeft(float amount)
+        public void UpdateYaw(float amount)
         {
-            m_currentYaw -= amount;
+            m_currentYaw += amount;
                 
         }
 
-        public void YawRight(float amount)
-        {
-            m_currentYaw += amount;
-
-        }
-
-        public void PitchUp(float amount)
+        public void UpdatePitch(float amount)
         {
             m_currentPitch += amount;
 
-        }
-
-        public void PitchDown(float amount)
-        {
-            m_currentPitch -= amount;
         }
 
 
