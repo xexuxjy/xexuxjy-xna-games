@@ -296,7 +296,7 @@ namespace Dhpoware
         private bool m_keyboardInputEnabled;
 
         private GameObject m_followTarget;
-        private Vector3 m_followTargetLookatOffset = new Vector3(0,0.0f,0.0f);
+        private Vector3 m_followTargetLookatOffset = Vector3.Backward * 2;
 
     #region Public Methods
 
@@ -825,8 +825,20 @@ namespace Dhpoware
                 Vector3 newEye = eye + zAxis * orbitOffsetLength;
 
                 LookAt(newEye, eye, targetYAxis);
-                break;
+            break;
+            case Behavior.Follow:
+                savedEye = eye;
+                savedOrientation = orientation;
+                savedAccumPitchDegrees = accumPitchDegrees;
 
+                Matrix targetWorldTransform = FollowTarget.WorldTransform;
+                Matrix copyTargetWorldTransform = FollowTarget.WorldTransform;
+                copyTargetWorldTransform.Translation = Vector3.Zero;
+                targetYAxis = targetWorldTransform.Up;
+                Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorldTransform);
+                newEye2 += targetWorldTransform.Translation;
+                LookAt(newEye2, targetWorldTransform.Translation, targetYAxis);
+            break;
             default:
                 break;
             }
@@ -853,8 +865,22 @@ namespace Dhpoware
 
             orientation = newOrientation;
 
-            if (behavior == Behavior.FirstPerson || behavior == Behavior.Spectator || behavior == Behavior.Follow)
+            if (behavior == Behavior.FirstPerson || behavior == Behavior.Spectator)
+            {
                 LookAt(eye, eye + Vector3.Negate(zAxis), WORLD_Y_AXIS);
+            }
+            else if (behavior == Behavior.Follow)
+            {
+                Matrix targetWorldTransform = FollowTarget.WorldTransform;
+                Matrix copyTargetWorldTransform = FollowTarget.WorldTransform;
+                copyTargetWorldTransform.Translation = Vector3.Zero;
+                targetYAxis = targetWorldTransform.Up;
+                Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorldTransform);
+                newEye2 += targetWorldTransform.Translation;
+                LookAt(newEye2, targetWorldTransform.Translation, targetYAxis);
+
+            }
+
 
             UpdateViewMatrix();
         }
@@ -966,12 +992,12 @@ namespace Dhpoware
         /// </summary>
         public void UpdateViewMatrix()
         {
-            if (behavior == Behavior.Follow && FollowTarget != null)
-            {
-                Matrix targetFacing = FollowTarget.WorldTransform;
-                targetFacing.Translation = Vector3.Zero;
-                orientation = Quaternion.CreateFromRotationMatrix(targetFacing);
-            }
+            //if (behavior == Behavior.Follow && FollowTarget != null)
+            //{
+            //    Matrix targetFacing = FollowTarget.WorldTransform;
+            //    targetFacing.Translation = Vector3.Zero;
+            //    orientation = Quaternion.CreateFromRotationMatrix(targetFacing);
+            //}
 
             Matrix.CreateFromQuaternion(ref orientation, out viewMatrix);
 
@@ -996,15 +1022,19 @@ namespace Dhpoware
 
                 eye = target + zAxis * orbitOffsetLength;
             }
-            if (behavior == Behavior.Follow && FollowTarget != null)
-            {
-                Matrix targetFacing = FollowTarget.WorldTransform;
-                target = targetFacing.Translation;
-                targetFacing.Translation = Vector3.Zero;
+            //if (behavior == Behavior.Follow && FollowTarget != null)
+            //{
+            //    Matrix targetFacing = FollowTarget.WorldTransform;
+            //    //target = targetFacing.Translation;
+            //    //targetFacing.Translation = Vector3.Zero;
                 
-                Vector3 offset = Vector3.TransformNormal(m_followTargetLookatOffset, targetFacing);
-                eye = target + offset;
-            }
+            //    //Vector3 offset = Vector3.TransformNormal(m_followTargetLookatOffset, targetFacing);
+            //    //eye = target + offset;
+
+            //    eye = Vector3.Transform(FollowTargetLookAtOffset, targetFacing);
+
+
+            //}
 
             viewMatrix.M41 = -Vector3.Dot(xAxis, eye);
             viewMatrix.M42 = -Vector3.Dot(yAxis, eye);
@@ -1275,10 +1305,6 @@ namespace Dhpoware
         private InputState inputState;
         private Dictionary<Actions, Keys> actionKeys;
         private bool m_keyboardInputEnabled = true;
-
-        //private bool clipToWorld = true;
-        //private GameObject m_followTarget;
-        //private Vector3 m_followTargetLookatOffset = new Vector3(0, 2, -3);
 
 
     #region Public Methods
@@ -1743,10 +1769,13 @@ namespace Dhpoware
         /// <param name="e">Ignored.</param>
         private void HandleGameDeactivatedEvent(object sender, EventArgs e)
         {
-            MouseState state = inputState.CurrentMouseState;
+            if (inputState != null)
+            {
+                MouseState state = inputState.CurrentMouseState;
 
-            savedMousePosX = state.X;
-            savedMousePosY = state.Y;
+                savedMousePosX = state.X;
+                savedMousePosY = state.Y;
+            }
         }
 
         /// <summary>
@@ -2105,6 +2134,13 @@ namespace Dhpoware
                 break;
             case Camera.Behavior.Follow:
                 {
+                    Matrix targetWorldTransform = FollowTarget.WorldTransform;
+                    Matrix copyTargetWorldTransform = FollowTarget.WorldTransform;
+                    copyTargetWorldTransform.Translation = Vector3.Zero;
+                    Vector3 targetYAxis = targetWorldTransform.Up;
+                    Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorldTransform);
+                    newEye2 += targetWorldTransform.Translation;
+                    LookAt(newEye2, targetWorldTransform.Translation, targetYAxis);
                     
                     camera.UpdateViewMatrix();
                     break;
@@ -2387,11 +2423,11 @@ namespace Dhpoware
             }
         }
 
-        //public Vector3 FollowTargetLookAtOffset
-        //{
-        //    get { return camera.FollowTargetLookatOffset; }
-        //    set { camera.FollowTargetLookatOffset = value; }
-        //}
+        public Vector3 FollowTargetLookAtOffset
+        {
+            get { return camera.FollowTargetLookAtOffset; }
+            set { camera.FollowTargetLookAtOffset = value; }
+        }
 
 
         public void DebugOutput()

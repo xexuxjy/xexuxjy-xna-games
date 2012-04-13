@@ -44,31 +44,22 @@ namespace com.xexuxjy.magiccarpet.util
             float pitchChange = inputState.CurrentMouseState.Y - inputState.LastMouseState.Y;
             float yawChange = inputState.CurrentMouseState.X - inputState.LastMouseState.X;
 
-            if (!MathUtil.FuzzyZero(pitchChange))
-            {
-                if (pitchChange > 0)
-                {
-                    m_playerController.PitchUp(pitchChange);
-                }
-                else
-                {
-                    m_playerController.PitchDown(Math.Abs(pitchChange));
-                }
-            }
-
             yawChange *= m_mouseSensitivity;
             pitchChange *= m_mouseSensitivity;
 
+
+            if (!MathUtil.FuzzyZero(pitchChange))
+            {
+                if (m_invertY)
+                {
+                    pitchChange *= -1.0f;
+                }
+                m_playerController.UpdatePitch(pitchChange);
+            }
+
             if (!MathUtil.FuzzyZero(yawChange))
             {
-                if (yawChange > 0)
-                {
-                    m_playerController.YawRight(yawChange);
-                }
-                else
-                {
-                    m_playerController.YawLeft(Math.Abs(yawChange));
-                }
+                m_playerController.UpdateYaw(yawChange);
             }
 
             float scrollWheelChange = (float)(inputState.LastMouseState.ScrollWheelValue -

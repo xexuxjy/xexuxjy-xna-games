@@ -152,10 +152,10 @@ namespace com.xexuxjy.magiccarpet.util
                 case Keys.D: m_playerController.StepRight(Globals.STEPSIZETRANSLATE * elapsedTime); break;
                 case Keys.Q: m_playerController.StepUp(Globals.STEPSIZETRANSLATE * elapsedTime); break;
                 case Keys.Z: m_playerController.StepDown(Globals.STEPSIZETRANSLATE * elapsedTime); break;
-                case Keys.Left: m_playerController.YawLeft(Globals.STEPSIZEROTATE * elapsedTime); break;
-                case Keys.Right: m_playerController.YawRight(Globals.STEPSIZEROTATE * elapsedTime); break;
-                case Keys.Up: m_playerController.PitchUp(Globals.STEPSIZEROTATE * elapsedTime); break;
-                case Keys.Down: m_playerController.PitchDown(Globals.STEPSIZEROTATE * elapsedTime); break;
+                case Keys.Left: m_playerController.UpdateYaw(-Globals.STEPSIZEROTATE * elapsedTime); break;
+                case Keys.Right: m_playerController.UpdateYaw(Globals.STEPSIZEROTATE * elapsedTime); break;
+                case Keys.Up: m_playerController.UpdatePitch(-Globals.STEPSIZEROTATE * elapsedTime); break;
+                case Keys.Down: m_playerController.UpdatePitch(Globals.STEPSIZEROTATE * elapsedTime); break;
                 //case Keys.PageUp: ZoomIn(0.4f); break;
                 //case Keys.PageDown: ZoomOut(0.4f); break;
             }
