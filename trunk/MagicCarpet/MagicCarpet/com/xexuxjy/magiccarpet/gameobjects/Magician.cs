@@ -103,10 +103,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             Vector3 magicianDimensions = new Vector3(m_carpetDimensions.X, 0.2f, m_carpetDimensions.Z);
             CollisionShape collisionShape = new BoxShape(magicianDimensions / 2);
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.magician;
-            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera);
+            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera | GameObjectType.terrain);
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, GetMotionState(), true, this, collisionFlags, collisionMask);
             m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
-
+            BuildRayCallback();
         }
 
 
@@ -448,6 +448,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         }
 
+        public override Vector3 Position
+        {
+            set
+            {
+                // make sure we don't crash into the ground.
+                Vector3 oldVal = WorldTransform.Translation;
+                Vector3 result = CheckForGroundCollision(oldVal, value);
+
+                base.Position = result;
+            }
+        }
+
+
         //public void DrawBasicEffect(GameTime gameTime)
         //{
         //    if (m_carpetEffectBasic == null)
@@ -496,6 +509,33 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //}
 
+        protected void BuildRayCallback()
+        {
+            IndexedVector3 iv3start = IndexedVector3.Zero;
+            IndexedVector3 iv3end = IndexedVector3.Zero;
+            m_groundCallback = new ClosestRayResultCallback(ref iv3start, ref iv3end);
+            m_groundCallback.m_collisionFilterMask = (CollisionFilterGroups)(GameObjectType.terrain);
+            m_groundCallback.m_collisionFilterGroup = (CollisionFilterGroups)(GameObjectType.magician);
+
+        }
+
+        protected Vector3 CheckForGroundCollision(Vector3 startPos, Vector3 endPos)
+        {
+            //startPos = new Vector3(0, 10, 0);
+            //endPos = new Vector3(0, -10, 0);
+
+            m_groundCallback.Initialize(startPos, endPos);
+            Globals.CollisionManager.CastRay(startPos, endPos, m_groundCallback);
+            if (m_groundCallback.HasHit())
+            {
+                Vector3 normalPushBack = m_groundCallback.m_hitNormalWorld * 1f;
+                endPos = m_groundCallback.m_hitPointWorld + normalPushBack;
+
+            }
+            return endPos;
+        }
+
+
         private Vector4 m_carpetDimensions;
 
         private VertexPositionTexture[] m_carpetVertices;
@@ -503,6 +543,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private Texture2D m_carpetTexture;
         private Effect m_carpetEffect;
         private float m_carpetMovementOffset;
+
+        private ClosestRayResultCallback m_groundCallback;
 
 
 

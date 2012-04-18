@@ -63,7 +63,8 @@ namespace com.xexuxjy.magiccarpet.control
                 // need to convert the absolute movements into player relative ones.
 
                 Matrix im = Globals.Player.WorldTransform;
-                Vector3 up = im.Up;
+                //Vector3 up = im.Up;
+                Vector3 up = Vector3.Up;
                 Vector3 right = im.Right;
                 Vector3 forward = im.Forward;
                 Vector3 position = im.Translation;

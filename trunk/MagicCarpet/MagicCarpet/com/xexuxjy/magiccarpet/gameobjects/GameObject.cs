@@ -346,6 +346,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     clampedValue.Y = height + GetStartOffsetHeight() +  GetHoverHeight();
                 }
 
+                // stop us going into the ground.
+
+
                 m.Translation = clampedValue;
                 WorldTransform = m;
             }
@@ -429,7 +432,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             get { return WorldTransform.Forward; }
             set
             {
-                Matrix m = Matrix.CreateLookAt(Position, Position + value, Up);
+                //Matrix m = Matrix.CreateLookAt(Position, Position + value, Up);
+                Matrix m = WorldTransform;
+                m.Forward = value;
+                // adjust axis?
                 WorldTransform = m;
             }
         }

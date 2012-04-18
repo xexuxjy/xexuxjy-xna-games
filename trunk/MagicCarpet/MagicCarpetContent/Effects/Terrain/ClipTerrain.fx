@@ -182,7 +182,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
 
 	// do something funky as well to provide fog near the boundaries of the world.
-	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
+	result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
 
 	return result;

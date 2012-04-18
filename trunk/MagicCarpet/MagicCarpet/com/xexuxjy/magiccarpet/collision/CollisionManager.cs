@@ -258,6 +258,19 @@ namespace com.xexuxjy.magiccarpet.collision
         }
 
 
+        public void CastRay(Vector3 startPos, Vector3 endPos, RayResultCallback callback)
+        {
+            if( Vector3.DistanceSquared(startPos,endPos) > 0)
+            {
+                int ibreak =0;
+            }
+            IndexedVector3 iv3start = startPos;
+            IndexedVector3 iv3end = endPos;
+            m_dynamicsWorld.RayTest(ref iv3start, ref iv3end, callback);
+        }
+
+
+
         public bool CastRay(Vector3 startPos, Vector3 endPos, ref Vector3 collisionPoint, ref Vector3 collisionNormal)
         {
             if (m_dynamicsWorld != null)

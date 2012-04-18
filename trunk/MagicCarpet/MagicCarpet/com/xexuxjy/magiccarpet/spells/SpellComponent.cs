@@ -14,7 +14,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
             m_owner = owner;
             // manaCost,castTime,cooldownTime,duration
-            InitializeTemplate(SpellType.Convert, 5, 0.5f, 10f, 10f);
+            InitializeTemplate(SpellType.Convert, 0, 0.1f, 0f, 10f);
             InitializeTemplate(SpellType.Lower, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Raise, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Castle, 5, 0.5f, 1f, 10f);
@@ -68,7 +68,7 @@ namespace com.xexuxjy.magiccarpet.spells
                 GameObjectAttribute mana = m_owner.GetAttribute(GameObjectAttributeType.Mana);
                 mana.CurrentValue -= template.ManaCost;
 
-                Spell spell = Globals.SpellPool.CreateSpell(spellType, m_owner);
+                Spell spell = Globals.SpellPool.CreateAndInitializeSpell(spellType, m_owner);
 
                 Globals.GameObjectManager.AddAndInitializeObject(spell,false);
 

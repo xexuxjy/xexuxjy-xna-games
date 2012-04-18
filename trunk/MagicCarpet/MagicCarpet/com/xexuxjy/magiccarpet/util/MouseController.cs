@@ -74,8 +74,8 @@ namespace com.xexuxjy.magiccarpet.util
 
             if ( leftReleased || rightReleased)
             {
-                Vector3 startPos = Globals.Camera.Position;
-                Vector3 direction = Globals.Camera.ViewDirection;
+                Vector3 startPos = Globals.Player.Position ;
+                Vector3 direction = Globals.Player.Forward ;
                 if(leftReleased)
                 {
                     if (Globals.Player != null)
