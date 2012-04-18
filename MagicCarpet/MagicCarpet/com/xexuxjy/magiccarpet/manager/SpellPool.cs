@@ -7,7 +7,7 @@ namespace com.xexuxjy.magiccarpet.manager
     public class SpellPool
     {
 
-        public Spell CreateSpell(SpellType spellType, GameObject owner)
+        public Spell CreateAndInitializeSpell(SpellType spellType, GameObject owner)
         {
 
                 Spell spell = null;
@@ -60,7 +60,7 @@ namespace com.xexuxjy.magiccarpet.manager
                             break;
                         }
                 }
-
+                spell.Initialize(owner.SpellComponent.GetSpellTemplate(spellType));
 #if LOG_EVENT
                 Globals.EventLogger.LogEvent(String.Format("CreateSpell[{0}][{1}][{2}].", spell.Id, owner.Id, spell.SpellType));
 #endif

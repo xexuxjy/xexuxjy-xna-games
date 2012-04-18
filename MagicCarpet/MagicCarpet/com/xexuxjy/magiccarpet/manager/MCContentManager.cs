@@ -33,7 +33,9 @@ namespace com.xexuxjy.magiccarpet.manager
             m_effectDictionary["Carpet"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
 
 
-            m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("unitcube");
+            //m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("unitcube");
+            m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
+
             //m_castleModel = m_contentManager.Load<Model>("Models/Castle/saintriqT3DS");
             //m_castleModel = m_contentManager.Load<Model>("Models/NewCastle/castle3");
 
@@ -283,6 +285,8 @@ namespace com.xexuxjy.magiccarpet.manager
             effect.Parameters["FogEnabled"].SetValue(true);
             effect.Parameters["FogStart"].SetValue(20);
             effect.Parameters["FogEnd"].SetValue(200);
+            effect.Parameters["EdgeFog"].SetValue(5);
+            effect.Parameters["WorldWidth"].SetValue(Globals.WorldWidth);
         }
 
 
