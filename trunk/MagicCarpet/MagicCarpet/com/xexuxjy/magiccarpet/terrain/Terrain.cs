@@ -153,6 +153,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_blockIndexBuffer = new IndexBuffer(Globals.GraphicsDevice, IndexElementSize.ThirtyTwoBits, blockIndices.Length, BufferUsage.None);
             m_blockIndexBuffer.SetData<int>(blockIndices);
 
+
             BuildTreeMap();
         }
 
@@ -223,7 +224,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Draw(GameTime gameTime)
         {
-            //return;
+            return;
             UpdateHeightMapTexture();
 
 
@@ -251,6 +252,27 @@ namespace com.xexuxjy.magiccarpet.terrain
             Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
             Vector3 startPosition = new Vector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
             float oneOverTextureWidth = 1f / (m_textureWidth - 1);
+
+            // draw in the wall
+            m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["TerrainWall"];
+            Model m = Globals.MCContentManager.GetModelForName("TerrainWalls");
+
+            Matrix wallTransform = Matrix.CreateScale(new Vector3(Globals.WorldWidth / 2, 100, Globals.WorldWidth / 2));
+            //Matrix wallTransform = Matrix.Identity;
+            //wallTransform.Translation = startPosition;
+
+            m_terrainEffect.Parameters["WorldMatrix"].SetValue(wallTransform);
+            foreach (ModelMesh mesh in m.Meshes)
+            {
+                foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
+                {
+
+                    pass.Apply();
+                    mesh.Draw();
+
+                }
+            }
+
 
             m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["TileTerrain"];
             Globals.GraphicsDevice.Indices = m_blockIndexBuffer;
@@ -1025,6 +1047,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         private List<Vector4> m_treePositions = new List<Vector4>();
 
 
+
+
         private bool m_defaultHeightMethod = true;
         private bool m_terrainHasChanged;
         private float m_maxCoverage = 0.65f;
@@ -1043,6 +1067,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         VertexBuffer m_blockVertexBuffer;
         IndexBuffer m_blockIndexBuffer;
+
         Effect m_terrainEffect;
         Effect m_normalsEffect;
 

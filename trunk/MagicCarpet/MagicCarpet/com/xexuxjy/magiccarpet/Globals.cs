@@ -35,7 +35,7 @@ namespace com.xexuxjy.magiccarpet
         public static bool ProfilingEnabled;
         public static bool DebugTextEnabled = true;
         public static bool BulletCollisionEnabled;
-        public static bool TerrainCollisionEnabled = true;
+        public static bool TerrainCollisionEnabled = false;
         public static bool TerrainWrapEnabled = true;
 
         public static bool MouseEnabled = true;

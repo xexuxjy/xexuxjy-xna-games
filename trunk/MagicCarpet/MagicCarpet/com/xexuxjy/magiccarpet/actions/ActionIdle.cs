@@ -14,6 +14,13 @@ namespace com.xexuxjy.magiccarpet.actions
             Duration = s_idleDuration;
         }
 
+        public ActionIdle(GameObject owner,float idleDuration)
+            : base(owner, null, ActionState.Idle)
+        {
+            Duration = idleDuration;
+        }
+
+
         const float s_idleDuration = 2f;
     }
 }

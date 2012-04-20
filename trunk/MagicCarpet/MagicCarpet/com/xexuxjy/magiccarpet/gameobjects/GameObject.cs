@@ -102,7 +102,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_spellComponent = new SpellComponent(this);
             m_spellComponent.Initialize();
 
-            m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
+            m_model = Globals.MCContentManager.GetModelForObjectType(GameObjectType);
 
             SetStartAttributes();
 
@@ -286,8 +286,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         BasicEffect basicEffect = (BasicEffect)effect;
                         basicEffect.View = view;
                         basicEffect.Projection = projection;
-                        basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform * world;
-
+                        //basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform * world;
+                        basicEffect.World = world;
                         basicEffect.Texture = GetTexture();
                     }
                     mesh.Draw();
@@ -465,7 +465,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject Owner
+        public virtual GameObject Owner
         {
             get { return m_owner; }
             set

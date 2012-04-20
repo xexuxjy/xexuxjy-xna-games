@@ -19,7 +19,7 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             m_contentManager = Globals.Game.Content;
             m_graphicsDevice = Globals.Game.GraphicsDevice;
-            m_modelDictionary = new Dictionary<GameObjectType, Model>();
+            m_modelDictionary = new Dictionary<String, Model>();
             m_colorMap = new Dictionary<Color, Texture2D>();
             m_textureDictionary = new Dictionary<string, Texture2D>();
             m_effectDictionary = new Dictionary<string, Effect>();
@@ -33,26 +33,29 @@ namespace com.xexuxjy.magiccarpet.manager
             m_effectDictionary["Carpet"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
 
 
-            //m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("unitcube");
-            m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
+            m_modelDictionary[GameObjectType.castle.ToString()] = m_contentManager.Load<Model>("Models/SimpleShapes/unitcube");
+            m_modelDictionary["TerrainWalls"] = m_contentManager.Load<Model>("Models/Terrain/TerrainWalls");
+
+            //m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
 
             //m_castleModel = m_contentManager.Load<Model>("Models/Castle/saintriqT3DS");
             //m_castleModel = m_contentManager.Load<Model>("Models/NewCastle/castle3");
 
-            m_modelDictionary[GameObjectType.balloon] = m_contentManager.Load<Model>("unitsphere");
+            m_modelDictionary[GameObjectType.balloon.ToString()] = m_contentManager.Load<Model>("Models/SimpleShapes/unitsphere");
 
-            m_modelDictionary[GameObjectType.manaball] = m_modelDictionary[GameObjectType.balloon];
+            m_modelDictionary[GameObjectType.manaball.ToString()] = m_modelDictionary[GameObjectType.balloon.ToString()];
 
-            m_modelDictionary[GameObjectType.spell] = m_modelDictionary[GameObjectType.balloon]; 
+            m_modelDictionary[GameObjectType.spell.ToString()] = m_modelDictionary[GameObjectType.balloon.ToString()];
 
-            m_modelDictionary[GameObjectType.monster] = m_contentManager.Load<Model>("unitcone");
+            m_modelDictionary[GameObjectType.monster.ToString()] = m_contentManager.Load<Model>("Models/SimpleShapes/unitcone");
 
             //m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("unitcylinder");
-            m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("Models/Magician/magician");
+            m_modelDictionary[GameObjectType.magician.ToString()] = m_contentManager.Load<Model>("Models/Magician/magician");
+            m_modelDictionary["CastleTower"] = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
 
 
             Model m = m_contentManager.Load<Model>("Models/SkyDome/skydome");
-            m_modelDictionary[GameObjectType.skydome] = m;
+            m_modelDictionary[GameObjectType.skydome.ToString()] = m;
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
             m_basicEffect = new BasicEffect(m_graphicsDevice);
@@ -62,6 +65,9 @@ namespace com.xexuxjy.magiccarpet.manager
             {
                 RemapModel(model, m_basicEffect);
             }
+
+
+            RemapModel(m_modelDictionary["TerrainWalls"], m_effectDictionary["Terrain"]);
 
 
             m_textureDictionary["MiniMapAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/MiniMapAtlas");
@@ -81,12 +87,20 @@ namespace com.xexuxjy.magiccarpet.manager
         
         }
 
-        public Model ModelForObjectType(GameObjectType gameObjectType)
+        public Model GetModelForObjectType(GameObjectType gameObjectType)
         {
             Model model;
-            m_modelDictionary.TryGetValue(gameObjectType, out model);
+            m_modelDictionary.TryGetValue(gameObjectType.ToString(), out model);
             return model;
         }
+
+        public Model GetModelForName(String name)
+        {
+            Model model;
+            m_modelDictionary.TryGetValue(name, out model);
+            return model;
+        }
+
 
         public Texture2D GetTexture(Color color)
         {
@@ -305,7 +319,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         private SpriteFont m_debugFont;
 
-        private Dictionary<GameObjectType, Model> m_modelDictionary;
+        private Dictionary<String, Model> m_modelDictionary;
         private Dictionary<String, Texture2D> m_textureDictionary;
         private Dictionary<Color, Texture2D> m_colorMap;
         private Dictionary<String, Effect> m_effectDictionary;
