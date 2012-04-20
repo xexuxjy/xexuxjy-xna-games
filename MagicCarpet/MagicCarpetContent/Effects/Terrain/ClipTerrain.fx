@@ -49,6 +49,28 @@ struct TreeVertexShaderOutput
 	float3 pos3d : TEXCOORD3;
 };
 
+/*
+struct WallVertexShaderInput
+{
+    float3 pos  : POSITION;
+	float4 color : COLOR;   
+};
+*/
+struct WallVertexShaderInput
+{
+	float4 pos : POSITION0;
+    float3 normal : NORMAL;
+    float4 uv : TEXCOORD0;
+};
+
+
+
+struct WallVertexShaderOutput
+{
+    vector pos        : POSITION;   
+	float3 pos3d : TEXCOORD0;
+};
+
 
 uniform sampler ElevationSampler = sampler_state
 {
@@ -243,6 +265,25 @@ float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
     return result;
 }
 
+WallVertexShaderOutput WallVertexShaderFunction(WallVertexShaderInput input)
+{
+    WallVertexShaderOutput output;
+    float4 worldPosition = mul(input.pos, WorldMatrix);
+    float4 viewPosition = mul(worldPosition, ViewMatrix);
+    output.pos = mul(viewPosition, ProjMatrix);
+	output.pos3d = input.pos;
+    return output;
+}
+
+
+float4 WallPixelShaderFunction(WallVertexShaderOutput input) : COLOR0
+{
+	float4 result = float4(FogColor,1);
+	//float distanceFromCamera = length(input.pos3d - CameraPosition);
+	//float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
+	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
+    return result;
+}
 
 
 technique TileTerrain
@@ -261,10 +302,22 @@ technique BillboardTrees
 {
     pass Pass1
     {
-        // TODO: set renderstates here.
-
         VertexShader = compile vs_3_0 TreeVertexShaderFunction();
         PixelShader = compile ps_3_0 TreePixelShaderFunction();
     }
 
 }
+
+technique TerrainWall
+{
+	pass Pass1
+	{
+        VertexShader = compile vs_3_0 WallVertexShaderFunction();
+        PixelShader = compile ps_3_0 WallPixelShaderFunction();
+
+	}
+}
+
+
+
+

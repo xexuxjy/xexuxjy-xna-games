@@ -342,6 +342,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\SimpleShapes\unitcubeinv.fbx">
+      <Name>unitcubeinv</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Terrain\TerrainWalls.fbx">
+      <Name>TerrainWalls</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Models\NewCastle\castle_tower.fbx">
       <Name>castle_tower</Name>
       <Importer>FbxImporter</Importer>

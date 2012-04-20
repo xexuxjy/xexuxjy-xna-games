@@ -523,14 +523,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             //startPos = new Vector3(0, 10, 0);
             //endPos = new Vector3(0, -10, 0);
-
-            m_groundCallback.Initialize(startPos, endPos);
-            Globals.CollisionManager.CastRay(startPos, endPos, m_groundCallback);
-            if (m_groundCallback.HasHit())
+            if (Globals.TerrainCollisionEnabled)
             {
-                Vector3 normalPushBack = m_groundCallback.m_hitNormalWorld * 1f;
-                endPos = m_groundCallback.m_hitPointWorld + normalPushBack;
+                m_groundCallback.Initialize(startPos, endPos);
+                Globals.CollisionManager.CastRay(startPos, endPos, m_groundCallback);
+                if (m_groundCallback.HasHit())
+                {
+                    Vector3 normalPushBack = m_groundCallback.m_hitNormalWorld * 1f;
+                    endPos = m_groundCallback.m_hitPointWorld + normalPushBack;
 
+                }
             }
             return endPos;
         }

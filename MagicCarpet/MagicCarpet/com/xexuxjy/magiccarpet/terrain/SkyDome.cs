@@ -11,7 +11,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public SkyDome()
             : base(GameObjectType.skydome)
         {
-            m_model = Globals.MCContentManager.ModelForObjectType(GameObjectType);
+            m_model = Globals.MCContentManager.GetModelForObjectType(GameObjectType);
             DrawOrder = Globals.TERRAIN_DRAW_ORDER;
         }
 
@@ -23,6 +23,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Draw(GameTime gameTime)
         {
+            base.Draw(gameTime);
         }
 
 
@@ -33,8 +34,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override Texture2D GetTexture()
         {
-            return Globals.MCContentManager.GetTexture("SkyDome");
-            //return Globals.MCContentManager.GetTexture(Color.HotPink);
+            //return Globals.MCContentManager.GetTexture("SkyDome");
+            return Globals.MCContentManager.GetTexture(Color.HotPink);
 
         }
 

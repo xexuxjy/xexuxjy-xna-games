@@ -128,6 +128,13 @@ namespace com.xexuxjy.magiccarpet.actions
                 findData.m_monsterWeight = 0.6f;
                 findData.m_castleWeight = 0.3f;
             }
+            else if (owner is Castle || owner is CastleTower)
+            {
+                findData.m_findMask = GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster;
+                findData.m_magicianWeight = 1.0f;
+                findData.m_balloonWeight = 0.7f;
+                findData.m_monsterWeight = 0.6f;
+            }
 
             findData.m_findRadius = searchRadius;
             findData.m_manaballWeight = 1.0f;

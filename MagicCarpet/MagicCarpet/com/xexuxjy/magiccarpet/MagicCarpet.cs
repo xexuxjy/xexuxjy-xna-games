@@ -36,7 +36,8 @@ namespace com.xexuxjy.magiccarpet
             Globals.GraphicsDeviceManager.PreferredBackBufferWidth = 1024;
             Globals.GraphicsDeviceManager.PreferredBackBufferHeight = 768;
             Globals.GraphicsDeviceManager.PreparingDeviceSettings += graphics_PreparingDeviceSettings;
- 
+
+
             }
 
 

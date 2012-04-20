@@ -148,6 +148,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\control\PlayerController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\CastleTower.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\EmptyGameObject.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Monster.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\ScreenManager\GameScreen.cs" />
