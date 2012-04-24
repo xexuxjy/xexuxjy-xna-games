@@ -282,22 +282,17 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     m_model.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
                     foreach (Effect effect in mesh.Effects)
                     {
-
-                        BasicEffect basicEffect = (BasicEffect)effect;
-                        basicEffect.View = view;
-                        basicEffect.Projection = projection;
-                        basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform * world;
-                        //basicEffect.World = world;
+                        effect.CurrentTechnique = effect.Techniques["SimpleTechnique"];
+                        Globals.MCContentManager.ApplyCommonEffectParameters(effect);
+                        effect.Parameters["WorldMatrix"].SetValue(m_boneTransforms[mesh.ParentBone.Index] * world); 
                         Texture2D texture = GetTexture();
                         if (texture != null)
                         {
-                            basicEffect.Texture = texture;
-                            basicEffect.TextureEnabled = true;
+                            effect.Parameters["Texture"].SetValue(texture);
                         }
                     }
                     mesh.Draw();
                 }
-
             }
         }
 
