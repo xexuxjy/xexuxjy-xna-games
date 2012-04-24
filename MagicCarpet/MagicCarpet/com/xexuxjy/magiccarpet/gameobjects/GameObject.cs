@@ -263,7 +263,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            DrawEffect(Game.GraphicsDevice, Globals.Camera.ViewMatrix, WorldTransform, Globals.Camera.ViewMatrix);
+            DrawEffect(Game.GraphicsDevice, Globals.Camera.ViewMatrix, WorldTransform, Globals.Camera.ProjectionMatrix);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -286,9 +286,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         BasicEffect basicEffect = (BasicEffect)effect;
                         basicEffect.View = view;
                         basicEffect.Projection = projection;
-                        //basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform * world;
-                        basicEffect.World = world;
-                        basicEffect.Texture = GetTexture();
+                        basicEffect.World = m_boneTransforms[mesh.ParentBone.Index] * m_scaleTransform * world;
+                        //basicEffect.World = world;
+                        Texture2D texture = GetTexture();
+                        if (texture != null)
+                        {
+                            basicEffect.Texture = texture;
+                            basicEffect.TextureEnabled = true;
+                        }
                     }
                     mesh.Draw();
                 }

@@ -216,6 +216,7 @@ namespace com.xexuxjy.magiccarpet.actions
         AttackingMelee= 9,
         AttackingRange=10,
         Dieing = 11,
+        Spawning = 12
 
     }
 

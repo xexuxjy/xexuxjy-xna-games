@@ -51,10 +51,10 @@ namespace com.xexuxjy.magiccarpet.manager
 
             //m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("unitcylinder");
             m_modelDictionary[GameObjectType.magician.ToString()] = m_contentManager.Load<Model>("Models/Magician/magician");
-            m_modelDictionary["CastleTower"] = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
+            Model m = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
+            m_modelDictionary["CastleTower"] = m;
 
-
-            Model m = m_contentManager.Load<Model>("Models/SkyDome/skydome");
+            m = m_contentManager.Load<Model>("Models/SkyDome/skydome");
             m_modelDictionary[GameObjectType.skydome.ToString()] = m;
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
@@ -82,6 +82,7 @@ namespace com.xexuxjy.magiccarpet.manager
             m_textureDictionary["TerrainHeightMap"] = new Texture2D(Globals.GraphicsDevice, Globals.WorldWidth + 1, Globals.WorldWidth + 1, false, SurfaceFormat.Single);
             m_textureDictionary["TerrainNormalMap"] = new RenderTarget2D(Globals.GraphicsDevice, Globals.WorldWidth + 1, Globals.WorldWidth + 1, false, SurfaceFormat.Color, DepthFormat.None);
             m_textureDictionary["TreeBillboard"] = m_contentManager.Load<Texture2D>("Textures/Terrain/TreeBillBoard");
+            m_textureDictionary["CastleTower"] = m_contentManager.Load<Texture2D>("Models/NewCastle/wallstone");
 
             m_textureDictionary["Carpet2"] = m_contentManager.Load<Texture2D>("Textures/Magician/Carpet2");
         

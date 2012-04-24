@@ -22,7 +22,7 @@ namespace com.xexuxjy.magiccarpet.gui
             // after init so we get the right draw order.
             DrawOrder = Globals.GUI_DRAW_ORDER;
 
-            Globals.GameObjectManager.AddAndInitializeObject(new FrameRateCounter(Globals.DebugTextFPS, Globals.DebugDraw));
+            //Globals.GameObjectManager.AddAndInitializeObject(new FrameRateCounter(Globals.DebugTextFPS, Globals.DebugDraw));
             Globals.GameObjectManager.AddAndInitializeObject(this);
 
             int inset = 10;

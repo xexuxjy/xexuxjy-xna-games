@@ -80,7 +80,7 @@ namespace com.xexuxjy.magiccarpet.collision
             ProcessCollisions();
 
             String debugText = String.Format("CollisionManager Objects[{0}] Constraints[{1}] Pairs[{2}] Manifolds[{3}].", m_dynamicsWorld.GetNumCollisionObjects(), m_dynamicsWorld.GetNumConstraints(), m_broadphase.GetOverlappingPairCache().GetNumOverlappingPairs(), m_dispatcher.GetNumManifolds());
-            Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, IndexedVector3.One);
+            //Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, IndexedVector3.One);
 
             base.Update(gameTime);
 

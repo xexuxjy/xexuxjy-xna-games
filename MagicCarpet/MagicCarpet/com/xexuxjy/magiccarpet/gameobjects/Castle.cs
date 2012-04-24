@@ -89,7 +89,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 tower.Draw(gameTime);
             }
-            base.Draw(gameTime);
         }
 
 
@@ -99,6 +98,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             if (m_towers != null)
             {
+                foreach (CastleTower tower in m_towers)
+                {
+                    tower.Cleanup();
+                }
                 m_towers.Clear();
             }
 

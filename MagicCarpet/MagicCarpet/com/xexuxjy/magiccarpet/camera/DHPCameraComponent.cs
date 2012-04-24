@@ -2434,7 +2434,7 @@ namespace Dhpoware
         {
 
             // add something to draw and test collision?
-            if (true)
+            if (false)
             {
                 if (Globals.CollisionManager != null)
                 {
