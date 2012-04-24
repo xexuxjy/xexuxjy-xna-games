@@ -7,6 +7,7 @@ using com.xexuxjy.magiccarpet.actions;
 using com.xexuxjy.magiccarpet.spells;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.util;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -130,6 +131,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public override Texture2D GetTexture()
+        {
+            return Globals.MCContentManager.GetTexture("CastleTower");
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
         private Castle m_castle;
     }
             
