@@ -31,6 +31,10 @@ namespace com.xexuxjy.magiccarpet.manager
             m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
             m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
             m_effectDictionary["Carpet"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
+            Effect simpleEffect = m_contentManager.Load<Effect>("Effects/SimpleEffect");
+            simpleEffect.CurrentTechnique = simpleEffect.Techniques["SimpleTechnique"];
+            simpleEffect.Name = "Simple";
+            m_effectDictionary["Simple"] = simpleEffect;
 
 
             m_modelDictionary[GameObjectType.castle.ToString()] = m_contentManager.Load<Model>("Models/SimpleShapes/unitcube");
@@ -58,12 +62,11 @@ namespace com.xexuxjy.magiccarpet.manager
             m_modelDictionary[GameObjectType.skydome.ToString()] = m;
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
-            m_basicEffect = new BasicEffect(m_graphicsDevice);
-            m_basicEffect.TextureEnabled = true;
+
 
             foreach (Model model in m_modelDictionary.Values)
             {
-                RemapModel(model, m_basicEffect);
+                RemapModel(model, simpleEffect);
             }
 
 
@@ -154,13 +157,6 @@ namespace com.xexuxjy.magiccarpet.manager
                     part.Effect = effect;
                 }
             }
-        }
-
-
-
-        public BasicEffect BasicEffect
-        {
-            get { return m_basicEffect; }
         }
 
         public SpriteFont DebugFont
@@ -303,20 +299,6 @@ namespace com.xexuxjy.magiccarpet.manager
             effect.Parameters["EdgeFog"].SetValue(5);
             effect.Parameters["WorldWidth"].SetValue(Globals.WorldWidth);
         }
-
-
-
-        private BasicEffect m_basicEffect;
-
-
-        //private Model m_spellModel;
-        //private Model m_castleModel;
-        //private Model m_balloonModel;
-        //private Model m_manaBallModel;
-        //private Model m_monsterModel;
-        //private Model m_magicianModel;
-        //private Model m_skyDomeModel;
-
 
         private SpriteFont m_debugFont;
 
