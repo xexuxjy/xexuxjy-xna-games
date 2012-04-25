@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework.Graphics;
 using BulletXNA.LinearMath;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
@@ -11,7 +12,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public SkyDome()
             : base(GameObjectType.skydome)
         {
-            m_model = Globals.MCContentManager.GetModelForObjectType(GameObjectType);
+            m_modelHelperData = Globals.MCContentManager.GetModelHelperData("SkyDome");
             DrawOrder = Globals.TERRAIN_DRAW_ORDER;
         }
 
@@ -26,16 +27,31 @@ namespace com.xexuxjy.magiccarpet.terrain
             base.Draw(gameTime);
         }
 
+        public override void SetEffectParameters(Effect effect)
+        {
+            effect.Parameters["UVOffset"].SetValue(uvOffset);
+
+        }
+
 
         public override void Update(GameTime gameTime)
         {
+            testCounter += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float scrollTime = 100;
+            uvOffset = testCounter / scrollTime;
+            
+            if(testCounter > scrollTime)
+            {
+                testCounter = 0f;
+            }
+
         }
 
 
         public override Texture2D GetTexture()
         {
-            //return Globals.MCContentManager.GetTexture("SkyDome");
-            return Globals.MCContentManager.GetTexture(Color.HotPink);
+            return Globals.MCContentManager.GetTexture("SkyDome");
+            //return Globals.MCContentManager.GetTexture(Color.HotPink);
 
         }
 
@@ -61,6 +77,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             set { }
         }
 
+        private float testCounter = 0f;
+        private float uvOffset = 0f;
         private float m_heightOffset = -10f;
     }
 }

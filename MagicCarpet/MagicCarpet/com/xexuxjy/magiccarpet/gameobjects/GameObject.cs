@@ -17,6 +17,7 @@ using com.xexuxjy.magiccarpet.util.debug;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.combat;
+using com.xexuxjy.magiccarpet.manager;
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
 
@@ -91,6 +92,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public virtual void InitializeModel()
+        {
+            m_modelHelperData = Globals.MCContentManager.GetModelHelperData(GameObjectType.ToString());
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public override void Initialize()
         {
             m_scaleTransform = Matrix.Identity;
@@ -102,7 +111,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_spellComponent = new SpellComponent(this);
             m_spellComponent.Initialize();
 
-            m_model = Globals.MCContentManager.GetModelForObjectType(GameObjectType);
 
             SetStartAttributes();
 
@@ -110,6 +118,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             base.Initialize();
 
+            InitializeModel();
             // call this here so we've loaded any content?
             BuildCollisionObject();
 
@@ -257,6 +266,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void BuildCollisionObject()
         {
+            // box based on model is the default.
+            if (m_modelHelperData != null)
+            {
+                Vector3 halfExtents = (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min) / 2f;
+                CollisionShape cs = new BoxShape(halfExtents);
+                float mass = 0f;
+                m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this);
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -271,19 +288,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected virtual void DrawEffect(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
         {
             //return;
-            if (m_model != null)
+            if (m_modelHelperData.m_model != null)
             {
-                foreach (ModelMesh mesh in m_model.Meshes)
+                foreach (ModelMesh mesh in m_modelHelperData.m_model.Meshes)
                 {
                     if (m_boneTransforms == null)
                     {
-                        m_boneTransforms = new Matrix[m_model.Bones.Count];
+                        m_boneTransforms = new Matrix[m_modelHelperData.m_model.Bones.Count];
                     }
-                    m_model.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
+                    m_modelHelperData.m_model.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
                     foreach (Effect effect in mesh.Effects)
                     {
                         effect.CurrentTechnique = effect.Techniques["SimpleTechnique"];
                         Globals.MCContentManager.ApplyCommonEffectParameters(effect);
+                        SetEffectParameters(effect);
                         effect.Parameters["WorldMatrix"].SetValue(m_boneTransforms[mesh.ParentBone.Index] * world); 
                         Texture2D texture = GetTexture();
                         if (texture != null)
@@ -294,6 +312,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     mesh.Draw();
                 }
             }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual void SetEffectParameters(Effect effect)
+        {
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -875,7 +899,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected bool m_awaitingRemoval;
 
         protected Matrix m_scaleTransform;
-        protected Model m_model;
+        protected ModelHelperData m_modelHelperData;
 
         protected bool m_debugEnabled;
         protected bool m_playerControlled;

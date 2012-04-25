@@ -19,7 +19,7 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             m_contentManager = Globals.Game.Content;
             m_graphicsDevice = Globals.Game.GraphicsDevice;
-            m_modelDictionary = new Dictionary<String, Model>();
+            m_modelDictionary = new Dictionary<String, ModelHelperData>();
             m_colorMap = new Dictionary<Color, Texture2D>();
             m_textureDictionary = new Dictionary<string, Texture2D>();
             m_effectDictionary = new Dictionary<string, Effect>();
@@ -28,49 +28,48 @@ namespace com.xexuxjy.magiccarpet.manager
         public void LoadContent()
         {
 
+
+
             m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
             m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
             m_effectDictionary["Carpet"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
-            Effect simpleEffect = m_contentManager.Load<Effect>("Effects/SimpleEffect");
-            simpleEffect.CurrentTechnique = simpleEffect.Techniques["SimpleTechnique"];
-            simpleEffect.Name = "Simple";
-            m_effectDictionary["Simple"] = simpleEffect;
+            m_effectDictionary["Simple"] = m_contentManager.Load<Effect>("Effects/SimpleEffect");
+            m_effectDictionary["SkyDome"] = m_contentManager.Load<Effect>("Effects/Skydome/Skydome");
 
 
-            m_modelDictionary[GameObjectType.castle.ToString()] = m_contentManager.Load<Model>("Models/SimpleShapes/unitcube");
-            m_modelDictionary["TerrainWalls"] = m_contentManager.Load<Model>("Models/Terrain/TerrainWalls");
+            LoadModel(GameObjectType.castle.ToString(), "Models/SimpleShapes/unitcube");
+            LoadModel("TerrainWalls","Models/Terrain/TerrainWalls");
 
             //m_modelDictionary[GameObjectType.castle] = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
 
             //m_castleModel = m_contentManager.Load<Model>("Models/Castle/saintriqT3DS");
             //m_castleModel = m_contentManager.Load<Model>("Models/NewCastle/castle3");
 
-            m_modelDictionary[GameObjectType.balloon.ToString()] = m_contentManager.Load<Model>("Models/SimpleShapes/unitsphere");
+            LoadModel(GameObjectType.balloon.ToString(),"Models/SimpleShapes/unitsphere");
 
-            m_modelDictionary[GameObjectType.manaball.ToString()] = m_modelDictionary[GameObjectType.balloon.ToString()];
+            LoadModel(GameObjectType.manaball.ToString(),"Models/SimpleShapes/unitsphere");
 
-            m_modelDictionary[GameObjectType.spell.ToString()] = m_modelDictionary[GameObjectType.balloon.ToString()];
+            LoadModel(GameObjectType.spell.ToString(), "Models/SimpleShapes/unitsphere");
 
-            m_modelDictionary[GameObjectType.monster.ToString()] = m_contentManager.Load<Model>("Models/SimpleShapes/unitcone");
+            LoadModel(GameObjectType.monster.ToString(),"Models/SimpleShapes/unitcone");
 
             //m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("unitcylinder");
-            m_modelDictionary[GameObjectType.magician.ToString()] = m_contentManager.Load<Model>("Models/Magician/magician");
-            Model m = m_contentManager.Load<Model>("Models/NewCastle/castle_tower");
-            m_modelDictionary["CastleTower"] = m;
+            LoadModel(GameObjectType.magician.ToString(),"Models/Magician/magician");
+            LoadModel("CastleTower", "Models/NewCastle/castle_tower");
 
-            m = m_contentManager.Load<Model>("Models/SkyDome/skydome");
-            m_modelDictionary[GameObjectType.skydome.ToString()] = m;
+            LoadModel("SkyDome","Models/SkyDome/skydome");
 
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
 
-
-            foreach (Model model in m_modelDictionary.Values)
+            Effect simpleEffect = GetEffect("Simple");
+            foreach (ModelHelperData modelHelperData in m_modelDictionary.Values)
             {
-                RemapModel(model, simpleEffect);
+                RemapModel(modelHelperData.m_model, simpleEffect);
             }
 
 
-            RemapModel(m_modelDictionary["TerrainWalls"], m_effectDictionary["Terrain"]);
+            RemapModel(m_modelDictionary["TerrainWalls"].m_model, m_effectDictionary["Terrain"]);
+            RemapModel(m_modelDictionary["SkyDome"].m_model, m_effectDictionary["SkyDome"]);
 
 
             m_textureDictionary["MiniMapAtlas"] = m_contentManager.Load<Texture2D>("textures/ui/MiniMapAtlas");
@@ -91,20 +90,35 @@ namespace com.xexuxjy.magiccarpet.manager
         
         }
 
+        private void LoadModel(String modelKey, String path)
+        {
+            Model m = m_contentManager.Load<Model>(path);
+            BoundingBox bb = UpdateBoundingBox(m, Matrix.Identity);
+            ModelHelperData modelHelperData = new ModelHelperData(m, bb);
+            m_modelDictionary[modelKey] = modelHelperData;
+        }
+
+
         public Model GetModelForObjectType(GameObjectType gameObjectType)
         {
-            Model model;
-            m_modelDictionary.TryGetValue(gameObjectType.ToString(), out model);
-            return model;
+            ModelHelperData modelHelperData;
+            m_modelDictionary.TryGetValue(gameObjectType.ToString(), out modelHelperData);
+            return modelHelperData != null ? modelHelperData.m_model : null;
         }
 
         public Model GetModelForName(String name)
         {
-            Model model;
-            m_modelDictionary.TryGetValue(name, out model);
-            return model;
+            ModelHelperData modelHelperData;
+            m_modelDictionary.TryGetValue(name, out modelHelperData);
+            return modelHelperData != null ? modelHelperData.m_model : null;
         }
 
+        public ModelHelperData GetModelHelperData(String name)
+        {
+            ModelHelperData modelHelperData;
+            m_modelDictionary.TryGetValue(name, out modelHelperData);
+            return modelHelperData;
+        }
 
         public Texture2D GetTexture(Color color)
         {
@@ -300,9 +314,49 @@ namespace com.xexuxjy.magiccarpet.manager
             effect.Parameters["WorldWidth"].SetValue(Globals.WorldWidth);
         }
 
+
+        protected BoundingBox UpdateBoundingBox(Model model, Matrix worldTransform)
+        {
+            // Initialize minimum and maximum corners of the bounding box to max and min values
+            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+            // For each mesh of the model
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                {
+                    // Vertex buffer parameters
+                    int vertexStride = meshPart.VertexBuffer.VertexDeclaration.VertexStride;
+                    int vertexBufferSize = meshPart.NumVertices * vertexStride;
+
+                    // Get vertex data as float
+                    float[] vertexData = new float[vertexBufferSize / sizeof(float)];
+                    meshPart.VertexBuffer.GetData<float>(vertexData);
+
+                    // Iterate through vertices (possibly) growing bounding box, all calculations are done in world space
+                    for (int i = 0; i < vertexBufferSize / sizeof(float); i += vertexStride / sizeof(float))
+                    {
+                        Vector3 transformedPosition = Vector3.Transform(new Vector3(vertexData[i], vertexData[i + 1], vertexData[i + 2]), worldTransform);
+
+                        min = Vector3.Min(min, transformedPosition);
+                        max = Vector3.Max(max, transformedPosition);
+                    }
+                }
+            }
+
+            // swap yz from blender
+            min = new Vector3(min.X, min.Z, min.Y);
+            max = new Vector3(max.X, max.Z, max.Y);
+
+            // Create and return bounding box
+            return new BoundingBox(min, max);
+        }
+
+
         private SpriteFont m_debugFont;
 
-        private Dictionary<String, Model> m_modelDictionary;
+        private Dictionary<String, ModelHelperData> m_modelDictionary;
         private Dictionary<String, Texture2D> m_textureDictionary;
         private Dictionary<Color, Texture2D> m_colorMap;
         private Dictionary<String, Effect> m_effectDictionary;
@@ -310,6 +364,19 @@ namespace com.xexuxjy.magiccarpet.manager
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;
     }
+
+
+    public class ModelHelperData
+    {
+        public ModelHelperData(Model model, BoundingBox boundingBox)
+        {
+            m_model = model;
+            m_boundingBox = boundingBox;
+        }
+        public Model m_model;
+        public BoundingBox m_boundingBox;
+    }
+
 
 
     public struct PosOnlyVertex : IVertexType

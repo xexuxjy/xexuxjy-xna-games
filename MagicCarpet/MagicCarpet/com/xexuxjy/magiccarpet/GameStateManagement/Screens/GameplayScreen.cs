@@ -168,6 +168,7 @@ namespace GameStateManagement
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
+            m_updateCalls++;
             base.Update(gameTime, otherScreenHasFocus, false);
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
@@ -221,6 +222,7 @@ namespace GameStateManagement
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
+            m_drawCalls++;
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
@@ -275,6 +277,10 @@ namespace GameStateManagement
 
         #endregion
         #region Fields
+
+        protected int m_updateCalls;
+        protected int m_drawCalls;
+
 
         PlayerHud m_playerHud;
         ContentManager m_content;
