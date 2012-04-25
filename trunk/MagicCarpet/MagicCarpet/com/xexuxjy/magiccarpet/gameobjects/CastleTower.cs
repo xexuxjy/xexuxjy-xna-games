@@ -23,28 +23,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public override void Initialize()
+        public override void InitializeModel()
         {
-            base.Initialize();
-            m_model = Globals.MCContentManager.GetModelForName("CastleTower");
+            m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleTower");
         }
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public override void BuildCollisionObject()
-        {
-            Vector3 halfExtents = new Vector3(1,5,1)/2f;
-            CollisionShape cs = new BoxShape(halfExtents);
-            float mass = 0f;
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this);
-        }
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-
-
-
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override void Update(GameTime gameTime)

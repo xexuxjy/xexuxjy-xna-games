@@ -53,24 +53,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        public override void BuildCollisionObject()
-        {
-            Vector3 halfExtents = new Vector3(CastleSizes[Level]/2, GetStartOffsetHeight(), CastleSizes[Level]/2);
-           
-            CollisionShape cs = new BoxShape(halfExtents);
-            float mass = 0f;
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public override float GetStartOffsetHeight()
-        {
-            return 2.5f;
-        }
-        
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
         
         public override void Update(GameTime gameTime)
         {
