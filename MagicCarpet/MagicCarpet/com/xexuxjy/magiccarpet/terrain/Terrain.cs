@@ -224,7 +224,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Draw(GameTime gameTime)
         {
-            return;
+            //return;
             UpdateHeightMapTexture();
 
 
@@ -403,6 +403,15 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
+        public virtual float GetHeightAtPointWorldSmooth(Vector3 point)
+        {
+            // straight down
+            float result = GetHeightAtPointWorldSmooth(point.X, point.Z);
+            return result;
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         public void SetHeightAtPointWorld(ref Vector3 worldPoint)
         {
             Vector3 local = WorldToLocal(worldPoint);
@@ -422,6 +431,26 @@ namespace com.xexuxjy.magiccarpet.terrain
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public virtual float GetHeightAtPointWorldSmooth(float x, float z)
+        {
+            // Use a similar technique to the shader and sample around
+
+            float tl = GetHeightAtPointWorld(x-1, z-1);
+            float tc = GetHeightAtPointWorld(x-1, z-1);
+            float tr = GetHeightAtPointWorld(x + 1, z-1);
+
+            float ml = GetHeightAtPointWorld(x - 1, z );
+            float mc = GetHeightAtPointWorld(x - 1, z );
+            float mr = GetHeightAtPointWorld(x + 1, z );
+
+            float bl = GetHeightAtPointWorld(x - 1, z+1);
+            float bc = GetHeightAtPointWorld(x - 1, z+1);
+            float br = GetHeightAtPointWorld(x + 1, z+1);
+
+            return (tl + tc + tr + ml + mc + mr + bl + bc + br) / 9.0f;
+        }
+
 
         public virtual float GetHeightAtPointWorld(float x, float z)
         {
@@ -684,6 +713,20 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public Vector3 WorldToLocal(Vector3 worldPoint)
+        {
+            return (worldPoint - BoundingBox.Min);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public Vector3 LocalToWorld(Vector3 localPoint)
+        {
+            return (localPoint + BoundingBox.Min);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public Vector3 GetRandomWorldPositionXZ()
         {
             Vector3 result = new Vector3();
@@ -776,11 +819,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void BuildFractalLandscape()
         {
-            //m_heightMap = FractalUtil.GetRandomHeightData(m_textureWidth);
             m_heightMap = new float[m_textureWidth * m_textureWidth];
             float height = 10.0f;
             float smoothness = 0.7f;
             FractalUtil.Fill2DFractArray(m_heightMap, m_textureWidth - 1, 1, height, smoothness);
+            UpdateHeightMap();
         }
 
 

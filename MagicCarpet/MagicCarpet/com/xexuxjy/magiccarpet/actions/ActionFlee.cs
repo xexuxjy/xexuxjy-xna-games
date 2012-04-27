@@ -12,7 +12,7 @@ namespace com.xexuxjy.magiccarpet.actions
         public ActionFlee(GameObject owner, Vector3 direction,float speed)
             : base(owner, null, ActionState.Fleeing)
         {
-            Owner.Forward = direction;
+            Owner.Heading = direction;
             Owner.TargetSpeed = speed;
             Duration = s_fleeDuration;
         }

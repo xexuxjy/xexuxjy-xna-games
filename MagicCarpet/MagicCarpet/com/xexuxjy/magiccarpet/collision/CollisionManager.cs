@@ -19,19 +19,14 @@ namespace com.xexuxjy.magiccarpet.collision
         public CollisionManager(IndexedVector3 worldMin, IndexedVector3 worldMax)
             : base(GameObjectType.manager)
         {
-            //game.Components.Add(this);
             m_collisionConfiguration = new DefaultCollisionConfiguration();
 
             ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
             m_dispatcher = new CollisionDispatcher(m_collisionConfiguration);
 
-            //BulletGlobals.gContactAddedCallback = new CustomMaterialCombinerCallback();
 
             m_broadphase = new DbvtBroadphase();
             IOverlappingPairCache pairCache = null;
-            //pairCache = new SortedOverlappingPairCache();
-
-            //m_broadphase = new SimpleBroadphase(1000, pairCache);
 
             ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
             SequentialImpulseConstraintSolver sol = new SequentialImpulseConstraintSolver();
@@ -80,7 +75,7 @@ namespace com.xexuxjy.magiccarpet.collision
             ProcessCollisions();
 
             String debugText = String.Format("CollisionManager Objects[{0}] Constraints[{1}] Pairs[{2}] Manifolds[{3}].", m_dynamicsWorld.GetNumCollisionObjects(), m_dynamicsWorld.GetNumConstraints(), m_broadphase.GetOverlappingPairCache().GetNumOverlappingPairs(), m_dispatcher.GetNumManifolds());
-            //Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, IndexedVector3.One);
+            Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, IndexedVector3.One);
 
             base.Update(gameTime);
 

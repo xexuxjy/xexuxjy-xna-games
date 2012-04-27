@@ -25,7 +25,7 @@ namespace com.xexuxjy.magiccarpet.actions
             base.Start();
             if (GameUtil.InRange(Owner, Target, m_attackRange))
             {
-                Owner.CastSpell(m_spellType, Owner.Position, GameUtil.DirectionToTarget(Owner, Target));
+                Owner.CastSpell(m_spellType, Owner.SpellCastPosition, GameUtil.DirectionToTarget(Owner.SpellCastPosition, Target));
             }
 
         }

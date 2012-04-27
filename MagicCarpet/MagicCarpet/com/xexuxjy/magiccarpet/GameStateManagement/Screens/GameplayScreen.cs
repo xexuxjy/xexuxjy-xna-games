@@ -71,21 +71,12 @@ namespace GameStateManagement
                 m_content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
 
-            //m_debugDrawMode = DebugDrawModes.DBG_DrawConstraints | DebugDrawModes.DBG_DrawConstraintLimits | DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
+            //m_debugDrawMode = DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
             //m_debugDrawMode = DebugDrawModes.ALL;
             m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
             m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
 
-            //ChaseCamera camera = new ChaseCamera();
-            ////make it a very rigid camera
-            //camera.Mass = 50f;
-
-            //// stop camera going through terrain?
-            //camera.ClipToWorld = true;
-            //camera.ChasePosition = new Vector3(0, 5, 0);
-            
-            //Globals.Camera = camera;
             Globals.Camera = new CameraComponent();
             Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
 

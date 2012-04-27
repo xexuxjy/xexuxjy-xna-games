@@ -63,9 +63,9 @@ namespace com.xexuxjy.magiccarpet.gui
                     topLeft = new Point(118, 130);
                     DrawCoolDown(magician.SelectedSpell2, magician, topLeft, spellWidth);
 
-
-
                     // Draw the active spells.
+                    magician.SpellComponent.GetActiveSpells();
+
 
                 }
                 m_spriteBatch.End();

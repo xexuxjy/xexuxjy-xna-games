@@ -37,19 +37,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override float GetStartOffsetHeight()
-        {
-            return 0.5f;
-        }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
         public override void BuildCollisionObject()
         {
             if (s_collisionShape == null)
             {
-                s_collisionShape = new SphereShape(GetStartOffsetHeight());
+                s_collisionShape = new SphereShape(Globals.s_manaBallSize);
             }
             float mass = 2f;
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
@@ -116,6 +108,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         private float m_manaValue;
         private bool m_beingLoaded;
+
 
         protected static CollisionShape s_collisionShape;
     }

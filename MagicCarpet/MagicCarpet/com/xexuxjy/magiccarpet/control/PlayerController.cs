@@ -28,6 +28,11 @@ namespace com.xexuxjy.magiccarpet.control
 
         public virtual void HandleInput(InputState inputState,GameTime gameTime)
         {
+            if (!Globals.Game.IsActive)
+            {
+                // don't do anything if we're not active.
+                return;
+            }
             if (!m_skippedFirst)
             {
                 m_skippedFirst = true;

@@ -172,7 +172,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             if (currentHealthPercentage <= Globals.s_balloonFleeHealthPercentage)
             {
                 m_actionComponent.ClearAllActions();
-                QueueAction(Globals.ActionPool.GetActionFlee(this, GetFleeDirection(), Globals.s_balloonFleeSpeed));
+                QueueAction(Globals.ActionPool.GetActionFlee(this, m_threatComponent.GetFleeDirection(), Globals.s_balloonFleeSpeed));
             }
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////

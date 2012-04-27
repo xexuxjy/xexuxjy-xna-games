@@ -18,7 +18,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         
         {
             m_castle = castle;
-
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -27,8 +26,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleTower");
         }
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public override CollisionFilterGroups GetCollisionFlags()
+        {
+            return  (CollisionFilterGroups)GameObjectType.castle;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override CollisionFilterGroups GetCollisionMask()
+        {
+            return (CollisionFilterGroups)(GameObjectType.spell);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -119,6 +132,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override Vector3 SpellCastPosition
+        {
+            get
+            {
+                Vector3 result = Position;
+                // offset this a bit so we fire from the top of the tower.
+                result.Y = m_modelHelperData.m_boundingBox.Max.Y;
+                return result;
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private Castle m_castle;
     }
             

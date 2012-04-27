@@ -82,7 +82,7 @@ namespace com.xexuxjy.magiccarpet
         public static float s_balloonFleeHealthPercentage = 0.25f;
 
         public static float s_monsterSearchRadius = 50f;
-        public static float s_monsterTravelSpeed = 0.1f;
+        public static float s_monsterTravelSpeed = 2.0f;
         public static float s_monsterFleeSpeed = 5.0f;
         public static float s_monsterMeleeRange = 0.5f;
         public static float s_monsterMeleeDamage = 5f;
@@ -95,7 +95,7 @@ namespace com.xexuxjy.magiccarpet
         public static int s_castleSize1 = 2;
         public static int s_castleSize2 = 4;
         public static int s_castleSize3 = 8;
-        public static float s_castleTurretSearchRadius = 2;
+        public static float s_castleTurretSearchRadius = 5;
         public static float s_castleTurretSearchFrequency = 2;
         public static float s_castleTurretAttackFrequency = 2;
         public static float s_castleTurretAttackDamage = 2;
@@ -109,6 +109,13 @@ namespace com.xexuxjy.magiccarpet
         public static float s_magicianRangedRange = 10f;
         public static float s_magicianRangedDamage = 5f;
         public static float s_magicianMaxFollowRange = 50;
+
+        public static float s_defaultSpellSpeed = 3f;
+
+
+        public static float s_manaBallSize = 0.5f;
+        public static float s_spellSize = 0.5f;
+        public static float s_monsterSize = 0.5f;
 
 
 
@@ -145,10 +152,15 @@ namespace com.xexuxjy.magiccarpet
 
         public static Random s_random = null;
 
-        public static int DEBUG_DRAW_ORDER = 3;
-        public static int GUI_DRAW_ORDER = 2;
-        public static int TERRAIN_DRAW_ORDER = 1;
-        public static int NORMAL_DRAW_ORDER = 1;
+        public static int DEBUG_DRAW_ORDER = 4;
+        public static int GUI_DRAW_ORDER = 4;
+
+        public static int SKYDOME_DRAW_ORDER = 1;
+        public static int TERRAIN_DRAW_ORDER = 2;
+        public static int NORMAL_DRAW_ORDER = 3;
+
+
+
 
         public static MiniMap MiniMap;
 
