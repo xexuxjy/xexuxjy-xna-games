@@ -266,6 +266,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             if (m_modelHelperData != null)
             {
                 Vector3 halfExtents = (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min) / 2f;
+
+                Vector3 scale;
+                Quaternion rotation;
+                Vector3 translation;
+
+                // adjust for scale transform.
+                m_scaleTransform.Decompose(out scale,out rotation,out translation);
+
+                halfExtents *= scale;
+
                 CollisionShape cs = new BoxShape(halfExtents);
                 float mass = 0f;
                 m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this,GetCollisionFlags(),GetCollisionMask());

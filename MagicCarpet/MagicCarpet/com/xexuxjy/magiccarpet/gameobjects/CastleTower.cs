@@ -8,6 +8,7 @@ using com.xexuxjy.magiccarpet.spells;
 using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.util;
 using Microsoft.Xna.Framework.Graphics;
+using com.xexuxjy.magiccarpet.combat;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -18,6 +19,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         
         {
             m_castle = castle;
+            StickToGround = false;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -25,9 +27,32 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void InitializeModel()
         {
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleTower");
+
+            // scale the base of the tower to one unit?
+            float scale = Castle.s_towerCastleSize / (float)(m_modelHelperData.m_boundingBox.Max.X - m_modelHelperData.m_boundingBox.Min.X);
+            m_scaleTransform = Matrix.CreateScale(scale);
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            float height = (BoundingBox.Max.Y - BoundingBox.Min.Y);
+
+            Vector3 newPos = Position;
+
+            newPos.Y += height / 2.0f;
+
+            Position = newPos;
+
+
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
 
         public override CollisionFilterGroups GetCollisionFlags()
         {
@@ -124,6 +149,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
         }
 
+        public override void Damaged(DamageData damageData)
+        {
+            // let the main castle body handle it for now
+            m_castle.Damaged(damageData);
+        }
+
+        
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override Texture2D GetTexture()

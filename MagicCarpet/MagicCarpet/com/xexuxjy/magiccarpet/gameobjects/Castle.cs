@@ -41,6 +41,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // test value for now.
             m_storedMana = 500;
 
+
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,17 +201,25 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             startPos -= offset;
 
 
-            for (int j = 0; j < width; ++j)
-            {
-                for (int i = 0; i < width; ++i)
-                {
-                    Vector3 point = startPos + new Vector3(i, 0, j);
-                    point.Y = m_initialHeight;
-                    //point.Y = 0f;
-                    Globals.Terrain.SetHeightAtPointWorld(ref point);
-                    Globals.Terrain.SetTerrainTypeAndOccupier(point, TerrainType.castle,this);
-                }
-            }
+            //for (int j = 0; j < width; ++j)
+            //{
+            //    for (int i = 0; i < width; ++i)
+            //    {
+            //        Vector3 point = startPos + new Vector3(i, 0, j);
+            //        point.Y = m_initialHeight;
+            //        //point.Y = 0f;
+            //        Globals.Terrain.SetHeightAtPointWorld(ref point);
+            //        Globals.Terrain.SetTerrainTypeAndOccupier(point, TerrainType.castle,this);
+            //    }
+            //}
+
+            // test
+            Vector3 pos = Position;
+            pos.X -= width / 2;
+            pos.Z -= width / 2;
+
+            Globals.Terrain.SetHeightForArea(pos, 12, 12, 5);
+            //TerrainUpdater.ApplyImmediate(Position, 12, 4, Globals.Terrain);
 
             Globals.Terrain.UpdateHeightMap();
             m_scaleTransform = Matrix.CreateScale(width/2, 1, width/2);
@@ -313,6 +323,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private int m_level;
         private float m_storedMana;
         private float m_initialHeight;
+
+        public const float s_towerCastleSize = 1f;
 
         private List<CastleTower> m_towers = new List<CastleTower>();
     }
