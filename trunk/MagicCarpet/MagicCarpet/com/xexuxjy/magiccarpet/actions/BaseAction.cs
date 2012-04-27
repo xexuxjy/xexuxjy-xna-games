@@ -171,7 +171,8 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public static bool IsPassive(ActionState state)
         {
-            return state >= ActionState.None && state <= ActionState.Turning;
+            return state >= ActionState.Idle && state <= ActionState.Turning;
+            //return state >= ActionState.None && state <= ActionState.Turning;
         }
 
         public static bool IsAttacking(ActionState state)

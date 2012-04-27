@@ -22,6 +22,20 @@ namespace com.xexuxjy.magiccarpet.control
 
             m_playerHud = playerHud;
 
+            Globals.Game.Activated += new EventHandler<EventArgs>(Game_Activated);
+            Globals.Game.Deactivated += new EventHandler<EventArgs>(Game_Deactivated);
+            
+        }
+
+        void Game_Activated(object sender, EventArgs e)
+        {
+            // reset?
+            m_skippedFirst = false;        
+        }
+
+        void Game_Deactivated(object sender, EventArgs e)
+        {
+        
         }
 
 
@@ -30,7 +44,6 @@ namespace com.xexuxjy.magiccarpet.control
         {
             if (!Globals.Game.IsActive)
             {
-                // don't do anything if we're not active.
                 return;
             }
             if (!m_skippedFirst)

@@ -436,19 +436,30 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             // Use a similar technique to the shader and sample around
 
-            float tl = GetHeightAtPointWorld(x-1, z-1);
-            float tc = GetHeightAtPointWorld(x-1, z-1);
-            float tr = GetHeightAtPointWorld(x + 1, z-1);
+            //float tl = GetHeightAtPointWorld(x-1, z-1);
+            //float tc = GetHeightAtPointWorld(x-1, z-1);
+            //float tr = GetHeightAtPointWorld(x + 1, z-1);
 
-            float ml = GetHeightAtPointWorld(x - 1, z );
-            float mc = GetHeightAtPointWorld(x - 1, z );
-            float mr = GetHeightAtPointWorld(x + 1, z );
+            //float ml = GetHeightAtPointWorld(x - 1, z );
+            //float mc = GetHeightAtPointWorld(x - 1, z );
+            //float mr = GetHeightAtPointWorld(x + 1, z );
 
-            float bl = GetHeightAtPointWorld(x - 1, z+1);
-            float bc = GetHeightAtPointWorld(x - 1, z+1);
+            //float bl = GetHeightAtPointWorld(x - 1, z+1);
+            //float bc = GetHeightAtPointWorld(x - 1, z+1);
+            //float br = GetHeightAtPointWorld(x + 1, z+1);
+
+            //return (tl + tc + tr + ml + mc + mr + bl + bc + br) / 9.0f;
+
+            float tl = GetHeightAtPointWorld(x, z);
+            float tr = GetHeightAtPointWorld(x + 1, z);
+            float bl = GetHeightAtPointWorld(x, z+1);
             float br = GetHeightAtPointWorld(x + 1, z+1);
 
-            return (tl + tc + tr + ml + mc + mr + bl + bc + br) / 9.0f;
+            float txdiff = MathHelper.Lerp(tl,tr,(x-(float)Math.Truncate(x)));
+            float bxdiff = MathHelper.Lerp(bl,br,(x-(float)Math.Truncate(x)));
+            float result = MathHelper.Lerp(txdiff, bxdiff, (z - (float)Math.Truncate(z)));
+            return result;
+
         }
 
 
@@ -525,45 +536,20 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        //// used to put a castle on the land, this will take the center of the castle and figure out 
-        //// how much space it will need , flatten the land etc.
-        //public void addCastle(Castle theCastle)
-        //{
-        //    Vector3 castlePosition = theCastle.Position;
-        //    BoundingBox box = theCastle.BoundingBox;
-        //    int left = (int)box.Min.X;
-        //    int right = (int)box.Max.X;
-        //    int top = (int)box.Min.Z;
-        //    int bottom = (int)box.Max.Z;
+        public void SetHeightForArea(Vector3 startPosition,int width,int breadth,float height)
+        {
+            Vector3 baseVec = new Vector3(startPosition.X, height, startPosition.Z);
+            for (int i = 0; i < width; ++i)
+            {
+                for (int j = 0; j < breadth; ++j)
+                {
+                    Vector3 vec = baseVec + new Vector3(i, 0, j);
+                    SetHeightAtPointWorld(ref vec);
+                }
+            }
+            UpdateHeightMap();
+        }
 
-        //    // If it will fit then add it. otherwise no
-        //    if((left > 0 ) && (right < Width) && (top > 0 ) && (bottom < Breadth))
-        //    {
-        //        // hmm what should the height be? height at 'centre' of castle
-        //        float height = getHeightAtPoint(castlePosition);
-        //        // go through and set the height on the squares
-        //        for(int i=left;i<right;++i)
-        //        {
-        //            for(int j=top;j<bottom;++j)
-        //            {
-        //                TerrainSquare terrainSquare = getTerrainSquareAtPoint(i,j);
-        //                terrainSquare.setTargetHeight(height);
-        //                terrainSquare.Type = TerrainType.castle;
-        //            }
-        //        }
-        //        Vector3 castlePosition2 = new Vector3();
-        //        castlePosition2.X = theCastle.Position.X;
-        //        castlePosition2.Z = theCastle.Position.Z;
-        //        castlePosition2.Y = height;
-
-        //        theCastle.Position = castlePosition2;
-        //        m_terrainHasChanged = true;
-        //    }
-        //    else
-        //    {
-        //        // won't fit.
-        //    }
-        //}
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -744,12 +730,26 @@ namespace com.xexuxjy.magiccarpet.terrain
             float sign = Globals.s_random.NextDouble() > 0.5f ? 1.0f : -1.0f;
             result.X = position.X + (sign * ((float)Globals.s_random.NextDouble() * distance));
             result.Z = position.Z + (sign * ((float)Globals.s_random.NextDouble() * distance));
-
-            return LocalToWorld(result);
+            return result;
+            //return LocalToWorld(result);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public Vector3 GetRandomWorldPositionWithRange(Vector3 position, float distance)
+        {
+            Vector3 result = new Vector3();
+            float sign = Globals.s_random.NextDouble() > 0.5f ? 1.0f : -1.0f;
+            result.X = position.X + (sign * ((float)Globals.s_random.NextDouble() * distance));
+            result.Z = position.Z + (sign * ((float)Globals.s_random.NextDouble() * distance));
+
+            result.Y = GetHeightAtPointWorld((int)result.X, (int)result.Z);
+            
+            return result;
+            //return LocalToWorld(result);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
         public void ClampToTerrain(ref Vector3 position)
         {
             Vector3 local = WorldToLocal(position);
@@ -959,129 +959,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        private struct TerrainUpdater
-        {
-            public TerrainUpdater(Vector3 position, float radius, float totalTime, float totalDeflection, Terrain terrain)
-            {
-                m_terrain = terrain;
-                m_positionLocal = position;
-                m_updateDeflection = 0f;
-
-                BoundingBox terrainBB = m_terrain.BoundingBox;
-
-                // need to adjust position based on midpoint of terrain
-                //m_position -= new Vector3(CommonSettings.worldWidth / 2, 0, CommonSettings.worldBreadth / 2);
-                m_radius = radius;
-                m_totalTime = totalTime;
-                m_totalDeflection = totalDeflection;
-                m_currentTime = 0f;
-
-
-                m_minX = (int)System.Math.Max(0, position.X - radius);
-                m_maxX = (int)System.Math.Min(Globals.WorldWidth, position.X + radius);
-                m_minZ = (int)System.Math.Max(0, position.Z - radius);
-                m_maxZ = (int)System.Math.Min(Globals.WorldWidth, position.Z + radius);
-            }
-
-
-            public static void ApplyImmediate(Vector3 position, float radius, float totalDeflection, Terrain terrain)
-            {
-                int minX = (int)System.Math.Max(0, position.X - radius);
-                int maxX = (int)System.Math.Min(Globals.WorldWidth, position.X + radius);
-                int minZ = (int)System.Math.Max(0, position.Z - radius);
-                int maxZ = (int)System.Math.Min(Globals.WorldWidth, position.Z + radius);
-
-                float floatRadius2 = radius * radius;
-                for (int j = minZ; j < maxZ; j++)
-                {
-                    for (int i = minX; i < maxX; i++)
-                    {
-                        Vector3 worldPoint = new Vector3(i, 0, j);
-                        Vector3 diff = worldPoint - position;
-                        float diffLength2 = diff.LengthSquared();
-                        if (diffLength2 < floatRadius2)
-                        {
-                            float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
-                            lerpValue = (float)Math.Pow(lerpValue, 4f);
-                            lerpValue = (float)Math.Sin(MathUtil.SIMD_HALF_PI * lerpValue);
-                            //lerpValue += 1.0f;
-
-                            // play with lerp value to smooth the terrain?
-                            //                          lerpValue = (float)Math.Sqrt(lerpValue);
-                            //lerpValue *= lerpValue;
-                            //lerpValue = (float)Math.Pow(lerpValue, 4f);
-                            // ToDo - fractal hill generation.
-                            float currentHeight = terrain.GetHeightAtPointLocal(i, j);
-                            //float oldHeight = getHeightAtPoint(i, j);
-                            float newHeight = currentHeight + (totalDeflection * lerpValue);
-
-                            newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight, Globals.WorldHeight);
-                            terrain.SetHeightAtPointLocal(i, j, newHeight);
-                        }
-                    }
-                }
-            }
-
-
-            public void ApplyToTerrain()
-            {
-                if (m_currentTime < m_totalTime)
-                {
-                    float floatRadius2 = m_radius * m_radius;
-                    for (int j = m_minZ; j < m_maxZ; j++)
-                    {
-                        for (int i = m_minX; i < m_maxX; i++)
-                        {
-                            Vector3 worldPoint = new Vector3(i, 0, j);
-                            Vector3 diff = worldPoint - m_positionLocal;
-                            float diffLength2 = diff.LengthSquared();
-                            if (diffLength2 < floatRadius2)
-                            {
-                                float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
-                                lerpValue = (float)Math.Pow(lerpValue, 1.5f);
-                                float currentHeight = m_terrain.GetHeightAtPointLocal(i, j);
-                                float newHeight = currentHeight + (m_updateDeflection * lerpValue);
-
-                                newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight, Globals.WorldHeight);
-                                m_terrain.SetHeightAtPointLocal(i, j, newHeight);
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            public void Update(GameTime gameTime)
-            {
-                float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                m_currentTime += timeStep;
-                m_updateDeflection = (timeStep / m_totalTime) * m_totalDeflection;
-            }
-
-            public bool Complete()
-            {
-                return m_currentTime > m_totalTime;
-            }
-
-
-
-            private Terrain m_terrain;
-            private Vector3 m_positionLocal;
-            //private Vector3 m_midPoint;
-
-            private float m_radius;
-            private float m_totalTime;
-            private float m_currentTime;
-            private float m_totalDeflection;
-            private float m_updateDeflection;
-            int m_minX;
-            int m_maxX;
-            int m_minZ;
-            int m_maxZ;
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
         private TerrainSquare[] m_terrainSquareGrid;
         private float[] m_heightMap;
 
@@ -1149,7 +1026,130 @@ namespace com.xexuxjy.magiccarpet.terrain
         }
     }
 
- 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+    public struct TerrainUpdater
+    {
+        public TerrainUpdater(Vector3 position, float radius, float totalTime, float totalDeflection, Terrain terrain)
+        {
+            m_terrain = terrain;
+            m_positionLocal = position;
+            m_updateDeflection = 0f;
+
+            BoundingBox terrainBB = m_terrain.BoundingBox;
+
+            // need to adjust position based on midpoint of terrain
+            //m_position -= new Vector3(CommonSettings.worldWidth / 2, 0, CommonSettings.worldBreadth / 2);
+            m_radius = radius;
+            m_totalTime = totalTime;
+            m_totalDeflection = totalDeflection;
+            m_currentTime = 0f;
+
+
+            m_minX = (int)System.Math.Max(0, position.X - radius);
+            m_maxX = (int)System.Math.Min(Globals.WorldWidth, position.X + radius);
+            m_minZ = (int)System.Math.Max(0, position.Z - radius);
+            m_maxZ = (int)System.Math.Min(Globals.WorldWidth, position.Z + radius);
+        }
+
+
+        public static void ApplyImmediate(Vector3 position, float radius, float totalDeflection, Terrain terrain)
+        {
+            int minX = (int)System.Math.Max(0, position.X - radius);
+            int maxX = (int)System.Math.Min(Globals.WorldWidth, position.X + radius);
+            int minZ = (int)System.Math.Max(0, position.Z - radius);
+            int maxZ = (int)System.Math.Min(Globals.WorldWidth, position.Z + radius);
+
+            float floatRadius2 = radius * radius;
+            for (int j = minZ; j < maxZ; j++)
+            {
+                for (int i = minX; i < maxX; i++)
+                {
+                    Vector3 worldPoint = new Vector3(i, 0, j);
+                    Vector3 diff = worldPoint - position;
+                    float diffLength2 = diff.LengthSquared();
+                    if (diffLength2 < floatRadius2)
+                    {
+                        float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
+                        lerpValue = (float)Math.Pow(lerpValue, 4f);
+                        lerpValue = (float)Math.Sin(MathUtil.SIMD_HALF_PI * lerpValue);
+                        //lerpValue += 1.0f;
+
+                        // play with lerp value to smooth the terrain?
+                        //                          lerpValue = (float)Math.Sqrt(lerpValue);
+                        //lerpValue *= lerpValue;
+                        //lerpValue = (float)Math.Pow(lerpValue, 4f);
+                        // ToDo - fractal hill generation.
+                        float currentHeight = terrain.GetHeightAtPointLocal(i, j);
+                        //float oldHeight = getHeightAtPoint(i, j);
+                        float newHeight = currentHeight + (totalDeflection * lerpValue);
+
+                        newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight, Globals.WorldHeight);
+                        terrain.SetHeightAtPointLocal(i, j, newHeight);
+                    }
+                }
+            }
+        }
+
+
+        public void ApplyToTerrain()
+        {
+            if (m_currentTime < m_totalTime)
+            {
+                float floatRadius2 = m_radius * m_radius;
+                for (int j = m_minZ; j < m_maxZ; j++)
+                {
+                    for (int i = m_minX; i < m_maxX; i++)
+                    {
+                        Vector3 worldPoint = new Vector3(i, 0, j);
+                        Vector3 diff = worldPoint - m_positionLocal;
+                        float diffLength2 = diff.LengthSquared();
+                        if (diffLength2 < floatRadius2)
+                        {
+                            float lerpValue = (floatRadius2 - diffLength2) / floatRadius2;
+                            lerpValue = (float)Math.Pow(lerpValue, 1.5f);
+                            float currentHeight = m_terrain.GetHeightAtPointLocal(i, j);
+                            float newHeight = currentHeight + (m_updateDeflection * lerpValue);
+
+                            newHeight = MathHelper.Clamp(newHeight, -Globals.WorldHeight, Globals.WorldHeight);
+                            m_terrain.SetHeightAtPointLocal(i, j, newHeight);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public void Update(GameTime gameTime)
+        {
+            float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            m_currentTime += timeStep;
+            m_updateDeflection = (timeStep / m_totalTime) * m_totalDeflection;
+        }
+
+        public bool Complete()
+        {
+            return m_currentTime > m_totalTime;
+        }
+
+
+
+        private Terrain m_terrain;
+        private Vector3 m_positionLocal;
+        //private Vector3 m_midPoint;
+
+        private float m_radius;
+        private float m_totalTime;
+        private float m_currentTime;
+        private float m_totalDeflection;
+        private float m_updateDeflection;
+        int m_minX;
+        int m_maxX;
+        int m_minZ;
+        int m_maxZ;
+    }
+
 
 
 
