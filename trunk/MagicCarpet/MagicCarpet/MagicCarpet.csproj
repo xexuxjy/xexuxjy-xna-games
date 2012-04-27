@@ -144,6 +144,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\combat\DamageData.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\combat\ThreatComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\combat\ThreatData.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\control\PlayerController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />

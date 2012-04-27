@@ -45,6 +45,21 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        public override CollisionFilterGroups GetCollisionFlags()
+        {
+            return (CollisionFilterGroups)GameObjectType.castle;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override CollisionFilterGroups GetCollisionMask()
+        {
+            return (CollisionFilterGroups)(GameObjectType.spell);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public override void SetStartAttributes()
         {
             m_attributes[(int)GameObjectAttributeType.Health] = new GameObjectAttribute(GameObjectAttributeType.Health, 100);
@@ -197,7 +212,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
 
             Globals.Terrain.UpdateHeightMap();
-            m_scaleTransform = Matrix.CreateScale(width/2, GetStartOffsetHeight(), width/2);
+            m_scaleTransform = Matrix.CreateScale(width/2, 1, width/2);
 
             bool enableTurrets = true;
             if (enableTurrets)
@@ -229,7 +244,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 }
             }
-            CreateBalloon();
+            //CreateBalloon();
         }
         
         

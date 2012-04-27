@@ -112,13 +112,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override float GetStartOffsetHeight()
-        {
-            return 0.5f;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
         public override float GetHoverHeight()
         {
             return 1.0f;
@@ -401,7 +394,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 // if we're being attacked and damaged then run away if we're below 1/4 health.
                 // FIXME - shouldn't really clear action if we're dead / dieing?
                 ClearAllActions();
-                QueueAction(Globals.ActionPool.GetActionFlee(this, GetFleeDirection(), Globals.s_magicianFleeSpeed));
+                QueueAction(Globals.ActionPool.GetActionFlee(this, m_threatComponent.GetFleeDirection(), Globals.s_magicianFleeSpeed));
             }
         }
 

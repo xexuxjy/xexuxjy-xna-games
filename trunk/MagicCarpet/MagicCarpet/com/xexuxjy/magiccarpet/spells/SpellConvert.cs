@@ -18,7 +18,7 @@ namespace com.xexuxjy.magiccarpet.spells
         public SpellConvert(GameObject owner)
             : base(owner)
         {
-           
+
         }
 
 

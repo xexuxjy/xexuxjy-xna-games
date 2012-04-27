@@ -34,6 +34,14 @@ namespace com.xexuxjy.magiccarpet.util
             if (Globals.SimpleConsole.Enabled && released)
             {
                 Globals.SimpleConsole.KeyboardCallback(key,released,ref newState,ref oldState);
+
+                // eat the event if its not a console close
+                if (key == Keys.Tab)
+                {
+                    Globals.DisableDebugConsole();
+                }
+                
+                return;
             }
 
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;

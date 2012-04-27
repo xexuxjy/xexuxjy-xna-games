@@ -54,12 +54,19 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 	float4 result = tex2D(TextureSampler, input.uv);
 
+	float dotResult = dot(-LightDirection, input.normal);    
+	dotResult = saturate(dotResult);
+
+	float3 directionalComponent = DirectionalLight * dotResult;
+	float4 light = float4(directionalComponent + AmbientLight,1);
+
+	result *= light;
+
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
 	result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
 	//result = float4(1,1,0,1);
-	// do some lighting here.
 
 
     return result;

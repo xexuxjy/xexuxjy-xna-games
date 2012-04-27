@@ -72,7 +72,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
                 Globals.GameObjectManager.AddAndInitializeObject(spell,false);
 
-                spell.Initialize(template);
+                //spell.Initialize(template);
                 
                 // why is this needed now??
                 template.Cast(spell);

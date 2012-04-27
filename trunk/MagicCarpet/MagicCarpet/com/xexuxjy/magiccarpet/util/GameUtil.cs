@@ -40,5 +40,17 @@ namespace com.xexuxjy.magiccarpet.util
         }
 
 
+        public static Matrix RebaseMatrixOnForward(Vector3 forward)
+        {
+            //Matrix m = Matrix.Identity;
+            //Vector3 right = Vector3.Cross(forward, Vector3.Up);
+            //Vector3 up = Vector3.Cross(right,forward);
+            //m.Forward = forward;
+            //m.Up = up;
+            //m.Right = right;
+            //return m;
+            return Matrix.CreateWorld(Vector3.Zero, forward, Vector3.Up);
+        }
+
     }
 }

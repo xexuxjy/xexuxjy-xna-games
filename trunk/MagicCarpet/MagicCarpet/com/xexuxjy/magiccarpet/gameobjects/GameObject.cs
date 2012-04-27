@@ -45,18 +45,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             : base(Globals.Game)
         {
             m_gameObjectType = gameObjectType;
-
-            startPosition.Y += GetStartOffsetHeight();
-
             m_motionState = new DefaultMotionState(Matrix.CreateTranslation(startPosition), Matrix.Identity);
             m_id = "" + (++s_idCounter);
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public virtual float GetStartOffsetHeight()
-        {
-            return 0f;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -103,7 +93,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Initialize()
         {
             m_scaleTransform = Matrix.Identity;
-            m_modelTransform = Matrix.Identity;
 
             m_actionComponent = new ActionComponent(this);
             m_actionComponent.Initialize();
@@ -111,6 +100,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_spellComponent = new SpellComponent(this);
             m_spellComponent.Initialize();
 
+            m_threatComponent = new ThreatComponent(this);
 
             SetStartAttributes();
 
@@ -214,6 +204,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 m_spellComponent.Update(gameTime);
             }
 
+            if (m_threatComponent != null)
+            {
+                m_threatComponent.UpdateThreats();
+            }
+
+
             // no acceleration)
             if (!MathUtil.CompareFloat(TargetSpeed, Speed))
             {
@@ -224,10 +220,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // movement here?
             if (Speed > 0)
             {
-                Vector3 movement = Forward * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Vector3 movement = Forward * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Vector3 movement = Heading * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Position += movement;
             }
-
             // no health left so die.
             if (!IsAlive())
             {
@@ -272,8 +268,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 Vector3 halfExtents = (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min) / 2f;
                 CollisionShape cs = new BoxShape(halfExtents);
                 float mass = 0f;
-                m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this);
+                m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this,GetCollisionFlags(),GetCollisionMask());
             }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual  CollisionFilterGroups GetCollisionFlags()
+        {
+            return CollisionFilterGroups.StaticFilter;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual CollisionFilterGroups GetCollisionMask()
+        {
+            return (CollisionFilterGroups.AllFilter ^ CollisionFilterGroups.StaticFilter);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -302,7 +312,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         effect.CurrentTechnique = effect.Techniques["SimpleTechnique"];
                         Globals.MCContentManager.ApplyCommonEffectParameters(effect);
                         SetEffectParameters(effect);
-                        effect.Parameters["WorldMatrix"].SetValue(m_boneTransforms[mesh.ParentBone.Index] * world); 
+
+                        Matrix result = m_scaleTransform * world;
+
+                        effect.Parameters["WorldMatrix"].SetValue(m_boneTransforms[mesh.ParentBone.Index] * result); 
                         Texture2D texture = GetTexture();
                         if (texture != null)
                         {
@@ -329,22 +342,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return Globals.MCContentManager.GetTexture(ref colour);
         }
 
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        
-        public virtual void DrawDebugAxes(GraphicsDevice graphicsDevice)
-        {
-
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public virtual void DrawBoundingBox(GraphicsDevice graphicsDevice)
-        {
-
-        }
-
         ///////////////////////////////////////////////////////////////////////////////////////////////	
         [DescriptionAttribute("Position in the world")]
         public virtual Vector3 Position
@@ -362,12 +359,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 if (StickToGround)
                 {
-                    float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
-                    if (height > 0f)
-                    {
-                        int ibreak = 0;
-                    }
-                    clampedValue.Y = height + GetStartOffsetHeight() +  GetHoverHeight();
+                    //float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
+                    float height = Globals.Terrain.GetHeightAtPointWorldSmooth(clampedValue);
+                    clampedValue.Y = height +  GetHoverHeight();
                 }
 
                 // stop us going into the ground.
@@ -456,19 +450,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             get { return WorldTransform.Forward; }
             set
             {
-                //Matrix m = Matrix.CreateLookAt(Position, Position + value, Up);
-                Matrix m = WorldTransform;
-                m.Forward = value;
-                // adjust axis?
-                WorldTransform = m;
+                Matrix worldTransform = WorldTransform;
+                if (worldTransform.Forward != value)
+                {
+                    Matrix m = GameUtil.RebaseMatrixOnForward(value);
+                    m.Translation = worldTransform.Translation;
+                    WorldTransform = m;
+                }
             }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public Vector3 Up
-        {
-            get { return WorldTransform.Up; }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -578,22 +567,20 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
+
+        public virtual Vector3 SpellCastPosition
         {
-            m_spellComponent.CastSpell(spellType, startPosition, direction);
+            get
+            {
+                return Position;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        public Vector3 WorldToLocal(Vector3 worldPoint)
+        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
         {
-            return (worldPoint - BoundingBox.Min);
-        }
-
-        public Vector3 LocalToWorld(Vector3 localPoint)
-        {
-            return (localPoint + BoundingBox.Min);
+            m_spellComponent.CastSpell(spellType, startPosition, direction);
         }
 
 
@@ -654,7 +641,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_attributes[(int)GameObjectAttributeType.Health].CurrentValue -= damageData.m_damage;
 
             // got hit so update our threat lists
-            AddOrUpdateThreat(damageData.m_damager);
+            if (m_threatComponent != null)
+            {
+                m_threatComponent.AddOrUpdateThreat(damageData.m_damager);
+            }
 
         }
 
@@ -666,85 +656,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return false;
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public virtual bool ProcessCollision(ICollideable partner, ManifoldPoint manifoldPont)
         {
             return false;
         }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public virtual GameObject GetGameObject()
         {
             return this;
         }
 
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public void UpdateThreats()
-        {
-            for (int i = 0; i < m_recentThreats.Count; ++i)
-            {
-                if (m_recentThreats[i].m_threatLevel > 0)
-                {
-                    ThreatData.UpdateThreatLevel(ref m_recentThreats.GetRawArray()[i], -ThreatData.s_threatDecay);
-                }
-            }
-
-
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public void AddOrUpdateThreat(GameObject gameObject)
-        {
-
-#if LOG_EVENT
-            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] AddThreat [{2}][{3}].", Id, GameObjectType, gameObject.Id, gameObject.GameObjectType));
-#endif
-
-            int index = FindThreatIndex(gameObject);
-            if (index >= 0)
-            {
-                ThreatData.UpdateThreatLevel(ref m_recentThreats.GetRawArray()[index], ThreatData.s_threatIncrement);
-            }
-            else
-            {
-                m_recentThreats.Add(new ThreatData(gameObject, ThreatData.s_initialThreatLevel, 0));
-            }
-
-
-
-
-        }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        protected int FindThreatIndex(GameObject gameObject)
-        {
-            int index = -1;
-            for (int i = 0; i < m_recentThreats.Count; ++i)
-            {
-                if (m_recentThreats[i].m_gameObject == gameObject)
-                {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        public void RemoveThreat(GameObject gameObject)
-        {
-
-            int index = FindThreatIndex(gameObject);
-            if (index >= 0)
-            {
-#if LOG_EVENT
-                Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] RemoveThreat [{2}][{3}].", Id, GameObjectType, gameObject.Id, gameObject.GameObjectType));
-#endif
-                m_recentThreats.RemoveAt(index);
-            }
-        }
-
+        
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // These are pseudo-events but not going to bother registering listeners and will brute force it.
         public void WorldObjectAdded(GameObject gameObject)
@@ -755,7 +679,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void WorldObjectRemoved(GameObject gameObject)
         {
-            RemoveThreat(gameObject);
+            if (m_threatComponent != null)
+            {
+                m_threatComponent.RemoveThreat(gameObject);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -778,52 +705,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        public Vector3 GetFleeDirection()
-        {
-            // find out which is the 
-            float totalThreatLevel = 0f;
-            Vector3 threatDirection = Vector3.Zero;
-
-            foreach (ThreatData threatData in m_recentThreats)
-            {
-                totalThreatLevel += threatData.m_threatLevel;
-            }
-
-            // if we have a threat level.
-            if (totalThreatLevel > 0)
-            {
-
-                // now go through and find the direction of greatest threat?
-                foreach (ThreatData threatData in m_recentThreats)
-                {
-                    float contribution = (float)threatData.m_threatLevel / totalThreatLevel;
-                    threatDirection += (GameUtil.DirectionToTarget(this, threatData.m_gameObject) * contribution);
-                }
-                // flee away from the area of greatest threats...
-                threatDirection.Y = 0f;
-                threatDirection = -threatDirection;
-            }
-            if (MathUtil.FuzzyZero(threatDirection.LengthSquared()))
-            {
-                // either equal threats around us or no threats, in which case chose random direction
-                Vector3 randomPosition = Globals.Terrain.GetRandomWorldPositionXZ();
-                threatDirection = GameUtil.DirectionToTarget(this, randomPosition);
-            }
-            threatDirection.Normalize();
-
-#if LOG_EVENT
-            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] FleeDirection [{2}].", Id, GameObjectType, threatDirection));
-#endif
-            return threatDirection;
-
-
-
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public SpellComponent SpellComponent
         {
@@ -875,7 +756,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public ObjectArray<ThreatData> m_recentThreats = new ObjectArray<ThreatData>();
+        public Vector3 Heading
+        {
+            get { return m_heading; }
+            set{m_heading = value;}
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
        // And others
 
@@ -904,13 +793,17 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected bool m_debugEnabled;
         protected bool m_playerControlled;
 
-
         protected ActionComponent m_actionComponent;
         protected SpellComponent m_spellComponent;
+        protected ThreatComponent m_threatComponent;
 
         protected bool m_stickToGround = true;
         protected Matrix[] m_boneTransforms;
-        protected Matrix m_modelTransform;
+
+        // keeping this separate from facing on purpose.
+        protected Vector3 m_heading;
+
+
 
         public static int s_idCounter = 0;
     }

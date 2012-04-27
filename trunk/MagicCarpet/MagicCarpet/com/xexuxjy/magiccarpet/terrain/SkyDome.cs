@@ -13,7 +13,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             : base(GameObjectType.skydome)
         {
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData("SkyDome");
-            DrawOrder = Globals.TERRAIN_DRAW_ORDER;
+            DrawOrder = Globals.SKYDOME_DRAW_ORDER;
         }
 
         public override void Initialize()

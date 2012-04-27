@@ -177,6 +177,7 @@ namespace com.xexuxjy.magiccarpet.manager
                 removedGameObject.Cleanup();
                 Globals.CollisionManager.RemoveFromWorld(removedGameObject.CollisionObject);
                 m_gameObjectList.Remove(removedGameObject);
+                m_drawableList.Remove(removedGameObject);
 
                 foreach (GameObject gameObject in m_gameObjectList)
                 {

@@ -27,33 +27,16 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void BuildCollisionObject()
-        {
-            //m_collisionObject = new CollisionObject();
-            //m_collisionObject.SetCollisionShape(s_collisionShape);
-            //m_collisionObject.SetUserPointer(this);
-            //m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() & (~CollisionFlags.CF_STATIC_OBJECT));
-
-            //Globals.CollisionManager.AddToWorld(m_collisionObject);
-            //m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), s_collisionShape, m_motionState, true, this);
-        }
-        
-        
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
         public void SetInitialPositionAndDirection(Vector3 position, Vector3 direction)
         {
             Position = position;
-            Forward = direction;
-
-            //m_motionState.SetWorldTransform(Matrix.CreateTranslation(position));
-            TargetSpeed = s_defaultSpellSpeed;
+            Heading = direction;
+            TargetSpeed = Globals.s_defaultSpellSpeed;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         protected static CollisionShape s_collisionShape = new SphereShape(Spell.s_objectSize);
-        protected const float s_defaultSpellSpeed = 5f;
 
 
     }

@@ -33,9 +33,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.monster;
             CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.terrain | GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster | GameObjectType.castle | GameObjectType.spell);
 
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), new SphereShape(s_radius), m_motionState, true, this, collisionFlags, collisionMask);
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), new SphereShape(Globals.s_monsterSize), m_motionState, true, this, collisionFlags, collisionMask);
             m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
-            m_scaleTransform = Matrix.CreateScale(s_radius);
+            m_scaleTransform = Matrix.CreateScale(Globals.s_monsterSize);
 
         }
 
@@ -176,12 +176,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             {
                 // if we're being attacked and damaged then run away if we're below 1/4 health.
                 ClearAllActions();
-                QueueAction(Globals.ActionPool.GetActionFlee(this, GetFleeDirection(), Globals.s_monsterFleeSpeed));
+                QueueAction(Globals.ActionPool.GetActionFlee(this, m_threatComponent.GetFleeDirection(), Globals.s_monsterFleeSpeed));
             }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        const float s_radius = 0.5f;
     }
 }
