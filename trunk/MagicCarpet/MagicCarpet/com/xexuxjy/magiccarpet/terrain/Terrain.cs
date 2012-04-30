@@ -240,13 +240,13 @@ namespace com.xexuxjy.magiccarpet.terrain
             Vector4 scaleFactor = new Vector4(m_oneOver);
             m_terrainEffect.Parameters["ScaleFactor"].SetValue(scaleFactor);
             Globals.MCContentManager.ApplyCommonEffectParameters(m_terrainEffect);
-            DrawTerrainBlocks(boundingFrustrum,ref viewProjection);
-            //DrawTrees(boundingFrustrum, ref viewProjection);
+            DrawTerrainBlocks(boundingFrustrum);
+            DrawTrees(boundingFrustrum);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void DrawTerrainBlocks(BoundingFrustum boundingFrustrum,ref Matrix viewProjection)
+        public void DrawTerrainBlocks(BoundingFrustum boundingFrustrum)
         {
             int numSpans = Globals.WorldWidth / m_blockSize;
             Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
@@ -320,7 +320,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void DrawTrees(BoundingFrustum boundingFrustrum,ref Matrix viewProjection)
+        public void DrawTrees(BoundingFrustum boundingFrustrum)
         {
             m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["BillboardTrees"];
             Globals.GraphicsDevice.SetVertexBuffer(m_treeVertexBuffer);
@@ -329,9 +329,10 @@ namespace com.xexuxjy.magiccarpet.terrain
             Globals.GraphicsDevice.RasterizerState = m_noCullState;
 
             Vector3 startPosition = Vector3.Zero;//new Vector3(-Globals.WorldWidth / 2f, 0, -Globals.WorldWidth / 2f);
-            Matrix transform = Matrix.CreateTranslation(startPosition) * viewProjection;
+            Matrix transform = Matrix.CreateTranslation(startPosition);
+            Globals.MCContentManager.ApplyCommonEffectParameters(m_terrainEffect);
 
-            m_terrainEffect.Parameters["WorldViewProjMatrix"].SetValue(transform);
+            m_terrainEffect.Parameters["WorldMatrix"].SetValue(transform);
             m_terrainEffect.Parameters["TreeTexture"].SetValue(m_treeTexture);
          
             float oneOverTextureWidth = 1f / (m_textureWidth - 1);
@@ -890,7 +891,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                             float rand2 = (float)Globals.s_random.Next(1000) / 1000.0f;
                             float scale = (float)Globals.s_random.NextDouble();
                             //worldPosition
-                            Vector3 tempPos = new Vector3((float)x - rand1, height, -(float)z - rand2);
+                            Vector3 tempPos = new Vector3((float)x - rand1, height, (float)z - rand2);
                             tempPos -= halfWidth;
                             Vector4 treePos = new Vector4(tempPos,scale);
                             m_treePositions.Add(treePos);

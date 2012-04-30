@@ -219,29 +219,18 @@ TreeVertexShaderOutput TreeVertexShaderFunction(TreeVertexShaderInput input)
 	float3 worldPos = input.pos;
 	float2 worldPos2 = float2(input.pos.x,input.pos.z);
 	float scale = input.scale;
-                     
+
     // compute coordinates for vertex texture
     //  FineBlockOrig.xy: 1/(w, h) of texture (texelwidth)
-    //float2 uv = float2(worldPos.x + WorldWidth/2,worldPos.z+WorldWidth/2) * FineTextureBlockOrigin.x;
-   
+    float2 uv = float2(worldPos.x + WorldWidth/2,worldPos.z+WorldWidth/2) * FineTextureBlockOrigin.x;
 
-    float2 uv = float2((worldPos2)*FineTextureBlockOrigin.xy);
-    //float height = ComputeHeight(uv);
-
-	
 	float height = ComputeHeight(uv);
-
-	
-
-	worldPos = float3(worldPos.x, worldPos.y + height,worldPos.z);
 
 	float3 adjustedPos = float3(worldPos.x,worldPos.y + height,worldPos.z);
 
-	//output.pos = mul(float4(adjustedPos,1), WorldViewProjMatrix);
 	float4 worldPosition = mul(float4(adjustedPos, 1), WorldMatrix);
     float4 viewPosition = mul(worldPosition, ViewMatrix);
     output.pos = mul(viewPosition, ProjMatrix);
-
 
 	output.pos3d = output.pos;
     output.uv= input.uv;
@@ -259,8 +248,9 @@ float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
-	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
-
+	float4 result2;
+	result2.rgb = lerp(result.rgb,FogColor,fogFactor);
+	result2.a = result.a;
 
     return result;
 }
