@@ -326,7 +326,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             Globals.GraphicsDevice.SetVertexBuffer(m_treeVertexBuffer);
 
             RasterizerState oldState = Globals.GraphicsDevice.RasterizerState;
-            Globals.GraphicsDevice.RasterizerState = m_noCullState;
+            //Globals.GraphicsDevice.RasterizerState = m_noCullState;
 
             Vector3 startPosition = Vector3.Zero;//new Vector3(-Globals.WorldWidth / 2f, 0, -Globals.WorldWidth / 2f);
             Matrix transform = Matrix.CreateTranslation(startPosition);
@@ -338,9 +338,9 @@ namespace com.xexuxjy.magiccarpet.terrain
             float oneOverTextureWidth = 1f / (m_textureWidth - 1);
             m_terrainEffect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, 0, 0));
 
-            BlendState oldBlendState = Globals.GraphicsDevice.BlendState;
-            Globals.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-
+            //BlendState oldBlendState = Globals.GraphicsDevice.BlendState;
+            //Globals.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            
 
             foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
             {
@@ -350,8 +350,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                 Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
             }
 
-            Globals.GraphicsDevice.RasterizerState = oldState;
-            Globals.GraphicsDevice.BlendState = oldBlendState;          
+            //Globals.GraphicsDevice.RasterizerState = oldState;
+            //Globals.GraphicsDevice.BlendState = oldBlendState;          
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////

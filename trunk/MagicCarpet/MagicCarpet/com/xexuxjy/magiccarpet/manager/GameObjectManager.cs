@@ -6,6 +6,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.terrain;
 using BulletXNA.LinearMath;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -379,6 +380,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public override void Draw(GameTime gameTime)
         {
+            BlendState bs = Globals.GraphicsDevice.BlendState;
             foreach (IDrawable drawable in m_drawableList)
             {
                 drawable.Draw(gameTime);

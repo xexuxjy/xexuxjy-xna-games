@@ -218,8 +218,8 @@ namespace GameStateManagement
             base.Draw(gameTime);
 
             // reset the blendstats as spritebatch probably trashed them.
-            //Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
-            //Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             Globals.GameObjectManager.Draw(gameTime);
 
@@ -231,39 +231,6 @@ namespace GameStateManagement
                 ScreenManager.FadeBackBufferToBlack(alpha);
             }
         }
-
-        //public void AddComponent(GameComponent gameComponent)
-        //{
-        //    AddComponent(gameComponent, false);
-        //}
-
-        //public void AddComponent(GameComponent gameComponent,bool initialise)
-        //{
-        //    if (initialise)
-        //    {
-        //        gameComponent.Initialize();
-        //    }
-
-        //    m_componentCollection.Add(gameComponent);
-        //    IDrawable drawable = gameComponent as IDrawable;
-        //    if (drawable != null)
-        //    {
-        //        m_drawableList.Add(drawable);
-        //        m_drawableList.Sort(drawComparator);
-        //    }
-
-        //}
-
-        //public void RemoveComponent(GameComponent gameComponent)
-        //{
-        //    m_componentCollection.Remove(gameComponent);
-        //    IDrawable drawable = gameComponent as IDrawable;
-        //    if (drawable != null)
-        //    {
-        //        m_drawableList.Remove(drawable);
-        //    }
-        //}
-
 
 
         #endregion
