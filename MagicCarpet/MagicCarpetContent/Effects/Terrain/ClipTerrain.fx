@@ -206,6 +206,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	// do something funky as well to provide fog near the boundaries of the world.
 	result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
+	result.a = 1;
 
 	return result;
 
@@ -251,6 +252,9 @@ float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
 	float4 result2;
 	result2.rgb = lerp(result.rgb,FogColor,fogFactor);
 	result2.a = result.a;
+
+
+	clip(result.w - 0.7843f);
 
     return result;
 }
