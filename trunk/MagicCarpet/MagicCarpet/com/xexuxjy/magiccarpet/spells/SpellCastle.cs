@@ -38,13 +38,13 @@ namespace com.xexuxjy.magiccarpet.spells
                     // adjust to nearest integer.
                     Vector3 roundedPoint = new Vector3((float)Math.Round(collisionPointWorld.X), collisionPointWorld.Y, (float)Math.Round(collisionPointWorld.Z));
 
-                    if (Castle.CanPlaceSize(collisionPointWorld, 0))
+                    if (Castle.CanPlaceLevel(collisionPointWorld, 0))
                     {
                         Castle castle = (Castle)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.castle,collisionPointWorld);
                         if(castle != null)
                         {
                             castle.Owner = Owner;
-                            castle.GrowToSize(0);
+                            castle.GrowToLevel(0);
                         }
                     }
                 }

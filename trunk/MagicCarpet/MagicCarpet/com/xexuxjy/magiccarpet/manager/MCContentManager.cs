@@ -37,6 +37,9 @@ namespace com.xexuxjy.magiccarpet.manager
             m_effectDictionary["SkyDome"] = m_contentManager.Load<Effect>("Effects/Skydome/Skydome");
 
 
+            LoadModel("UnitCube", "Models/SimpleShapes/unitcube");
+
+            
             LoadModel(GameObjectType.castle.ToString(), "Models/SimpleShapes/unitcube");
             LoadModel("TerrainWalls","Models/Terrain/TerrainWalls");
 
@@ -56,6 +59,7 @@ namespace com.xexuxjy.magiccarpet.manager
             //m_modelDictionary[GameObjectType.magician] = m_contentManager.Load<Model>("unitcylinder");
             LoadModel(GameObjectType.magician.ToString(),"Models/Magician/magician");
             LoadModel("CastleTower", "Models/NewCastle/castle_tower");
+            LoadModel("CastleWall", "Models/NewCastle/castle_wall");
 
             LoadModel("SkyDome","Models/SkyDome/skydome");
 

@@ -12,6 +12,8 @@ using BulletXNA.BulletCollision;
 using com.xexuxjy.magiccarpet.util;
 using com.xexuxjy.magiccarpet.combat;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.interfaces;
+using BulletXNA;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -73,9 +75,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         
         public override void Update(GameTime gameTime)
         {
-            foreach (CastleTower tower in m_towers)
+            foreach (GameObject gameObject in m_castleParts)
             {
-                tower.Update(gameTime);
+                gameObject.Update(gameTime);
             }
             base.Update(gameTime);
         }
@@ -84,9 +86,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (CastleTower tower in m_towers)
+            foreach (GameObject gameObject in m_castleParts)
             {
-                tower.Draw(gameTime);
+                gameObject.Draw(gameTime);
             }
         }
 
@@ -95,16 +97,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Cleanup()
         {
-            if (m_towers != null)
+            if (m_castleParts != null)
             {
-                foreach (CastleTower tower in m_towers)
+                foreach (GameObject gameObject in m_castleParts)
                 {
-                    tower.Cleanup();
+                    gameObject.Cleanup();
                 }
-                m_towers.Clear();
+                m_castleParts.Clear();
             }
 
-            m_towers = null;
+            m_castleParts = null;
             base.Cleanup();
         }
 
@@ -151,16 +153,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public bool CanGrow(int level)
         {
-            return CanPlaceSize(Position,level);
+            return CanPlaceLevel(Position,level);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
-        public static bool CanPlaceSize(Vector3 position,int size)
+        public static bool CanPlaceLevel(Vector3 position,int level)
         {
             // go to the terrain and make sure that there is nothing nearby that will interfere.
-            int width = CastleSizes[size];
+            int width = GetWidthForLevel(level) ;
 
             Vector3 startPos = position;
             startPos -= new Vector3(-width / 2, 0, -width / 2);
@@ -188,72 +190,76 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void GrowToSize(int size)
+        public static int GetWidthForLevel(int level)
         {
-            Debug.Assert(CanPlaceSize(Position,size));
+            return s_levelMap[level][0].Length;
+        }
 
-            Level = size;
 
-            int width = CastleSizes[size];
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        public void GrowToLevel(int level)
+        {
+            Debug.Assert(CanPlaceLevel(Position,level));
+
+            Level = level;
+
+            int width = GetWidthForLevel(level);
+            String[] dataForLevel = s_levelMap[level];
+
 
             Vector3 startPos = Position;
             Vector3 offset = new Vector3(width / 2, 0, width / 2);
-            startPos -= offset;
 
+            int borderWidth = 3;
 
-            //for (int j = 0; j < width; ++j)
-            //{
-            //    for (int i = 0; i < width; ++i)
-            //    {
-            //        Vector3 point = startPos + new Vector3(i, 0, j);
-            //        point.Y = m_initialHeight;
-            //        //point.Y = 0f;
-            //        Globals.Terrain.SetHeightAtPointWorld(ref point);
-            //        Globals.Terrain.SetTerrainTypeAndOccupier(point, TerrainType.castle,this);
-            //    }
-            //}
+            // fudge factor for the slope leading up to the flat area...
 
-            // test
-            Vector3 pos = Position;
-            pos.X -= width / 2;
-            pos.Z -= width / 2;
+            startPos -= (offset + new Vector3(borderWidth, 0, borderWidth));
 
-            Globals.Terrain.SetHeightForArea(pos, 12, 12, 5);
+            Globals.Terrain.SetHeightForArea(startPos, width + (borderWidth * 2), width + (borderWidth * 2), 5);
             //TerrainUpdater.ApplyImmediate(Position, 12, 4, Globals.Terrain);
 
             Globals.Terrain.UpdateHeightMap();
-            m_scaleTransform = Matrix.CreateScale(width/2, 1, width/2);
 
-            bool enableTurrets = true;
-            if (enableTurrets)
+
+            Vector3 xOffset = new Vector3(1, 0, 0);
+            Vector3 zOffset = new Vector3(0, 0, 1);
+            Matrix verticalRotation = Matrix.CreateRotationY(MathUtil.SIMD_HALF_PI);
+            Vector3 currentPosition = startPos;
+            for (int i = 0; i < dataForLevel.Length;++i )
             {
-                Vector3 turretPos0 = new Vector3(Position.X - offset.X, Position.Y, Position.Z - offset.Z);
-                Vector3 turretPos1 = new Vector3(Position.X + offset.X, Position.Y, Position.Z - offset.Z);
-                Vector3 turretPos2 = new Vector3(Position.X - offset.X, Position.Y, Position.Z + offset.Z);
-                Vector3 turretPos3 = new Vector3(Position.X + offset.X, Position.Y, Position.Z + offset.Z);
-
-                // clear or move turrets?
-                if (m_towers.Count == 0)
+                // reset to start of line
+                currentPosition.X = startPos.X;
+                for (int j = 0; j < dataForLevel[i].Length; ++j)
                 {
-                    m_towers.Add(new CastleTower(this, turretPos0));
-                    m_towers.Add(new CastleTower(this, turretPos1));
-                    m_towers.Add(new CastleTower(this, turretPos2));
-                    m_towers.Add(new CastleTower(this, turretPos3));
-
-                    foreach (CastleTower tower in m_towers)
+                    GameObject castlePart = null;
+                    if (dataForLevel[i][j] == 'T')
                     {
-                        tower.Initialize();
+                        castlePart = new CastleTower(this,currentPosition);
+                    }
+                    else if (dataForLevel[i][j] == 'V')
+                    {
+                        castlePart = new CastleWall(this, currentPosition,verticalRotation);
+                    }
+                    else if (dataForLevel[i][j] == 'W')
+                    {
+                        castlePart = new CastleWall(this, currentPosition,Matrix.Identity);
+                    }
+
+                    currentPosition += xOffset;
+                    // only add if we created.
+                    if (castlePart != null)
+                    {
+                        castlePart.Initialize();
+                        m_castleParts.Add(castlePart);
                     }
                 }
-                else
-                {
-                    m_towers[0].Position = turretPos0;
-                    m_towers[1].Position = turretPos1;
-                    m_towers[2].Position = turretPos2;
-                    m_towers[3].Position = turretPos3;
-
-                }
+                currentPosition += zOffset;
             }
+
             //CreateBalloon();
         }
         
@@ -314,18 +320,48 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Different castle sizes.
-        public static int[] CastleSizes = new int[]{4,6,10};
+        public static int[] CastleSizes = new int[]{6,8,12};
 
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        public static String[][] s_levelMap = new String[][]{
+                                                       new String[]
+                                                       {"THHT",
+                                                        "V  V", 
+                                                        "V  V",  
+                                                        "THHT"},
+                                                       new String[]
+                                                       {"THHTHHT",
+                                                        "V     V", 
+                                                        "V     V", 
+                                                        "T  T  T",
+                                                        "V     V", 
+                                                        "V     V", 
+                                                        "THHTHHT"},
+                                                        new String[]
+                                                       {"THHTHHTHHT",
+                                                        "V        V", 
+                                                        "V        V", 
+                                                        "T        T",
+                                                        "V        V", 
+                                                        "V        V", 
+                                                        "T        T",
+                                                        "V        V", 
+                                                        "V        V", 
+                                                        "THHTHHTHHT"}};
+
         private int m_level;
         private float m_storedMana;
         private float m_initialHeight;
 
-        public const float s_towerCastleSize = 1f;
+        public const float s_castleTowerSize = 1f;
+        public const float s_castleWallSize = 1f;
 
-        private List<CastleTower> m_towers = new List<CastleTower>();
+
+        private List<GameObject> m_castleParts = new List<GameObject>();
+
     }
 }

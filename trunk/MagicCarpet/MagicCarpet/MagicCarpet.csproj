@@ -150,6 +150,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Balloon.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Castle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\CastleTower.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\gameobjects\CastleWall.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\EmptyGameObject.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Monster.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\GameStateManagement\ScreenManager\GameScreen.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\gui\MiniMap.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\PlayerStats.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gui\SpellSelector.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\interfaces\ICastlePart.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\interfaces\IKeyboardCallback.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\ActionPool.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\GameObjectManager.cs" />

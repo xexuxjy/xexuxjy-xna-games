@@ -370,7 +370,7 @@ namespace com.xexuxjy.magiccarpet.manager
             {
                 Castle castle =  gameObject as Castle;
                 int level = int.Parse(value);
-                castle.GrowToSize(level);
+                castle.GrowToLevel(level);
 
             }
 
