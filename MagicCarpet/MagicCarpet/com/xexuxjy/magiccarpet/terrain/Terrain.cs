@@ -979,7 +979,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         // the time taken for the complete terrain move.
         private float s_terrainMoveTime = 5.0f;
 
-        const int m_blockSize = 256;
+        const int m_blockSize = 64;
         const int m_textureWidth = Globals.WorldWidth + 1;
 
         const int m_multiplier = 1;

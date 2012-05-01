@@ -13,24 +13,24 @@ using com.xexuxjy.magiccarpet.interfaces;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
-    public class CastleTower : GameObject, ICastlePart
+    public class CastleWall : GameObject, ICastlePart
     {
-        public CastleTower(Castle castle,Vector3 startPosition)
+        public CastleWall(Castle castle, Vector3 startPosition,Matrix rotation)
             : base(startPosition, GameObjectType.castle)
-        
         {
             m_castle = castle;
             StickToGround = false;
+            rotation.Translation = startPosition;
+            WorldTransform = rotation;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override void InitializeModel()
         {
-            m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleTower");
+            m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleWall");
 
-            // scale the base of the tower to one unit?
-            float scale = Castle.s_castleTowerSize / (float)(m_modelHelperData.m_boundingBox.Max.X - m_modelHelperData.m_boundingBox.Min.X);
+            float scale = Castle.s_castleWallSize / (float)(m_modelHelperData.m_boundingBox.Max.X - m_modelHelperData.m_boundingBox.Min.X);
             m_scaleTransform = Matrix.CreateScale(scale);
 
         }
@@ -47,8 +47,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             newPos.Y += height / 2.0f;
 
             Position = newPos;
-
-
         }
 
 
@@ -57,7 +55,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override CollisionFilterGroups GetCollisionFlags()
         {
-            return  (CollisionFilterGroups)GameObjectType.castle;
+            return (CollisionFilterGroups)GameObjectType.castle;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -103,37 +101,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             switch (action.ActionState)
             {
-                case (ActionState.Searching):
-                    {
-                        ActionFind actionFind = action as ActionFind;
-                        // If we found something nearby
-                        if (actionFind.Target != null)
-                        {
-                            QueueAction(Globals.ActionPool.GetActionAttackRange(this, actionFind.Target, Globals.s_castleTurretSearchRadius, Globals.s_castleTurretAttackDamage, SpellType.Fireball));
-                        }
-                        break;
-                    }
-                case (ActionState.Idle):
-                    {
-                        // if we've finished an idle then look around for something
-                        // to do.
-
-                        BaseAction newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindEnemy(this, Globals.s_castleTurretSearchRadius));;
-                        QueueAction(newAction);
-                        break;
-                    }
-                case (ActionState.AttackingRange):
-                    {
-                        // if we've finished attacking at range. then we need to see if 
-                        // our target is dead or if we should do something else.
-
-                        if (action.Target.Alive && GameUtil.InRange(this, action.Target, Globals.s_monsterRangedDamage))
-                        {
-                            QueueAction(Globals.ActionPool.GetActionAttackRange(this, action.Target, Globals.s_monsterRangedRange, Globals.s_monsterRangedDamage, SpellType.Fireball));
-                        }
-                        break;
-                    }
-
                 case (ActionState.Dieing):
                     {
                         // when we've finished dieing then we want to spawn a manaball here.
@@ -144,7 +111,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 default:
                     {
-                        QueueAction(Globals.ActionPool.GetActionIdle(this,Globals.s_castleTurretSearchFrequency));
+                        QueueAction(Globals.ActionPool.GetActionIdle(this, Globals.s_castleTurretSearchFrequency));
                         break;
                     }
             }
@@ -156,7 +123,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_castle.Damaged(damageData);
         }
 
-        
+
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override Texture2D GetTexture()
@@ -164,22 +131,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             return Globals.MCContentManager.GetTexture("CastleTower");
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public override Vector3 SpellCastPosition
-        {
-            get
-            {
-                Vector3 result = Position;
-                // offset this a bit so we fire from the top of the tower.
-                result.Y = m_modelHelperData.m_boundingBox.Max.Y;
-                return result;
-            }
-        }
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private Castle m_castle;
     }
-            
+
 }

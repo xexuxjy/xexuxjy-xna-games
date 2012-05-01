@@ -71,9 +71,9 @@ namespace GameStateManagement
                 m_content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
 
-            //m_debugDrawMode = DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
+            m_debugDrawMode = DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
             //m_debugDrawMode = DebugDrawModes.ALL;
-            m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
+            //m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
             m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
 
