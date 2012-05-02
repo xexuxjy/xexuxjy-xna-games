@@ -1,21 +1,21 @@
 #include "Common.fx"
 
-uniform float CarpetMovementOffset;
+uniform float ClothMovementOffset;
 uniform float Amplitude;
 uniform float Frequency;
-uniform float CarpetLength;
+uniform float ClothLength;
+uniform float3 OwnerColor;
 
+texture ClothTexture;
 
-texture CarpetTexture;
-
-struct CarpetVertexShaderInput
+struct ClothVertexShaderInput
 {
     float3 pos  : POSITION;
     float2 uv	: TEXCOORD0;  // coordinates for normal-map lookup
 };
 
 
-struct CarpetVertexShaderOutput
+struct ClothVertexShaderOutput
 {
     float4 pos        : POSITION;   
     float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
@@ -24,9 +24,9 @@ struct CarpetVertexShaderOutput
 };
 
 
-uniform sampler CarpetSampler = sampler_state
+uniform sampler ClothSampler = sampler_state
 {
-    Texture   = (CarpetTexture);
+    Texture   = (ClothTexture);
     MipFilter = None;
     MinFilter = Point;
     MagFilter = Point;
@@ -36,13 +36,13 @@ uniform sampler CarpetSampler = sampler_state
 
 
 // Vertex shader for rendering the geometry clipmap
-CarpetVertexShaderOutput CarpetVertexShaderFunction(CarpetVertexShaderInput input)
+ClothVertexShaderOutput ClothVertexShaderFunction(ClothVertexShaderInput input)
 {
-	CarpetVertexShaderOutput output;
+	ClothVertexShaderOutput output;
 
-	float waveLength = CarpetLength / Frequency;
+	float waveLength = ClothLength / Frequency;
 
-	float angle = (input.pos.z + CarpetMovementOffset) / waveLength;
+	float angle = (input.pos.z + ClothMovementOffset) / waveLength;
 	angle = angle * 2 * PI;
 
 	float cosAngle = cos(angle);
@@ -69,10 +69,18 @@ CarpetVertexShaderOutput CarpetVertexShaderFunction(CarpetVertexShaderInput inpu
 }
 
 
-float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
+float4 ClothPixelShaderFunction(ClothVertexShaderOutput input) : COLOR0
 {
-	float4 result = tex2D(CarpetSampler, input.uv);
-	//float4 result = float4(1,0,0,1);
+	float4 result = tex2D(ClothSampler, input.uv);
+	
+	// translate color to owners color.
+	/*
+	if(result.rgb == float3(0,0,0))
+	{
+		result.rgb = OwnerColor;
+
+	}
+	*/
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 
@@ -89,7 +97,7 @@ float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
 
 	result *= light;
 
-	// alpha blend carpet when it's close to camera?
+	// alpha blend Cloth when it's close to camera?
 	//result.a = lerp(result.a,2,5);
 
 
@@ -99,13 +107,13 @@ float4 CarpetPixelShaderFunction(CarpetVertexShaderOutput input) : COLOR0
 }
 
 
-technique DrawCarpet
+technique DrawCloth
 {
     pass Pass1
     {
         // TODO: set renderstates here.
 
-        VertexShader = compile vs_3_0 CarpetVertexShaderFunction();
-        PixelShader = compile ps_3_0 CarpetPixelShaderFunction();
+        VertexShader = compile vs_3_0 ClothVertexShaderFunction();
+        PixelShader = compile ps_3_0 ClothPixelShaderFunction();
     }
 }

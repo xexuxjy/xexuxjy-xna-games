@@ -30,7 +30,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleTower");
 
             // scale the base of the tower to one unit?
-            float scale = Castle.s_castleTowerSize / (float)(m_modelHelperData.m_boundingBox.Max.X - m_modelHelperData.m_boundingBox.Min.X);
+            Vector3 scale = Castle.s_castleTowerSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
             m_scaleTransform = Matrix.CreateScale(scale);
 
         }
@@ -48,6 +48,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             Position = newPos;
 
+
+            Globals.FlagManager.AddFlagForObject(this,Position, new Vector3(1,1,1));
 
         }
 
@@ -76,13 +78,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 QueueAction(Globals.ActionPool.GetActionIdle(this));
             }
 
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -118,7 +113,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         // if we've finished an idle then look around for something
                         // to do.
 
-                        BaseAction newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindEnemy(this, Globals.s_castleTurretSearchRadius));;
+                        BaseAction newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindEnemy(Owner, Globals.s_castleTurretSearchRadius));;
                         QueueAction(newAction);
                         break;
                     }
@@ -129,7 +124,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                         if (action.Target.Alive && GameUtil.InRange(this, action.Target, Globals.s_monsterRangedDamage))
                         {
-                            QueueAction(Globals.ActionPool.GetActionAttackRange(this, action.Target, Globals.s_monsterRangedRange, Globals.s_monsterRangedDamage, SpellType.Fireball));
+                            QueueAction(Globals.ActionPool.GetActionAttackRange(Owner, action.Target, Globals.s_monsterRangedRange, Globals.s_monsterRangedDamage, SpellType.Fireball));
                         }
                         break;
                     }
@@ -144,7 +139,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 default:
                     {
-                        QueueAction(Globals.ActionPool.GetActionIdle(this,Globals.s_castleTurretSearchFrequency));
+                        QueueAction(Globals.ActionPool.GetActionIdle(Owner,Globals.s_castleTurretSearchFrequency));
                         break;
                     }
             }
@@ -179,7 +174,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override void Cleanup()
+        {
+            Globals.FlagManager.RemoveFlagForObject(this);
+            base.Cleanup();
+        }
+
         private Castle m_castle;
     }
             
 }
+

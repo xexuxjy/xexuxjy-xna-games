@@ -29,68 +29,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected override void LoadContent()
         {
             base.LoadContent();
-            if (m_carpetVertices == null)
+            if (m_carpetVertexBuffer == null)
             {
                 float carpetWidth = 1f;
                 float carpetLength = 1f;
-                float carpetHeightDeflection = 0.02f;
-                float carpetThickness = 0.0001f;
                 int carpetSegments = 99;
                 float segmentStep = carpetLength / carpetSegments;
 
-                m_carpetDimensions = new Vector4(carpetWidth, carpetHeightDeflection, carpetLength,segmentStep);
-                
+                ObjectBuilderUtil.BuildClothObject(carpetSegments, carpetWidth, carpetLength, out m_carpetDimensions,out m_carpetVertexBuffer);
 
-                int counter = 0;
-                float uvStep = 1f / (float)carpetSegments;
-
-                Vector3 carpetWidthOffset = new Vector3(-carpetWidth / 2, 0, -carpetLength/2);
-
-                m_carpetVertices = new VertexPositionTexture[carpetSegments * 12];
-
-                for (int i = 0; i < carpetSegments; ++i)
-                {
-                    Vector3 bl = new Vector3(0, 0, i * segmentStep) + carpetWidthOffset;
-                    Vector3 br = new Vector3(carpetWidth, 0, i * segmentStep) + carpetWidthOffset;
-                    Vector3 tl = new Vector3(0, 0, (i + 1) * segmentStep) + carpetWidthOffset;
-                    Vector3 tr = new Vector3(carpetWidth, 0, (i + 1) * segmentStep) + carpetWidthOffset;
-
-                    Vector2 tbl = new Vector2(0, i * uvStep);
-                    Vector2 tbr = new Vector2(1, i * uvStep);
-                    Vector2 ttl = new Vector2(0, (i+1) * uvStep);
-                    Vector2 ttr = new Vector2(1, (i+1) * uvStep);
-
-                    // top face of carpet...
-                    m_carpetVertices[counter++] = new VertexPositionTexture(bl,  tbl);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(br,  tbr);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tl,  ttl);
-
-                    m_carpetVertices[counter++] = new VertexPositionTexture(br,  tbr);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tr,  ttr);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tl,  ttl);
-
-
-                    // bottom face of carpet...
-
-                    Vector3 bottomOffset = new Vector3(0, -carpetThickness, 0);
-
-
-                    m_carpetVertices[counter++] = new VertexPositionTexture(bl+bottomOffset, tbl);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, ttl);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(br + bottomOffset, tbr);
-
-                    m_carpetVertices[counter++] = new VertexPositionTexture(br + bottomOffset, tbr);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tl + bottomOffset, ttl);
-                    m_carpetVertices[counter++] = new VertexPositionTexture(tr + bottomOffset, ttr);
-
-
-                }
-
-                m_carpetVertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionTexture.VertexDeclaration, counter, BufferUsage.WriteOnly);
-                m_carpetVertexBuffer.SetData(m_carpetVertices,0,counter);
-
-
-                m_carpetEffect = Globals.MCContentManager.GetEffect("Carpet");
+                m_carpetEffect = Globals.MCContentManager.GetEffect("OwnerColour");
                 m_carpetTexture = Globals.MCContentManager.GetTexture("Carpet2");
             }
         }
@@ -177,46 +125,46 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            Matrix viewProjection = Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix;
-            BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
-
-            Globals.MCContentManager.ApplyCommonEffectParameters(m_carpetEffect);
-
-
-            Globals.GraphicsDevice.SetVertexBuffer(m_carpetVertexBuffer);
-
-            Vector3 startPosition = Position;
-            Matrix worldMatrix = WorldTransform;
-
-            Vector3 forward = WorldTransform.Forward;
-
-            m_carpetEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
-            m_carpetEffect.Parameters["CarpetTexture"].SetValue(m_carpetTexture);
-
-            float timeScalar = 4f;
-            float frequency = 4f;
-            m_carpetMovementOffset += (timeScalar * m_carpetDimensions.W * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-            m_carpetEffect.Parameters["Frequency"].SetValue(frequency);
-            m_carpetEffect.Parameters["Amplitude"].SetValue(m_carpetDimensions.Y);
-            m_carpetEffect.Parameters["CarpetLength"].SetValue(m_carpetDimensions.Z);
-
-
-            m_carpetEffect.Parameters["CarpetMovementOffset"].SetValue(m_carpetMovementOffset);
-
-
-
-            int noTriangles = m_carpetVertexBuffer.VertexCount / 3;
-
-            m_carpetEffect.CurrentTechnique = m_carpetEffect.Techniques["DrawCarpet"];
-
-            foreach (EffectPass pass in m_carpetEffect.CurrentTechnique.Passes)
+            if (Globals.s_currentCameraFrustrum.Intersects(BoundingBox))
             {
-                int noVertices = m_carpetVertexBuffer.VertexCount;
-                pass.Apply();
-                Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
-            }
 
+                Globals.MCContentManager.ApplyCommonEffectParameters(m_carpetEffect);
+
+                Globals.GraphicsDevice.SetVertexBuffer(m_carpetVertexBuffer);
+
+                Vector3 startPosition = Position;
+                Matrix worldMatrix = WorldTransform;
+
+                Vector3 forward = WorldTransform.Forward;
+
+                m_carpetEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
+                m_carpetEffect.Parameters["ClothTexture"].SetValue(m_carpetTexture);
+                m_carpetEffect.Parameters["OwnerColor"].SetValue(BadgeColor.ToVector3());
+
+                float timeScalar = 4f;
+                float frequency = 4f;
+                m_carpetMovementOffset += (timeScalar * m_carpetDimensions.W * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+                m_carpetEffect.Parameters["Frequency"].SetValue(frequency);
+                m_carpetEffect.Parameters["Amplitude"].SetValue(m_carpetDimensions.Y);
+                m_carpetEffect.Parameters["ClothLength"].SetValue(m_carpetDimensions.Z);
+
+
+                m_carpetEffect.Parameters["ClothMovementOffset"].SetValue(m_carpetMovementOffset);
+
+
+
+                int noTriangles = m_carpetVertexBuffer.VertexCount / 3;
+
+                m_carpetEffect.CurrentTechnique = m_carpetEffect.Techniques["DrawCloth"];
+
+                foreach (EffectPass pass in m_carpetEffect.CurrentTechnique.Passes)
+                {
+                    int noVertices = m_carpetVertexBuffer.VertexCount;
+                    pass.Apply();
+                    Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
+                }
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -454,53 +402,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
 
-        //public void DrawBasicEffect(GameTime gameTime)
-        //{
-        //    if (m_carpetEffectBasic == null)
-        //    {
-        //        m_carpetEffectBasic = new BasicEffect(Globals.Game.GraphicsDevice);
-        //    }
-
-        //    //Matrix transform = m_scaleTransform.ToMatrix() *  Matrix.CreateTranslation(startPosition) * viewProjection;
-
-        //    float carpetWidth = 1;
-        //    IndexedVector3 pos = Position;
-        //   // pos.X -= carpetWidth / 2f;
-
-            
-        //    Matrix worldMatrix = Matrix.CreateTranslation(pos);
-
-
-
-        //    m_carpetEffectBasic.Texture = m_carpetTexture;
-        //    m_carpetEffectBasic.TextureEnabled = true;
-        //    m_carpetEffectBasic.EnableDefaultLighting();
-        //    Globals.GraphicsDevice.SetVertexBuffer(m_carpetVertexBuffer);
-
-        //    Vector3 offset = new Vector3(0,1,-5);
-        //    //Matrix view = Matrix.CreateLookAt(Position+offset, Position, Vector3.Up);
-        //    //Matrix view = Matrix.CreateLookAt(Position-offset, Position, Vector3.Up);
-        //    //Matrix proj = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_QUARTER_PI, Globals.GraphicsDevice.Viewport.AspectRatio, 1f, 100000f);
-
-
-        //    Matrix view = Globals.Camera.View.ToMatrix();
-        //    Matrix proj = Globals.Camera.Projection.ToMatrixProjection();
-
-        //    m_carpetEffectBasic.View = view;
-        //    m_carpetEffectBasic.Projection = proj;
-        //    m_carpetEffectBasic.World = worldMatrix;
-
-
-        //    foreach (EffectPass pass in m_carpetEffectBasic.CurrentTechnique.Passes)
-        //    {
-        //        int noVertices = m_carpetVertexBuffer.VertexCount;
-        //        int noTriangles = noVertices / 3;
-        //        pass.Apply();
-        //        //Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
-        //        Globals.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, m_carpetVertices,0, noTriangles);
-        //    }
-
-        //}
 
         protected void BuildRayCallback()
         {
@@ -533,15 +434,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         private Vector4 m_carpetDimensions;
 
-        private VertexPositionTexture[] m_carpetVertices;
         private VertexBuffer m_carpetVertexBuffer;
         private Texture2D m_carpetTexture;
         private Effect m_carpetEffect;
         private float m_carpetMovementOffset;
 
         private ClosestRayResultCallback m_groundCallback;
-
-
 
         private List<Castle> m_castles = new List<Castle>();
         private List<Balloon> m_balloons = new List<Balloon>();

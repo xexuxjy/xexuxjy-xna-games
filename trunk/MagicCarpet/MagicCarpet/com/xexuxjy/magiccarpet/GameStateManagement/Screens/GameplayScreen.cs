@@ -112,6 +112,10 @@ namespace GameStateManagement
 
             Globals.SpellPool = new SpellPool();
 
+            Globals.FlagManager = new FlagManager();
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager);
+
+
             //Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
             //Globals.DebugObjectManager.DebugObject = Globals.Player;
 

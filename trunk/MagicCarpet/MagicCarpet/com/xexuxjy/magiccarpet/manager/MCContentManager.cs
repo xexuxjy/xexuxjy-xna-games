@@ -32,7 +32,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
             m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
-            m_effectDictionary["Carpet"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
+            m_effectDictionary["OwnerColour"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
             m_effectDictionary["Simple"] = m_contentManager.Load<Effect>("Effects/SimpleEffect");
             m_effectDictionary["SkyDome"] = m_contentManager.Load<Effect>("Effects/Skydome/Skydome");
 
