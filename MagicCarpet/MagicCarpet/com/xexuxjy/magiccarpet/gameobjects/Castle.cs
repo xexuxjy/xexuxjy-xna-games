@@ -202,62 +202,67 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void GrowToLevel(int level)
         {
-            Debug.Assert(CanPlaceLevel(Position,level));
-
-            Level = level;
-
-            int width = GetWidthForLevel(level);
-            String[] dataForLevel = s_levelMap[level];
-
-
-            Vector3 startPos = Position;
-            Vector3 offset = new Vector3(width / 2, 0, width / 2);
-
-            int borderWidth = 3;
-
-            // fudge factor for the slope leading up to the flat area...
-
-            startPos -= (offset + new Vector3(borderWidth, 0, borderWidth));
-
-            Globals.Terrain.SetHeightForArea(startPos, width + (borderWidth * 2), width + (borderWidth * 2), 5);
-            //TerrainUpdater.ApplyImmediate(Position, 12, 4, Globals.Terrain);
-
-            Globals.Terrain.UpdateHeightMap();
-
-
-            Vector3 xOffset = new Vector3(1, 0, 0);
-            Vector3 zOffset = new Vector3(0, 0, 1);
-            Matrix verticalRotation = Matrix.CreateRotationY(MathUtil.SIMD_HALF_PI);
-            Vector3 currentPosition = startPos;
-            for (int i = 0; i < dataForLevel.Length;++i )
+            if (level >= 0 && level <= s_levelMap.Length)
             {
-                // reset to start of line
-                currentPosition.X = startPos.X;
-                for (int j = 0; j < dataForLevel[i].Length; ++j)
-                {
-                    GameObject castlePart = null;
-                    if (dataForLevel[i][j] == 'T')
-                    {
-                        castlePart = new CastleTower(this,currentPosition);
-                    }
-                    else if (dataForLevel[i][j] == 'V')
-                    {
-                        castlePart = new CastleWall(this, currentPosition,verticalRotation);
-                    }
-                    else if (dataForLevel[i][j] == 'W')
-                    {
-                        castlePart = new CastleWall(this, currentPosition,Matrix.Identity);
-                    }
+                Debug.Assert(CanPlaceLevel(Position, level));
 
-                    currentPosition += xOffset;
-                    // only add if we created.
-                    if (castlePart != null)
+                Level = level;
+
+                float width = GetWidthForLevel(level);
+                String[] dataForLevel = s_levelMap[level];
+
+
+                Vector3 startPos = Position;
+                Vector3 offset = new Vector3(width / 2, 0, width / 2);
+
+                int borderWidth = 1;
+
+                // fudge factor for the slope leading up to the flat area...
+
+                startPos -= (offset + new Vector3(borderWidth, 0, borderWidth));
+
+                int areaWidth = (int)(width + (borderWidth * 2));
+
+                Globals.Terrain.SetHeightForArea(startPos, areaWidth, areaWidth, 5);
+                //TerrainUpdater.ApplyImmediate(Position, 12, 4, Globals.Terrain);
+
+                Globals.Terrain.UpdateHeightMap();
+
+
+                Vector3 xOffset = new Vector3(1, 0, 0);
+                Vector3 zOffset = new Vector3(0, 0, 1);
+                Matrix verticalRotation = Matrix.CreateRotationY(MathUtil.SIMD_HALF_PI);
+                Vector3 currentPosition = startPos;
+                for (int i = 0; i < dataForLevel.Length; ++i)
+                {
+                    // reset to start of line
+                    currentPosition.X = startPos.X;
+                    for (int j = 0; j < dataForLevel[i].Length; ++j)
                     {
-                        castlePart.Initialize();
-                        m_castleParts.Add(castlePart);
+                        GameObject castlePart = null;
+                        if (dataForLevel[i][j] == 'T')
+                        {
+                            castlePart = new CastleTower(this, currentPosition);
+                        }
+                        else if (dataForLevel[i][j] == 'V')
+                        {
+                            castlePart = new CastleWall(this, currentPosition, verticalRotation);
+                        }
+                        else if (dataForLevel[i][j] == 'H')
+                        {
+                            castlePart = new CastleWall(this, currentPosition, Matrix.Identity);
+                        }
+
+                        currentPosition += xOffset;
+                        // only add if we created.
+                        if (castlePart != null)
+                        {
+                            castlePart.Initialize();
+                            m_castleParts.Add(castlePart);
+                        }
                     }
+                    currentPosition += zOffset;
                 }
-                currentPosition += zOffset;
             }
 
             //CreateBalloon();
@@ -357,8 +362,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private float m_storedMana;
         private float m_initialHeight;
 
-        public const float s_castleTowerSize = 1f;
-        public const float s_castleWallSize = 1f;
+        public static Vector3 s_castleTowerSize = new Vector3(1,2,1);
+        public static Vector3 s_castleWallSize = new Vector3(1, 1, 0.5f);
 
 
         private List<GameObject> m_castleParts = new List<GameObject>();

@@ -310,29 +310,32 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //return;
             if (m_modelHelperData.m_model != null)
             {
-                foreach (ModelMesh mesh in m_modelHelperData.m_model.Meshes)
+                if(Globals.s_currentCameraFrustrum.Intersects(BoundingBox))
                 {
-                    if (m_boneTransforms == null)
+                    foreach (ModelMesh mesh in m_modelHelperData.m_model.Meshes)
                     {
-                        m_boneTransforms = new Matrix[m_modelHelperData.m_model.Bones.Count];
-                    }
-                    m_modelHelperData.m_model.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
-                    foreach (Effect effect in mesh.Effects)
-                    {
-                        effect.CurrentTechnique = effect.Techniques["SimpleTechnique"];
-                        Globals.MCContentManager.ApplyCommonEffectParameters(effect);
-                        SetEffectParameters(effect);
-
-                        Matrix result = m_scaleTransform * world;
-
-                        effect.Parameters["WorldMatrix"].SetValue(m_boneTransforms[mesh.ParentBone.Index] * result); 
-                        Texture2D texture = GetTexture();
-                        if (texture != null)
+                        if (m_boneTransforms == null)
                         {
-                            effect.Parameters["Texture"].SetValue(texture);
+                            m_boneTransforms = new Matrix[m_modelHelperData.m_model.Bones.Count];
                         }
+                        m_modelHelperData.m_model.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
+                        foreach (Effect effect in mesh.Effects)
+                        {
+                            effect.CurrentTechnique = effect.Techniques["SimpleTechnique"];
+                            Globals.MCContentManager.ApplyCommonEffectParameters(effect);
+                            SetEffectParameters(effect);
+
+                            Matrix result = m_scaleTransform * world;
+
+                            effect.Parameters["WorldMatrix"].SetValue(m_boneTransforms[mesh.ParentBone.Index] * result);
+                            Texture2D texture = GetTexture();
+                            if (texture != null)
+                            {
+                                effect.Parameters["Texture"].SetValue(texture);
+                            }
+                        }
+                        mesh.Draw();
                     }
-                    mesh.Draw();
                 }
             }
         }

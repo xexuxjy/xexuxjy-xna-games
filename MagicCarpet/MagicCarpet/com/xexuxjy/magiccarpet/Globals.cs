@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -39,11 +38,6 @@ namespace com.xexuxjy.magiccarpet
         public static bool TerrainWrapEnabled = true;
 
         public static bool MouseEnabled = true;
-
-
-
-        public static Keys InsertWayPoint = Keys.Insert;
-        public static Keys DeleteWayPoint = Keys.Delete;
         public static Keys LowerLandModifier = Keys.LeftControl;
         public static Keys Solid = Keys.F10;
         public static Keys WireFrame = Keys.F11;
@@ -160,6 +154,7 @@ namespace com.xexuxjy.magiccarpet
         public static int NORMAL_DRAW_ORDER = 3;
 
 
+        public static BoundingFrustum s_currentCameraFrustrum;
 
 
         public static MiniMap MiniMap;
@@ -211,6 +206,7 @@ namespace com.xexuxjy.magiccarpet
         public static EventLogger EventLogger;
         public static ActionPool ActionPool;
         public static SpellPool SpellPool;
+        public static FlagManager FlagManager;
 
         public static ScreenManager ScreenManager;
 

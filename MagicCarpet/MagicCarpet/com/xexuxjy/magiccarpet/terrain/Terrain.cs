@@ -227,26 +227,18 @@ namespace com.xexuxjy.magiccarpet.terrain
             //return;
             UpdateHeightMapTexture();
 
-
-            Matrix viewProjection = Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix;
-            BoundingFrustum boundingFrustrum = new BoundingFrustum(viewProjection);
-
-            //float oneOverTextureWidth = 1f/m_textureWidth;
-
-            //Vector3 maxPos = Vector3.Zero;
-
             Vector3 lastStartPosition = Vector3.Zero;
             
             Vector4 scaleFactor = new Vector4(m_oneOver);
             m_terrainEffect.Parameters["ScaleFactor"].SetValue(scaleFactor);
             Globals.MCContentManager.ApplyCommonEffectParameters(m_terrainEffect);
-            DrawTerrainBlocks(boundingFrustrum);
-            DrawTrees(boundingFrustrum);
+            DrawTerrainBlocks();
+            DrawTrees();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void DrawTerrainBlocks(BoundingFrustum boundingFrustrum)
+        public void DrawTerrainBlocks()
         {
             int numSpans = Globals.WorldWidth / m_blockSize;
             Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
@@ -294,7 +286,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         BoundingBox bb = new BoundingBox(minbb, maxbb);
 
-                        if (boundingFrustrum.Intersects(bb))
+                        if (Globals.s_currentCameraFrustrum.Intersects(bb))
                         {
 
                             Matrix transform = Matrix.CreateTranslation(startPosition);
@@ -320,7 +312,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void DrawTrees(BoundingFrustum boundingFrustrum)
+        public void DrawTrees()
         {
             m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["BillboardTrees"];
             Globals.GraphicsDevice.SetVertexBuffer(m_treeVertexBuffer);

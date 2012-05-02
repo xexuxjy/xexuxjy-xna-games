@@ -30,7 +30,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleWall");
 
-            float scale = Castle.s_castleWallSize / (float)(m_modelHelperData.m_boundingBox.Max.X - m_modelHelperData.m_boundingBox.Min.X);
+            Vector3 scale = Castle.s_castleWallSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
             m_scaleTransform = Matrix.CreateScale(scale);
 
         }
@@ -77,14 +77,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////	
-
 
         public override GameObject Owner
         {

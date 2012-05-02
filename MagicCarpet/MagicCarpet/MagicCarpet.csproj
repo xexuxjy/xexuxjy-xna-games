@@ -176,6 +176,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\interfaces\ICastlePart.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\interfaces\IKeyboardCallback.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\ActionPool.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\manager\FlagManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\GameObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObjectType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\Magician.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\util\KeyboardController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MathHelperExtension.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\MouseController.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\ObjectBuilderUtil.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\profile\SimpleProfiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
