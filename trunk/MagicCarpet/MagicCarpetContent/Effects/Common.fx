@@ -20,6 +20,9 @@ uniform float WorldWidth;
 
 static const float PI = 3.14159265f;
 
+
+uniform float3 UnassignedPlayerColor;
+
 float DotProduct(float3 lightPos, float3 pos3D, float3 normal)
 {
     float3 lightDir = normalize(pos3D - lightPos);

@@ -726,13 +726,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Color BadgeColor
+        public virtual Color BadgeColor
         {
             get
             {
-                if (m_owner != null)
+                if (Owner != null)
                 {
-                    return m_owner.BadgeColor;
+                    return Owner.BadgeColor;
                 }
                 else
                 {
