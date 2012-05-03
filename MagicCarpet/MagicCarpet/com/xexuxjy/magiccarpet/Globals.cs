@@ -119,7 +119,7 @@ namespace com.xexuxjy.magiccarpet
         public static Color player2Colour = Color.Green;
         public static Color player3Colour = Color.Blue;
         public static Color player4Colour = Color.Yellow;
-        public static Color unassignedPlayerColour = Color.Pink;
+        public static Color unassignedPlayerColour = Color.Magenta;
 
 
 

@@ -33,6 +33,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             Vector3 scale = Castle.s_castleTowerSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
             m_scaleTransform = Matrix.CreateScale(scale);
 
+            m_spellCastPosition = Position;
+            // offset this a bit so we fire from the top of the tower.
+
+            m_spellCastPosition.Y += m_modelHelperData.m_boundingBox.Max.Y * scale.Y;
+
+
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -48,8 +55,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             Position = newPos;
 
+            Vector3 scale = new Vector3(0.5f);
+            Vector3 defaultFlagDimensions = Globals.FlagManager.DefaultFlagDimensions;
 
-            Globals.FlagManager.AddFlagForObject(this,Position, new Vector3(1,1,1));
+            Vector3 adjustedPosition = defaultFlagDimensions * scale;
+            
+            Vector3 flagPosition = SpellCastPosition + new Vector3(0, adjustedPosition.Y*3f, 0);
+            Globals.FlagManager.AddFlagForObject(this,flagPosition, scale);
 
         }
 
@@ -165,10 +177,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             get
             {
-                Vector3 result = Position;
-                // offset this a bit so we fire from the top of the tower.
-                result.Y = m_modelHelperData.m_boundingBox.Max.Y;
-                return result;
+                return m_spellCastPosition;
             }
         }
 
@@ -180,6 +189,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             base.Cleanup();
         }
 
+        private Vector3 m_spellCastPosition;
         private Castle m_castle;
     }
             

@@ -74,6 +74,12 @@ float4 ClothPixelShaderFunction(ClothVertexShaderOutput input) : COLOR0
 	float4 result = tex2D(ClothSampler, input.uv);
 	
 	// translate color to owners color.
+
+	if(result.r == UnassignedPlayerColor.r && result.g == UnassignedPlayerColor.g && result.b == UnassignedPlayerColor.b)
+	{
+		result.rgb = OwnerColor.rgb;
+	}
+
 	/*
 	if(result.rgb == float3(0,0,0))
 	{
@@ -95,14 +101,13 @@ float4 ClothPixelShaderFunction(ClothVertexShaderOutput input) : COLOR0
 	float3 directionalComponent = DirectionalLight * dotResult;
 	float4 light = float4(directionalComponent + AmbientLight,1);
 
-	result *= light;
+	//result *= light;
 
 	// alpha blend Cloth when it's close to camera?
 	//result.a = lerp(result.a,2,5);
 
-
-
-
+	//result.rgb = float3(1,0,0);
+	//result.a = 0.0;
     return result;
 }
 

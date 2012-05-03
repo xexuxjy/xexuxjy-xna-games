@@ -91,6 +91,7 @@ namespace com.xexuxjy.magiccarpet.manager
             m_textureDictionary["CastleTower"] = m_contentManager.Load<Texture2D>("Models/NewCastle/wallstone");
 
             m_textureDictionary["Carpet2"] = m_contentManager.Load<Texture2D>("Textures/Magician/Carpet2");
+            m_textureDictionary["Flag"] = m_contentManager.Load<Texture2D>("Textures/flag");
         
         }
 
@@ -316,6 +317,9 @@ namespace com.xexuxjy.magiccarpet.manager
             effect.Parameters["FogEnd"].SetValue(200);
             effect.Parameters["EdgeFog"].SetValue(5);
             effect.Parameters["WorldWidth"].SetValue(Globals.WorldWidth);
+
+            effect.Parameters["UnassignedPlayerColor"].SetValue(Globals.unassignedPlayerColour.ToVector3());
+
         }
 
 
