@@ -20,8 +20,11 @@ uniform float WorldWidth;
 
 static const float PI = 3.14159265f;
 
+texture Texture;
+
 
 uniform float3 UnassignedPlayerColor;
+uniform float3 OwnerColor;
 
 float DotProduct(float3 lightPos, float3 pos3D, float3 normal)
 {
@@ -52,7 +55,14 @@ float ComputeFogFactor(float d,float3 worldpos)
 
 }
 
-
+float3 AssignOwnerColour(float3 input)
+{
+	if(input.r == UnassignedPlayerColor.r && input.g == UnassignedPlayerColor.g && input.b == UnassignedPlayerColor.b)
+	{
+		return  OwnerColor.rgb;
+	}
+	return input;
+}
 
 
 technique CommonTechnique

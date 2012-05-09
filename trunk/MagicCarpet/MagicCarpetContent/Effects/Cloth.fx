@@ -4,9 +4,7 @@ uniform float ClothMovementOffset;
 uniform float Amplitude;
 uniform float Frequency;
 uniform float ClothLength;
-uniform float3 OwnerColor;
 
-texture ClothTexture;
 
 struct ClothVertexShaderInput
 {
@@ -26,7 +24,7 @@ struct ClothVertexShaderOutput
 
 uniform sampler ClothSampler = sampler_state
 {
-    Texture   = (ClothTexture);
+    Texture   = (Texture);
     MipFilter = None;
     MinFilter = Point;
     MagFilter = Point;
@@ -54,7 +52,6 @@ ClothVertexShaderOutput ClothVertexShaderFunction(ClothVertexShaderInput input)
 	normal = normalize(normal);
 
 	float height = sinAngle * Amplitude;
-	//float height = sin(temp) * Amplitude;
 
 	float4 worldPosition = mul(float4(input.pos.x, height,input.pos.z, 1), WorldMatrix);
     float4 viewPosition = mul(worldPosition, ViewMatrix);
@@ -74,19 +71,8 @@ float4 ClothPixelShaderFunction(ClothVertexShaderOutput input) : COLOR0
 	float4 result = tex2D(ClothSampler, input.uv);
 	
 	// translate color to owners color.
+	result.rgb = AssignOwnerColour(result.rgb);
 
-	if(result.r == UnassignedPlayerColor.r && result.g == UnassignedPlayerColor.g && result.b == UnassignedPlayerColor.b)
-	{
-		result.rgb = OwnerColor.rgb;
-	}
-
-	/*
-	if(result.rgb == float3(0,0,0))
-	{
-		result.rgb = OwnerColor;
-
-	}
-	*/
 
 	float distanceFromCamera = length(input.pos3d - CameraPosition);
 

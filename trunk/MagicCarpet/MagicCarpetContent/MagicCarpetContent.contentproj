@@ -45,8 +45,8 @@
     <Folder Include="textures\Castle\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Effects\OwnerColour.fx">
-      <Name>OwnerColour</Name>
+    <Compile Include="Effects\Cloth.fx">
+      <Name>Cloth</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
@@ -389,6 +389,13 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Balloon\canopy.png">
+      <Name>canopy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

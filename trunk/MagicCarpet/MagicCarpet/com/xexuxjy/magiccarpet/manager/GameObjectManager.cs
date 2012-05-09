@@ -373,7 +373,6 @@ namespace com.xexuxjy.magiccarpet.manager
                 castle.GrowToLevel(level);
 
 
-                Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);
             }
 
         }

@@ -38,7 +38,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 ObjectBuilderUtil.BuildClothObject(carpetSegments, carpetWidth, carpetLength, out m_carpetDimensions,out m_carpetVertexBuffer);
 
-                m_carpetEffect = Globals.MCContentManager.GetEffect("OwnerColour");
+                m_carpetEffect = Globals.MCContentManager.GetEffect("Cloth");
                 m_carpetTexture = Globals.MCContentManager.GetTexture("Carpet2");
             }
         }
@@ -138,7 +138,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 Vector3 forward = WorldTransform.Forward;
 
                 m_carpetEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
-                m_carpetEffect.Parameters["ClothTexture"].SetValue(m_carpetTexture);
+                m_carpetEffect.Parameters["Texture"].SetValue(m_carpetTexture);
                 m_carpetEffect.Parameters["OwnerColor"].SetValue(BadgeColor.ToVector3());
 
                 float timeScalar = 4f;

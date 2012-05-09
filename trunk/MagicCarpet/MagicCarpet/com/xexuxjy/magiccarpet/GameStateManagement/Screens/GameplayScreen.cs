@@ -120,6 +120,7 @@ namespace GameStateManagement
             //Globals.DebugObjectManager.DebugObject = Globals.Player;
 
             Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
+            Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);
 
 
             Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);

@@ -78,22 +78,24 @@ namespace com.xexuxjy.magiccarpet.gui
                 }
             }
 
-
-            Vector3 location = Globals.DebugTextCamera;
-            Vector3 colour = new Vector3(1, 1, 1);
-
-            String baseInfo = String.Format("Player Forward[{1}]. ", Globals.TrackedObject.Position, Globals.TrackedObject.Forward);
-            Globals.DebugDraw.DrawText(baseInfo,location,colour);
-            if (Globals.TrackedObject.SpellComponent.GetActiveSpells().Count > 0)
+            if (Globals.TrackedObject != null)
             {
-                Spell spell = Globals.TrackedObject.SpellComponent.GetActiveSpells()[0];
-                if (spell.Heading != Globals.TrackedObject.Heading)
+                Vector3 location = Globals.DebugTextCamera;
+                Vector3 colour = new Vector3(1, 1, 1);
+
+                String baseInfo = String.Format("Player Forward[{1}]. ", Globals.TrackedObject.Position, Globals.TrackedObject.Forward);
+                Globals.DebugDraw.DrawText(baseInfo, location, colour);
+                if (Globals.TrackedObject.SpellComponent.GetActiveSpells().Count > 0)
                 {
-                    int ibreak = 0;
+                    Spell spell = Globals.TrackedObject.SpellComponent.GetActiveSpells()[0];
+                    if (spell.Heading != Globals.TrackedObject.Heading)
+                    {
+                        int ibreak = 0;
+                    }
+                    //String spellInfo = String.Format("Spell Forward[{1}]. ", spell.Position, spell.Forward);
+                    //location.Y += 15;
+                    //Globals.DebugDraw.DrawText(spellInfo, location,colour);
                 }
-                //String spellInfo = String.Format("Spell Forward[{1}]. ", spell.Position, spell.Forward);
-                //location.Y += 15;
-                //Globals.DebugDraw.DrawText(spellInfo, location,colour);
             }
 
         }
