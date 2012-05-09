@@ -35,7 +35,7 @@ namespace com.xexuxjy.magiccarpet.manager
             int numSegments = 30;
             float width = DefaultFlagDimensions.X;
             float length = DefaultFlagDimensions.Y;
-            m_flagEffect = Globals.MCContentManager.GetEffect("OwnerColour");
+            m_effect = Globals.MCContentManager.GetEffect("Cloth");
             m_flagTexture = Globals.MCContentManager.GetTexture("Flag");
             ObjectBuilderUtil.BuildClothObject(numSegments, width, length, out m_dimensions, out m_flagVertexBuffer);
 
@@ -72,22 +72,22 @@ namespace com.xexuxjy.magiccarpet.manager
                 BlendState oldState = Globals.Game.GraphicsDevice.BlendState;
                 //Globals.Game.GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-                m_flagEffect.CurrentTechnique = m_flagEffect.Techniques["DrawCloth"];
+                m_effect.CurrentTechnique = m_effect.Techniques["DrawCloth"];
 
-                Globals.MCContentManager.ApplyCommonEffectParameters(m_flagEffect);
+                Globals.MCContentManager.ApplyCommonEffectParameters(m_effect);
                 Globals.GraphicsDevice.SetVertexBuffer(m_flagVertexBuffer);
-                m_flagEffect.Parameters["ClothTexture"].SetValue(m_flagTexture);
+                m_effect.Parameters["ClothTexture"].SetValue(m_flagTexture);
 
                 float timeScalar = 4f;
                 float frequency = 4f;
                 m_flagMovementOffset += (timeScalar * m_dimensions.W * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
-                m_flagEffect.Parameters["Frequency"].SetValue(frequency);
-                m_flagEffect.Parameters["Amplitude"].SetValue(m_dimensions.Y);
-                m_flagEffect.Parameters["ClothLength"].SetValue(m_dimensions.Z);
+                m_effect.Parameters["Frequency"].SetValue(frequency);
+                m_effect.Parameters["Amplitude"].SetValue(m_dimensions.Y);
+                m_effect.Parameters["ClothLength"].SetValue(m_dimensions.Z);
 
 
-                m_flagEffect.Parameters["ClothMovementOffset"].SetValue(m_flagMovementOffset);
+                m_effect.Parameters["ClothMovementOffset"].SetValue(m_flagMovementOffset);
 
                 m_flagDataListSorted.Clear();
                 foreach (FlagData flagData in m_flagData.Values)
@@ -108,14 +108,13 @@ namespace com.xexuxjy.magiccarpet.manager
                     worldMatrix.Translation = flagData.Position;
 
 
-                    m_flagEffect.Parameters["WorldMatrix"].SetValue(worldMatrix);
-                    m_flagEffect.Parameters["OwnerColor"].SetValue(flagData.Owner.BadgeColor.ToVector3());
+                    m_effect.Parameters["WorldMatrix"].SetValue(worldMatrix);
 
 
                     int noTriangles = m_flagVertexBuffer.VertexCount / 3;
 
 
-                    foreach (EffectPass pass in m_flagEffect.CurrentTechnique.Passes)
+                    foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
                     {
                         pass.Apply();
                         Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
@@ -142,7 +141,6 @@ namespace com.xexuxjy.magiccarpet.manager
 
         private Matrix m_rotation;
         private Texture2D m_flagTexture;
-        private Effect m_flagEffect;
         private Vector4 m_dimensions;
         private float m_flagMovementOffset;
 

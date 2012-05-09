@@ -32,7 +32,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
             m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
-            m_effectDictionary["OwnerColour"] = m_contentManager.Load<Effect>("Effects/OwnerColour");
+            m_effectDictionary["Cloth"] = m_contentManager.Load<Effect>("Effects/Cloth");
             m_effectDictionary["Simple"] = m_contentManager.Load<Effect>("Effects/SimpleEffect");
             m_effectDictionary["SkyDome"] = m_contentManager.Load<Effect>("Effects/Skydome/Skydome");
 
@@ -48,7 +48,7 @@ namespace com.xexuxjy.magiccarpet.manager
             //m_castleModel = m_contentManager.Load<Model>("Models/Castle/saintriqT3DS");
             //m_castleModel = m_contentManager.Load<Model>("Models/NewCastle/castle3");
 
-            LoadModel(GameObjectType.balloon.ToString(),"Models/SimpleShapes/unitsphere");
+            LoadModel(GameObjectType.balloon.ToString(),"Models/Balloon/balloon");
 
             LoadModel(GameObjectType.manaball.ToString(),"Models/SimpleShapes/unitsphere");
 
@@ -92,7 +92,8 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_textureDictionary["Carpet2"] = m_contentManager.Load<Texture2D>("Textures/Magician/Carpet2");
             m_textureDictionary["Flag"] = m_contentManager.Load<Texture2D>("Textures/flag");
-        
+
+            m_textureDictionary["Balloon"] = m_contentManager.Load<Texture2D>("Models/Balloon/canopy");
         }
 
         private void LoadModel(String modelKey, String path)

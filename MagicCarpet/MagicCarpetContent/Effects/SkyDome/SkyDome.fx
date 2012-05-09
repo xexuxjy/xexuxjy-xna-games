@@ -1,6 +1,5 @@
 #include "../Common.fx"
 
-texture Texture;
 float UVOffset;
 
 uniform sampler TextureSampler = sampler_state

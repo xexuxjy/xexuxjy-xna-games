@@ -1,7 +1,5 @@
 #include "Common.fx"
 
-texture Texture;
-
 
 uniform sampler TextureSampler = sampler_state
 {
@@ -53,6 +51,9 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 	float4 result = tex2D(TextureSampler, input.uv);
+
+	result.rgb = AssignOwnerColour(result.rgb);
+
 
 	float dotResult = dot(-LightDirection, input.normal);    
 	dotResult = saturate(dotResult);

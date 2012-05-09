@@ -69,7 +69,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             get
             {
-                Matrix im = Globals.Player.WorldTransform;
+                Matrix im = Globals.Player!=null?Globals.Player.WorldTransform:Matrix.Identity;
                 im.Translation += new Vector3(0,m_heightOffset,0);
                 return im;
           

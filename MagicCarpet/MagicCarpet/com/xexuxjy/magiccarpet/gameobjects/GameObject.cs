@@ -344,6 +344,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void SetEffectParameters(Effect effect)
         {
+            effect.Parameters["OwnerColor"].SetValue(BadgeColor.ToVector3());
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -816,7 +817,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         // keeping this separate from facing on purpose.
         protected Vector3 m_heading;
 
-
+        protected Effect m_effect;
 
         public static int s_idCounter = 0;
     }

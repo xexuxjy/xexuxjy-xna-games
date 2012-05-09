@@ -9,6 +9,7 @@ using System.Diagnostics;
 using BulletXNA;
 using GameStateManagement;
 using com.xexuxjy.magiccarpet.combat;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -26,7 +27,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
         }
 
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public override float GetHoverHeight()
@@ -35,7 +35,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        public override Texture2D GetTexture()
+        {
+            return Globals.MCContentManager.GetTexture("Balloon");
+        }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -210,7 +216,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private float m_currentLoad;
-
         private GameObject m_currentTarget;
 
 
