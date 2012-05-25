@@ -24,12 +24,26 @@ namespace com.xexuxjy.magiccarpet.collision
             SetWorldTransform(ref centerOfMassWorldTrans);
         }
 
+        public override void GetWorldTransform(out IndexedMatrix centerOfMassWorldTrans)
+        {
+            // these don't see to go through motion states so set it directly.
+            if (RigidBody != null && RigidBody.IsStaticObject())
+            {
+                centerOfMassWorldTrans = RigidBody.GetWorldTransform();
+            }
+            else
+            {
+                base.GetWorldTransform(out centerOfMassWorldTrans);
+            }
+        }
+
         public override void SetWorldTransform(ref IndexedMatrix centerOfMassWorldTrans)
         {
             // these don't see to go through motion states so set it directly.
             if (RigidBody != null && RigidBody.IsStaticObject())
             {
                 RigidBody.SetWorldTransform(ref centerOfMassWorldTrans);
+                RigidBody.SetInterpolationWorldTransform(ref centerOfMassWorldTrans);
             }
             else
             {
