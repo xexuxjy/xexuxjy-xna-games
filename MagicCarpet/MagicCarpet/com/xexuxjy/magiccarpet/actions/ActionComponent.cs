@@ -66,6 +66,7 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public void Initialize()
         {
+            QueueAction(Globals.ActionPool.GetActionSpawn(m_owner));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,21 +122,24 @@ namespace com.xexuxjy.magiccarpet.actions
 
         public void Update(GameTime gameTime)
         {
-
-            if (CurrentAction != null)
+            // no point having updates if we're under player control?
+            if(!m_owner.PlayerControlled)
             {
-                if (!CurrentAction.Started)
+                if (CurrentAction != null)
                 {
-                    StartAction(CurrentAction);
-                }
+                    if (!CurrentAction.Started)
+                    {
+                        StartAction(CurrentAction);
+                    }
 
-                CurrentAction.Update(gameTime);
+                    CurrentAction.Update(gameTime);
 
-                if (CurrentAction.Complete)
-                {
-                    BaseAction completedAction = m_actionQueue.Dequeue();
-                    //handle setup of next actions
-                    CompleteAction(completedAction);
+                    if (CurrentAction.Complete)
+                    {
+                        BaseAction completedAction = m_actionQueue.Dequeue();
+                        //handle setup of next actions
+                        CompleteAction(completedAction);
+                    }
                 }
             }
         }

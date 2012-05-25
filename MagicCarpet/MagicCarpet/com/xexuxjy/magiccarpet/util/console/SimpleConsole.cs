@@ -45,12 +45,25 @@ namespace com.xexuxjy.magiccarpet.util.console
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void ProcessCommand(String command)
+        private String ProcessCommand(String command)
         {
             // commands are space delimited.
             String[] tokens = command.Split(s_commandSplitChars);
             m_outputLine.Clear();
-            m_outputLine.Append(DoProcess(tokens));
+
+            String result = "Ok";
+            try
+            {
+                result = DoProcess(tokens);
+            }
+            catch (System.Exception ex)
+            {
+            	result = ex.StackTrace;
+            }
+
+
+            m_outputLine.Append(result);
+            return m_outputLine.ToString();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -353,7 +366,7 @@ namespace com.xexuxjy.magiccarpet.util.console
                     }
                     foreach (String commandLine in commands)
                     {
-                        ProcessCommand(commandLine);
+                        result = ProcessCommand(commandLine);
                     }
                 }
             }

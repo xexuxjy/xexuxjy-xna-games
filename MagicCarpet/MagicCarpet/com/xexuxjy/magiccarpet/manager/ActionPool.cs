@@ -65,6 +65,12 @@ namespace com.xexuxjy.magiccarpet.manager
             return new ActionIdle(owner);
         }
 
+        public ActionSpawn GetActionSpawn(GameObject owner)
+        {
+            return new ActionSpawn(owner);
+        }
+
+
         public ActionIdle GetActionIdle(GameObject owner,float duration)
         {
             return new ActionIdle(owner,duration);

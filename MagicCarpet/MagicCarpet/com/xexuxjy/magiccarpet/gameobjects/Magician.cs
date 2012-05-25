@@ -46,14 +46,41 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void BuildCollisionObject()
+        public override CollisionFilterGroups GetCollisionFlags()
+        {
+            return (CollisionFilterGroups)GameObjectType.magician;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override CollisionFilterGroups GetCollisionMask()
+        {
+            return (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera | GameObjectType.terrain);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override CollisionShape BuildCollisionShape()
         {
             Vector3 magicianDimensions = new Vector3(m_carpetDimensions.X, 0.2f, m_carpetDimensions.Z);
-            CollisionShape collisionShape = new BoxShape(magicianDimensions / 2);
-            CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.magician;
-            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera | GameObjectType.terrain);
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, GetMotionState(), true, this, collisionFlags, collisionMask);
-            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+            return new BoxShape(magicianDimensions / 2);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override float Mass
+        {
+            get
+            {
+                return 1f;
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override void BuildCollisionObject()
+        {
+            base.BuildCollisionObject();    
             BuildRayCallback();
         }
 
@@ -125,7 +152,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            if (Globals.s_currentCameraFrustrum.Intersects(BoundingBox))
+            if (Globals.s_currentCameraFrustrum.Contains(BoundingBox) != ContainmentType.Disjoint)
             {
 
                 Globals.MCContentManager.ApplyCommonEffectParameters(m_carpetEffect);
@@ -396,7 +423,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 // make sure we don't crash into the ground.
                 Vector3 oldVal = WorldTransform.Translation;
                 Vector3 result = CheckForGroundCollision(oldVal, value);
-
                 base.Position = result;
             }
         }
@@ -446,7 +472,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
         private SpellType m_selectedSpell1 = SpellType.Convert;
-        private SpellType m_selectedSpell2 = SpellType.Raise;
+        private SpellType m_selectedSpell2 = SpellType.Castle;
 
 
     }

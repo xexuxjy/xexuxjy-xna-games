@@ -51,8 +51,8 @@ namespace com.xexuxjy.magiccarpet.manager
             flagData.Scale = flagScale;
 
 
-            Vector3 min = flagPosition - new Vector3(1, 1, 0);
-            Vector3 max = flagPosition + new Vector3(1, 1, 0);
+            Vector3 min = flagPosition - new Vector3(1, 1, 0.1f);
+            Vector3 max = flagPosition + new Vector3(1, 1, 0.1f);
 
             flagData.BoundingBox = new BoundingBox(min, max);
 
@@ -76,7 +76,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
                 Globals.MCContentManager.ApplyCommonEffectParameters(m_effect);
                 Globals.GraphicsDevice.SetVertexBuffer(m_flagVertexBuffer);
-                m_effect.Parameters["ClothTexture"].SetValue(m_flagTexture);
+                m_effect.Parameters["Texture"].SetValue(m_flagTexture);
 
                 float timeScalar = 4f;
                 float frequency = 4f;
@@ -92,12 +92,16 @@ namespace com.xexuxjy.magiccarpet.manager
                 m_flagDataListSorted.Clear();
                 foreach (FlagData flagData in m_flagData.Values)
                 {
-                    if (Globals.s_currentCameraFrustrum.Intersects(flagData.BoundingBox))
+                    if (Globals.s_currentCameraFrustrum.Contains(flagData.BoundingBox) != ContainmentType.Disjoint)
                     {
                         m_flagDataListSorted.Add(flagData);
                     }
+                    else
+                    {
+                        int ibreak = 0;
+                    }
                 }
-                m_flagDataListSorted.Sort(distanceComparator);
+                //m_flagDataListSorted.Sort(distanceComparator);
 
 
                 foreach (FlagData flagData in m_flagDataListSorted)

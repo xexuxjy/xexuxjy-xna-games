@@ -35,17 +35,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             : base(Globals.Game)
         {
             m_gameObjectType = gameObjectType;
-            m_motionState = new DefaultMotionState();
             m_id = "" + (++s_idCounter);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject(Vector3 startPosition, GameObjectType gameObjectType)
+        public GameObject(Vector3 spawnPosition, GameObjectType gameObjectType)
             : base(Globals.Game)
         {
+            SpawnPosition = spawnPosition;
             m_gameObjectType = gameObjectType;
-            m_motionState = new DefaultMotionState(Matrix.CreateTranslation(startPosition), Matrix.Identity);
             m_id = "" + (++s_idCounter);
         }
 
@@ -85,6 +84,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public virtual void InitializeModel()
         {
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData(GameObjectType.ToString());
+            if (m_modelHelperData != null)
+            {
+                Vector3 bbSize = (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
+
+                // make sure the height offset by default is the center of the box.
+                m_modelHeightOffset = bbSize.Y / 2.0f;
+            }
         }
 
 
@@ -111,7 +117,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             InitializeModel();
             // call this here so we've loaded any content?
             BuildCollisionObject();
-
+            Position = SpawnPosition;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -257,33 +263,41 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             get { return m_collisionObject; }
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual Vector3 ObjectDimensions
+        {
+            get { return new Vector3(1); }
+        }
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public virtual void BuildCollisionObject()
+        public virtual CollisionShape BuildCollisionShape()
         {
-            // box based on model is the default.
-            if (m_modelHelperData != null)
-            {
-                Vector3 halfExtents = (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min) / 2f;
-
-                Vector3 scale;
-                Quaternion rotation;
-                Vector3 translation;
-
-                // adjust for scale transform.
-                m_scaleTransform.Decompose(out scale,out rotation,out translation);
-
-                halfExtents *= scale;
-
-                CollisionShape cs = new BoxShape(halfExtents);
-                float mass = 0f;
-                m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), cs, m_motionState, true, this,GetCollisionFlags(),GetCollisionMask());
-            }
+            Vector3 halfExtents = ObjectDimensions / 2f;
+            CollisionShape cs = new BoxShape(halfExtents);
+            return cs;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+
+        public virtual void BuildCollisionObject()
+        {
+            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(Mass, Matrix.Identity, BuildCollisionShape(), out m_motionState, true, this,GetCollisionFlags(),GetCollisionMask());
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual float Mass
+        {
+            get { return 0f; }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        
         public virtual  CollisionFilterGroups GetCollisionFlags()
         {
             return CollisionFilterGroups.StaticFilter;
@@ -310,7 +324,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //return;
             if (m_modelHelperData.m_model != null)
             {
-                if(Globals.s_currentCameraFrustrum.Intersects(BoundingBox))
+                if(Globals.s_currentCameraFrustrum.Contains(BoundingBox) != ContainmentType.Disjoint)
                 {
                     foreach (ModelMesh mesh in m_modelHelperData.m_model.Meshes)
                     {
@@ -366,26 +380,43 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
             set
             {
+                if(this is CastleTower)
+                {
+                    int ibreak = 0;
+                }
                 Matrix m = WorldTransform;
 
                 Vector3 clampedValue = value;
                 Globals.Terrain.ClampToTerrain(ref clampedValue);
 
-                if (StickToGround)
-                {
-                    //float height = Globals.Terrain.GetHeightAtPointWorld(clampedValue);
-                    float height = Globals.Terrain.GetHeightAtPointWorldSmooth(clampedValue);
-                    clampedValue.Y = height +  GetHoverHeight();
-                }
-
-                // stop us going into the ground.
-
-
                 m.Translation = clampedValue;
                 WorldTransform = m;
             }
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        // set the position of the objects 'base' , real position will then be offset by height etc
+        public Vector3 PositionBase
+        {
+            get 
+            {
+                Vector3 centerPos = WorldTransform.Translation;
+                centerPos.Y -= m_modelHeightOffset;
+                return centerPos;
+            }
+            set
+            {
+                Vector3 clampedValue = value;
+                Globals.Terrain.ClampToTerrain(ref clampedValue);
+                if (StickToGround)
+                {
+                    float height = Globals.Terrain.GetHeightAtPointWorldSmooth(clampedValue);
+                    clampedValue.Y = height + GetHoverHeight() + m_modelHeightOffset;
+                }
+
+                Position = clampedValue;
+            }
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -757,13 +788,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public IMotionState GetMotionState()
+        public DefaultMotionState GetMotionState()
         {
-            RigidBody rb = m_collisionObject as RigidBody;
-            if (rb != null)
-            {
-                return rb.GetMotionState();
-            }
+            Debug.Assert(m_motionState != null);
             return m_motionState;
         }
 
@@ -787,13 +814,16 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected String m_id;
         protected Vector3 m_spawnPosition; // where the object starts in the world, used by AI
 
+        protected float m_modelHeightOffset = 0;
+
+
         protected GameObject m_owner; // if this is owned by another entitiy (e.g. manaballs,castles, balloons owned by magicians)
 
         protected Color m_badgeColor; // represents the color for multiplayer type stuff.
 
         protected GameObjectType m_gameObjectType;
 
-        protected IMotionState m_motionState;
+        protected SimpleMotionState m_motionState;
         protected CollisionObject m_collisionObject;
 
         protected float m_speed;
@@ -820,20 +850,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected Effect m_effect;
 
         public static int s_idCounter = 0;
+
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

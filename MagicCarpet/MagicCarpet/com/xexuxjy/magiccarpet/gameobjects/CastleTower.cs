@@ -20,7 +20,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         
         {
             m_castle = castle;
-            StickToGround = false;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -30,16 +29,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleTower");
 
             // scale the base of the tower to one unit?
-            Vector3 scale = Castle.s_castleTowerSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
+            Vector3 scale = Globals.s_castleTowerSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
             m_scaleTransform = Matrix.CreateScale(scale);
+        }
 
-            m_spellCastPosition = Position;
-            // offset this a bit so we fire from the top of the tower.
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-            m_spellCastPosition.Y += m_modelHelperData.m_boundingBox.Max.Y * scale.Y;
-
-
-
+        public override Vector3 ObjectDimensions
+        {
+            get { return Globals.s_castleTowerSize; }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -47,22 +45,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Initialize()
         {
             base.Initialize();
-            float height = (BoundingBox.Max.Y - BoundingBox.Min.Y);
+            float height = ObjectDimensions.Y;
+            m_modelHeightOffset = height / 2.0f;
 
-            Vector3 newPos = Position;
+            m_spellCastPosition = Position;
+            // offset this a bit so we fire from the top of the tower.
+            Vector3 scale = Globals.s_castleTowerSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
+            m_spellCastPosition.Y += m_modelHelperData.m_boundingBox.Max.Y * scale.Y;
 
-            newPos.Y += height / 2.0f;
 
-            Position = newPos;
-
-            Vector3 scale = new Vector3(0.5f);
+            Vector3 flagScale = new Vector3(0.5f);
             Vector3 defaultFlagDimensions = Globals.FlagManager.DefaultFlagDimensions;
 
-            Vector3 adjustedPosition = defaultFlagDimensions * scale;
+            Vector3 adjustedPosition = defaultFlagDimensions * flagScale;
             
             Vector3 flagPosition = SpellCastPosition + new Vector3(0, adjustedPosition.Y*3f, 0);
-            Globals.FlagManager.AddFlagForObject(this,flagPosition, scale);
-
+            Globals.FlagManager.AddFlagForObject(this, flagPosition, flagScale);
         }
 
 
@@ -110,6 +108,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             switch (action.ActionState)
             {
+                case (ActionState.Spawning):
+                    {
+                        // force an update on spawn positions and the like?
+                        PositionBase = Position;
+                        break;
+                    }
+
                 case (ActionState.Searching):
                     {
                         ActionFind actionFind = action as ActionFind;
@@ -185,7 +190,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Cleanup()
         {
-            Globals.FlagManager.RemoveFlagForObject(this);
+            if (!m_awaitingRemoval)
+            {
+                Globals.FlagManager.RemoveFlagForObject(this);
+            }
+
             base.Cleanup();
         }
 

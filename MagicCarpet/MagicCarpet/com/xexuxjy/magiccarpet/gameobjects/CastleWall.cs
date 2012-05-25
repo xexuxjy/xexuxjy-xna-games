@@ -19,7 +19,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             : base(startPosition, GameObjectType.castle)
         {
             m_castle = castle;
-            StickToGround = false;
             rotation.Translation = startPosition;
             WorldTransform = rotation;
         }
@@ -30,7 +29,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             m_modelHelperData = Globals.MCContentManager.GetModelHelperData("CastleWall");
 
-            Vector3 scale = Castle.s_castleWallSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
+            Vector3 scale = Globals.s_castleWallSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
             m_scaleTransform = Matrix.CreateScale(scale);
 
         }
@@ -41,12 +40,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Initialize();
             float height = (BoundingBox.Max.Y - BoundingBox.Min.Y);
-
-            Vector3 newPos = Position;
-
-            newPos.Y += height / 2.0f;
-
-            Position = newPos;
+            m_modelHeightOffset = height / 2.0f;
         }
 
 
@@ -93,6 +87,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             switch (action.ActionState)
             {
+                case (ActionState.Spawning):
+                    {
+                        // force an update on spawn positions and the like?
+                        Position = Position;
+                        break;
+                    }
                 case (ActionState.Dieing):
                     {
                         // when we've finished dieing then we want to spawn a manaball here.

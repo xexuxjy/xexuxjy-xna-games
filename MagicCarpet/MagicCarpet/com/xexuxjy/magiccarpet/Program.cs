@@ -10,9 +10,18 @@ namespace com.xexuxjy.magiccarpet
         /// </summary>
         static void Main(string[] args)
         {
-            using (Globals.Game = new MagicCarpet())
+            try
             {
-                Globals.Game.Run();
+                using (Globals.Game = new MagicCarpet())
+                {
+                    Globals.Game.Run();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                String st = ex.StackTrace;
+                int ibreak = 0;
+
             }
         }
     }

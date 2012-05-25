@@ -98,15 +98,19 @@ namespace com.xexuxjy.magiccarpet.collision
                     ICollideable user0 = obA.GetUserPointer() as ICollideable;
                     ICollideable user1 = obB.GetUserPointer() as ICollideable;
 
-                    if (user0 != null && user0.Active() && user1 != null && user1.Active())
+                    int numContacts = contactManifold.GetNumContacts();
+                    for (int j = 0; j < numContacts; j++)
                     {
-                        int numContacts = contactManifold.GetNumContacts();
-                        for (int j = 0; j < numContacts; j++)
+                        ManifoldPoint pt = contactManifold.GetContactPoint(j);
+                        if (pt.GetDistance() < 0.0f)
                         {
-                            ManifoldPoint pt = contactManifold.GetContactPoint(j);
-                            if (pt.GetDistance() < 0.0f)
+                            // do the check here as a process collision may have asked for a cleanup 
+                            if (user0 != null && user0.Active() && user1 != null && user1.Active())
                             {
                                 user0.ProcessCollision(user1, pt);
+                            }
+                            if (user0 != null && user0.Active() && user1 != null && user1.Active())
+                            {
                                 user1.ProcessCollision(user0, pt);
                             }
                         }
@@ -117,28 +121,28 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld,Object userPointer)
+        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, out SimpleMotionState motionState, bool addToWorld, Object userPointer)
         {
-            return LocalCreateRigidBody(mass, ref startTransform, shape,motionState, addToWorld,userPointer);
+            return LocalCreateRigidBody(mass, ref startTransform, shape,out motionState, addToWorld,userPointer);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer)
+        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, out SimpleMotionState motionState, bool addToWorld, Object userPointer)
         {
-            return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, CollisionFilterGroups.StaticFilter,(CollisionFilterGroups.AllFilter ^ CollisionFilterGroups.StaticFilter));
+            return LocalCreateRigidBody(mass, ref startTransform, shape, out motionState, addToWorld, userPointer, CollisionFilterGroups.StaticFilter,(CollisionFilterGroups.AllFilter ^ CollisionFilterGroups.StaticFilter));
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public RigidBody LocalCreateRigidBody(float mass, Matrix startTransform, CollisionShape shape, out SimpleMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
-            return LocalCreateRigidBody(mass, ref startTransform, shape, motionState, addToWorld, userPointer, filterGroup, filterMask);
+            return LocalCreateRigidBody(mass, ref startTransform, shape, out motionState, addToWorld, userPointer, filterGroup, filterMask);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, IMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
+        public RigidBody LocalCreateRigidBody(float mass, ref Matrix startTransform, CollisionShape shape, out SimpleMotionState motionState, bool addToWorld, Object userPointer, CollisionFilterGroups filterGroup, CollisionFilterGroups filterMask)
         {
 
             Debug.Assert((shape == null || shape.GetShapeType() != BroadphaseNativeTypes.INVALID_SHAPE_PROXYTYPE));
@@ -153,12 +157,8 @@ namespace com.xexuxjy.magiccarpet.collision
             }
             //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 
-            //#define USE_MOTIONSTATE 1
-            //#ifdef USE_MOTIONSTATE
-            if (motionState == null)
-            {
-                motionState = new DefaultMotionState(startTransform, Matrix.Identity);
-            }
+            motionState = new SimpleMotionState(startTransform, Matrix.Identity);
+            motionState.m_userPointer = userPointer;
 
             RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, motionState, shape, localInertia);
 
@@ -170,6 +170,15 @@ namespace com.xexuxjy.magiccarpet.collision
             body.SetActivationState(ActivationState.DISABLE_DEACTIVATION);
             body.SetUserPointer(userPointer);
             body.SetGravity(ref m_gravity);
+
+            // we;re going to drive most things through kinematics
+            if (isDynamic)
+            {
+                body.SetCollisionFlags(body.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+            }
+
+            motionState.RigidBody = body;
+
             if (addToWorld)
             {
                 m_dynamicsWorld.AddRigidBody(body,filterGroup,filterMask);

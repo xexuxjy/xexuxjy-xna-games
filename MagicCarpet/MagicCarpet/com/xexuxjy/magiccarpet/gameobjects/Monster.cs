@@ -27,18 +27,25 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public override void BuildCollisionObject()
+        
+        public override CollisionFilterGroups GetCollisionFlags()
         {
-            CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.monster;
-            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.terrain | GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster | GameObjectType.castle | GameObjectType.spell);
-
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(1f, Matrix.CreateTranslation(Position), new SphereShape(Globals.s_monsterSize), m_motionState, true, this, collisionFlags, collisionMask);
-            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
-            m_scaleTransform = Matrix.CreateScale(Globals.s_monsterSize);
-
+            return (CollisionFilterGroups)GameObjectType.monster;
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override CollisionFilterGroups GetCollisionMask()
+        {
+            return (CollisionFilterGroups)(GameObjectType.terrain | GameObjectType.magician | GameObjectType.balloon | GameObjectType.monster | GameObjectType.castle | GameObjectType.spell);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override CollisionShape BuildCollisionShape()
+        {
+            return new SphereShape(Globals.s_monsterSize);
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
