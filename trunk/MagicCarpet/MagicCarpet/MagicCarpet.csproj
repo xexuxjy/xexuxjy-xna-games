@@ -135,6 +135,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionFlee.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionIdle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionLoad.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\actions\ActionSpawn.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionTravel.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\ActionUnload.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\actions\BaseAction.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\camera\ChaseCamera.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\camera\DHPCameraComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\CollisionManager.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\collision\SimpleMotionState.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\collision\TerrainIndicesHolder.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\combat\DamageData.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\combat\ThreatComponent.cs" />

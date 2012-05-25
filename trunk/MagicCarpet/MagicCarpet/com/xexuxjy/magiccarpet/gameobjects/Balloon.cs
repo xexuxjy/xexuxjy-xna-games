@@ -35,7 +35,19 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
+        public override void InitializeModel()
+        {
+            m_modelHelperData = Globals.MCContentManager.GetModelHelperData("balloon");
+
+            Vector3 scale = Globals.s_balloonSize/ (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
+            m_scaleTransform = Matrix.CreateScale(scale);
+
+            StickToGround = true;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public override Texture2D GetTexture()
         {
             return Globals.MCContentManager.GetTexture("Balloon");
@@ -94,6 +106,13 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             switch (action.ActionState)
             {
+                case (ActionState.Spawning):
+                    {
+                        // force an update on spawn positions and the like?
+                        Position = Position;
+                        break;
+                    }
+
                 case (ActionState.Loading):
                     {
                         ManaBall manaball = action.Target as ManaBall;

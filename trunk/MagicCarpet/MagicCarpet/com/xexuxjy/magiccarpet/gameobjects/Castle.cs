@@ -14,6 +14,7 @@ using com.xexuxjy.magiccarpet.combat;
 using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.interfaces;
 using BulletXNA;
+using com.xexuxjy.magiccarpet.collision;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -63,6 +64,15 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void BuildCollisionObject()
+        {
+            m_motionState = new SimpleMotionState();
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public override void SetStartAttributes()
         {
@@ -223,7 +233,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
                 int areaWidth = (int)(width + (borderWidth * 2));
 
-                Globals.Terrain.SetHeightForArea(startPos, areaWidth, areaWidth, 5);
+                Globals.Terrain.SetHeightForArea(startPos, areaWidth, areaWidth, Position.Y);
                 //TerrainUpdater.ApplyImmediate(Position, 12, 4, Globals.Terrain);
 
                 Globals.Terrain.UpdateHeightMap();
@@ -253,13 +263,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                             castlePart = new CastleWall(this, currentPosition, Matrix.Identity);
                         }
 
-                        currentPosition += xOffset;
                         // only add if we created.
                         if (castlePart != null)
                         {
                             castlePart.Initialize();
+                            //castlePart.PositionBase = currentPosition;
                             m_castleParts.Add(castlePart);
                         }
+                        currentPosition += xOffset;
                     }
                     currentPosition += zOffset;
                 }
@@ -333,6 +344,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
 
         public static String[][] s_levelMap = new String[][]{
+                                                       new String[]
+                                                       {"T"},
                                                        new String[]
                                                        {"THHT",
                                                         "V  V", 

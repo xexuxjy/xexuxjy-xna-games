@@ -16,16 +16,22 @@ namespace com.xexuxjy.magiccarpet.terrain
             DrawOrder = Globals.SKYDOME_DRAW_ORDER;
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public override void Initialize()
         {
             m_scaleTransform = Matrix.CreateScale(10);
 
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
         }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override void SetEffectParameters(Effect effect)
         {
@@ -33,6 +39,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override void Update(GameTime gameTime)
         {
@@ -48,12 +55,16 @@ namespace com.xexuxjy.magiccarpet.terrain
         }
 
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public override Texture2D GetTexture()
         {
             return Globals.MCContentManager.GetTexture("SkyDome");
             //return Globals.MCContentManager.GetTexture(Color.HotPink);
 
         }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override Vector3 Position
         {
@@ -64,6 +75,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                 return position;
             }
         }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         public override Matrix WorldTransform
         {
@@ -76,6 +89,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             }
             set { }
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
 
         private float testCounter = 0f;
         private float uvOffset = 0f;

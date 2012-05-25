@@ -86,9 +86,6 @@ namespace com.xexuxjy.magiccarpet
         public static float s_monsterMaxFollowRange = 50;
 
 
-        public static int s_castleSize1 = 2;
-        public static int s_castleSize2 = 4;
-        public static int s_castleSize3 = 8;
         public static float s_castleTurretSearchRadius = 5;
         public static float s_castleTurretSearchFrequency = 2;
         public static float s_castleTurretAttackFrequency = 2;
@@ -112,6 +109,15 @@ namespace com.xexuxjy.magiccarpet
         public static float s_monsterSize = 0.5f;
 
 
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Object model sizes
+
+        public static Vector3 s_castleTowerSize = new Vector3(1, 2, 1);
+        public static Vector3 s_castleWallSize = new Vector3(1, 1, 0.5f);
+
+        public static Vector3 s_balloonSize = new Vector3(1, 1, 1);
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -273,9 +279,6 @@ namespace com.xexuxjy.magiccarpet
             TryReadFloat(configMap,"balloon.flee.health.percentage", ref s_balloonFleeHealthPercentage);
 
 
-            TryReadInt(configMap, "castle.size1", ref s_castleSize1);
-            TryReadInt(configMap, "castle.size2", ref s_castleSize2);
-            TryReadInt(configMap, "castle.size3", ref s_castleSize3);
             TryReadFloat(configMap, "castle.turret.search.radius", ref s_castleTurretSearchRadius);
             TryReadFloat(configMap, "castle.turret.search.frequency", ref s_castleTurretSearchFrequency);
             TryReadFloat(configMap, "castle.turret.attack.frequency", ref s_castleTurretAttackFrequency);

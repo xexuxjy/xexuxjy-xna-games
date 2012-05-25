@@ -54,6 +54,19 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
+        public override Vector3 Position
+        {
+            set
+            {
+                Matrix m = WorldTransform;
+                m.Translation = value;
+                WorldTransform = m;
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
         public void LoadOrCreateHeightMap(String textureName)
         {
             m_heightMap = new float[m_textureWidth * m_textureWidth];
@@ -64,18 +77,27 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override CollisionFilterGroups GetCollisionFlags()
+        {
+            return (CollisionFilterGroups)GameObjectType.terrain;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public override CollisionFilterGroups GetCollisionMask()
+        {
+            return (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera | GameObjectType.magician);
+        }
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void BuildCollisionObject()
+        public override CollisionShape BuildCollisionShape()
         {
-            CollisionShape collisionShape = new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
-            CollisionFilterGroups collisionFlags = (CollisionFilterGroups)GameObjectType.terrain;
-            CollisionFilterGroups collisionMask = (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera | GameObjectType.magician);
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(0f, Matrix.CreateTranslation(Position), collisionShape, m_motionState, true, this, collisionFlags, collisionMask);
-
+            return new HeightfieldTerrainShape(m_textureWidth, m_textureWidth, m_heightMap, 1f, -Globals.WorldHeight, Globals.WorldHeight, 1, true);
         }
-
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -233,7 +255,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainEffect.Parameters["ScaleFactor"].SetValue(scaleFactor);
             Globals.MCContentManager.ApplyCommonEffectParameters(m_terrainEffect);
             DrawTerrainBlocks();
-            DrawTrees();
+            //DrawTrees();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,7 +308,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         BoundingBox bb = new BoundingBox(minbb, maxbb);
 
-                        if (Globals.s_currentCameraFrustrum.Intersects(bb))
+                        if (Globals.s_currentCameraFrustrum.Contains(bb) != ContainmentType.Disjoint)
                         {
 
                             Matrix transform = Matrix.CreateTranslation(startPosition);
@@ -1000,12 +1022,6 @@ namespace com.xexuxjy.magiccarpet.terrain
         Texture2D m_treeTexture;
 
         RasterizerState m_noCullState;
-
-
-        public int GetCollisionMask()
-        {
-            throw new NotImplementedException();
-        }
 
         public bool ShouldCollideWith(ICollideable partner)
         {

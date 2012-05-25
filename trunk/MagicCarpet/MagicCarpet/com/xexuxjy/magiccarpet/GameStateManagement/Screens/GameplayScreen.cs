@@ -59,84 +59,88 @@ namespace GameStateManagement
         /// </summary>
         public override void LoadContent()
         {
-
-            Globals.GameObjectManager = new GameObjectManager(this);
-            //Globals.GameObjectManager.AddAndInitializeObject(Globals.GameObjectManager);
-
-
-            Globals.LoadConfig();
-
-            if (m_content == null)
+            try
             {
-                m_content = new ContentManager(ScreenManager.Game.Services, "Content");
+                Globals.GameObjectManager = new GameObjectManager(this);
+                //Globals.GameObjectManager.AddAndInitializeObject(Globals.GameObjectManager);
+
+
+                Globals.LoadConfig();
+
+                if (m_content == null)
+                {
+                    m_content = new ContentManager(ScreenManager.Game.Services, "Content");
+                }
+
+                m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;// | DebugDrawModes.DBG_DrawWireframe;
+                //m_debugDrawMode = DebugDrawModes.ALL;
+                //m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
+                m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
+
+
+                Globals.Camera = new CameraComponent();
+                Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
+
+
+
+                Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
+                Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
+                if (Globals.DebugDraw != null)
+                {
+                    Globals.DebugDraw.LoadContent();
+                }
+
+                Globals.CollisionManager = new CollisionManager(Globals.worldMinPos, Globals.worldMaxPos);
+                Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager, true);
+
+
+                Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
+                Globals.SimpleConsole.Enabled = false;
+                Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole, true);
+
+
+                Globals.MCContentManager = new MCContentManager();
+                Globals.MCContentManager.Initialize();
+
+                Globals.DebugObjectManager = new DebugObjectManager(Globals.DebugDraw);
+                Globals.DebugObjectManager.Enabled = true;
+                Globals.GameObjectManager.AddAndInitializeObject(Globals.DebugObjectManager);
+
+
+
+                Globals.ActionPool = new ActionPool();
+
+                Globals.SpellPool = new SpellPool();
+
+
+                Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain, Vector3.Zero);
+
+                Globals.FlagManager = new FlagManager();
+                Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager, true);
+
+                Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
+                Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);
+
+
+                Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
+
+
+                m_playerHud = new PlayerHud(this);
+                m_playerHud.Initialise();
+
+
+                m_playerController = new PlayerController(m_playerHud);
+
+
+                // once the load has finished, we use ResetElapsedTime to tell the game's
+                // timing mechanism that we have just finished a very long frame, and that
+                // it should not try to catch up.
+                ScreenManager.Game.ResetElapsedTime();
             }
-
-            m_debugDrawMode = DebugDrawModes.DBG_DrawAabb | DebugDrawModes.DBG_DrawWireframe;
-            //m_debugDrawMode = DebugDrawModes.ALL;
-            //m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
-            m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
-
-
-            Globals.Camera = new CameraComponent();
-            Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
-
-
-
-            Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
-            Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
-            if (Globals.DebugDraw != null)
+            catch (System.Exception ex)
             {
-                Globals.DebugDraw.LoadContent();
+                int ibreak = 0;            	
             }
-
-            Globals.CollisionManager = new CollisionManager(Globals.worldMinPos, Globals.worldMaxPos);
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager,true);
-
-
-            Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
-            Globals.SimpleConsole.Enabled = false;
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole,true);
-
-
-            Globals.MCContentManager = new MCContentManager();
-            Globals.MCContentManager.Initialize();
-
-            Globals.DebugObjectManager = new DebugObjectManager(Globals.DebugDraw);
-            Globals.DebugObjectManager.Enabled = true;
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.DebugObjectManager);
-
-
-            Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain,Vector3.Zero);
-
-            Globals.ActionPool = new ActionPool();
-
-            Globals.SpellPool = new SpellPool();
-
-            Globals.FlagManager = new FlagManager();
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager,true);
-
-
-            //Globals.Player = (Magician)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.magician, new Vector3(0, 10, 0));
-            //Globals.DebugObjectManager.DebugObject = Globals.Player;
-
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
-            Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);
-
-
-            Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
-
-
-            m_playerHud = new PlayerHud(this);
-            m_playerHud.Initialise();
-
-
-            m_playerController = new PlayerController(m_playerHud);
-
-
-            // once the load has finished, we use ResetElapsedTime to tell the game's
-            // timing mechanism that we have just finished a very long frame, and that
-            // it should not try to catch up.
-            ScreenManager.Game.ResetElapsedTime();
         }
 
 
@@ -164,24 +168,33 @@ namespace GameStateManagement
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
-            m_updateCalls++;
-            base.Update(gameTime, otherScreenHasFocus, false);
-
-            // Gradually fade in or out depending on whether we are covered by the pause screen.
-            if (coveredByOtherScreen)
-                pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
-            else
-                pauseAlpha = Math.Max(pauseAlpha - 1f / 32, 0);
-
-            if (IsActive)
+            try
             {
-                Globals.GameObjectManager.Update(gameTime);
+                m_updateCalls++;
+                base.Update(gameTime, otherScreenHasFocus, false);
+
+                // Gradually fade in or out depending on whether we are covered by the pause screen.
+                if (coveredByOtherScreen)
+                    pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
+                else
+                    pauseAlpha = Math.Max(pauseAlpha - 1f / 32, 0);
+
+                if (IsActive)
+                {
+                    Globals.GameObjectManager.Update(gameTime);
+                    Globals.s_currentCameraFrustrum.Matrix = Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix;
+
+                }
+
+                if (Globals.s_initialScript != null && !loadedInitialScript)
+                {
+                    loadedInitialScript = true;
+                    Globals.SimpleConsole.LoadScript(Globals.s_initialScript);
+                }
             }
-
-            if (Globals.s_initialScript != null && !loadedInitialScript)
+            catch (System.Exception ex)
             {
-                loadedInitialScript = true;
-                Globals.SimpleConsole.LoadScript(Globals.s_initialScript);
+                int ibreak = 0;
             }
         }
 

@@ -37,18 +37,24 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public override void BuildCollisionObject()
+        public override CollisionShape BuildCollisionShape()
         {
             if (s_collisionShape == null)
             {
                 s_collisionShape = new SphereShape(Globals.s_manaBallSize);
             }
-            float mass = 2f;
-            m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(mass, Matrix.CreateTranslation(Position), s_collisionShape,m_motionState,true,this);
+            return s_collisionShape;
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public override void BuildCollisionObject()
+        {
+            base.BuildCollisionShape();
             BeingLoaded = false;
             // set a custom material here as we want a fairly damped response.
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
-            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
             // manaballs should be allowed to move and go into sleep tates.
             m_collisionObject.SetActivationState(ActivationState.ACTIVE_TAG);
 
