@@ -182,7 +182,7 @@ namespace GameStateManagement
                 if (IsActive)
                 {
                     Globals.GameObjectManager.Update(gameTime);
-                    Globals.s_currentCameraFrustrum.Matrix = Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix;
+                    Globals.s_currentCameraFrustrum.Matrix = Globals.Camera.ViewMatrix * Globals.Camera.ProjectionMatrix;
 
                 }
 
