@@ -19,8 +19,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             : base(startPosition, GameObjectType.castle)
         {
             m_castle = castle;
-            rotation.Translation = startPosition;
-            WorldTransform = rotation;
+            m_rotation = rotation;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -39,10 +38,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public override void Initialize()
         {
             base.Initialize();
-            float height = (BoundingBox.Max.Y - BoundingBox.Min.Y);
+            float height = ObjectDimensions.Y;
             m_modelHeightOffset = height / 2.0f;
+            m_rotation.Translation = SpawnPosition;
+            WorldTransform = m_rotation;
         }
 
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+        public override Vector3 ObjectDimensions
+        {
+            get { return Globals.s_castleWallSize; }
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -64,6 +71,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             base.Update(gameTime);
             if (ActionState == ActionState.None)
+
             {
                 QueueAction(Globals.ActionPool.GetActionIdle(this));
             }
@@ -90,7 +98,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Spawning):
                     {
                         // force an update on spawn positions and the like?
-                        Position = Position;
+                        PositionBase = Position;
                         break;
                     }
                 case (ActionState.Dieing):
@@ -126,6 +134,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private Castle m_castle;
+        private Matrix m_rotation;
     }
 
 }
+
+

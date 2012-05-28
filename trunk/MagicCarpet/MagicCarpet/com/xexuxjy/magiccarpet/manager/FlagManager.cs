@@ -7,6 +7,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.magiccarpet.util;
 using System.Diagnostics;
 using BulletXNA;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -19,8 +20,9 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public Vector3 DefaultFlagDimensions
         {
-            get { return new Vector3(1, 1, 1); }
+            get { return new Vector3(1, 0.1f, 1); }
         }
+
 
 
         public override void Initialize()
@@ -34,7 +36,7 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             int numSegments = 30;
             float width = DefaultFlagDimensions.X;
-            float length = DefaultFlagDimensions.Y;
+            float length = DefaultFlagDimensions.Z;
             m_effect = Globals.MCContentManager.GetEffect("Cloth");
             m_flagTexture = Globals.MCContentManager.GetTexture("Flag");
             ObjectBuilderUtil.BuildClothObject(numSegments, width, length, out m_dimensions, out m_flagVertexBuffer);
@@ -51,10 +53,10 @@ namespace com.xexuxjy.magiccarpet.manager
             flagData.Scale = flagScale;
 
 
-            Vector3 min = flagPosition - new Vector3(1, 1, 0.1f);
-            Vector3 max = flagPosition + new Vector3(1, 1, 0.1f);
+            Vector3 min = flagPosition - DefaultFlagDimensions / 2f;
+            Vector3 max = flagPosition + DefaultFlagDimensions / 2f;
 
-            flagData.BoundingBox = new BoundingBox(min, max);
+            flagData.BoundingSphere = new BoundingSphere(flagPosition,(DefaultFlagDimensions.X/2*flagScale.X));
 
             m_flagData[owner] = flagData;
         }
@@ -92,7 +94,7 @@ namespace com.xexuxjy.magiccarpet.manager
                 m_flagDataListSorted.Clear();
                 foreach (FlagData flagData in m_flagData.Values)
                 {
-                    if (Globals.s_currentCameraFrustrum.Contains(flagData.BoundingBox) != ContainmentType.Disjoint)
+                    if (Globals.s_currentCameraFrustrum.Contains(flagData.BoundingSphere) != ContainmentType.Disjoint)
                     {
                         m_flagDataListSorted.Add(flagData);
                     }
@@ -108,9 +110,22 @@ namespace com.xexuxjy.magiccarpet.manager
                 {
                     Vector3 startPosition = flagData.Position;
                     Matrix scaleMatrix = Matrix.CreateScale(flagData.Scale);
-                    Matrix worldMatrix = scaleMatrix * m_rotation;
-                    worldMatrix.Translation = flagData.Position;
+                    Matrix worldMatrix = scaleMatrix * m_rotation * Matrix.CreateTranslation(flagData.Position);
+                    //worldMatrix.Translation = flagData.Position;
 
+                    Vector3 scaled = DefaultFlagDimensions;
+
+                    IndexedVector3 min = -(scaled / 2f);
+                    IndexedVector3 max = scaled / 2f;
+
+                    IndexedVector3 colour = new IndexedVector3(0, 0, 1);
+                    IndexedMatrix m = new IndexedMatrix(worldMatrix);
+                    //m = IndexedMatrix.Identity;
+                    m._origin = flagData.Position;
+
+                    // already been translated
+                    //m._origin = IndexedVector3.Zero;
+                    Globals.DebugDraw.DrawBox(ref min, ref max, ref m, ref colour);
 
                     m_effect.Parameters["WorldMatrix"].SetValue(worldMatrix);
 
@@ -125,6 +140,9 @@ namespace com.xexuxjy.magiccarpet.manager
                     }
 
                 }
+
+                Globals.DebugDraw.DrawText(String.Format("FlagManager visible[{0}] total[{1}]", m_flagDataListSorted.Count, m_flagData.Count), new IndexedVector3(10, 70, 0), new IndexedVector3(1, 1, 1));
+
                 Globals.Game.GraphicsDevice.BlendState = oldState;
             }
         }
@@ -159,6 +177,6 @@ namespace com.xexuxjy.magiccarpet.manager
         public GameObject Owner;
         public Vector3 Position;
         public Vector3 Scale;
-        public BoundingBox BoundingBox;
+        public BoundingSphere BoundingSphere;
     }
 }

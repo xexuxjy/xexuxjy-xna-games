@@ -50,8 +50,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             m_spellCastPosition = Position;
             // offset this a bit so we fire from the top of the tower.
-            Vector3 scale = Globals.s_castleTowerSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
-            m_spellCastPosition.Y += m_modelHelperData.m_boundingBox.Max.Y * scale.Y;
+            //Vector3 scale = Globals.s_castleTowerSize / (m_modelHelperData.m_boundingBox.Max - m_modelHelperData.m_boundingBox.Min);
+            m_spellCastPosition.Y += Globals.s_castleTowerSize.Y;
 
 
             Vector3 flagScale = new Vector3(0.5f);
