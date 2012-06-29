@@ -347,6 +347,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                             {
                                 effect.Parameters["Texture"].SetValue(texture);
                             }
+
+                            Texture2D normalTexture = GetNormalTexture();
+                            if (texture != null)
+                            {
+                                effect.Parameters["NormalTexture"].SetValue(normalTexture);
+                            }
                         }
                         mesh.Draw();
                     }
@@ -367,11 +373,45 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public virtual String GetBaseTextureName()
+        {
+            return null;
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
         public virtual Texture2D GetTexture()
         {
-            // cheat for now.
-            Vector3 colour = Owner != null ? new Vector3(1, 0, 0) : new Vector3(1, 1, 1);
-            return Globals.MCContentManager.GetTexture(ref colour);
+            String baseTextureName = GetBaseTextureName();
+            if (baseTextureName == null)
+            {
+                // cheat for now.
+                Vector3 colour = Owner != null ? new Vector3(1, 0, 0) : new Vector3(1, 1, 1);
+                return Globals.MCContentManager.GetTexture(ref colour);
+            }
+            else
+            {
+                //return Globals.MCContentManager.GetTexture(baseTextureName);
+                return GetNormalTexture();
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public virtual Texture2D GetNormalTexture()
+        {
+            String baseTextureName = GetBaseTextureName();
+            if (baseTextureName == null)
+            {
+                // cheat for now.
+                Vector3 colour = new Vector3(1, 1, 1);
+                return Globals.MCContentManager.GetTexture(ref colour);
+            }
+            else
+            {
+                return Globals.MCContentManager.GetTexture(baseTextureName+"_Normal");
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -847,7 +887,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected ThreatComponent m_threatComponent;
 
         protected bool m_stickToGround = true;
-        protected Matrix[] m_boneTransforms;
+        protected static Matrix[] m_boneTransforms;
 
         // keeping this separate from facing on purpose.
         protected Vector3 m_heading;
