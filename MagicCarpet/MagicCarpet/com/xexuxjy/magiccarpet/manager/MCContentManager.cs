@@ -309,7 +309,7 @@ namespace com.xexuxjy.magiccarpet.manager
         {
             LightManager.ApplyLightToEffect(effect);
 
-            effect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
+            effect.Parameters["CameraPosition"].SetValue(Globals.Camera.Eye);
             effect.Parameters["ViewMatrix"].SetValue(Globals.Camera.ViewMatrix);
             effect.Parameters["ProjMatrix"].SetValue(Globals.Camera.ProjectionMatrix);
 

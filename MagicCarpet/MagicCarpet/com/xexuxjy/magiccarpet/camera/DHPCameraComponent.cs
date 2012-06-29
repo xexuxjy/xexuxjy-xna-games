@@ -143,7 +143,16 @@ namespace Dhpoware
             get;
             set;
         }
-        
+
+        /// <summary>
+        /// Property to get and set the camera's position.
+        /// </summary>
+        Vector3 Eye
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Property to get the camera's perspective projection matrix.
         /// </summary>
@@ -878,7 +887,7 @@ namespace Dhpoware
                 Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorldTransform);
                 newEye2 += targetWorldTransform.Translation;
                 LookAt(newEye2, targetWorldTransform.Translation, targetYAxis);
-
+                Position = newEye2;
             }
 
 
@@ -1022,19 +1031,6 @@ namespace Dhpoware
 
                 eye = target + zAxis * orbitOffsetLength;
             }
-            //if (behavior == Behavior.Follow && FollowTarget != null)
-            //{
-            //    Matrix targetFacing = FollowTarget.WorldTransform;
-            //    //target = targetFacing.Translation;
-            //    //targetFacing.Translation = Vector3.Zero;
-                
-            //    //Vector3 offset = Vector3.TransformNormal(m_followTargetLookatOffset, targetFacing);
-            //    //eye = target + offset;
-
-            //    eye = Vector3.Transform(FollowTargetLookAtOffset, targetFacing);
-
-
-            //}
 
             viewMatrix.M41 = -Vector3.Dot(xAxis, eye);
             viewMatrix.M42 = -Vector3.Dot(yAxis, eye);
@@ -1116,6 +1112,22 @@ namespace Dhpoware
                 UpdateViewMatrix();
             }
         }
+
+        /// <summary>
+        /// Property to get and set the camera position. without updating view matrix
+        /// </summary>
+
+        public Vector3 Eye
+        {
+            get { return eye; }
+
+            set
+            {
+                eye = value;
+            }
+        }
+
+
 
         /// <summary>
         /// Property to get and set the flag to force the camera
@@ -2143,6 +2155,8 @@ namespace Dhpoware
                     LookAt(newEye2, targetWorldTransform.Translation, targetYAxis);
                     
                     camera.UpdateViewMatrix();
+                    camera.Eye = newEye2;
+
                     break;
                 }
             default:
@@ -2304,7 +2318,22 @@ namespace Dhpoware
         public Vector3 Position
         {
             get { return camera.Position; }
-            set { camera.Position = value; }
+            set 
+            { 
+                camera.Position = value; 
+            }
+        }
+
+        /// <summary>
+        /// Property to get and set the camera's position.
+        /// </summary>
+        public Vector3 Eye
+        {
+            get { return camera.Eye; }
+            set
+            {
+                camera.Eye = value;
+            }
         }
 
         /// <summary>
@@ -2405,20 +2434,6 @@ namespace Dhpoware
                     {
                         camera.CurrentBehavior = Camera.Behavior.Follow;
                     }
-                //if (m_followTarget != null)
-                //{
-                //    Vector3 targetPosition = FollowTarget.Position;
-                //    Vector3 targetFacing = FollowTarget.Forward;
-                //    if (targetFacing.LengthSquared() == 0)
-                //    {
-                //        targetFacing = new Vector3(0, 0, -1);
-                //    }
-                //    //Vector3 
-                //    float offset = 5;
-                //    Vector3 eye = targetPosition - (targetFacing * offset);
-                //    // jump to immediate facing.
-                //    camera.LookAt(eye, targetPosition, Vector3.Up);
-
                 }
             }
         }

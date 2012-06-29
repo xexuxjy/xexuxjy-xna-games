@@ -63,8 +63,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 
 	result *= light;
 
-	float distanceFromCamera = length(input.pos3d - CameraPosition);
-	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
+	float fogFactor = ComputeFogFactor(input.pos3d);
 	result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
 	//result = float4(1,1,0,1);

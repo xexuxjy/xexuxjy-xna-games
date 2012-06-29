@@ -51,13 +51,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void BuildCollisionObject()
         {
-            base.BuildCollisionShape();
+            base.BuildCollisionObject();
             BeingLoaded = false;
             // set a custom material here as we want a fairly damped response.
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
             // manaballs should be allowed to move and go into sleep tates.
             m_collisionObject.SetActivationState(ActivationState.ACTIVE_TAG);
-
+            RigidBody rb = m_collisionObject as RigidBody;
+            rb.SetFlags(rb.GetFlags() &~ RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

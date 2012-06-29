@@ -173,7 +173,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	output.normal = float3(0,1,0);
     output.uv = uv;
 	output.noiseuv = float2(worldPos.x/10.0,worldPos.y/10.0);
-	output.pos3d = output.pos;
+	output.pos3d = worldPosition.xyz;//output.pos;
     return output;
 
 }
@@ -200,8 +200,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	result *= light;
 	
 	// Fog stuff.
-	float distanceFromCamera = length(input.pos3d - CameraPosition);
-	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
+	float fogFactor = ComputeFogFactor(input.pos3d);
 
 	// do something funky as well to provide fog near the boundaries of the world.
 	result.rgb = lerp(result.rgb,FogColor,fogFactor);
@@ -247,8 +246,7 @@ float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
 	float4 result = tex2D(TreeSampler, input.uv);
 	// Make sure tree's vanish in the mist as well.
 
-	float distanceFromCamera = length(input.pos3d - CameraPosition);
-	float fogFactor = ComputeFogFactor(distanceFromCamera,input.pos3d);
+	float fogFactor = ComputeFogFactor(input.pos3d);
 	float4 result2;
 	result2.rgb = lerp(result.rgb,FogColor,fogFactor);
 	result2.a = result.a;
