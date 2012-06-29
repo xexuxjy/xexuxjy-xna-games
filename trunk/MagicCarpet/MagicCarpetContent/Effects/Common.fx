@@ -21,6 +21,7 @@ uniform float WorldWidth;
 static const float PI = 3.14159265f;
 
 texture Texture;
+texture NormalTexture;
 
 
 uniform float3 UnassignedPlayerColor;
@@ -65,6 +66,30 @@ float3 AssignOwnerColour(float3 input)
 	}
 	return input;
 }
+
+
+uniform sampler TextureSampler = sampler_state
+{
+    Texture   = (Texture);
+    MipFilter = None;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+
+float BumpConstant = 1;
+
+sampler NormalMapSampler = sampler_state
+{
+	Texture = <NormalTexture>;
+	AddressU = Wrap;
+	AddressV = Wrap;
+	MipFilter = LINEAR; 
+	MinFilter = LINEAR; 
+	MagFilter = LINEAR; 
+};
 
 
 technique CommonTechnique

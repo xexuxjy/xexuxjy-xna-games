@@ -171,9 +171,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public override Texture2D GetTexture()
+        public override String GetBaseTextureName()
         {
-            return Globals.MCContentManager.GetTexture("CastleTower");
+            return "CastleTower";
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

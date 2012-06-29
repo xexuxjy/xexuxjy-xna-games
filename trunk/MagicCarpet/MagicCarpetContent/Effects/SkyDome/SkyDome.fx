@@ -2,16 +2,6 @@
 
 float UVOffset;
 
-uniform sampler TextureSampler = sampler_state
-{
-    Texture   = (Texture);
-    MipFilter = None;
-    MinFilter = Point;
-    MagFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
-};
-
 
 // TODO: add effect parameters here.
 

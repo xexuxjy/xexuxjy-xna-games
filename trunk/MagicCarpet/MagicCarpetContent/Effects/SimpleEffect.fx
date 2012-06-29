@@ -1,16 +1,6 @@
 #include "Common.fx"
 
 
-uniform sampler TextureSampler = sampler_state
-{
-    Texture   = (Texture);
-    MipFilter = None;
-    MinFilter = Point;
-    MagFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
 
 // TODO: add effect parameters here.
 
@@ -33,6 +23,8 @@ struct VertexShaderOutput
     float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
 	float3 pos3d : TEXCOORD1;
 	float3 normal : TEXCOORD2;
+	float3 Tangent : TEXCOORD3;
+	float3 Binormal : TEXCOORD4;
 };
 
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
@@ -55,7 +47,12 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	result.rgb = AssignOwnerColour(result.rgb);
 
 
-	float dotResult = dot(-LightDirection, input.normal);    
+	// Get value in the range of -1 to 1
+	float3 normalFromMap = normalize(2.0f * tex2D(NormalMapSampler,input.uv) - 1.0f);
+	//normalFromMap *= input.normal;
+	//normalFromMap.normalize();
+
+	float dotResult = dot(-LightDirection, normalFromMap);    
 	dotResult = saturate(dotResult);
 
 	float3 directionalComponent = DirectionalLight * dotResult;
