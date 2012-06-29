@@ -7,8 +7,14 @@ uniform float3 CameraPosition;
 
 uniform float3 LightPosition;
 uniform float3 LightDirection;
-uniform float3 AmbientLight;
-uniform float3 DirectionalLight;
+uniform float3 AmbientLightColor;
+uniform float AmbientLightIntensity;
+uniform float3 DirectionalLightColor;
+uniform float DirectionalLightIntensity;
+uniform float3 SpecularLightColor;
+uniform float SpecularLightIntensity;
+
+uniform float Shininess = 0.2f;
 
 uniform bool FogEnabled;
 uniform float FogStart;
@@ -79,7 +85,7 @@ uniform sampler TextureSampler = sampler_state
 };
 
 
-float BumpConstant = 1;
+float BumpConstant = 2;
 
 sampler NormalMapSampler = sampler_state
 {

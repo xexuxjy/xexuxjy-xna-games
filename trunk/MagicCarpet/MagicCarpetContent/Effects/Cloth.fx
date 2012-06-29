@@ -84,8 +84,8 @@ float4 ClothPixelShaderFunction(ClothVertexShaderOutput input) : COLOR0
     float dotResult = dot(-lightDir, smoothedNormal.xyz);    
 	dotResult = saturate(dotResult);
 
-	float3 directionalComponent = DirectionalLight * dotResult;
-	float4 light = float4(directionalComponent + AmbientLight,1);
+	float3 directionalComponent = DirectionalLightColor * DirectionalLightIntensity * dotResult;
+	float4 light = float4(directionalComponent + (AmbientLightColor * AmbientLightIntensity),1);
 
 	//result *= light;
 

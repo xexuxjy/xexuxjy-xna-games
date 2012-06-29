@@ -362,12 +362,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                                                         new String[]
                                                        {"THHTHHTHHT",
                                                         "V        V", 
-                                                        "V        V", 
-                                                        "T        T",
-                                                        "V        V", 
-                                                        "V        V", 
-                                                        "T        T",
-                                                        "V        V", 
+                                                        "V THHHHT V", 
+                                                        "T V    V T",
+                                                        "V V    V V", 
+                                                        "V V    V V", 
+                                                        "T V    V T",
+                                                        "V THHHHT V", 
                                                         "V        V", 
                                                         "THHTHHTHHT"}};
 
