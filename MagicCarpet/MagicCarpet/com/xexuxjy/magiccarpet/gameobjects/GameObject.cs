@@ -314,7 +314,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            DrawEffect(Game.GraphicsDevice, Globals.Camera.ViewMatrix, WorldTransform, Globals.Camera.ProjectionMatrix);
+            try
+            {
+                DrawEffect(Game.GraphicsDevice, Globals.Camera.ViewMatrix, WorldTransform, Globals.Camera.ProjectionMatrix);
+            }
+            catch (System.Exception ex)
+            {
+                int ibreak = 0;            	
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -392,8 +399,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             }
             else
             {
-                //return Globals.MCContentManager.GetTexture(baseTextureName);
-                return GetNormalTexture();
+                return Globals.MCContentManager.GetTexture(baseTextureName);
+                //return GetNormalTexture();
             }
         }
 

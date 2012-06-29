@@ -9,11 +9,22 @@ namespace com.xexuxjy.magiccarpet.renderer
 
         public static void ApplyLightToEffect(Effect effect)
         {
-            Vector3 ambientLight = new Vector3(0.1f);
-            Vector3 directionalLight = new Vector3(0.4f);
+            Vector3 ambientLightColor = new Vector3(1f);
+            float ambientLightIntensity = 0.1f;
+            Vector3 directionalLightColor = new Vector3(1f);
+            float directionalLightIntensity = 0.4f;
 
-            effect.Parameters["AmbientLight"].SetValue(ambientLight);
-            effect.Parameters["DirectionalLight"].SetValue(directionalLight);
+            Vector3 specularLightColor = new Vector3(1f);
+            float specularLightIntensity = 0.4f;
+
+            effect.Parameters["AmbientLightColor"].SetValue(ambientLightColor);
+            effect.Parameters["AmbientLightIntensity"].SetValue(ambientLightIntensity);
+
+            effect.Parameters["DirectionalLightColor"].SetValue(directionalLightColor);
+            effect.Parameters["DirectionalLightIntensity"].SetValue(directionalLightIntensity);
+
+            effect.Parameters["SpecularLightColor"].SetValue(specularLightColor);
+            effect.Parameters["SpecularLightIntensity"].SetValue(specularLightIntensity);
 
             if (Globals.Player != null)
             {

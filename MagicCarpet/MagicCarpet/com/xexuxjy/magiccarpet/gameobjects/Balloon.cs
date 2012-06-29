@@ -109,7 +109,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Spawning):
                     {
                         // force an update on spawn positions and the like?
-                        Position = Position;
+                        PositionBase = Position;
                         break;
                     }
 
