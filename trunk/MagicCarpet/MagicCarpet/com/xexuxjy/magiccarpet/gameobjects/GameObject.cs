@@ -324,7 +324,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //return;
             if (m_modelHelperData.m_model != null)
             {
-                if(Globals.s_currentCameraFrustrum.Contains(BoundingBox) != ContainmentType.Disjoint)
+                if (Globals.s_currentCameraFrustrum.Contains(BoundingBox) != ContainmentType.Disjoint)
                 {
                     foreach (ModelMesh mesh in m_modelHelperData.m_model.Meshes)
                     {
@@ -350,6 +350,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         mesh.Draw();
                     }
+                }
+                else
+                {
+                    int ibreak = 0;
                 }
             }
         }
@@ -481,7 +485,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 BoundingBox bb = new BoundingBox();
                 if (m_collisionObject != null)
                 {
-                    m_collisionObject.GetCollisionShape().GetAabb(Matrix.Identity, out min, out max);
+                    //m_collisionObject.GetCollisionShape().GetAabb(Matrix.Identity, out min, out max);
+                    ((RigidBody)m_collisionObject).GetAabb(out min, out max);
                     bb = new BoundingBox(min, max);
                 }
                 return bb;

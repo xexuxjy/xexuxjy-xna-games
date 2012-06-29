@@ -41,9 +41,11 @@ color.rgb = lerp(color.rgb, FogColor, fogFactor);
 */
 
 
-float ComputeFogFactor(float d,float3 worldpos)
+float ComputeFogFactor(float3 worldpos)
 {
-    float result = clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
+	float distanceFromCamera = length(worldpos - CameraPosition);
+    float result = clamp((distanceFromCamera - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
+
 	float minFog = (-WorldWidth / 2) + EdgeFog;
 	float maxFog = (WorldWidth / 2) - EdgeFog;
 	// provide a foggy band around the edge of the world.

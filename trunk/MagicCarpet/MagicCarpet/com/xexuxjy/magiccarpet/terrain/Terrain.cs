@@ -450,29 +450,29 @@ namespace com.xexuxjy.magiccarpet.terrain
         public virtual float GetHeightAtPointWorldSmooth(float x, float z)
         {
             // Use a similar technique to the shader and sample around
+            float result = 0.0f;
+            float tl = GetHeightAtPointWorld(x - 1, z - 1);
+            float tc = GetHeightAtPointWorld(x - 1, z - 1);
+            float tr = GetHeightAtPointWorld(x + 1, z - 1);
 
-            //float tl = GetHeightAtPointWorld(x-1, z-1);
-            //float tc = GetHeightAtPointWorld(x-1, z-1);
-            //float tr = GetHeightAtPointWorld(x + 1, z-1);
+            float ml = GetHeightAtPointWorld(x - 1, z);
+            float mc = GetHeightAtPointWorld(x - 1, z);
+            float mr = GetHeightAtPointWorld(x + 1, z);
 
-            //float ml = GetHeightAtPointWorld(x - 1, z );
-            //float mc = GetHeightAtPointWorld(x - 1, z );
-            //float mr = GetHeightAtPointWorld(x + 1, z );
+            float bl = GetHeightAtPointWorld(x - 1, z + 1);
+            float bc = GetHeightAtPointWorld(x - 1, z + 1);
+            float br = GetHeightAtPointWorld(x + 1, z + 1);
 
-            //float bl = GetHeightAtPointWorld(x - 1, z+1);
-            //float bc = GetHeightAtPointWorld(x - 1, z+1);
-            //float br = GetHeightAtPointWorld(x + 1, z+1);
+            result = (tl + tc + tr + ml + mc + mr + bl + bc + br) / 9.0f;
 
-            //return (tl + tc + tr + ml + mc + mr + bl + bc + br) / 9.0f;
+            //float tl = GetHeightAtPointWorld(x, z);
+            //float tr = GetHeightAtPointWorld(x + 1, z);
+            //float bl = GetHeightAtPointWorld(x, z + 1);
+            //float br = GetHeightAtPointWorld(x + 1, z + 1);
 
-            float tl = GetHeightAtPointWorld(x, z);
-            float tr = GetHeightAtPointWorld(x + 1, z);
-            float bl = GetHeightAtPointWorld(x, z+1);
-            float br = GetHeightAtPointWorld(x + 1, z+1);
-
-            float txdiff = MathHelper.Lerp(tl,tr,(x-(float)Math.Truncate(x)));
-            float bxdiff = MathHelper.Lerp(bl,br,(x-(float)Math.Truncate(x)));
-            float result = MathHelper.Lerp(txdiff, bxdiff, (z - (float)Math.Truncate(z)));
+            //float txdiff = MathHelper.Lerp(tl, tr, (x - (float)Math.Truncate(x)));
+            //float bxdiff = MathHelper.Lerp(bl, br, (x - (float)Math.Truncate(x)));
+            //float result = MathHelper.Lerp(txdiff, bxdiff, (z - (float)Math.Truncate(z)));
             return result;
 
         }

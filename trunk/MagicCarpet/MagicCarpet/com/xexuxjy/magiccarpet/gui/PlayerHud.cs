@@ -83,7 +83,7 @@ namespace com.xexuxjy.magiccarpet.gui
                 Vector3 location = Globals.DebugTextCamera;
                 Vector3 colour = new Vector3(1, 1, 1);
 
-                String baseInfo = String.Format("Player Forward[{1}]. ", Globals.TrackedObject.Position, Globals.TrackedObject.Forward);
+                String baseInfo = String.Format("Player Forward[{1}] Camera Eye[{2}]. ", Globals.TrackedObject.Position, Globals.TrackedObject.Forward,Globals.Camera.Eye);
                 Globals.DebugDraw.DrawText(baseInfo, location, colour);
                 if (Globals.TrackedObject.SpellComponent.GetActiveSpells().Count > 0)
                 {
