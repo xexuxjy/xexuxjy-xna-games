@@ -255,7 +255,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_terrainEffect.Parameters["ScaleFactor"].SetValue(scaleFactor);
             Globals.MCContentManager.ApplyCommonEffectParameters(m_terrainEffect);
             DrawTerrainBlocks();
-            //DrawTrees();
+            DrawTrees();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -921,52 +921,51 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void CreateBillboardVerticesFromList(List<Vector4> list,out VertexBuffer vertexBuffer)
         {
-            VertexPositionScaleTexture[] billboardVertices = new VertexPositionScaleTexture[list.Count * 12];
             int i = 0;
 
             float width = 1f;
             float height = 10f;
             // rotate through half to get a checkboard.
-            Matrix rotation = Matrix.CreateRotationY(MathUtil.SIMD_HALF_PI);
+            //Matrix rotation = Matrix.CreateRotationY(MathUtil.SIMD_PI);
 
-            Vector3 left = new Vector3(-width, 0, 0);
-            Vector3 right = new Vector3(width, 0, 0);
-            Vector3 baseUp = new Vector3(0, height, 0);
 
+            int numIterations = 6;
+            float stepSize = MathUtil.SIMD_2_PI / numIterations;
+
+            VertexPositionScaleTexture[] billboardVertices = new VertexPositionScaleTexture[list.Count * 6 * numIterations];
 
             foreach (Vector4 currentV4 in list)
             {
+                Vector3 left = new Vector3(-width, 0, 0);
+                Vector3 right = new Vector3(width, 0, 0);
+                Vector3 baseUp = new Vector3(0, height, 0);
+
+                float scale2 = currentV4.W * (float)BulletGlobals.gRandom.NextDouble();
+                
+                left *= scale2;
+                right *= scale2;
                 Vector3 v = new Vector3(currentV4.X,currentV4.Y,currentV4.Z);
                 float scale = currentV4.W;
                 Vector3 up = baseUp * scale;
 
+                // FIXME - update this to allow multiple textures to provide a more interesting looking tree..
 
-                billboardVertices[i++] = new VertexPositionScaleTexture(v+left, scale,new Vector2(0, 1));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + right , scale, new Vector2(1, 1));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + right + up, scale, new Vector2(1, 0));
+                for (int j = 0; j < numIterations; ++j)
+                {
+                    Matrix rotation = Matrix.CreateRotationY(j * stepSize);
 
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + right+up, scale, new Vector2(1, 0));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + left+ up, scale, new Vector2(0, 0));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + left, scale, new Vector2(0, 1));
+                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
+                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right, rotation), scale, new Vector2(1, 1));
+                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right + up, rotation), scale, new Vector2(1, 0));
 
-                
-                billboardVertices[i++] = new VertexPositionScaleTexture(v+Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v+Vector3.TransformNormal(right,  rotation), scale, new Vector2(1, 1));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v+ Vector3.TransformNormal(right + up, rotation), scale, new Vector2(1, 0));
-
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right+up, rotation), scale, new Vector2(1, 0));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left + up, rotation), scale, new Vector2(0, 0));
-                billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
-
+                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right + up, rotation), scale, new Vector2(1, 0));
+                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left + up, rotation), scale, new Vector2(0, 0));
+                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
+                }
             }
 
             vertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionScaleTexture.VertexDeclaration, billboardVertices.Length, BufferUsage.WriteOnly);
             vertexBuffer.SetData(billboardVertices);
-        
-        
-        
-        
-        
         }
 
 

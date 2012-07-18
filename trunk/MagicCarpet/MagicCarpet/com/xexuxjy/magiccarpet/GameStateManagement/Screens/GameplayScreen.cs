@@ -130,7 +130,7 @@ namespace GameStateManagement
 
 
                 m_playerController = new PlayerController(m_playerHud);
-
+                Globals.playerController = m_playerController;
 
                 // once the load has finished, we use ResetElapsedTime to tell the game's
                 // timing mechanism that we have just finished a very long frame, and that

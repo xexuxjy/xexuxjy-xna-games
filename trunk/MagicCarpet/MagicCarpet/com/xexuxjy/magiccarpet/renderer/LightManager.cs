@@ -12,10 +12,10 @@ namespace com.xexuxjy.magiccarpet.renderer
             Vector3 ambientLightColor = new Vector3(1f);
             float ambientLightIntensity = 0.1f;
             Vector3 directionalLightColor = new Vector3(1f);
-            float directionalLightIntensity = 0.4f;
+            float directionalLightIntensity = 1f;
 
             Vector3 specularLightColor = new Vector3(1f);
-            float specularLightIntensity = 0.4f;
+            float specularLightIntensity = 1f;
 
             effect.Parameters["AmbientLightColor"].SetValue(ambientLightColor);
             effect.Parameters["AmbientLightIntensity"].SetValue(ambientLightIntensity);
@@ -29,7 +29,10 @@ namespace com.xexuxjy.magiccarpet.renderer
             if (Globals.Player != null)
             {
                 effect.Parameters["LightPosition"].SetValue(Globals.Player.Position);
-                effect.Parameters["LightDirection"].SetValue(Globals.Player.Forward);
+                //effect.Parameters["LightDirection"].SetValue(Globals.Player.Forward);
+                Vector3 lightDir = new Vector3(0, 1, -1);
+                lightDir.Normalize();
+                effect.Parameters["LightDirection"].SetValue(lightDir);
             }
             
             //effect.Parameters["LightPosition"].SetValue(new Vector3(0, 40, 0));

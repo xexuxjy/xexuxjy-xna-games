@@ -92,7 +92,7 @@ namespace com.xexuxjy.magiccarpet.util
                 }
             }
 
-            CenterMouse();
+            //CenterMouse();
         }
 
 
@@ -122,7 +122,7 @@ namespace com.xexuxjy.magiccarpet.util
         //    MouseFunc(ref oldState, ref newState);
         //    MouseMotionFunc(ref newState);
         //}
-        private float m_mouseSensitivity = 0.001f;
+        private float m_mouseSensitivity = 0.01f;
         private bool m_invertY = false;
         private PlayerController m_playerController;
     }

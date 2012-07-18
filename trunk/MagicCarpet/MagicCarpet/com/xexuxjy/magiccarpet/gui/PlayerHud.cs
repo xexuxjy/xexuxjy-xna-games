@@ -83,8 +83,13 @@ namespace com.xexuxjy.magiccarpet.gui
                 Vector3 location = Globals.DebugTextCamera;
                 Vector3 colour = new Vector3(1, 1, 1);
 
-                String baseInfo = String.Format("Player Forward[{1}] Camera Eye[{2}]. ", Globals.TrackedObject.Position, Globals.TrackedObject.Forward,Globals.Camera.Eye);
-                Globals.DebugDraw.DrawText(baseInfo, location, colour);
+                if (Globals.TrackedObject != null && Globals.playerController != null)
+                {
+                    String baseInfo = String.Format("Player Forward[{1}] Camera Eye[{2}]. ", Globals.TrackedObject.Position, Globals.TrackedObject.Forward, Globals.Camera.Eye);
+                    Globals.DebugDraw.DrawText(baseInfo, location, colour);
+                    baseInfo = String.Format("Y[{0:0.000}] P[{1:0.000}] LY[{2:0.000}] LP[{3:0.000}]. ", Globals.playerController.CurrentYaw, Globals.playerController.CurrentPitch, Globals.playerController.LastYaw, Globals.playerController.LastPitch);
+                    Globals.DebugDraw.DrawText(baseInfo, location + new Vector3(0, 10, 0), colour);
+                }
                 if (Globals.TrackedObject.SpellComponent.GetActiveSpells().Count > 0)
                 {
                     Spell spell = Globals.TrackedObject.SpellComponent.GetActiveSpells()[0];

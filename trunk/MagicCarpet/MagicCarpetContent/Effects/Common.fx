@@ -14,7 +14,7 @@ uniform float DirectionalLightIntensity;
 uniform float3 SpecularLightColor;
 uniform float SpecularLightIntensity;
 
-uniform float Shininess = 0.2f;
+uniform float Shininess = 200;
 
 uniform bool FogEnabled;
 uniform float FogStart;
@@ -29,6 +29,7 @@ static const float PI = 3.14159265f;
 texture Texture;
 texture NormalTexture;
 
+float BumpConstant = 10;
 
 uniform float3 UnassignedPlayerColor;
 uniform float3 OwnerColor;
@@ -85,7 +86,6 @@ uniform sampler TextureSampler = sampler_state
 };
 
 
-float BumpConstant = 2;
 
 sampler NormalMapSampler = sampler_state
 {

@@ -18,6 +18,7 @@ using com.xexuxjy.magiccarpet.util.debug;
 using System.IO;
 using com.xexuxjy.magiccarpet.gui;
 using com.xexuxjy.magiccarpet.camera;
+using com.xexuxjy.magiccarpet.control;
 
 namespace com.xexuxjy.magiccarpet
 {
@@ -140,13 +141,15 @@ namespace com.xexuxjy.magiccarpet
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public const int WorldWidth = 1024;//512;//1024;
+        public const int WorldWidth = 2048;//512;//1024;
         public const int WorldHeight = 10;
 
         public static Vector3 worldMinPos = new Vector3(-WorldWidth/2, -WorldHeight, -WorldWidth/2);
         public static Vector3 worldMaxPos = -worldMinPos;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static PlayerController playerController;
 
         public static Vector3 gravity = new Vector3(0f, -9.8f, 0f);
 
