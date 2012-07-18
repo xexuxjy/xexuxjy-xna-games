@@ -142,7 +142,7 @@ float ComputeHeight(float2 uv:TEXCOORD0)
 	float numSamples = 9;
 	float sum1 = c+tl+l+bl+t;
 	float sum2 = b+tr+r+br;
-	float result = (float)((sum1+sum2) / numSamples);
+	float result = c;//(float)((sum1+sum2) / numSamples);
 	//float result = c;
 	
 	return result;

@@ -141,7 +141,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
                 }
 
-                Globals.DebugDraw.DrawText(String.Format("FlagManager visible[{0}] total[{1}]", m_flagDataListSorted.Count, m_flagData.Count), new IndexedVector3(10, 70, 0), new IndexedVector3(1, 1, 1));
+                //Globals.DebugDraw.DrawText(String.Format("FlagManager visible[{0}] total[{1}]", m_flagDataListSorted.Count, m_flagData.Count), new IndexedVector3(10, 70, 0), new IndexedVector3(1, 1, 1));
 
                 Globals.Game.GraphicsDevice.BlendState = oldState;
             }

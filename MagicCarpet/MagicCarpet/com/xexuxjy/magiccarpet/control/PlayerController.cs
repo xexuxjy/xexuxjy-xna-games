@@ -35,7 +35,8 @@ namespace com.xexuxjy.magiccarpet.control
 
         void Game_Deactivated(object sender, EventArgs e)
         {
-        
+            int ibreak = 0;
+            m_skippedFirst = false;
         }
 
 
@@ -48,6 +49,8 @@ namespace com.xexuxjy.magiccarpet.control
             }
             if (!m_skippedFirst)
             {
+                // synch the two so we don't get odd updates??
+                inputState.LastMouseState = inputState.CurrentMouseState;
                 m_skippedFirst = true;
                 return;
             }
@@ -81,62 +84,22 @@ namespace com.xexuxjy.magiccarpet.control
                 // need to convert the absolute movements into player relative ones.
 
                 Matrix im = Globals.Player.WorldTransform;
-                //Vector3 up = im.Up;
-                Vector3 up = Vector3.Up;
-                Vector3 right = im.Right;
-                Vector3 forward = im.Forward;
                 Vector3 position = im.Translation;
 
-                Vector3 relativeMovement = Vector3.TransformNormal(m_currentTranslation, im);
+                Quaternion q1 = Quaternion.CreateFromAxisAngle(Vector3.Up, m_currentYaw);
+                Quaternion q2 = Quaternion.CreateFromAxisAngle(Vector3.Right, m_currentPitch);
+                Quaternion qresult = q1 * q2;
+                Matrix qmatrix = Matrix.CreateFromQuaternion(qresult);
+                qmatrix.Translation = position;
+
+                // make movement relative
+                Vector3 relativeMovement = Vector3.TransformNormal(m_currentTranslation, qmatrix);
 
 
-                // Update camera etc?
-                // Correct the X axis steering when the ship is upside down
-                //if (Up.Y < 0)
-                //{
-                //    rotationAmount.X = -rotationAmount.X;
-                //}
-
-
-                // Create rotation matrix from rotation amount
-                //Matrix rotationMatrix = Matrix.CreateFromAxisAngle(right, m_currentPitch) *
-                //    Matrix.CreateRotationY(m_currentYaw);
-                Matrix yawMatrix = Matrix.CreateFromAxisAngle(up,m_currentYaw);
-                Matrix pitchMatrix = Matrix.CreateFromAxisAngle(right, m_currentPitch);
-
-                Matrix rotationMatrix = yawMatrix * pitchMatrix;
-
-                //// Rotate orientation vectors
-                Vector3 direction = Vector3.TransformNormal(forward,rotationMatrix);
-                up = Vector3.TransformNormal(up ,rotationMatrix);
-
-                //// Re-normalize orientation vectors
-                //// Without this, the matrix transformations may introduce small rounding
-                //// errors which add up over time and could destabilize the ship.
-                direction.Normalize();
-                up.Normalize();
-
-                //// Re-calculate Right
-                right = Vector3.Cross(direction, up);
-
-                // The same instability may cause the 3 orientation vectors may
-                // also diverge. Either the Up or Direction vector needs to be
-                // re-computed with a cross product to ensure orthagonality
-                up = Vector3.Cross(right, direction);
-
-                Matrix world = Matrix.Identity;
-                world.Right = right;
-                world.Up = up;
-                world.Forward = direction;
-                world.Translation = position;
-
-                 //bit of extra work here.
-                Globals.Player.WorldTransform = world;
-                Globals.Player.Position += relativeMovement;
+                qmatrix.Translation += relativeMovement;
+                Globals.Player.WorldTransform = qmatrix;
 
             }
-        
-        
         }
 
 
@@ -178,19 +141,47 @@ namespace com.xexuxjy.magiccarpet.control
 
         public void UpdateYaw(float amount)
         {
+            if (amount < 0)
+            {
+                int ibreak = 0;
+            }
+            m_lastYaw = m_currentYaw;
             m_currentYaw += amount;
                 
         }
 
         public void UpdatePitch(float amount)
         {
+            m_lastPitch = m_currentPitch;
             m_currentPitch += amount;
 
         }
 
+        public float CurrentYaw
+        {
+            get { return m_currentYaw; }
+        }
+        public float CurrentPitch
+        {
+            get { return m_currentPitch; }
+        }
+
+        public float LastYaw
+        {
+            get { return m_lastYaw; }
+        }
+        public float LastPitch
+        {
+            get { return m_lastPitch; }
+        }
+
+
+
 
         private float m_currentYaw;
         private float m_currentPitch;
+        private float m_lastYaw;
+        private float m_lastPitch;
         private Vector3 m_currentTranslation;
 
 
