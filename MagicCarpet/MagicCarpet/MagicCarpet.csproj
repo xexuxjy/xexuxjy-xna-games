@@ -64,12 +64,6 @@
     <StartupObject>com.xexuxjy.magiccarpet.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Indiefreaks.AOP.Profiler">
-      <HintPath>E:\Program Files (x86)\Indiefreaks.com\Indiefreaks Game Profiler\Assemblies\Windows\Indiefreaks.AOP.Profiler.dll</HintPath>
-    </Reference>
-    <Reference Include="Indiefreaks.Xna.Profiler">
-      <HintPath>E:\Program Files (x86)\Indiefreaks.com\Indiefreaks Game Profiler\Assemblies\Windows\Indiefreaks.Xna.Profiler.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>lib\log4net.dll</HintPath>
     </Reference>
@@ -244,6 +238,10 @@
     <ProjectReference Include="..\..\..\..\bullet-xna\trunk\BulletXNA\BulletXNA-Windows.csproj">
       <Project>{4E1937EE-3139-44CB-989D-F050BC099CE6}</Project>
       <Name>BulletXNA-Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LTrees Source\LTreesLibrary\LTreesLibrary.csproj">
+      <Project>{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}</Project>
+      <Name>LTreesLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\MagicCarpetContent\MagicCarpetContent.contentproj">
       <Project>{FAF449CF-C173-4DEC-BC1A-E02576C62389}</Project>
