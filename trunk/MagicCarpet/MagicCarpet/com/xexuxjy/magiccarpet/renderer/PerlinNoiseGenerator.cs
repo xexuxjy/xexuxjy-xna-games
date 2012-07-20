@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using com.xexuxjy.magiccarpet;
 
-namespace MagicCarpet.com.xexuxjy.magiccarpet.renderer
+namespace com.xexuxjy.magiccarpet.renderer
 {
     public static class PerlinNoiseGenerator
     {

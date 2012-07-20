@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using MagicCarpet.com.xexuxjy.magiccarpet.renderer;
+using com.xexuxjy.magiccarpet.renderer;
 using Microsoft.Xna.Framework;
 
 namespace com.xexuxjy.magiccarpet.gui

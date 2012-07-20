@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of BulletXNAD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of MagicCarpet", "MagicCarpet\Xbox 360 Copy of MagicCarpet.csproj", "{9A434EB5-59A7-4FE6-B042-4070D4E10F6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LTreesLibrary", "..\LTrees Source\LTreesLibrary\LTreesLibrary.csproj", "{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -112,6 +114,16 @@ Global
 		{9A434EB5-59A7-4FE6-B042-4070D4E10F6F}.Release|Xbox 360.ActiveCfg = Release|Xbox 360
 		{9A434EB5-59A7-4FE6-B042-4070D4E10F6F}.Release|Xbox 360.Build.0 = Release|Xbox 360
 		{9A434EB5-59A7-4FE6-B042-4070D4E10F6F}.Release|Xbox 360.Deploy.0 = Release|Xbox 360
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Debug|x86.ActiveCfg = Debug|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Debug|x86.Build.0 = Debug|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Debug|Xbox 360.ActiveCfg = Debug|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Release|x86.ActiveCfg = Release|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Release|x86.Build.0 = Release|x86
+		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Release|Xbox 360.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
