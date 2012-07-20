@@ -410,6 +410,92 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LTreeContent\Textures\BirchBark.png">
+      <Name>BirchBark</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\BirchLeaf.png">
+      <Name>BirchLeaf</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\Grass.jpg">
+      <Name>Grass</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\GrayBark.JPG">
+      <Name>GrayBark</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\GraywoodLeaf.png">
+      <Name>GraywoodLeaf</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\OakLeaf.png">
+      <Name>OakLeaf</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\PineBark.png">
+      <Name>PineBark</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\PineLeaf.png">
+      <Name>PineLeaf</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Textures\WillowLeaf.png">
+      <Name>WillowLeaf</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LTreeContent\Trees\Birch.ltree">
+      <Name>Birch</Name>
+      <Processor>TreeProfileProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Trees\Gardenwood.ltree">
+      <Name>Gardenwood</Name>
+      <Processor>TreeProfileProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Trees\Graywood.ltree">
+      <Name>Graywood</Name>
+      <Processor>TreeProfileProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Trees\Pine.ltree">
+      <Name>Pine</Name>
+      <Processor>TreeProfileProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Trees\Rug.ltree">
+      <Name>Rug</Name>
+      <Processor>TreeProfileProcessor</Processor>
+    </Compile>
+    <Compile Include="LTreeContent\Trees\Willow.ltree">
+      <Name>Willow</Name>
+      <Processor>TreeProfileProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LTrees Source\LTreesPipeline\LTreesPipeline.csproj">
+      <Project>{199AA449-800E-4908-BF49-778990A2983A}</Project>
+      <Name>LTreesPipeline</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Effects\Terrain\InstancedTree.fx">
+      <Name>InstancedTree</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

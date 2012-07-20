@@ -10,6 +10,7 @@ using BulletXNA.LinearMath;
 using com.xexuxjy.magiccarpet.spells;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.renderer;
+using LTreesLibrary.Trees;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -25,6 +26,21 @@ namespace com.xexuxjy.magiccarpet.manager
             m_effectDictionary = new Dictionary<string, Effect>();
         }
 
+        // fixme - stack these?
+        public void SaveBlendState()
+        {
+            m_savedStencilState = Globals.GraphicsDevice.DepthStencilState;
+            m_savedBlendState = Globals.GraphicsDevice.BlendState;
+
+        }
+
+        public void RestoreBlendState()
+        {
+            Globals.GraphicsDevice.DepthStencilState = m_savedStencilState;
+            Globals.GraphicsDevice.BlendState = m_savedBlendState;
+        }
+        
+        
         public void LoadContent()
         {
 
@@ -35,6 +51,7 @@ namespace com.xexuxjy.magiccarpet.manager
             m_effectDictionary["Cloth"] = m_contentManager.Load<Effect>("Effects/Cloth");
             m_effectDictionary["Simple"] = m_contentManager.Load<Effect>("Effects/SimpleEffect");
             m_effectDictionary["SkyDome"] = m_contentManager.Load<Effect>("Effects/Skydome/Skydome");
+            m_effectDictionary["InstancedTree"] = m_contentManager.Load<Effect>("Effects/Terrain/InstancedTree");
 
 
             LoadModel("UnitCube", "Models/SimpleShapes/unitcube");
@@ -97,6 +114,14 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_textureDictionary["Balloon"] = m_contentManager.Load<Texture2D>("Models/Balloon/canopy");
         }
+
+
+        public SimpleTree GetSimpleTree(String sourceFile)
+        {
+            TreeProfile treeProfile = m_contentManager.Load<TreeProfile>("LTreeContent/Trees/"+sourceFile);
+            return treeProfile.GenerateSimpleTree();
+        }
+
 
         private void LoadModel(String modelKey, String path)
         {
@@ -315,7 +340,7 @@ namespace com.xexuxjy.magiccarpet.manager
             effect.Parameters["ViewMatrix"].SetValue(Globals.Camera.ViewMatrix);
             effect.Parameters["ProjMatrix"].SetValue(Globals.Camera.ProjectionMatrix);
 
-            effect.Parameters["FogEnabled"].SetValue(true);
+            effect.Parameters["FogEnabled"].SetValue(false);
             effect.Parameters["FogStart"].SetValue(20);
             effect.Parameters["FogEnd"].SetValue(200);
             effect.Parameters["EdgeFog"].SetValue(5);
@@ -363,6 +388,10 @@ namespace com.xexuxjy.magiccarpet.manager
             // Create and return bounding box
             return new BoundingBox(min, max);
         }
+
+
+        private DepthStencilState m_savedStencilState;
+        private BlendState m_savedBlendState;
 
 
         private SpriteFont m_debugFont;
