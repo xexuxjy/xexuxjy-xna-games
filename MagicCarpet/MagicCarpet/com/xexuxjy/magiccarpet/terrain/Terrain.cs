@@ -64,6 +64,26 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
+        public float OneOverTextureWidth
+        {
+            get
+            {
+                return m_oneOverTextureWidth;
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public Texture2D HeightMapTexture
+        {
+            get
+            {
+                return m_heightMapTexture;
+            }
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
 
         public void LoadOrCreateHeightMap(String textureName)
         {
@@ -260,7 +280,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             int numSpans = Globals.WorldWidth / m_blockSize;
             Vector3 blockSize = new Vector3(m_blockSize, 0, m_blockSize);
             Vector3 startPosition = new Vector3(-Globals.WorldWidth * 0.5f, 0, -Globals.WorldWidth * 0.5f);
-            float oneOverTextureWidth = 1f / (m_textureWidth - 1);
 
             // draw in the wall
             m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["TerrainWall"];
@@ -309,7 +328,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                             Matrix transform = Matrix.CreateTranslation(startPosition);
 
                             m_terrainEffect.Parameters["WorldMatrix"].SetValue(transform);
-                            m_terrainEffect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(oneOverTextureWidth, oneOverTextureWidth, localPosition.X, localPosition.Z));
+                            m_terrainEffect.Parameters["FineTextureBlockOrigin"].SetValue(new Vector4(m_oneOverTextureWidth, m_oneOverTextureWidth, localPosition.X, localPosition.Z));
 
                             // need apply on inner level to make sure latest vals copied across
                             pass.Apply();
@@ -828,6 +847,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         const int m_blockSize = 64;
         const int m_textureWidth = Globals.WorldWidth + 1;
+        const float m_oneOverTextureWidth = 1f / (m_textureWidth - 1);
+
 
         const int m_multiplier = 1;
         const float m_oneOver = 1f / (float)(m_multiplier);

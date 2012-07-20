@@ -105,7 +105,10 @@ namespace LTreesLibrary.Trees
 
         private void UpdateSkeleton()
         {
-            this.trunk = new TreeMesh(device, skeleton);
+            if (this.trunk == null)
+            {
+                this.trunk = new TreeMesh(device, skeleton);
+            }
             this.leaves = new TreeLeafCloud(device, skeleton);
             this.animationState = new TreeAnimationState(skeleton);
             this.bindingMatrices = new Matrix[skeleton.Bones.Count];
@@ -116,6 +119,17 @@ namespace LTreesLibrary.Trees
             this.device = device;
             this.boneEffect = new BasicEffect(device);
         }
+
+        public SimpleTree(GraphicsDevice device, TreeSkeleton skeleton, TreeMesh trunk)
+        {
+            this.device = device;
+            this.boneEffect = new BasicEffect(device);
+            this.skeleton = skeleton;
+            this.trunk = trunk;
+            UpdateSkeleton();
+        }
+
+
         public SimpleTree(GraphicsDevice device, TreeSkeleton skeleton)
         {
             this.device = device;

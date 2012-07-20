@@ -13,6 +13,19 @@
 #define MAXBONES 20
 float4x4 Bones[MAXBONES];
 
+float HeightMapTexelWidth;
+
+texture HeightMapTexture;
+uniform sampler ElevationSampler = sampler_state
+{
+    Texture   = (HeightMapTexture);
+    MipFilter = None;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 
 Texture2D LeafTexture;
 float LeafScale = 0.1f;
@@ -67,8 +80,15 @@ struct TrunkVertexShaderOutput
 TrunkVertexShaderOutput TrunkVertexShaderFunction(TrunkVertexShaderInput input, float4x4 instanceTransform)
 {
     TrunkVertexShaderOutput output;
+    float2 uv = float2(input.pos.x + WorldWidth/2,input.pos.z+WorldWidth/2) * HeightMapTexelWidth;
 
-	float4 localPosition = mul(input.pos, Bones[input.BoneIndex.x]);
+	float4 posCopy = input.pos;
+	float height = tex2Dlod(ElevationSampler, float4(uv, 0, 1));
+	height = 0;
+
+	posCopy.y += height;
+
+	float4 localPosition = mul(posCopy, Bones[input.BoneIndex.x]);
     float4 worldPosition = mul(localPosition, instanceTransform);
     float4 viewPosition = mul(worldPosition, ViewMatrix);
     output.pos = mul(viewPosition, ProjMatrix);
@@ -83,6 +103,28 @@ float4 TrunkPixelShaderFunction(TrunkVertexShaderOutput input) : COLOR0
 {
     // TODO: add your pixel shader code here.
 	float4 result = tex2D(TextureSampler, input.uv);
+
+	// lighting
+	float3 lightDir = LightDirection;
+    
+    float dotResult = dot(-lightDir, input.normal);    
+	dotResult = saturate(dotResult);
+
+	float3 directionalComponent = DirectionalLightColor * DirectionalLightIntensity * dotResult;
+	float4 light = float4(directionalComponent + (AmbientLightColor * AmbientLightIntensity),1);
+
+	result *= light;
+	
+	// Fog stuff.
+	float fogFactor = ComputeFogFactor(input.pos3d);
+
+	// do something funky as well to provide fog near the boundaries of the world.
+	result.rgb = lerp(result.rgb,FogColor,fogFactor);
+
+	result.a = 1;
+
+
+
 	return result;
 }
 

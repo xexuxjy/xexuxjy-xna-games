@@ -150,6 +150,7 @@ Global
 		{8AAAB1D0-6C1D-4F92-851B-56D4611A6D1E}.Release|Zune.ActiveCfg = Release|x86
 		{AD2A5284-A291-4F88-B06C-E32F0D39BB78}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{AD2A5284-A291-4F88-B06C-E32F0D39BB78}.Debug|x86.ActiveCfg = Debug|x86
+		{AD2A5284-A291-4F88-B06C-E32F0D39BB78}.Debug|x86.Build.0 = Debug|x86
 		{AD2A5284-A291-4F88-B06C-E32F0D39BB78}.Debug|Xbox 360.ActiveCfg = Debug|x86
 		{AD2A5284-A291-4F88-B06C-E32F0D39BB78}.Debug|Zune.ActiveCfg = Debug|x86
 		{AD2A5284-A291-4F88-B06C-E32F0D39BB78}.Release|Mixed Platforms.ActiveCfg = Release|x86

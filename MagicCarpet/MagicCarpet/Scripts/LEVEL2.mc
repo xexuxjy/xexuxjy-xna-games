@@ -1,4 +1,4 @@
-﻿#buildrandomlandscape
+﻿buildrandomlandscape
 #buildfractallandscape
 spawn magician 0,2,0 id=player1
 #spawn balloon 0,0,0 ownerid=player1

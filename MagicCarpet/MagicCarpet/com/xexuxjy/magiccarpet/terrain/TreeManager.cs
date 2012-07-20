@@ -36,7 +36,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void BuildPrettyTrees()
         {
-            m_simpleTree = Globals.MCContentManager.GetSimpleTree("Pine");
+            //m_simpleTree = Globals.MCContentManager.GetSimpleTree("Pine");
+            m_simpleTree = Globals.MCContentManager.GetSimpleLowPolyTree("Pine",4); 
+
             m_instanceTrunkEffect = Globals.MCContentManager.GetEffect("InstancedTree");
             m_simpleTree.TrunkEffect = m_instanceTrunkEffect;
             m_simpleTree.LeafEffect = m_instanceTrunkEffect;
@@ -89,6 +91,11 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public void DrawPrettyTrees()
         {
+            if (Globals.Terrain.HeightMapTexture == null)
+            { 
+                return;
+            }
+            
 
             Globals.MCContentManager.SaveBlendState();
 
@@ -109,6 +116,8 @@ namespace com.xexuxjy.magiccarpet.terrain
             effect.Parameters["Bones"].SetValue(m_bindingMatrices);
 
             effect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
+            effect.Parameters["HeightMapTexelWidth"].SetValue(Globals.Terrain.OneOverTextureWidth);
+            effect.Parameters["HeightMapTexture"].SetValue(Globals.Terrain.HeightMapTexture);
 
             // Draw trunks....
 
@@ -130,37 +139,48 @@ namespace com.xexuxjy.magiccarpet.terrain
                                                        m_simpleTree.TrunkMesh.NumberOfTriangles, m_treePositions.Count);
             }
 
-
-            // And leaves
-            effect.CurrentTechnique = effect.Techniques["LeafHardwareInstancing"];
-            effect.Parameters["LeafScale"].SetValue(0.1f);
-            effect.Parameters["Bones"].SetValue(m_bindingMatrices);
-
-            effect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
-
-            effect.Parameters["BillboardRight"].SetValue(Vector3.Right);
-            effect.Parameters["BillboardUp"].SetValue(Vector3.Up);
-
-
-            // Tell the GPU to read from both the model vertex buffer plus our instanceVertexBuffer.
-            Globals.GraphicsDevice.SetVertexBuffers(
-                new VertexBufferBinding(m_simpleTree.LeafCloud.VertexBuffer, 0, 0),
-                new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
-            );
-
-            Globals.GraphicsDevice.Indices = m_simpleTree.LeafCloud.IndexBuffer;
-
-            // Draw all the instance copies in a single call.
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            bool drawLeaves = false;
+            if (drawLeaves)
             {
-                pass.Apply();
+                // And leaves
+                effect.CurrentTechnique = effect.Techniques["LeafHardwareInstancing"];
+                effect.Parameters["LeafScale"].SetValue(0.1f);
+                effect.Parameters["Bones"].SetValue(m_bindingMatrices);
 
-                Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
-                                                       m_simpleTree.LeafCloud.NumberOfVertices, 0,
-                                                       m_simpleTree.LeafCloud.NumberOfTriangles, m_treePositions.Count);
+                effect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
+
+                effect.Parameters["BillboardRight"].SetValue(Vector3.Right);
+                effect.Parameters["BillboardUp"].SetValue(Vector3.Up);
+
+
+                // Tell the GPU to read from both the model vertex buffer plus our instanceVertexBuffer.
+                Globals.GraphicsDevice.SetVertexBuffers(
+                    new VertexBufferBinding(m_simpleTree.LeafCloud.VertexBuffer, 0, 0),
+                    new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
+                );
+
+                Globals.GraphicsDevice.Indices = m_simpleTree.LeafCloud.IndexBuffer;
+
+
+                try
+                {
+                    // Draw all the instance copies in a single call.
+                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+
+                        Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
+                                                               m_simpleTree.LeafCloud.NumberOfVertices, 0,
+                                                               m_simpleTree.LeafCloud.NumberOfTriangles, m_treePositions.Count);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    int ibreak = 0;                
+                }
+
             }
-
-
+            effect.Parameters["HeightMapTexture"].SetValue((Texture)null);
 
             Globals.MCContentManager.RestoreBlendState();
         }
@@ -172,7 +192,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void BuildTreeMap()
         {
             // Based on example by Reimer at http://www.riemers.net/eng/Tutorials/XNA/Csharp/Series4/Region_growing.php
-            int noiseTextureWidth = 32;
+            int noiseTextureWidth = 64;
 
             RenderTarget2D treeTarget = new RenderTarget2D(Globals.GraphicsDevice, noiseTextureWidth, noiseTextureWidth, false, SurfaceFormat.Color, DepthFormat.Depth16);
             PerlinNoiseGenerator.GeneratePerlinNoise(noiseTextureWidth, treeTarget);
@@ -230,8 +250,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                         {
                             //float rand1 = (float)Globals.s_random.Next(1000) / 1000.0f;
                             //float rand2 = (float)Globals.s_random.Next(1000) / 1000.0f;
-                            float rand1 = (float)Globals.s_random.NextDouble() * stepSize/2;
-                            float rand2 = (float)Globals.s_random.NextDouble() * stepSize / 2;
+                            float rand1 = (float)Globals.s_random.NextDouble() * stepSize;
+                            float rand2 = (float)Globals.s_random.NextDouble() * stepSize;
 
                             rand1 *= Globals.s_random.NextDouble() < 0.5 ? 1 : -1;
                             rand2 *= Globals.s_random.NextDouble() < 0.5 ? 1 : -1;
@@ -365,6 +385,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
         private Texture2D m_treeTexture;
+        private Texture2D m_heightMapTexture;
+
         private Effect m_terrainEffect;
         private Effect m_instanceTrunkEffect;
         private Effect m_instanceLeafEffect;

@@ -122,6 +122,19 @@ namespace com.xexuxjy.magiccarpet.manager
             return treeProfile.GenerateSimpleTree();
         }
 
+        public SimpleTree GetSimpleLowPolyTree(String sourceFile,int lod)
+        {
+            TreeProfile treeProfile = m_contentManager.Load<TreeProfile>("LTreeContent/Trees/" + sourceFile);
+            TreeSkeleton skeleton = treeProfile.Generator.GenerateTree(Globals.s_random);
+            TreeMesh treeMesh = new TreeMesh(Globals.GraphicsDevice,skeleton,lod);
+            SimpleTree simpleTree = new SimpleTree(Globals.GraphicsDevice,skeleton, treeMesh);
+            return simpleTree;
+            
+
+
+        }
+
+
 
         private void LoadModel(String modelKey, String path)
         {
