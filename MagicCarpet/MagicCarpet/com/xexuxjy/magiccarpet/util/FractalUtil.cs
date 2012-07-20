@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using com.xexuxjy.magiccarpet;
 
-namespace MagicCarpet.com.xexuxjy.magiccarpet.util
+namespace com.xexuxjy.magiccarpet.util
 {
     public static class FractalUtil
     {

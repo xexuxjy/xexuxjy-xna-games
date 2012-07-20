@@ -203,6 +203,7 @@ namespace com.xexuxjy.magiccarpet
         //public static ChaseCamera Camera;
         public static CameraComponent Camera;
         public static Terrain Terrain;
+        public static TreeManager TreeManager;
         public static IDebugDraw DebugDraw;
         public static CollisionManager CollisionManager;
         public static GameObjectManager GameObjectManager;

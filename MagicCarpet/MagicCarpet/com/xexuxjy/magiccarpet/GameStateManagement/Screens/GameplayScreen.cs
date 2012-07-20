@@ -115,8 +115,15 @@ namespace GameStateManagement
 
                 Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain, Vector3.Zero);
 
+
+
                 Globals.FlagManager = new FlagManager();
                 Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager, true);
+
+
+                Globals.TreeManager = new TreeManager();
+                Globals.GameObjectManager.AddAndInitializeObject(Globals.TreeManager, true);
+
 
                 Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
                 Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);

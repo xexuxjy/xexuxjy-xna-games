@@ -21,6 +21,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         skydome=512,
         gui=1024,
         manager = 2048,
+        treemanager = 4096,
         NUMTYPES
     }
 }

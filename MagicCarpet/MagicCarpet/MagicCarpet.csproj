@@ -214,6 +214,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainSquare.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObject.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\terrain\TreeManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\console\SimpleConsole.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugTextBuilder.cs" />
