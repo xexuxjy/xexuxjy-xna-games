@@ -50,6 +50,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="LTreeContent\Textures\WillowLeaf.png">
+      <Name>WillowLeaf</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Models\Balloon\Balloon.fbx">
       <Name>Balloon</Name>
       <Importer>FbxImporter</Importer>
@@ -448,11 +453,6 @@
     </Compile>
     <Compile Include="LTreeContent\Textures\PineLeaf.png">
       <Name>PineLeaf</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="LTreeContent\Textures\WillowLeaf.png">
-      <Name>WillowLeaf</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

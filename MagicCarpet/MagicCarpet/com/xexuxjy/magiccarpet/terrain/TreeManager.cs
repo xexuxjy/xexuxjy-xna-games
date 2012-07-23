@@ -10,6 +10,7 @@ using com.xexuxjy.magiccarpet.manager;
 using com.xexuxjy.magiccarpet.gameobjects;
 using com.xexuxjy.magiccarpet.renderer;
 using LTreesLibrary.Trees;
+using BulletXNA.LinearMath;
 
 namespace com.xexuxjy.magiccarpet.terrain
 {
@@ -25,16 +26,27 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             m_terrainEffect = Globals.MCContentManager.GetEffect("Terrain");
             m_treeTexture = Globals.MCContentManager.GetTexture("TreeBillboard");
-            BuildTreeMap();
-            CreateBillboardVerticesFromList(m_treePositions, out m_treeVertexBuffer);
-            BuildPrettyTrees();
+            List<Vector4> treePositions = new List<Vector4>();
+            BuildTreeMap(treePositions);
+            CreateBillboardVerticesFromList(treePositions, out m_treeVertexBuffer);
+            BuildPrettyTrees(treePositions);
 
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        // first pass brute force.
+        public override void Update(GameTime gameTime)
+        {
+        }
+
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         #region PrettyTrees
 
-        public void BuildPrettyTrees()
+        public void BuildPrettyTrees(List<Vector4> treePositions)
         {
             //m_simpleTree = Globals.MCContentManager.GetSimpleTree("Pine");
             m_simpleTree = Globals.MCContentManager.GetSimpleLowPolyTree("Pine",4); 
@@ -43,7 +55,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_simpleTree.TrunkEffect = m_instanceTrunkEffect;
             m_simpleTree.LeafEffect = m_instanceTrunkEffect;
 
-            m_instanceTreeMatrices = new Matrix[m_treePositions.Count];
+            //m_instanceTreeMatrices = new Matrix[m_treePositions.Count];
 
             BoundingSphere bs = m_simpleTree.TrunkMesh.BoundingSphere;
             float desiredSize = 3f;
@@ -61,7 +73,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
             int counter = 0;
-            foreach (Vector4 currentV4 in m_treePositions)
+            foreach (Vector4 currentV4 in treePositions)
             {
 
                 float scale2 = currentV4.W;// *(float)BulletGlobals.gRandom.NextDouble();
@@ -77,12 +89,15 @@ namespace com.xexuxjy.magiccarpet.terrain
                 Matrix resultMatrix = scaleMatrix * rotationMatrix;
                 resultMatrix.Translation = v;
 
-                m_instanceTreeMatrices[counter++] = resultMatrix;
+                TreeBounds treeBounds = new TreeBounds(resultMatrix);
+
+                m_treeBoundsQuadTree.AddObject(treeBounds);
+
             }
 
-            m_instanceVertexBuffer = new VertexBuffer(Globals.GraphicsDevice, s_instanceVertexDeclaration,
-                                                               m_instanceTreeMatrices.Length, BufferUsage.WriteOnly);
-            m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatrices, 0, m_instanceTreeMatrices.Length);
+            //m_instanceVertexBuffer = new DynamicVertexBuffer(Globals.GraphicsDevice, s_instanceVertexDeclaration,
+            //                                                   500, BufferUsage.WriteOnly);
+            //m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatrices, 0, m_instanceTreeMatrices.Length,SetDataOptions.Discard);
 
             //m_instanceVertexBuffer.SetData(0, m_instanceTreeMatrices, 0, m_instanceTreeMatrices.Length, s_instanceVertexDeclaration.VertexStride);
 
@@ -121,24 +136,64 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             // Draw trunks....
 
-            // Tell the GPU to read from both the model vertex buffer plus our instanceVertexBuffer.
-            Globals.GraphicsDevice.SetVertexBuffers(
-                new VertexBufferBinding(m_simpleTree.TrunkMesh.VertexBuffer, 0, 0),
-                new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
-            );
+            bool drawTrunks = true;
 
-            Globals.GraphicsDevice.Indices = m_simpleTree.TrunkMesh.IndexBuffer;
-
-            // Draw all the instance copies in a single call.
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            if (drawTrunks)
             {
-                pass.Apply();
+                float visibiltyDistance2 = 400;
 
-                Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
-                                                       m_simpleTree.TrunkMesh.NumberOfVertices, 0,
-                                                       m_simpleTree.TrunkMesh.NumberOfTriangles, m_treePositions.Count);
+                m_instanceTreeMatricesList.Clear();
+
+                List<QuadTree<TreeBounds>> activeBounds = m_treeBoundsQuadTree.GetLeavesInsideFrustrum(Globals.s_currentCameraFrustrum);
+                foreach (QuadTree<TreeBounds> quadTreeNode in activeBounds)
+                {
+                    foreach (TreeBounds treeBounds in quadTreeNode.Objects)
+                    {
+                        m_instanceTreeMatricesList.Add(treeBounds.m_matrix);
+                    }
+                }
+
+                if (m_instanceTreeMatricesList.Count > 0)
+                {
+
+                    // If we have more instances than room in our vertex buffer, grow it to the neccessary size.
+                    if ((m_instanceVertexBuffer == null) ||
+                        (m_instanceTreeMatricesList.Count > m_instanceVertexBuffer.VertexCount))
+                    {
+                        if (m_instanceVertexBuffer != null)
+                        {
+                            m_instanceVertexBuffer.Dispose();
+                        }
+
+                        m_instanceVertexBuffer = new DynamicVertexBuffer(Globals.GraphicsDevice, s_instanceVertexDeclaration,
+                                                                       m_instanceTreeMatricesList.Count, BufferUsage.WriteOnly);
+                    }
+
+
+                    // Tell the GPU to read from both the model vertex buffer plus our instanceVertexBuffer.
+                    Globals.GraphicsDevice.SetVertexBuffers(
+                        new VertexBufferBinding(m_simpleTree.TrunkMesh.VertexBuffer, 0, 0),
+                        new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
+                    );
+
+                    Globals.GraphicsDevice.Indices = m_simpleTree.TrunkMesh.IndexBuffer;
+
+                    
+                    m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatricesList.GetRawArray(), 0, m_instanceTreeMatricesList.Count, SetDataOptions.Discard);
+                    //m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatricesList.GetRawArray(), 0, 1, SetDataOptions.Discard);
+
+
+                    // Draw all the instance copies in a single call.
+                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+
+                        Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
+                                                               m_simpleTree.TrunkMesh.NumberOfVertices, 0,
+                                                               m_simpleTree.TrunkMesh.NumberOfTriangles, m_instanceTreeMatricesList.Count);
+                    }
+                }
             }
-
             bool drawLeaves = false;
             if (drawLeaves)
             {
@@ -171,7 +226,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
                                                                m_simpleTree.LeafCloud.NumberOfVertices, 0,
-                                                               m_simpleTree.LeafCloud.NumberOfTriangles, m_treePositions.Count);
+                                                               m_simpleTree.LeafCloud.NumberOfTriangles, m_instanceTreeMatricesList.Count);
                     }
                 }
                 catch (System.Exception ex)
@@ -189,7 +244,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         #region BillboardTrees
-        public void BuildTreeMap()
+        public void BuildTreeMap(List<Vector4> treePositions)
         {
             // Based on example by Reimer at http://www.riemers.net/eng/Tutorials/XNA/Csharp/Series4/Region_growing.php
             int noiseTextureWidth = 64;
@@ -263,7 +318,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                             Vector3 tempPos = new Vector3((float)x - rand1, height, (float)z - rand2);
                             tempPos -= halfWidth;
                             Vector4 treePos = new Vector4(tempPos, scale);
-                            m_treePositions.Add(treePos);
+                            treePositions.Add(treePos);
                         }
                     }
 
@@ -380,8 +435,9 @@ namespace com.xexuxjy.magiccarpet.terrain
 
 
         private SimpleTree m_simpleTree;
-        private List<Vector4> m_treePositions = new List<Vector4>();
-        private Matrix[] m_instanceTreeMatrices = null;
+        //private List<Vector4> m_treePositions = new List<Vector4>();
+        //private Matrix[] m_instanceTreeMatrices = null;
+        private ObjectArray<Matrix> m_instanceTreeMatricesList = new ObjectArray<Matrix>();
 
 
         private Texture2D m_treeTexture;
@@ -392,8 +448,39 @@ namespace com.xexuxjy.magiccarpet.terrain
         private Effect m_instanceLeafEffect;
 
         private VertexBuffer m_treeVertexBuffer;
-        private VertexBuffer m_instanceVertexBuffer;
+        private DynamicVertexBuffer m_instanceVertexBuffer;
         private Matrix[] m_bindingMatrices = new Matrix[4];
         private Quaternion[] m_bindingQuaternions = new Quaternion[4];
+
+        private QuadTree<TreeBounds> m_treeBoundsQuadTree = new QuadTree<TreeBounds>(4,Vector3.Zero,(Globals.worldMaxPos - Globals.worldMinPos)/2f);
+
+
+
+
     }
+        public class TreeBounds : ISpatialNode
+        {
+            public Matrix m_matrix = Matrix.Identity;
+
+            public TreeBounds(Matrix m)
+            {
+                m_matrix = m;
+            }
+
+            public Vector3 Position
+            {
+                get{return m_matrix.Translation;}
+            }
+
+            public BoundingSphere BoundSphere
+            {
+                // need to get scale?
+                get
+                {
+                    return new BoundingSphere(m_matrix.Translation,1f);
+                }
+            }
+                    
+
+        }
 }
