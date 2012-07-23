@@ -223,6 +223,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\util\MouseController.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\ObjectBuilderUtil.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\profile\SimpleProfiler.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\util\QuadTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
