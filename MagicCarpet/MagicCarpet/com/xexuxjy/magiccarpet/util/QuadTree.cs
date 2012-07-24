@@ -1,4 +1,4 @@
-﻿// This is taken from the sample at http://www.xnawiki.com/index.php/QuadTree  . many thanks.
+// This is taken from the sample at http://www.xnawiki.com/index.php/QuadTree  . many thanks.
 
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -222,6 +222,23 @@ public class QuadTree<T> where T : ISpatialNode
     /// <summary>
     /// Return a list of all QuadTree leaves that intersect the specified frustum
     /// </summary>
+	
+	public void FindObjectsInsideFrustrum(BoundingFrustum frustum,List<T> resultList)
+	{
+		List<QuadTree<T>> quadNodes = GetLeavesInsideFrustum(frustum);
+		foreach(QuadTree<T> node in quadNodes)
+		{
+			foreach(T obj in node.Objects)
+			{
+				resultList.Add(obj);
+			}
+		}
+	}
+
+
+
+
+
     public List<QuadTree<T>> GetLeavesInsideFrustrum(BoundingFrustum frustum)
     {
         leavesInsideBound.Clear();
@@ -250,6 +267,20 @@ public class QuadTree<T> where T : ISpatialNode
     /// <summary>
     /// Return a list of all QuadTree leaves that intersect the specified bounding sphere
     /// </summary>
+
+	public void FindObjectsInsideSphere(BoundingSphere sphere,List<T> resultList)
+	{
+		List<QuadTree<T>> quadNodes = GetLeavesInsideSphere(sphere);
+		foreach(QuadTree<T> node in quadNodes)
+		{
+			foreach(T obj in node.Objects)
+			{
+				resultList.Add(obj);
+			}
+		}
+	}
+
+
     public List<QuadTree<T>> GetLeavesInsideSphere(BoundingSphere sphere)
     {
         leavesInsideBound.Clear();
@@ -280,6 +311,20 @@ public class QuadTree<T> where T : ISpatialNode
     /// </summary>
     /// <typeparam name="innerSphere">Inner band edge</typeparam>
     /// <typeparam name="outerSphere">Outer band edge</typeparam>
+    
+	public void FindObjectsInsideSphereBand(BoundingSphere inner,BoundingSphere outer,List<T> resultList)
+	{
+		List<QuadTree<T>> quadNodes = GetLeavesInsideSphereBand(inner,outer);
+		foreach(QuadTree<T> node in quadNodes)
+		{
+			foreach(T obj in node.Objects)
+			{
+				resultList.Add(obj);
+			}
+		}
+	}
+
+    
     public List<QuadTree<T>> GetLeavesInsideSphereBand(BoundingSphere innerSphere, BoundingSphere outerSphere)
     {
         leavesInsideBound.Clear();
@@ -309,6 +354,19 @@ public class QuadTree<T> where T : ISpatialNode
     /// <summary>
     /// Return a list of all QuadTree leaves that intersect the specified bounding box
     /// </summary>
+
+	public void FindObjectsInsideBox(BoundingBox box,List<T> resultList)
+	{
+		List<QuadTree<T>> quadNodes = GetLeavesInsideBox(inner,outer);
+		foreach(QuadTree<T> node in quadNodes)
+		{
+			foreach(T obj in node.Objects)
+			{
+				resultList.Add(obj);
+			}
+		}
+	}
+
     public List<QuadTree<T>> GetLeavesInsideBox(BoundingBox box)
     {
         leavesInsideBound.Clear();
