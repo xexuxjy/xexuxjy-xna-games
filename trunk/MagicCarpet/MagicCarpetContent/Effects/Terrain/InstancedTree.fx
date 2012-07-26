@@ -26,6 +26,34 @@ uniform sampler ElevationSampler = sampler_state
     AddressV  = Clamp;
 };
 
+texture BillboardTreeTexture;
+uniform sampler BillboardTreeSampler = sampler_state
+{
+    Texture   = (BillboardTreeTexture);
+    MipFilter = None;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+
+
+struct BillboardTreeVertexShaderInput
+{
+    float4 pos  : POSITION0;
+    float2 uv	: TEXCOORD0;  // coordinates for normal-map lookup
+};
+
+struct BillboardTreeVertexShaderOutput
+{
+    vector pos        : POSITION;   
+    float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
+	float3 pos3d : TEXCOORD3;
+};
+
+
+
 
 Texture2D LeafTexture;
 float LeafScale = 0.1f;
@@ -192,6 +220,78 @@ float4 LeafPixelShaderFunctionBlendedEdges(LeafVertexShaderOutput input) : COLOR
 	return result;
 }
 
+
+BillboardTreeVertexShaderOutput BillboardTreeVertexShaderFunction(BillboardTreeVertexShaderInput input,float4x4 instanceTransform)
+{
+	BillboardTreeVertexShaderOutput output;
+
+	float scale = 1.0;
+
+    // compute coordinates for vertex texture
+    //  FineBlockOrig.xy: 1/(w, h) of texture (texelwidth)
+    float2 uv = float2(1,1);//float2(input.pos.x + WorldWidth/2,input.pos.z+WorldWidth/2) * HeightMapTexelWidth;
+
+
+	float height = 0;//ComputeHeight(uv);
+
+	/*
+	float3 adjustedPos = float3(input.pos.x,input.pos.y + height,input.pos.z);
+
+	float4 worldPosition = mul(float4(adjustedPos, 1), instanceTransform);
+    float4 viewPosition = mul(worldPosition, ViewMatrix);
+    output.pos = mul(viewPosition, ProjMatrix);
+	*/
+
+
+	float3 center = mul(input.pos, instanceTransform);
+    float3 eyeVector = center - CameraPosition;
+
+    float3 upVector = float3(0,1,0);
+    upVector = normalize(upVector);
+    float3 sideVector = cross(eyeVector,upVector);
+    sideVector = normalize(sideVector);
+
+    float3 finalPosition = center;
+    finalPosition += (input.uv.x-0.5f)*sideVector;
+    finalPosition += (1.5f-input.uv.y*1.5f)*upVector;
+
+    float4 finalPosition4 = float4(finalPosition, 1);
+    float4 viewPosition = mul(finalPosition4, ViewMatrix);
+    output.pos = mul(viewPosition, ProjMatrix);
+
+
+	output.pos3d = output.pos;
+    output.uv= input.uv;
+
+    return output;
+}
+
+
+float4 BillboardTreePixelShaderFunction(BillboardTreeVertexShaderOutput input) : COLOR0
+{
+	float4 result = float4(1,0,0,0);//tex2D(BillboardTreeSampler, input.uv);
+	// Make sure tree's vanish in the mist as well.
+/*
+	float fogFactor = ComputeFogFactor(input.pos3d);
+	float4 result2;
+	result2.rgb = lerp(result.rgb,FogColor,fogFactor);
+	result2.a = result.a;
+
+	clip(result.w - 0.7843f);
+*/
+    return result;
+}
+
+
+BillboardTreeVertexShaderOutput BillboardHardwareInstancingTreeVertexShaderFunction(BillboardTreeVertexShaderInput input,
+                                                  float4x4 instanceTransform : BLENDWEIGHT)
+{
+    return BillboardTreeVertexShaderFunction(input, mul(WorldMatrix, transpose(instanceTransform)));
+}
+
+
+
+
 technique LeafHardwareInstancing
 {
     pass Opaque
@@ -239,4 +339,15 @@ technique TrunkHardwareInstancing
         VertexShader = compile vs_3_0 TrunkHardwareInstancingVertexShader();
         PixelShader = compile ps_3_0 TrunkPixelShaderFunction();
     }
+}
+
+
+technique BillboardTrees
+{
+    pass Pass1
+    {
+        VertexShader = compile vs_3_0 BillboardHardwareInstancingTreeVertexShaderFunction();
+        PixelShader = compile ps_3_0 BillboardTreePixelShaderFunction();
+    }
+
 }
