@@ -24,13 +24,12 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
-            m_terrainEffect = Globals.MCContentManager.GetEffect("Terrain");
+            m_billboardTreeEffect = Globals.MCContentManager.GetEffect("InstancedTree");
             m_treeTexture = Globals.MCContentManager.GetTexture("TreeBillboard");
             List<Vector4> treePositions = new List<Vector4>();
             BuildTreeMap(treePositions);
-            CreateBillboardVerticesFromList(treePositions, out m_treeVertexBuffer);
             BuildPrettyTrees(treePositions);
-
+            BuildBillboardTrees();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,10 +37,13 @@ namespace com.xexuxjy.magiccarpet.terrain
         // first pass brute force.
         public override void Update(GameTime gameTime)
         {
+            Matrix m = Matrix.CreatePerspective(4, 3, m_nearPrettyPlane, m_farPrettyPlane);
+
+            m_prettyFrustum.Matrix = Globals.Camera.ViewMatrix * m;
+
+            m = m = Matrix.CreatePerspective(4, 3, m_farPrettyPlane+1, m_farBillBoardPlane);
+            m_billboardFrustum.Matrix = Globals.Camera.ViewMatrix * m;
         }
-
-
-
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         #region PrettyTrees
@@ -75,7 +77,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             int counter = 0;
             foreach (Vector4 currentV4 in treePositions)
             {
-
                 float scale2 = currentV4.W;// *(float)BulletGlobals.gRandom.NextDouble();
 
                 Vector3 v = new Vector3(currentV4.X, currentV4.Y, currentV4.Z);
@@ -92,14 +93,63 @@ namespace com.xexuxjy.magiccarpet.terrain
                 TreeBounds treeBounds = new TreeBounds(resultMatrix);
 
                 m_treeBoundsQuadTree.AddObject(treeBounds);
-
             }
 
-            //m_instanceVertexBuffer = new DynamicVertexBuffer(Globals.GraphicsDevice, s_instanceVertexDeclaration,
-            //                                                   500, BufferUsage.WriteOnly);
-            //m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatrices, 0, m_instanceTreeMatrices.Length,SetDataOptions.Discard);
+        }
 
-            //m_instanceVertexBuffer.SetData(0, m_instanceTreeMatrices, 0, m_instanceTreeMatrices.Length, s_instanceVertexDeclaration.VertexStride);
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void DrawInstanced(BoundingFrustum frustum,VertexBuffer vertexBuffer,IndexBuffer indexBuffer,Effect effect,int numVertices,int numTriangles)
+        {
+
+            m_instanceTreeMatricesList.Clear();
+
+            m_activeBoundsList.Clear();
+            m_treeBoundsQuadTree.FindObjectsInsideFrustum(frustum, m_activeBoundsList);
+            foreach (TreeBounds treeBounds in m_activeBoundsList)
+            {
+                m_instanceTreeMatricesList.Add(treeBounds.m_matrix);
+            }
+
+            if (m_instanceTreeMatricesList.Count > 0)
+            {
+
+                // If we have more instances than room in our vertex buffer, grow it to the neccessary size.
+                if ((m_instanceVertexBuffer == null) ||
+                    (m_instanceTreeMatricesList.Count > m_instanceVertexBuffer.VertexCount))
+                {
+                    if (m_instanceVertexBuffer != null)
+                    {
+                        m_instanceVertexBuffer.Dispose();
+                    }
+
+                    m_instanceVertexBuffer = new DynamicVertexBuffer(Globals.GraphicsDevice, s_instanceVertexDeclaration,
+                                                                   m_instanceTreeMatricesList.Count, BufferUsage.WriteOnly);
+                }
+
+
+                // Tell the GPU to read from both the model vertex buffer plus our instanceVertexBuffer.
+                Globals.GraphicsDevice.SetVertexBuffers(
+                    new VertexBufferBinding(vertexBuffer, 0, 0),
+                    new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
+                );
+
+                Globals.GraphicsDevice.Indices = indexBuffer;
+
+
+                m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatricesList.GetRawArray(), 0, m_instanceTreeMatricesList.Count, SetDataOptions.Discard);
+
+
+                // Draw all the instance copies in a single call.
+                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+
+                    Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
+                                                           numVertices, 0,
+                                                           numTriangles, m_instanceTreeMatricesList.Count);
+                }
+            }
 
         }
 
@@ -140,59 +190,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             if (drawTrunks)
             {
-                float visibiltyDistance2 = 400;
-
-                m_instanceTreeMatricesList.Clear();
-
-                List<QuadTree<TreeBounds>> activeBounds = m_treeBoundsQuadTree.GetLeavesInsideFrustrum(Globals.s_currentCameraFrustrum);
-                foreach (QuadTree<TreeBounds> quadTreeNode in activeBounds)
-                {
-                    foreach (TreeBounds treeBounds in quadTreeNode.Objects)
-                    {
-                        m_instanceTreeMatricesList.Add(treeBounds.m_matrix);
-                    }
-                }
-
-                if (m_instanceTreeMatricesList.Count > 0)
-                {
-
-                    // If we have more instances than room in our vertex buffer, grow it to the neccessary size.
-                    if ((m_instanceVertexBuffer == null) ||
-                        (m_instanceTreeMatricesList.Count > m_instanceVertexBuffer.VertexCount))
-                    {
-                        if (m_instanceVertexBuffer != null)
-                        {
-                            m_instanceVertexBuffer.Dispose();
-                        }
-
-                        m_instanceVertexBuffer = new DynamicVertexBuffer(Globals.GraphicsDevice, s_instanceVertexDeclaration,
-                                                                       m_instanceTreeMatricesList.Count, BufferUsage.WriteOnly);
-                    }
-
-
-                    // Tell the GPU to read from both the model vertex buffer plus our instanceVertexBuffer.
-                    Globals.GraphicsDevice.SetVertexBuffers(
-                        new VertexBufferBinding(m_simpleTree.TrunkMesh.VertexBuffer, 0, 0),
-                        new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
-                    );
-
-                    Globals.GraphicsDevice.Indices = m_simpleTree.TrunkMesh.IndexBuffer;
-
-                    
-                    m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatricesList.GetRawArray(), 0, m_instanceTreeMatricesList.Count, SetDataOptions.Discard);
-                    //m_instanceVertexBuffer.SetData<Matrix>(m_instanceTreeMatricesList.GetRawArray(), 0, 1, SetDataOptions.Discard);
-
-
-                    // Draw all the instance copies in a single call.
-                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-                    {
-                        pass.Apply();
-
-                        Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
-                                                               m_simpleTree.TrunkMesh.NumberOfVertices, 0,
-                                                               m_simpleTree.TrunkMesh.NumberOfTriangles, m_instanceTreeMatricesList.Count);
-                    }
-                }
+                DrawInstanced(m_prettyFrustum, m_simpleTree.TrunkMesh.VertexBuffer, m_simpleTree.TrunkMesh.IndexBuffer, m_simpleTree.TrunkEffect,
+                    m_simpleTree.TrunkMesh.NumberOfVertices, m_simpleTree.TrunkMesh.NumberOfTriangles);
             }
             bool drawLeaves = false;
             if (drawLeaves)
@@ -247,7 +246,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         public void BuildTreeMap(List<Vector4> treePositions)
         {
             // Based on example by Reimer at http://www.riemers.net/eng/Tutorials/XNA/Csharp/Series4/Region_growing.php
-            int noiseTextureWidth = 64;
+            int noiseTextureWidth = 256;
 
             RenderTarget2D treeTarget = new RenderTarget2D(Globals.GraphicsDevice, noiseTextureWidth, noiseTextureWidth, false, SurfaceFormat.Color, DepthFormat.Depth16);
             PerlinNoiseGenerator.GeneratePerlinNoise(noiseTextureWidth, treeTarget);
@@ -303,8 +302,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                         for (int currDetail = 0; currDetail < treeDensity; currDetail++)
                         {
-                            //float rand1 = (float)Globals.s_random.Next(1000) / 1000.0f;
-                            //float rand2 = (float)Globals.s_random.Next(1000) / 1000.0f;
                             float rand1 = (float)Globals.s_random.NextDouble() * stepSize;
                             float rand2 = (float)Globals.s_random.NextDouble() * stepSize;
 
@@ -329,7 +326,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        public void CreateBillboardVerticesFromList(List<Vector4> list, out VertexBuffer vertexBuffer)
+        public void BuildBillboardTrees()
         {
             int i = 0;
 
@@ -338,87 +335,58 @@ namespace com.xexuxjy.magiccarpet.terrain
             // rotate through half to get a checkboard.
             //Matrix rotation = Matrix.CreateRotationY(MathUtil.SIMD_PI);
 
-
-            int numIterations = 3;
+            int numIterations = 1;
             float stepSize = MathUtil.SIMD_2_PI / numIterations;
 
-            VertexPositionScaleTexture[] billboardVertices = new VertexPositionScaleTexture[list.Count * 6 * numIterations];
+            VertexPositionTexture[] billboardVertices = new VertexPositionTexture[4];
+            Vector3 left = new Vector3(-width, 0, 0);
+            Vector3 right = new Vector3(width, 0, 0);
+            Vector3 baseUp = new Vector3(0, height, 0);
 
-            foreach (Vector4 currentV4 in list)
-            {
-                Vector3 left = new Vector3(-width, 0, 0);
-                Vector3 right = new Vector3(width, 0, 0);
-                Vector3 baseUp = new Vector3(0, height, 0);
+            Matrix rotation = Matrix.Identity;
+            float scale = 1f;
 
-                float scale2 = currentV4.W * (float)BulletGlobals.gRandom.NextDouble();
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left, rotation), new Vector2(0, 1));
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right, rotation), new Vector2(1, 1));
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right + baseUp, rotation), new Vector2(1, 0));
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left + baseUp, rotation), new Vector2(0, 0));
 
-                left *= scale2;
-                right *= scale2;
-                Vector3 v = new Vector3(currentV4.X, currentV4.Y, currentV4.Z);
-                float scale = currentV4.W;
-                Vector3 up = baseUp * scale;
+            short[] indices = new short[] { 0, 1, 2, 2, 3, 0 };
 
+            m_billboardVertexBuffer  = new VertexBuffer(Globals.GraphicsDevice, VertexPositionTexture.VertexDeclaration, billboardVertices.Length, BufferUsage.WriteOnly);
+            m_billboardVertexBuffer.SetData<VertexPositionTexture>(billboardVertices);
 
-                // pick a random rotation for each tree as a base...
+            m_billboardIndexBuffer = new IndexBuffer(Globals.GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
+            m_billboardIndexBuffer.SetData<short>(indices);
 
-                float baseAngle = MathUtil.SIMD_2_PI * (float)Globals.s_random.NextDouble();
-
-
-                // FIXME - update this to allow multiple textures to provide a more interesting looking tree..
-
-
-
-                for (int j = 0; j < numIterations; ++j)
-                {
-                    Matrix rotation = Matrix.CreateRotationY(baseAngle + (j * stepSize));
-
-                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
-                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right, rotation), scale, new Vector2(1, 1));
-                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right + up, rotation), scale, new Vector2(1, 0));
-
-                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(right + up, rotation), scale, new Vector2(1, 0));
-                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left + up, rotation), scale, new Vector2(0, 0));
-                    billboardVertices[i++] = new VertexPositionScaleTexture(v + Vector3.TransformNormal(left, rotation), scale, new Vector2(0, 1));
-                }
-            }
-
-            vertexBuffer = new VertexBuffer(Globals.GraphicsDevice, VertexPositionScaleTexture.VertexDeclaration, billboardVertices.Length, BufferUsage.WriteOnly);
-            vertexBuffer.SetData(billboardVertices);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
         public override void Draw(GameTime gameTime)
         {
-            //   DrawTrees();
-            DrawPrettyTrees();
+            DrawBillboardTrees();
+            //DrawPrettyTrees();
         }
 
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void DrawTrees()
+        public void DrawBillboardTrees()
         {
-            m_terrainEffect.CurrentTechnique = m_terrainEffect.Techniques["BillboardTrees"];
-            Globals.GraphicsDevice.SetVertexBuffer(m_treeVertexBuffer);
+            m_billboardTreeEffect.CurrentTechnique = m_billboardTreeEffect.Techniques["BillboardTrees"];
 
+            Matrix transform = Matrix.Identity;
+            Globals.MCContentManager.ApplyCommonEffectParameters(m_billboardTreeEffect);
 
-            Vector3 startPosition = Vector3.Zero;
-            Matrix transform = Matrix.CreateTranslation(startPosition);
-            Globals.MCContentManager.ApplyCommonEffectParameters(m_terrainEffect);
+            m_billboardTreeEffect.Parameters["WorldMatrix"].SetValue(transform);
+            m_billboardTreeEffect.Parameters["BillboardTreeTexture"].SetValue(m_treeTexture);
+            m_billboardTreeEffect.Parameters["HeightMapTexelWidth"].SetValue(Globals.Terrain.OneOverTextureWidth);
+            m_billboardTreeEffect.Parameters["HeightMapTexture"].SetValue(Globals.Terrain.HeightMapTexture);
 
-            m_terrainEffect.Parameters["WorldMatrix"].SetValue(transform);
-            m_terrainEffect.Parameters["TreeTexture"].SetValue(m_treeTexture);
+            DrawInstanced(m_billboardFrustum, m_billboardVertexBuffer, m_billboardIndexBuffer, m_billboardTreeEffect, 4, 2);
 
-
-            foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
-            {
-                int noVertices = m_treeVertexBuffer.VertexCount;
-                int noTriangles = noVertices / 3;
-                pass.Apply();
-                Globals.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, noTriangles);
-            }
         }
         #endregion
 
@@ -438,12 +406,20 @@ namespace com.xexuxjy.magiccarpet.terrain
         //private List<Vector4> m_treePositions = new List<Vector4>();
         //private Matrix[] m_instanceTreeMatrices = null;
         private ObjectArray<Matrix> m_instanceTreeMatricesList = new ObjectArray<Matrix>();
+        private List<TreeBounds> m_activeBoundsList = new List<TreeBounds>();
+        private float m_nearPrettyPlane = 1;
+        private float m_farPrettyPlane = 20;
+        private float m_farBillBoardPlane = 300;
+
+        private BoundingFrustum m_prettyFrustum = new BoundingFrustum(Matrix.Identity);
+        private BoundingFrustum m_billboardFrustum= new BoundingFrustum(Matrix.Identity);
+
 
 
         private Texture2D m_treeTexture;
         private Texture2D m_heightMapTexture;
 
-        private Effect m_terrainEffect;
+        private Effect m_billboardTreeEffect;
         private Effect m_instanceTrunkEffect;
         private Effect m_instanceLeafEffect;
 
@@ -451,6 +427,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         private DynamicVertexBuffer m_instanceVertexBuffer;
         private Matrix[] m_bindingMatrices = new Matrix[4];
         private Quaternion[] m_bindingQuaternions = new Quaternion[4];
+        private VertexBuffer m_billboardVertexBuffer;
+        private IndexBuffer m_billboardIndexBuffer;
+
 
         private QuadTree<TreeBounds> m_treeBoundsQuadTree = new QuadTree<TreeBounds>(4,Vector3.Zero,(Globals.worldMaxPos - Globals.worldMinPos)/2f);
 

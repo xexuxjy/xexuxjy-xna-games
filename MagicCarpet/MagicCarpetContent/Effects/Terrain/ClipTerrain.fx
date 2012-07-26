@@ -35,20 +35,6 @@ struct VertexShaderOutput
 };
 
 
-struct TreeVertexShaderInput
-{
-    float3 pos  : POSITION;
-	float scale : TEXCOORD0;   
-    float2 uv	: TEXCOORD1;  // coordinates for normal-map lookup
-};
-
-struct TreeVertexShaderOutput
-{
-    vector pos        : POSITION;   
-    float2 uv         : TEXCOORD0;  // coordinates for normal-map lookup
-	float3 pos3d : TEXCOORD3;
-};
-
 /*
 struct WallVertexShaderInput
 {
@@ -114,15 +100,6 @@ uniform sampler NormalMapSamplerPS = sampler_state
     AddressV  = Clamp;
 };
 
-uniform sampler TreeSampler = sampler_state
-{
-    Texture   = (TreeTexture);
-    MipFilter = None;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
 
 float ComputeHeight(float2 uv:TEXCOORD0)
 {
@@ -212,50 +189,6 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 }
 
 
-// Vertex shader for rendering the geometry clipmap
-TreeVertexShaderOutput TreeVertexShaderFunction(TreeVertexShaderInput input)
-{
-	TreeVertexShaderOutput output;
-	float3 worldPos = input.pos;
-	float2 worldPos2 = float2(input.pos.x,input.pos.z);
-	float scale = input.scale;
-
-    // compute coordinates for vertex texture
-    //  FineBlockOrig.xy: 1/(w, h) of texture (texelwidth)
-    float2 uv = float2(worldPos.x + WorldWidth/2,worldPos.z+WorldWidth/2) * FineTextureBlockOrigin.x;
-
-	float height = ComputeHeight(uv);
-
-	float3 adjustedPos = float3(worldPos.x,worldPos.y + height,worldPos.z);
-
-	float4 worldPosition = mul(float4(adjustedPos, 1), WorldMatrix);
-    float4 viewPosition = mul(worldPosition, ViewMatrix);
-    output.pos = mul(viewPosition, ProjMatrix);
-
-	output.pos3d = output.pos;
-    output.uv= input.uv;
-
-    return output;
-}
-
-
-
-
-float4 TreePixelShaderFunction(TreeVertexShaderOutput input) : COLOR0
-{
-	float4 result = tex2D(TreeSampler, input.uv);
-	// Make sure tree's vanish in the mist as well.
-
-	float fogFactor = ComputeFogFactor(input.pos3d);
-	float4 result2;
-	result2.rgb = lerp(result.rgb,FogColor,fogFactor);
-	result2.a = result.a;
-
-
-	clip(result.w - 0.7843f);
-
-    return result;
-}
 
 WallVertexShaderOutput WallVertexShaderFunction(WallVertexShaderInput input)
 {
@@ -287,17 +220,6 @@ technique TileTerrain
         VertexShader = compile vs_3_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 PixelShaderFunction();
     }
-}
-
-
-technique BillboardTrees
-{
-    pass Pass1
-    {
-        VertexShader = compile vs_3_0 TreeVertexShaderFunction();
-        PixelShader = compile ps_3_0 TreePixelShaderFunction();
-    }
-
 }
 
 technique TerrainWall

@@ -1,4 +1,4 @@
-// This is taken from the sample at http://www.xnawiki.com/index.php/QuadTree  . many thanks.
+﻿// This is taken from the sample at http://www.xnawiki.com/index.php/QuadTree  . many thanks.
 
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -223,7 +223,7 @@ public class QuadTree<T> where T : ISpatialNode
     /// Return a list of all QuadTree leaves that intersect the specified frustum
     /// </summary>
 	
-	public void FindObjectsInsideFrustrum(BoundingFrustum frustum,List<T> resultList)
+	public void FindObjectsInsideFrustum(BoundingFrustum frustum,List<T> resultList)
 	{
 		List<QuadTree<T>> quadNodes = GetLeavesInsideFrustum(frustum);
 		foreach(QuadTree<T> node in quadNodes)
@@ -239,27 +239,30 @@ public class QuadTree<T> where T : ISpatialNode
 
 
 
-    public List<QuadTree<T>> GetLeavesInsideFrustrum(BoundingFrustum frustum)
+    public List<QuadTree<T>> GetLeavesInsideFrustum(BoundingFrustum frustum)
     {
         leavesInsideBound.Clear();
-        AddLeavesInsideFrustrum(frustum);
+        AddLeavesInsideFrustum(frustum);
         return leavesInsideBound;
     }
 
-    void AddLeavesInsideFrustrum(BoundingFrustum frustum)
+    void AddLeavesInsideFrustum(BoundingFrustum frustum)
     {
         if (frustum.Contains(BoundingBox) != ContainmentType.Disjoint)
         {
-            if (TopLeft == null && Objects.Count > 0)
+            if (TopLeft == null)
             {
-                leavesInsideBound.Add(this);
+                if (Objects.Count > 0)
+                {
+                    leavesInsideBound.Add(this);
+                }
             }
             else
             {
-                TopLeft.AddLeavesInsideFrustrum(frustum);
-                TopRight.AddLeavesInsideFrustrum(frustum);
-                BottomLeft.AddLeavesInsideFrustrum(frustum);
-                BottomRight.AddLeavesInsideFrustrum(frustum);
+                TopLeft.AddLeavesInsideFrustum(frustum);
+                TopRight.AddLeavesInsideFrustum(frustum);
+                BottomLeft.AddLeavesInsideFrustum(frustum);
+                BottomRight.AddLeavesInsideFrustum(frustum);
             }
         }
     }
@@ -357,7 +360,7 @@ public class QuadTree<T> where T : ISpatialNode
 
 	public void FindObjectsInsideBox(BoundingBox box,List<T> resultList)
 	{
-		List<QuadTree<T>> quadNodes = GetLeavesInsideBox(inner,outer);
+		List<QuadTree<T>> quadNodes = GetLeavesInsideBox(box);
 		foreach(QuadTree<T> node in quadNodes)
 		{
 			foreach(T obj in node.Objects)
