@@ -43,6 +43,15 @@ uniform sampler BillboardTreeSampler = sampler_state
     AddressV  = Clamp;
 };
 
+sampler TrunkTextureSampler = sampler_state
+{
+	Texture = (Texture);
+	AddressU = Wrap;
+	AddressV = Wrap;
+	AddressW = Wrap;
+	MinFilter = Anisotropic;
+	MagFilter = Anisotropic;
+};
 
 
 struct BillboardTreeVertexShaderInput
@@ -127,8 +136,10 @@ TrunkVertexShaderOutput TrunkVertexShaderFunction(TrunkVertexShaderInput input, 
     float4 viewPosition = mul(worldPosition, ViewMatrix);
     output.pos = mul(viewPosition, ProjMatrix);
 	output.uv = input.uv;
-	output.pos3d = input.pos;
-	output.normal = mul(input.normal,instanceTransform);
+	output.pos3d = worldPosition;//input.pos;
+	
+	float3 normal = mul(input.normal, Bones[input.BoneIndex.x]);
+	output.normal = normalize(mul(normal,instanceTransform));
 
     return output;
 }
@@ -136,7 +147,7 @@ TrunkVertexShaderOutput TrunkVertexShaderFunction(TrunkVertexShaderInput input, 
 float4 TrunkPixelShaderFunction(TrunkVertexShaderOutput input) : COLOR0
 {
     // TODO: add your pixel shader code here.
-	float4 result = tex2D(TextureSampler, input.uv);
+	float4 result = tex2D(TrunkTextureSampler, input.uv);
 
 	// lighting
 	float3 lightDir = LightDirection;
@@ -146,6 +157,8 @@ float4 TrunkPixelShaderFunction(TrunkVertexShaderOutput input) : COLOR0
 
 	float3 directionalComponent = DirectionalLightColor * DirectionalLightIntensity * dotResult;
 	float4 light = float4(directionalComponent + (AmbientLightColor * AmbientLightIntensity),1);
+
+	//light = float4(1,1,1,1);
 
 	result *= light;
 	
