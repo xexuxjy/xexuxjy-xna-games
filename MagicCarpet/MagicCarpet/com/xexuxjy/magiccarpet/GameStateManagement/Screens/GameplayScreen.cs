@@ -238,22 +238,29 @@ namespace GameStateManagement
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            m_drawCalls++;
-            ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
-            base.Draw(gameTime);
-
-            // reset the blendstats as spritebatch probably trashed them.
-            Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
-            Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            Globals.GameObjectManager.Draw(gameTime);
-
-            // If the game is transitioning on or off, fade it out to black.
-            if (TransitionPosition > 0 || pauseAlpha > 0)
+            try
             {
-                float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
+                m_drawCalls++;
+                ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+                base.Draw(gameTime);
 
-                ScreenManager.FadeBackBufferToBlack(alpha);
+                // reset the blendstats as spritebatch probably trashed them.
+                Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
+                Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+                Globals.GameObjectManager.Draw(gameTime);
+
+                // If the game is transitioning on or off, fade it out to black.
+                if (TransitionPosition > 0 || pauseAlpha > 0)
+                {
+                    float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
+
+                    ScreenManager.FadeBackBufferToBlack(alpha);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                int ibreak = 0;            	
             }
         }
 

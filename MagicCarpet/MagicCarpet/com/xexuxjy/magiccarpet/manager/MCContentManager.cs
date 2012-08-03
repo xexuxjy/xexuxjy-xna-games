@@ -119,7 +119,7 @@ namespace com.xexuxjy.magiccarpet.manager
         public SimpleTree GetSimpleTree(String sourceFile)
         {
             TreeProfile treeProfile = m_contentManager.Load<TreeProfile>("LTreeContent/Trees/"+sourceFile);
-            return treeProfile.GenerateSimpleTree();
+            return treeProfile.GenerateSimpleTree(Globals.s_random);
         }
 
         public SimpleTree GetSimpleLowPolyTree(String sourceFile,int lod)

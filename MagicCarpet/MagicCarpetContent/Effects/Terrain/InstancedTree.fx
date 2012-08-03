@@ -9,6 +9,12 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+// 1 means we should only accept opaque pixels.
+// -1 means only accept transparent pixels.
+float AlphaTestDirection = 1;
+float AlphaTestThreshold = 0.95;
+
+
 // Should be:  InverseReferenceFrame * AbsoluteBoneTransform
 #define MAXBONES 20
 float4x4 Bones[MAXBONES];
@@ -56,7 +62,7 @@ struct BillboardTreeVertexShaderOutput
 
 
 Texture2D LeafTexture;
-float LeafScale = 0.1f;
+float LeafScale = 1.0f;
 
 float3 BillboardRight = float3(1,0,0);	// The billboard's right direction in view space
 float3 BillboardUp = float3(0,1,0);		// The billboard's up direction in view space
@@ -111,7 +117,7 @@ TrunkVertexShaderOutput TrunkVertexShaderFunction(TrunkVertexShaderInput input, 
     float2 uv = float2(input.pos.x + WorldWidth/2,input.pos.z+WorldWidth/2) * HeightMapTexelWidth;
 
 	float4 posCopy = input.pos;
-	float height = tex2Dlod(ElevationSampler, float4(uv, 0, 1));
+	float height = 0;//tex2Dlod(ElevationSampler, float4(uv, 0, 1));
 	height = 0;
 
 	posCopy.y += height;
@@ -173,7 +179,10 @@ LeafVertexShaderOutput LeafVertexShaderFunction(LeafVertexShaderInput input,
 	float4 localPosition = mul(input.pos, Bones[input.BoneIndex.x]);
     float4 worldPosition = mul(localPosition, instanceTransform);
     float4 viewPosition = mul(worldPosition, ViewMatrix);
-    viewPosition.xyz += (input.Offset.x * BillboardRight + input.Offset.y * BillboardUp) * LeafScale;
+
+	float leafLen = length(instanceTransform[0].xyz);
+
+    viewPosition.xyz += (input.Offset.x * BillboardRight + input.Offset.y * BillboardUp) * LeafScale * leafLen;
 
     output.pos = mul(viewPosition, ProjMatrix);
 	output.uv = input.uv;
@@ -196,6 +205,7 @@ float4 LeafPixelShaderFunction(LeafVertexShaderOutput input) : COLOR0
 {
 	// we use a larger mipmap for the alpha channel so the leaves don't look transparent
     return float4(input.Color * tex2D(LeafTextureSampler, input.uv).rgb, tex2Dbias(LeafTextureSampler, float4(input.uv.xy, 1, -1)).a);
+	
 }
 
 float4 LeafPixelShaderFunctionOpaque(LeafVertexShaderOutput input) : COLOR0
@@ -269,7 +279,10 @@ BillboardTreeVertexShaderOutput BillboardTreeVertexShaderFunction(BillboardTreeV
 
 float4 BillboardTreePixelShaderFunction(BillboardTreeVertexShaderOutput input) : COLOR0
 {
-	float4 result = float4(1,0,0,0);//tex2D(BillboardTreeSampler, input.uv);
+	float4 color = tex2D(BillboardTreeSampler, input.uv);
+    // Apply the alpha test.
+    clip((color.a - AlphaTestThreshold) * AlphaTestDirection);
+
 	// Make sure tree's vanish in the mist as well.
 /*
 	float fogFactor = ComputeFogFactor(input.pos3d);
@@ -279,7 +292,9 @@ float4 BillboardTreePixelShaderFunction(BillboardTreeVertexShaderOutput input) :
 
 	clip(result.w - 0.7843f);
 */
-    return result;
+	//color = float4(1,0,0,0);
+
+    return color;
 }
 
 
