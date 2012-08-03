@@ -61,8 +61,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             m_simpleTree.TrunkEffect = m_instanceTrunkEffect;
             m_simpleTree.LeafEffect = m_instanceTrunkEffect;
 
-
-
             BoundingSphere bs = BoundingSphere.CreateMerged(m_simpleTree.TrunkMesh.BoundingSphere,m_simpleTree.LeafCloud.BoundingSphere);
             
             float desiredSize = m_billboardHeight;
@@ -291,18 +289,23 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             m_billboardIndexBuffer = new IndexBuffer(Globals.GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
             m_billboardIndexBuffer.SetData<short>(indices);
+        }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void BuildBillboardTreeTexture()
+        {
             int textureWidth = 256;
             int textureHeight = 512;
 
-            //m_billboardTreeRenderTarget = new RenderTarget2D(Globals.GraphicsDevice, textureWidth, textureHeight, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 4, RenderTargetUsage.PreserveContents);
-            m_billboardTreeRenderTarget = new RenderTarget2D(Globals.GraphicsDevice, textureWidth, textureHeight, true, SurfaceFormat.Color, DepthFormat.None);
-            // render our simple tree to the target?
+            if (m_billboardTreeRenderTarget == null)
+            {
+                m_billboardTreeRenderTarget = new RenderTarget2D(Globals.GraphicsDevice, textureWidth, textureHeight, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 4, RenderTargetUsage.PreserveContents);
+            }
+
 
             Globals.GraphicsDevice.SetRenderTarget(m_billboardTreeRenderTarget);
             Globals.GraphicsDevice.Clear(Color.Transparent);
-
 
             BoundingSphere bs = BoundingSphere.CreateMerged(m_simpleTree.TrunkMesh.BoundingSphere, m_simpleTree.LeafCloud.BoundingSphere);
             float desiredSize = m_billboardHeight;
@@ -313,23 +316,23 @@ namespace com.xexuxjy.magiccarpet.terrain
             Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_HALF_PI, 1f, 0.1f, 1000f);
             Vector3 offset = Vector3.Forward * (float)Math.Sin(MathUtil.SIMD_HALF_PI) * (m_billboardHeight * 0.5f);
 
-            Vector3 scaledCenter = new Vector3(0,desiredSize,0) * 0.5f;
+            Vector3 scaledCenter = new Vector3(0, desiredSize, 0) * 0.5f;
 
             Matrix view = Matrix.CreateLookAt(scaledCenter + offset, scaledCenter, Vector3.Up);
 
-            DrawSingleTree(projection,view,scaled, m_simpleTree, true, true);
+            DrawSingleTree(projection, view, scaled, m_simpleTree, true, true);
+
+            Globals.GraphicsDevice.SetRenderTarget(null);
 
             m_treeTexture = m_billboardTreeRenderTarget;
-            
-            Globals.GraphicsDevice.SetRenderTarget(null);
 
             //using (Stream stream = File.OpenWrite("c:/tmp/carpet-tree.png"))
             //{
-            //    m_treeTexture.SaveAsPng(stream, m_treeTexture.Width, m_treeTexture.Height);
+            //    m_billboardTreeRenderTarget.SaveAsPng(stream, m_treeTexture.Width, m_treeTexture.Height);
             //}
-		
 
         }
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -349,36 +352,41 @@ namespace com.xexuxjy.magiccarpet.terrain
                 return;
             }
 
-            Globals.MCContentManager.SaveBlendState();
 
-            Globals.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            Globals.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            drawLeaves = false;
+            //Globals.MCContentManager.SaveBlendState();
+            if (drawTrunk)
+            {
+                ApplyStateBlock();
 
-            // Set up the instance rendering effect.
-            Effect effect = m_simpleTree.TrunkEffect;
+                // Set up the instance rendering effect.
+                Effect effect = m_simpleTree.TrunkEffect;
 
-            effect.CurrentTechnique = effect.Techniques["TrunkHardwareInstancing"];
+                effect.CurrentTechnique = effect.Techniques["TrunkHardwareInstancing"];
 
-            Globals.MCContentManager.ApplyCommonEffectParameters(m_instanceTrunkEffect);
+                Globals.MCContentManager.ApplyCommonEffectParameters(m_instanceTrunkEffect);
 
-            effect.Parameters["Texture"].SetValue(m_simpleTree.TrunkTexture);
+                effect.Parameters["Texture"].SetValue(m_simpleTree.TrunkTexture);
 
-            m_simpleTree.Skeleton.CopyBoneBindingMatricesTo(m_bindingMatrices, m_bindingQuaternions);
-            effect.Parameters["Bones"].SetValue(m_bindingMatrices);
+                m_simpleTree.Skeleton.CopyBoneBindingMatricesTo(m_bindingMatrices, m_bindingQuaternions);
+                effect.Parameters["Bones"].SetValue(m_bindingMatrices);
 
-            effect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
-            effect.Parameters["HeightMapTexelWidth"].SetValue(Globals.Terrain.OneOverTextureWidth);
-            effect.Parameters["HeightMapTexture"].SetValue(Globals.Terrain.HeightMapTexture);
-
-
-            DrawInstanced(projection,view,m_simpleTree.TrunkMesh.VertexBuffer, m_simpleTree.TrunkMesh.IndexBuffer, m_simpleTree.TrunkEffect,
-                m_simpleTree.TrunkMesh.NumberOfVertices, m_simpleTree.TrunkMesh.NumberOfTriangles);
+                effect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
+                effect.Parameters["HeightMapTexelWidth"].SetValue(Globals.Terrain.OneOverTextureWidth);
+                effect.Parameters["HeightMapTexture"].SetValue(Globals.Terrain.HeightMapTexture);
 
 
-			Globals.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+                DrawInstanced(projection, view, m_simpleTree.TrunkMesh.VertexBuffer, m_simpleTree.TrunkMesh.IndexBuffer, m_simpleTree.TrunkEffect,
+                    m_simpleTree.TrunkMesh.NumberOfVertices, m_simpleTree.TrunkMesh.NumberOfTriangles);
+
+            }
 
             if (drawLeaves)
             {
+                ApplyStateBlock();
+                // Set up the instance rendering effect.
+                Effect effect = m_simpleTree.LeafEffect;
+                
                 // And leaves
                 effect.CurrentTechnique = effect.Techniques["LeafHardwareInstancing"];
                 effect.Parameters["LeafScale"].SetValue(1f);
@@ -410,18 +418,29 @@ namespace com.xexuxjy.magiccarpet.terrain
                                                             m_simpleTree.LeafCloud.NumberOfTriangles, m_instanceTreeMatricesList.Count);
                 }
             }
-            effect.Parameters["HeightMapTexture"].SetValue((Texture)null);
-            Globals.MCContentManager.RestoreBlendState();
+            //effect.Parameters["HeightMapTexture"].SetValue((Texture)null);
 
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void ApplyStateBlock()
+        {
+            Globals.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+            Globals.GraphicsDevice.BlendState = BlendState.Opaque;
+            Globals.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            Globals.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         
         public override void Draw(GameTime gameTime)
         {
+            Globals.MCContentManager.SaveBlendState();
+            BuildBillboardTreeTexture();
             DrawBillboardTrees();
             DrawPrettyTrees();
+            Globals.MCContentManager.RestoreBlendState();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -432,6 +451,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             Matrix transform = Matrix.Identity;
             Globals.MCContentManager.ApplyCommonEffectParameters(m_billboardTreeEffect);
+
 
             m_billboardTreeEffect.Parameters["WorldMatrix"].SetValue(transform);
             m_billboardTreeEffect.Parameters["BillboardTreeTexture"].SetValue(m_treeTexture);
@@ -452,7 +472,6 @@ namespace com.xexuxjy.magiccarpet.terrain
                 m_instanceTreeMatricesList.Add(treeBounds.m_matrix);
             }
 
-            Globals.MCContentManager.SaveBlendState();
 
             m_billboardTreeEffect.Parameters["AlphaTestDirection"].SetValue(1f);
 
@@ -471,7 +490,6 @@ namespace com.xexuxjy.magiccarpet.terrain
             DrawInstanced(Globals.Camera.ProjectionMatrix, Globals.Camera.ViewMatrix, m_billboardVertexBuffer, m_billboardIndexBuffer, m_billboardTreeEffect, 4, 2);
 
 
-            Globals.MCContentManager.RestoreBlendState();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////

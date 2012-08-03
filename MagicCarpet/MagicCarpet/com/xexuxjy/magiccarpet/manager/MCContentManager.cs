@@ -29,23 +29,19 @@ namespace com.xexuxjy.magiccarpet.manager
         // fixme - stack these?
         public void SaveBlendState()
         {
-            m_savedStencilState = Globals.GraphicsDevice.DepthStencilState;
-            m_savedBlendState = Globals.GraphicsDevice.BlendState;
-
+            m_graphicsStateStack.Push(new GraphicsState(Globals.GraphicsDevice.DepthStencilState,Globals.GraphicsDevice.BlendState));
         }
 
         public void RestoreBlendState()
         {
-            Globals.GraphicsDevice.DepthStencilState = m_savedStencilState;
-            Globals.GraphicsDevice.BlendState = m_savedBlendState;
+            GraphicsState gs = m_graphicsStateStack.Pop();
+            Globals.GraphicsDevice.DepthStencilState = gs.m_dss;
+            Globals.GraphicsDevice.BlendState = gs.m_bs;
         }
         
         
         public void LoadContent()
         {
-
-
-
             m_effectDictionary["Terrain"] = m_contentManager.Load<Effect>("Effects/Terrain/ClipTerrain");
             m_effectDictionary["TerrainNormal"] = m_contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
             m_effectDictionary["Cloth"] = m_contentManager.Load<Effect>("Effects/Cloth");
@@ -403,8 +399,7 @@ namespace com.xexuxjy.magiccarpet.manager
         }
 
 
-        private DepthStencilState m_savedStencilState;
-        private BlendState m_savedBlendState;
+        public Stack<GraphicsState> m_graphicsStateStack = new Stack<GraphicsState>();
 
 
         private SpriteFont m_debugFont;
@@ -416,6 +411,18 @@ namespace com.xexuxjy.magiccarpet.manager
 
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;
+    }
+
+
+    public struct GraphicsState
+    {
+        public GraphicsState(DepthStencilState dss,BlendState bs)
+        {
+            m_dss = dss;
+            m_bs = bs;
+        }
+        public DepthStencilState m_dss;
+        public BlendState m_bs;
     }
 
 
