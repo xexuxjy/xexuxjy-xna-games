@@ -215,7 +215,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 }
 
                 m_heightMapTexture.SetData<Single>(m_heightMap);
-                m_terrainEffect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
+                //m_terrainEffect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
 
                 UpdateNormalMap();
 
@@ -251,7 +251,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                 m_helperScreenQuad.Draw();
             }
 
-            //m_normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+            m_normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
 
             Globals.GraphicsDevice.SetRenderTarget(null);
             m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMapRenderTarget);
@@ -288,13 +288,12 @@ namespace com.xexuxjy.magiccarpet.terrain
             Matrix wallTransform = Matrix.CreateScale(new Vector3(Globals.WorldWidth / 2, 100, Globals.WorldWidth / 2));
             //Matrix wallTransform = Matrix.Identity;
             //wallTransform.Translation = startPosition;
-
+            m_terrainEffect.Parameters["HeightMapTexture"].SetValue(m_heightMapTexture);
             m_terrainEffect.Parameters["WorldMatrix"].SetValue(wallTransform);
             foreach (ModelMesh mesh in m.Meshes)
             {
                 foreach (EffectPass pass in m_terrainEffect.CurrentTechnique.Passes)
                 {
-
                     pass.Apply();
                     mesh.Draw();
 
@@ -343,6 +342,7 @@ namespace com.xexuxjy.magiccarpet.terrain
                     }
                 }
             }
+            m_terrainEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
 
         }
 

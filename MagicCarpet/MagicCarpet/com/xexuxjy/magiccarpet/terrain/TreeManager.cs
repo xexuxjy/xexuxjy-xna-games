@@ -379,6 +379,8 @@ namespace com.xexuxjy.magiccarpet.terrain
                 DrawInstanced(projection, view, m_simpleTree.TrunkMesh.VertexBuffer, m_simpleTree.TrunkMesh.IndexBuffer, m_simpleTree.TrunkEffect,
                     m_simpleTree.TrunkMesh.NumberOfVertices, m_simpleTree.TrunkMesh.NumberOfTriangles);
 
+                ClearHeightmapTexture(effect);
+
             }
 
             if (drawLeaves)
@@ -406,7 +408,9 @@ namespace com.xexuxjy.magiccarpet.terrain
                     new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
                 );
 
+
                 Globals.GraphicsDevice.Indices = m_simpleTree.LeafCloud.IndexBuffer;
+                effect.Parameters["HeightMapTexture"].SetValue(Globals.Terrain.HeightMapTexture);
 
                 // Draw all the instance copies in a single call.
                 foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -417,12 +421,24 @@ namespace com.xexuxjy.magiccarpet.terrain
                                                             m_simpleTree.LeafCloud.NumberOfVertices, 0,
                                                             m_simpleTree.LeafCloud.NumberOfTriangles, m_instanceTreeMatricesList.Count);
                 }
+                ClearHeightmapTexture(effect);
             }
-            //effect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void ClearHeightmapTexture(Effect effect)
+        {
+            effect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+            }
 
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public void ApplyStateBlock()
         {
@@ -489,7 +505,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             DrawInstanced(Globals.Camera.ProjectionMatrix, Globals.Camera.ViewMatrix, m_billboardVertexBuffer, m_billboardIndexBuffer, m_billboardTreeEffect, 4, 2);
 
-
+            m_billboardTreeEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
