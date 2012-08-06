@@ -353,7 +353,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             }
 
 
-            drawLeaves = false;
+            //drawLeaves = false;
             //Globals.MCContentManager.SaveBlendState();
             if (drawTrunk)
             {
