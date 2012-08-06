@@ -222,6 +222,11 @@ LeafVertexShaderOutput LeafVertexShaderFunction(LeafVertexShaderInput input,
 	
 	float4 localPosition = mul(input.pos, Bones[input.BoneIndex.x]);
     float4 worldPosition = mul(localPosition, instanceTransform);
+
+    float2 uv = float2(worldPosition.x + WorldWidth/2,worldPosition.z+WorldWidth/2) * HeightMapTexelWidth;
+	float height = ComputeHeight(uv);
+	worldPosition.y += height;
+
     float4 viewPosition = mul(worldPosition, ViewMatrix);
 
 	float leafLen = length(instanceTransform[0].xyz);
@@ -358,8 +363,8 @@ technique LeafHardwareInstancing
 {
     pass Opaque
     {
-        VertexShader = compile vs_2_0 LeafHardwareInstancingVertexShader();
-        PixelShader = compile ps_2_0 LeafPixelShaderFunctionOpaque();
+        VertexShader = compile vs_3_0 LeafHardwareInstancingVertexShader();
+        PixelShader = compile ps_3_0 LeafPixelShaderFunctionOpaque();
         
         AlphaBlendEnable = false;
         
@@ -370,8 +375,8 @@ technique LeafHardwareInstancing
     }
     pass BlendedEdges
     {
-        VertexShader = compile vs_2_0 LeafHardwareInstancingVertexShader();
-        PixelShader = compile ps_2_0 LeafPixelShaderFunctionBlendedEdges();
+        VertexShader = compile vs_3_0 LeafHardwareInstancingVertexShader();
+        PixelShader = compile ps_3_0 LeafPixelShaderFunctionBlendedEdges();
         
         AlphaBlendEnable = true;
         SrcBlend = SrcAlpha;
@@ -387,8 +392,8 @@ technique LeafSetNoRenderStates
 {
 	pass Pass1
 	{
-        VertexShader = compile vs_2_0 LeafHardwareInstancingVertexShader();
-        PixelShader = compile ps_2_0 LeafPixelShaderFunction();
+        VertexShader = compile vs_3_0 LeafHardwareInstancingVertexShader();
+        PixelShader = compile ps_3_0 LeafPixelShaderFunction();
 	}
 }
 
