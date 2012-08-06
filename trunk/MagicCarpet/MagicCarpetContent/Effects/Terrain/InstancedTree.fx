@@ -68,6 +68,31 @@ struct BillboardTreeVertexShaderOutput
 };
 
 
+float ComputeHeight(float2 uv:TEXCOORD0)
+{
+	//float c = abs(tex2D (ElevationSampler, uv));   // center
+	float c = tex2Dlod(ElevationSampler, float4(uv, 0, 1));
+
+    float tl = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2(-1, -1),0,1));   // top left
+    float  l = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2(-1,  0),0,1));   // left
+    float bl = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2(-1,  1),0,1));   // bottom left
+    float  t = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2( 0, -1),0,1));   // top
+
+	float  b = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2( 0,  1),0,1));   // bottom
+    float tr = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2( 1, -1),0,1));   // top right
+    float  r = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2( 1,  0),0,1));   // right
+    float br = tex2Dlod (ElevationSampler, float4(uv + HeightMapTexelWidth * float2( 1,  1),0,1));   // bottom right
+	
+	float numSamples = 9;
+	float sum1 = c+tl+l+bl+t;
+	float sum2 = b+tr+r+br;
+	float result = c;//(float)((sum1+sum2) / numSamples);
+	//float result = c;
+	
+	return result;
+}
+
+
 
 
 Texture2D LeafTexture;
@@ -123,16 +148,22 @@ struct TrunkVertexShaderOutput
 TrunkVertexShaderOutput TrunkVertexShaderFunction(TrunkVertexShaderInput input, float4x4 instanceTransform)
 {
     TrunkVertexShaderOutput output;
-    float2 uv = float2(input.pos.x + WorldWidth/2,input.pos.z+WorldWidth/2) * HeightMapTexelWidth;
 
 	float4 posCopy = input.pos;
-	float height = 0;//tex2Dlod(ElevationSampler, float4(uv, 0, 1));
-	height = 0;
-
-	posCopy.y += height;
 
 	float4 localPosition = mul(posCopy, Bones[input.BoneIndex.x]);
     float4 worldPosition = mul(localPosition, instanceTransform);
+
+
+	// height needs to be off the instance transform center, not the vertex otherwise branches follow terrain. oops.
+
+
+	float3 center = instanceTransform[3].xyz;
+    float2 uv = float2(center.x + WorldWidth/2,center.z+WorldWidth/2) * HeightMapTexelWidth;
+	float height = ComputeHeight(uv);
+	center.y += height;
+	worldPosition.y += center.y;
+
     float4 viewPosition = mul(worldPosition, ViewMatrix);
     output.pos = mul(viewPosition, ProjMatrix);
 	output.uv = input.uv;
@@ -252,10 +283,8 @@ BillboardTreeVertexShaderOutput BillboardTreeVertexShaderFunction(BillboardTreeV
 
     // compute coordinates for vertex texture
     //  FineBlockOrig.xy: 1/(w, h) of texture (texelwidth)
-    float2 uv = float2(1,1);//float2(input.pos.x + WorldWidth/2,input.pos.z+WorldWidth/2) * HeightMapTexelWidth;
 
 
-	float height = 0;//ComputeHeight(uv);
 
 	/*
 	float3 adjustedPos = float3(input.pos.x,input.pos.y + height,input.pos.z);
@@ -267,6 +296,11 @@ BillboardTreeVertexShaderOutput BillboardTreeVertexShaderFunction(BillboardTreeV
 
 
 	float3 center = mul(input.pos, instanceTransform);
+
+    float2 uv = float2(center.x + WorldWidth/2,center.z+WorldWidth/2) * HeightMapTexelWidth;
+	float height = ComputeHeight(uv);
+	center.y += height;
+
     float3 eyeVector = center - CameraPosition;
 
     float3 upVector = float3(0,1,0);
