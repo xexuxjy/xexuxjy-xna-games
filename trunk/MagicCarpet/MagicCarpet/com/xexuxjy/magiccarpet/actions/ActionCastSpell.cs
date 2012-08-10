@@ -24,14 +24,14 @@ namespace com.xexuxjy.magiccarpet.actions
         public override void Start()
         {
             base.Start();
-            Vector3 targetDirection = Vector3.Up;
+            Matrix targetDirection = Matrix.Identity;
             if (Target != null)
             {
-                targetDirection = GameUtil.DirectionToTarget(Owner, Target);
+                targetDirection = GameUtil.CreateLookatMatrix(Owner, Target);
             }
             else
             {
-                targetDirection = GameUtil.DirectionToTarget(Owner, m_targetPosition.Value);
+                targetDirection = GameUtil.CreateLookatMatrix(Owner, m_targetPosition.Value);
             }
             Owner.CastSpell(m_spellType, Owner.Position, targetDirection);
         }

@@ -112,10 +112,7 @@ namespace GameStateManagement
 
                 Globals.SpellPool = new SpellPool();
 
-
-                Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.terrain, Vector3.Zero);
-
-
+                Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject("Terrain", Vector3.Zero);
 
                 Globals.FlagManager = new FlagManager();
                 Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager, true);

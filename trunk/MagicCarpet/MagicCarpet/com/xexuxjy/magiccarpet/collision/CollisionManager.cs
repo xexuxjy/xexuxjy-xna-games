@@ -169,12 +169,12 @@ namespace com.xexuxjy.magiccarpet.collision
             // most objects should stay live?
             body.SetActivationState(ActivationState.DISABLE_DEACTIVATION);
             body.SetUserPointer(userPointer);
-            body.SetGravity(ref m_gravity);
+            //body.SetGravity(ref m_gravity);
 
             // we;re going to drive most things through kinematics
             if (isDynamic)
             {
-                body.SetCollisionFlags(body.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
+                //body.SetCollisionFlags(body.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
             }
 
             motionState.RigidBody = body;
@@ -224,6 +224,27 @@ namespace com.xexuxjy.magiccarpet.collision
         {
             m_dynamicsWorld.RemoveCollisionObject(collisionObject);
             collisionObject.Cleanup();
+        }
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void AddContraint(TypedConstraint constraint,bool disableCollisionsBetweenLinkedBodies)
+        {
+            m_dynamicsWorld.AddConstraint(constraint, disableCollisionsBetweenLinkedBodies);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void AddContraint(TypedConstraint constraint)
+        {
+            m_dynamicsWorld.AddConstraint(constraint);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void RemoveContraint(TypedConstraint constraint)
+        {
+            m_dynamicsWorld.RemoveConstraint(constraint);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

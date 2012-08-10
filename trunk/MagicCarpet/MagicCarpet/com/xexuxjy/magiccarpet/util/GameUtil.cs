@@ -52,5 +52,71 @@ namespace com.xexuxjy.magiccarpet.util
             return Matrix.CreateWorld(Vector3.Zero, forward, Vector3.Up);
         }
 
+        public static void Rotate(Vector3 axis, float angle, ref Quaternion rotation)
+        {
+            axis = Vector3.Transform(axis, Matrix.CreateFromQuaternion(rotation));
+            rotation = Quaternion.Normalize(Quaternion.CreateFromAxisAngle(axis, angle) * rotation);
+        }
+
+        public static void LookAt(Vector3 target, float speed, Vector3 position, ref Quaternion rotation, Vector3 fwd)
+        {
+            if (fwd == Vector3.Zero)
+            {
+                fwd = Vector3.Forward;
+            }
+
+            Vector3 tminusp = target - position;
+            Vector3 ominusp = fwd;
+
+            if (tminusp == Vector3.Zero)
+            {
+                return;
+            }
+
+            tminusp.Normalize();
+
+            float theta = (float)System.Math.Acos(Vector3.Dot(tminusp, ominusp));
+            Vector3 cross = Vector3.Cross(ominusp, tminusp);
+
+            if (cross == Vector3.Zero)
+            {
+                return;
+            }
+
+            cross.Normalize();
+
+            Quaternion targetQ = Quaternion.CreateFromAxisAngle(cross, theta);
+            rotation = Quaternion.Slerp(rotation, targetQ, speed);
+        }
+
+        public static Matrix CreateLookatMatrix(Vector3 position, Vector3 target)
+        {
+            Matrix m = Matrix.CreateLookAt(position, target, Vector3.Up);
+            m.Translation = Vector3.Zero;
+            return m;
+        }
+
+        public static Matrix CreateLookatMatrix(GameObject source, GameObject target)
+        {
+            Matrix m = Matrix.CreateLookAt(source.WorldTransform.Translation, target.WorldTransform.Translation, Vector3.Up);
+            m.Translation = Vector3.Zero;
+            return m;
+        }
+
+        public static Matrix CreateLookatMatrix(Vector3 source, GameObject target)
+        {
+            Matrix m = Matrix.CreateLookAt(source, target.WorldTransform.Translation, Vector3.Up);
+            m.Translation = Vector3.Zero;
+            return m;
+        }
+
+        public static Matrix CreateLookatMatrix(GameObject source, Vector3 target)
+        {
+            Matrix m = Matrix.CreateLookAt(source.WorldTransform.Translation, target, Vector3.Up);
+            m.Translation = Vector3.Zero;
+            return m;
+        }
+    
     }
+
 }

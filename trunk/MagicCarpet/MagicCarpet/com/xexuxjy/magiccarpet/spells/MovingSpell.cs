@@ -27,10 +27,11 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void SetInitialPositionAndDirection(Vector3 position, Vector3 direction)
+        public void SetInitialPositionAndDirection(Vector3 position, Matrix direction)
         {
+            WorldTransform = direction;
             Position = position;
-            Heading = direction;
+            //Heading = direction;
             TargetSpeed = Globals.s_defaultSpellSpeed;
         }
 

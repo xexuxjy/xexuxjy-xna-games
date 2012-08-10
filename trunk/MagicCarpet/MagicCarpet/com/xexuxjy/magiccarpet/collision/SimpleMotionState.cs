@@ -37,6 +37,17 @@ namespace com.xexuxjy.magiccarpet.collision
             }
         }
 
+        public IndexedMatrix GetWorldTransform()
+        {
+            IndexedMatrix im;
+            GetWorldTransform(out im);
+            return im;
+        }
+
+        public IndexedVector3 Position
+        {
+            get { return GetWorldTransform()._origin; }
+        }
         public override void SetWorldTransform(ref IndexedMatrix centerOfMassWorldTrans)
         {
             // these don't see to go through motion states so set it directly.

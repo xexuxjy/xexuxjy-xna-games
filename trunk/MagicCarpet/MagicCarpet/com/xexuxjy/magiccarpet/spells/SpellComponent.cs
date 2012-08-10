@@ -59,7 +59,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
+        public void CastSpell(SpellType spellType, Vector3 startPosition, Matrix direction)
         {
             if (CanCastSpell(spellType))
             {

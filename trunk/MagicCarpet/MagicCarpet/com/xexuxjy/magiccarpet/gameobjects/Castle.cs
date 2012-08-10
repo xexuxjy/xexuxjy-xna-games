@@ -142,7 +142,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         {
                             int radius = CastleSizes[Level];
                             Vector3 manaBallPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(Position, radius);
-                            ManaBall manaBall = (ManaBall)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, manaBallPosition);
+                            ManaBall manaBall = (ManaBall)Globals.GameObjectManager.CreateAndInitialiseGameObject("manaball", manaBallPosition);
                             manaBall.ManaValue = manaValue;
                         }
 
@@ -315,7 +315,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public void CreateBalloon()
         {
-            GameObject gameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.balloon, Position);
+            GameObject gameObject = Globals.GameObjectManager.CreateAndInitialiseGameObject("balloon", Position);
             gameObject.Owner = Owner;
         }
 

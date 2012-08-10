@@ -55,7 +55,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         //}
 
-        public ActionFlee GetActionFlee(GameObject owner, Vector3 direction, float speed)
+        public ActionFlee GetActionFlee(GameObject owner, Matrix direction, float speed)
         {
             return new ActionFlee(owner, direction, speed);
         }

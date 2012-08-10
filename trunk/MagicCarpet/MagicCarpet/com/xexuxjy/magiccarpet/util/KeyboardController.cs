@@ -224,7 +224,7 @@ namespace com.xexuxjy.magiccarpet.util
 
         public void PlaceManaBall(Vector3 position)
         {
-            Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, position);
+            Globals.GameObjectManager.CreateAndInitialiseGameObject("manaball", position);
         }
 
         private PlayerController m_playerController;

@@ -9,7 +9,7 @@ namespace com.xexuxjy.magiccarpet.actions
 {
     public class ActionFlee : BaseAction
     {
-        public ActionFlee(GameObject owner, Vector3 direction,float speed)
+        public ActionFlee(GameObject owner, Matrix direction,float speed)
             : base(owner, null, ActionState.Fleeing)
         {
             Owner.Heading = direction;

@@ -74,20 +74,19 @@ namespace com.xexuxjy.magiccarpet.util
 
             if ( leftReleased || rightReleased)
             {
-                Vector3 startPos = Globals.Player.Position ;
-                Vector3 direction = Globals.Player.Forward ;
+                Matrix playerMatrix = Globals.Player.WorldTransform;
                 if(leftReleased)
                 {
                     if (Globals.Player != null)
                     {
-                        Globals.Player.CastSpell1(startPos, direction);
+                        Globals.Player.CastSpell1(playerMatrix.Translation, playerMatrix);
                     }
                 }
                 if(rightReleased)
                 {
                     if (Globals.Player != null)
                     {
-                        Globals.Player.CastSpell2(startPos, direction);
+                        Globals.Player.CastSpell2(playerMatrix.Translation, playerMatrix);
                     }
                 }
             }

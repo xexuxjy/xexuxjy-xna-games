@@ -106,7 +106,7 @@ namespace com.xexuxjy.magiccarpet.util.console
                         if (commandDetails.Name.Equals("spawn"))
                         {
                             Vector3 spawnPosition = Vector3.Zero;
-                            GameObjectType objectType = GetGameObjectType(args, 0);
+                            String objectType = args[0];
                             Dictionary<String, String> properties = null;
 
                             if (args.Length > 1)
@@ -379,7 +379,7 @@ namespace com.xexuxjy.magiccarpet.util.console
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private string SpawnEntity(GameObjectType entityType, Vector3 position,Dictionary<String,String> properties)
+        private string SpawnEntity(String entityType, Vector3 position,Dictionary<String,String> properties)
         {
             GameObject GameObject = null;
             try
@@ -486,7 +486,7 @@ namespace com.xexuxjy.magiccarpet.util.console
         public void DropRandomManaBall()
         {
             Vector3 position = Globals.Terrain.GetRandomWorldPositionXZ();
-            SpawnEntity(GameObjectType.manaball, position,null);
+            SpawnEntity("ManaBall", position,null);
         }
 
 
@@ -497,7 +497,7 @@ namespace com.xexuxjy.magiccarpet.util.console
             for (int i = 0; i < number; ++i)
             {
                 Vector3 ballPosition = Globals.Terrain.GetRandomWorldPositionXZWithRange(centerPosition, range);
-                SpawnEntity(GameObjectType.manaball, ballPosition, null);
+                SpawnEntity("ManaBall", ballPosition, null);
             }
         }
 

@@ -106,7 +106,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override CollisionFilterGroups GetCollisionMask()
         {
-            return (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera | GameObjectType.magician);
+            return (CollisionFilterGroups)(GameObjectType.spell | GameObjectType.manaball | GameObjectType.camera | GameObjectType.magician | GameObjectType.monster);
         }
 
 

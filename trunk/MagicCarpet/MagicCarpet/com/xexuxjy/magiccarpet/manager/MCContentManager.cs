@@ -51,6 +51,8 @@ namespace com.xexuxjy.magiccarpet.manager
 
 
             LoadModel("UnitCube", "Models/SimpleShapes/unitcube");
+            LoadModel("UnitSphere", "Models/SimpleShapes/unitsphere");
+            LoadModel("UnitCone", "Models/SimpleShapes/unitcone");
 
             
             LoadModel(GameObjectType.castle.ToString(), "Models/SimpleShapes/unitcube");
