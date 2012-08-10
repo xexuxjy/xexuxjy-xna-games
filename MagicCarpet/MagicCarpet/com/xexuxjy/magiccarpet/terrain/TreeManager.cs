@@ -452,6 +452,7 @@ namespace com.xexuxjy.magiccarpet.terrain
         
         public override void Draw(GameTime gameTime)
         {
+            return;
             Globals.MCContentManager.SaveBlendState();
             BuildBillboardTreeTexture();
             DrawBillboardTrees();

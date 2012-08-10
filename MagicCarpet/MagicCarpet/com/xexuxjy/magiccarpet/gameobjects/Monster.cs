@@ -98,7 +98,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         else if (choice >= 0.2 && choice < 0.5)
                         {
-                            newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindEnemy(this, Globals.s_monsterSearchRadius));
+                            //newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindEnemy(this, Globals.s_monsterSearchRadius));
+                            newAction = Globals.ActionPool.GetActionFind(FindData.GetActionFindLocation(this, Globals.s_monsterSearchRadius));
                         }
                         else
                         {
@@ -135,7 +136,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case(ActionState.Dieing):
                     {
                         // when we've finished dieing then we want to spawn a manaball here.
-                        Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, Position);
+                        Globals.GameObjectManager.CreateAndInitialiseGameObject("Manaball", Position);
                         Cleanup();
                         break;
                     }

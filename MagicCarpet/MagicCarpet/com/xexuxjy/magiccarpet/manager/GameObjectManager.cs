@@ -36,46 +36,51 @@ namespace com.xexuxjy.magiccarpet.manager
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, Vector3 startPosition)
+        public GameObject CreateAndInitialiseGameObject(String gameObjectType, Vector3 startPosition)
         {
             return CreateAndInitialiseGameObject(gameObjectType, startPosition, null);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
  
-        public GameObject CreateAndInitialiseGameObject(GameObjectType gameObjectType, Vector3 startPosition,Dictionary<String,String> properties)
+        public GameObject CreateAndInitialiseGameObject(String gameObjectType, Vector3 startPosition,Dictionary<String,String> properties)
         {
             GameObject gameObject = null;
-            switch (gameObjectType)
+            switch (gameObjectType.ToLower())
             {
-                case GameObjectType.manaball:
+                case "manaball":
                     {
                         gameObject = new ManaBall(startPosition);
                         break;
                     }
-                case GameObjectType.balloon:
+                case "balloon":
                     {
                         gameObject = new Balloon(startPosition);
                         break;
                     }
-                case GameObjectType.castle:
+                case "castle":
                     {
                         gameObject = new Castle(startPosition);
                         break;
                     }
-                case GameObjectType.magician:
+                case "magician":
                     {
                         gameObject = new Magician(startPosition);
                         break;
                     }
-                case GameObjectType.terrain:
+                case "terrain":
                     {
                         gameObject = new Terrain(startPosition);
                         break;
                     }
-                case GameObjectType.monster:
+                case "monster":
                     {
                         gameObject = new Monster(startPosition);
+                        break;
+                    }
+                case "dragon":
+                    {
+                        gameObject = new Dragon(startPosition);
                         break;
                     }
 

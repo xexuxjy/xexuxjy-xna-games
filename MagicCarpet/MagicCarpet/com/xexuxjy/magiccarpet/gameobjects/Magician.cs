@@ -80,7 +80,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void BuildCollisionObject()
         {
-            base.BuildCollisionObject();    
+            base.BuildCollisionObject();
+            // magician (player) is knimeatic.
+            m_collisionObject.SetCollisionFlags(m_collisionObject.GetCollisionFlags() | CollisionFlags.CF_KINEMATIC_OBJECT);
             BuildRayCallback();
         }
 
@@ -102,9 +104,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // after init so we get the right draw order.
             DrawOrder = Globals.GUI_DRAW_ORDER;
             StickToGround = false;
-
-
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public SpellType SelectedSpell1
         {
@@ -122,14 +124,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell1(Vector3 start, Vector3 direction)
+        public void CastSpell1(Vector3 start, Matrix direction)
         {
             CastSpell(m_selectedSpell1, start, direction);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell2(Vector3 start, Vector3 direction)
+        public void CastSpell2(Vector3 start, Matrix direction)
         {
             CastSpell(m_selectedSpell2, start, direction);
         }
@@ -313,7 +315,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Dieing):
                     {
                         // when we've finished dieing then we want to spawn a manaball here.
-                        Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, Position);
+                        Globals.GameObjectManager.CreateAndInitialiseGameObject("manaball", Position);
                         Cleanup();
                         break;
                     }

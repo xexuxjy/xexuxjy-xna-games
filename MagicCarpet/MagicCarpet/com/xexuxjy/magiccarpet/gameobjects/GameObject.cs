@@ -215,21 +215,18 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 m_threatComponent.UpdateThreats();
             }
 
+            if (m_targetSpeed > 0)
+            {
+                int ibreak = 0;
+            }
 
             // no acceleration)
-            if (!MathUtil.CompareFloat(TargetSpeed, Speed))
+            //if (!MathUtil.CompareFloat(TargetSpeed, Speed))
             {
                 Speed = TargetSpeed;
             }
 
 
-            // movement here?
-            if (Speed > 0)
-            {
-                //Vector3 movement = Forward * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                Vector3 movement = Heading * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                Position += movement;
-            }
             // no health left so die.
             if (!IsAlive())
             {
@@ -286,6 +283,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         public virtual void BuildCollisionObject()
         {
             m_collisionObject = Globals.CollisionManager.LocalCreateRigidBody(Mass, Matrix.Identity, BuildCollisionShape(), out m_motionState, true, this,GetCollisionFlags(),GetCollisionMask());
+            m_rigidBody = m_collisionObject as RigidBody;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -363,10 +361,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                         }
                         mesh.Draw();
                     }
-                }
-                else
-                {
-                    int ibreak = 0;
                 }
             }
         }
@@ -559,18 +553,43 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public float Speed
+        public virtual float Speed
         {
-            get { return m_speed; }
-            set { m_speed = value; }
+            get 
+            { 
+                return m_speed; 
+            }
+            set 
+            { 
+                m_speed = value; 
+                if(m_rigidBody != null)
+                {
+                    if (m_speed > 0f)
+                    {
+                        m_rigidBody.SetLinearVelocity(new IndexedVector3(0, 0, m_speed));
+                    }
+                    else
+                    {
+                        m_rigidBody.ClearForces();
+                        m_rigidBody.SetLinearVelocity(IndexedVector3.Zero);
+                        m_rigidBody.SetAngularVelocity(IndexedVector3.Zero);
+                    }
+                }
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public float TargetSpeed
         {
-            get { return m_targetSpeed; }
-            set { m_targetSpeed = value; }
+            get 
+            { 
+                return m_targetSpeed; 
+            }
+            set 
+            { 
+                m_targetSpeed = value; 
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -675,7 +694,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void CastSpell(SpellType spellType, Vector3 startPosition, Vector3 direction)
+        public void CastSpell(SpellType spellType, Vector3 startPosition, Matrix direction)
         {
             m_spellComponent.CastSpell(spellType, startPosition, direction);
         }
@@ -849,17 +868,40 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3 Heading
+        public Matrix Heading
         {
-            get { return m_heading; }
-            set{m_heading = value;}
+            get
+            {
+                Matrix m = m_collisionObject.GetWorldTransform();
+                m.Translation = Vector3.Zero;
+                return m;
+            }
+            set
+            {
+                IndexedMatrix m = value;
+                if (m_collisionObject == null)
+                {
+                    int ibreak = 0;
+                }
+                m._origin= m_collisionObject.GetWorldTransform()._origin;
+                m_collisionObject.SetWorldTransform(m);
+
+            }
         }
-
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-       // And others
+        public virtual void Rotate(Vector3 axis, float angle)
+        {
+            Quaternion currentRotation = Quaternion.CreateFromRotationMatrix(m_collisionObject.GetWorldTransform());
+            GameUtil.Rotate(axis, angle, ref currentRotation);
+            IndexedMatrix result = (Matrix.CreateFromQuaternion(currentRotation) * Matrix.CreateTranslation(Position));
+            m_collisionObject.SetWorldTransform(result);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        // And others
 
         protected ObjectArray<GameObjectAttribute> m_attributes = new ObjectArray<GameObjectAttribute>();
 
@@ -877,6 +919,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         protected SimpleMotionState m_motionState;
         protected CollisionObject m_collisionObject;
+        protected RigidBody m_rigidBody;
 
         protected float m_speed;
         protected float m_targetSpeed;
@@ -897,7 +940,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         protected static Matrix[] m_boneTransforms;
 
         // keeping this separate from facing on purpose.
-        protected Vector3 m_heading;
+        //protected Vector3 m_heading;
 
         protected Effect m_effect;
 

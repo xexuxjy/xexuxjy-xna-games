@@ -77,7 +77,7 @@ namespace com.xexuxjy.magiccarpet
         public static float s_balloonFleeHealthPercentage = 0.25f;
 
         public static float s_monsterSearchRadius = 50f;
-        public static float s_monsterTravelSpeed = 2.0f;
+        public static float s_monsterTravelSpeed = 5.0f;
         public static float s_monsterFleeSpeed = 5.0f;
         public static float s_monsterMeleeRange = 0.5f;
         public static float s_monsterMeleeDamage = 5f;

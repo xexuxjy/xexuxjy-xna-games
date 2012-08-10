@@ -7,6 +7,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
 using com.xexuxjy.magiccarpet.util;
 using BulletXNA;
+using System.Diagnostics;
 
 
 namespace com.xexuxjy.magiccarpet.combat
@@ -84,11 +85,12 @@ namespace com.xexuxjy.magiccarpet.combat
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Vector3 GetFleeDirection()
+        public Matrix GetFleeDirection()
         {
             // find out which is the 
             float totalThreatLevel = 0f;
             Vector3 threatDirection = Vector3.Zero;
+            Matrix resultDirection = Matrix.Identity;
 
             foreach (ThreatData threatData in m_recentThreats)
             {
@@ -109,21 +111,20 @@ namespace com.xexuxjy.magiccarpet.combat
                 threatDirection.Y = 0f;
                 threatDirection = -threatDirection;
             }
-            if (MathUtil.FuzzyZero(threatDirection.LengthSquared()))
+            else
             {
-                // either equal threats around us or no threats, in which case chose random direction
-                Vector3 randomPosition = Globals.Terrain.GetRandomWorldPositionXZ();
-                threatDirection = GameUtil.DirectionToTarget(m_gameObject, randomPosition);
+                threatDirection = Globals.Terrain.GetRandomWorldPositionXZ();
             }
-            threatDirection.Normalize();
+
+            Debug.Assert(!MathUtil.FuzzyZero(threatDirection.LengthSquared()));
+                // either equal threats around us or no threats, in which case chose random direction
+            resultDirection = GameUtil.CreateLookatMatrix(m_gameObject, threatDirection);
+            
 
 #if LOG_EVENT
             Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] FleeDirection [{2}].", m_gameObject.Id, m_gameObject.GameObjectType, threatDirection));
 #endif
-            return threatDirection;
-
-
-
+            return resultDirection;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -57,8 +57,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             //rb.SetCollisionFlags(rb.GetCollisionFlags() | CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
             // manaballs should be allowed to move and go into sleep tates.
             m_collisionObject.SetActivationState(ActivationState.ACTIVE_TAG);
-            RigidBody rb = m_collisionObject as RigidBody;
-            rb.SetFlags(rb.GetFlags() &~ RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
+            m_rigidBody.SetFlags(m_rigidBody.GetFlags() &~ RigidBodyFlags.BT_DISABLE_WORLD_GRAVITY);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

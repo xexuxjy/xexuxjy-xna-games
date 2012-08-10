@@ -25,7 +25,10 @@ namespace com.xexuxjy.magiccarpet.actions
             base.Start();
             if (GameUtil.InRange(Owner, Target, m_attackRange))
             {
-                Owner.CastSpell(m_spellType, Owner.SpellCastPosition, GameUtil.DirectionToTarget(Owner.SpellCastPosition, Target));
+                Matrix m = Matrix.CreateLookAt(Owner.SpellCastPosition, Target.Position, Vector3.Up);
+                // just want the rotation?
+                m.Translation = Vector3.Zero;
+                Owner.CastSpell(m_spellType, Owner.SpellCastPosition, m);
             }
 
         }

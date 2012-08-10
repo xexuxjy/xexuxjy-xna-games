@@ -40,7 +40,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
                     if (Castle.CanPlaceLevel(collisionPointWorld, 0))
                     {
-                        Castle castle = (Castle)Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.castle,collisionPointWorld);
+                        Castle castle = (Castle)Globals.GameObjectManager.CreateAndInitialiseGameObject("castle",collisionPointWorld);
                         if(castle != null)
                         {
                             castle.Owner = Owner;

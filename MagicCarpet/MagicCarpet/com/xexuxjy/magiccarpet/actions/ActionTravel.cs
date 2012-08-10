@@ -6,6 +6,7 @@ using com.xexuxjy.magiccarpet.gameobjects;
 using Microsoft.Xna.Framework;
 using BulletXNA;
 using BulletXNA.LinearMath;
+using com.xexuxjy.magiccarpet.util;
 
 namespace com.xexuxjy.magiccarpet.actions
 {
@@ -65,8 +66,9 @@ namespace com.xexuxjy.magiccarpet.actions
                     // 
                     Vector3 direction = targetPosition - currentPosition;
                     direction.Y = 0;
-                    direction.Normalize();
-                    Owner.Heading = direction;
+
+                    Matrix m = GameUtil.CreateLookatMatrix(currentPosition, targetPosition);
+                    Owner.Heading = m;
                 }
             }
         }

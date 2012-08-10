@@ -104,7 +104,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 case (ActionState.Dieing):
                     {
                         // when we've finished dieing then we want to spawn a manaball here.
-                        Globals.GameObjectManager.CreateAndInitialiseGameObject(GameObjectType.manaball, Position);
+                        Globals.GameObjectManager.CreateAndInitialiseGameObject("castle", Position);
                         Cleanup();
                         break;
                     }
