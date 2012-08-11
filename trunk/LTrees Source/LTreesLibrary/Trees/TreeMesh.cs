@@ -27,6 +27,7 @@ namespace LTreesLibrary.Trees
         private int numtriangles;
         private int maxRadialSegments = 8;
         private BoundingSphere boundingSphere;
+        private BoundingBox boundingBox;
 
         /// <summary>
         /// Bounding sphere of the mesh.
@@ -41,6 +42,13 @@ namespace LTreesLibrary.Trees
             get { return boundingSphere; }
             set { boundingSphere = value; }
         }
+
+        public BoundingBox BoundingBox
+        {
+            get { return boundingBox; }
+            set { boundingBox = value; }
+        }
+
 
         /// <summary>
         /// Number of triangles in the mesh.
@@ -253,6 +261,8 @@ namespace LTreesLibrary.Trees
             // Set the bounding sphere
             boundingSphere.Center = (min + max) / 2.0f;
             boundingSphere.Radius = (max - min).Length() / 2.0f;
+
+            boundingBox = new BoundingBox(min, max); 
         }
 
         private short[] Create16BitArray(List<int> list)

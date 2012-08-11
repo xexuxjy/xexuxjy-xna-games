@@ -142,7 +142,7 @@ namespace com.xexuxjy.magiccarpet
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public const int WorldWidth = 512;//2048;//512;//1024;
-        public const int WorldHeight = 10;
+        public const int WorldHeight = 50;
 
         public static Vector3 worldMinPos = new Vector3(-WorldWidth/2, -WorldHeight, -WorldWidth/2);
         public static Vector3 worldMaxPos = -worldMinPos;

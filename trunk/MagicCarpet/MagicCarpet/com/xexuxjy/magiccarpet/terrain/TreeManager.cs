@@ -42,12 +42,12 @@ namespace com.xexuxjy.magiccarpet.terrain
             Rectangle clientBounds = Game.Window.ClientBounds;
             float aspect = (float)clientBounds.Width / (float)clientBounds.Height;
 
-            Matrix m = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_HALF_PI, aspect, m_nearPrettyPlane, m_farPrettyPlane);
+            Matrix m = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_QUARTER_PI, aspect, m_nearPrettyPlane, m_farPrettyPlane);
 
             m_prettyFrustum.Matrix = Globals.Camera.ViewMatrix * m;
 
-            m = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_HALF_PI, aspect, m_farPrettyPlane + 1, m_farBillBoardPlane);
-            m_billboardFrustum.Matrix = Globals.Camera.ViewMatrix * m;
+            m = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_QUARTER_PI, aspect, m_farPrettyPlane + 1, m_farBillBoardPlane);
+            m_billboardFrustum.Matrix =  Globals.Camera.ViewMatrix * m;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,8 +73,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             for (int i = 0; i < m_bindingQuaternions.Length; ++i)
             {
-                m_bindingQuaternions[i] = Quaternion.Identity;
+                m_bindingQuaternions[i] = m_simpleTree.Skeleton.Bones[i].Rotation;
             }
+
+            m_simpleTree.Skeleton.CopyBoneBindingMatricesTo(m_bindingMatrices, m_bindingQuaternions);
 
 
             int counter = 0;
@@ -157,21 +159,79 @@ namespace com.xexuxjy.magiccarpet.terrain
             }
             
            
-            BoundingSphere nearSphere = new BoundingSphere(Globals.Player.Position, 1f);
-            BoundingSphere farSphere = new BoundingSphere(Globals.Player.Position, m_farPrettyPlane);
+            //BoundingSphere nearSphere = new BoundingSphere(Globals.Player.Position, 1f);
+            //BoundingSphere farSphere = new BoundingSphere(Globals.Player.Position, m_farPrettyPlane);
 
             m_instanceTreeMatricesList.Clear();
             m_activeBoundsList.Clear();
 
-            m_treeBoundsQuadTree.FindObjectsInsideSphereBand(nearSphere,farSphere, m_activeBoundsList);
+            //m_treeBoundsQuadTree.FindObjectsInsideSphereBand(nearSphere, farSphere, m_activeBoundsList);
+            m_treeBoundsQuadTree.FindObjectsInsideFrustum(m_prettyFrustum, m_activeBoundsList);
+
+            //List<QuadTree<TreeBounds>> bounds = m_treeBoundsQuadTree.GetLeavesInsideFrustum(m_prettyFrustum);
+            //List<QuadTree<TreeBounds>> bounds = m_treeBoundsQuadTree.GetLeavesInsideSphereBand(nearSphere,farSphere);
+            //foreach (QuadTree<TreeBounds> node in bounds)
+            //{
+            //    DrawBoundingBox(node.BoundingBox, new IndexedVector3(1, 1, 0));
+
+            //}
+
+
+
+            //DrawFrustum(m_prettyFrustum,new IndexedVector3(1,1,0));
+
             foreach (TreeBounds treeBounds in m_activeBoundsList)
             {
                 m_instanceTreeMatricesList.Add(treeBounds.m_matrix);
             }
 
-            DrawTree(Globals.Camera.ProjectionMatrix,Globals.Camera.ViewMatrix,m_simpleTree, true, true);
+            DrawTree(Globals.Camera.ProjectionMatrix, Globals.Camera.ViewMatrix, m_simpleTree, true, true);
                 
         }
+
+        private static Vector3[] corners = new Vector3[8];
+
+        public void DrawBoundingBox(Microsoft.Xna.Framework.BoundingBox boundingBox, IndexedVector3 color)
+        {
+            boundingBox.GetCorners(corners);
+            Globals.DebugDraw.DrawLine(corners[0], corners[1], color);
+            Globals.DebugDraw.DrawLine(corners[1], corners[2], color);
+            Globals.DebugDraw.DrawLine(corners[2], corners[3], color);
+            Globals.DebugDraw.DrawLine(corners[3], corners[0], color);
+
+            Globals.DebugDraw.DrawLine(corners[4], corners[5], color);
+            Globals.DebugDraw.DrawLine(corners[5], corners[6], color);
+            Globals.DebugDraw.DrawLine(corners[6], corners[7], color);
+            Globals.DebugDraw.DrawLine(corners[7], corners[4], color);
+
+            Globals.DebugDraw.DrawLine(corners[0], corners[4], color);
+            Globals.DebugDraw.DrawLine(corners[1], corners[5], color);
+            Globals.DebugDraw.DrawLine(corners[2], corners[6], color);
+            Globals.DebugDraw.DrawLine(corners[3], corners[7], color);
+
+        }
+        
+        public void DrawFrustum(Microsoft.Xna.Framework.BoundingFrustum boundingFrustum, IndexedVector3 color)
+        {
+            boundingFrustum.GetCorners(corners);
+            Globals.DebugDraw.DrawLine(corners[0], corners[1], color);
+            Globals.DebugDraw.DrawLine(corners[1], corners[2], color);
+            Globals.DebugDraw.DrawLine(corners[2], corners[3], color);
+            Globals.DebugDraw.DrawLine(corners[3], corners[0], color);
+
+            Globals.DebugDraw.DrawLine(corners[4], corners[5], color);
+            Globals.DebugDraw.DrawLine(corners[5], corners[6], color);
+            Globals.DebugDraw.DrawLine(corners[6], corners[7], color);
+            Globals.DebugDraw.DrawLine(corners[7], corners[4], color);
+
+            Globals.DebugDraw.DrawLine(corners[0], corners[4], color);
+            Globals.DebugDraw.DrawLine(corners[1], corners[5], color);
+            Globals.DebugDraw.DrawLine(corners[2], corners[6], color);
+            Globals.DebugDraw.DrawLine(corners[3], corners[7], color);
+
+        }
+
+
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -277,10 +337,15 @@ namespace com.xexuxjy.magiccarpet.terrain
             Matrix rotation = Matrix.Identity;
             float scale = 1f;
 
-            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left, rotation), new Vector2(0, 0));
-            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left+baseUp, rotation), new Vector2(0, 1));
-            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right + baseUp, rotation), new Vector2(1, 1));
-            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right , rotation), new Vector2(1, 0));
+            //billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left, rotation), new Vector2(0, 0));
+            //billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left+baseUp, rotation), new Vector2(0, 1));
+            //billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right + baseUp, rotation), new Vector2(1, 1));
+            //billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right , rotation), new Vector2(1, 0));
+
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left, rotation), new Vector2(0, 1));
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(left + baseUp, rotation), new Vector2(0, 0));
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right + baseUp, rotation), new Vector2(1, 0));
+            billboardVertices[i++] = new VertexPositionTexture(Vector3.TransformNormal(right, rotation), new Vector2(1, 1));
 
             short[] indices = new short[] { 0, 3, 2, 2, 1, 0 };
 
@@ -289,6 +354,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             m_billboardIndexBuffer = new IndexBuffer(Globals.GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
             m_billboardIndexBuffer.SetData<short>(indices);
+
+            BuildBillboardTreeTexture();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -313,8 +380,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             Matrix scaled = Matrix.CreateScale(scaledSize);
 
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_HALF_PI, 1f, 0.1f, 1000f);
-            Vector3 offset = Vector3.Forward * (float)Math.Sin(MathUtil.SIMD_HALF_PI) * (m_billboardHeight * 0.5f);
+            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathUtil.SIMD_QUARTER_PI, 1f, 0.1f, 1000f);
+            //Vector3 offset = Vector3.Forward * (float)Math.Tan(MathUtil.SIMD_QUARTER_PI) * (m_billboardHeight * 0.5f);
+
+            Vector3 offset = Vector3.Backward * (float)Math.Tan(MathUtil.SIMD_QUARTER_PI) * (m_billboardHeight * 0.5f) * 2f;
 
             Vector3 scaledCenter = new Vector3(0, desiredSize, 0) * 0.5f;
 
@@ -326,10 +395,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             m_treeTexture = m_billboardTreeRenderTarget;
 
-            //using (Stream stream = File.OpenWrite("c:/tmp/carpet-tree.png"))
-            //{
-            //    m_billboardTreeRenderTarget.SaveAsPng(stream, m_treeTexture.Width, m_treeTexture.Height);
-            //}
+            using (Stream stream = File.OpenWrite("d:/tmp/carpet-tree.png"))
+            {
+                m_billboardTreeRenderTarget.SaveAsPng(stream, m_treeTexture.Width, m_treeTexture.Height);
+            }
 
         }
 
@@ -355,9 +424,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             //drawLeaves = false;
             //Globals.MCContentManager.SaveBlendState();
+            
             if (drawTrunk)
             {
-                ApplyStateBlock();
+                //ApplyStateBlock();
 
                 // Set up the instance rendering effect.
                 Effect effect = m_simpleTree.TrunkEffect;
@@ -368,7 +438,6 @@ namespace com.xexuxjy.magiccarpet.terrain
 
                 effect.Parameters["Texture"].SetValue(m_simpleTree.TrunkTexture);
 
-                m_simpleTree.Skeleton.CopyBoneBindingMatricesTo(m_bindingMatrices, m_bindingQuaternions);
                 effect.Parameters["Bones"].SetValue(m_bindingMatrices);
 
                 effect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
@@ -385,42 +454,42 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             if (drawLeaves)
             {
-                ApplyStateBlock();
+                //ApplyStateBlock();
                 // Set up the instance rendering effect.
                 Effect effect = m_simpleTree.LeafEffect;
                 
                 // And leaves
                 effect.CurrentTechnique = effect.Techniques["LeafHardwareInstancing"];
+                Globals.MCContentManager.ApplyCommonEffectParameters(effect);
+
+
                 effect.Parameters["LeafScale"].SetValue(1f);
                 effect.Parameters["Bones"].SetValue(m_bindingMatrices);
                 effect.Parameters["LeafTexture"].SetValue(m_simpleTree.LeafTexture);
 
                 effect.Parameters["WorldMatrix"].SetValue(Matrix.Identity);
-                effect.Parameters["ProjMatrix"].SetValue(projection);
-                effect.Parameters["ViewMatrix"].SetValue(view);
 
                 effect.Parameters["BillboardRight"].SetValue(Vector3.Right);
                 effect.Parameters["BillboardUp"].SetValue(Vector3.Up);
 
-                // Tell the GPU to read from both the model vertex buffer plus our instanceVertexBuffer.
-                Globals.GraphicsDevice.SetVertexBuffers(
-                    new VertexBufferBinding(m_simpleTree.LeafCloud.VertexBuffer, 0, 0),
-                    new VertexBufferBinding(m_instanceVertexBuffer, 0, 1)
-                );
-
-
-                Globals.GraphicsDevice.Indices = m_simpleTree.LeafCloud.IndexBuffer;
                 effect.Parameters["HeightMapTexture"].SetValue(Globals.Terrain.HeightMapTexture);
 
-                // Draw all the instance copies in a single call.
-                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-                {
-                    pass.Apply();
+                effect.Parameters["AlphaTestDirection"].SetValue(1f);
 
-                    Globals.GraphicsDevice.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0,
-                                                            m_simpleTree.LeafCloud.NumberOfVertices, 0,
-                                                            m_simpleTree.LeafCloud.NumberOfTriangles, m_instanceTreeMatricesList.Count);
-                }
+                Globals.GraphicsDevice.BlendState = BlendState.Opaque;
+                Globals.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                Globals.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+                Globals.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+
+                DrawInstanced(projection, view, m_simpleTree.LeafCloud.VertexBuffer, m_simpleTree.LeafCloud.IndexBuffer, effect, m_simpleTree.LeafCloud.NumberOfVertices, m_simpleTree.LeafCloud.NumberOfTriangles);
+
+                effect.Parameters["AlphaTestDirection"].SetValue(-1f);
+
+                Globals.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
+                Globals.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+
+                DrawInstanced(projection, view, m_simpleTree.LeafCloud.VertexBuffer, m_simpleTree.LeafCloud.IndexBuffer, effect, m_simpleTree.LeafCloud.NumberOfVertices, m_simpleTree.LeafCloud.NumberOfTriangles);
+
                 ClearHeightmapTexture(effect);
             }
         }
@@ -454,9 +523,9 @@ namespace com.xexuxjy.magiccarpet.terrain
         {
             return;
             Globals.MCContentManager.SaveBlendState();
-            BuildBillboardTreeTexture();
-            DrawBillboardTrees();
+            //BuildBillboardTreeTexture();
             DrawPrettyTrees();
+            DrawBillboardTrees();
             Globals.MCContentManager.RestoreBlendState();
         }
 
@@ -479,11 +548,11 @@ namespace com.xexuxjy.magiccarpet.terrain
             BoundingSphere farSphere = new BoundingSphere(Globals.Player.Position, m_farBillBoardPlane);
 
             m_instanceTreeMatricesList.Clear();
-
             m_activeBoundsList.Clear();
 
-            m_treeBoundsQuadTree.FindObjectsInsideSphereBand(nearSphere,farSphere, m_activeBoundsList);
-
+            //m_treeBoundsQuadTree.FindObjectsInsideSphereBand(nearSphere,farSphere, m_activeBoundsList);
+            m_treeBoundsQuadTree.FindObjectsInsideFrustum(m_billboardFrustum, m_activeBoundsList);
+            //m_treeBoundsQuadTree.FindObjectsInsideFrustum(m_prettyFrustum, m_activeBoundsList);
             foreach (TreeBounds treeBounds in m_activeBoundsList)
             {
                 m_instanceTreeMatricesList.Add(treeBounds.m_matrix);
@@ -506,7 +575,8 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             DrawInstanced(Globals.Camera.ProjectionMatrix, Globals.Camera.ViewMatrix, m_billboardVertexBuffer, m_billboardIndexBuffer, m_billboardTreeEffect, 4, 2);
 
-            m_billboardTreeEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+
+            ClearHeightmapTexture(m_billboardTreeEffect);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -527,12 +597,12 @@ namespace com.xexuxjy.magiccarpet.terrain
         //private Matrix[] m_instanceTreeMatrices = null;
         private ObjectArray<Matrix> m_instanceTreeMatricesList = new ObjectArray<Matrix>();
         private List<TreeBounds> m_activeBoundsList = new List<TreeBounds>();
-        private float m_nearPrettyPlane = 1;
-        private float m_farPrettyPlane = 10;
-        private float m_farBillBoardPlane = 70;
+        private float m_nearPrettyPlane = 0.1f;
+        private float m_farPrettyPlane = 20;
+        private float m_farBillBoardPlane = 200;
 
         private float m_billboardHalfWidth = 1f;
-        private float m_billboardHeight = 4;
+        private float m_billboardHeight = 4f;
 
 
         private BoundingFrustum m_prettyFrustum = new BoundingFrustum(Matrix.Identity);
@@ -554,8 +624,8 @@ namespace com.xexuxjy.magiccarpet.terrain
         private VertexBuffer m_billboardVertexBuffer;
         private IndexBuffer m_billboardIndexBuffer;
         private RenderTarget2D m_billboardTreeRenderTarget;
-
-        private QuadTree<TreeBounds> m_treeBoundsQuadTree = new QuadTree<TreeBounds>(4,Vector3.Zero,(Globals.worldMaxPos - Globals.worldMinPos)/2f);
+        private const int quadTreeMaxObjects = 16;
+        private QuadTree<TreeBounds> m_treeBoundsQuadTree = new QuadTree<TreeBounds>(quadTreeMaxObjects,Vector3.Zero,(Globals.worldMaxPos - Globals.worldMinPos)/2f);
 
 
     }

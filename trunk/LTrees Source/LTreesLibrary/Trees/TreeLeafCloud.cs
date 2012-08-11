@@ -160,6 +160,9 @@ namespace LTreesLibrary.Trees
             ibuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, indices.Length, BufferUsage.None);
             ibuffer.SetData<short>(indices);
 
+
+            //FIXME - calc BoundingBox here 
+
             // Remember the number of leaves
             numleaves = skeleton.Leaves.Count;
         }
