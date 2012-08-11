@@ -22,7 +22,7 @@ public class QuadTree<T> where T : ISpatialNode
 {
     #region Fields
 
-    public readonly BoundingBox BoundingBox;
+    public BoundingBox BoundingBox;
     public readonly List<T> Objects;
     public int MaxObjects;
     public QuadTree<T> Parent;
@@ -46,8 +46,11 @@ public class QuadTree<T> where T : ISpatialNode
     public QuadTree(int maxObjects, BoundingBox box)
     {
         MaxObjects = maxObjects;
-        box.Min.Y = float.MinValue;
-        box.Max.Y = float.MaxValue;
+        
+        //box.Min.Y = float.MinValue;
+        //box.Max.Y = float.MaxValue;
+
+
         BoundingBox = box;
         Objects = new List<T>(maxObjects);
     }
@@ -61,7 +64,7 @@ public class QuadTree<T> where T : ISpatialNode
     /// <typeparam name="position">The center of the QuadTree in world space</typeparam>
     /// <typeparam name="scale">The size of the QuadTree</typeparam>
     public QuadTree(int maxObjects, Vector3 position, Vector3 scale)
-        : this(maxObjects, new BoundingBox(position - scale * 0.5f, position + scale * 0.5f))
+        : this(maxObjects, new BoundingBox(position - (scale * 0.5f), position + (scale * 0.5f)))
     {
     }
 
@@ -248,6 +251,11 @@ public class QuadTree<T> where T : ISpatialNode
 
     void AddLeavesInsideFrustum(BoundingFrustum frustum)
     {
+        //if (frustum.Contains(BoundingBox) != ContainmentType.Disjoint)
+        //bool intersects;
+        //frustum.FastIntersects(ref BoundingBox, out intersects);
+        //if (intersects) ;
+
         if (frustum.Contains(BoundingBox) != ContainmentType.Disjoint)
         {
             if (TopLeft == null)
@@ -407,15 +415,21 @@ public class QuadTree<T> where T : ISpatialNode
         float halfScaleX = (BoundingBox.Max.X - BoundingBox.Min.X) * 0.5f;
         float halfScaleZ = (BoundingBox.Max.Z - BoundingBox.Min.Z) * 0.5f;
         Vector3 halfScale = new Vector3(halfScaleX, 0f, halfScaleZ);
+        halfScale.Y = (BoundingBox.Max.Y * 2);
+
         float qtrScaleX = halfScaleX * 0.5f;
         float qtrScaleZ = halfScaleZ * 0.5f;
 
         if (qtrScaleX != 0f && qtrScaleZ != 0f)
         {
             Vector3 topLeftPosition = BoundingBox.Min + new Vector3(qtrScaleX, 0f, qtrScaleZ);
+            topLeftPosition.Y = 0f;
             Vector3 topRightPosition = BoundingBox.Min + new Vector3(qtrScaleX + halfScaleX, 0f, qtrScaleZ);
+            topRightPosition.Y = 0f;
             Vector3 bottomLeftPosition = BoundingBox.Min + new Vector3(qtrScaleX, 0f, qtrScaleZ + halfScaleZ);
+            bottomLeftPosition.Y = 0f;
             Vector3 bottomRightPosition = BoundingBox.Min + new Vector3(qtrScaleX + halfScaleX, 0f, qtrScaleZ + halfScaleZ);
+            bottomRightPosition.Y = 0f;
 
             TopLeft = new QuadTree<T>(MaxObjects, topLeftPosition, halfScale);
             TopRight = new QuadTree<T>(MaxObjects, topRightPosition, halfScale);
@@ -447,4 +461,104 @@ public class QuadTree<T> where T : ISpatialNode
     }
 
     #endregion
+}
+
+
+// faster example taken from : http://gamedev.stackexchange.com/questions/6514/boundingfrustum-performance-issues
+
+public static class FrustumHelper
+{
+    public static Vector3 GetNegativeVertex(this BoundingBox aabb,
+                                            ref Vector3 normal)
+    {
+        Vector3 p = aabb.Max;
+        if (normal.X >= 0)
+            p.X = aabb.Min.X;
+        if (normal.Y >= 0)
+            p.Y = aabb.Min.Y;
+        if (normal.Z >= 0)
+            p.Z = aabb.Min.Z;
+
+        return p;
+    }
+
+    public static Vector3 GetPositiveVertex(this BoundingBox aabb,
+                                            ref Vector3 normal)
+    {
+        Vector3 p = aabb.Min;
+        if (normal.X >= 0)
+            p.X = aabb.Max.X;
+        if (normal.Y >= 0)
+            p.Y = aabb.Max.Y;
+        if (normal.Z >= 0)
+            p.Z = aabb.Max.Z;
+
+        return p;
+    }
+
+
+public static void FastIntersects(this BoundingFrustum boundingfrustum, 
+                                          ref BoundingBox aabb, 
+                                          out bool intersects)
+        {
+            intersects = false;
+
+            Plane plane; Vector3 normal, p;
+
+            plane = boundingfrustum.Bottom;
+            normal = plane.Normal;
+            normal.X = -normal.X; 
+            normal.Y = -normal.Y; 
+            normal.Z = -normal.Z;
+            p = aabb.GetPositiveVertex(ref normal);
+            if (-plane.D + normal.X * p.X + normal.Y * p.Y + normal.Z * p.Z < 0)
+                return;
+
+            plane = boundingfrustum.Far;
+            normal = plane.Normal;
+            normal.X = -normal.X;
+            normal.Y = -normal.Y;
+            normal.Z = -normal.Z;
+            p = aabb.GetPositiveVertex(ref normal);
+            if (-plane.D + normal.X * p.X + normal.Y * p.Y + normal.Z * p.Z < 0)
+                return;
+
+            plane = boundingfrustum.Left;
+            normal = plane.Normal;
+            normal.X = -normal.X;
+            normal.Y = -normal.Y;
+            normal.Z = -normal.Z;
+            p = aabb.GetPositiveVertex(ref normal);
+            if (-plane.D + normal.X * p.X + normal.Y * p.Y + normal.Z * p.Z < 0)
+                return;
+
+            plane = boundingfrustum.Near;
+            normal = plane.Normal;
+            normal.X = -normal.X;
+            normal.Y = -normal.Y;
+            normal.Z = -normal.Z;
+            p = aabb.GetPositiveVertex(ref normal);
+            if (-plane.D + normal.X * p.X + normal.Y * p.Y + normal.Z * p.Z < 0)
+                return;
+
+            plane = boundingfrustum.Right;
+            normal = plane.Normal;
+            normal.X = -normal.X;
+            normal.Y = -normal.Y;
+            normal.Z = -normal.Z;
+            p = aabb.GetPositiveVertex(ref normal);
+            if (-plane.D + normal.X * p.X + normal.Y * p.Y + normal.Z * p.Z < 0)
+                return;
+
+            plane = boundingfrustum.Top;
+            normal = plane.Normal;
+            normal.X = -normal.X;
+            normal.Y = -normal.Y;
+            normal.Z = -normal.Z;
+            p = aabb.GetPositiveVertex(ref normal);
+            if (-plane.D + normal.X * p.X + normal.Y * p.Y + normal.Z * p.Z < 0)
+                return;
+
+            intersects = true;
+        }
 }

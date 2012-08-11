@@ -253,51 +253,14 @@ LeafVertexShaderOutput LeafHardwareInstancingVertexShader(LeafVertexShaderInput 
 float4 LeafPixelShaderFunction(LeafVertexShaderOutput input) : COLOR0
 {
 	// we use a larger mipmap for the alpha channel so the leaves don't look transparent
-    return float4(input.Color * tex2D(LeafTextureSampler, input.uv).rgb, tex2Dbias(LeafTextureSampler, float4(input.uv.xy, 1, -1)).a);
-	
+    float4 color = float4(input.Color * tex2D(LeafTextureSampler, input.uv).rgb, tex2Dbias(LeafTextureSampler, float4(input.uv.xy, 1, -1)).a);
+	clip((color.a - AlphaTestThreshold) * AlphaTestDirection);
+	return color;
 }
-
-float4 LeafPixelShaderFunctionOpaque(LeafVertexShaderOutput input) : COLOR0
-{
-	float4 result = LeafPixelShaderFunction(input);
-
-	// XNA 4.0 doesn't support AlphaTestEnable state, so need to replicate
-	// that functionality with this.
-	clip((result.a < 230.0 / 255.0) ? -1 : 1);
-
-	return result;
-}
-
-float4 LeafPixelShaderFunctionBlendedEdges(LeafVertexShaderOutput input) : COLOR0
-{
-	float4 result = LeafPixelShaderFunction(input);
-
-	// XNA 4.0 doesn't support AlphaTestEnable state, so need to replicate
-	// that functionality with this.
-	clip((result.a > 230.0 / 255.0) ? -1 : 1);
-
-	return result;
-}
-
 
 BillboardTreeVertexShaderOutput BillboardTreeVertexShaderFunction(BillboardTreeVertexShaderInput input,float4x4 instanceTransform)
 {
 	BillboardTreeVertexShaderOutput output;
-
-	float scale = 1.0;
-
-    // compute coordinates for vertex texture
-    //  FineBlockOrig.xy: 1/(w, h) of texture (texelwidth)
-
-
-
-	/*
-	float3 adjustedPos = float3(input.pos.x,input.pos.y + height,input.pos.z);
-
-	float4 worldPosition = mul(float4(adjustedPos, 1), instanceTransform);
-    float4 viewPosition = mul(worldPosition, ViewMatrix);
-    output.pos = mul(viewPosition, ProjMatrix);
-	*/
 
 
 	float3 center = mul(input.pos, instanceTransform);
@@ -314,8 +277,14 @@ BillboardTreeVertexShaderOutput BillboardTreeVertexShaderFunction(BillboardTreeV
     sideVector = normalize(sideVector);
 
     float3 finalPosition = center;
-    finalPosition += (input.uv.x-0.5f)*sideVector;
-    finalPosition += (1.5f-input.uv.y*1.5f)*upVector;
+    //finalPosition += (input.uv.x-0.5f)*sideVector;
+    //finalPosition += (1.5f-input.uv.y*1.5f)*upVector;
+
+
+	finalPosition += (input.pos.x)*sideVector;
+    finalPosition += (input.pos.y)*upVector;
+
+
 
     float4 finalPosition4 = float4(finalPosition, 1);
     float4 viewPosition = mul(finalPosition4, ViewMatrix);
@@ -361,40 +330,11 @@ BillboardTreeVertexShaderOutput BillboardHardwareInstancingTreeVertexShaderFunct
 
 technique LeafHardwareInstancing
 {
-    pass Opaque
+    pass Pass1
     {
-        VertexShader = compile vs_3_0 LeafHardwareInstancingVertexShader();
-        PixelShader = compile ps_3_0 LeafPixelShaderFunctionOpaque();
-        
-        AlphaBlendEnable = false;
-        
-        ZEnable = true;
-        ZWriteEnable = true;
-        
-        CullMode = None;
-    }
-    pass BlendedEdges
-    {
-        VertexShader = compile vs_3_0 LeafHardwareInstancingVertexShader();
-        PixelShader = compile ps_3_0 LeafPixelShaderFunctionBlendedEdges();
-        
-        AlphaBlendEnable = true;
-        SrcBlend = SrcAlpha;
-        DestBlend = InvSrcAlpha;
-
-        ZEnable = true;
-        ZWriteEnable = false;
-
-        CullMode = None;
-    }
-}
-technique LeafSetNoRenderStates
-{
-	pass Pass1
-	{
         VertexShader = compile vs_3_0 LeafHardwareInstancingVertexShader();
         PixelShader = compile ps_3_0 LeafPixelShaderFunction();
-	}
+    }
 }
 
 
