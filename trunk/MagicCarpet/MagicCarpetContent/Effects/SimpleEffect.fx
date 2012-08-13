@@ -69,32 +69,6 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	result.rgb = saturate(result.rgb * (diffuseIntensity) + AmbientLightColor * AmbientLightIntensity + specular);
 
 
-	// Get value in the range of -1 to 1
-	//float3 normalFromMap = BumpConstant * (tex2D(NormalMapSampler, input.uv) - (0.5, 0.5, 0.5));
-	//float3 normalFromMap = normalize(2.0f * tex2D(NormalMapSampler,input.uv) - 1.0f);
-	//normalFromMap = mul(normalFromMap,input.tangent);	
-
-	//normalFromMap *= input.normal;
-	//normalFromMap.normalize();
-
-	//float dotResult = dot(-LightDirection, normalFromMap);    
-	//dotResult = saturate(dotResult);
-
-	//float3 directionalComponent = DirectionalLightColor * DirectionalLightIntensity * dotResult;
-	//float4 light = float4(directionalComponent + (AmbientLightColor * AmbientLightIntensity),1);
-
-
-	//float3 specular = SpecularLightIntensity * SpecularLightColor * max(pow(dotResult, Shininess), 0) * diffuseIntensity;
-
-	//result.rgb = saturate(result.rgb * (diffuseIntensity) + AmbientLightColor * AmbientLightIntensity + specular);
-	//result *= light;
-
-	//float fogFactor = ComputeFogFactor(input.pos3d);
-	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
-
-	//result = float4(1,1,0,1);
-
-
     return result;
 }
 

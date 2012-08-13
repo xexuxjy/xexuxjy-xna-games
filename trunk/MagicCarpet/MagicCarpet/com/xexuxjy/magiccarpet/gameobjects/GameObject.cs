@@ -126,6 +126,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         {
             m_attributes[(int)GameObjectAttributeType.Health] = new GameObjectAttribute(GameObjectAttributeType.Health, 100);
             m_attributes[(int)GameObjectAttributeType.Mana] = new GameObjectAttribute(GameObjectAttributeType.Mana, 100);
+            m_attributes[(int)GameObjectAttributeType.DamageReduction] = new GameObjectAttribute(GameObjectAttributeType.DamageReduction, 0f);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -749,12 +750,14 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public virtual void Damaged(DamageData damageData)
         {
+            float adjustedDamage = damageData.m_damage * (1f - m_attributes[(int)GameObjectAttributeType.DamageReduction].CurrentValue);
+
 #if LOG_EVENT
-            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] Damaged [{2}][{3}][{4}].", Id, GameObjectType, damageData.m_damager.Id, damageData.m_damager.GameObjectType, damageData.m_damage));
+            Globals.EventLogger.LogEvent(String.Format("GameObject[{0}][{1}] Damaged [{2}][{3}][{4}][{5}].", Id, GameObjectType, damageData.m_damager.Id, damageData.m_damager.GameObjectType, damageData.m_damage,adjustedDamage));
 #endif
 
 
-            m_attributes[(int)GameObjectAttributeType.Health].CurrentValue -= damageData.m_damage;
+            m_attributes[(int)GameObjectAttributeType.Health].CurrentValue -= adjustedDamage;
 
             // got hit so update our threat lists
             if (m_threatComponent != null)

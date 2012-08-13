@@ -200,6 +200,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellCastle.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellComponent.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellRubberband.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\spells\SpellShield.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellSwarmOfBees.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\SpellTurbo.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\spells\Spell.cs" />

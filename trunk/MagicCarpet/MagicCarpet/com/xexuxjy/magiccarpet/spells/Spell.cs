@@ -22,6 +22,7 @@ namespace com.xexuxjy.magiccarpet.spells
         RubberBand,
         SwarmOfBees,
         Turbo,
+        Shield,
         NumSpellTypes
     }
 
@@ -192,7 +193,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // called by the spell template when the cast time is complete.
-        public void Start()
+        public virtual void Start()
         {
 
 

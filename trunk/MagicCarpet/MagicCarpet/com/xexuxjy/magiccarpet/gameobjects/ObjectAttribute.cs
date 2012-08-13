@@ -11,6 +11,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         Health,
         Mana,
         Speed,
+        DamageReduction,
         NumTypes
     }
 

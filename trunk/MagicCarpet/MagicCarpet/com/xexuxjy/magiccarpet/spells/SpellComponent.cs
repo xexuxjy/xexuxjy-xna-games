@@ -22,6 +22,7 @@ namespace com.xexuxjy.magiccarpet.spells
             InitializeTemplate(SpellType.Heal, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.Turbo, 5, 0.5f, 1f, 10f);
             InitializeTemplate(SpellType.RubberBand, 5, 0.5f, 1f, 10f);
+            InitializeTemplate(SpellType.Shield, 5, 0.5f, 1f, 10f);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
