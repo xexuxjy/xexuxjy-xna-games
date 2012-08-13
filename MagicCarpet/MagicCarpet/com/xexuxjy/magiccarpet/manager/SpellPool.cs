@@ -59,6 +59,11 @@ namespace com.xexuxjy.magiccarpet.manager
                             spell = new SpellTurbo(owner);
                             break;
                         }
+                    case (SpellType.Shield):
+                        {
+                            spell = new SpellShield(owner);
+                            break;
+                        }
                 }
                 spell.Initialize(owner.SpellComponent.GetSpellTemplate(spellType));
 #if LOG_EVENT

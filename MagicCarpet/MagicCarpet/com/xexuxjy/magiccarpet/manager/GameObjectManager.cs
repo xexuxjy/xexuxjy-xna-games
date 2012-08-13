@@ -386,11 +386,17 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public override void Draw(GameTime gameTime)
         {
-            BlendState bs = Globals.GraphicsDevice.BlendState;
             foreach (IDrawable drawable in m_drawableList)
             {
+                if (drawable as TreeManager == null)
+                {
+                    //continue;
+                }
                 drawable.Draw(gameTime);
             }
+
+            // now temp effects.
+            DrawEffects(Globals.GraphicsDevice, Globals.Camera.ViewMatrix, Matrix.Identity, Globals.Camera.ProjectionMatrix);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,6 +409,70 @@ namespace com.xexuxjy.magiccarpet.manager
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public TempGraphicHolder AddTempGraphicHolder(GameObject ownerObject, Model model, Texture2D texture, Texture2D normalTexture, Matrix transform)
+        {
+
+            TempGraphicHolder tempHolder = new TempGraphicHolder(ownerObject, model, texture, normalTexture, transform);
+            m_tempGraphicHolders.Add(tempHolder);
+            return tempHolder;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void ReleaseTempGraphicHolder(TempGraphicHolder tempHolder)
+        {
+            m_tempGraphicHolders.Remove(tempHolder);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        static Matrix[] s_boneTransforms = new Matrix[10];
+
+        public void DrawEffects(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
+        {
+            Globals.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            foreach (TempGraphicHolder holder in m_tempGraphicHolders)
+            {
+                if (holder.m_active && holder.m_model != null)
+                {
+                    //if (Globals.s_currentCameraFrustrum.Contains(holder.m_boundingBox) != ContainmentType.Disjoint)
+                    {
+                        foreach (ModelMesh mesh in holder.m_model.Meshes)
+                        {
+                            holder.m_model.CopyAbsoluteBoneTransformsTo(s_boneTransforms);
+                            foreach (Effect effect in mesh.Effects)
+                            {
+                                effect.CurrentTechnique = effect.Techniques["SimpleTechnique"];
+                                Globals.MCContentManager.ApplyCommonEffectParameters(effect);
+
+                                Matrix owner = holder.m_owner != null ? holder.m_owner.WorldTransform : Matrix.Identity;
+                                Matrix result = owner * holder.m_transform * world;
+
+                                effect.Parameters["WorldMatrix"].SetValue(s_boneTransforms[mesh.ParentBone.Index] * result);
+                                Texture2D texture = holder.m_texture;
+                                if (texture != null)
+                                {
+                                    effect.Parameters["Texture"].SetValue(texture);
+                                }
+
+                                Texture2D normalTexture = holder.m_normalTexture;
+                                if (texture != null)
+                                {
+                                    effect.Parameters["NormalTexture"].SetValue(normalTexture);
+                                }
+                            }
+                            mesh.Draw();
+                        }
+                    }
+                }
+            }
+            Globals.GraphicsDevice.BlendState = BlendState.Opaque;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public ObjectArray<TempGraphicHolder> m_tempGraphicHolders = new ObjectArray<TempGraphicHolder>();
 
         private List<GameObject> m_gameObjectListAdd = new List<GameObject>();
         private List<GameObject> m_gameObjectList = new List<GameObject>();
@@ -430,9 +500,30 @@ namespace com.xexuxjy.magiccarpet.manager
         }
 
         private Vector3 m_position;
-    
+    }
 
-}
+    public class TempGraphicHolder
+    {
+        public TempGraphicHolder() { } // list
+        public TempGraphicHolder(GameObject owner, Model model, Texture2D texture, Texture2D normalTexture, Matrix transform)
+        {
+            m_model = model;
+            m_texture = texture;
+            m_normalTexture = normalTexture;
+            m_transform = transform;
+            m_owner = owner;
+            m_active = true;
+        }
+
+        public int m_effectHandle;
+        public bool m_active;
+        public Model m_model;
+        public Texture2D m_texture;
+        public Texture2D m_normalTexture;
+        public Matrix m_transform;
+        public BoundingBox m_boundingBox;
+        public GameObject m_owner;
+    }
 
 
 }

@@ -473,8 +473,8 @@ namespace com.xexuxjy.magiccarpet.gameobjects
         private List<Balloon> m_balloons = new List<Balloon>();
 
 
-        private SpellType m_selectedSpell1 = SpellType.Convert;
-        private SpellType m_selectedSpell2 = SpellType.Castle;
+        private SpellType m_selectedSpell1 = SpellType.Shield;
+        private SpellType m_selectedSpell2 = SpellType.Heal;
 
 
     }

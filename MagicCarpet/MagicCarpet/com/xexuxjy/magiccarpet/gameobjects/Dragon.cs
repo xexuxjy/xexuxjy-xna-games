@@ -1,4 +1,4 @@
-﻿#define P2P
+﻿#define CT
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,10 +46,12 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
             float headMass = 1f;
             float bodyMass = 0.9f;
+            float tailMass = 2f;
 
             for (int i = 0; i < numSpheres; ++i)
             {
-                float mass = (i == 0) ? headMass : bodyMass;
+                float mass = (i == 0) ? headMass : (i==numSpheres-1)?tailMass:bodyMass;
+
                 float radius = (i == 0) ? headRadius : bodyRadius;
                 SphereShape sphereShape = (i == 0) ? headSphereShape : bodySphereShape;
 
@@ -91,9 +93,9 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 #endif
 #if CT
                 IndexedMatrix frameInA, frameInB;
-                frameInA = MathUtil.SetEulerZYX(0, 0, MathUtil.SIMD_HALF_PI);
+                frameInA = MathUtil.SetEulerZYX(0, 0, MathUtil.SIMD_QUARTER_PI);
                 frameInA._origin = new IndexedVector3(0, -radius, 0);
-				frameInB = MathUtil.SetEulerZYX(0, 0, MathUtil.SIMD_HALF_PI);
+				frameInB = MathUtil.SetEulerZYX(0, 0, MathUtil.SIMD_QUARTER_PI);
                 frameInB._origin = new IndexedVector3(0, radius, 0);
 
 		        ConeTwistConstraint constraint = new ConeTwistConstraint(body0, body1, ref frameInA, ref frameInB);

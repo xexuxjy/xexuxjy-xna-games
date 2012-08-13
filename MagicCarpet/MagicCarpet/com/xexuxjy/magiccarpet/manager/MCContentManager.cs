@@ -78,6 +78,8 @@ namespace com.xexuxjy.magiccarpet.manager
 
             LoadModel("SkyDome","Models/SkyDome/skydome");
 
+            LoadModel("SpellShield", "Models/SimpleShapes/unitsphere");
+
             m_debugFont = m_contentManager.Load<SpriteFont>("DebugFont8");
 
             Effect simpleEffect = GetEffect("Simple");
@@ -111,6 +113,13 @@ namespace com.xexuxjy.magiccarpet.manager
             m_textureDictionary["Flag"] = m_contentManager.Load<Texture2D>("Textures/flag");
 
             m_textureDictionary["Balloon"] = m_contentManager.Load<Texture2D>("Models/Balloon/canopy");
+
+
+            Color color = Color.OrangeRed;
+            color.A = 100;
+            m_textureDictionary["SpellShield"] = GetTexture(color);
+
+
         }
 
 
@@ -413,8 +422,10 @@ namespace com.xexuxjy.magiccarpet.manager
 
         private ContentManager m_contentManager;
         private GraphicsDevice m_graphicsDevice;
-    }
 
+    
+    
+    }
 
     public struct GraphicsState
     {

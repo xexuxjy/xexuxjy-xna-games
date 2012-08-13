@@ -261,7 +261,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Draw(GameTime gameTime)
         {
-            //return;
+            
             UpdateHeightMapTexture();
 
             Vector3 lastStartPosition = Vector3.Zero;
