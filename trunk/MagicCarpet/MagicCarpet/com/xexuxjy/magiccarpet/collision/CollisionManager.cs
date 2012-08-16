@@ -11,14 +11,18 @@ using BulletXNA;
 using com.xexuxjy.magiccarpet.interfaces;
 using BulletXNADemos.Demos;
 using com.xexuxjy.magiccarpet.gameobjects;
+using System.Threading;
 
 namespace com.xexuxjy.magiccarpet.collision
 {
     public class CollisionManager : EmptyGameObject
     {
-        public CollisionManager(IndexedVector3 worldMin, IndexedVector3 worldMax)
+        public CollisionManager(AutoResetEvent startEvent,AutoResetEvent endEvent,IndexedVector3 worldMin, IndexedVector3 worldMax)
             : base(GameObjectType.manager)
         {
+            m_startEvent = startEvent;
+            m_endEvent = endEvent;
+
             m_collisionConfiguration = new DefaultCollisionConfiguration();
 
             ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
@@ -41,6 +45,9 @@ namespace com.xexuxjy.magiccarpet.collision
 
 
             DrawOrder = Globals.DEBUG_DRAW_ORDER;
+
+            RunInThread();
+
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -66,16 +73,16 @@ namespace com.xexuxjy.magiccarpet.collision
 
         public override void Update(GameTime gameTime)
         {
-            float ms = (float)gameTime.ElapsedGameTime.TotalSeconds;
             //ms *= 0.1f;
             ///step the simulation
-            m_dynamicsWorld.StepSimulation(ms, 1);
+            ///
+            m_gameTime = gameTime;
+            
             //m_dynamicsWorld.DebugDrawWorld();
 
-            ProcessCollisions();
 
-            String debugText = String.Format("CollisionManager Objects[{0}] Constraints[{1}] Pairs[{2}] Manifolds[{3}].", m_dynamicsWorld.GetNumCollisionObjects(), m_dynamicsWorld.GetNumConstraints(), m_broadphase.GetOverlappingPairCache().GetNumOverlappingPairs(), m_dispatcher.GetNumManifolds());
-            Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, IndexedVector3.One);
+            //String debugText = String.Format("CollisionManager Objects[{0}] Constraints[{1}] Pairs[{2}] Manifolds[{3}].", m_dynamicsWorld.GetNumCollisionObjects(), m_dynamicsWorld.GetNumConstraints(), m_broadphase.GetOverlappingPairCache().GetNumOverlappingPairs(), m_dispatcher.GetNumManifolds());
+            //Globals.DebugDraw.DrawText(debugText, Globals.DebugTextCollisionManager, IndexedVector3.One);
 
             base.Update(gameTime);
 
@@ -83,7 +90,35 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
-        protected void ProcessCollisions()
+        public void RunInThread()
+        {
+            ThreadStart ts = new ThreadStart(RunUpdate);
+            m_updateThread = new Thread(ts);
+            m_updateThread.Start();
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void RunUpdate()
+        {
+            while (true)
+            {
+                m_startEvent.WaitOne();
+                Thread.MemoryBarrier();
+                if (m_gameTime != null)
+                {
+                    float ms = (float)m_gameTime.ElapsedGameTime.TotalSeconds;
+                    //ms *= 0.1f;
+                    ///step the simulation
+                    m_dynamicsWorld.StepSimulation(ms, 1);
+                }
+                Thread.MemoryBarrier();
+                m_endEvent.Set();
+            }
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        public void ProcessCollisions()
         {
             IDispatcher dispatcher = m_dynamicsWorld.GetDispatcher();
             int numManifolds = dispatcher.GetNumManifolds();
@@ -381,6 +416,14 @@ namespace com.xexuxjy.magiccarpet.collision
         protected DynamicsWorld m_dynamicsWorld;
         protected GhostPairCallback m_ghostPairCallback;
         protected IndexedVector3 m_gravity = new IndexedVector3(0, -10, 0);
+
+        protected AutoResetEvent m_startEvent;
+        protected AutoResetEvent m_endEvent;
+        protected volatile GameTime m_gameTime;
+
+        protected Thread m_updateThread;
+
+
     }
 
     public class CustomMaterialCombinerCallback : IContactAddedCallback

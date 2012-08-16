@@ -7,6 +7,12 @@ using GameStateManagement;
 using com.xexuxjy.magiccarpet.terrain;
 using BulletXNA.LinearMath;
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
+using Dhpoware;
+using BulletXNADemos.Demos;
+using com.xexuxjy.magiccarpet.collision;
+using com.xexuxjy.magiccarpet.util.console;
+using com.xexuxjy.magiccarpet.util.debug;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -16,10 +22,76 @@ namespace com.xexuxjy.magiccarpet.manager
             : base(Globals.Game)
         {
             m_gameplayScreen = gameplayScreen;
+            m_physicsFrameStart = new AutoResetEvent(false);
+            m_physicsFrameEnd = new AutoResetEvent(false);
+
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void CreateInitialComponents()
+        {
+            Globals.Camera = new CameraComponent();
+            Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
+
+
+
+            Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
+
+            m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;// | DebugDrawModes.DBG_DrawWireframe;
+            //m_debugDrawMode = DebugDrawModes.ALL;
+            //m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
+
+            Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
+            if (Globals.DebugDraw != null)
+            {
+                Globals.DebugDraw.LoadContent();
+            }
+
+            Globals.CollisionManager = new CollisionManager(m_physicsFrameStart,m_physicsFrameEnd,Globals.worldMinPos, Globals.worldMaxPos);
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager, true);
+
+
+            Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
+            Globals.SimpleConsole.Enabled = false;
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole, true);
+
+
+            Globals.MCContentManager = new MCContentManager();
+            Globals.MCContentManager.Initialize();
+
+            Globals.DebugObjectManager = new DebugObjectManager(Globals.DebugDraw);
+            Globals.DebugObjectManager.Enabled = true;
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.DebugObjectManager);
+
+
+
+            Globals.ActionPool = new ActionPool();
+
+            Globals.SpellPool = new SpellPool();
+
+            Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject("Terrain", Vector3.Zero);
+
+            Globals.FlagManager = new FlagManager();
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager, true);
+
+
+            Globals.TreeManager = new TreeManager();
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.TreeManager, true);
+
+
+            Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
+            Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);
+
+
+            Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
+
+
+
+        }
+
+        
         public static bool IsAttackable(GameObject gameObject)
         {
             bool alive = gameObject.IsAlive();
@@ -139,6 +211,8 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public override void Update(GameTime gameTime)
         {
+            // All new objects are added and removed here
+
             foreach (GameObject gameObject in m_gameObjectListAdd)
             {
                 m_gameObjectList.Add(gameObject);
@@ -155,10 +229,20 @@ namespace com.xexuxjy.magiccarpet.manager
 
             m_gameObjectListAdd.Clear();
 
+            // tell the phyics we're ready to go.
+            m_physicsFrameStart.Set();
+            Thread.MemoryBarrier();
+
             foreach (GameObject gameObject in m_gameObjectList)
             {
                 gameObject.Update(gameTime);
             }
+            // wait for physics before we continue?
+            m_physicsFrameEnd.WaitOne();
+
+
+            // and again all old objects are removed in a single threaded form.
+
 
             foreach (GameObject removedGameObject in m_gameObjectListRemove)
             {
@@ -166,7 +250,10 @@ namespace com.xexuxjy.magiccarpet.manager
             }
 
             m_gameObjectListRemove.Clear();
-    
+
+            // do this at the end
+            Globals.CollisionManager.ProcessCollisions();
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -481,6 +568,13 @@ namespace com.xexuxjy.magiccarpet.manager
 
         private GameplayScreen m_gameplayScreen;
         public const GameObjectType m_allActiveObjectTypes = GameObjectType.spell | GameObjectType.manaball | GameObjectType.balloon | GameObjectType.castle | GameObjectType.magician | GameObjectType.monster;
+
+
+        private AutoResetEvent m_physicsFrameStart;
+        private AutoResetEvent m_physicsFrameEnd;
+
+        private DebugDrawModes m_debugDrawMode;
+
 
     }
 

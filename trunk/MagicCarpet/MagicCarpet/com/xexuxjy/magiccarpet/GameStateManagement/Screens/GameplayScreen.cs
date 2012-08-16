@@ -61,73 +61,20 @@ namespace GameStateManagement
         {
             try
             {
-                Globals.GameObjectManager = new GameObjectManager(this);
-                //Globals.GameObjectManager.AddAndInitializeObject(Globals.GameObjectManager);
-
-
                 Globals.LoadConfig();
+
+                Globals.GameObjectManager = new GameObjectManager(this);
+                Globals.GameObjectManager.CreateInitialComponents();
+                //Globals.GameObjectManager.AddAndInitializeObject(Globals.GameObjectManager);
+                
+
 
                 if (m_content == null)
                 {
                     m_content = new ContentManager(ScreenManager.Game.Services, "Content");
                 }
 
-                m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;// | DebugDrawModes.DBG_DrawWireframe;
-                //m_debugDrawMode = DebugDrawModes.ALL;
-                //m_debugDrawMode = DebugDrawModes.DBG_DrawAabb;
                 m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
-
-
-                Globals.Camera = new CameraComponent();
-                Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
-
-
-
-                Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
-                Globals.DebugDraw.SetDebugMode(m_debugDrawMode);
-                if (Globals.DebugDraw != null)
-                {
-                    Globals.DebugDraw.LoadContent();
-                }
-
-                Globals.CollisionManager = new CollisionManager(Globals.worldMinPos, Globals.worldMaxPos);
-                Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager, true);
-
-
-                Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
-                Globals.SimpleConsole.Enabled = false;
-                Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole, true);
-
-
-                Globals.MCContentManager = new MCContentManager();
-                Globals.MCContentManager.Initialize();
-
-                Globals.DebugObjectManager = new DebugObjectManager(Globals.DebugDraw);
-                Globals.DebugObjectManager.Enabled = true;
-                Globals.GameObjectManager.AddAndInitializeObject(Globals.DebugObjectManager);
-
-
-
-                Globals.ActionPool = new ActionPool();
-
-                Globals.SpellPool = new SpellPool();
-
-                Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject("Terrain", Vector3.Zero);
-
-                Globals.FlagManager = new FlagManager();
-                Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager, true);
-
-
-                Globals.TreeManager = new TreeManager();
-                Globals.GameObjectManager.AddAndInitializeObject(Globals.TreeManager, true);
-
-
-                Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
-                Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);
-
-
-                Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
-
 
                 m_playerHud = new PlayerHud(this);
                 m_playerHud.Initialise();
@@ -135,6 +82,7 @@ namespace GameStateManagement
 
                 m_playerController = new PlayerController(m_playerHud);
                 Globals.playerController = m_playerController;
+
 
                 // once the load has finished, we use ResetElapsedTime to tell the game's
                 // timing mechanism that we have just finished a very long frame, and that
@@ -273,14 +221,13 @@ namespace GameStateManagement
         ContentManager m_content;
         SpriteFont m_gameFont;
 
-        DebugDrawModes m_debugDrawMode;
-
         static bool loadedInitialScript = false;
 
         float pauseAlpha;
 
         private PlayerController m_playerController;
 
+        private volatile GameTime gameTime;
         #endregion
 
     }

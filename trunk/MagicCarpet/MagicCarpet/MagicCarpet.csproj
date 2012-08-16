@@ -211,6 +211,12 @@
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TerrainType.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\gameobjects\GameObject.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\terrain\TreeManager.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\threading\ChangeBuffer.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\threading\ChangeMessage.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\threading\ChangeMessageType.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\threading\DoubleBuffer.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\threading\RenderData.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\threading\RenderManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\console\SimpleConsole.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugObjectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\util\debug\DebugTextBuilder.cs" />
