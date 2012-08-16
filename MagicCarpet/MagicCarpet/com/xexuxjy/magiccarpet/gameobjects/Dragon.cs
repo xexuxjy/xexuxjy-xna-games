@@ -36,7 +36,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void BuildCollisionObject()
         {
-            int numSpheres = 10;
+            int numSpheres = 20;
             float sphereGap = 1f;
             float headRadius = 0.5f;
             float bodyRadius = 0.5f;
