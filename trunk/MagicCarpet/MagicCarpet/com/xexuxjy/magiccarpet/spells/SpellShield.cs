@@ -32,7 +32,7 @@ namespace com.xexuxjy.magiccarpet.spells
             base.Start();
             Model model = Globals.MCContentManager.GetModelForName("SpellShield");
             Texture2D texture = Globals.MCContentManager.GetTexture("SpellShield");
-            m_tempGraphicsHolder = Globals.GameObjectManager.AddTempGraphicHolder(Owner, model, texture, null, Matrix.Identity);
+            m_tempGraphicsHolder = Globals.ParticleAndEffectManager.AddTempGraphicHolder(Owner, model, texture, null, Matrix.Identity);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ namespace com.xexuxjy.magiccarpet.spells
 
         public override void Cleanup()
         {
-            Globals.GameObjectManager.ReleaseTempGraphicHolder(m_tempGraphicsHolder);
+            Globals.ParticleAndEffectManager.ReleaseTempGraphicHolder(m_tempGraphicsHolder);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////

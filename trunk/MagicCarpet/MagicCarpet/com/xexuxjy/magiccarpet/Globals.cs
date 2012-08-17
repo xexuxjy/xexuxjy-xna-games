@@ -157,8 +157,8 @@ namespace com.xexuxjy.magiccarpet
 
         public const int DEBUG_DRAW_ORDER = 4;
         public const int GUI_DRAW_ORDER = 4;
-
         public const int NORMAL_DRAW_ORDER = 3;
+        public const int PARTICLE_DRAW_ORDER = 5;
 
 
         public static BoundingFrustum s_currentCameraFrustrum;
@@ -215,8 +215,10 @@ namespace com.xexuxjy.magiccarpet
         public static ActionPool ActionPool;
         public static SpellPool SpellPool;
         public static FlagManager FlagManager;
-
         public static ScreenManager ScreenManager;
+        public static ParticleAndEffectManager ParticleAndEffectManager;
+
+
 
         public static Game Game;
 
