@@ -45,7 +45,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             SphereShape bodySphereShape = new SphereShape(bodyRadius);
 
             float headMass = 1f;
-            float bodyMass = 0.9f;
+            float bodyMass = 2f;
             float tailMass = 2f;
 
             for (int i = 0; i < numSpheres; ++i)
@@ -56,12 +56,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                 SphereShape sphereShape = (i == 0) ? headSphereShape : bodySphereShape;
 
                 DragonNode dragonNode = new DragonNode();
-                Matrix startTransform = Matrix.CreateTranslation(SpawnPosition + new IndexedVector3(i * sphereGap, 0, 0));
+                Matrix startTransform = Matrix.CreateTranslation(SpawnPosition + new IndexedVector3(0,0,-i * sphereGap));
                 SimpleMotionState simpleMotionState;
                 dragonNode.rigidBody = Globals.CollisionManager.LocalCreateRigidBody(mass,startTransform,sphereShape,out simpleMotionState,true,this,GetCollisionFlags(),GetCollisionMask());
                 dragonNode.simpleMotionState = simpleMotionState;
-
-                dragonNode.rigidBody.SetCollisionFlags(dragonNode.rigidBody.GetCollisionFlags() & ~CollisionFlags.CF_KINEMATIC_OBJECT);
 
 
                 // copy the head motionstate to local.
@@ -70,8 +68,6 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     m_motionState = simpleMotionState;
                     m_collisionObject = dragonNode.rigidBody;
                 }
-
-
 
                 m_dragonNodes.Add(dragonNode);
             }
@@ -136,14 +132,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             m_sineCounter += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (m_sineCounter > MathUtil.SIMD_2_PI)
             {
-                m_sineCounter = 0;
+                m_sineCounter -= MathUtil.SIMD_2_PI;
             }
 
             m_sineWave = (float)Math.Sin(m_sineCounter);
 
-
-
-            //m_dragonNodes[0].rigidBody.ApplyCentralImpulse(ref impulse);
             base.Update(gameTime);
         }
 

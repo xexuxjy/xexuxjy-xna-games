@@ -13,6 +13,8 @@ using BulletXNADemos.Demos;
 using com.xexuxjy.magiccarpet.collision;
 using com.xexuxjy.magiccarpet.util.console;
 using com.xexuxjy.magiccarpet.util.debug;
+using System.Diagnostics;
+using com.xexuxjy.magiccarpet.renderer;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -22,6 +24,7 @@ namespace com.xexuxjy.magiccarpet.manager
             : base(Globals.Game)
         {
             m_gameplayScreen = gameplayScreen;
+
             m_physicsFrameStart = new AutoResetEvent(false);
             m_physicsFrameEnd = new AutoResetEvent(false);
 
@@ -35,6 +38,11 @@ namespace com.xexuxjy.magiccarpet.manager
             Globals.Camera = new CameraComponent();
             Globals.GraphicsDevice = Globals.Game.GraphicsDevice;
 
+            m_mainScreenRenderTarget = new RenderTarget2D(Globals.GraphicsDevice, Globals.GraphicsDevice.Viewport.Width, Globals.GraphicsDevice.Viewport.Height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+            m_mainScreenBasicEffect = new BasicEffect(Globals.Game.GraphicsDevice);
+            m_mainScreenBasicEffect.TextureEnabled = true;
+            m_mainScreenScreenQuad = new ScreenQuad(Globals.Game);
+            m_mainScreenScreenQuad.Initialize();
 
 
             Globals.DebugDraw = new XNA_ShapeDrawer(Globals.Game);
@@ -82,8 +90,6 @@ namespace com.xexuxjy.magiccarpet.manager
 
 
             Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
-            Globals.s_currentCameraFrustrum = new BoundingFrustum(Globals.Camera.ProjectionMatrix * Globals.Camera.ViewMatrix);
-
 
             Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
 
@@ -91,6 +97,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         
         public static bool IsAttackable(GameObject gameObject)
         {
@@ -188,8 +195,21 @@ namespace com.xexuxjy.magiccarpet.manager
             }
             m_gameObjectListAdd.Add(gameObject);
 
-            m_drawableList.Add(gameObject);
-            m_drawableList.Sort(drawComparator);
+            if(gameObject is IDrawable)
+            {
+                switch (gameObject.DrawOrder)
+                {
+                    case (Globals.NORMAL_DRAW_ORDER):
+                        m_normalDrawableList.Add(gameObject);
+                        break;
+                    case (Globals.GUI_DRAW_ORDER):
+                        m_guiDrawableList.Add(gameObject);
+                        break;
+                    default:
+                        //Debug.Assert(false);
+                        break;
+                }
+            }
 
 #if LOG_EVENT
                 Globals.EventLogger.LogEvent(String.Format("AddObject[{0}][{1}].", gameObject.Id, gameObject.GameObjectType));
@@ -270,8 +290,22 @@ namespace com.xexuxjy.magiccarpet.manager
                 removedGameObject.Cleanup();
                 Globals.CollisionManager.RemoveFromWorld(removedGameObject.CollisionObject);
                 m_gameObjectList.Remove(removedGameObject);
-                m_drawableList.Remove(removedGameObject);
+                if (removedGameObject is IDrawable)
+                {
 
+                    switch (removedGameObject.DrawOrder)
+                    {
+                        case (Globals.NORMAL_DRAW_ORDER):
+                            m_normalDrawableList.Remove(removedGameObject);
+                            break;
+                        case (Globals.GUI_DRAW_ORDER):
+                            m_guiDrawableList.Remove(removedGameObject);
+                            break;
+                        default:
+                            //Debug.Assert(false);
+                            break;
+                    }
+                }
                 foreach (GameObject gameObject in m_gameObjectList)
                 {
                     gameObject.WorldObjectRemoved(removedGameObject);
@@ -473,7 +507,35 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (IDrawable drawable in m_drawableList)
+            m_mainScreenBasicEffect.Texture = null;
+            Globals.GraphicsDevice.SetRenderTarget(m_mainScreenRenderTarget);
+            Globals.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
+            DrawMainScreens(gameTime);
+            DrawShadows(gameTime);
+            DrawParticlesAndEffects(gameTime);
+            ApplyMainScreenPostProcess(gameTime);
+            DrawGuiScreens(gameTime);
+            // draw to main Frame Buffer.
+            Globals.GraphicsDevice.SetRenderTarget(null);
+
+            m_mainScreenBasicEffect.Texture = m_mainScreenRenderTarget;
+            m_mainScreenBasicEffect.View = Matrix.Identity;
+            m_mainScreenBasicEffect.Projection = Matrix.Identity;
+            m_mainScreenBasicEffect.World = Matrix.Identity;
+
+            foreach (EffectPass pass in m_mainScreenBasicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                m_mainScreenScreenQuad.Draw();
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void DrawMainScreens(GameTime gameTime)
+        {
+            foreach (IDrawable drawable in m_normalDrawableList)
             {
                 if (drawable as TreeManager == null)
                 {
@@ -482,11 +544,46 @@ namespace com.xexuxjy.magiccarpet.manager
                 drawable.Draw(gameTime);
             }
 
-            // now temp effects.
-            DrawEffects(Globals.GraphicsDevice, Globals.Camera.ViewMatrix, Matrix.Identity, Globals.Camera.ProjectionMatrix);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void DrawShadows(GameTime gameTime)
+        {
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void DrawParticlesAndEffects(GameTime gameTime)
+        {
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public void ApplyMainScreenPostProcess(GameTime gameTime)
+        {
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        public void DrawGuiScreens(GameTime gameTime)
+        {
+
+            foreach (IDrawable drawable in m_guiDrawableList)
+            {
+                if (drawable as TreeManager == null)
+                {
+                    //continue;
+                }
+                drawable.Draw(gameTime);
+            }
+
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         static Comparison<IDrawable> drawComparator = new Comparison<IDrawable>(DrawableSortPredicate);
         private static int DrawableSortPredicate(IDrawable lhs, IDrawable rhs)
@@ -557,14 +654,19 @@ namespace com.xexuxjy.magiccarpet.manager
             Globals.GraphicsDevice.BlendState = BlendState.Opaque;
         }
 
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public ObjectArray<TempGraphicHolder> m_tempGraphicHolders = new ObjectArray<TempGraphicHolder>();
 
         private List<GameObject> m_gameObjectListAdd = new List<GameObject>();
         private List<GameObject> m_gameObjectList = new List<GameObject>();
         private List<GameObject> m_gameObjectListRemove = new List<GameObject>();
-        private List<IDrawable> m_drawableList = new List<IDrawable>();
+
+
+        private List<IDrawable> m_normalDrawableList = new List<IDrawable>();
+        private List<IDrawable> m_guiDrawableList = new List<IDrawable>();
 
         private GameplayScreen m_gameplayScreen;
         public const GameObjectType m_allActiveObjectTypes = GameObjectType.spell | GameObjectType.manaball | GameObjectType.balloon | GameObjectType.castle | GameObjectType.magician | GameObjectType.monster;
@@ -574,6 +676,15 @@ namespace com.xexuxjy.magiccarpet.manager
         private AutoResetEvent m_physicsFrameEnd;
 
         private DebugDrawModes m_debugDrawMode;
+
+        private bool m_cleanupRequested = false;
+
+
+        private BasicEffect m_mainScreenBasicEffect;
+        private RenderTarget2D m_mainScreenRenderTarget;
+        private ScreenQuad m_mainScreenScreenQuad;
+
+
 
 
     }

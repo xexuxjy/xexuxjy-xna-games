@@ -144,7 +144,7 @@ namespace com.xexuxjy.magiccarpet.terrain
             base.Initialize();
 
             // after init so we get the right draw order.
-            DrawOrder = Globals.TERRAIN_DRAW_ORDER;
+            DrawOrder = Globals.NORMAL_DRAW_ORDER;
 
             m_noCullState = new RasterizerState();
             m_noCullState.CullMode = CullMode.None;

@@ -153,6 +153,8 @@ namespace GameStateManagement
         /// </summary>
         public override void Update(GameTime gameTime)
         {
+            try
+            {
             // Read the keyboard and gamepad.
             input.Update();
 
@@ -199,6 +201,11 @@ namespace GameStateManagement
             // Print debug trace?
             if (traceEnabled)
                 TraceScreens();
+            }
+            catch (System.Exception ex)
+            {
+                int ibreak = 0;
+            }
         }
 
 

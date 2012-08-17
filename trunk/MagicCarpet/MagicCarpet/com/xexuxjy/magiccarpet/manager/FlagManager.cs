@@ -27,6 +27,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public override void Initialize()
         {
+            DrawOrder = Globals.NORMAL_DRAW_ORDER;
             LoadContent();
             m_rotation = Matrix.CreateRotationX(MathUtil.SIMD_HALF_PI);
         }

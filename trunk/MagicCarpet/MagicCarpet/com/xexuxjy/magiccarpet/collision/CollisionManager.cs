@@ -103,17 +103,29 @@ namespace com.xexuxjy.magiccarpet.collision
         {
             while (true)
             {
-                m_startEvent.WaitOne();
-                Thread.MemoryBarrier();
-                if (m_gameTime != null)
+                try
                 {
-                    float ms = (float)m_gameTime.ElapsedGameTime.TotalSeconds;
-                    //ms *= 0.1f;
-                    ///step the simulation
-                    m_dynamicsWorld.StepSimulation(ms, 1);
+                    m_startEvent.WaitOne();
+                    Thread.MemoryBarrier();
+                    if (m_gameTime != null)
+                    {
+                        float ms = (float)m_gameTime.ElapsedGameTime.TotalSeconds;
+                        //ms *= 0.1f;
+                        ///step the simulation
+                        ///
+                        m_dynamicsWorld.StepSimulation(ms, 1);
+
+                    }
+                    Thread.MemoryBarrier();
+                    m_endEvent.Set();
                 }
-                Thread.MemoryBarrier();
-                m_endEvent.Set();
+                catch (ThreadInterruptedException ex)
+                {
+                    if (m_shutdownRequested)
+                    {
+                        break;
+                    }
+                }
             }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////	
@@ -405,6 +417,17 @@ namespace com.xexuxjy.magiccarpet.collision
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	
 
+        public override void Cleanup()
+        {
+            m_shutdownRequested = true;
+            m_updateThread.Interrupt();
+        }
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////	
+
+        protected volatile bool m_shutdownRequested = false;
         protected ClosestRayResultCallback m_callback = null;
         protected ClosestRayResultCallback m_groundCallback = null;
 

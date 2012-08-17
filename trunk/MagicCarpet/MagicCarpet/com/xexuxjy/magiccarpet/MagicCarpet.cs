@@ -36,9 +36,7 @@ namespace com.xexuxjy.magiccarpet
             Globals.GraphicsDeviceManager.PreferredBackBufferWidth = 1024;
             Globals.GraphicsDeviceManager.PreferredBackBufferHeight = 768;
             Globals.GraphicsDeviceManager.PreparingDeviceSettings += graphics_PreparingDeviceSettings;
-
-
-            }
+        }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,6 +49,11 @@ namespace com.xexuxjy.magiccarpet
         /// </summary>
         protected override void Initialize()
         {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+            AppDomain.CurrentDomain.FirstChanceException += new EventHandler<System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs>(CurrentDomain_FirstChanceException);
+        
+            
             Globals.ScreenManager = new ScreenManager(this);
             Globals.ScreenManager.AddScreen(new BackgroundScreen(), null);
             Globals.ScreenManager.AddScreen(new MainMenuScreen(), null);
@@ -60,6 +63,21 @@ namespace com.xexuxjy.magiccarpet
 
             base.Initialize();
         }
+
+        void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            System.Console.Error.WriteLine(ex.StackTrace);
+            System.Console.Error.Flush();
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = e.ExceptionObject as Exception;
+            System.Console.Error.WriteLine(ex.StackTrace);
+            System.Console.Error.Flush();
+        }
+        
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
