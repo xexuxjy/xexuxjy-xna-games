@@ -25,6 +25,7 @@ namespace com.xexuxjy.magiccarpet.terrain
 
         public override void Initialize()
         {
+            DrawOrder = Globals.NORMAL_DRAW_ORDER;
             m_billboardTreeEffect = Globals.MCContentManager.GetEffect("InstancedTree");
             m_treeTexture = Globals.MCContentManager.GetTexture("TreeBillboard");
             List<Vector4> treePositions = new List<Vector4>();
@@ -395,10 +396,10 @@ namespace com.xexuxjy.magiccarpet.terrain
 
             m_treeTexture = m_billboardTreeRenderTarget;
 
-            using (Stream stream = File.OpenWrite("d:/tmp/carpet-tree.png"))
-            {
-                m_billboardTreeRenderTarget.SaveAsPng(stream, m_treeTexture.Width, m_treeTexture.Height);
-            }
+            //using (Stream stream = File.OpenWrite("d:/tmp/carpet-tree.png"))
+            //{
+            //    m_billboardTreeRenderTarget.SaveAsPng(stream, m_treeTexture.Width, m_treeTexture.Height);
+            //}
 
         }
 

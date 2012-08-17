@@ -155,12 +155,10 @@ namespace com.xexuxjy.magiccarpet
 
         public static Random s_random = null;
 
-        public static int DEBUG_DRAW_ORDER = 4;
-        public static int GUI_DRAW_ORDER = 4;
+        public const int DEBUG_DRAW_ORDER = 4;
+        public const int GUI_DRAW_ORDER = 4;
 
-        public static int SKYDOME_DRAW_ORDER = 1;
-        public static int TERRAIN_DRAW_ORDER = 2;
-        public static int NORMAL_DRAW_ORDER = 3;
+        public const int NORMAL_DRAW_ORDER = 3;
 
 
         public static BoundingFrustum s_currentCameraFrustrum;

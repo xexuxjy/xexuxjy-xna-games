@@ -313,14 +313,7 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         public override void Draw(GameTime gameTime)
         {
-            try
-            {
-                DrawEffect(Game.GraphicsDevice, Globals.Camera.ViewMatrix, WorldTransform, Globals.Camera.ProjectionMatrix);
-            }
-            catch (System.Exception ex)
-            {
-                int ibreak = 0;            	
-            }
+            DrawEffect(Game.GraphicsDevice, Globals.Camera.ViewMatrix, WorldTransform, Globals.Camera.ProjectionMatrix);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////	

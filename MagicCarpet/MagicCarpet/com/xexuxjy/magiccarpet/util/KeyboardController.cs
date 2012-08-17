@@ -50,6 +50,8 @@ namespace com.xexuxjy.magiccarpet.util
             {
                 case Keys.Escape:
                     {
+                        // FIXME - provide a nice cleanup path for all objects....
+                        Globals.CollisionManager.Cleanup();
                         Globals.Game.Exit();
                         break;
                     }

@@ -51,6 +51,8 @@ namespace GameStateManagement
         {
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
+            Globals.s_currentCameraFrustrum = new BoundingFrustum(Matrix.Identity);
+
         }
 
 
@@ -59,20 +61,18 @@ namespace GameStateManagement
         /// </summary>
         public override void LoadContent()
         {
-            try
-            {
                 Globals.LoadConfig();
-
-                Globals.GameObjectManager = new GameObjectManager(this);
-                Globals.GameObjectManager.CreateInitialComponents();
-                //Globals.GameObjectManager.AddAndInitializeObject(Globals.GameObjectManager);
-                
 
 
                 if (m_content == null)
                 {
                     m_content = new ContentManager(ScreenManager.Game.Services, "Content");
                 }
+
+                Globals.GameObjectManager = new GameObjectManager(this);
+                Globals.GameObjectManager.CreateInitialComponents();
+                //Globals.GameObjectManager.AddAndInitializeObject(Globals.GameObjectManager);
+
 
                 m_gameFont = m_content.Load<SpriteFont>("fonts/gamefont");
 
@@ -88,11 +88,6 @@ namespace GameStateManagement
                 // timing mechanism that we have just finished a very long frame, and that
                 // it should not try to catch up.
                 ScreenManager.Game.ResetElapsedTime();
-            }
-            catch (System.Exception ex)
-            {
-                int ibreak = 0;            	
-            }
         }
 
 
@@ -120,33 +115,26 @@ namespace GameStateManagement
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
-            try
+            m_updateCalls++;
+            base.Update(gameTime, otherScreenHasFocus, false);
+
+            // Gradually fade in or out depending on whether we are covered by the pause screen.
+            if (coveredByOtherScreen)
+                pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
+            else
+                pauseAlpha = Math.Max(pauseAlpha - 1f / 32, 0);
+
+            if (IsActive && Globals.Camera != null)
             {
-                m_updateCalls++;
-                base.Update(gameTime, otherScreenHasFocus, false);
+                Globals.GameObjectManager.Update(gameTime);
+                Globals.s_currentCameraFrustrum.Matrix = Globals.Camera.ViewMatrix * Globals.Camera.ProjectionMatrix;
 
-                // Gradually fade in or out depending on whether we are covered by the pause screen.
-                if (coveredByOtherScreen)
-                    pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
-                else
-                    pauseAlpha = Math.Max(pauseAlpha - 1f / 32, 0);
-
-                if (IsActive)
-                {
-                    Globals.GameObjectManager.Update(gameTime);
-                    Globals.s_currentCameraFrustrum.Matrix = Globals.Camera.ViewMatrix * Globals.Camera.ProjectionMatrix;
-
-                }
-
-                if (Globals.s_initialScript != null && !loadedInitialScript)
-                {
-                    loadedInitialScript = true;
-                    Globals.SimpleConsole.LoadScript(Globals.s_initialScript);
-                }
             }
-            catch (System.Exception ex)
+
+            if (Globals.s_initialScript != null && !loadedInitialScript)
             {
-                int ibreak = 0;
+                loadedInitialScript = true;
+                Globals.SimpleConsole.LoadScript(Globals.s_initialScript);
             }
         }
 
@@ -183,29 +171,22 @@ namespace GameStateManagement
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            try
+            m_drawCalls++;
+            ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+            base.Draw(gameTime);
+
+            // reset the blendstats as spritebatch probably trashed them.
+            Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            Globals.GameObjectManager.Draw(gameTime);
+
+            // If the game is transitioning on or off, fade it out to black.
+            if (TransitionPosition > 0 || pauseAlpha > 0)
             {
-                m_drawCalls++;
-                ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
-                base.Draw(gameTime);
+                float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
 
-                // reset the blendstats as spritebatch probably trashed them.
-                Globals.Game.GraphicsDevice.BlendState = BlendState.Opaque;
-                Globals.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-                Globals.GameObjectManager.Draw(gameTime);
-
-                // If the game is transitioning on or off, fade it out to black.
-                if (TransitionPosition > 0 || pauseAlpha > 0)
-                {
-                    float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
-
-                    ScreenManager.FadeBackBufferToBlack(alpha);
-                }
-            }
-            catch (System.Exception ex)
-            {
-                int ibreak = 0;            	
+                ScreenManager.FadeBackBufferToBlack(alpha);
             }
         }
 
