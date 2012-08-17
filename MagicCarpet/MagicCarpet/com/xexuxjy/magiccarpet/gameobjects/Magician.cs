@@ -14,6 +14,8 @@ using Microsoft.Xna.Framework.Graphics;
 using BulletXNA;
 using com.xexuxjy.magiccarpet.renderer;
 using BulletXNA.BulletCollision;
+using ProjectMercury;
+using ProjectMercury.Proxies;
 
 namespace com.xexuxjy.magiccarpet.gameobjects
 {
@@ -104,6 +106,11 @@ namespace com.xexuxjy.magiccarpet.gameobjects
             // after init so we get the right draw order.
             DrawOrder = Globals.GUI_DRAW_ORDER;
             StickToGround = false;
+
+
+            ParticleEffect particleEffect = Globals.ParticleAndEffectManager.LoadParticleEffect("BasicCarpet");
+            m_particleEffectProxy = new ParticleEffectProxy(particleEffect);
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,6 +155,22 @@ namespace com.xexuxjy.magiccarpet.gameobjects
                     QueueAction(Globals.ActionPool.GetActionIdle(this));
                 }
             }
+
+            // make sure our particles are attached to us.
+            if (m_particleEffectProxy != null)
+            {
+                // test frequency emitter
+                m_particleTriggerCount++;
+                if(m_particleTriggerCount > m_particleTriggerFrequency)
+                {
+                   m_particleEffectProxy.Trigger();
+                    m_particleTriggerCount = 0;
+                }
+
+
+                m_particleEffectProxy.World = WorldTransform;
+            }
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -475,6 +498,10 @@ namespace com.xexuxjy.magiccarpet.gameobjects
 
         private SpellType m_selectedSpell1 = SpellType.Shield;
         private SpellType m_selectedSpell2 = SpellType.Heal;
+
+        private ParticleEffectProxy m_particleEffectProxy;
+        private int m_particleTriggerCount = 0;
+        private int m_particleTriggerFrequency = 10;
 
 
     }

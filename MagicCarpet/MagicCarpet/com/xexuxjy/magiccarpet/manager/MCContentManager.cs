@@ -11,6 +11,7 @@ using com.xexuxjy.magiccarpet.spells;
 using System.Diagnostics;
 using com.xexuxjy.magiccarpet.renderer;
 using LTreesLibrary.Trees;
+using ProjectMercury;
 
 namespace com.xexuxjy.magiccarpet.manager
 {
@@ -121,6 +122,23 @@ namespace com.xexuxjy.magiccarpet.manager
 
 
         }
+
+        public ParticleEffect LoadParticleEffect(String filename)
+        {
+
+            ParticleEffect particleEffect = m_contentManager.Load<ParticleEffect>("Particles/"+filename);
+            //particleEffect.LoadContent(m_contentManager);
+            for (int i = 0; i < particleEffect.Emitters.Count; ++i)
+            {
+                particleEffect.Emitters[i].Initialise();
+
+                // FIXME - Load Textures Correctly
+                particleEffect.Emitters[i].ParticleTexture = m_contentManager.Load<Texture2D>("Particles/Textures/Particle001");
+
+            }
+            return particleEffect;
+        }
+
 
 
         public SimpleTree GetSimpleTree(String sourceFile)

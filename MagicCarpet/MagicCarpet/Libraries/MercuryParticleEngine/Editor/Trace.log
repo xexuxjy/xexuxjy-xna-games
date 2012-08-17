@@ -1,0 +1,644 @@
+﻿APP: Mercury Particle Engine EffectEditor
+    Date: 17/08/2012 15:18:03
+    Version: 1.0.0.0
+    Culture: en-GB
+    Path: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor
+CORE: Program core initialising...
+CORE: Composing IOC container...
+CORE: Found plugin assemblies...
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.CONTENTPIPELINE.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTCONTROLLERS.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTEMITTERS.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTMODIFIERS.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTSERIALIZERS.DLL
+CORE: Found exported parts...
+    Part:ProjectMercury.Plugins.DefaultControllers.CooldownControllerPlugin
+        Implementing: ProjectMercury.PluginContracts.IControllerPlugin
+    Part:ProjectMercury.Plugins.DefaultControllers.TimedReleaseQuantityControllerPlugin
+        Implementing: ProjectMercury.PluginContracts.IControllerPlugin
+    Part:ProjectMercury.Plugins.DefaultControllers.TriggerOffsetControllerPlugin
+        Implementing: ProjectMercury.PluginContracts.IControllerPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.SphereEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.PointEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.CircleEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.CylinderEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.LineEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.BoxEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.BoxForceModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.OpacityFastFadeModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ColourInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.DampingModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.VelocityClampModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ColourInterpolator3Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.OpacityInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.SphereForceModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ScaleInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.HueShiftModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ForceInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.RotationModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.OpacityInterpolator3Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ScaleInterpolator3Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.LinearGravityModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultSerializers.DefaultSerializer
+        Implementing: ProjectMercury.PluginContracts.ISerializerPlugin
+CORE: Found 6 emitter plugins...
+    Plugin: Sphere Emitter
+    Plugin: Point Emitter
+    Plugin: Circle Emitter
+    Plugin: Cylinder Emitter
+    Plugin: Line Emitter
+    Plugin: Box Emitter
+CORE: Found 15 modifier plugins...
+    Plugin: Box Force Modifier
+    Plugin: Opacity Fast Fade Modifier
+    Plugin: Colour Interpolator (2 colours)
+    Plugin: Damping Modifier
+    Plugin: Velocity Clamp Modifier
+    Plugin: Colour Interpolator (3 colours)
+    Plugin: Opacity Interpolator (2 values)
+    Plugin: Sphere Force Modifier
+    Plugin: Scale Interpolator (2 values)
+    Plugin: Hue Shift Modifier
+    Plugin: Force Interpolator (2 forces)
+    Plugin: Rotation Modifier
+    Plugin: Opacity Interpolator (3 values)
+    Plugin: Scale Interpolator (3 values)
+    Plugin: Linear Gravity Modifier
+CORE: Found 3 controller plugins...
+    Plugin: Cooldown Controller
+    Plugin: Timed ReleaseQuantity Controller
+    Plugin: Trigger Offset Controller
+CORE: Found 1 serialization plugins...
+    Plugin: Default Serializer
+CORE: InterfaceProvider loaded: ProjectMercury.EffectEditor.UserInterface, ProjectMercury.EffectEditor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+UI: UserInterface reporting ready...
+CORE: User interface ready...
+CORE: Instantiating particle renderer...
+CORE: Loading default particle texture...
+CORE: Instantiating default particle effect...
+CORE: Loading default texture references...
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Beam.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\BeamBlurred.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud003.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud004.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Flame.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\FlowerBurst.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Laser.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\LensFlare.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\MultiDot.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle003.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle004.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle005.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle006.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle007.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Ring001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Ring002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\SoftClumpy.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\SoftSmokey.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Spikey001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Spikey002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Splash.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Spray001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Star.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Water001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Water002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Weeds.png
+UI: Adding menu item for 'Box Emitter' plugin...
+UI: Adding menu item for 'Circle Emitter' plugin...
+UI: Adding menu item for 'Cylinder Emitter' plugin...
+UI: Adding menu item for 'Line Emitter' plugin...
+UI: Adding menu item for 'Point Emitter' plugin...
+UI: Adding menu item for 'Sphere Emitter' plugin...
+UI: Adding menu item for 'Box Force Modifier' plugin...
+UI: Adding menu item for 'Colour Interpolator (2 colours)' plugin...
+UI: Adding menu item for 'Colour Interpolator (3 colours)' plugin...
+UI: Adding menu item for 'Damping Modifier' plugin...
+UI: Adding menu item for 'Force Interpolator (2 forces)' plugin...
+UI: Adding menu item for 'Hue Shift Modifier' plugin...
+UI: Adding menu item for 'Linear Gravity Modifier' plugin...
+UI: Adding menu item for 'Opacity Fast Fade Modifier' plugin...
+UI: Adding menu item for 'Opacity Interpolator (2 values)' plugin...
+UI: Adding menu item for 'Opacity Interpolator (3 values)' plugin...
+UI: Adding menu item for 'Rotation Modifier' plugin...
+UI: Adding menu item for 'Scale Interpolator (2 values)' plugin...
+UI: Adding menu item for 'Scale Interpolator (3 values)' plugin...
+UI: Adding menu item for 'Sphere Force Modifier' plugin...
+UI: Adding menu item for 'Velocity Clamp Modifier' plugin...
+UI: Adding menu item for 'Cooldown Controller' plugin...
+UI: Adding menu item for 'Timed ReleaseQuantity Controller' plugin...
+UI: Adding menu item for 'Trigger Offset Controller' plugin...
+UI: Adding menu item for 'Default Serializer' plugin...
+UI: Searching for library particle effects...
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicExplosion.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicFireball.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicSmokePlume.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BeamMeUp.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\CampFire.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\FlowerBloom.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\MagicTrail.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\Paparazzi.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\SimpleRain.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\StarTrail.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\WaterJet.xml
+UI: User requires removing an emitter...
+    Emitter: Basic Emitter
+CORE: Removing emitter...
+UI: User requires adding an emitter...
+CORE: Adding emitter...
+    Using plugin: Line Emitter
+UI: User requires adding a modifier...
+    Emitter: CarpetEmitter
+CORE: Adding modifier...
+    Using plugin: Colour Interpolator (2 colours)
+UI: User requires serialize of particle effect...
+    Filepath: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+CORE: Serializing particle effect to C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+    Using plugin: Default Serializer
+User requires removing a modifier...
+CORE: Removing modifier...
+UI: User requires removing an emitter...
+    Emitter: CarpetEmitter
+CORE: Removing emitter...
+UI: User requires adding an emitter...
+CORE: Adding emitter...
+    Using plugin: Point Emitter
+UI: User requires assigning texture reference to emitter...
+    Emitter: Emitter 2
+    Texture: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle001.png
+UI: User requires assigning texture reference to emitter...
+    Emitter: Emitter 2
+    Texture: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\BeamBlurred.png
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+    Using plugin: Default Serializer
+UI: User requires assigning texture reference to emitter...
+    Emitter: CarpetEmitter
+    Texture: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud001.png
+UI: User requires serialize of particle effect...
+    Filepath: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+CORE: Serializing particle effect to C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+    Using plugin: Default Serializer
+UI: User requires serialize of particle effect...
+    Filepath: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+CORE: Serializing particle effect to C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+    Using plugin: Default Serializer
+UI: User requires serialize of particle effect...
+    Filepath: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+CORE: Serializing particle effect to C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+    Using plugin: Default Serializer
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\MagicTrail.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\MagicTrail.xml
+    Using plugin: Default Serializer
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\MagicTrail.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\MagicTrail.xml
+    Using plugin: Default Serializer
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\FlowerBloom.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\FlowerBloom.xml
+    Using plugin: Default Serializer
+ProjectMercury.EffectEditor.exe Error: 0 : Microsoft.Xna.Framework.Content.Pipeline.InvalidContentException: XML element "ParticleTextureAssetPath" not found.
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at ProjectMercury.ContentPipeline.IntermediateReaderExtensions.ReadObject[T](IntermediateReader instance, String elementName)
+   at ProjectMercury.ContentPipeline.Emitters.AbstractEmitterSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, T existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ContentTypeSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadRawObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.CollectionHelper.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object collection)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ListSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, List`1 existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ContentTypeSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ReflectiveSerializer.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadRawObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at ProjectMercury.ContentPipeline.IntermediateReaderExtensions.ReadObject[T](IntermediateReader instance, String elementName, String collectionItemName)
+   at ProjectMercury.ContentPipeline.ParticleEffectSerializer.Deserialize(IntermediateReader input, ContentSerializerAttribute format, ParticleEffect existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ContentTypeSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadRawObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateSerializer.Deserialize[T](XmlReader input, String referenceRelocationPath)
+   at ProjectMercury.Plugins.DefaultSerializers.DefaultSerializer.Deserialize(String filePath)
+   at ProjectMercury.EffectEditor.Core.Interface_Deserialize(Object sender, SerializeEventArgs e)
+    Callstack=   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at System.Diagnostics.TraceEventCache.get_Callstack()
+   at System.Diagnostics.TraceListener.WriteFooter(TraceEventCache eventCache)
+   at System.Diagnostics.TraceListener.TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String message)
+   at System.Diagnostics.TraceInternal.TraceEvent(TraceEventType eventType, Int32 id, String format, Object[] args)
+   at ProjectMercury.EffectEditor.UserInterface.AssertOperationOK(CoreOperationResult operationResult)
+   at ProjectMercury.EffectEditor.UserInterface.OnDeserialize(SerializeEventArgs e)
+   at ProjectMercury.EffectEditor.UserInterface.uxLibraryListView_ItemActivate(Object sender, EventArgs e)
+   at System.Windows.Forms.ListView.OnItemActivate(EventArgs e)
+   at System.Windows.Forms.ListView.WmReflectNotify(Message& m)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.SendMessage(HandleRef hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.Control.SendMessage(Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.Control.ReflectMessageInternal(IntPtr hWnd, Message& m)
+   at System.Windows.Forms.Control.WmNotify(Message& m)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.CallWindowProc(IntPtr wndProc, IntPtr hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.NativeWindow.DefWndProc(Message& m)
+   at System.Windows.Forms.Control.DefWndProc(Message& m)
+   at System.Windows.Forms.ListView.WmMouseDown(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at ProjectMercury.EffectEditor.Program.Main(String[] args)
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\Paparazzi.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\Paparazzi.xml
+    Using plugin: Default Serializer
+ProjectMercury.EffectEditor.exe Error: 0 : Microsoft.Xna.Framework.Content.Pipeline.InvalidContentException: XML element "Name" not found.
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at ProjectMercury.ContentPipeline.IntermediateReaderExtensions.ReadObject[T](IntermediateReader instance, String elementName)
+   at ProjectMercury.ContentPipeline.ParticleEffectSerializer.Deserialize(IntermediateReader input, ContentSerializerAttribute format, ParticleEffect existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ContentTypeSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadRawObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateSerializer.Deserialize[T](XmlReader input, String referenceRelocationPath)
+   at ProjectMercury.Plugins.DefaultSerializers.DefaultSerializer.Deserialize(String filePath)
+   at ProjectMercury.EffectEditor.Core.Interface_Deserialize(Object sender, SerializeEventArgs e)
+    Callstack=   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at System.Diagnostics.TraceEventCache.get_Callstack()
+   at System.Diagnostics.TraceListener.WriteFooter(TraceEventCache eventCache)
+   at System.Diagnostics.TraceListener.TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String message)
+   at System.Diagnostics.TraceInternal.TraceEvent(TraceEventType eventType, Int32 id, String format, Object[] args)
+   at ProjectMercury.EffectEditor.UserInterface.AssertOperationOK(CoreOperationResult operationResult)
+   at ProjectMercury.EffectEditor.UserInterface.OnDeserialize(SerializeEventArgs e)
+   at ProjectMercury.EffectEditor.UserInterface.uxLibraryListView_ItemActivate(Object sender, EventArgs e)
+   at System.Windows.Forms.ListView.OnItemActivate(EventArgs e)
+   at System.Windows.Forms.ListView.WmReflectNotify(Message& m)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.SendMessage(HandleRef hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.Control.SendMessage(Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.Control.ReflectMessageInternal(IntPtr hWnd, Message& m)
+   at System.Windows.Forms.Control.WmNotify(Message& m)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.CallWindowProc(IntPtr wndProc, IntPtr hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.NativeWindow.DefWndProc(Message& m)
+   at System.Windows.Forms.Control.DefWndProc(Message& m)
+   at System.Windows.Forms.ListView.WmMouseDown(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at ProjectMercury.EffectEditor.Program.Main(String[] args)
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicFireball.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicFireball.xml
+    Using plugin: Default Serializer
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+    Using plugin: Default Serializer
+UI: User requires assigning texture reference to emitter...
+    Emitter: CarpetEmitter
+    Texture: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud001.png
+CORE: Disposing program core...
+CORE: Disposing program core...
+APP: Mercury Particle Engine EffectEditor
+    Date: 17/08/2012 16:58:11
+    Version: 1.0.0.0
+    Culture: en-GB
+    Path: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor
+CORE: Program core initialising...
+CORE: Composing IOC container...
+CORE: Found plugin assemblies...
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.CONTENTPIPELINE.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTCONTROLLERS.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTEMITTERS.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTMODIFIERS.DLL
+    Assembly: C:\GOOGLECODE\XEXUXJY-XNA-GAMES\TRUNK\MAGICCARPET\MAGICCARPET\LIBRARIES\MERCURYPARTICLEENGINE\EDITOR\PLUGINS\PROJECTMERCURY.PLUGINS.DEFAULTSERIALIZERS.DLL
+CORE: Found exported parts...
+    Part:ProjectMercury.Plugins.DefaultControllers.CooldownControllerPlugin
+        Implementing: ProjectMercury.PluginContracts.IControllerPlugin
+    Part:ProjectMercury.Plugins.DefaultControllers.TimedReleaseQuantityControllerPlugin
+        Implementing: ProjectMercury.PluginContracts.IControllerPlugin
+    Part:ProjectMercury.Plugins.DefaultControllers.TriggerOffsetControllerPlugin
+        Implementing: ProjectMercury.PluginContracts.IControllerPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.SphereEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.PointEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.CircleEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.CylinderEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.LineEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultEmitters.BoxEmitterPlugin
+        Implementing: ProjectMercury.PluginContracts.IEmitterPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.BoxForceModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.OpacityFastFadeModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ColourInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.DampingModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.VelocityClampModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ColourInterpolator3Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.OpacityInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.SphereForceModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ScaleInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.HueShiftModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ForceInterpolator2Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.RotationModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.OpacityInterpolator3Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.ScaleInterpolator3Plugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultModifiers.LinearGravityModifierPlugin
+        Implementing: ProjectMercury.PluginContracts.IModifierPlugin
+    Part:ProjectMercury.Plugins.DefaultSerializers.DefaultSerializer
+        Implementing: ProjectMercury.PluginContracts.ISerializerPlugin
+CORE: Found 6 emitter plugins...
+    Plugin: Sphere Emitter
+    Plugin: Point Emitter
+    Plugin: Circle Emitter
+    Plugin: Cylinder Emitter
+    Plugin: Line Emitter
+    Plugin: Box Emitter
+CORE: Found 15 modifier plugins...
+    Plugin: Box Force Modifier
+    Plugin: Opacity Fast Fade Modifier
+    Plugin: Colour Interpolator (2 colours)
+    Plugin: Damping Modifier
+    Plugin: Velocity Clamp Modifier
+    Plugin: Colour Interpolator (3 colours)
+    Plugin: Opacity Interpolator (2 values)
+    Plugin: Sphere Force Modifier
+    Plugin: Scale Interpolator (2 values)
+    Plugin: Hue Shift Modifier
+    Plugin: Force Interpolator (2 forces)
+    Plugin: Rotation Modifier
+    Plugin: Opacity Interpolator (3 values)
+    Plugin: Scale Interpolator (3 values)
+    Plugin: Linear Gravity Modifier
+CORE: Found 3 controller plugins...
+    Plugin: Cooldown Controller
+    Plugin: Timed ReleaseQuantity Controller
+    Plugin: Trigger Offset Controller
+CORE: Found 1 serialization plugins...
+    Plugin: Default Serializer
+CORE: InterfaceProvider loaded: ProjectMercury.EffectEditor.UserInterface, ProjectMercury.EffectEditor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+UI: UserInterface reporting ready...
+CORE: User interface ready...
+CORE: Instantiating particle renderer...
+CORE: Loading default particle texture...
+CORE: Instantiating default particle effect...
+CORE: Loading default texture references...
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Beam.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\BeamBlurred.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud003.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Cloud004.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Flame.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\FlowerBurst.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Laser.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\LensFlare.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\MultiDot.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle003.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle004.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle005.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle006.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Particle007.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Ring001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Ring002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\SoftClumpy.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\SoftSmokey.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Spikey001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Spikey002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Splash.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Spray001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Star.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Water001.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Water002.png
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\Textures\Weeds.png
+UI: Adding menu item for 'Box Emitter' plugin...
+UI: Adding menu item for 'Circle Emitter' plugin...
+UI: Adding menu item for 'Cylinder Emitter' plugin...
+UI: Adding menu item for 'Line Emitter' plugin...
+UI: Adding menu item for 'Point Emitter' plugin...
+UI: Adding menu item for 'Sphere Emitter' plugin...
+UI: Adding menu item for 'Box Force Modifier' plugin...
+UI: Adding menu item for 'Colour Interpolator (2 colours)' plugin...
+UI: Adding menu item for 'Colour Interpolator (3 colours)' plugin...
+UI: Adding menu item for 'Damping Modifier' plugin...
+UI: Adding menu item for 'Force Interpolator (2 forces)' plugin...
+UI: Adding menu item for 'Hue Shift Modifier' plugin...
+UI: Adding menu item for 'Linear Gravity Modifier' plugin...
+UI: Adding menu item for 'Opacity Fast Fade Modifier' plugin...
+UI: Adding menu item for 'Opacity Interpolator (2 values)' plugin...
+UI: Adding menu item for 'Opacity Interpolator (3 values)' plugin...
+UI: Adding menu item for 'Rotation Modifier' plugin...
+UI: Adding menu item for 'Scale Interpolator (2 values)' plugin...
+UI: Adding menu item for 'Scale Interpolator (3 values)' plugin...
+UI: Adding menu item for 'Sphere Force Modifier' plugin...
+UI: Adding menu item for 'Velocity Clamp Modifier' plugin...
+UI: Adding menu item for 'Cooldown Controller' plugin...
+UI: Adding menu item for 'Timed ReleaseQuantity Controller' plugin...
+UI: Adding menu item for 'Trigger Offset Controller' plugin...
+UI: Adding menu item for 'Default Serializer' plugin...
+UI: Searching for library particle effects...
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicExplosion.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicFireball.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicSmokePlume.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BeamMeUp.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\CampFire.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\FlowerBloom.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\MagicTrail.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\Paparazzi.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\SimpleRain.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\StarTrail.xml
+    File: C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\WaterJet.xml
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpetContent\Particles\BasicCarpet.xml
+    Using plugin: Default Serializer
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\WaterJet.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\WaterJet.xml
+    Using plugin: Default Serializer
+ProjectMercury.EffectEditor.exe Error: 0 : Microsoft.Xna.Framework.Content.Pipeline.InvalidContentException: XML element "Name" not found.
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at ProjectMercury.ContentPipeline.IntermediateReaderExtensions.ReadObject[T](IntermediateReader instance, String elementName)
+   at ProjectMercury.ContentPipeline.ParticleEffectSerializer.Deserialize(IntermediateReader input, ContentSerializerAttribute format, ParticleEffect existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ContentTypeSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadRawObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateSerializer.Deserialize[T](XmlReader input, String referenceRelocationPath)
+   at ProjectMercury.Plugins.DefaultSerializers.DefaultSerializer.Deserialize(String filePath)
+   at ProjectMercury.EffectEditor.Core.Interface_Deserialize(Object sender, SerializeEventArgs e)
+    Callstack=   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at System.Diagnostics.TraceEventCache.get_Callstack()
+   at System.Diagnostics.TraceListener.WriteFooter(TraceEventCache eventCache)
+   at System.Diagnostics.TraceListener.TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String message)
+   at System.Diagnostics.TraceInternal.TraceEvent(TraceEventType eventType, Int32 id, String format, Object[] args)
+   at ProjectMercury.EffectEditor.UserInterface.AssertOperationOK(CoreOperationResult operationResult)
+   at ProjectMercury.EffectEditor.UserInterface.OnDeserialize(SerializeEventArgs e)
+   at ProjectMercury.EffectEditor.UserInterface.uxLibraryListView_ItemActivate(Object sender, EventArgs e)
+   at System.Windows.Forms.ListView.OnItemActivate(EventArgs e)
+   at System.Windows.Forms.ListView.WmReflectNotify(Message& m)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.SendMessage(HandleRef hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.Control.SendMessage(Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.Control.ReflectMessageInternal(IntPtr hWnd, Message& m)
+   at System.Windows.Forms.Control.WmNotify(Message& m)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.CallWindowProc(IntPtr wndProc, IntPtr hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.NativeWindow.DefWndProc(Message& m)
+   at System.Windows.Forms.Control.DefWndProc(Message& m)
+   at System.Windows.Forms.ListView.WmMouseDown(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at ProjectMercury.EffectEditor.Program.Main(String[] args)
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\StarTrail.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\StarTrail.xml
+    Using plugin: Default Serializer
+ProjectMercury.EffectEditor.exe Error: 0 : Microsoft.Xna.Framework.Content.Pipeline.InvalidContentException: XML element "Name" not found.
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at ProjectMercury.ContentPipeline.IntermediateReaderExtensions.ReadObject[T](IntermediateReader instance, String elementName)
+   at ProjectMercury.ContentPipeline.ParticleEffectSerializer.Deserialize(IntermediateReader input, ContentSerializerAttribute format, ParticleEffect existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.ContentTypeSerializer`1.Deserialize(IntermediateReader input, ContentSerializerAttribute format, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadRawObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObjectInternal[T](ContentSerializerAttribute format, ContentTypeSerializer typeSerializer, Object existingInstance)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateReader.ReadObject[T](ContentSerializerAttribute format)
+   at Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate.IntermediateSerializer.Deserialize[T](XmlReader input, String referenceRelocationPath)
+   at ProjectMercury.Plugins.DefaultSerializers.DefaultSerializer.Deserialize(String filePath)
+   at ProjectMercury.EffectEditor.Core.Interface_Deserialize(Object sender, SerializeEventArgs e)
+    Callstack=   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at System.Diagnostics.TraceEventCache.get_Callstack()
+   at System.Diagnostics.TraceListener.WriteFooter(TraceEventCache eventCache)
+   at System.Diagnostics.TraceListener.TraceEvent(TraceEventCache eventCache, String source, TraceEventType eventType, Int32 id, String message)
+   at System.Diagnostics.TraceInternal.TraceEvent(TraceEventType eventType, Int32 id, String format, Object[] args)
+   at ProjectMercury.EffectEditor.UserInterface.AssertOperationOK(CoreOperationResult operationResult)
+   at ProjectMercury.EffectEditor.UserInterface.OnDeserialize(SerializeEventArgs e)
+   at ProjectMercury.EffectEditor.UserInterface.uxLibraryListView_ItemActivate(Object sender, EventArgs e)
+   at System.Windows.Forms.ListView.OnItemActivate(EventArgs e)
+   at System.Windows.Forms.ListView.WmReflectNotify(Message& m)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.SendMessage(HandleRef hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.Control.SendMessage(Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.Control.ReflectMessageInternal(IntPtr hWnd, Message& m)
+   at System.Windows.Forms.Control.WmNotify(Message& m)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.CallWindowProc(IntPtr wndProc, IntPtr hWnd, Int32 msg, IntPtr wParam, IntPtr lParam)
+   at System.Windows.Forms.NativeWindow.DefWndProc(Message& m)
+   at System.Windows.Forms.Control.DefWndProc(Message& m)
+   at System.Windows.Forms.ListView.WmMouseDown(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.ListView.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at ProjectMercury.EffectEditor.Program.Main(String[] args)
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicFireball.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicFireball.xml
+    Using plugin: Default Serializer
+UI: User requires deserialize of particle effect...
+    Filepath:C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicExplosion.xml
+CORE: Deserializing particle effect from C:\GoogleCode\xexuxjy-xna-games\trunk\MagicCarpet\MagicCarpet\Libraries\MercuryParticleEngine\Editor\EffectLibrary\BasicExplosion.xml
+    Using plugin: Default Serializer
+UI: User requires removing an emitter...
+    Emitter: Smoke Trail
+CORE: Removing emitter...
+UI: User requires removing an emitter...
+    Emitter: Flash
+CORE: Removing emitter...

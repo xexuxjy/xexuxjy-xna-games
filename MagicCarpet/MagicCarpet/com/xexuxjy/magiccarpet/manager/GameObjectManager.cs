@@ -58,12 +58,12 @@ namespace com.xexuxjy.magiccarpet.manager
             }
 
             Globals.CollisionManager = new CollisionManager(m_physicsFrameStart,m_physicsFrameEnd,Globals.worldMinPos, Globals.worldMaxPos);
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.CollisionManager, true);
+            AddAndInitializeObject(Globals.CollisionManager, true);
 
 
             Globals.SimpleConsole = new SimpleConsole(Globals.DebugDraw);
             Globals.SimpleConsole.Enabled = false;
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.SimpleConsole, true);
+            AddAndInitializeObject(Globals.SimpleConsole, true);
 
 
             Globals.MCContentManager = new MCContentManager();
@@ -71,7 +71,7 @@ namespace com.xexuxjy.magiccarpet.manager
 
             Globals.DebugObjectManager = new DebugObjectManager(Globals.DebugDraw);
             Globals.DebugObjectManager.Enabled = true;
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.DebugObjectManager);
+            AddAndInitializeObject(Globals.DebugObjectManager);
 
 
 
@@ -79,21 +79,21 @@ namespace com.xexuxjy.magiccarpet.manager
 
             Globals.SpellPool = new SpellPool();
 
-            Globals.Terrain = (Terrain)Globals.GameObjectManager.CreateAndInitialiseGameObject("Terrain", Vector3.Zero);
+            Globals.Terrain = (Terrain)CreateAndInitialiseGameObject("Terrain", Vector3.Zero);
 
             Globals.FlagManager = new FlagManager();
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.FlagManager, true);
+            AddAndInitializeObject(Globals.FlagManager, true);
 
 
             Globals.TreeManager = new TreeManager();
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.TreeManager, true);
+            AddAndInitializeObject(Globals.TreeManager, true);
 
+            AddAndInitializeObject(Globals.Camera);
 
-            Globals.GameObjectManager.AddAndInitializeObject(Globals.Camera);
-
-            Globals.GameObjectManager.AddAndInitializeObject(new SkyDome(), true);
-
-
+            AddAndInitializeObject(new SkyDome(), true);
+            
+            Globals.ParticleAndEffectManager = new ParticleAndEffectManager();
+            AddAndInitializeObject(Globals.ParticleAndEffectManager,true);
 
         }
 
@@ -557,7 +557,10 @@ namespace com.xexuxjy.magiccarpet.manager
 
         public void DrawParticlesAndEffects(GameTime gameTime)
         {
-
+            if (Globals.ParticleAndEffectManager != null)
+            {
+                Globals.ParticleAndEffectManager.Draw(gameTime);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -591,74 +594,6 @@ namespace com.xexuxjy.magiccarpet.manager
             int result = lhs.DrawOrder - rhs.DrawOrder;
             return result;
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public TempGraphicHolder AddTempGraphicHolder(GameObject ownerObject, Model model, Texture2D texture, Texture2D normalTexture, Matrix transform)
-        {
-
-            TempGraphicHolder tempHolder = new TempGraphicHolder(ownerObject, model, texture, normalTexture, transform);
-            m_tempGraphicHolders.Add(tempHolder);
-            return tempHolder;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public void ReleaseTempGraphicHolder(TempGraphicHolder tempHolder)
-        {
-            m_tempGraphicHolders.Remove(tempHolder);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        static Matrix[] s_boneTransforms = new Matrix[10];
-
-        public void DrawEffects(GraphicsDevice graphicsDevice, Matrix view, Matrix world, Matrix projection)
-        {
-            Globals.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            foreach (TempGraphicHolder holder in m_tempGraphicHolders)
-            {
-                if (holder.m_active && holder.m_model != null)
-                {
-                    //if (Globals.s_currentCameraFrustrum.Contains(holder.m_boundingBox) != ContainmentType.Disjoint)
-                    {
-                        foreach (ModelMesh mesh in holder.m_model.Meshes)
-                        {
-                            holder.m_model.CopyAbsoluteBoneTransformsTo(s_boneTransforms);
-                            foreach (Effect effect in mesh.Effects)
-                            {
-                                effect.CurrentTechnique = effect.Techniques["SimpleTechnique"];
-                                Globals.MCContentManager.ApplyCommonEffectParameters(effect);
-
-                                Matrix owner = holder.m_owner != null ? holder.m_owner.WorldTransform : Matrix.Identity;
-                                Matrix result = owner * holder.m_transform * world;
-
-                                effect.Parameters["WorldMatrix"].SetValue(s_boneTransforms[mesh.ParentBone.Index] * result);
-                                Texture2D texture = holder.m_texture;
-                                if (texture != null)
-                                {
-                                    effect.Parameters["Texture"].SetValue(texture);
-                                }
-
-                                Texture2D normalTexture = holder.m_normalTexture;
-                                if (texture != null)
-                                {
-                                    effect.Parameters["NormalTexture"].SetValue(normalTexture);
-                                }
-                            }
-                            mesh.Draw();
-                        }
-                    }
-                }
-            }
-            Globals.GraphicsDevice.BlendState = BlendState.Opaque;
-        }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        public ObjectArray<TempGraphicHolder> m_tempGraphicHolders = new ObjectArray<TempGraphicHolder>();
 
         private List<GameObject> m_gameObjectListAdd = new List<GameObject>();
         private List<GameObject> m_gameObjectList = new List<GameObject>();

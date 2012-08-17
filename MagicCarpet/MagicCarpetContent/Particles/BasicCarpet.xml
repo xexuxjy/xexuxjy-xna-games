@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="ProjectMercury.ParticleEffect">
+    <Name>BasicCarpet</Name>
+    <Author Null="true" />
+    <Description Null="true" />
+    <Emitters>
+      <Item Type="ProjectMercury.Emitters.LineEmitter">
+        <Name>CarpetEmitter</Name>
+        <Enabled>true</Enabled>
+        <Budget>1000</Budget>
+        <Term>1</Term>
+        <ReleaseQuantity>10</ReleaseQuantity>
+        <BillboardStyle>None</BillboardStyle>
+        <BillboardRotationalAxis>0 0 0</BillboardRotationalAxis>
+        <ReleaseSpeed>[0,2]</ReleaseSpeed>
+        <ReleaseOpacity>[1,1]</ReleaseOpacity>
+        <ReleaseScale>[0.1,0.3]</ReleaseScale>
+        <ReleaseColour>
+          <Red>[1,1]</Red>
+          <Green>[1,1]</Green>
+          <Blue>[1,1]</Blue>
+        </ReleaseColour>
+        <ReleaseRotation>
+          <Pitch>[0,0]</Pitch>
+          <Yaw>[0,0]</Yaw>
+          <Roll>[-3.14157,3.14157]</Roll>
+        </ReleaseRotation>
+        <BlendMode>Add</BlendMode>
+        <ParticleTextureAssetPath Null="true" />
+        <Modifiers>
+          <Item Type="ProjectMercury.Modifiers.ColourInterpolator2">
+            <InitialColour>0 0 1</InitialColour>
+            <FinalColour>1 0 1</FinalColour>
+          </Item>
+        </Modifiers>
+        <Controllers />
+        <UseVelocityAsBillboardAxis>false</UseVelocityAsBillboardAxis>
+        <ConstrainToPlane>false</ConstrainToPlane>
+        <Length>1</Length>
+        <Rectilinear>false</Rectilinear>
+        <EmitBothWays>false</EmitBothWays>
+      </Item>
+    </Emitters>
+  </Asset>
+</XnaContent>

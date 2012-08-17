@@ -98,6 +98,12 @@
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
+    <Reference Include="ProjectMercury">
+      <HintPath>Libraries\MercuryParticleEngine\References\X86\ProjectMercury.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectMercury.ContentPipeline">
+      <HintPath>Libraries\MercuryParticleEngine\References\X86\ProjectMercury.ContentPipeline.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -187,6 +193,7 @@
     <Compile Include="com\xexuxjy\magiccarpet\interfaces\ICollideable.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\MagicCarpet.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\MCContentManager.cs" />
+    <Compile Include="com\xexuxjy\magiccarpet\manager\ParticleAndEffectManager.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\manager\SpellPool.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\Program.cs" />
     <Compile Include="com\xexuxjy\magiccarpet\renderer\LightManager.cs" />
