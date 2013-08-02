@@ -45,9 +45,39 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="actors\Arena.cs" />
+    <Compile Include="actors\BaseActor.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="gamestatemanagement\screenmanager\GameScreen.cs" />
+    <Compile Include="gamestatemanagement\screenmanager\InputState.cs" />
+    <Compile Include="gamestatemanagement\screenmanager\ScreenManager.cs" />
+    <Compile Include="gamestatemanagement\screens\BackgroundScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\GameplayScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\LoadingScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\MainMenuScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\MenuEntry.cs" />
+    <Compile Include="gamestatemanagement\screens\MenuScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\MessageBoxScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\OptionsMenuScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\PauseMenuScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\PlayerIndexEventArgs.cs" />
+    <Compile Include="MainGame.cs" />
+    <Compile Include="modes\arena\actions\AbilityAction.cs" />
+    <Compile Include="modes\arena\actions\AttackAction.cs" />
+    <Compile Include="modes\arena\actions\BaseAction.cs" />
+    <Compile Include="modes\arena\actions\MoveAction.cs" />
+    <Compile Include="modes\arena\ArenaMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="renderer\DHPCameraComponent.cs" />
+    <Compile Include="renderer\SimpleArenaRenderer.cs" />
+    <Compile Include="util\ColouredTextureDictionary.cs" />
+    <Compile Include="util\EventLogger.cs" />
+    <Compile Include="util\ObjectAttribute.cs" />
+    <Compile Include="util\SimpleProfiler.cs" />
+    <Compile Include="util\StringBuilderExtFormat.cs" />
+    <Compile Include="util\StringBuilderExtNumeric.cs" />
+    <Compile Include="util\ThreadSafeContentManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -67,20 +97,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="SDL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\" />
+    <Folder Include="modes\shop\" />
+    <Folder Include="modes\world\" />
     <Folder Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GladiusContent\GladiusContentContent\GladiusContentContent.contentproj">
-      <Project>{75B69C91-B96D-4AF4-8A6C-09CF72AFFE3A}</Project>
-      <Name>GladiusContentContent %28Content%29</Name>
-      <XnaReferenceType>Content</XnaReferenceType>
-    </ProjectReference>
+    <None Include="Content\UnitCube.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

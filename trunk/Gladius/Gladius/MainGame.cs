@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Gladius.actors;
 using Gladius.renderer;
 using Dhpoware;
+using GameStateManagement;
 #endregion
 
 namespace Gladius
@@ -26,7 +27,7 @@ namespace Gladius
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "GladiusContent";
+            Content.RootDirectory = "Content";
         }
 
         /// <summary>
@@ -76,7 +77,8 @@ namespace Gladius
                 Exit();
 
             // TODO: Add your update logic here
-
+            m_inputstate.Update();
+            m_camera.HandleInput(m_inputstate);
             base.Update(gameTime);
         }
 
@@ -100,11 +102,22 @@ namespace Gladius
 
         public void SetupArena()
         {
-            m_camera = new Dhpoware.Camera();
+            m_inputstate = new InputState();
+
+            m_camera = new Dhpoware.CameraComponent(this);
+            IGameComponent igc = m_camera as IGameComponent;
+            Components.Add(igc);
+
+            float aspect = GraphicsDevice.Viewport.AspectRatio;
+            m_camera.Perspective(((float)Math.PI / 4f), aspect, 0.1f, 1000f);
             m_arena = new Arena(32, 32);
 
-            m_camera.Position = new Vector3(0, 3, -5);
-            m_camera.LookAt(Vector3.Zero);
+            //m_camera.Position = new Vectsor3(0, 20, 0);
+            //m_camera.LookAt(Vector3.Zero);
+            //m_camera.CurrentBehavior = Camera.Behavior.Spectator;
+            m_camera.LookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
+
+            Matrix m = m_camera.ViewMatrix;
 
             m_arenaRenderer = new SimpleArenaRenderer();
             m_arenaRenderer.LoadContent(this,GraphicsDevice);
@@ -115,6 +128,7 @@ namespace Gladius
         Arena m_arena;
         SimpleArenaRenderer m_arenaRenderer;
         ICamera m_camera;
+        InputState m_inputstate;
 
     }
 }
