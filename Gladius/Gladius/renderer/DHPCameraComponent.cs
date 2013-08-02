@@ -56,7 +56,6 @@ namespace Dhpoware
         /// <param name="target">The target position to look at.</param>
         /// <param name="up">The up direction.</param>
         void LookAt(Vector3 eye, Vector3 target, Vector3 up);
-        void LookAtSmooth(Vector3 eye, Vector3 target, Vector3 up,float elapsedTimeSec);
         /// <summary>
         /// Moves the camera by dx world units to the left or right; dy
         /// world units upwards or downwards; and dz world units forwards
@@ -138,15 +137,6 @@ namespace Dhpoware
         /// Property to get and set the camera's position.
         /// </summary>
         Vector3 Position
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Property to get and set the camera's position.
-        /// </summary>
-        Vector3 Eye
         {
             get;
             set;
@@ -365,104 +355,45 @@ namespace Dhpoware
             this.eye = eye;
             this.target = target;
 
-            LookatBuildView(ref eye, ref target, ref up, out viewMatrix, out xAxis, out yAxis, out zAxis);
-            accumPitchDegrees = MathHelper.ToDegrees((float)Math.Asin(viewMatrix.M23));
-            Quaternion.CreateFromRotationMatrix(ref viewMatrix, out orientation);
-        }
+            zAxis = eye - target;
+            zAxis.Normalize();
 
+            viewDir.X = -zAxis.X;
+            viewDir.Y = -zAxis.Y;
+            viewDir.Z = -zAxis.Z;
 
+            Vector3.Cross(ref up, ref zAxis, out xAxis);
+            xAxis.Normalize();
 
-        public void LookatBuildView(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix oviewMatrix,out Vector3 oxAxis,out Vector3 oyAxis,out Vector3 ozAxis)
-        {
-            Vector3  lzAxis = eye - target;
-            lzAxis.Normalize();
-            ozAxis = lzAxis;
+            Vector3.Cross(ref zAxis, ref xAxis, out yAxis);
+            yAxis.Normalize();
+            xAxis.Normalize();
 
-            Vector3 lViewDir = -lzAxis;
+            viewMatrix.M11 = xAxis.X;
+            viewMatrix.M21 = xAxis.Y;
+            viewMatrix.M31 = xAxis.Z;
+            Vector3.Dot(ref xAxis, ref eye, out viewMatrix.M41);
+            viewMatrix.M41 = -viewMatrix.M41;
 
-            Vector3.Cross(ref up, ref lzAxis, out oxAxis);
-            oxAxis.Normalize();
+            viewMatrix.M12 = yAxis.X;
+            viewMatrix.M22 = yAxis.Y;
+            viewMatrix.M32 = yAxis.Z;
+            Vector3.Dot(ref yAxis, ref eye, out viewMatrix.M42);
+            viewMatrix.M42 = -viewMatrix.M42;
 
-            Vector3.Cross(ref lzAxis, ref xAxis, out oyAxis);
-            oyAxis.Normalize();
-            oxAxis.Normalize();
+            viewMatrix.M13 = zAxis.X;
+            viewMatrix.M23 = zAxis.Y;
+            viewMatrix.M33 = zAxis.Z;
+            Vector3.Dot(ref zAxis, ref eye, out viewMatrix.M43);
+            viewMatrix.M43 = -viewMatrix.M43;
 
-            oviewMatrix.M11 = xAxis.X;
-            oviewMatrix.M21 = xAxis.Y;
-            oviewMatrix.M31 = xAxis.Z;
-            Vector3.Dot(ref oxAxis, ref eye, out oviewMatrix.M41);
-            oviewMatrix.M41 = -oviewMatrix.M41;
-
-            oviewMatrix.M12 = oyAxis.X;
-            oviewMatrix.M22 = oyAxis.Y;
-            oviewMatrix.M32 = oyAxis.Z;
-            Vector3.Dot(ref oyAxis, ref eye, out oviewMatrix.M42);
-            oviewMatrix.M42 = -oviewMatrix.M42;
-
-            oviewMatrix.M13 = ozAxis.X;
-            oviewMatrix.M23 = ozAxis.Y;
-            oviewMatrix.M33 = ozAxis.Z;
-            Vector3.Dot(ref ozAxis, ref eye, out oviewMatrix.M43);
-            oviewMatrix.M43 = -oviewMatrix.M43;
-
-            oviewMatrix.M14 = 0.0f;
-            oviewMatrix.M24 = 0.0f;
-            oviewMatrix.M34 = 0.0f;
-            oviewMatrix.M44 = 1.0f;
-
-            //accumPitchDegrees = MathHelper.ToDegrees((float)Math.Asin(viewMatrix.M23));
-            //Quaternion.CreateFromRotationMatrix(ref viewMatrix, out orientation);
-
-
-        }
-
-
-        public void LookAtSmooth(Vector3 eye, Vector3 target, Vector3 up, float elapsedTimeSec)
-        {
-            // get current orientation;
-
-            // get new orientation;
-
-            // should do something clever like rotate around up to get new facing but
-            // for now we'll lerp the orientation
-
-            this.eye = eye;
-            this.target = target;
-
-
-            LookatBuildView(ref eye, ref target, ref up, out viewMatrix, out xAxis, out yAxis, out zAxis);
-
-
-            
-
-            Quaternion existingOrientation;
-            Quaternion.CreateFromRotationMatrix(ref viewMatrix, out existingOrientation);
-
-
-            Matrix newLookat = Matrix.CreateLookAt(eye, target, up);
-            Quaternion newOrientation;
-            Quaternion.CreateFromRotationMatrix(ref newLookat, out newOrientation);
-
-
-            float dotThreshold = 0.99995f;
-
-            float qDot = Quaternion.Dot(existingOrientation, newOrientation);
-
-            float slerpValue = 10 * elapsedTimeSec;
-
-            if (qDot > dotThreshold)
-            {
-                slerpValue = 1.0f;
-            }
-
-
-            Quaternion.Slerp(ref existingOrientation, ref newOrientation, slerpValue,out orientation);
-            viewMatrix = Matrix.CreateFromQuaternion(orientation);
-            viewMatrix.Translation = -eye;
             viewMatrix.M14 = 0.0f;
             viewMatrix.M24 = 0.0f;
             viewMatrix.M34 = 0.0f;
             viewMatrix.M44 = 1.0f;
+
+            accumPitchDegrees = MathHelper.ToDegrees((float)Math.Asin(viewMatrix.M23));
+            Quaternion.CreateFromRotationMatrix(ref viewMatrix, out orientation);
         }
 
 
@@ -500,13 +431,11 @@ namespace Dhpoware
                 forwards = viewDir;
             }
 
+            eye += xAxis * dx;
+            eye += WORLD_Y_AXIS * dy;
+            eye += forwards * dz;
 
-            Vector3 start = eye;
-            Vector3 end = start;
-            end += xAxis * dx;
-            end += WORLD_Y_AXIS * dy;
-            end += forwards * dz;
-            Position = end;
+            Position = eye;
         }
 
 
@@ -525,10 +454,9 @@ namespace Dhpoware
                 return;
             }
 
-            Vector3 start = eye;
-            Vector3 end = eye + (direction * distance);
-
-            eye = end;
+            eye.X += direction.X * distance.X;
+            eye.Y += direction.Y * distance.Y;
+            eye.Z += direction.Z * distance.Z;
 
             UpdateViewMatrix();
         }
@@ -1064,22 +992,6 @@ namespace Dhpoware
         }
 
         /// <summary>
-        /// Property to get and set the camera position. without updating view matrix
-        /// </summary>
-
-        public Vector3 Eye
-        {
-            get { return eye; }
-
-            set
-            {
-                eye = value;
-            }
-        }
-
-
-
-        /// <summary>
         /// Property to get and set the flag to force the camera
         /// to orbit around the orbit target's Y axis rather than the camera's
         /// local Y axis.
@@ -1233,12 +1145,9 @@ namespace Dhpoware
         private const float DEFAULT_SPEED_MOUSE_WHEEL = 1.0f;
         private const float DEFAULT_SPEED_ORBIT_ROLL = 100.0f;
         private const float DEFAULT_SPEED_ROTATION = 0.2f;
-        //private const float DEFAULT_VELOCITY_X = 1.0f;
-        //private const float DEFAULT_VELOCITY_Y = 1.0f;
-        //private const float DEFAULT_VELOCITY_Z = 1.0f;
-        private const float DEFAULT_VELOCITY_X = 5.0f;
-        private const float DEFAULT_VELOCITY_Y = 5.0f;
-        private const float DEFAULT_VELOCITY_Z = 5.0f;
+        private const float DEFAULT_VELOCITY_X = 1.0f;
+        private const float DEFAULT_VELOCITY_Y = 1.0f;
+        private const float DEFAULT_VELOCITY_Z = 1.0f;
                 
         private const int MOUSE_SMOOTHING_CACHE_SIZE = 10;
         
@@ -1309,7 +1218,8 @@ namespace Dhpoware
             mouseMovement[1].X = 0.0f;
             mouseMovement[1].Y = 0.0f;
 
-            float aspect = 800f / 600f;
+            Rectangle clientBounds = game.Window.ClientBounds;
+            float aspect = (float)clientBounds.Width / (float)clientBounds.Height;
 
             Perspective(Camera.DEFAULT_FOVX, aspect, Camera.DEFAULT_ZNEAR, Camera.DEFAULT_ZFAR);
 
@@ -1336,12 +1246,23 @@ namespace Dhpoware
             actionKeys.Add(Actions.StrafeLeftPrimary, Keys.Left);
             actionKeys.Add(Actions.StrafeLeftAlternate, Keys.A);
 
-            //Game.Activated += HandleGameActivatedEvent;
-            //Game.Deactivated += HandleGameDeactivatedEvent;
+            Game.Activated += HandleGameActivatedEvent;
+            Game.Deactivated += HandleGameDeactivatedEvent;
 
-
+            UpdateOrder = 1;
         }
 
+        /// <summary>
+        /// Initializes the CameraComponent class. This method repositions the
+        /// mouse to the center of the game window.
+        /// </summary>
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            Rectangle clientBounds = Game.Window.ClientBounds;
+            Mouse.SetPosition(clientBounds.Width / 2, clientBounds.Height / 2);
+        }
 
         /// <summary>
         /// Builds a look at style viewing matrix.
@@ -1362,12 +1283,6 @@ namespace Dhpoware
         public void LookAt(Vector3 eye, Vector3 target, Vector3 up)
         {
             camera.LookAt(eye, target, up);
-        }
-
-
-        public void LookAtSmooth(Vector3 eye, Vector3 target, Vector3 up, float elapsedTimeSec)
-        {
-            camera.LookAtSmooth(eye, target, up,elapsedTimeSec);
         }
 
         /// <summary>
@@ -1435,6 +1350,8 @@ namespace Dhpoware
         /// <param name="gameTime">Time elapsed since the last call to Update.</param>
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+            UpdateInput();
             UpdateCamera(gameTime);
         }
 
@@ -1489,15 +1406,14 @@ namespace Dhpoware
         /// <param name="direction">The movement direction.</param>
         private void GetMovementDirection(out Vector3 direction)
         {
+            direction.X = 0.0f;
+            direction.Y = 0.0f;
+            direction.Z = 0.0f;
 
-            direction = Vector3.Zero;
-
-            // if we don't have access to the keyboard then do nothing here.
-            if (!m_keyboardInputEnabled || inputState == null)
+            if (inputState == null)
             {
                 return;
             }
-
 
             if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveForwardsPrimary]) ||
                 inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveForwardsAlternate]))
@@ -1808,14 +1724,14 @@ namespace Dhpoware
             smoothedMouseMovement = Vector2.Zero;
             mouseIndex = 0;
 
-            //Rectangle clientBounds = Game.Window.ClientBounds;
+            Rectangle clientBounds = Game.Window.ClientBounds;
 
-            //int centerX = clientBounds.Width / 2;
-            //int centerY = clientBounds.Height / 2;
-            //int deltaX = centerX - inputState.CurrentMouseState.X;
-            //int deltaY = centerY - inputState.CurrentMouseState.Y;
+            int centerX = clientBounds.Width / 2;
+            int centerY = clientBounds.Height / 2;
+            int deltaX = centerX - inputState.CurrentMouseState.X;
+            int deltaY = centerY - inputState.CurrentMouseState.Y;
 
-            //Mouse.SetPosition(centerX, centerY);
+            Mouse.SetPosition(centerX, centerY);
         }
 
         /// <summary>
@@ -1874,17 +1790,17 @@ namespace Dhpoware
             }
             else
             {
-                //Rectangle clientBounds = Game.Window.ClientBounds;
+                Rectangle clientBounds = Game.Window.ClientBounds;
 
-                //int centerX = clientBounds.Width / 2;
-                //int centerY = clientBounds.Height / 2;
-                //int deltaX = centerX - inputState.CurrentMouseState.X;
-                //int deltaY = centerY - inputState.CurrentMouseState.Y;
+                int centerX = clientBounds.Width / 2;
+                int centerY = clientBounds.Height / 2;
+                int deltaX = centerX - inputState.CurrentMouseState.X;
+                int deltaY = centerY - inputState.CurrentMouseState.Y;
 
-                //Mouse.SetPosition(centerX, centerY);
+                Mouse.SetPosition(centerX, centerY);
 
-                //PerformMouseFiltering((float)deltaX, (float)deltaY);
-                //PerformMouseSmoothing(smoothedMouseMovement.X, smoothedMouseMovement.Y);
+                PerformMouseFiltering((float)deltaX, (float)deltaY);
+                PerformMouseSmoothing(smoothedMouseMovement.X, smoothedMouseMovement.Y);
             }
         }
 
@@ -2085,21 +2001,21 @@ namespace Dhpoware
                     camera.Zoom(dz, camera.OrbitMinZoom, camera.OrbitMaxZoom);
                     
                 break;
-            case Camera.Behavior.Follow:
-                {
-                    Matrix targetWorld = FollowTarget.World;
-                    Matrix copyTargetWorld = FollowTarget.World;
-                    copyTargetWorld.Translation = Vector3.Zero;
-                    Vector3 targetYAxis = targetWorld.Up;
-                    Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorld);
-                    newEye2 += targetWorld.Translation;
-                    LookAt(newEye2, targetWorld.Translation, targetYAxis);
+            //case Camera.Behavior.Follow:
+            //    {
+            //        Matrix targetWorld = FollowTarget.World;
+            //        Matrix copyTargetWorld = FollowTarget.World;
+            //        copyTargetWorld.Translation = Vector3.Zero;
+            //        Vector3 targetYAxis = targetWorld.Up;
+            //        Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorld);
+            //        newEye2 += targetWorld.Translation;
+            //        LookAt(newEye2, targetWorld.Translation, targetYAxis);
                     
-                    camera.UpdateViewMatrix();
-                    camera.Eye = newEye2;
+            //        camera.UpdateViewMatrix();
+            //        camera.Eye = newEye2;
 
-                    break;
-                }
+            //        break;
+            //    }
             default:
                 break;
             }
@@ -2258,22 +2174,7 @@ namespace Dhpoware
         public Vector3 Position
         {
             get { return camera.Position; }
-            set 
-            { 
-                camera.Position = value; 
-            }
-        }
-
-        /// <summary>
-        /// Property to get and set the camera's position.
-        /// </summary>
-        public Vector3 Eye
-        {
-            get { return camera.Eye; }
-            set
-            {
-                camera.Eye = value;
-            }
+            set { camera.Position = value; }
         }
 
         /// <summary>
