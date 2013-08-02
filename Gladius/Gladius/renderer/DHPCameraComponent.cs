@@ -40,6 +40,7 @@ namespace Dhpoware
     {
     #region Public Methods
 
+        void HandleInput(InputState input);
 
     /// <summary>
         /// Builds a look at style viewing matrix using the camera's current
@@ -245,6 +246,14 @@ namespace Dhpoware
             Orbit,
             Follow
         };
+
+            
+        private InputState inputState;
+        public void HandleInput(InputState input)
+        {
+            inputState = input;
+        }
+
 
         public const float DEFAULT_FOVX = 90.0f;
         public const float DEFAULT_ZNEAR = 0.1f;
@@ -1171,7 +1180,7 @@ namespace Dhpoware
     /// These actions are defined by the Actions enumeration. Methods are
     /// provided to remap the camera components default bindings.
     /// </summary>
-    public class CameraComponent : ICamera
+    public class CameraComponent : GameComponent,ICamera
     {
         public enum Actions
         {
@@ -1269,7 +1278,7 @@ namespace Dhpoware
         /// z axis. An initial perspective projection matrix is created
         /// as well as setting up initial key bindings to the actions.
         /// </summary>
-        public CameraComponent() 
+        public CameraComponent(Game game) : base(game)
         {
             camera = new Camera();
             //camera.CurrentBehavior = Camera.Behavior.Spectator;
@@ -1424,7 +1433,7 @@ namespace Dhpoware
         /// Updates the state of the CameraComponent class.
         /// </summary>
         /// <param name="gameTime">Time elapsed since the last call to Update.</param>
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             UpdateCamera(gameTime);
         }
@@ -1822,6 +1831,12 @@ namespace Dhpoware
             rollDegrees *= rotationSpeed;
 
             Rotate(headingDegrees, pitchDegrees, rollDegrees);
+        }
+
+        public void HandleInput(InputState input)
+        {
+            inputState = input;
+            UpdateInput();
         }
 
         /// <summary>
