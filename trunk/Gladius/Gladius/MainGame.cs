@@ -112,12 +112,10 @@ namespace Gladius
             m_camera.Perspective(((float)Math.PI / 4f), aspect, 0.1f, 1000f);
             m_arena = new Arena(32, 32);
 
-            //m_camera.Position = new Vectsor3(0, 20, 0);
+            m_camera.Position = new Vector3(0, 2, 0);
             //m_camera.LookAt(Vector3.Zero);
-            //m_camera.CurrentBehavior = Camera.Behavior.Spectator;
-            m_camera.LookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
-
-            Matrix m = m_camera.ViewMatrix;
+            m_camera.CurrentBehavior = Camera.Behavior.Spectator;
+            //m_camera.LookAt(Vector3.Zero, new Vector3(0,-1,1), Vector3.Up);
 
             m_arenaRenderer = new SimpleArenaRenderer();
             m_arenaRenderer.LoadContent(this,GraphicsDevice);
