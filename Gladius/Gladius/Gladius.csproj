@@ -110,6 +110,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\GameFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\UnitCube.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
