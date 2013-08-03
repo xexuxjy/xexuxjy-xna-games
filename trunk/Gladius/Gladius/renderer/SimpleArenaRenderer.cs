@@ -70,7 +70,8 @@ namespace Gladius.renderer
                     if (texture2d != null)
                     {
                         translation = topLeft + new Vector3(i, 0.5f, j);
-                        DrawBox(Vector3.One, texture2d, translation);
+                        Vector3 boxScale = new Vector3(0.5f);
+                        DrawBox(boxScale, texture2d, translation);
                     }
                 }
             }
