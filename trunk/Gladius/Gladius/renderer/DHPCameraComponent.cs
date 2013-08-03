@@ -204,28 +204,16 @@ namespace Dhpoware
             set;
         }
 
-        BaseActor FollowTarget
-        {
-            get;
-            set;
-        }
+        //BaseActor FollowTarget
+        //{
+        //    get;
+        //    set;
+        //}
 
 
     #endregion
     }
 
-    /// <summary>
-    /// A general purpose 6DoF (six degrees of freedom) quaternion based
-    /// camera. This camera class supports 4 different behaviors: first
-    /// person mode, spectator mode, flight mode, and orbit mode. First
-    /// person mode only allows 5DOF (x axis movement, y axis movement,
-    /// z axis movement, yaw, and pitch) and movement is always parallel
-    /// to the world x-z (ground) plane. Spectator mode is similar to first
-    /// person mode only movement is along the direction the camera is
-    /// pointing. Flight mode supports 6DoF. This is the camera class'
-    /// default behavior. Orbit mode rotates the camera around a target
-    /// position. This mode can be used to simulate a third person camera.
-    /// </summary>
     public class Camera : ICamera
     {
         public enum Behavior
@@ -233,11 +221,9 @@ namespace Dhpoware
             FirstPerson,
             Spectator,
             Flight,
-            Orbit,
-            Follow
+            Orbit
         };
 
-            
         private InputState inputState;
         public void HandleInput(InputState input)
         {
@@ -248,10 +234,10 @@ namespace Dhpoware
         public const float DEFAULT_FOVX = 90.0f;
         public const float DEFAULT_ZNEAR = 0.1f;
         public const float DEFAULT_ZFAR = 1000.0f;
-        
+
         public const float DEFAULT_ORBIT_MIN_ZOOM = DEFAULT_ZNEAR + 1.0f;
         public const float DEFAULT_ORBIT_MAX_ZOOM = DEFAULT_ZFAR * 0.5f;
-        
+
         public const float DEFAULT_ORBIT_OFFSET_LENGTH = DEFAULT_ORBIT_MIN_ZOOM +
             (DEFAULT_ORBIT_MAX_ZOOM - DEFAULT_ORBIT_MIN_ZOOM) * 0.25f;
 
@@ -262,8 +248,6 @@ namespace Dhpoware
         private Behavior behavior;
         private bool preferTargetYAxisOrbiting;
 
-        private bool clipToWorld;
-
         private float fovx;
         private float aspectRatio;
         private float znear;
@@ -273,7 +257,7 @@ namespace Dhpoware
         private float orbitMaxZoom;
         private float orbitOffsetLength;
         private float firstPersonYOffset;
-        
+
         private Vector3 eye;
         private Vector3 target;
         private Vector3 targetYAxis;
@@ -290,12 +274,7 @@ namespace Dhpoware
         private Vector3 savedEye;
         private float savedAccumPitchDegrees;
 
-        private bool m_keyboardInputEnabled;
-
-        private BaseActor m_followTarget;
-        private Vector3 m_followTargetLookatOffset = Vector3.Backward * 2;
-
-    #region Public Methods
+        #region Public Methods
 
         /// <summary>
         /// Constructs a new instance of the camera class. The camera will
@@ -331,9 +310,6 @@ namespace Dhpoware
             savedOrientation = orientation;
             savedAccumPitchDegrees = 0.0f;
         }
-
-
-
 
         /// <summary>
         /// Builds a look at style viewing matrix.
@@ -396,8 +372,6 @@ namespace Dhpoware
             Quaternion.CreateFromRotationMatrix(ref viewMatrix, out orientation);
         }
 
-
-
         /// <summary>
         /// Moves the camera by dx world units to the left or right; dy
         /// world units upwards or downwards; and dz world units forwards
@@ -437,8 +411,6 @@ namespace Dhpoware
 
             Position = eye;
         }
-
-
 
         /// <summary>
         /// Moves the camera the specified distance in the specified direction.
@@ -519,23 +491,21 @@ namespace Dhpoware
 
             switch (behavior)
             {
-            case Behavior.FirstPerson:
-            case Behavior.Spectator:
-            case Behavior.Follow:
+                case Behavior.FirstPerson:
+                case Behavior.Spectator:
+                    RotateFirstPerson(headingDegrees, pitchDegrees);
+                    break;
 
-                RotateFirstPerson(headingDegrees, pitchDegrees);
-                break;
+                case Behavior.Flight:
+                    RotateFlight(headingDegrees, pitchDegrees, rollDegrees);
+                    break;
 
-            case Behavior.Flight:
-                RotateFlight(headingDegrees, pitchDegrees, rollDegrees);
-                break;
+                case Behavior.Orbit:
+                    RotateOrbit(headingDegrees, pitchDegrees, rollDegrees);
+                    break;
 
-            case Behavior.Orbit:
-                RotateOrbit(headingDegrees, pitchDegrees, rollDegrees);
-                break;
-
-            default:
-                break;
+                default:
+                    break;
             }
 
             UpdateViewMatrix();
@@ -600,26 +570,9 @@ namespace Dhpoware
             }
         }
 
-        public void EnableKeyboardInput()
-        {
-            m_keyboardInputEnabled = true;
-        }
+        #endregion
 
-        public void DisableKeyboardInput()
-        {
-            m_keyboardInputEnabled = false;
-        }
-
-        public Vector3 FollowTargetLookAtOffset
-        {
-            get { return m_followTargetLookatOffset; }
-            set { m_followTargetLookatOffset = value; }
-        }
-
-
-    #endregion
-
-    #region Private Methods
+        #region Private Methods
 
         /// <summary>
         /// Change to a new camera behavior.
@@ -636,98 +589,84 @@ namespace Dhpoware
 
             switch (newBehavior)
             {
-            case Behavior.FirstPerson:
-                switch (prevBehavior)
-                {
-                case Behavior.Flight:
+                case Behavior.FirstPerson:
+                    switch (prevBehavior)
+                    {
+                        case Behavior.Flight:
+                        case Behavior.Spectator:
+                            eye.Y = firstPersonYOffset;
+                            UpdateViewMatrix();
+                            break;
+
+                        case Behavior.Orbit:
+                            eye.X = savedEye.X;
+                            eye.Z = savedEye.Z;
+                            eye.Y = firstPersonYOffset;
+                            orientation = savedOrientation;
+                            accumPitchDegrees = savedAccumPitchDegrees;
+                            UpdateViewMatrix();
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    UndoRoll();
+                    break;
+
                 case Behavior.Spectator:
-                case Behavior.Follow:
+                    switch (prevBehavior)
+                    {
+                        case Behavior.Flight:
+                            UpdateViewMatrix();
+                            break;
 
-                    eye.Y = firstPersonYOffset;
-                    UpdateViewMatrix();
+                        case Behavior.Orbit:
+                            eye = savedEye;
+                            orientation = savedOrientation;
+                            accumPitchDegrees = savedAccumPitchDegrees;
+                            UpdateViewMatrix();
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    UndoRoll();
                     break;
 
-                case Behavior.Orbit:
-                    eye.X = savedEye.X;
-                    eye.Z = savedEye.Z;
-                    eye.Y = firstPersonYOffset;
-                    orientation = savedOrientation;
-                    accumPitchDegrees = savedAccumPitchDegrees;
-                    UpdateViewMatrix();
-                    break;
-
-                default:
-                    break;
-                }
-
-                UndoRoll();
-                break;
-
-            case Behavior.Spectator:
-                switch (prevBehavior)
-                {
                 case Behavior.Flight:
-                    UpdateViewMatrix();
+                    if (prevBehavior == Behavior.Orbit)
+                    {
+                        eye = savedEye;
+                        orientation = savedOrientation;
+                        accumPitchDegrees = savedAccumPitchDegrees;
+                        UpdateViewMatrix();
+                    }
+                    else
+                    {
+                        savedEye = eye;
+                        UpdateViewMatrix();
+                    }
                     break;
 
                 case Behavior.Orbit:
-                    eye = savedEye;
-                    orientation = savedOrientation;
-                    accumPitchDegrees = savedAccumPitchDegrees;
-                    UpdateViewMatrix();
+                    if (prevBehavior == Behavior.FirstPerson)
+                        firstPersonYOffset = eye.Y;
+
+                    savedEye = eye;
+                    savedOrientation = orientation;
+                    savedAccumPitchDegrees = accumPitchDegrees;
+
+                    targetYAxis = yAxis;
+
+                    Vector3 newEye = eye + zAxis * orbitOffsetLength;
+
+                    LookAt(newEye, eye, targetYAxis);
                     break;
 
                 default:
                     break;
-                }
-
-                UndoRoll();
-                break;
-
-            case Behavior.Flight:
-                if (prevBehavior == Behavior.Orbit)
-                {
-                    eye = savedEye;
-                    orientation = savedOrientation;
-                    accumPitchDegrees = savedAccumPitchDegrees;
-                    UpdateViewMatrix();
-                }
-                else
-                {
-                    savedEye = eye;
-                    UpdateViewMatrix();
-                }
-                break;
-
-            case Behavior.Orbit:
-                if (prevBehavior == Behavior.FirstPerson)
-                    firstPersonYOffset = eye.Y;
-
-                savedEye = eye;
-                savedOrientation = orientation;
-                savedAccumPitchDegrees = accumPitchDegrees;
-
-                targetYAxis = yAxis;
-
-                Vector3 newEye = eye + zAxis * orbitOffsetLength;
-
-                LookAt(newEye, eye, targetYAxis);
-            break;
-            case Behavior.Follow:
-                savedEye = eye;
-                savedOrientation = orientation;
-                savedAccumPitchDegrees = accumPitchDegrees;
-
-                Matrix targetWorld = FollowTarget.World;
-                Matrix copyTargetWorld = FollowTarget.World;
-                copyTargetWorld.Translation = Vector3.Zero;
-                targetYAxis = targetWorld.Up;
-                Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorld);
-                newEye2 += targetWorld.Translation;
-                LookAt(newEye2, targetWorld.Translation, targetYAxis);
-            break;
-            default:
-                break;
             }
         }
 
@@ -738,7 +677,7 @@ namespace Dhpoware
         private void ChangeOrientation(Quaternion newOrientation)
         {
             Matrix m = Matrix.CreateFromQuaternion(newOrientation);
-            
+
             // Store the pitch for this new orientation.
             // First person and spectator behaviors limit pitching to
             // 90 degrees straight up and down.
@@ -753,21 +692,7 @@ namespace Dhpoware
             orientation = newOrientation;
 
             if (behavior == Behavior.FirstPerson || behavior == Behavior.Spectator)
-            {
                 LookAt(eye, eye + Vector3.Negate(zAxis), WORLD_Y_AXIS);
-            }
-            else if (behavior == Behavior.Follow)
-            {
-                Matrix targetWorld = FollowTarget.World;
-                Matrix copyTargetWorld = FollowTarget.World;
-                copyTargetWorld.Translation = Vector3.Zero;
-                targetYAxis = targetWorld.Up;
-                Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorld);
-                newEye2 += targetWorld.Translation;
-                LookAt(newEye2, targetWorld.Translation, targetYAxis);
-                Position = newEye2;
-            }
-
 
             UpdateViewMatrix();
         }
@@ -849,7 +774,7 @@ namespace Dhpoware
         {
             float heading = MathHelper.ToRadians(headingDegrees);
             float pitch = MathHelper.ToRadians(pitchDegrees);
-            
+
             if (preferTargetYAxisOrbiting)
             {
                 Quaternion rotation = Quaternion.Identity;
@@ -877,15 +802,8 @@ namespace Dhpoware
         /// <summary>
         /// Rebuild the view matrix.
         /// </summary>
-        public void UpdateViewMatrix()
+        private void UpdateViewMatrix()
         {
-            //if (behavior == Behavior.Follow && FollowTarget != null)
-            //{
-            //    Matrix targetFacing = FollowTarget.World;
-            //    targetFacing.Translation = Vector3.Zero;
-            //    orientation = Quaternion.CreateFromRotationMatrix(targetFacing);
-            //}
-
             Matrix.CreateFromQuaternion(ref orientation, out viewMatrix);
 
             xAxis.X = viewMatrix.M11;
@@ -919,9 +837,9 @@ namespace Dhpoware
             viewDir.Z = -zAxis.Z;
         }
 
-    #endregion
-        
-    #region Properties
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Property to get and set the camera's behavior.
@@ -999,9 +917,9 @@ namespace Dhpoware
         public bool PreferTargetYAxisOrbiting
         {
             get { return preferTargetYAxisOrbiting; }
-            
+
             set
-            { 
+            {
                 preferTargetYAxisOrbiting = value;
 
                 if (preferTargetYAxisOrbiting)
@@ -1065,21 +983,7 @@ namespace Dhpoware
             get { return zAxis; }
         }
 
-        public BaseActor FollowTarget
-        {
-            get { return m_followTarget; }
-            set { m_followTarget = value; }
-        }
-
-        public bool ClipToWorld
-        {
-            set
-            {
-                clipToWorld = value;
-            }
-        }
-
-    #endregion
+        #endregion
     }
 
     /// <summary>
@@ -1092,7 +996,7 @@ namespace Dhpoware
     /// These actions are defined by the Actions enumeration. Methods are
     /// provided to remap the camera components default bindings.
     /// </summary>
-    public class CameraComponent : GameComponent,ICamera
+    public class CameraComponent : GameComponent, ICamera
     {
         public enum Actions
         {
@@ -1120,7 +1024,7 @@ namespace Dhpoware
             PitchUpAlternate,
             PitchDownPrimary,
             PitchDownAlternate,
-            
+
             YawLeftPrimary,
             YawLeftAlternate,
             YawRightPrimary,
@@ -1130,16 +1034,16 @@ namespace Dhpoware
             RollLeftAlternate,
             RollRightPrimary,
             RollRightAlternate,
-            
+
             StrafeRightPrimary,
             StrafeRightAlternate,
             StrafeLeftPrimary,
             StrafeLeftAlternate
         };
 
-        private const float DEFAULT_ACCELERATION_X = 18.0f;
-        private const float DEFAULT_ACCELERATION_Y = 18.0f;
-        private const float DEFAULT_ACCELERATION_Z = 18.0f;
+        private const float DEFAULT_ACCELERATION_X = 8.0f;
+        private const float DEFAULT_ACCELERATION_Y = 8.0f;
+        private const float DEFAULT_ACCELERATION_Z = 8.0f;
         private const float DEFAULT_MOUSE_SMOOTHING_SENSITIVITY = 0.5f;
         private const float DEFAULT_SPEED_FLIGHT_YAW = 100.0f;
         private const float DEFAULT_SPEED_MOUSE_WHEEL = 1.0f;
@@ -1148,9 +1052,9 @@ namespace Dhpoware
         private const float DEFAULT_VELOCITY_X = 1.0f;
         private const float DEFAULT_VELOCITY_Y = 1.0f;
         private const float DEFAULT_VELOCITY_Z = 1.0f;
-                
+
         private const int MOUSE_SMOOTHING_CACHE_SIZE = 10;
-        
+
         private Camera camera;
         private bool clickAndDragMouseRotation;
         private bool movingAlongPosX;
@@ -1173,12 +1077,12 @@ namespace Dhpoware
         private Vector2[] mouseMovement;
         private Vector2[] mouseSmoothingCache;
         private Vector2 smoothedMouseMovement;
-        private InputState inputState;
+        private MouseState currentMouseState;
+        private MouseState previousMouseState;
+        private KeyboardState currentKeyboardState;
         private Dictionary<Actions, Keys> actionKeys;
-        private bool m_keyboardInputEnabled = true;
 
-
-    #region Public Methods
+        #region Public Methods
 
         /// <summary>
         /// Constructs a new instance of the CameraComponent class. The
@@ -1187,18 +1091,19 @@ namespace Dhpoware
         /// z axis. An initial perspective projection matrix is created
         /// as well as setting up initial key bindings to the actions.
         /// </summary>
-        public CameraComponent(Game game) : base(game)
+        public CameraComponent(Game game)
+            : base(game)
         {
             camera = new Camera();
-            //camera.CurrentBehavior = Camera.Behavior.Spectator;
-            camera.CurrentBehavior = Camera.Behavior.FirstPerson;
+            camera.CurrentBehavior = Camera.Behavior.Spectator;
+
             movingAlongPosX = false;
             movingAlongNegX = false;
             movingAlongPosY = false;
             movingAlongNegY = false;
             movingAlongPosZ = false;
             movingAlongNegZ = false;
-            
+
             savedMousePosX = -1;
             savedMousePosY = -1;
 
@@ -1272,7 +1177,6 @@ namespace Dhpoware
         {
             camera.LookAt(target);
         }
-
 
         /// <summary>
         /// Builds a look at style viewing matrix.
@@ -1395,9 +1299,9 @@ namespace Dhpoware
             camera.Zoom(zoom, minZoom, maxZoom);
         }
 
-    #endregion
+        #endregion
 
-    #region Private Methods
+        #region Private Methods
 
         /// <summary>
         /// Determines which way to move the camera based on player input.
@@ -1409,11 +1313,6 @@ namespace Dhpoware
             direction.X = 0.0f;
             direction.Y = 0.0f;
             direction.Z = 0.0f;
-
-            if (inputState == null)
-            {
-                return;
-            }
 
             if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveForwardsPrimary]) ||
                 inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.MoveForwardsAlternate]))
@@ -1481,114 +1380,112 @@ namespace Dhpoware
 
             switch (CurrentBehavior)
             {
-            case Camera.Behavior.FirstPerson:
-            case Camera.Behavior.Spectator:
-            case Camera.Behavior.Follow:
-
-                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightPrimary]) ||
-                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightAlternate]))
-                {
-                    if (!movingAlongPosX)
+                case Camera.Behavior.FirstPerson:
+                case Camera.Behavior.Spectator:
+                    if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightPrimary]) ||
+                        inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeRightAlternate]))
                     {
-                        movingAlongPosX = true;
-                        currentVelocity.X = 0.0f;
+                        if (!movingAlongPosX)
+                        {
+                            movingAlongPosX = true;
+                            currentVelocity.X = 0.0f;
+                        }
+
+                        direction.X += 1.0f;
+                    }
+                    else
+                    {
+                        movingAlongPosX = false;
                     }
 
-                    direction.X += 1.0f;
-                }
-                else
-                {
-                    movingAlongPosX = false;
-                }
-
-                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeLeftPrimary]) ||
-                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeLeftAlternate]))
-                {
-                    if (!movingAlongNegX)
+                    if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeLeftPrimary]) ||
+                        inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.StrafeLeftAlternate]))
                     {
-                        movingAlongNegX = true;
-                        currentVelocity.X = 0.0f;
+                        if (!movingAlongNegX)
+                        {
+                            movingAlongNegX = true;
+                            currentVelocity.X = 0.0f;
+                        }
+
+                        direction.X -= 1.0f;
+                    }
+                    else
+                    {
+                        movingAlongNegX = false;
                     }
 
-                    direction.X -= 1.0f;
-                }
-                else
-                {
-                    movingAlongNegX = false;
-                }
+                    break;
 
-                break;
-
-            case Camera.Behavior.Flight:
-                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawLeftPrimary]) ||
-                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawLeftAlternate]))
-                {
-                    if (!movingAlongPosX)
+                case Camera.Behavior.Flight:
+                    if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawLeftPrimary]) ||
+                        inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawLeftAlternate]))
                     {
-                        movingAlongPosX = true;
-                        currentVelocity.X = 0.0f;
+                        if (!movingAlongPosX)
+                        {
+                            movingAlongPosX = true;
+                            currentVelocity.X = 0.0f;
+                        }
+
+                        direction.X += 1.0f;
+                    }
+                    else
+                    {
+                        movingAlongPosX = false;
                     }
 
-                    direction.X += 1.0f;
-                }
-                else
-                {
-                    movingAlongPosX = false;
-                }
-
-                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawRightPrimary]) ||
-                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawRightAlternate]))
-                {
-                    if (!movingAlongNegX)
+                    if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawRightPrimary]) ||
+                        inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.FlightYawRightAlternate]))
                     {
-                        movingAlongNegX = true;
-                        currentVelocity.X = 0.0f;
+                        if (!movingAlongNegX)
+                        {
+                            movingAlongNegX = true;
+                            currentVelocity.X = 0.0f;
+                        }
+
+                        direction.X -= 1.0f;
+                    }
+                    else
+                    {
+                        movingAlongNegX = false;
+                    }
+                    break;
+
+                case Camera.Behavior.Orbit:
+                    if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollLeftPrimary]) ||
+                        inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollLeftAlternate]))
+                    {
+                        if (!movingAlongPosX)
+                        {
+                            movingAlongPosX = true;
+                            currentVelocity.X = 0.0f;
+                        }
+
+                        direction.X += 1.0f;
+                    }
+                    else
+                    {
+                        movingAlongPosX = false;
                     }
 
-                    direction.X -= 1.0f;
-                }
-                else
-                {
-                    movingAlongNegX = false;
-                }
-                break;
-
-            case Camera.Behavior.Orbit:
-                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollLeftPrimary]) ||
-                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollLeftAlternate]))
-                {
-                    if (!movingAlongPosX)
+                    if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollRightPrimary]) ||
+                        inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollRightAlternate]))
                     {
-                        movingAlongPosX = true;
-                        currentVelocity.X = 0.0f;
+                        if (!movingAlongNegX)
+                        {
+                            movingAlongNegX = true;
+                            currentVelocity.X = 0.0f;
+                        }
+
+                        direction.X -= 1.0f;
                     }
-
-                    direction.X += 1.0f;
-                }
-                else
-                {
-                    movingAlongPosX = false;
-                }
-
-                if (inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollRightPrimary]) ||
-                    inputState.CurrentKeyboardStates[0].IsKeyDown(actionKeys[Actions.OrbitRollRightAlternate]))
-                {
-                    if (!movingAlongNegX)
+                    else
                     {
-                        movingAlongNegX = true;
-                        currentVelocity.X = 0.0f;
+                        movingAlongNegX = false;
                     }
+                    break;
 
-                    direction.X -= 1.0f;
-                }
-                else
-                {
-                    movingAlongNegX = false;
-                }
-                break;
-
-            default:
-                break;
+                default:
+                    break;
             }
         }
 
@@ -1603,8 +1500,8 @@ namespace Dhpoware
         /// </returns>
         private float GetMouseWheelDirection()
         {
-            int currentWheelValue = inputState.CurrentMouseState.ScrollWheelValue;
-            int previousWheelValue = inputState.LastMouseState.ScrollWheelValue;
+            int currentWheelValue = currentMouseState.ScrollWheelValue;
+            int previousWheelValue = previousMouseState.ScrollWheelValue;
 
             if (currentWheelValue > previousWheelValue)
                 return -1.0f;
@@ -1632,13 +1529,10 @@ namespace Dhpoware
         /// <param name="e">Ignored.</param>
         private void HandleGameDeactivatedEvent(object sender, EventArgs e)
         {
-            if (inputState != null)
-            {
-                MouseState state = inputState.CurrentMouseState;
+            MouseState state = Mouse.GetState();
 
-                savedMousePosX = state.X;
-                savedMousePosY = state.Y;
-            }
+            savedMousePosX = state.X;
+            savedMousePosY = state.Y;
         }
 
         /// <summary>
@@ -1665,7 +1559,7 @@ namespace Dhpoware
             // Store the current mouse movement entry at the front of cache.
             mouseSmoothingCache[0].X = x;
             mouseSmoothingCache[0].Y = y;
-            
+
             float averageX = 0.0f;
             float averageY = 0.0f;
             float averageTotal = 0.0f;
@@ -1681,7 +1575,7 @@ namespace Dhpoware
                 averageTotal += 1.0f * currentWeight;
                 currentWeight *= mouseSmoothingSensitivity;
             }
-            
+
             // Calculate the new smoothed mouse movement.
             smoothedMouseMovement.X = averageX / averageTotal;
             smoothedMouseMovement.Y = averageY / averageTotal;
@@ -1712,6 +1606,9 @@ namespace Dhpoware
         /// </summary>
         private void ResetMouse()
         {
+            currentMouseState = Mouse.GetState();
+            previousMouseState = currentMouseState;
+
             for (int i = 0; i < mouseMovement.Length; ++i)
                 mouseMovement[i] = Vector2.Zero;
 
@@ -1728,8 +1625,8 @@ namespace Dhpoware
 
             int centerX = clientBounds.Width / 2;
             int centerY = clientBounds.Height / 2;
-            int deltaX = centerX - inputState.CurrentMouseState.X;
-            int deltaY = centerY - inputState.CurrentMouseState.Y;
+            int deltaX = centerX - currentMouseState.X;
+            int deltaY = centerY - currentMouseState.Y;
 
             Mouse.SetPosition(centerX, centerY);
         }
@@ -1749,11 +1646,13 @@ namespace Dhpoware
             Rotate(headingDegrees, pitchDegrees, rollDegrees);
         }
 
+        private InputState inputState;
         public void HandleInput(InputState input)
         {
             inputState = input;
             UpdateInput();
         }
+
 
         /// <summary>
         /// Gathers and updates input from all supported input devices for use
@@ -1761,29 +1660,33 @@ namespace Dhpoware
         /// </summary>
         private void UpdateInput()
         {
+            currentKeyboardState = Keyboard.GetState();
+
+            previousMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+
             if (clickAndDragMouseRotation)
             {
                 int deltaX = 0;
                 int deltaY = 0;
 
-                if (inputState.CurrentMouseState.LeftButton == ButtonState.Pressed)
+                if (currentMouseState.LeftButton == ButtonState.Pressed)
                 {
                     switch (CurrentBehavior)
                     {
-                    case Camera.Behavior.FirstPerson:
-                    case Camera.Behavior.Spectator:
-                    case Camera.Behavior.Flight:
-                    case Camera.Behavior.Follow:
-                        deltaX = inputState.LastMouseState.X - inputState.CurrentMouseState.X;
-                        deltaY = inputState.LastMouseState.Y - inputState.CurrentMouseState.Y;
-                        break;
+                        case Camera.Behavior.FirstPerson:
+                        case Camera.Behavior.Spectator:
+                        case Camera.Behavior.Flight:
+                            deltaX = previousMouseState.X - currentMouseState.X;
+                            deltaY = previousMouseState.Y - currentMouseState.Y;
+                            break;
 
-                    case Camera.Behavior.Orbit:
-                        deltaX = inputState.CurrentMouseState.X - inputState.LastMouseState.X;
-                        deltaY = inputState.CurrentMouseState.Y - inputState.LastMouseState.Y;
-                        break;
+                        case Camera.Behavior.Orbit:
+                            deltaX = currentMouseState.X - previousMouseState.X;
+                            deltaY = currentMouseState.Y - previousMouseState.Y;
+                            break;
                     }
-                    
+
                     PerformMouseFiltering((float)deltaX, (float)deltaY);
                     PerformMouseSmoothing(smoothedMouseMovement.X, smoothedMouseMovement.Y);
                 }
@@ -1794,8 +1697,8 @@ namespace Dhpoware
 
                 int centerX = clientBounds.Width / 2;
                 int centerY = clientBounds.Height / 2;
-                int deltaX = centerX - inputState.CurrentMouseState.X;
-                int deltaY = centerY - inputState.CurrentMouseState.Y;
+                int deltaX = centerX - currentMouseState.X;
+                int deltaY = centerY - currentMouseState.Y;
 
                 Mouse.SetPosition(centerX, centerY);
 
@@ -1963,78 +1866,53 @@ namespace Dhpoware
 
             switch (camera.CurrentBehavior)
             {
-            case Camera.Behavior.FirstPerson:
-            case Camera.Behavior.Spectator:
-                dx = smoothedMouseMovement.X;
-                dy = smoothedMouseMovement.Y;
-                
-                RotateSmoothly(dx, dy, 0.0f);
-                UpdatePosition(ref direction, elapsedTimeSec);
-                break;
+                case Camera.Behavior.FirstPerson:
+                case Camera.Behavior.Spectator:
+                    dx = smoothedMouseMovement.X;
+                    dy = smoothedMouseMovement.Y;
 
-            case Camera.Behavior.Flight:
-                dy = -smoothedMouseMovement.Y;
-                dz = smoothedMouseMovement.X;
-                
-                RotateSmoothly(0.0f, dy, dz);
+                    RotateSmoothly(dx, dy, 0.0f);
+                    UpdatePosition(ref direction, elapsedTimeSec);
+                    break;
 
-                if ((dx = direction.X * flightYawSpeed * elapsedTimeSec) != 0.0f)
-                    camera.Rotate(dx, 0.0f, 0.0f);
+                case Camera.Behavior.Flight:
+                    dy = -smoothedMouseMovement.Y;
+                    dz = smoothedMouseMovement.X;
 
-                direction.X = 0.0f; // ignore yaw motion when updating camera's velocity
-                UpdatePosition(ref direction, elapsedTimeSec);
-                break;
+                    RotateSmoothly(0.0f, dy, dz);
 
-            case Camera.Behavior.Orbit:
-                dx = -smoothedMouseMovement.X;
-                dy = -smoothedMouseMovement.Y;
+                    if ((dx = direction.X * flightYawSpeed * elapsedTimeSec) != 0.0f)
+                        camera.Rotate(dx, 0.0f, 0.0f);
 
-                RotateSmoothly(dx, dy, 0.0f);
+                    direction.X = 0.0f; // ignore yaw motion when updating camera's velocity
+                    UpdatePosition(ref direction, elapsedTimeSec);
+                    break;
 
-                if (!camera.PreferTargetYAxisOrbiting)
-                {
-                    if ((dz = direction.X * orbitRollSpeed * elapsedTimeSec) != 0.0f)
-                        camera.Rotate(0.0f, 0.0f, dz);
-                }
+                case Camera.Behavior.Orbit:
+                    dx = -smoothedMouseMovement.X;
+                    dy = -smoothedMouseMovement.Y;
 
-                if ((dz = GetMouseWheelDirection() * mouseWheelSpeed) != 0.0f)
-                    camera.Zoom(dz, camera.OrbitMinZoom, camera.OrbitMaxZoom);
-                    
-                break;
-            //case Camera.Behavior.Follow:
-            //    {
-            //        Matrix targetWorld = FollowTarget.World;
-            //        Matrix copyTargetWorld = FollowTarget.World;
-            //        copyTargetWorld.Translation = Vector3.Zero;
-            //        Vector3 targetYAxis = targetWorld.Up;
-            //        Vector3 newEye2 = Vector3.Transform(FollowTargetLookAtOffset, copyTargetWorld);
-            //        newEye2 += targetWorld.Translation;
-            //        LookAt(newEye2, targetWorld.Translation, targetYAxis);
-                    
-            //        camera.UpdateViewMatrix();
-            //        camera.Eye = newEye2;
+                    RotateSmoothly(dx, dy, 0.0f);
 
-            //        break;
-            //    }
-            default:
-                break;
+                    if (!camera.PreferTargetYAxisOrbiting)
+                    {
+                        if ((dz = direction.X * orbitRollSpeed * elapsedTimeSec) != 0.0f)
+                            camera.Rotate(0.0f, 0.0f, dz);
+                    }
+
+                    if ((dz = GetMouseWheelDirection() * mouseWheelSpeed) != 0.0f)
+                        camera.Zoom(dz, camera.OrbitMinZoom, camera.OrbitMaxZoom);
+
+                    break;
+
+                default:
+                    break;
             }
         }
 
-        public void EnableKeyboardInput()
-        {
-            m_keyboardInputEnabled = true;
-        }
+        #endregion
 
-        public void DisableKeyboardInput()
-        {
-            m_keyboardInputEnabled = false;
-        }
-
-
-    #endregion
-
-    #region Properties
+        #region Properties
 
         /// <summary>
         /// Property to get and set the camera's acceleration.
@@ -2055,10 +1933,11 @@ namespace Dhpoware
         public bool ClickAndDragMouseRotation
         {
             get { return clickAndDragMouseRotation; }
-            
+
             set
-            { 
+            {
                 clickAndDragMouseRotation = value;
+                Game.IsMouseVisible = value;
 
                 if (value == false)
                     ResetMouse();
@@ -2137,7 +2016,7 @@ namespace Dhpoware
             get { return camera.OrbitOffsetDistance; }
             set { camera.OrbitOffsetDistance = value; }
         }
-        
+
         /// <summary>
         /// Property to get and set the orbit behavior's rolling speed.
         /// This only applies when PreferTargetYAxisOrbiting is set to false.
@@ -2262,32 +2141,6 @@ namespace Dhpoware
             get { return camera.ZAxis; }
         }
 
-
-        public BaseActor FollowTarget
-        {
-            get { return camera.FollowTarget; }
-            set 
-            {
-                camera.FollowTarget = value;
-                if (camera.FollowTarget != null)
-                {
-                    if(camera.CurrentBehavior != Camera.Behavior.Follow)
-                    {
-                        camera.CurrentBehavior = Camera.Behavior.Follow;
-                    }
-                }
-            }
-        }
-
-        public Vector3 FollowTargetLookAtOffset
-        {
-            get { return camera.FollowTargetLookAtOffset; }
-            set { camera.FollowTargetLookAtOffset = value; }
-        }
-
-
-
-
-    #endregion
+        #endregion
     }
 }

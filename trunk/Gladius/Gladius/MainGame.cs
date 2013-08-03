@@ -11,6 +11,7 @@ using Gladius.actors;
 using Gladius.renderer;
 using Dhpoware;
 using GameStateManagement;
+using System.Text;
 #endregion
 
 namespace Gladius
@@ -93,7 +94,7 @@ namespace Gladius
             // TODO: Add your drawing code here
 
             m_arenaRenderer.Draw(m_arena,m_camera,GraphicsDevice);
-
+            DrawText();
             base.Draw(gameTime);
 
 
@@ -104,17 +105,27 @@ namespace Gladius
         {
             m_inputstate = new InputState();
 
+            m_spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Load the sprite font. The sprite font has a 3 pixel outer glow
+            // baked into it so we need to decrease the spacing so that the
+            // SpriteFont will render correctly.
+            m_spriteFont = Content.Load<SpriteFont>("GameFont");
+            m_spriteFont.Spacing = -4.0f;
+
+
             m_camera = new Dhpoware.CameraComponent(this);
             IGameComponent igc = m_camera as IGameComponent;
             Components.Add(igc);
-
             float aspect = GraphicsDevice.Viewport.AspectRatio;
-            m_camera.Perspective(((float)Math.PI / 4f), aspect, 0.1f, 1000f);
+            m_camera.Position = new Vector3(0, 5, -10);
+
+            
             m_arena = new Arena(32, 32);
 
-            m_camera.Position = new Vector3(0, 2, 0);
+            //m_camera.Position = new Vector3(0, 2, 0);
             //m_camera.LookAt(Vector3.Zero);
-            m_camera.CurrentBehavior = Camera.Behavior.Spectator;
+            m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
             //m_camera.LookAt(Vector3.Zero, new Vector3(0,-1,1), Vector3.Up);
 
             m_arenaRenderer = new SimpleArenaRenderer();
@@ -122,10 +133,45 @@ namespace Gladius
         }
 
 
+        private void DrawText()
+        {
+            string text = null;
+            StringBuilder buffer = new StringBuilder();
+            Vector2 fontPos = new Vector2(1.0f, 1.0f);
 
+                buffer.Append("Camera:\n");
+                buffer.AppendFormat("  Behavior: {0}\n", m_camera.CurrentBehavior);
+                buffer.AppendFormat("  Position: x:{0} y:{1} z:{2}\n",
+                    m_camera.Position.X.ToString("#0.00"),
+                    m_camera.Position.Y.ToString("#0.00"),
+                    m_camera.Position.Z.ToString("#0.00"));
+                buffer.AppendFormat("  Velocity: x:{0} y:{1} z:{2}\n",
+                    m_camera.CurrentVelocity.X.ToString("#0.00"),
+                    m_camera.CurrentVelocity.Y.ToString("#0.00"),
+                    m_camera.CurrentVelocity.Z.ToString("#0.00"));
+                buffer.AppendFormat("  Rotation speed: {0}\n",
+                    m_camera.RotationSpeed.ToString("#0.00"));
+
+                if (m_camera.PreferTargetYAxisOrbiting)
+                    buffer.Append("  Target Y axis orbiting\n\n");
+                else
+                    buffer.Append("  Free orbiting\n\n");
+
+     
+                text = buffer.ToString();
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            spriteBatch.DrawString(m_spriteFont, text, fontPos, Color.Yellow);
+            spriteBatch.End();
+        }
+
+
+        SpriteFont m_spriteFont;
+        SpriteBatch m_spriteBatch;
         Arena m_arena;
         SimpleArenaRenderer m_arenaRenderer;
-        ICamera m_camera;
+        //ICamera m_camera;
+        CameraComponent m_camera;
         InputState m_inputstate;
 
     }

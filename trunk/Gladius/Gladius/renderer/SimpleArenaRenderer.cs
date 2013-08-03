@@ -78,8 +78,8 @@ namespace Gladius.renderer
 
         public void DrawBox(Vector3 scale, Texture2D t,Vector3 position)
         {
-            //Matrix world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
-            Matrix world = Matrix.CreateTranslation(position);
+            Matrix world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
+            //Matrix world = Matrix.CreateTranslation(position);
             foreach (ModelMesh mm in m_boxModel.Meshes)
             {
                 foreach (BasicEffect effect in mm.Effects)
