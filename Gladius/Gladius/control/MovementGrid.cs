@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Gladius.renderer;
+using Dhpoware;
+using Gladius.actors;
+
+namespace Gladius.control
+{
+    public class MovementGrid : GameComponent
+    {
+        public MovementGrid(Game game,Arena arena)
+            : base(game)
+        {
+            m_arena = arena;
+        }
+        
+        
+        public void LoadContent()
+        {
+            m_simpleCursor = Game.Content.Load<Texture2D>("UI/SimpleCursor");
+            m_simpleQuad = new SimpleQuad(Game.GraphicsDevice);
+        }
+
+        public void Draw(GraphicsDevice device,ICamera camera)
+        {
+            m_simpleQuad.Draw(device, m_simpleCursor, CurrentV3, Vector3.Up, Vector3.One, camera);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            UpdateMovement();
+        }
+
+        public void UpdateMovement()
+        {
+            Point p = CurrentPosition;
+            if (Globals.UserControl.CursorLeftPressed())
+            {
+                p.X--;
+            }
+            if (Globals.UserControl.CursorRightPressed())
+            {
+                p.X++;
+            }
+            if (Globals.UserControl.CursorUpPressed())
+            {
+                p.Y--;
+            }
+            if (Globals.UserControl.CursorDownPressed())
+            {
+                p.Y++;
+            }
+            if (m_arena.InLevel(p))
+            {
+                CurrentPosition = p;
+            }
+        }
+
+        public Point CurrentPosition
+        {
+            get
+            {
+                return m_currentPosition;
+            }
+            set
+            {
+                m_currentPosition = value;
+            }
+        }
+
+        public Vector3 CurrentV3
+        {
+
+            get
+            {
+                float height = m_arena.GetHeightAtLocation(CurrentPosition);
+                height += m_hover;
+                return new Vector3(CurrentPosition.X, height, CurrentPosition.Y);
+            }
+        }
+
+        public const float m_hover = 0.01f;
+        public Arena m_arena;
+        public Point m_currentPosition;
+        public SimpleQuad m_simpleQuad;
+        public Texture2D m_simpleCursor;
+    }
+}

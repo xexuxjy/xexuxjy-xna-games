@@ -32,6 +32,13 @@ namespace Gladius.actors
         }
 
 
+        public Point CurrentPoint
+        {
+            get;
+            set;
+        }
+
+
         public Vector3 Position
         {
             get;
@@ -44,6 +51,11 @@ namespace Gladius.actors
             set;
         }
 
+        public BoundingBox BoundingBox
+        {
+            get;
+            set;
+        }
 
 
         public Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;

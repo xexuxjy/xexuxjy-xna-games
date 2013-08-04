@@ -8,11 +8,17 @@ using Microsoft.Xna.Framework.Graphics;
 using Dhpoware;
 using Gladius.util;
 using Microsoft.Xna.Framework;
+using Gladius.control;
 
 namespace Gladius.renderer
 {
     public class SimpleArenaRenderer 
     {
+        public SimpleArenaRenderer(Arena arena)
+        {
+            m_arena = arena;
+        }
+
 
         public void LoadContent(Game game,GraphicsDevice device)
         {
@@ -22,11 +28,16 @@ namespace Gladius.renderer
 
             m_boneTransforms = new Matrix[m_boxModel.Bones.Count];
             m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
+
+            m_movementGrid = new MovementGrid(game,m_arena);
+            game.Components.Add(m_movementGrid);
+            m_movementGrid.LoadContent();
+            m_movementGrid.CurrentPosition = new Point(12, 12);
         }
 
 
 
-        public void Draw(Arena arena,ICamera camera,GraphicsDevice graphicsDevice)
+        public void Draw(ICamera camera,GraphicsDevice graphicsDevice)
         {
             float aspectRatio = graphicsDevice.Viewport.AspectRatio;
             //m_projection=
@@ -40,23 +51,24 @@ namespace Gladius.renderer
 
 
             // Draw the ground....
-            Vector3 topLeft = new Vector3(-arena.Width / 2f, 0, -arena.Breadth / 2f);
+            Vector3 topLeft = new Vector3(-m_arena.Width / 2f, 0, -m_arena.Breadth / 2f);
 
-            Vector3 scale = new Vector3(arena.Width, 1f, arena.Breadth);
+            Vector3 scale = new Vector3(m_arena.Width, 1f, m_arena.Breadth);
             Vector3 translation = new Vector3(0, -0.5f, 0);
 
             DrawBox(scale, ColouredTextureDictionary.GetTexture(Color.LawnGreen, graphicsDevice), translation);
-         
-            for (int i = 0; i < arena.Width; ++i)
+            Texture2D texture2d = null;
+
+            for (int i = 0; i < m_arena.Width; ++i)
             {
-                for (int j = 0; j < arena.Breadth; ++j)
+                for (int j = 0; j < m_arena.Breadth; ++j)
                 {
                     //m_basicEffect.World = Matrix.CreateFromT
-                    SquareType squareType = arena.SquareTypeAtLocation(i, j);
-                    Texture2D texture2d = null;
+                    float groundHeight = 0f;
+                    Vector3 boxScale = new Vector3(0.5f);
 
-
-
+                    SquareType squareType = m_arena.SquareTypeAtLocation(i, j);
+                    texture2d = null;
                     switch (squareType)
                     {
                         case (SquareType.Wall):
@@ -64,17 +76,46 @@ namespace Gladius.renderer
                                 texture2d = ColouredTextureDictionary.GetTexture(Color.Brown, graphicsDevice);
                                 break;
                             }
-
+                        case (SquareType.Level1):
+                            {
+                                texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
+                                boxScale = new Vector3(0.5f, 0.25f, 0.5f);
+                                break;
+                            }
+                        case (SquareType.Level2):
+                            {
+                                texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
+                                boxScale = new Vector3(0.5f);
+                                break;
+                            }
+                        case (SquareType.Level3):
+                            {
+                                texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
+                                boxScale = new Vector3(0.75f);
+                                break;
+                            }
                     }
 
                     if (texture2d != null)
                     {
-                        translation = topLeft + new Vector3(i, 0.5f, j);
-                        Vector3 boxScale = new Vector3(0.5f);
+                        translation = topLeft + new Vector3(i, boxScale.Y, j);
                         DrawBox(boxScale, texture2d, translation);
                     }
                 }
             }
+
+            // Draw Actors.
+            texture2d = ColouredTextureDictionary.GetTexture(Color.Pink, graphicsDevice);
+
+            foreach (BaseActor ba in m_arena.PointActorMap.Values)
+            {
+                float groundHeight = m_arena.GetHeightAtLocation(ba.CurrentPoint);
+                translation = topLeft + new Vector3(ba.CurrentPoint.X, groundHeight+0.5f, ba.CurrentPoint.Y);
+                DrawBox(Vector3.One, texture2d, translation);
+            }
+
+            m_movementGrid.Draw(graphicsDevice, camera);
+
         }
 
         public void DrawBox(Vector3 scale, Texture2D t,Vector3 position)
@@ -104,6 +145,8 @@ namespace Gladius.renderer
         Matrix[] m_boneTransforms;
         ContentManager m_contentManager;
         Model m_boxModel;
+        MovementGrid m_movementGrid;
+        Arena m_arena;
 
     }
 }

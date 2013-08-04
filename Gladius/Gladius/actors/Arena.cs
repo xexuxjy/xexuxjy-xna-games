@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace Gladius.actors
 {
@@ -16,6 +17,12 @@ namespace Gladius.actors
             m_breadth = breadth;
             BuildDefaultArena();
         }
+
+        public bool InLevel(Point p)
+        {
+            return p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Breadth;
+        }
+
 
         public bool InLevel(int x, int y)
         {
@@ -56,10 +63,89 @@ namespace Gladius.actors
             }
         }
 
+        public void SetActorAtPosition(int x, int y, BaseActor actor)
+        {
+            m_arenaGrid[x, y] = SquareType.Mobile;
+
+
+        }
+
+        public bool CanMoveActor(BaseActor baseActor, Point newPoint)
+        {
+            return m_arenaGrid[newPoint.X, newPoint.Y] == SquareType.Empty;
+
+        }
+
+        // move actor - assumes any validity checks have already taken place.
+        public void MoveActor(BaseActor baseActor, Point newPoint)
+        {
+            // set current actor square to empty
+            //baseActor
+            m_arenaGrid[baseActor.CurrentPoint.X,baseActor.CurrentPoint.Y] = SquareType.Empty;
+            if (m_baseActorMap.ContainsKey(baseActor.CurrentPoint))
+            {
+                m_baseActorMap.Remove(baseActor.CurrentPoint);
+            }
+            m_arenaGrid[newPoint.X, newPoint.Y] = SquareType.Mobile;
+            baseActor.CurrentPoint = newPoint;
+            m_baseActorMap[baseActor.CurrentPoint] = baseActor;
+        }
+
+        public void AssertBounds(Point p)
+        {
+            if(p.X < 0 || p.X >= Width || p.Y < 0 || p.Y >= Breadth)
+            {
+                Debug.Assert(false);
+            }
+        }
+
+
+        public float GetHeightAtLocation(Point point)
+        {
+            SquareType st = SquareTypeAtLocation(point);
+            float result = 0;
+            switch (st)
+            {
+                case (SquareType.Level1):
+                    {
+                        result = 0.5f;
+                        break;
+                    }
+                case (SquareType.Level2):
+                    {
+                        result = 1.0f;
+                        break;
+                    }
+                case (SquareType.Level3):
+                    {
+                        result = 1.5f;
+                        break;
+                    }
+                default:
+                    result = 0.0f;
+                    break;
+            }
+            return result;
+        }
+
+        public SquareType SquareTypeAtLocation(Point p)
+        {
+            AssertBounds(p);
+            return m_arenaGrid[p.X, p.Y];
+        }
+
 
         public SquareType SquareTypeAtLocation(int x, int y)
         {
             return m_arenaGrid[x, y];
+        }
+
+        public Dictionary<Point, BaseActor> PointActorMap
+        {
+            get
+            {
+                return m_baseActorMap;
+            }
         }
 
 
@@ -67,7 +153,7 @@ namespace Gladius.actors
         private int m_width;
         private int m_breadth;
 
-        private Dictionary<Point, BaseActor> m_baseActorMap;
+        private Dictionary<Point, BaseActor> m_baseActorMap = new Dictionary<Point, BaseActor>();
 
 
     }

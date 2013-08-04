@@ -12,6 +12,7 @@ using Gladius.renderer;
 using Dhpoware;
 using GameStateManagement;
 using System.Text;
+using Gladius.control;
 #endregion
 
 namespace Gladius
@@ -93,7 +94,7 @@ namespace Gladius
 
             // TODO: Add your drawing code here
 
-            m_arenaRenderer.Draw(m_arena,m_camera,GraphicsDevice);
+            m_arenaRenderer.Draw(m_camera,GraphicsDevice);
             DrawText();
             base.Draw(gameTime);
 
@@ -105,6 +106,7 @@ namespace Gladius
         {
             m_inputstate = new InputState();
 
+
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load the sprite font. The sprite font has a 3 pixel outer glow
@@ -113,6 +115,9 @@ namespace Gladius
             m_spriteFont = Content.Load<SpriteFont>("GameFont");
             m_spriteFont.Spacing = -4.0f;
 
+
+            Globals.UserControl = new UserControl(this,m_inputstate);
+            Components.Add(Globals.UserControl);
 
             m_camera = new Dhpoware.CameraComponent(this);
             IGameComponent igc = m_camera as IGameComponent;
@@ -128,7 +133,22 @@ namespace Gladius
             m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
             //m_camera.LookAt(Vector3.Zero, new Vector3(0,-1,1), Vector3.Up);
 
-            m_arenaRenderer = new SimpleArenaRenderer();
+            BaseActor ba1 = new BaseActor();
+            BaseActor ba2 = new BaseActor();
+            BaseActor ba3 = new BaseActor();
+            BaseActor ba4 = new BaseActor();
+
+            ba1.CurrentPoint = new Point(10, 10);
+            ba2.CurrentPoint = new Point(10, 20);
+            ba3.CurrentPoint = new Point(20, 10);
+            ba4.CurrentPoint = new Point(20, 20);
+
+            m_arena.MoveActor(ba1, ba1.CurrentPoint);
+            m_arena.MoveActor(ba2, ba2.CurrentPoint);
+            m_arena.MoveActor(ba3, ba3.CurrentPoint);
+            m_arena.MoveActor(ba4, ba4.CurrentPoint);
+
+            m_arenaRenderer = new SimpleArenaRenderer(m_arena);
             m_arenaRenderer.LoadContent(this,GraphicsDevice);
         }
 
