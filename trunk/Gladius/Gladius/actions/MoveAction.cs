@@ -22,6 +22,12 @@ namespace Gladius.actions
 
         public void Update(GameTime gameTime)
         {
+            // check and see if we can move
+            int nextIndex = m_currentIndex+1;
+            if(m_arena.CanMoveActor(m_baseActor,m_wayPoints[nextIndex]))
+            {
+                m_arena.MoveActor(m_baseActor,m_wayPoints[nextIndex]);
+            }
         }
 
 
@@ -30,7 +36,7 @@ namespace Gladius.actions
             get { return "Move"; }
         }
 
-
+        int m_currentIndex = 0;
         List<Point> m_wayPoints = new List<Point>();
     }
 }

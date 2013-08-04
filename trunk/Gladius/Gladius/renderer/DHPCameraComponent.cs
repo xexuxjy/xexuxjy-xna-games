@@ -1041,17 +1041,17 @@ namespace Dhpoware
             StrafeLeftAlternate
         };
 
-        private const float DEFAULT_ACCELERATION_X = 8.0f;
-        private const float DEFAULT_ACCELERATION_Y = 8.0f;
-        private const float DEFAULT_ACCELERATION_Z = 8.0f;
-        private const float DEFAULT_MOUSE_SMOOTHING_SENSITIVITY = 0.5f;
-        private const float DEFAULT_SPEED_FLIGHT_YAW = 100.0f;
-        private const float DEFAULT_SPEED_MOUSE_WHEEL = 1.0f;
-        private const float DEFAULT_SPEED_ORBIT_ROLL = 100.0f;
-        private const float DEFAULT_SPEED_ROTATION = 0.2f;
-        private const float DEFAULT_VELOCITY_X = 1.0f;
-        private const float DEFAULT_VELOCITY_Y = 1.0f;
-        private const float DEFAULT_VELOCITY_Z = 1.0f;
+        public const float DEFAULT_ACCELERATION_X = 8.0f;
+        public const float DEFAULT_ACCELERATION_Y = 8.0f;
+        public const float DEFAULT_ACCELERATION_Z = 8.0f;
+        public const float DEFAULT_MOUSE_SMOOTHING_SENSITIVITY = 0.5f;
+        public const float DEFAULT_SPEED_FLIGHT_YAW = 100.0f;
+        public const float DEFAULT_SPEED_MOUSE_WHEEL = 1.0f;
+        public const float DEFAULT_SPEED_ORBIT_ROLL = 100.0f;
+        public const float DEFAULT_SPEED_ROTATION = 0.2f;
+        public const float DEFAULT_VELOCITY_X = 5.0f;
+        public const float DEFAULT_VELOCITY_Y = 5.0f;
+        public const float DEFAULT_VELOCITY_Z = 5.0f;
 
         private const int MOUSE_SMOOTHING_CACHE_SIZE = 10;
 

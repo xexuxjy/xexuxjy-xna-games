@@ -15,8 +15,8 @@ namespace Gladius.actions
         }
 
 
-        private Arena m_arena;
-        private BaseActor m_baseActor;
+        protected Arena m_arena;
+        protected BaseActor m_baseActor;
 
         public abstract String Name
         {
