@@ -25,9 +25,16 @@ namespace Gladius.renderer
             //m_contentManager = new ContentManager(game.Services,"Content");
             //m_boxModel = m_contentManager.Load<Model>("Models/Shapes/UnitCube");
             m_boxModel = game.Content.Load<Model>("UnitCube");
-
             m_boneTransforms = new Matrix[m_boxModel.Bones.Count];
             m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
+
+            m_baseActorTexture = game.Content.Load<Texture2D>("ThirdParty/test_m");
+            m_baseActorModel = game.Content.Load<Model>("ThirdParty/test_XNA");
+            m_baseActorBoneTransforms = new Matrix[m_baseActorModel.Bones.Count];
+            m_baseActorModel.CopyAbsoluteBoneTransformsTo(m_baseActorBoneTransforms);
+
+            BoundingSphere actorBs = m_baseActorModel.Meshes[0].BoundingSphere;
+            m_baseActorScale = Vector3.One;// new Vector3(1f / actorBs.Radius);
 
             m_movementGrid = new MovementGrid(game,m_arena);
             game.Components.Add(m_movementGrid);
@@ -111,12 +118,33 @@ namespace Gladius.renderer
             {
                 float groundHeight = m_arena.GetHeightAtLocation(ba.CurrentPoint);
                 translation = topLeft + new Vector3(ba.CurrentPoint.X, groundHeight+0.5f, ba.CurrentPoint.Y);
-                DrawBox(Vector3.One, texture2d, translation);
+                //DrawBox(Vector3.One, texture2d, translation);
+                DrawBaseActor3(m_baseActorScale, m_baseActorTexture, translation);
             }
 
             m_movementGrid.Draw(graphicsDevice, camera);
 
         }
+
+        public void DrawBaseActor3(Vector3 scale, Texture2D t, Vector3 position)
+        {
+            Matrix world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
+            //Matrix world = Matrix.CreateTranslation(position);
+            foreach (ModelMesh mm in m_baseActorModel.Meshes)
+            {
+                foreach (BasicEffect effect in mm.Effects)
+                {
+                    effect.EnableDefaultLighting();
+                    effect.TextureEnabled = true;
+                    effect.Texture = t;
+                    effect.View = m_view;
+                    effect.Projection = m_projection;
+                    effect.World = m_baseActorBoneTransforms[mm.ParentBone.Index] * world;
+                }
+                mm.Draw();
+            }
+        }
+
 
         public void DrawBox(Vector3 scale, Texture2D t,Vector3 position)
         {
@@ -148,5 +176,10 @@ namespace Gladius.renderer
         MovementGrid m_movementGrid;
         Arena m_arena;
 
+
+        Model m_baseActorModel;
+        Matrix[] m_baseActorBoneTransforms;
+        Vector3 m_baseActorScale;
+        Texture2D m_baseActorTexture;
     }
 }
