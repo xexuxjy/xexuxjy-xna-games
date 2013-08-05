@@ -57,6 +57,12 @@ namespace Gladius.actors
             set;
         }
 
+        public String Team
+        {
+            get;
+            set;
+        }
+
 
         public Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
     }

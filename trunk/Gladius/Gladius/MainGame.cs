@@ -95,7 +95,7 @@ namespace Gladius
             // TODO: Add your drawing code here
 
             m_arenaRenderer.Draw(m_camera,GraphicsDevice);
-            DrawText();
+            //DrawCameraDebugText();
             base.Draw(gameTime);
 
 
@@ -153,7 +153,7 @@ namespace Gladius
         }
 
 
-        private void DrawText()
+        private void DrawCameraDebugText()
         {
             string text = null;
             StringBuilder buffer = new StringBuilder();

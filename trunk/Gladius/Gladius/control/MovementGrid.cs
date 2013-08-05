@@ -22,6 +22,13 @@ namespace Gladius.control
         public void LoadContent()
         {
             m_simpleCursor = Game.Content.Load<Texture2D>("UI/SimpleCursor");
+            m_selectCursor = Game.Content.Load<Texture2D>("UI/SelectCursor");
+            m_attackCursor = Game.Content.Load<Texture2D>("UI/AttackCursor");
+            m_blockedCursor = Game.Content.Load<Texture2D>("UI/BlockedCursor");
+            m_forwardMoveCursor = Game.Content.Load<Texture2D>("UI/ForwardMoveCursor");
+            m_turnMoveCursor = Game.Content.Load<Texture2D>("UI/TurnMoveCursor");
+
+
             m_simpleQuad = new SimpleQuad(Game.GraphicsDevice);
         }
 
@@ -83,10 +90,31 @@ namespace Gladius.control
             }
         }
 
+
+        public void BuildForPlayer(BaseActor actor)
+        {
+
+            // build a grid of 'x' values centered around player.
+
+
+
+
+        }
+
+
+        
         public const float m_hover = 0.01f;
         public Arena m_arena;
         public Point m_currentPosition;
         public SimpleQuad m_simpleQuad;
+        
         public Texture2D m_simpleCursor;
+        public Texture2D m_selectCursor;
+        public Texture2D m_attackCursor;
+        public Texture2D m_blockedCursor;
+        public Texture2D m_forwardMoveCursor;
+        public Texture2D m_turnMoveCursor;
+
+
     }
 }
