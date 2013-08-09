@@ -46,51 +46,61 @@ namespace Gladius.control
         {
             Vector3 v = new Vector3();
 
-
+            Vector3 fwd = Globals.Camera.ViewDirection;
+            Vector3 right = Vector3.Cross(fwd, Vector3.Up);
 
             Point p = CurrentPosition;
             if (Globals.UserControl.CursorLeftPressed())
             {
-                v.X--;
+                v = -right;
             }
             if (Globals.UserControl.CursorRightPressed())
             {
-                v.X++;
+                v = right;
             }
             if (Globals.UserControl.CursorUpPressed())
             {
-                v.Z--;
+                v = fwd;
             }
             if (Globals.UserControl.CursorDownPressed())
             {
-                v.Z++;
+                v = -fwd;
             }
 
-            v.Normalize();
+            if (v.LengthSquared() > 0)
+            {
+                v.Y = 0;
+                v.Normalize();
 
-            v = Vector3.Transform(v,Globals.Camera.ViewMatrix);
+                //v = v * vd;
+                //v = result;
 
-            if (v.X < 0)
-            {
-                p.X--;
-            }
-            if (v.X > 0)
-            {
-                p.X++;
-            }
-            if(v.Z < 0)
-            {
-
-                p.Y--;
-            }
-            if(v.Z > 0)
-            {
-                p.Y++;
-            }
-
-            if (m_arena.InLevel(p))
-            {
-                CurrentPosition = p;
+                if (Math.Abs(v.X) > Math.Abs(v.Z))
+                {
+                    if (v.X < 0)
+                    {
+                        p.X--;
+                    }
+                    if (v.X > 0)
+                    {
+                        p.X++;
+                    }
+                }
+                else
+                {
+                    if (v.Z < 0)
+                    {
+                        p.Y--;
+                    }
+                    if (v.Z > 0)
+                    {
+                        p.Y++;
+                    }
+                }
+                if (m_arena.InLevel(p))
+                {
+                    CurrentPosition = p;
+                }
             }
         }
 

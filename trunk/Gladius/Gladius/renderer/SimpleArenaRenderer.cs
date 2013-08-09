@@ -40,6 +40,9 @@ namespace Gladius.renderer
             game.Components.Add(m_movementGrid);
             m_movementGrid.LoadContent();
             m_movementGrid.CurrentPosition = new Point(12, 12);
+
+            m_spriteBatch = new SpriteBatch(device);
+            m_spriteFont = game.Content.Load<SpriteFont>("UI/DebugFont8");
         }
 
 
@@ -123,7 +126,7 @@ namespace Gladius.renderer
             }
 
             m_movementGrid.Draw(graphicsDevice, camera);
-
+            DrawCameraDebugText();
         }
 
         public void DrawBaseActor3(Vector3 scale, Texture2D t, Vector3 position)
@@ -165,6 +168,47 @@ namespace Gladius.renderer
             }
         }
 
+        private void DrawCameraDebugText()
+        {
+            string text = null;
+            StringBuilder buffer = new StringBuilder();
+            Vector2 fontPos = new Vector2(1.0f, 1.0f);
+
+            buffer.Append("Camera:\n");
+            buffer.AppendFormat("  Behavior: {0}\n", Globals.Camera.CurrentBehavior);
+            buffer.AppendFormat("  Position: x:{0} y:{1} z:{2}\n",
+                Globals.Camera.Position.X.ToString("#0.00"),
+                Globals.Camera.Position.Y.ToString("#0.00"),
+                Globals.Camera.Position.Z.ToString("#0.00"));
+            buffer.AppendFormat("  Velocity: x:{0} y:{1} z:{2}\n",
+                Globals.Camera.CurrentVelocity.X.ToString("#0.00"),
+                Globals.Camera.CurrentVelocity.Y.ToString("#0.00"),
+                Globals.Camera.CurrentVelocity.Z.ToString("#0.00"));
+
+            buffer.AppendFormat("  Forward: x:{0} y:{1} z:{2}\n",
+                Globals.Camera.ViewDirection.X.ToString("#0.00"),
+                Globals.Camera.ViewDirection.Y.ToString("#0.00"),
+                Globals.Camera.ViewDirection.Z.ToString("#0.00"));
+            
+            buffer.AppendFormat("  Rotation speed: {0}\n",
+                Globals.Camera.RotationSpeed.ToString("#0.00"));
+
+            if (Globals.Camera.PreferTargetYAxisOrbiting)
+                buffer.Append("  Target Y axis orbiting\n\n");
+            else
+                buffer.Append("  Free orbiting\n\n");
+
+
+            text = buffer.ToString();
+
+            m_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            m_spriteBatch.DrawString(m_spriteFont, text, fontPos, Color.Yellow);
+            m_spriteBatch.End();
+        }
+
+
+        SpriteBatch m_spriteBatch;
+        SpriteFont m_spriteFont;
 
         Matrix m_view;
         Matrix m_projection;
