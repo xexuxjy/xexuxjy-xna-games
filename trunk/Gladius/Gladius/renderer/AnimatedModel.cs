@@ -1,11 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using SkinnedModel;
 
 namespace Gladius.renderer
 {
     public class AnimatedModel 
     {
+        public AnimatedModel(SkinningData skinningData)
+        {
+            m_skinningData = skinningData;
+        }
+
+        private SkinningData m_skinningData;
     }
 }

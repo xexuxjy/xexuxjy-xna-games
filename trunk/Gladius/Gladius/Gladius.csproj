@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <xnaPlatform>Windows</xnaPlatform>
-    <xnaFrameworkVersion>4.0</xnaFrameworkVersion>
+    <xnaFrameworkVersion>v4.0</xnaFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -57,7 +57,7 @@
     <Compile Include="gamestatemanagement\screenmanager\InputState.cs" />
     <Compile Include="gamestatemanagement\screenmanager\ScreenManager.cs" />
     <Compile Include="gamestatemanagement\screens\BackgroundScreen.cs" />
-    <Compile Include="gamestatemanagement\screens\GameplayScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\ArenaScreen.cs" />
     <Compile Include="gamestatemanagement\screens\LoadingScreen.cs" />
     <Compile Include="gamestatemanagement\screens\MainMenuScreen.cs" />
     <Compile Include="gamestatemanagement\screens\MenuEntry.cs" />
@@ -112,7 +112,6 @@
   <ItemGroup>
     <Folder Include="modes\shop\" />
     <Folder Include="modes\world\" />
-    <Folder Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -160,6 +159,16 @@
     <None Include="Content\UnitCube.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SkinnedModelPipeline\SkinnedModelPipeline.csproj">
+      <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
+      <Name>SkinnedModelPipeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkinnedModel\SkinnedModelWindows.csproj">
+      <Project>{0D41E29B-829F-4255-BCA5-64DC2677DA6D}</Project>
+      <Name>SkinnedModelWindows</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
