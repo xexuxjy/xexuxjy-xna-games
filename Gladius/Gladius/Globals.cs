@@ -14,7 +14,7 @@ namespace Gladius
         public const float MovementStepTime = 2f;
 
         public static UserControl UserControl;
-        public static ICamera Camera;
+        public static CameraComponent Camera;
         public static CombatEngine CombatEngine;
         public static EventLogger EventLogger;
     }
