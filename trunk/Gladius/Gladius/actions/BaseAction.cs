@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Gladius.actors;
+using Gladius.combat;
 
 namespace Gladius.actions
 {
@@ -14,6 +15,14 @@ namespace Gladius.actions
             m_baseActor = baseActor;
         }
 
+        public virtual void Start()
+        {
+        }
+
+        public virtual void Stop()
+        {
+
+        }
 
         protected Arena m_arena;
         protected BaseActor m_baseActor;
@@ -22,5 +31,13 @@ namespace Gladius.actions
         {
             get;
         }
+    }
+
+
+    public enum ActionTypes
+    {
+        Idle,
+        Death,
+        Stagger
     }
 }

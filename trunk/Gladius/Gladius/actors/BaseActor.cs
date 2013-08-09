@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using xexuxjy.Gladius.util;
 using Microsoft.Xna.Framework;
+using Gladius.combat;
+using Gladius.actions;
 
 namespace Gladius.actors
 {
@@ -69,8 +71,41 @@ namespace Gladius.actors
             set;
         }
 
+        public void TakeDamage(AttackResult attackResult)
+        {
+            if(attackResult.resultType != AttackResultType.Miss)
+            {
+                m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue -= attackResult.damageDone;
+            }
+        }
 
 
+        public virtual void Update(GameTime gameTime)
+        {
+
+
+        }
+
+        public virtual void CheckState()
+        {
+            if(m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue <= 0f)
+            {
+                StartAction(ActionTypes.Death);
+            }
+        }
+
+        public virtual void StartAction(ActionTypes actionType)
+        {
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] started.", DebugName, actionType));
+        }
+
+        public virtual void StopAction(ActionTypes actionType)
+        {
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] stopped.", DebugName, actionType));
+        }
+
+
+        public List<AttackSkill> m_knownAttacks;
         public Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
     }
 

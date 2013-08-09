@@ -20,6 +20,7 @@ using Gladius.renderer;
 using Gladius.actors;
 using Gladius;
 using Gladius.control;
+using Gladius.combat;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
@@ -62,6 +63,10 @@ namespace GameStateManagement
             // it should not try to catch up.
             ScreenManager.Game.ResetElapsedTime();
             SetupArena();
+
+            AttackSkillDictionary asd = new AttackSkillDictionary();
+            asd.Populate(m_content);
+
         }
 
 

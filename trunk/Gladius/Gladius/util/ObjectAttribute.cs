@@ -14,10 +14,13 @@ namespace xexuxjy.Gladius.util
         Damage,
         Agility,
         Defense,
+        CriticalChance,
         EarthAffinity,
         AirAffinity,
         FireAffinity,
         WaterAffinity,
+        LightAffinity,
+        DarkAffinity,
         NumTypes
     }
 

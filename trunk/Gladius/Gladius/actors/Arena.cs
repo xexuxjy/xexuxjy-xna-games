@@ -67,7 +67,6 @@ namespace Gladius.actors
         {
             m_arenaGrid[x, y] = SquareType.Mobile;
 
-
         }
 
         public bool CanMoveActor(BaseActor baseActor, Point newPoint)
@@ -147,6 +146,12 @@ namespace Gladius.actors
                 return m_baseActorMap;
             }
         }
+
+
+        public void InitialArenaSetup()
+        {
+        }
+     
 
 
         private SquareType[,] m_arenaGrid;
