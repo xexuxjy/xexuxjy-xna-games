@@ -34,8 +34,55 @@ namespace Gladius.control
 
         public void Draw(GraphicsDevice device,ICamera camera)
         {
-            m_simpleQuad.Draw(device, m_simpleCursor, CurrentV3, Vector3.Up, Vector3.One, camera);
+            //Vector3 topLeft = new Vector3(CurrentCursorSize - 1, 0, CurrentCursorSize - 1);
+            //topLeft /= -2f;
+            int width = ((CurrentCursorSize - 1) / 2);
+            Point topLeft = new Point(-width,-width);
+
+
+            for (int i = -width; i <= width; ++i)
+            {
+                for (int j = -width; j <= width; ++j)
+                {
+                    Point p = new Point(CurrentPosition.X + i, CurrentPosition.Y + j);
+                    Texture2D cursor = CursorForSquare(p);
+                    if (cursor != null)
+                    {
+                        Vector3 v3 = V3ForSquare(p);
+
+                        m_simpleQuad.Draw(device, cursor, v3, Vector3.Up, Vector3.One, camera);
+                    }
+                }
+            }
         }
+
+        public Texture2D CursorForSquare(Point p)
+        {
+            if (m_arena.InLevel(p))
+            {
+                SquareType type = m_arena.SquareTypeAtLocation(p);
+                switch (type)
+                {
+                    case(SquareType.Empty):
+                        {
+                            return m_forwardMoveCursor;
+                        }
+                    case(SquareType.Mobile):
+                        {
+                            return m_blockedCursor;
+                        }
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+            //if (p.X < 0 && p.X >= m_arena.Width && p.Y >= 0 && p.Y < m_arena.Breadth)
+
+        }
+
 
         public override void Update(GameTime gameTime)
         {
@@ -127,6 +174,12 @@ namespace Gladius.control
             }
         }
 
+        public Vector3 V3ForSquare(Point p)
+        {
+            float height = m_arena.GetHeightAtLocation(p);
+            height += m_hover;
+            return new Vector3(p.X, height, p.Y);
+        }
 
         public void BuildForPlayer(BaseActor actor)
         {
@@ -139,7 +192,7 @@ namespace Gladius.control
         }
 
 
-        
+        public int CurrentCursorSize = 5;
         public const float m_hover = 0.01f;
         public Arena m_arena;
         public Point m_currentPosition;
