@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Gladius.control;
 using Dhpoware;
+using Gladius.combat;
+using xexuxjy.Gladius.util;
 
 namespace Gladius
 {
@@ -13,6 +15,7 @@ namespace Gladius
 
         public static UserControl UserControl;
         public static ICamera Camera;
-
+        public static CombatEngine CombatEngine;
+        public static EventLogger EventLogger;
     }
 }
