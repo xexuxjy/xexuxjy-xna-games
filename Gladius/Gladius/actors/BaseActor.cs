@@ -63,10 +63,22 @@ namespace Gladius.actors
             set;
         }
 
+        public ActorClass ActorClass
+        {
+            get;
+            set;
+        }
+
+
 
         public Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
     }
 
-
+    public enum ActorClass
+    {
+        Light,
+        Medium,
+        Heavy
+    }
 
 }

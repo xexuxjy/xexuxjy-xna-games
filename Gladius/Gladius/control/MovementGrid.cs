@@ -44,23 +44,50 @@ namespace Gladius.control
 
         public void UpdateMovement()
         {
+            Vector3 v = new Vector3();
+
+
+
             Point p = CurrentPosition;
             if (Globals.UserControl.CursorLeftPressed())
             {
-                p.X--;
+                v.X--;
             }
             if (Globals.UserControl.CursorRightPressed())
             {
-                p.X++;
+                v.X++;
             }
             if (Globals.UserControl.CursorUpPressed())
             {
-                p.Y--;
+                v.Z--;
             }
             if (Globals.UserControl.CursorDownPressed())
             {
+                v.Z++;
+            }
+
+            v.Normalize();
+
+            v = Vector3.Transform(v,Globals.Camera.ViewMatrix);
+
+            if (v.X < 0)
+            {
+                p.X--;
+            }
+            if (v.X > 0)
+            {
+                p.X++;
+            }
+            if(v.Z < 0)
+            {
+
+                p.Y--;
+            }
+            if(v.Z > 0)
+            {
                 p.Y++;
             }
+
             if (m_arena.InLevel(p))
             {
                 CurrentPosition = p;

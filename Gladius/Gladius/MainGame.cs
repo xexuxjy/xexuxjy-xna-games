@@ -56,7 +56,11 @@ namespace Gladius
 
             // TODO: use this.Content to load your game content here
 
-            SetupArena();
+            //SetupArena();
+            m_screenManager = new ScreenManager(this);
+            m_screenManager.AddScreen(new ArenaScreen(), null);
+
+            Components.Add(m_screenManager);
         }
 
         /// <summary>
@@ -79,8 +83,8 @@ namespace Gladius
                 Exit();
 
             // TODO: Add your update logic here
-            m_inputstate.Update();
-            m_camera.HandleInput(m_inputstate);
+            //m_inputstate.Update();
+            //m_camera.HandleInput(m_inputstate);
             base.Update(gameTime);
         }
 
@@ -88,111 +92,111 @@ namespace Gladius
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+        //protected override void Draw(GameTime gameTime)
+        //{
+        //    GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+        //    // TODO: Add your drawing code here
 
-            m_arenaRenderer.Draw(m_camera,GraphicsDevice);
-            //DrawCameraDebugText();
-            base.Draw(gameTime);
-
-
-
-        }
-
-        public void SetupArena()
-        {
-            m_inputstate = new InputState();
+        //    m_arenaRenderer.Draw(m_camera,GraphicsDevice);
+        //    //DrawCameraDebugText();
+        //    base.Draw(gameTime);
 
 
-            m_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Load the sprite font. The sprite font has a 3 pixel outer glow
-            // baked into it so we need to decrease the spacing so that the
-            // SpriteFont will render correctly.
-            m_spriteFont = Content.Load<SpriteFont>("GameFont");
-            m_spriteFont.Spacing = -4.0f;
+        //}
+
+        //public void SetupArena()
+        //{
+        //    m_inputstate = new InputState();
 
 
-            Globals.UserControl = new UserControl(this,m_inputstate);
-            Components.Add(Globals.UserControl);
+        //    m_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            m_camera = new Dhpoware.CameraComponent(this);
-            IGameComponent igc = m_camera as IGameComponent;
-            Components.Add(igc);
-            float aspect = GraphicsDevice.Viewport.AspectRatio;
-            m_camera.Position = new Vector3(0, 5, -10);
+        //    // Load the sprite font. The sprite font has a 3 pixel outer glow
+        //    // baked into it so we need to decrease the spacing so that the
+        //    // SpriteFont will render correctly.
+        //    m_spriteFont = Content.Load<SpriteFont>("GameFont");
+        //    m_spriteFont.Spacing = -4.0f;
 
+
+        //    Globals.UserControl = new UserControl(this,m_inputstate);
+        //    Components.Add(Globals.UserControl);
+
+        //    m_camera = new Dhpoware.CameraComponent(this);
+        //    IGameComponent igc = m_camera as IGameComponent;
+        //    Components.Add(igc);
+        //    float aspect = GraphicsDevice.Viewport.AspectRatio;
+        //    m_camera.Position = new Vector3(0, 5, -10);
+        //    Globals.Camera = m_camera;
             
-            m_arena = new Arena(32, 32);
+        //    m_arena = new Arena(32, 32);
 
-            //m_camera.Position = new Vector3(0, 2, 0);
-            //m_camera.LookAt(Vector3.Zero);
-            m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
-            //m_camera.LookAt(Vector3.Zero, new Vector3(0,-1,1), Vector3.Up);
+        //    //m_camera.Position = new Vector3(0, 2, 0);
+        //    //m_camera.LookAt(Vector3.Zero);
+        //    m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
+        //    //m_camera.LookAt(Vector3.Zero, new Vector3(0,-1,1), Vector3.Up);
 
-            BaseActor ba1 = new BaseActor();
-            BaseActor ba2 = new BaseActor();
-            BaseActor ba3 = new BaseActor();
-            BaseActor ba4 = new BaseActor();
+        //    BaseActor ba1 = new BaseActor();
+        //    BaseActor ba2 = new BaseActor();
+        //    BaseActor ba3 = new BaseActor();
+        //    BaseActor ba4 = new BaseActor();
 
-            ba1.CurrentPoint = new Point(10, 10);
-            ba2.CurrentPoint = new Point(10, 20);
-            ba3.CurrentPoint = new Point(20, 10);
-            ba4.CurrentPoint = new Point(20, 20);
+        //    ba1.CurrentPoint = new Point(10, 10);
+        //    ba2.CurrentPoint = new Point(10, 20);
+        //    ba3.CurrentPoint = new Point(20, 10);
+        //    ba4.CurrentPoint = new Point(20, 20);
 
-            m_arena.MoveActor(ba1, ba1.CurrentPoint);
-            m_arena.MoveActor(ba2, ba2.CurrentPoint);
-            m_arena.MoveActor(ba3, ba3.CurrentPoint);
-            m_arena.MoveActor(ba4, ba4.CurrentPoint);
+        //    m_arena.MoveActor(ba1, ba1.CurrentPoint);
+        //    m_arena.MoveActor(ba2, ba2.CurrentPoint);
+        //    m_arena.MoveActor(ba3, ba3.CurrentPoint);
+        //    m_arena.MoveActor(ba4, ba4.CurrentPoint);
 
-            m_arenaRenderer = new SimpleArenaRenderer(m_arena);
-            m_arenaRenderer.LoadContent(this,GraphicsDevice);
-        }
+        //    m_arenaRenderer = new SimpleArenaRenderer(m_arena);
+        //    m_arenaRenderer.LoadContent(this,GraphicsDevice);
+        //}
 
 
-        private void DrawCameraDebugText()
-        {
-            string text = null;
-            StringBuilder buffer = new StringBuilder();
-            Vector2 fontPos = new Vector2(1.0f, 1.0f);
+        //private void DrawCameraDebugText()
+        //{
+        //    string text = null;
+        //    StringBuilder buffer = new StringBuilder();
+        //    Vector2 fontPos = new Vector2(1.0f, 1.0f);
 
-                buffer.Append("Camera:\n");
-                buffer.AppendFormat("  Behavior: {0}\n", m_camera.CurrentBehavior);
-                buffer.AppendFormat("  Position: x:{0} y:{1} z:{2}\n",
-                    m_camera.Position.X.ToString("#0.00"),
-                    m_camera.Position.Y.ToString("#0.00"),
-                    m_camera.Position.Z.ToString("#0.00"));
-                buffer.AppendFormat("  Velocity: x:{0} y:{1} z:{2}\n",
-                    m_camera.CurrentVelocity.X.ToString("#0.00"),
-                    m_camera.CurrentVelocity.Y.ToString("#0.00"),
-                    m_camera.CurrentVelocity.Z.ToString("#0.00"));
-                buffer.AppendFormat("  Rotation speed: {0}\n",
-                    m_camera.RotationSpeed.ToString("#0.00"));
+        //        buffer.Append("Camera:\n");
+        //        buffer.AppendFormat("  Behavior: {0}\n", m_camera.CurrentBehavior);
+        //        buffer.AppendFormat("  Position: x:{0} y:{1} z:{2}\n",
+        //            m_camera.Position.X.ToString("#0.00"),
+        //            m_camera.Position.Y.ToString("#0.00"),
+        //            m_camera.Position.Z.ToString("#0.00"));
+        //        buffer.AppendFormat("  Velocity: x:{0} y:{1} z:{2}\n",
+        //            m_camera.CurrentVelocity.X.ToString("#0.00"),
+        //            m_camera.CurrentVelocity.Y.ToString("#0.00"),
+        //            m_camera.CurrentVelocity.Z.ToString("#0.00"));
+        //        buffer.AppendFormat("  Rotation speed: {0}\n",
+        //            m_camera.RotationSpeed.ToString("#0.00"));
 
-                if (m_camera.PreferTargetYAxisOrbiting)
-                    buffer.Append("  Target Y axis orbiting\n\n");
-                else
-                    buffer.Append("  Free orbiting\n\n");
+        //        if (m_camera.PreferTargetYAxisOrbiting)
+        //            buffer.Append("  Target Y axis orbiting\n\n");
+        //        else
+        //            buffer.Append("  Free orbiting\n\n");
 
      
-                text = buffer.ToString();
+        //        text = buffer.ToString();
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            spriteBatch.DrawString(m_spriteFont, text, fontPos, Color.Yellow);
-            spriteBatch.End();
-        }
+        //    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+        //    spriteBatch.DrawString(m_spriteFont, text, fontPos, Color.Yellow);
+        //    spriteBatch.End();
+        //}
 
 
-        SpriteFont m_spriteFont;
-        SpriteBatch m_spriteBatch;
-        Arena m_arena;
-        SimpleArenaRenderer m_arenaRenderer;
-        //ICamera m_camera;
-        CameraComponent m_camera;
-        InputState m_inputstate;
-
+        //SpriteFont m_spriteFont;
+        //SpriteBatch m_spriteBatch;
+        //Arena m_arena;
+        //SimpleArenaRenderer m_arenaRenderer;
+        ////ICamera m_camera;
+        //CameraComponent m_camera;
+        //InputState m_inputstate;
+        ScreenManager m_screenManager;
     }
 }
