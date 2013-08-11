@@ -6,11 +6,22 @@ using xexuxjy.Gladius.util;
 using Microsoft.Xna.Framework;
 using Gladius.combat;
 using Gladius.actions;
+using Gladius.renderer;
+using Microsoft.Xna.Framework.Graphics;
+using Dhpoware;
+using Gladius.renderer.animation;
+using Microsoft.Xna.Framework.Content;
 
 namespace Gladius.actors
 {
     public class BaseActor
     {
+        public BaseActor()
+        {
+            m_animatedModel = new AnimatedModel(this);
+        }
+
+
         public String Name
         {
             get;
@@ -18,6 +29,12 @@ namespace Gladius.actors
         }
 
         public String DebugName
+        {
+            get;
+            set;
+        }
+
+        public String ModelName
         {
             get;
             set;
@@ -31,6 +48,22 @@ namespace Gladius.actors
         public void SetAttributeValue(GameObjectAttributeType attributeType,float val)
         {
             m_attributeDictionary[attributeType].CurrentValue = val;
+        }
+
+        public void PlayAnimation(String name)
+        {
+            if (m_animatedModel != null)
+            {
+                m_animatedModel.PlayAnimation(name);
+            }
+        }
+
+        public void LoadContent(ContentManager contentManager)
+        {
+            if (m_animatedModel != null)
+            {
+                m_animatedModel.LoadContent(contentManager);
+            }
         }
 
 
@@ -82,7 +115,10 @@ namespace Gladius.actors
 
         public virtual void Update(GameTime gameTime)
         {
-
+            if (m_animatedModel != null)
+            {
+                m_animatedModel.Update(gameTime);
+            }
 
         }
 
@@ -105,8 +141,20 @@ namespace Gladius.actors
         }
 
 
+        public virtual void Draw(GraphicsDevice device, ICamera camera, GameTime gameTime)
+        {
+            if (m_animatedModel != null)
+            {
+                m_animatedModel.Draw(device, camera, gameTime);
+            }
+        }
+
+
+
         public List<AttackSkill> m_knownAttacks;
         public Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
+        public AnimatedModel m_animatedModel;
+
     }
 
     public enum ActorClass

@@ -12,13 +12,13 @@ namespace Gladius.control
 {
     public class MovementGrid : GameComponent
     {
-        public MovementGrid(Game game,Arena arena)
+        public MovementGrid(Game game, Arena arena)
             : base(game)
         {
             m_arena = arena;
         }
-        
-        
+
+
         public void LoadContent()
         {
             m_simpleCursor = Game.Content.Load<Texture2D>("UI/SimpleCursor");
@@ -30,29 +30,44 @@ namespace Gladius.control
 
 
             m_simpleQuad = new SimpleQuad(Game.GraphicsDevice);
+
+            m_offset = -(new Vector3(m_arena.Width, 0, m_arena.Breadth) / 2f) ;
+
         }
 
-        public void Draw(GraphicsDevice device,ICamera camera)
+        public void Draw(GraphicsDevice device, ICamera camera)
         {
             //Vector3 topLeft = new Vector3(CurrentCursorSize - 1, 0, CurrentCursorSize - 1);
             //topLeft /= -2f;
             int width = ((CurrentCursorSize - 1) / 2);
-            Point topLeft = new Point(-width,-width);
-
 
             for (int i = -width; i <= width; ++i)
             {
                 for (int j = -width; j <= width; ++j)
                 {
                     Point p = new Point(CurrentPosition.X + i, CurrentPosition.Y + j);
-                    Texture2D cursor = CursorForSquare(p);
-                    if (cursor != null)
-                    {
-                        Vector3 v3 = V3ForSquare(p);
-
-                        m_simpleQuad.Draw(device, cursor, v3, Vector3.Up, Vector3.One, camera);
-                    }
+                    DrawIfValid(device, camera, p);
                 }
+            }
+        }
+
+        public void DrawMovementCross(GraphicsDevice device, ICamera camera)
+        {
+            //Vector3 topLeft = new Vector3(CurrentCursorSize - 1, 0, CurrentCursorSize - 1);
+            //topLeft /= -2f;
+            DrawIfValid(device, camera, new Point(CurrentPosition.X - 1, CurrentPosition.Y));
+            DrawIfValid(device, camera, new Point(CurrentPosition.X + 1, CurrentPosition.Y));
+            DrawIfValid(device, camera, new Point(CurrentPosition.X, CurrentPosition.Y - 1));
+            DrawIfValid(device, camera, new Point(CurrentPosition.X, CurrentPosition.Y + 1));
+        }
+
+        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point p)
+        {
+            Texture2D cursor = CursorForSquare(p);
+            if (cursor != null)
+            {
+                Vector3 v3 = V3ForSquare(p);
+                m_simpleQuad.Draw(device, cursor, v3, Vector3.Up, Vector3.One, camera);
             }
         }
 
@@ -63,11 +78,11 @@ namespace Gladius.control
                 SquareType type = m_arena.SquareTypeAtLocation(p);
                 switch (type)
                 {
-                    case(SquareType.Empty):
+                    case (SquareType.Empty):
                         {
                             return m_forwardMoveCursor;
                         }
-                    case(SquareType.Mobile):
+                    case (SquareType.Mobile):
                         {
                             return m_blockedCursor;
                         }
@@ -81,6 +96,14 @@ namespace Gladius.control
             }
             //if (p.X < 0 && p.X >= m_arena.Width && p.Y >= 0 && p.Y < m_arena.Breadth)
 
+        }
+
+        public void DrawMovementPath(GraphicsDevice device, ICamera camera,List<Point> points)
+        {
+            foreach (Point p in points)
+            {
+                DrawIfValid(device, camera, p);
+            }
         }
 
 
@@ -178,7 +201,8 @@ namespace Gladius.control
         {
             float height = m_arena.GetHeightAtLocation(p);
             height += m_hover;
-            return new Vector3(p.X, height, p.Y);
+
+            return (m_offset + new Vector3(p.X, height, p.Y));
         }
 
         public void BuildForPlayer(BaseActor actor)
@@ -197,7 +221,8 @@ namespace Gladius.control
         public Arena m_arena;
         public Point m_currentPosition;
         public SimpleQuad m_simpleQuad;
-        
+        public Vector3 m_offset;
+
         public Texture2D m_simpleCursor;
         public Texture2D m_selectCursor;
         public Texture2D m_attackCursor;

@@ -112,8 +112,8 @@
   <ItemGroup>
     <Compile Include="Models\ThirdParty\monster-animated-character-XNA.X">
       <Name>monster-animated-character-XNA</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <Importer>XmlImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
     <Compile Include="Models\ThirdParty\test_XNA.X">
       <Name>test_XNA</Name>
@@ -134,6 +134,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SkinnedModelPipeline\SkinnedModelPipeline.csproj">
+      <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
+      <Name>SkinnedModelPipeline</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\XmlDocumentImporter\XmlDocumentImporter.csproj">
       <Project>{3B81A38A-AF09-474F-8E19-5086F620F85F}</Project>
       <Name>XmlDocumentImporter</Name>

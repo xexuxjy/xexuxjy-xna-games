@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<AttackSkills>
+  <AttackSkill name="Strike" cost="1" damageType="Physical" damageAffects="Default" baseDamage="10"/>
+  <AttackSkill name="Strike2" cost="2" damageType="Physical" damageAffects="Default" baseDamage="20"/>
+  <AttackSkill name="Strike3" cost="3" damageType="Physical" damageAffects="Default" baseDamage="30"/>
+</AttackSkills>
