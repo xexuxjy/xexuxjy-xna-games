@@ -135,22 +135,22 @@
     <None Include="Content\GameFont.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\ThirdParty\monster-animated-character-XNA.xnb">
+    <None Include="Content\Models\ThirdParty\monster-animated-character-XNA.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\ThirdParty\monster.xnb">
+    <None Include="Content\Models\ThirdParty\monster.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\ThirdParty\monster_0.xnb">
+    <None Include="Content\Models\ThirdParty\monster_0.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\ThirdParty\test_m.xnb">
+    <None Include="Content\Models\ThirdParty\test_m.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\ThirdParty\test_m_0.xnb">
+    <None Include="Content\Models\ThirdParty\test_m_0.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\ThirdParty\test_XNA.xnb">
+    <None Include="Content\Models\ThirdParty\test_XNA.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\UI\AttackCursor.xnb">
