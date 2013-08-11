@@ -201,16 +201,16 @@ namespace GameStateManagement
             m_arena.MoveActor(ba3, ba3.CurrentPoint);
             m_arena.MoveActor(ba4, ba4.CurrentPoint);
 
-            ba1.ModelName = "ThirdParty/monster-animated-character-XNA";
+            ba1.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba1.LoadContent(ScreenManager.Game.Content);
 
-            ba2.ModelName = "ThirdParty/monster-animated-character-XNA";
+            ba2.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba2.LoadContent(ScreenManager.Game.Content);
 
-            ba3.ModelName = "ThirdParty/monster-animated-character-XNA";
+            ba3.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba3.LoadContent(ScreenManager.Game.Content);
 
-            ba4.ModelName = "ThirdParty/monster-animated-character-XNA";
+            ba4.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba4.LoadContent(ScreenManager.Game.Content);
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena);

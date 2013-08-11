@@ -28,7 +28,7 @@ namespace Gladius.renderer
             m_boneTransforms = new Matrix[m_boxModel.Bones.Count];
             m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
 
-            m_baseActorTexture = game.Content.Load<Texture2D>("ThirdParty/test_m");
+            m_baseActorTexture = game.Content.Load<Texture2D>("Models/ThirdParty/test_m");
             m_baseActorModel = game.Content.Load<Model>("ThirdParty/test_XNA");
             m_baseActorBoneTransforms = new Matrix[m_baseActorModel.Bones.Count];
             m_baseActorModel.CopyAbsoluteBoneTransformsTo(m_baseActorBoneTransforms);
