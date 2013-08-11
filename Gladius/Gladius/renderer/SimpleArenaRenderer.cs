@@ -63,7 +63,9 @@ namespace Gladius.renderer
             // Draw the ground....
             Vector3 topLeft = new Vector3(-m_arena.Width / 2f, 0, -m_arena.Breadth / 2f);
 
-            Vector3 scale = new Vector3(m_arena.Width, 1f, m_arena.Breadth);
+            Vector3 scale = new Vector3(m_arena.Width, 1f, m_arena.Breadth) / 2f;
+
+
             Vector3 translation = new Vector3(0, -0.5f, 0);
 
             DrawBox(scale, ColouredTextureDictionary.GetTexture(Color.LawnGreen, graphicsDevice), translation);
@@ -95,20 +97,20 @@ namespace Gladius.renderer
                         case (SquareType.Level2):
                             {
                                 texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
-                                boxScale = new Vector3(0.5f);
+                                boxScale = new Vector3(0.5f,0.5f,0.5f);
                                 break;
                             }
                         case (SquareType.Level3):
                             {
                                 texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
-                                boxScale = new Vector3(0.75f);
+                                boxScale = new Vector3(0.5f, 0.75f, 0.5f);
                                 break;
                             }
                     }
 
                     if (texture2d != null)
                     {
-                        translation = topLeft + new Vector3(i, boxScale.Y, j);
+                        translation = topLeft + new Vector3(i, boxScale.Y, j) + new Vector3(0.5f,0,0.5f);
                         DrawBox(boxScale, texture2d, translation);
                     }
                 }

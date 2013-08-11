@@ -151,7 +151,12 @@ namespace Gladius.actors
         public void InitialArenaSetup()
         {
         }
-     
+
+
+        //public Vector3 ArenaToWorld(Point p)
+        //{
+
+        //}
 
 
         private SquareType[,] m_arenaGrid;

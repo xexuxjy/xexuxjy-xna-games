@@ -68,7 +68,8 @@ namespace xexuxjy.Gladius.util
         Action =1,
         LifeCycle =2 ,
         Waypoints=4,
-        ContentExceptions = 8
+        Animation=8,
+        ContentExceptions = 16
     }
 
 }
