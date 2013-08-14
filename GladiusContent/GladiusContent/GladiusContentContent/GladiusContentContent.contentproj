@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectGuid>{A83A07DE-BA8A-481B-A61B-A86A90A36F88}</ProjectGuid>
+    <ProjectTypeGuids>{96E2B04D-8817-42c6-938A-82C39BA4D311};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Windows</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GladiusContentContentContent</RootNamespace>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <MonoGamePlatform>Windows</MonoGamePlatform>
+    <OutputPath>bin\$(MonoGamePlatform)\$(Configuration)</OutputPath>
+    <ContentRootDirectory>Content</ContentRootDirectory>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Windows' ">
+    <MonoGamePlatform>Windows</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Windows8' ">
+    <MonoGamePlatform>Windows8</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Android' ">
+    <MonoGamePlatform>Android</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'iOS' ">
+    <MonoGamePlatform>iOS</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'OSX' ">
+    <MonoGamePlatform>OSX</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Linux' ">
+    <MonoGamePlatform>Linux</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'PSM' ">
+    <MonoGamePlatform>PSM</MonoGamePlatform>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.EffectImporter" />
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.FBXImporter" />
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.TextureImporter" />
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.XImporter" />
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.AudioImporters" />
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters" />
+    <Reference Include="MonoGameContentProcessors">
+      <HintPath>$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGameContentProcessors.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CombatData\Skills.xml">
+      <Name>Skills</Name>
+      <Importer>XImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Models\ThirdParty\monster.jpg">
+      <Name>monster</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\test_m.jpg">
+      <Name>test_m</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\AttackCursor.png">
+      <Name>AttackCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\BlockedCursor.png">
+      <Name>BlockedCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\ForwardMoveCursor.png">
+      <Name>ForwardMoveCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\SelectCursor.png">
+      <Name>SelectCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\SimpleCursor.png">
+      <Name>SimpleCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\TurnMoveCursor.png">
+      <Name>TurnMoveCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Shapes\UnitCone.fbx">
+      <Name>UnitCone</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Shapes\UnitCube.fbx">
+      <Name>UnitCube</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Shapes\UnitCylinder.fbx">
+      <Name>UnitCylinder</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Shapes\UnitSphere.fbx">
+      <Name>UnitSphere</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\monster-animated-character-XNA.X">
+      <Name>monster-animated-character-XNA</Name>
+      <Importer>XImporter</Importer>
+      <Processor>GpuSkinnedModelProcessor</Processor>
+      <ProcessorParameters_DefaultEffect>SkinnedEffect</ProcessorParameters_DefaultEffect>
+    </Compile>
+    <Compile Include="Models\ThirdParty\test_XNA.X">
+      <Name>test_XNA</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\DebugFont8.spritefont">
+      <Name>DebugFont8</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CpuSkinningPipelineExtensions\CpuSkinningPipelineExtensions.csproj">
+      <Project>{C74E3173-73C2-4357-87E2-E433D279A948}</Project>
+      <Name>CpuSkinningPipelineExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
+      <Name>monster-animated-character-XNA_Anims</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>
