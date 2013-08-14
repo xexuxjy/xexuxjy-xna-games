@@ -186,10 +186,10 @@ namespace GameStateManagement
 
             m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
-            BaseActor ba1 = new BaseActor();
-            BaseActor ba2 = new BaseActor();
-            BaseActor ba3 = new BaseActor();
-            BaseActor ba4 = new BaseActor();
+            BaseActor ba1 = new BaseActor(ScreenManager.Game);
+            BaseActor ba2 = new BaseActor(ScreenManager.Game);
+            BaseActor ba3 = new BaseActor(ScreenManager.Game);
+            BaseActor ba4 = new BaseActor(ScreenManager.Game);
 
             ba1.CurrentPoint = new Point(10, 10);
             ba2.CurrentPoint = new Point(10, 20);
@@ -212,6 +212,11 @@ namespace GameStateManagement
 
             ba4.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba4.LoadContent(ScreenManager.Game.Content);
+
+            Components.Add(ba1);
+            Components.Add(ba2);
+            Components.Add(ba3);
+            Components.Add(ba4);
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena);
             m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);

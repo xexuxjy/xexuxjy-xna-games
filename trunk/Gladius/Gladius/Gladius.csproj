@@ -80,11 +80,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="renderer\animation\AnimatedModel.cs" />
-    <Compile Include="renderer\animation\AnimationClip.cs" />
     <Compile Include="renderer\animation\AnimationEvent.cs" />
-    <Compile Include="renderer\animation\AnimationPlayer.cs" />
-    <Compile Include="renderer\animation\Keyframe.cs" />
-    <Compile Include="renderer\animation\SkinningData.cs" />
     <Compile Include="renderer\DHPCameraComponent.cs" />
     <Compile Include="renderer\SimpleArenaRenderer.cs" />
     <Compile Include="renderer\SimpleQuad.cs" />
@@ -129,63 +125,65 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\monster-animated-character-XNA.xnb">
+      <Link>Content\Models\ThirdParty\monster-animated-character-XNA.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\monster.xnb">
+      <Link>Content\Models\ThirdParty\monster.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\monster_0.xnb">
+      <Link>Content\Models\ThirdParty\monster_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\test_m.xnb">
+      <Link>Content\Models\ThirdParty\test_m.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\test_m_0.xnb">
+      <Link>Content\Models\ThirdParty\test_m_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\test_XNA.xnb">
+      <Link>Content\Models\ThirdParty\test_XNA.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\CombatData\Skills.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\GameFont.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Models\ThirdParty\monster-animated-character-XNA.xnb">
+    <Content Include="Content\UI\AttackCursor.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Models\ThirdParty\monster.xnb">
+    </Content>
+    <Content Include="Content\UI\BlockedCursor.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Models\ThirdParty\monster_0.xnb">
+    </Content>
+    <Content Include="Content\UI\DebugFont8.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Models\ThirdParty\test_m.xnb">
+    </Content>
+    <Content Include="Content\UI\ForwardMoveCursor.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Models\ThirdParty\test_m_0.xnb">
+    </Content>
+    <Content Include="Content\UI\SelectCursor.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\Models\ThirdParty\test_XNA.xnb">
+    </Content>
+    <Content Include="Content\UI\SimpleCursor.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\UI\AttackCursor.xnb">
+    </Content>
+    <Content Include="Content\UI\TurnMoveCursor.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\UI\BlockedCursor.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\UI\DebugFont8.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\UI\ForwardMoveCursor.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\UI\SelectCursor.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\UI\SimpleCursor.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\UI\TurnMoveCursor.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Content\UnitCube.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SkinnedModelPipeline\SkinnedModelPipeline.csproj">
-      <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
-      <Name>SkinnedModelPipeline</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XmlSource\XmlSource.csproj">
-      <Project>{4B7D0D83-C453-424B-9494-33DCEE70A58E}</Project>
-      <Name>XmlSource</Name>
+    <ProjectReference Include="..\CpuSkinningDataTypes\CpuSkinningDataTypes %28Windows%29.csproj">
+      <Project>{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}</Project>
+      <Name>CpuSkinningDataTypes %28Windows%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,6 +6,8 @@ using Gladius.actors;
 using Microsoft.Xna.Framework.Content;
 using System;
 using xexuxjy.Gladius.util;
+using CpuSkinningDataTypes;
+using Gladius.util;
 
 namespace Gladius.renderer.animation
 {
@@ -36,13 +38,13 @@ namespace Gladius.renderer.animation
             }
             // Create an animation player, and start decoding an animation clip.
             m_animationPlayer = new AnimationPlayer(skinningData);
-
+            m_skinningData = skinningData;
         }
 
 
         public void Draw(GraphicsDevice device, ICamera camera, GameTime gameTime)
         {
-            Matrix[] bones = m_animationPlayer.GetSkinTransforms();
+            Matrix[] bones = m_animationPlayer.SkinTransforms;
 
             // Render the skinned mesh.
             foreach (ModelMesh mesh in m_model.Meshes)

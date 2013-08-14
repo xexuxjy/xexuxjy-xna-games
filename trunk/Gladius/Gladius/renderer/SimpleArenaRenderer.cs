@@ -29,7 +29,7 @@ namespace Gladius.renderer
             m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
 
             m_baseActorTexture = game.Content.Load<Texture2D>("Models/ThirdParty/test_m");
-            m_baseActorModel = game.Content.Load<Model>("ThirdParty/test_XNA");
+            m_baseActorModel = game.Content.Load<Model>("Models/ThirdParty/test_XNA");
             m_baseActorBoneTransforms = new Matrix[m_baseActorModel.Bones.Count];
             m_baseActorModel.CopyAbsoluteBoneTransformsTo(m_baseActorBoneTransforms);
 
@@ -119,13 +119,13 @@ namespace Gladius.renderer
             // Draw Actors.
             texture2d = ColouredTextureDictionary.GetTexture(Color.Pink, graphicsDevice);
 
-            foreach (BaseActor ba in m_arena.PointActorMap.Values)
-            {
-                float groundHeight = m_arena.GetHeightAtLocation(ba.CurrentPoint);
-                translation = topLeft + new Vector3(ba.CurrentPoint.X, groundHeight+0.5f, ba.CurrentPoint.Y);
-                //DrawBox(Vector3.One, texture2d, translation);
-                DrawBaseActor3(m_baseActorScale, m_baseActorTexture, translation);
-            }
+            //foreach (BaseActor ba in m_arena.PointActorMap.Values)
+            //{
+            //    float groundHeight = m_arena.GetHeightAtLocation(ba.CurrentPoint);
+            //    translation = topLeft + new Vector3(ba.CurrentPoint.X, groundHeight+0.5f, ba.CurrentPoint.Y);
+            //    //DrawBox(Vector3.One, texture2d, translation);
+            //    DrawBaseActor3(m_baseActorScale, m_baseActorTexture, translation);
+            //}
 
             m_movementGrid.Draw(graphicsDevice, camera);
             DrawCameraDebugText();

@@ -11,12 +11,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Dhpoware;
 using Gladius.renderer.animation;
 using Microsoft.Xna.Framework.Content;
+using Gladius.util;
 
 namespace Gladius.actors
 {
-    public class BaseActor
+    public class BaseActor : DrawableGameComponent
     {
-        public BaseActor()
+        public BaseActor(Game game) : base(game)
         {
             m_animatedModel = new AnimatedModel(this);
         }
@@ -63,6 +64,7 @@ namespace Gladius.actors
             if (m_animatedModel != null)
             {
                 m_animatedModel.LoadContent(contentManager);
+                m_animatedModel.PlayAnimation("Walk");
             }
         }
 
@@ -113,7 +115,7 @@ namespace Gladius.actors
         }
 
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (m_animatedModel != null)
             {
@@ -140,6 +142,10 @@ namespace Gladius.actors
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] stopped.", DebugName, actionType));
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            Draw(Game.GraphicsDevice, Globals.Camera, gameTime);
+        }
 
         public virtual void Draw(GraphicsDevice device, ICamera camera, GameTime gameTime)
         {
