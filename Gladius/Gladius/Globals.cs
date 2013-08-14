@@ -5,7 +5,7 @@ using System.Text;
 using Gladius.control;
 using Dhpoware;
 using Gladius.combat;
-using xexuxjy.Gladius.util;
+using Gladius.util;
 
 namespace Gladius
 {

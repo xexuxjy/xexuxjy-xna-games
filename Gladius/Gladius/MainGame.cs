@@ -13,6 +13,7 @@ using Dhpoware;
 using GameStateManagement;
 using System.Text;
 using Gladius.control;
+using Gladius.util;
 #endregion
 
 namespace Gladius
@@ -30,6 +31,7 @@ namespace Gladius
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Globals.EventLogger = new EventLogger(this,null);
         }
 
         /// <summary>
