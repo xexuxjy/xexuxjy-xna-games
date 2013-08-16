@@ -207,15 +207,19 @@ namespace GameStateManagement
 
             ba1.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba1.LoadContent(ScreenManager.Game.Content);
+            ba1.Arena = m_arena;
 
             ba2.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba2.LoadContent(ScreenManager.Game.Content);
+            ba2.Arena = m_arena;
 
             ba3.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba3.LoadContent(ScreenManager.Game.Content);
+            ba3.Arena = m_arena;
 
             ba4.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba4.LoadContent(ScreenManager.Game.Content);
+            ba4.Arena = m_arena;
 
             Components.Add(ba1);
             Components.Add(ba2);

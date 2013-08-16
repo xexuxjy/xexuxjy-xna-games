@@ -30,15 +30,16 @@ namespace Gladius.control
 
 
             m_simpleQuad = new SimpleQuad(Game.GraphicsDevice);
-
-            m_offset = -(new Vector3(m_arena.Width, 0, m_arena.Breadth) / 2f) ;
-
         }
 
         public void Draw(GraphicsDevice device, ICamera camera)
         {
             //Vector3 topLeft = new Vector3(CurrentCursorSize - 1, 0, CurrentCursorSize - 1);
             //topLeft /= -2f;
+            
+            device.BlendState = BlendState.AlphaBlend;
+            //device.DepthStencilState = DepthStencilState.None;
+
             int width = ((CurrentCursorSize - 1) / 2);
 
             for (int i = -width; i <= width; ++i)
@@ -191,18 +192,15 @@ namespace Gladius.control
 
             get
             {
-                float height = m_arena.GetHeightAtLocation(CurrentPosition);
-                height += m_hover;
-                return new Vector3(CurrentPosition.X, height, CurrentPosition.Y);
+                return V3ForSquare(CurrentPosition);
             }
         }
 
         public Vector3 V3ForSquare(Point p)
         {
-            float height = m_arena.GetHeightAtLocation(p);
-            height += m_hover;
-
-            return (m_offset + new Vector3(p.X, height, p.Y));
+            Vector3 result = m_arena.ArenaToWorld(p);
+            result.Y += m_hover;
+            return result;
         }
 
         public void BuildForPlayer(BaseActor actor)
@@ -221,7 +219,6 @@ namespace Gladius.control
         public Arena m_arena;
         public Point m_currentPosition;
         public SimpleQuad m_simpleQuad;
-        public Vector3 m_offset;
 
         public Texture2D m_simpleCursor;
         public Texture2D m_selectCursor;

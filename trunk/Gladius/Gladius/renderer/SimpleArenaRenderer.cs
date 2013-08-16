@@ -134,7 +134,6 @@ namespace Gladius.renderer
         public void DrawBaseActor3(Vector3 scale, Texture2D t, Vector3 position)
         {
             Matrix world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
-            //Matrix world = Matrix.CreateTranslation(position);
             foreach (ModelMesh mm in m_baseActorModel.Meshes)
             {
                 foreach (BasicEffect effect in mm.Effects)

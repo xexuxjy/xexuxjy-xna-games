@@ -41,6 +41,12 @@ namespace Gladius.actors
             set;
         }
 
+        public Arena Arena
+        {
+            get;
+            set;
+        }
+
         public float GetAttributeValue(GameObjectAttributeType attributeType)
         {
             return m_attributeDictionary[attributeType].CurrentValue;
@@ -78,8 +84,17 @@ namespace Gladius.actors
 
         public Vector3 Position
         {
-            get;
-            set;
+            get
+            {
+                if (Arena != null)
+                {
+                    return Arena.ArenaToWorld(CurrentPoint);
+                }
+                else
+                {
+                    return new Vector3(CurrentPoint.X, 0, CurrentPoint.Y);
+                }
+            }
         }
 
         public Matrix World

@@ -153,11 +153,24 @@ namespace Gladius.actors
         }
 
 
-        //public Vector3 ArenaToWorld(Point p)
-        //{
+        public Vector3 ArenaToWorld(Point p,bool includeHeight=true)
+        {
+            float groundHeight = includeHeight ? GetHeightAtLocation(p) : 0.0f; ;
+            Vector3 topLeft = new Vector3(-Width / 2f, 0, -Breadth / 2f);
+            topLeft += Position;
+            
+            Vector3 result = topLeft + new Vector3(p.X, groundHeight, p.Y);
+            return result;
+            //    //DrawBox(Vector3.One, texture2d, translation);
+            //    DrawBaseActor3(m_baseActorScale, m_baseActorTexture, translation);
 
-        //}
+        }
 
+        public Vector3 Position
+        {
+            get;
+            set;
+        }
 
         private SquareType[,] m_arenaGrid;
         private int m_width;
