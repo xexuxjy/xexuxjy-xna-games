@@ -7,10 +7,12 @@ using Microsoft.Xna.Framework;
 using Gladius.renderer;
 using Dhpoware;
 using Gladius.actors;
+using Gladius.events;
+using Microsoft.Xna.Framework.Content;
 
 namespace Gladius.control
 {
-    public class MovementGrid : GameComponent
+    public class MovementGrid :DrawableGameComponent
     {
         public MovementGrid(Game game, Arena arena)
             : base(game)
@@ -18,9 +20,21 @@ namespace Gladius.control
             m_arena = arena;
         }
 
-
-        public void LoadContent()
+        public override void Initialize()
         {
+            base.Initialize();
+            SetupEvents();
+        }
+
+        public virtual void Cleanup()
+        {
+            TeardownEvents();
+        }
+
+
+        protected override void LoadContent()
+        {
+            base.LoadContent();
             m_simpleCursor = Game.Content.Load<Texture2D>("UI/SimpleCursor");
             m_selectCursor = Game.Content.Load<Texture2D>("UI/SelectCursor");
             m_attackCursor = Game.Content.Load<Texture2D>("UI/AttackCursor");
@@ -32,22 +46,43 @@ namespace Gladius.control
             m_simpleQuad = new SimpleQuad(Game.GraphicsDevice);
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            Draw(Game.GraphicsDevice, Globals.Camera);
+        }
+
         public void Draw(GraphicsDevice device, ICamera camera)
         {
-            //Vector3 topLeft = new Vector3(CurrentCursorSize - 1, 0, CurrentCursorSize - 1);
-            //topLeft /= -2f;
-            
             device.BlendState = BlendState.AlphaBlend;
             //device.DepthStencilState = DepthStencilState.None;
 
-            int width = ((CurrentCursorSize - 1) / 2);
-
-            for (int i = -width; i <= width; ++i)
+            if (GridMode == GridMode.Select)
             {
-                for (int j = -width; j <= width; ++j)
+                DrawIfValid(device, camera, CurrentPosition);
+            }
+            else if (GridMode == GridMode.Move)
+            {
+                if (SelectedActor != null)
                 {
-                    Point p = new Point(CurrentPosition.X + i, CurrentPosition.Y + j);
-                    DrawIfValid(device, camera, p);
+                    foreach (Point p in SelectedActor.WayPointList)
+                    {
+                        DrawIfValid(device, camera, p);
+                    }
+
+                }
+            }
+            else
+            {
+                // calculate type / size of grid to display based on player,skill, etc
+                int width = ((CurrentCursorSize - 1) / 2);
+
+                for (int i = -width; i <= width; ++i)
+                {
+                    for (int j = -width; j <= width; ++j)
+                    {
+                        Point p = new Point(CurrentPosition.X + i, CurrentPosition.Y + j);
+                        DrawIfValid(device, camera, p);
+                    }
                 }
             }
         }
@@ -76,7 +111,7 @@ namespace Gladius.control
         {
             if (m_arena.InLevel(p))
             {
-                SquareType type = m_arena.SquareTypeAtLocation(p);
+                SquareType type = m_arena.GetSquareTypeAtLocation(p);
                 switch (type)
                 {
                     case (SquareType.Empty):
@@ -95,8 +130,6 @@ namespace Gladius.control
             {
                 return null;
             }
-            //if (p.X < 0 && p.X >= m_arena.Width && p.Y >= 0 && p.Y < m_arena.Breadth)
-
         }
 
         public void DrawMovementPath(GraphicsDevice device, ICamera camera,List<Point> points)
@@ -111,7 +144,20 @@ namespace Gladius.control
         public override void Update(GameTime gameTime)
         {
             UpdateMovement();
+            UpdateActions();
         }
+
+        public void UpdateActions()
+        {
+            if (Globals.UserControl.Action1Pressed())
+            {
+                if (SelectedActor == null)
+                {
+                    SelectedActor = m_arena.GetActorAtPosition(CurrentPosition);
+                }
+            }
+        }
+
 
         public void UpdateMovement()
         {
@@ -213,7 +259,69 @@ namespace Gladius.control
 
         }
 
+        public BaseActor SelectedActor
+        {
+            get;
+            set;
+        }
 
+
+        public void SetupEvents()
+        {
+            EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
+            EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);    
+        }
+
+
+        
+        
+        void EventManager_BaseActorChanged(object sender, BaseActorChangedArgs e)
+        {
+            SelectedActor = e.New;
+            if(e.Original == e.New)
+            {
+                GridMode = GridMode.Move;
+            }
+            else
+            {
+                GridMode = GridMode.Select;
+            }
+        }
+
+        void EventManager_ActionPressed(object sender, ActionButtonPressedArgs e)
+        {
+            if (e.ActionButton == ActionButton.ActionButton1)
+            {
+                BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
+                EventManager.ChangeActor(this, SelectedActor, ba);
+
+                if (SelectedActor != null)
+                {
+                    SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
+                    if (st == SquareType.Empty)
+                    {
+                        // try and find a path.
+                        SelectedActor.WayPointList.Clear();
+                        if (m_arena.FindPath(SelectedActor.CurrentPoint, CurrentPosition, SelectedActor.WayPointList))
+                        {
+
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+
+        public void TeardownEvents()
+        {
+            //EventManager.ActionPressed -= new event ActionButtonPressed();
+
+        }
+
+        public Vector3 m_cursorMovement = Vector3.Zero;
+        public GridMode GridMode = GridMode.Select;
         public int CurrentCursorSize = 5;
         public const float m_hover = 0.01f;
         public Arena m_arena;
@@ -229,4 +337,13 @@ namespace Gladius.control
 
 
     }
+
+
+    public enum GridMode
+    {
+        Select,
+        Move,
+        PerformAction
+    }
+
 }

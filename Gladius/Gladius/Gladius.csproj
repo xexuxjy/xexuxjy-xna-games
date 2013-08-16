@@ -52,8 +52,10 @@
     <Compile Include="actors\BaseActor.cs" />
     <Compile Include="combat\AttackSkill.cs" />
     <Compile Include="combat\CombatEngine.cs" />
+    <Compile Include="control\ActionController.cs" />
     <Compile Include="control\MovementGrid.cs" />
     <Compile Include="control\UserControl.cs" />
+    <Compile Include="events\EventManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="gamestatemanagement\screenmanager\GameScreen.cs" />
     <Compile Include="gamestatemanagement\screenmanager\InputState.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="util\ColouredTextureDictionary.cs" />
     <Compile Include="util\EventLogger.cs" />
     <Compile Include="util\ObjectAttribute.cs" />
+    <Compile Include="util\ScreenGameComponents.cs" />
     <Compile Include="util\SimpleProfiler.cs" />
     <Compile Include="util\StringBuilderExtFormat.cs" />
     <Compile Include="util\StringBuilderExtNumeric.cs" />
