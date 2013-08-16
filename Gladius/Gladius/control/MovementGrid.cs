@@ -217,6 +217,20 @@ namespace Gladius.control
                 if (m_arena.InLevel(p))
                 {
                     CurrentPosition = p;
+
+                    if (SelectedActor != null)
+                    {
+                        SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
+                        if (st == SquareType.Empty)
+                        {
+                            // try and find a path.
+                            SelectedActor.WayPointList.Clear();
+                            if (m_arena.FindPath(SelectedActor.CurrentPoint, CurrentPosition, SelectedActor.WayPointList))
+                            {
+
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -295,19 +309,19 @@ namespace Gladius.control
                 BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
                 EventManager.ChangeActor(this, SelectedActor, ba);
 
-                if (SelectedActor != null)
-                {
-                    SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
-                    if (st == SquareType.Empty)
-                    {
-                        // try and find a path.
-                        SelectedActor.WayPointList.Clear();
-                        if (m_arena.FindPath(SelectedActor.CurrentPoint, CurrentPosition, SelectedActor.WayPointList))
-                        {
+                //if (SelectedActor != null)
+                //{
+                //    SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
+                //    if (st == SquareType.Empty)
+                //    {
+                //        // try and find a path.
+                //        SelectedActor.WayPointList.Clear();
+                //        if (m_arena.FindPath(SelectedActor.CurrentPoint, CurrentPosition, SelectedActor.WayPointList))
+                //        {
 
-                        }
-                    }
-                }
+                //        }
+                //    }
+                //}
 
             }
 
