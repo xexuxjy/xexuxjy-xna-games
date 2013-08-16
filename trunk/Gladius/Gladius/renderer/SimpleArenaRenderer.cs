@@ -12,49 +12,41 @@ using Gladius.control;
 
 namespace Gladius.renderer
 {
-    public class SimpleArenaRenderer 
+    public class SimpleArenaRenderer : DrawableGameComponent
     {
-        public SimpleArenaRenderer(Arena arena)
+        public SimpleArenaRenderer(Arena arena,Game game) : base(game)
         {
             m_arena = arena;
         }
 
 
-        public void LoadContent(Game game,GraphicsDevice device)
+        protected override void LoadContent()
         {
-            //m_contentManager = new ContentManager(game.Services,"Content");
-            //m_boxModel = m_contentManager.Load<Model>("Models/Shapes/UnitCube");
-            m_boxModel = game.Content.Load<Model>("UnitCube");
+            m_boxModel = Game.Content.Load<Model>("UnitCube");
             m_boneTransforms = new Matrix[m_boxModel.Bones.Count];
             m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
 
-            m_baseActorTexture = game.Content.Load<Texture2D>("Models/ThirdParty/test_m");
-            m_baseActorModel = game.Content.Load<Model>("Models/ThirdParty/test_XNA");
+            m_baseActorTexture = Game.Content.Load<Texture2D>("Models/ThirdParty/test_m");
+            m_baseActorModel = Game.Content.Load<Model>("Models/ThirdParty/test_XNA");
             m_baseActorBoneTransforms = new Matrix[m_baseActorModel.Bones.Count];
             m_baseActorModel.CopyAbsoluteBoneTransformsTo(m_baseActorBoneTransforms);
 
             BoundingSphere actorBs = m_baseActorModel.Meshes[0].BoundingSphere;
             m_baseActorScale = Vector3.One;// new Vector3(1f / actorBs.Radius);
 
-            m_movementGrid = new MovementGrid(game,m_arena);
-            game.Components.Add(m_movementGrid);
-            m_movementGrid.LoadContent();
-            m_movementGrid.CurrentPosition = new Point(12, 12);
-
-            m_spriteBatch = new SpriteBatch(device);
-            m_spriteFont = game.Content.Load<SpriteFont>("UI/DebugFont8");
+            m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            m_spriteFont = Game.Content.Load<SpriteFont>("UI/DebugFont8");
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            Draw(Globals.Camera, Game.GraphicsDevice);
+        }
 
 
         public void Draw(ICamera camera,GraphicsDevice graphicsDevice)
         {
             float aspectRatio = graphicsDevice.Viewport.AspectRatio;
-            //m_projection=
-            //       Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f),
-            //       aspectRatio, 1.0f, 10000.0f);
-            //m_view = Matrix.CreateLookAt(new Vector3(0.0f, 50.0f, 1f),
-            //    Vector3.Zero, Vector3.Up);
 
             m_projection = camera.ProjectionMatrix;
             m_view = camera.ViewMatrix;
@@ -79,7 +71,7 @@ namespace Gladius.renderer
                     float groundHeight = 0f;
                     Vector3 boxScale = new Vector3(0.5f);
 
-                    SquareType squareType = m_arena.SquareTypeAtLocation(i, j);
+                    SquareType squareType = m_arena.GetSquareTypeAtLocation(i, j);
                     texture2d = null;
                     switch (squareType)
                     {
@@ -127,7 +119,7 @@ namespace Gladius.renderer
             //    DrawBaseActor3(m_baseActorScale, m_baseActorTexture, translation);
             //}
 
-            m_movementGrid.Draw(graphicsDevice, camera);
+            //m_movementGrid.Draw(graphicsDevice, camera);
             DrawCameraDebugText();
         }
 
@@ -213,12 +205,9 @@ namespace Gladius.renderer
 
         Matrix m_view;
         Matrix m_projection;
-
-        BasicEffect m_basicEffect;
         Matrix[] m_boneTransforms;
-        ContentManager m_contentManager;
         Model m_boxModel;
-        MovementGrid m_movementGrid;
+        //MovementGrid m_movementGrid;
         Arena m_arena;
 
 

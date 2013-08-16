@@ -170,7 +170,13 @@ namespace Gladius.actors
             }
         }
 
+        public List<Point> WayPointList
+        {
+            get { return m_wayPointList; }
 
+        }
+
+        private List<Point> m_wayPointList = new List<Point>();
 
         public List<AttackSkill> m_knownAttacks;
         public Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;

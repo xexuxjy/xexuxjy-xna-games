@@ -21,6 +21,7 @@ using Gladius.actors;
 using Gladius;
 using Gladius.control;
 using Gladius.combat;
+using Gladius.util;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
@@ -62,6 +63,9 @@ namespace GameStateManagement
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
             ScreenManager.Game.ResetElapsedTime();
+
+            m_screenComponents = new ScreenGameComponents(ScreenManager.Game);
+
             SetupArena();
 
             AttackSkillDictionary asd = new AttackSkillDictionary();
@@ -97,11 +101,7 @@ namespace GameStateManagement
             m_updateCalls++;
             base.Update(gameTime, otherScreenHasFocus, false);
 
-
-            foreach (GameComponent gc in Components)
-            {
-                gc.Update(gameTime);
-            }
+            m_screenComponents.Update(gameTime);
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
@@ -134,18 +134,9 @@ namespace GameStateManagement
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
-            foreach (GameComponent gc in Components)
-            {
-                DrawableGameComponent dgc = gc as DrawableGameComponent;
-                if (dgc != null)
-                {
-                    dgc.Draw(gameTime);
-                }
-                
-            }
+            m_screenComponents.Draw(gameTime);
 
-
-            m_arenaRenderer.Draw(Globals.Camera, ScreenManager.GraphicsDevice);
+            //m_arenaRenderer.Draw(Globals.Camera, ScreenManager.GraphicsDevice);
 
 
             // If the game is transitioning on or off, fade it out to black.
@@ -171,13 +162,13 @@ namespace GameStateManagement
 
 
             Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
-            Components.Add(Globals.UserControl);
+            m_screenComponents.Components.Add(Globals.UserControl);
 
             m_camera = new Dhpoware.CameraComponent(ScreenManager.Game);
             m_camera.HandleInput(ScreenManager.input);
     
             IGameComponent igc = m_camera as IGameComponent;
-            Components.Add(igc);
+            m_screenComponents.Components.Add(igc);
 
             m_camera.Position = new Vector3(0, 5, -10);
             Globals.Camera = m_camera;
@@ -186,8 +177,9 @@ namespace GameStateManagement
 
             m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
-            m_arenaRenderer = new SimpleArenaRenderer(m_arena);
-            m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
+            m_arenaRenderer = new SimpleArenaRenderer(m_arena,ScreenManager.Game);
+            m_screenComponents.Components.Add(m_arenaRenderer);
+            //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
 
 
             BaseActor ba1 = new BaseActor(ScreenManager.Game);
@@ -221,11 +213,13 @@ namespace GameStateManagement
             ba4.LoadContent(ScreenManager.Game.Content);
             ba4.Arena = m_arena;
 
-            Components.Add(ba1);
-            Components.Add(ba2);
-            Components.Add(ba3);
-            Components.Add(ba4);
+            m_screenComponents.Components.Add(ba1);
+            m_screenComponents.Components.Add(ba2);
+            m_screenComponents.Components.Add(ba3);
+            m_screenComponents.Components.Add(ba4);
 
+            MovementGrid movementGrid = new MovementGrid(ScreenManager.Game,m_arena);
+            m_screenComponents.Components.Add(movementGrid);
         }
 
 
@@ -250,7 +244,8 @@ namespace GameStateManagement
 
         protected CameraComponent m_camera;
 
-        protected GameComponentCollection Components = new GameComponentCollection();
+        //protected GameComponentCollection Components = new GameComponentCollection();
+        protected ScreenGameComponents m_screenComponents;
 
         #endregion
 

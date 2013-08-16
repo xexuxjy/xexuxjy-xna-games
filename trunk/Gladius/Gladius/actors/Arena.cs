@@ -15,6 +15,8 @@ namespace Gladius.actors
             m_arenaGrid = new SquareType[width, breadth];
             m_width = width;
             m_breadth = breadth;
+            m_pathFinder = new ArenaPathFinder();
+            m_pathFinder.Initialize(this);
             BuildDefaultArena();
         }
 
@@ -98,10 +100,20 @@ namespace Gladius.actors
             }
         }
 
+        public BaseActor GetActorAtPosition(Point p)
+        {
+            BaseActor result = null;
+            if (InLevel(p))
+            {
+                m_baseActorMap.TryGetValue(p,out result);
+            }
+            return result;
+        }
+
 
         public float GetHeightAtLocation(Point point)
         {
-            SquareType st = SquareTypeAtLocation(point);
+            SquareType st = GetSquareTypeAtLocation(point);
             float result = 0;
             switch (st)
             {
@@ -127,14 +139,14 @@ namespace Gladius.actors
             return result;
         }
 
-        public SquareType SquareTypeAtLocation(Point p)
+        public SquareType GetSquareTypeAtLocation(Point p)
         {
             AssertBounds(p);
             return m_arenaGrid[p.X, p.Y];
         }
 
 
-        public SquareType SquareTypeAtLocation(int x, int y)
+        public SquareType GetSquareTypeAtLocation(int x, int y)
         {
             return m_arenaGrid[x, y];
         }
@@ -172,12 +184,17 @@ namespace Gladius.actors
             set;
         }
 
+        public bool FindPath(Point start, Point end, List<Point> result)
+        {
+            return m_pathFinder.FindPath(start, end, result);
+        }
+
         private SquareType[,] m_arenaGrid;
         private int m_width;
         private int m_breadth;
 
         private Dictionary<Point, BaseActor> m_baseActorMap = new Dictionary<Point, BaseActor>();
-
+        private ArenaPathFinder m_pathFinder;
 
     }
 
@@ -602,13 +619,13 @@ namespace Gladius.actors
             int y = (int)center.Y + 1;
             object o = null;
 
-            if (m_levelMap.InLevel(x, y) && m_levelMap.SquareTypeAtLocation(x,y) == SquareType.Empty)
+            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x,y) == SquareType.Empty)
             {
                 results.Add(new Point(x, y));
             }
 
             y = (int)center.Y - 1;
-            if (m_levelMap.InLevel(x, y) && m_levelMap.SquareTypeAtLocation(x, y) == SquareType.Empty)
+            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
             {
                 results.Add(new Point(x, y));
             }
@@ -616,13 +633,13 @@ namespace Gladius.actors
             y = (int)center.Y;
             x = (int)center.X + 1;
 
-            if (m_levelMap.InLevel(x, y) && m_levelMap.SquareTypeAtLocation(x, y) == SquareType.Empty)
+            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
             {
                 results.Add(new Point(x, y));
             }
             x = (int)center.X - 1;
 
-            if (m_levelMap.InLevel(x, y) && m_levelMap.SquareTypeAtLocation(x, y) == SquareType.Empty)
+            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
             {
                 results.Add(new Point(x, y));
             }
