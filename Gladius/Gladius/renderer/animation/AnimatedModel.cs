@@ -27,6 +27,8 @@ namespace Gladius.renderer.animation
         {
             // Load the model.
             m_model = content.Load<Model>(m_baseActor.ModelName);
+            BoundingSphere actorBs = m_model.Meshes[0].BoundingSphere;
+            m_baseActorScale = new Vector3(1f / actorBs.Radius);
 
             // Look up our custom skinning information.
             SkinningData skinningData = m_model.Tag as SkinningData;
@@ -44,13 +46,19 @@ namespace Gladius.renderer.animation
 
         public void Draw(GraphicsDevice device, ICamera camera, GameTime gameTime)
         {
+            device.BlendState = BlendState.Opaque;
+            device.DepthStencilState = DepthStencilState.Default;
+            
             Matrix[] bones = m_animationPlayer.SkinTransforms;
 
+            Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateTranslation(m_baseActor.Position);
             // Render the skinned mesh.
             foreach (ModelMesh mesh in m_model.Meshes)
             {
+                Matrix boneWorld = bones[mesh.ParentBone.Index] * world;
                 foreach (SkinnedEffect effect in mesh.Effects)
                 {
+                    effect.World = boneWorld;
                     effect.SetBoneTransforms(bones);
 
                     effect.View = camera.ViewMatrix;
@@ -77,6 +85,7 @@ namespace Gladius.renderer.animation
         }
 
 
+        private Vector3 m_baseActorScale;
         private AnimationClip m_currentAnimationClip;
         private BaseActor m_baseActor;
         private Model m_model;
