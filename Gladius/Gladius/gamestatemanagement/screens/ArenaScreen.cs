@@ -186,6 +186,10 @@ namespace GameStateManagement
 
             m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
+            m_arenaRenderer = new SimpleArenaRenderer(m_arena);
+            m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
+
+
             BaseActor ba1 = new BaseActor(ScreenManager.Game);
             BaseActor ba2 = new BaseActor(ScreenManager.Game);
             BaseActor ba3 = new BaseActor(ScreenManager.Game);
@@ -218,8 +222,6 @@ namespace GameStateManagement
             Components.Add(ba3);
             Components.Add(ba4);
 
-            m_arenaRenderer = new SimpleArenaRenderer(m_arena);
-            m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
         }
 
 
