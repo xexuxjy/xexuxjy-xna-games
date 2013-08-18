@@ -17,5 +17,6 @@ namespace Gladius
         public static CameraComponent Camera;
         public static CombatEngine CombatEngine;
         public static EventLogger EventLogger;
+        public static MovementGrid MovementGrid;
     }
 }

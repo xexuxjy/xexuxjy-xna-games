@@ -82,14 +82,14 @@ namespace Gladius.actors
         {
             // set current actor square to empty
             //baseActor
-            m_arenaGrid[baseActor.CurrentPoint.X,baseActor.CurrentPoint.Y] = SquareType.Empty;
-            if (m_baseActorMap.ContainsKey(baseActor.CurrentPoint))
+            m_arenaGrid[baseActor.CurrentPosition.X,baseActor.CurrentPosition.Y] = SquareType.Empty;
+            if (m_baseActorMap.ContainsKey(baseActor.CurrentPosition))
             {
-                m_baseActorMap.Remove(baseActor.CurrentPoint);
+                m_baseActorMap.Remove(baseActor.CurrentPosition);
             }
             m_arenaGrid[newPoint.X, newPoint.Y] = SquareType.Mobile;
-            baseActor.CurrentPoint = newPoint;
-            m_baseActorMap[baseActor.CurrentPoint] = baseActor;
+            baseActor.CurrentPosition = newPoint;
+            m_baseActorMap[baseActor.CurrentPosition] = baseActor;
         }
 
         public void AssertBounds(Point p)
