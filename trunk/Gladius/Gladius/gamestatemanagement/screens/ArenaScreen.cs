@@ -187,16 +187,6 @@ namespace GameStateManagement
             BaseActor ba3 = new BaseActor(ScreenManager.Game);
             BaseActor ba4 = new BaseActor(ScreenManager.Game);
 
-            ba1.CurrentPoint = new Point(10, 10);
-            ba2.CurrentPoint = new Point(10, 20);
-            ba3.CurrentPoint = new Point(20, 10);
-            ba4.CurrentPoint = new Point(20, 20);
-
-            m_arena.MoveActor(ba1, ba1.CurrentPoint);
-            m_arena.MoveActor(ba2, ba2.CurrentPoint);
-            m_arena.MoveActor(ba3, ba3.CurrentPoint);
-            m_arena.MoveActor(ba4, ba4.CurrentPoint);
-
             ba1.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
             ba1.LoadContent(ScreenManager.Game.Content);
             ba1.Arena = m_arena;
@@ -213,13 +203,25 @@ namespace GameStateManagement
             ba4.LoadContent(ScreenManager.Game.Content);
             ba4.Arena = m_arena;
 
+            ba1.CurrentPosition = new Point(10, 10);
+            ba2.CurrentPosition = new Point(10, 20);
+            ba3.CurrentPosition = new Point(20, 10);
+            ba4.CurrentPosition = new Point(20, 20);
+
+            m_arena.MoveActor(ba1, ba1.CurrentPosition);
+            m_arena.MoveActor(ba2, ba2.CurrentPosition);
+            m_arena.MoveActor(ba3, ba3.CurrentPosition);
+            m_arena.MoveActor(ba4, ba4.CurrentPosition);
+
             m_screenComponents.Components.Add(ba1);
             m_screenComponents.Components.Add(ba2);
             m_screenComponents.Components.Add(ba3);
             m_screenComponents.Components.Add(ba4);
 
             MovementGrid movementGrid = new MovementGrid(ScreenManager.Game,m_arena);
+            movementGrid.CurrentPosition = ba1.CurrentPosition;
             m_screenComponents.Components.Add(movementGrid);
+            Globals.MovementGrid = movementGrid;
         }
 
 

@@ -120,7 +120,7 @@ namespace Gladius.renderer
             //}
 
             //m_movementGrid.Draw(graphicsDevice, camera);
-            DrawCameraDebugText();
+            DrawDebugText();
         }
 
         public void DrawBaseActor3(Vector3 scale, Texture2D t, Vector3 position)
@@ -161,7 +161,7 @@ namespace Gladius.renderer
             }
         }
 
-        private void DrawCameraDebugText()
+        private void DrawDebugText()
         {
             string text = null;
             StringBuilder buffer = new StringBuilder();
@@ -190,7 +190,10 @@ namespace Gladius.renderer
                 buffer.Append("  Target Y axis orbiting\n\n");
             else
                 buffer.Append("  Free orbiting\n\n");
-
+            if(Globals.MovementGrid != null)
+            {
+                buffer.AppendFormat("Cursor Pos : [{0},{1}]", Globals.MovementGrid.CurrentPosition.X, Globals.MovementGrid.CurrentPosition.Y);
+            }
 
             text = buffer.ToString();
 

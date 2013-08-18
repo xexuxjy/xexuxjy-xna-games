@@ -75,26 +75,28 @@ namespace Gladius.actors
         }
 
 
-        public Point CurrentPoint
+        Point m_currentPosition;
+        public Point CurrentPosition
         {
-            get;
-            set;
+            get
+            {
+                return m_currentPosition;
+            }
+
+            set
+            {
+                m_currentPosition = value;
+                Position = Arena.ArenaToWorld(CurrentPosition);
+            }
+
+
         }
 
 
         public Vector3 Position
         {
-            get
-            {
-                if (Arena != null)
-                {
-                    return Arena.ArenaToWorld(CurrentPoint);
-                }
-                else
-                {
-                    return new Vector3(CurrentPoint.X, 0, CurrentPoint.Y);
-                }
-            }
+            get;
+            set;
         }
 
         public Matrix World
@@ -137,7 +139,87 @@ namespace Gladius.actors
                 m_animatedModel.Update(gameTime);
             }
 
+            if(UnitActive)
+            {
+                if (Turning)
+                {
+                    TurnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Rotation = Quaternion.Slerp(Rotation, TargetRotation, (TurnTimer / m_turnSpeed));
+                    // close enough now to stop?
+                    if (QuaternionHelper.FuzzyEquals(Rotation, TargetRotation))
+                    {
+                        Turning = false;
+                    }
+                }
+                else
+                {
+
+
+
+
+                    if (FollowingWayPoints)
+                    {
+                        // mvoe towards the next point.
+                        if (WayPointList.Count > 0)
+                        {
+                            Vector3 target = Arena.ArenaToWorld(WayPointList[0]);
+                            Vector3 diff = target - Position;
+                            float closeEnough = 0.01f;
+                            if (diff.LengthSquared() < closeEnough)
+                            {
+                                diff.Normalize();
+                                Quaternion currentHeading = QuaternionHelper.LookRotation(diff);
+                                CurrentPosition = WayPointList[0];
+                                WayPointList.RemoveAt(0);
+                                // check and see if we need to turn
+                                if (WayPointList.Count > 0)
+                                {
+                                    Vector3 nextTarget = Arena.ArenaToWorld(WayPointList[0]);
+                                    Vector3 nextDiff = nextTarget - Position;
+                                    nextDiff.Normalize();
+                                    Quaternion newHeading = QuaternionHelper.LookRotation(nextDiff);
+                                    if (newHeading != currentHeading)
+                                    {
+                                        FaceDirection(newHeading, m_turnSpeed);
+                                    }
+                                }
+
+
+
+                            }
+                            else
+                            {
+                                diff.Normalize();
+                                {
+                                    Position += diff * (float)gameTime.ElapsedGameTime.TotalSeconds * m_movementSpeed;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // finished moving.
+                            FollowingWayPoints = false;
+                        }
+                    }
+                }
+
+            }
+
         }
+
+        public void FaceDirection(Quaternion newDirection, float turnSpeed)
+        {
+            if (!Turning)
+            {
+                Turning = true;
+                OriginalRotation = Rotation;
+                TargetRotation = newDirection;
+                TurnTimer = 0f;
+            }
+
+        }
+
+
 
         public virtual void CheckState()
         {
@@ -176,11 +258,66 @@ namespace Gladius.actors
 
         }
 
+        // 
+        public void ConfirmMove()
+        {
+            FollowingWayPoints = true;
+        }
+
+        public bool UnitActive
+        {
+            get;
+            set;
+        }
+
+        bool Turning
+        {
+            get;
+            set;
+        }
+
+        bool FollowingWayPoints
+        {
+            get;
+            set;
+        }
+
+
+        public float TurnTimer
+        {
+            get;
+            set;
+        }
+
+        public Quaternion Rotation
+        {
+            get;
+            set;
+        }
+
+        private Quaternion OriginalRotation
+        {
+            get;
+            set;
+        }
+
+        private Quaternion TargetRotation
+        {
+            get;
+            set;
+        }
+
+
+        //private Quaternion m_rotation = new Quaternion();
+
         private List<Point> m_wayPointList = new List<Point>();
 
-        public List<AttackSkill> m_knownAttacks;
-        public Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
-        public AnimatedModel m_animatedModel;
+        private List<AttackSkill> m_knownAttacks;
+        private Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
+        private AnimatedModel m_animatedModel;
+
+        private float m_movementSpeed = 1f;
+        private float m_turnSpeed = 1f;
 
     }
 

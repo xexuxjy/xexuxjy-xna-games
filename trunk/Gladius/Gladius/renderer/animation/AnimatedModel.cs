@@ -51,7 +51,7 @@ namespace Gladius.renderer.animation
             
             Matrix[] bones = m_animationPlayer.SkinTransforms;
 
-            Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateTranslation(m_baseActor.Position);
+            Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateFromQuaternion(m_baseActor.Rotation) * Matrix.CreateTranslation(m_baseActor.Position);
             // Render the skinned mesh.
             foreach (ModelMesh mesh in m_model.Meshes)
             {

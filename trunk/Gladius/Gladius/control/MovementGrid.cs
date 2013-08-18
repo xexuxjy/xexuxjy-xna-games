@@ -62,8 +62,10 @@ namespace Gladius.control
             }
             else if (GridMode == GridMode.Move)
             {
+
                 if (SelectedActor != null)
                 {
+                    DrawIfValid(device, camera, SelectedActor.CurrentPosition,m_selectCursor);
                     foreach (Point p in SelectedActor.WayPointList)
                     {
                         DrawIfValid(device, camera, p);
@@ -97,9 +99,12 @@ namespace Gladius.control
             DrawIfValid(device, camera, new Point(CurrentPosition.X, CurrentPosition.Y + 1));
         }
 
-        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point p)
+        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point p,Texture2D cursor=null)
         {
-            Texture2D cursor = CursorForSquare(p);
+            if (cursor == null)
+            {
+                cursor = CursorForSquare(p);
+            }
             if (cursor != null)
             {
                 Vector3 v3 = V3ForSquare(p);
@@ -225,7 +230,7 @@ namespace Gladius.control
                         {
                             // try and find a path.
                             SelectedActor.WayPointList.Clear();
-                            if (m_arena.FindPath(SelectedActor.CurrentPoint, CurrentPosition, SelectedActor.WayPointList))
+                            if (m_arena.FindPath(SelectedActor.CurrentPosition, CurrentPosition, SelectedActor.WayPointList))
                             {
 
                             }
@@ -306,8 +311,21 @@ namespace Gladius.control
         {
             if (e.ActionButton == ActionButton.ActionButton1)
             {
-                BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
-                EventManager.ChangeActor(this, SelectedActor, ba);
+                switch (GridMode)
+                {
+                    case (GridMode.Select):
+                        {
+                            BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
+                            EventManager.ChangeActor(this, SelectedActor, ba);
+                            ba.UnitActive = true;
+                            break;
+                        }
+                    case (GridMode.Move):
+                        {
+                            SelectedActor.ConfirmMove();
+                            break;
+                        }
+                }
 
                 //if (SelectedActor != null)
                 //{
