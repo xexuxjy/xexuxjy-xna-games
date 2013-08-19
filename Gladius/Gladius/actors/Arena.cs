@@ -73,6 +73,11 @@ namespace Gladius.actors
 
         public bool CanMoveActor(BaseActor baseActor, Point newPoint)
         {
+            // deal with moving to same position
+            if (GetActorAtPosition(newPoint) == baseActor)
+            {
+                return true;
+            }
             return m_arenaGrid[newPoint.X, newPoint.Y] == SquareType.Empty;
 
         }

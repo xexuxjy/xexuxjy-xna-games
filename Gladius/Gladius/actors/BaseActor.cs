@@ -20,6 +20,7 @@ namespace Gladius.actors
         public BaseActor(Game game) : base(game)
         {
             m_animatedModel = new AnimatedModel(this);
+            Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
         }
 
 
@@ -146,8 +147,10 @@ namespace Gladius.actors
                     TurnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     Rotation = Quaternion.Slerp(Rotation, TargetRotation, (TurnTimer / m_turnSpeed));
                     // close enough now to stop?
-                    if (QuaternionHelper.FuzzyEquals(Rotation, TargetRotation))
+                    //if (QuaternionHelper.FuzzyEquals(Rotation, TargetRotation))
+                    if(TurnTimer >= m_turnSpeed)
                     {
+                        Rotation = TargetRotation;
                         Turning = false;
                     }
                 }
@@ -167,24 +170,30 @@ namespace Gladius.actors
                             float closeEnough = 0.01f;
                             if (diff.LengthSquared() < closeEnough)
                             {
-                                diff.Normalize();
-                                Quaternion currentHeading = QuaternionHelper.LookRotation(diff);
-                                CurrentPosition = WayPointList[0];
-                                WayPointList.RemoveAt(0);
-                                // check and see if we need to turn
-                                if (WayPointList.Count > 0)
+                                // check that nothings blocked us since this was set.
+                                if (Arena.CanMoveActor(this, WayPointList[0]))
                                 {
-                                    Vector3 nextTarget = Arena.ArenaToWorld(WayPointList[0]);
-                                    Vector3 nextDiff = nextTarget - Position;
-                                    nextDiff.Normalize();
-                                    Quaternion newHeading = QuaternionHelper.LookRotation(nextDiff);
-                                    if (newHeading != currentHeading)
+                                    Arena.MoveActor(this, WayPointList[0]);
+
+                                    diff.Normalize();
+
+                                    Quaternion currentHeading = QuaternionHelper.LookRotation(diff);
+                                    CurrentPosition = WayPointList[0];
+
+                                    WayPointList.RemoveAt(0);
+                                    // check and see if we need to turn
+                                    if (WayPointList.Count > 0)
                                     {
-                                        FaceDirection(newHeading, m_turnSpeed);
+                                        Vector3 nextTarget = Arena.ArenaToWorld(WayPointList[0]);
+                                        Vector3 nextDiff = nextTarget - Position;
+                                        nextDiff.Normalize();
+                                        Quaternion newHeading = QuaternionHelper.LookRotation(nextDiff);
+                                        if (newHeading != currentHeading)
+                                        {
+                                            FaceDirection(newHeading, m_turnSpeed);
+                                        }
                                     }
                                 }
-
-
 
                             }
                             else
@@ -215,6 +224,10 @@ namespace Gladius.actors
                 OriginalRotation = Rotation;
                 TargetRotation = newDirection;
                 TurnTimer = 0f;
+            }
+            else
+            {
+                int ibreak = 0;
             }
 
         }
