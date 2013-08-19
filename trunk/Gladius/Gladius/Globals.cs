@@ -18,5 +18,8 @@ namespace Gladius
         public static CombatEngine CombatEngine;
         public static EventLogger EventLogger;
         public static MovementGrid MovementGrid;
+        public static AttackBar AttackBar;
+
+        public static ThreadSafeContentManager GlobalContentManager;
     }
 }

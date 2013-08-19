@@ -53,6 +53,7 @@
     <Compile Include="combat\AttackSkill.cs" />
     <Compile Include="combat\CombatEngine.cs" />
     <Compile Include="control\ActionController.cs" />
+    <Compile Include="control\AttackBar.cs" />
     <Compile Include="control\MovementGrid.cs" />
     <Compile Include="control\UserControl.cs" />
     <Compile Include="events\EventManager.cs" />

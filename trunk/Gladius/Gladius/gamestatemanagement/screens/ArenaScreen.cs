@@ -222,6 +222,13 @@ namespace GameStateManagement
             movementGrid.CurrentPosition = ba1.CurrentPosition;
             m_screenComponents.Components.Add(movementGrid);
             Globals.MovementGrid = movementGrid;
+
+            AttackBar attackBar = new AttackBar(ScreenManager.Game);
+            attackBar.Rectangle = new Rectangle(20, 300, 400, 40);
+            attackBar.InitializeCombatBar(2, 0.7f, 0.85f, 5f);
+            m_screenComponents.Components.Add(attackBar);
+            Globals.AttackBar = attackBar;
+
         }
 
 
