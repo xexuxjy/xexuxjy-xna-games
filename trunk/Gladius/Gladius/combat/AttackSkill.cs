@@ -89,6 +89,7 @@ namespace Gladius.combat
 
     public enum AttackResultType
     {
+        None,
         Miss,
         Hit,
         Critical

@@ -224,8 +224,8 @@ namespace GameStateManagement
             Globals.MovementGrid = movementGrid;
 
             AttackBar attackBar = new AttackBar(ScreenManager.Game);
-            attackBar.Rectangle = new Rectangle(20, 300, 400, 40);
-            attackBar.InitializeCombatBar(2, 0.7f, 0.85f, 5f);
+            attackBar.Rectangle = new Rectangle(20, 300, 600, 100);
+            attackBar.InitializeCombatBar(1, 0.7f, 0.85f, 5f);
             m_screenComponents.Components.Add(attackBar);
             Globals.AttackBar = attackBar;
 
