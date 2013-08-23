@@ -20,8 +20,43 @@ namespace Gladius.actors
         public BaseActor(Game game) : base(game)
         {
             m_animatedModel = new AnimatedModel(this);
+            m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
+            m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
         }
+
+        void m_animatedModel_OnAnimationStarted(AnimationEnum anim)
+        {
+            switch (anim)
+            {
+                case (AnimationEnum.Attack1):
+                    {
+                        break;
+                    }
+                case(AnimationEnum.Die):
+                    {
+                        break;
+                    }
+            }
+        }
+
+        void m_animatedModel_OnAnimationStopped(AnimationEnum anim)
+        {
+            switch (anim)
+            {
+                case (AnimationEnum.Attack1):
+                    {
+                        StopAttack();
+                        break;
+                    }
+                case (AnimationEnum.Die):
+                    {
+                        StopDeath();
+                        break;
+                    }
+            }
+        }
+
 
 
         public String Name
@@ -58,11 +93,11 @@ namespace Gladius.actors
             m_attributeDictionary[attributeType].CurrentValue = val;
         }
 
-        public void PlayAnimation(String name)
+        public void PlayAnimation(AnimationEnum animation)
         {
             if (m_animatedModel != null)
             {
-                m_animatedModel.PlayAnimation(name);
+                m_animatedModel.PlayAnimation(animation);
             }
         }
 
@@ -71,7 +106,7 @@ namespace Gladius.actors
             if (m_animatedModel != null)
             {
                 m_animatedModel.LoadContent(contentManager);
-                m_animatedModel.PlayAnimation("Walk");
+                m_animatedModel.PlayAnimation(AnimationEnum.Walk);
             }
         }
 
@@ -91,6 +126,13 @@ namespace Gladius.actors
             }
 
 
+        }
+
+        private bool m_attackRequested;
+        public bool AttackRequested
+        {
+            get { return m_attackRequested; }
+            set { m_attackRequested = value; }
         }
 
 
@@ -129,7 +171,13 @@ namespace Gladius.actors
             if(attackResult.resultType != AttackResultType.Miss)
             {
                 m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue -= attackResult.damageDone;
+                UpdateThreatList(attackResult.damageCauser); 
             }
+        }
+
+        private void UpdateThreatList(BaseActor actor)
+        {
+            // todo
         }
 
 
@@ -142,78 +190,79 @@ namespace Gladius.actors
 
             if(UnitActive)
             {
-                if (Turning)
+                UpdateMovement(gameTime);
+                UpdateAttack(gameTime);
+            }
+
+        }
+
+        private void UpdateMovement(GameTime gameTime)
+        {
+            if (Turning)
+            {
+                TurnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Rotation = Quaternion.Slerp(Rotation, TargetRotation, (TurnTimer / m_turnSpeed));
+                // close enough now to stop?
+                //if (QuaternionHelper.FuzzyEquals(Rotation, TargetRotation))
+                if (TurnTimer >= m_turnSpeed)
                 {
-                    TurnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Rotation = Quaternion.Slerp(Rotation, TargetRotation, (TurnTimer / m_turnSpeed));
-                    // close enough now to stop?
-                    //if (QuaternionHelper.FuzzyEquals(Rotation, TargetRotation))
-                    if(TurnTimer >= m_turnSpeed)
-                    {
-                        Rotation = TargetRotation;
-                        Turning = false;
-                    }
+                    Rotation = TargetRotation;
+                    Turning = false;
                 }
-                else
+            }
+            else
+            {
+                if (FollowingWayPoints)
                 {
-
-
-
-
-                    if (FollowingWayPoints)
+                    // mvoe towards the next point.
+                    if (WayPointList.Count > 0)
                     {
-                        // mvoe towards the next point.
-                        if (WayPointList.Count > 0)
+                        Vector3 target = Arena.ArenaToWorld(WayPointList[0]);
+                        Vector3 diff = target - Position;
+                        float closeEnough = 0.01f;
+                        if (diff.LengthSquared() < closeEnough)
                         {
-                            Vector3 target = Arena.ArenaToWorld(WayPointList[0]);
-                            Vector3 diff = target - Position;
-                            float closeEnough = 0.01f;
-                            if (diff.LengthSquared() < closeEnough)
+                            // check that nothings blocked us since this was set.
+                            if (Arena.CanMoveActor(this, WayPointList[0]))
                             {
-                                // check that nothings blocked us since this was set.
-                                if (Arena.CanMoveActor(this, WayPointList[0]))
+                                Arena.MoveActor(this, WayPointList[0]);
+
+                                diff.Normalize();
+
+                                Quaternion currentHeading = QuaternionHelper.LookRotation(diff);
+                                CurrentPosition = WayPointList[0];
+
+                                WayPointList.RemoveAt(0);
+                                // check and see if we need to turn
+                                if (WayPointList.Count > 0)
                                 {
-                                    Arena.MoveActor(this, WayPointList[0]);
-
-                                    diff.Normalize();
-
-                                    Quaternion currentHeading = QuaternionHelper.LookRotation(diff);
-                                    CurrentPosition = WayPointList[0];
-
-                                    WayPointList.RemoveAt(0);
-                                    // check and see if we need to turn
-                                    if (WayPointList.Count > 0)
+                                    Vector3 nextTarget = Arena.ArenaToWorld(WayPointList[0]);
+                                    Vector3 nextDiff = nextTarget - Position;
+                                    nextDiff.Normalize();
+                                    Quaternion newHeading = QuaternionHelper.LookRotation(nextDiff);
+                                    if (newHeading != currentHeading)
                                     {
-                                        Vector3 nextTarget = Arena.ArenaToWorld(WayPointList[0]);
-                                        Vector3 nextDiff = nextTarget - Position;
-                                        nextDiff.Normalize();
-                                        Quaternion newHeading = QuaternionHelper.LookRotation(nextDiff);
-                                        if (newHeading != currentHeading)
-                                        {
-                                            FaceDirection(newHeading, m_turnSpeed);
-                                        }
+                                        FaceDirection(newHeading, m_turnSpeed);
                                     }
                                 }
+                            }
 
-                            }
-                            else
-                            {
-                                diff.Normalize();
-                                {
-                                    Position += diff * (float)gameTime.ElapsedGameTime.TotalSeconds * m_movementSpeed;
-                                }
-                            }
                         }
                         else
                         {
-                            // finished moving.
-                            FollowingWayPoints = false;
+                            diff.Normalize();
+                            {
+                                Position += diff * (float)gameTime.ElapsedGameTime.TotalSeconds * m_movementSpeed;
+                            }
                         }
                     }
+                    else
+                    {
+                        // finished moving.
+                        FollowingWayPoints = false;
+                    }
                 }
-
             }
-
         }
 
         public void FaceDirection(Quaternion newDirection, float turnSpeed)
@@ -232,25 +281,79 @@ namespace Gladius.actors
 
         }
 
+        public void SetTarget(BaseActor target)
+        {
+            m_currentTarget = target;
+        }
 
+        public void StartAttack()
+        {
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}].", DebugName,m_currentTarget != null ?m_currentTarget.DebugName :"NoActorTarget"));
+            m_animatedModel.PlayAnimation(AnimationEnum.Attack1,false);
+            Attacking = true;
+            AttackRequested = false;
+        }
+
+
+
+
+        public void StopAttack()
+        {
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack stopped.", DebugName));
+            m_currentTarget = null;
+            Attacking = false;
+        }
+
+        public void UpdateAttack(GameTime gameTime)
+        {
+            if (AttackRequested)
+            {
+                if (!FollowingWayPoints)
+                {
+                    if (Globals.NextToTarget(this, m_currentTarget))
+                    {
+                        StartAttack();
+                    }
+                }
+            }
+        }
+
+
+        public bool Attacking
+        {
+            get;
+            set;
+        }
+
+        public void StartDeath()
+        {
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death started.", DebugName));
+
+        }
+
+        public void StopDeath()
+        {
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death stopped.", DebugName));
+
+        }
 
         public virtual void CheckState()
         {
             if(m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue <= 0f)
             {
-                StartAction(ActionTypes.Death);
+                StartDeath();
             }
         }
 
-        public virtual void StartAction(ActionTypes actionType)
-        {
-            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] started.", DebugName, actionType));
-        }
+        //public virtual void StartAction(ActionTypes actionType)
+        //{
+        //    Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] started.", DebugName, actionType));
+        //}
 
-        public virtual void StopAction(ActionTypes actionType)
-        {
-            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] stopped.", DebugName, actionType));
-        }
+        //public virtual void StopAction(ActionTypes actionType)
+        //{
+        //    Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] stopped.", DebugName, actionType));
+        //}
 
         public override void Draw(GameTime gameTime)
         {
@@ -321,8 +424,10 @@ namespace Gladius.actors
         }
 
 
-        //private Quaternion m_rotation = new Quaternion();
 
+
+        private BaseActor m_currentTarget = null;
+        private List<BaseActor> m_threatList = new List<BaseActor>();
         private List<Point> m_wayPointList = new List<Point>();
 
         private List<AttackSkill> m_knownAttacks;

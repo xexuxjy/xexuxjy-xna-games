@@ -162,6 +162,15 @@ namespace Gladius.control
             }
         }
 
+        public void GetCombatResult(List<AttackResultType> results)
+        {
+            results.Clear();
+            for (int i = 0; i < m_attackBarParts.Count; ++i)
+            {
+                results.Add(m_attackBarParts[i].BarResult);
+            }
+
+        }
 
         public static Rectangle InsetRectangle(Rectangle orig, int inset)
         {

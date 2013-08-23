@@ -39,6 +39,10 @@ namespace Gladius.combat
             return attackResult;
         }
 
+        public bool IsValidTarget(BaseActor attacker, BaseActor defender)
+        {
+            return attacker != null && defender != null && attacker != defender;
+        }
 
         
 
@@ -53,10 +57,12 @@ namespace Gladius.combat
 
 
 
+
     public class AttackResult
     {
         public AttackResultType resultType;
         public float damageDone;
+        public BaseActor damageCauser;
     }
 
 

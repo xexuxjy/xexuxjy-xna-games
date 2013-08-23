@@ -6,6 +6,9 @@ using Gladius.control;
 using Dhpoware;
 using Gladius.combat;
 using Gladius.util;
+using Gladius.actors;
+using System.Diagnostics;
+using Microsoft.Xna.Framework;
 
 namespace Gladius
 {
@@ -21,5 +24,20 @@ namespace Gladius
         public static AttackBar AttackBar;
 
         public static ThreadSafeContentManager GlobalContentManager;
+
+
+        public static bool NextToTarget(BaseActor from, BaseActor to)
+        {
+            Debug.Assert(from != null && to != null);
+            if (from != null && to!= null)
+            {
+                Point fp = from.CurrentPosition;
+                Point tp = to.CurrentPosition;
+                Vector3 diff = new Vector3(tp.X, 0, tp.Y) - new Vector3(fp.X, 0, fp.Y);
+                return diff.LengthSquared() == 1f;
+            }
+            return false;
+        }
+
     }
 }
