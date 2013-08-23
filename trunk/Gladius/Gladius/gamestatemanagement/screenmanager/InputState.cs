@@ -14,6 +14,8 @@ using Microsoft.Xna.Framework.Input.Touch;
 using System.Collections.Generic;
 using System;
 using System.Reflection;
+using Gladius;
+using Gladius.util;
 #endregion
 
 namespace GameStateManagement
@@ -79,6 +81,8 @@ namespace GameStateManagement
         /// </summary>
         public void Update()
         {
+            Globals.EventLogger.LogEvent(EventTypes.Update, "InputState Update");
+
             for (int i = 0; i < MaxInputs; i++)
             {
                 LastKeyboardStates[i] = CurrentKeyboardStates[i];

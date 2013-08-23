@@ -32,6 +32,7 @@ namespace Gladius
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             Globals.EventLogger = new EventLogger(this,null);
+            Globals.EventLogger.Enabled = true;
         }
 
         /// <summary>

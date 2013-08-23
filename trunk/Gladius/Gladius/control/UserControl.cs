@@ -21,55 +21,55 @@ namespace Gladius.control
         public bool CursorLeftPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.J,null,out pi);
+            return m_inputState.IsNewKeyPress(Keys.J, m_controllingPlayer, out pi);
         }
 
         public bool CursorRightPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.L, null, out pi);
+            return m_inputState.IsNewKeyPress(Keys.L, m_controllingPlayer, out pi);
 
         }
 
         public bool CursorUpPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.I, null, out pi);
+            return m_inputState.IsNewKeyPress(Keys.I, m_controllingPlayer, out pi);
 
         }
 
         public bool CursorDownPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.K, null, out pi);
+            return m_inputState.IsNewKeyPress(Keys.K, m_controllingPlayer, out pi);
 
         }
 
         public bool Action1Pressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.Z, null, out pi);
+            return m_inputState.IsNewKeyPress(Keys.X, m_controllingPlayer, out pi);
 
         }
 
         public bool Action2Pressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.X, null, out pi);
+            return m_inputState.IsNewKeyPress(Keys.C, m_controllingPlayer, out pi);
 
         }
 
         public bool Action3Pressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.C, null, out pi);
+            return m_inputState.IsNewKeyPress(Keys.V, m_controllingPlayer, out pi);
 
         }
 
         public bool Action4Pressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.V, null, out pi);
+            return m_inputState.IsNewKeyPress(Keys.B, m_controllingPlayer, out pi);
 
         }
 
@@ -95,7 +95,7 @@ namespace Gladius.control
         }
 
 
-
+        private PlayerIndex m_controllingPlayer = PlayerIndex.One;
         private InputState m_inputState;
     }
 

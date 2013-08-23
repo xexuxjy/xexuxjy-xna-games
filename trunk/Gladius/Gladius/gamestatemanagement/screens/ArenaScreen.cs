@@ -162,7 +162,7 @@ namespace GameStateManagement
 
 
             Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
-            m_screenComponents.Components.Add(Globals.UserControl);
+            //m_screenComponents.Components.Add(Globals.UserControl);
 
             m_camera = new Dhpoware.CameraComponent(ScreenManager.Game);
             m_camera.HandleInput(ScreenManager.input);
@@ -208,6 +208,12 @@ namespace GameStateManagement
             ba3.CurrentPosition = new Point(20, 10);
             ba4.CurrentPosition = new Point(20, 20);
 
+            ba1.DebugName = "Monster1";
+            ba2.DebugName = "Monster2";
+            ba3.DebugName = "Monster3";
+            ba4.DebugName = "Monster4";
+
+
             m_arena.MoveActor(ba1, ba1.CurrentPosition);
             m_arena.MoveActor(ba2, ba2.CurrentPosition);
             m_arena.MoveActor(ba3, ba3.CurrentPosition);
@@ -229,6 +235,7 @@ namespace GameStateManagement
             m_screenComponents.Components.Add(attackBar);
             Globals.AttackBar = attackBar;
 
+            Globals.CombatEngine = new CombatEngine();
         }
 
 

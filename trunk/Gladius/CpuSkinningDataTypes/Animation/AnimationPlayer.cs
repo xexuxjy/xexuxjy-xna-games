@@ -24,6 +24,8 @@ namespace CpuSkinningDataTypes
     {
         // Information about the currently playing animation clip.
         private AnimationClip currentClipValue;
+        private bool m_loopClip;
+        private bool m_clipComplete;
         private TimeSpan currentTimeValue;
         private int currentKeyframe;
         
@@ -86,6 +88,16 @@ namespace CpuSkinningDataTypes
             get { return currentTimeValue; }
         }
 
+        public bool Looping
+        {
+            get { return m_loopClip; }
+        }
+
+        public bool ClipComplete
+        {
+            get { return m_clipComplete; }
+        }
+
         /// <summary>
         /// Constructs a new animation player.
         /// </summary>
@@ -110,14 +122,18 @@ namespace CpuSkinningDataTypes
         /// <summary>
         /// Starts decoding the specified animation clip.
         /// </summary>
-        public void StartClip(AnimationClip clip)
+        public void StartClip(AnimationClip clip,bool loopClip=true)
         {
             if (clip == null)
+            {
                 throw new ArgumentNullException("clip");
+            }
 
             currentClipValue = clip;
             currentTimeValue = TimeSpan.Zero;
             currentKeyframe = 0;
+            m_loopClip = loopClip;
+            m_clipComplete = false;
 
             // Initialize bone transforms to the bind pose.
             skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
@@ -156,21 +172,35 @@ namespace CpuSkinningDataTypes
 
                 // If we reached the end, loop back to the start.
                 bool hasLooped = false;
-                while (time >= currentClipValue.Duration)
+                if (m_loopClip)
                 {
-                    hasLooped = true;
-                    time -= currentClipValue.Duration;
-                }
 
-                // If we've looped, reprocess the events
-                if (hasLooped)
+                    while (time >= currentClipValue.Duration)
+                    {
+                        hasLooped = true;
+                        time -= currentClipValue.Duration;
+                    }
+
+                    // If we've looped, reprocess the events
+                    if (hasLooped)
+                    {
+                        CheckEvents(ref time, ref lastTime);
+                    }
+                }
+                else
                 {
-                    CheckEvents(ref time, ref lastTime);
+                    if (time >= currentClipValue.Duration)
+                    {
+                        m_clipComplete = true;
+                        return;
+                    }
                 }
             }
 
             if ((time < TimeSpan.Zero) || (time >= currentClipValue.Duration))
+            {
                 throw new ArgumentOutOfRangeException("time");
+            }
 
             // If the position moved backwards, reset the keyframe index.
             bool HasResetKeyframe = false;

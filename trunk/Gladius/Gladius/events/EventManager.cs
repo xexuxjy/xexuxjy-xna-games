@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Gladius.actors;
 using Gladius.control;
+using Gladius.util;
 
 namespace Gladius.events
 {
@@ -18,6 +19,7 @@ namespace Gladius.events
 
         public static void ChangeActor(Object caller,BaseActor originalBa, BaseActor newBa)
         {
+            Globals.EventLogger.LogEvent(EventTypes.Update, "ChangeActorRaised");
             if (BaseActorChanged != null)
             {
                 BaseActorChanged(caller, new BaseActorChangedArgs(originalBa, newBa));
@@ -26,6 +28,7 @@ namespace Gladius.events
 
         public static void PerformAction(Object caller, ActionButton button)
         {
+            Globals.EventLogger.LogEvent(EventTypes.Update, "PerformActionRaised ["+button+"]");
             if (ActionPressed != null)
             {
                 ActionPressed(caller, new ActionButtonPressedArgs(button));
