@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Gladius.renderer.animation
 {
-    public class AnimatedModel 
+    public class AnimatedModel
     {
         public AnimatedModel(BaseActor baseActor)
         {
@@ -44,8 +44,15 @@ namespace Gladius.renderer.animation
         {
             // Load the model.
             m_model = content.Load<Model>(m_baseActor.ModelName);
-            BoundingSphere actorBs = m_model.Meshes[0].BoundingSphere;
-            m_baseActorScale = new Vector3(1f / actorBs.Radius);
+            BoundingBox bb = new BoundingBox();
+            foreach (ModelMesh mesh in m_model.Meshes)
+            {
+                CalculateBoundingBox(mesh, ref bb);
+            }
+            Vector3 diff = bb.Max - bb.Min;
+            float maxSpan = Math.Max(diff.X, Math.Max(diff.Y, diff.Z));
+            //BoundingSphere actorBs = m_model.Meshes[0].BoundingSphere;
+            m_baseActorScale = new Vector3(1f / maxSpan);
 
             // Look up our custom skinning information.
             SkinningData skinningData = m_model.Tag as SkinningData;
@@ -70,7 +77,7 @@ namespace Gladius.renderer.animation
         {
             device.BlendState = BlendState.Opaque;
             device.DepthStencilState = DepthStencilState.Default;
-            
+
             Matrix[] bones = m_animationPlayer.SkinTransforms;
 
             Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateFromQuaternion(m_baseActor.Rotation) * Matrix.CreateTranslation(m_baseActor.Position);
@@ -78,18 +85,40 @@ namespace Gladius.renderer.animation
             foreach (ModelMesh mesh in m_model.Meshes)
             {
                 Matrix boneWorld = bones[mesh.ParentBone.Index] * world;
-                foreach (SkinnedEffect effect in mesh.Effects)
+                foreach (Effect effect in mesh.Effects)
                 {
-                    effect.World = boneWorld;
-                    effect.SetBoneTransforms(bones);
+                    SkinnedEffect skinnedEffect = effect as SkinnedEffect;
+                    if (skinnedEffect != null)
+                    {
+                        skinnedEffect.World = boneWorld;
+                        skinnedEffect.SetBoneTransforms(bones);
 
-                    effect.View = camera.ViewMatrix;
-                    effect.Projection = camera.ProjectionMatrix;
+                        skinnedEffect.View = camera.ViewMatrix;
+                        skinnedEffect.Projection = camera.ProjectionMatrix;
 
-                    effect.EnableDefaultLighting();
+                        skinnedEffect.EnableDefaultLighting();
 
-                    effect.SpecularColor = new Vector3(0.25f);
-                    effect.SpecularPower = 16;
+                        skinnedEffect.SpecularColor = new Vector3(0.25f);
+                        skinnedEffect.SpecularPower = 16;
+                    }
+                    else
+                    {
+                        BasicEffect basicEffect = effect as BasicEffect;
+                        if (basicEffect != null)
+                        {
+                            basicEffect.World = boneWorld;
+                            //basicEffect.SetBoneTransforms(bones);
+
+                            basicEffect.View = camera.ViewMatrix;
+                            basicEffect.Projection = camera.ProjectionMatrix;
+
+                            basicEffect.EnableDefaultLighting();
+
+                            basicEffect.SpecularColor = new Vector3(0.25f);
+                            basicEffect.SpecularPower = 16;
+
+                        }
+                    }
                 }
 
                 mesh.Draw();
@@ -119,6 +148,81 @@ namespace Gladius.renderer.animation
             }
         }
 
+        public static void CalculateBoundingBox(ModelMesh mm, ref BoundingBox bb)
+        {
+            bb = new BoundingBox();
+            bool first = true;
+            Matrix x = Matrix.Identity;
+            ModelBone mb = mm.ParentBone;
+            while (mb != null)
+            {
+                x = x * mb.Transform;
+                mb = mb.Parent;
+            }
+
+
+            Vector3 meshMax = new Vector3(float.MinValue);
+            Vector3 meshMin = new Vector3(float.MaxValue);
+
+            foreach (ModelMeshPart part in mm.MeshParts)
+            {
+                int stride = part.VertexBuffer.VertexDeclaration.VertexStride;
+
+                //VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[part.NumVertices];
+                Vector3[] vertexData = new Vector3[part.NumVertices];
+                //int num = (part.NumVertices - part.VertexOffset);
+                int num = part.NumVertices;
+
+                //GetData(offsetFromStartOfVertexBufferInBytes, arrayOfVector3, 0, arrayOfVector3.Length, sizeOfEachVertexInBytes);
+
+                part.VertexBuffer.GetData(0, vertexData, 0, num, stride);
+                //part.VertexBuffer.GetData(part.VertexOffset * stride, vertexData, 0, num, stride);
+
+                // Find minimum and maximum xyz values for this mesh part
+                //Vector3 vertPosition = new Vector3();
+
+                for (int i = 0; i < vertexData.Length; i++)
+                {
+                    Vector3 vertPosition = vertexData[i];
+                    //vertPosition.X = vertexData[i];
+                    //vertPosition.Y = vertexData[i + 1];
+                    //vertPosition.Z = vertexData[i + 2];
+
+                    // update our values from this vertex
+                    meshMin = Vector3.Min(meshMin, vertPosition);
+                    meshMax = Vector3.Max(meshMax, vertPosition);
+                    i += stride;
+                }
+            }
+
+            // transform by mesh bone matrix
+            //meshMin = Vector3.Transform(meshMin, meshTransform);
+            //meshMax = Vector3.Transform(meshMax, meshTransform);
+
+            // Create the bounding box
+            //BoundingBox box = new BoundingBox(meshMin, meshMax);
+
+            BoundingBox newbox  = new BoundingBox(meshMin, meshMax);
+            bb = MergeBoxes(bb, newbox);
+            //return box;
+        }
+
+        public static BoundingBox MergeBoxes(BoundingBox one, BoundingBox two)
+        {
+            Vector3 min = one.Min;
+            Vector3 max = one.Max;
+
+            min.X = Math.Min(one.Min.X, two.Min.X);
+            min.Y = Math.Min(one.Min.Y, two.Min.Y);
+            min.Z = Math.Min(one.Min.Z, two.Min.Z);
+
+            max.X = Math.Max(one.Max.X, two.Max.X);
+            max.Y = Math.Max(one.Max.Y, two.Max.Y);
+            max.Z = Math.Max(one.Max.Z, two.Max.Z);
+
+            return new BoundingBox(min, max);
+        }
+
 
         public delegate void AnimationStarted(AnimationEnum anim);
         public delegate void AnimationStopped(AnimationEnum anim);
@@ -129,6 +233,7 @@ namespace Gladius.renderer.animation
 
 
         private Dictionary<AnimationEnum, String> m_clipNameDictionary = new Dictionary<AnimationEnum, string>();
+
         private Vector3 m_baseActorScale;
         private AnimationClip m_currentAnimationClip;
         private AnimationEnum m_currentAnimationEnum = AnimationEnum.None;

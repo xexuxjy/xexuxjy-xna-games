@@ -187,19 +187,22 @@ namespace GameStateManagement
             BaseActor ba3 = new BaseActor(ScreenManager.Game);
             BaseActor ba4 = new BaseActor(ScreenManager.Game);
 
-            ba1.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
+            //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
+            String modelName = "Models/ThirdParty/01_warrior";
+
+            ba1.ModelName = modelName;
             ba1.LoadContent(ScreenManager.Game.Content);
             ba1.Arena = m_arena;
 
-            ba2.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
+            ba2.ModelName = modelName;
             ba2.LoadContent(ScreenManager.Game.Content);
             ba2.Arena = m_arena;
 
-            ba3.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
+            ba3.ModelName = modelName;
             ba3.LoadContent(ScreenManager.Game.Content);
             ba3.Arena = m_arena;
 
-            ba4.ModelName = "Models/ThirdParty/monster-animated-character-XNA";
+            ba4.ModelName = modelName;
             ba4.LoadContent(ScreenManager.Game.Content);
             ba4.Arena = m_arena;
 
@@ -230,8 +233,8 @@ namespace GameStateManagement
             Globals.MovementGrid = movementGrid;
 
             AttackBar attackBar = new AttackBar(ScreenManager.Game);
-            attackBar.Rectangle = new Rectangle(20, 300, 600, 100);
-            attackBar.InitializeCombatBar(1, 0.7f, 0.85f, 5f);
+            attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
+            attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
             m_screenComponents.Components.Add(attackBar);
             Globals.AttackBar = attackBar;
 
