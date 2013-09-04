@@ -40,6 +40,15 @@ namespace Gladius.renderer.animation
 
         }
 
+        public void SetMeshActive(String meshName, bool active)
+        {
+            if (m_meshActiveDictionary.ContainsKey(meshName))
+            {
+                m_meshActiveDictionary[meshName] = active;
+            }
+        }
+
+
         public void LoadContent(ContentManager content)
         {
             // Load the model.
@@ -47,7 +56,10 @@ namespace Gladius.renderer.animation
             BoundingBox bb = new BoundingBox();
             foreach (ModelMesh mesh in m_model.Meshes)
             {
+                int ibreak = 0;
                 CalculateBoundingBox(mesh, ref bb);
+                m_meshActiveDictionary[mesh.Name] = true;
+                
             }
             Vector3 diff = bb.Max - bb.Min;
             float maxSpan = Math.Max(diff.X, Math.Max(diff.Y, diff.Z));
@@ -66,10 +78,12 @@ namespace Gladius.renderer.animation
             m_animationPlayer = new AnimationPlayer(skinningData);
             m_skinningData = skinningData;
 
-            m_clipNameDictionary[AnimationEnum.Idle] = "Walk";
+            m_clipNameDictionary[AnimationEnum.Idle] = "Idle";
             m_clipNameDictionary[AnimationEnum.Walk] = "Walk";
             m_clipNameDictionary[AnimationEnum.Attack1] = "Attack1";
-            
+            m_clipNameDictionary[AnimationEnum.Attack2] = "Attack2";
+            m_clipNameDictionary[AnimationEnum.Stagger] = "Hit1";
+            m_clipNameDictionary[AnimationEnum.Die] = "Death";
         }
 
 
@@ -78,28 +92,34 @@ namespace Gladius.renderer.animation
             device.BlendState = BlendState.Opaque;
             device.DepthStencilState = DepthStencilState.Default;
 
+            //Matrix[] bones = m_animationPlayer.SkinTransforms;
             Matrix[] bones = m_animationPlayer.SkinTransforms;
 
             Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateFromQuaternion(m_baseActor.Rotation) * Matrix.CreateTranslation(m_baseActor.Position);
             // Render the skinned mesh.
             foreach (ModelMesh mesh in m_model.Meshes)
             {
-                Matrix boneWorld = bones[mesh.ParentBone.Index] * world;
+                // only draw those that are active..
+                if (!m_meshActiveDictionary[mesh.Name])
+                {
+                    continue;
+                }
+
+                //Matrix boneWorld = bones[mesh.ParentBone.Index] * world;
+                Matrix boneWorld = world;
                 foreach (Effect effect in mesh.Effects)
                 {
                     SkinnedEffect skinnedEffect = effect as SkinnedEffect;
                     if (skinnedEffect != null)
                     {
                         skinnedEffect.World = boneWorld;
-                        skinnedEffect.SetBoneTransforms(bones);
+                        //skinnedEffect.SetBoneTransforms(bones);
+                        skinnedEffect.SetBoneTransforms(m_animationPlayer.SkinTransforms);
 
                         skinnedEffect.View = camera.ViewMatrix;
                         skinnedEffect.Projection = camera.ProjectionMatrix;
 
-                        skinnedEffect.EnableDefaultLighting();
-
-                        skinnedEffect.SpecularColor = new Vector3(0.25f);
-                        skinnedEffect.SpecularPower = 16;
+                        ApplyLighting(skinnedEffect);
                     }
                     else
                     {
@@ -114,8 +134,8 @@ namespace Gladius.renderer.animation
 
                             basicEffect.EnableDefaultLighting();
 
-                            basicEffect.SpecularColor = new Vector3(0.25f);
-                            basicEffect.SpecularPower = 16;
+                            //basicEffect.SpecularColor = new Vector3(0.25f);
+                            //basicEffect.SpecularPower = 16;
 
                         }
                     }
@@ -223,7 +243,18 @@ namespace Gladius.renderer.animation
             return new BoundingBox(min, max);
         }
 
+        public static void ApplyLighting(SkinnedEffect effect)
+        {
+            effect.DirectionalLight0.Enabled = true; // turn on the lighting subsystem.
+            effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f);
+            effect.DirectionalLight0.Direction = new Vector3(1, 0, 0);  // coming along the x-axis
+            effect.DirectionalLight0.SpecularColor = new Vector3(0.2f);
 
+            effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
+            effect.EmissiveColor = new Vector3(1);
+        }
+    
+        
         public delegate void AnimationStarted(AnimationEnum anim);
         public delegate void AnimationStopped(AnimationEnum anim);
         public event AnimationStarted OnAnimationStarted;
@@ -231,6 +262,7 @@ namespace Gladius.renderer.animation
 
 
 
+        private Dictionary<String, bool> m_meshActiveDictionary = new Dictionary<String, bool>();
 
         private Dictionary<AnimationEnum, String> m_clipNameDictionary = new Dictionary<AnimationEnum, string>();
 
@@ -242,6 +274,8 @@ namespace Gladius.renderer.animation
         private AnimationPlayer m_animationPlayer;
         private SkinningData m_skinningData;
     }
+
+
 
     public enum AnimationEnum
     {
@@ -261,6 +295,18 @@ namespace Gladius.renderer.animation
         Cheer
     }   
 
+/*
+ * w_shoes_01
+w_pants_01
+w_hand_01
+w_helmet_01
+w_shoulder_01
+w_body_01
+w_head_01
 
+bow_01
+shield_01
+sword_01
+ * */
 
 }

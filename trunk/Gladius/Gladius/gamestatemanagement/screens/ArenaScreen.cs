@@ -193,10 +193,12 @@ namespace GameStateManagement
             ba1.ModelName = modelName;
             ba1.LoadContent(ScreenManager.Game.Content);
             ba1.Arena = m_arena;
+            ba1.PlayerControlled = true;
 
             ba2.ModelName = modelName;
             ba2.LoadContent(ScreenManager.Game.Content);
             ba2.Arena = m_arena;
+            ba2.PlayerControlled = true;
 
             ba3.ModelName = modelName;
             ba3.LoadContent(ScreenManager.Game.Content);
@@ -216,7 +218,6 @@ namespace GameStateManagement
             ba3.DebugName = "Monster3";
             ba4.DebugName = "Monster4";
 
-
             m_arena.MoveActor(ba1, ba1.CurrentPosition);
             m_arena.MoveActor(ba2, ba2.CurrentPosition);
             m_arena.MoveActor(ba3, ba3.CurrentPosition);
@@ -227,10 +228,6 @@ namespace GameStateManagement
             m_screenComponents.Components.Add(ba3);
             m_screenComponents.Components.Add(ba4);
 
-            MovementGrid movementGrid = new MovementGrid(ScreenManager.Game,m_arena);
-            movementGrid.CurrentPosition = ba1.CurrentPosition;
-            m_screenComponents.Components.Add(movementGrid);
-            Globals.MovementGrid = movementGrid;
 
             AttackBar attackBar = new AttackBar(ScreenManager.Game);
             attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
@@ -238,6 +235,15 @@ namespace GameStateManagement
             m_screenComponents.Components.Add(attackBar);
             Globals.AttackBar = attackBar;
 
+            m_turnManager = new TurnManager(ScreenManager.Game,m_arena);
+            m_screenComponents.Components.Add(m_turnManager);
+
+            m_turnManager.QueueActor(ba1);
+            m_turnManager.QueueActor(ba2);
+            m_turnManager.QueueActor(ba3);
+            m_turnManager.QueueActor(ba4);
+
+            
             Globals.CombatEngine = new CombatEngine();
         }
 
@@ -262,7 +268,7 @@ namespace GameStateManagement
         private Arena m_arena;
 
         protected CameraComponent m_camera;
-
+        protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();
         protected ScreenGameComponents m_screenComponents;
 

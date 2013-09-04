@@ -13,17 +13,16 @@ using System.Diagnostics;
 
 namespace Gladius.control
 {
-    public class MovementGrid :DrawableGameComponent
+    public class MovementGrid 
     {
-        public MovementGrid(Game game, Arena arena)
-            : base(game)
+        public MovementGrid(TurnManager turnManager,Arena arena)
         {
+            TurnManager = turnManager;
             m_arena = arena;
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
             SetupEvents();
         }
 
@@ -33,23 +32,22 @@ namespace Gladius.control
         }
 
 
-        protected override void LoadContent()
+        public void LoadContent(ContentManager content,GraphicsDevice device)
         {
-            base.LoadContent();
-            m_simpleCursor = Game.Content.Load<Texture2D>("UI/SimpleCursor");
-            m_selectCursor = Game.Content.Load<Texture2D>("UI/SelectCursor");
-            m_attackCursor = Game.Content.Load<Texture2D>("UI/AttackCursor");
-            m_blockedCursor = Game.Content.Load<Texture2D>("UI/BlockedCursor");
-            m_forwardMoveCursor = Game.Content.Load<Texture2D>("UI/ForwardMoveCursor");
-            m_turnMoveCursor = Game.Content.Load<Texture2D>("UI/TurnMoveCursor");
+            m_simpleCursor = content.Load<Texture2D>("UI/SimpleCursor");
+            m_selectCursor = content.Load<Texture2D>("UI/SelectCursor");
+            m_attackCursor = content.Load<Texture2D>("UI/AttackCursor");
+            m_blockedCursor = content.Load<Texture2D>("UI/BlockedCursor");
+            m_forwardMoveCursor = content.Load<Texture2D>("UI/ForwardMoveCursor");
+            m_turnMoveCursor = content.Load<Texture2D>("UI/TurnMoveCursor");
 
 
-            m_simpleQuad = new SimpleQuad(Game.GraphicsDevice);
+            m_simpleQuad = new SimpleQuad(device);
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime,GraphicsDevice device)
         {
-            Draw(Game.GraphicsDevice, Globals.Camera);
+            Draw(device, Globals.Camera);
         }
 
         public void Draw(GraphicsDevice device, ICamera camera)
@@ -155,7 +153,7 @@ namespace Gladius.control
         }
 
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             UpdateMovement();
         }
@@ -252,6 +250,17 @@ namespace Gladius.control
                     }
                 }
             }
+        }
+
+        public void ActionComplete()
+        {
+            TurnManager.WaitingOnPlayerControl = false;
+        }
+
+        public TurnManager TurnManager
+        {
+            get;
+            set;
         }
 
         public Point FindClearPointNearTarget(BaseActor from, BaseActor to)
@@ -410,6 +419,7 @@ namespace Gladius.control
 
     public enum GridMode
     {
+        Inactive,
         Select,
         Move
     }

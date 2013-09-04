@@ -190,10 +190,10 @@ namespace Gladius.renderer
                 buffer.Append("  Target Y axis orbiting\n\n");
             else
                 buffer.Append("  Free orbiting\n\n");
-            if(Globals.MovementGrid != null)
-            {
-                buffer.AppendFormat("Cursor Pos : [{0},{1}]", Globals.MovementGrid.CurrentPosition.X, Globals.MovementGrid.CurrentPosition.Y);
-            }
+            //if(Globals.MovementGrid != null)
+            //{
+            //    buffer.AppendFormat("Cursor Pos : [{0},{1}]", Globals.MovementGrid.CurrentPosition.X, Globals.MovementGrid.CurrentPosition.Y);
+            //}
 
             text = buffer.ToString();
 
