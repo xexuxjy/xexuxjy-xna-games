@@ -41,6 +41,15 @@ namespace CpuSkinningPipelineExtensions
 
             // Read the bind pose and skeleton hierarchy data.
             IList<BoneContent> bones = MeshHelper.FlattenSkeleton(skeleton);
+            //IList<BoneContent> bones2 = new List<BoneContent>();
+            //foreach (BoneContent bone in bones)
+            //{
+            //    if (!String.IsNullOrEmpty(bone.Name))
+            //    {
+            //        bones2.Add(bone);
+            //    }
+            //}
+            //bones = bones2;
 
             if (bones.Count > maxBones)
             {
@@ -81,7 +90,11 @@ namespace CpuSkinningPipelineExtensions
                 string boneName = bones[i].Name;
 
                 if (!string.IsNullOrEmpty(boneName))
+                {
+                    //boneName = "NoName" + i;
                     boneMap.Add(boneName, i);
+                }
+                
             }
 
             // Convert each animation in turn.
@@ -206,18 +219,28 @@ namespace CpuSkinningPipelineExtensions
                 // Look up what bone this channel is controlling.
                 int boneIndex;
 
-                if (!boneMap.TryGetValue(channel.Key, out boneIndex))
-                {
-                    throw new InvalidContentException(string.Format(
-                        "Found animation for bone '{0}', " +
-                        "which is not part of the skeleton.", channel.Key));
-                }
+                //if (!boneMap.TryGetValue(channel.Key, out boneIndex))
+                //{
+                //    throw new InvalidContentException(string.Format(
+                //        "Found animation for bone '{0}', " +
+                //        "which is not part of the skeleton.", channel.Key));
+                //}
 
-                // Convert the keyframe data.
-                foreach (AnimationKeyframe keyframe in channel.Value)
+                //// Convert the keyframe data.
+                //foreach (AnimationKeyframe keyframe in channel.Value)
+                //{
+                //    keyframes.Add(new Keyframe(boneIndex, keyframe.Time,
+                //                               keyframe.Transform));
+                //}
+
+                if (boneMap.TryGetValue(channel.Key, out boneIndex))
                 {
-                    keyframes.Add(new Keyframe(boneIndex, keyframe.Time,
-                                               keyframe.Transform));
+                    // Convert the keyframe data.
+                    foreach (AnimationKeyframe keyframe in channel.Value)
+                    {
+                        keyframes.Add(new Keyframe(boneIndex, keyframe.Time,
+                                                   keyframe.Transform));
+                    }
                 }
             }
 

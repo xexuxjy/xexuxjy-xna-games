@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace CpuSkinningPipelineExtensions
 {
@@ -119,9 +120,13 @@ namespace CpuSkinningPipelineExtensions
             BoneContent skeleton = MeshHelper.FindSkeleton(geometry.Parent);
             Dictionary<string, int> boneIndices = new Dictionary<string, int>();
             IList<BoneContent> flattenedBones = MeshHelper.FlattenSkeleton(skeleton);
+            //System.Diagnostics.Debugger.Launch();
             for (int i = 0; i < flattenedBones.Count; i++)
             {
-                boneIndices.Add(flattenedBones[i].Name, i);
+                if (!String.IsNullOrEmpty(flattenedBones[i].Name))
+                {
+                    boneIndices.Add(flattenedBones[i].Name, i);
+                }
             }
 
             // convert all of our bone weights into the correct indices and weight values

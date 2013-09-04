@@ -140,8 +140,405 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ThirdParty\01_warrior.FBX">
+      <Name>01_warrior</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>GpuSkinnedModelProcessor</Processor>
+      <ProcessorParameters_DefaultEffect>SkinnedEffect</ProcessorParameters_DefaultEffect>
+    </Compile>
     <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
       <Name>monster-animated-character-XNA_Anims</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\ThirdParty\w_body_01_01.JPG">
+      <Name>w_body_01_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_01_02.JPG">
+      <Name>w_body_01_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_01_03.JPG">
+      <Name>w_body_01_03</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_01_04.JPG">
+      <Name>w_body_01_04</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_02_01.JPG">
+      <Name>w_body_02_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_02_02.JPG">
+      <Name>w_body_02_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_03_01.JPG">
+      <Name>w_body_03_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_03_02.JPG">
+      <Name>w_body_03_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_03_03.JPG">
+      <Name>w_body_03_03</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_03_04.JPG">
+      <Name>w_body_03_04</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_04_01.JPG">
+      <Name>w_body_04_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_04_02.JPG">
+      <Name>w_body_04_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_05_01.JPG">
+      <Name>w_body_05_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_05_02.JPG">
+      <Name>w_body_05_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_06_01.JPG">
+      <Name>w_body_06_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_06_02.JPG">
+      <Name>w_body_06_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_07_01.JPG">
+      <Name>w_body_07_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_body_07_02.JPG">
+      <Name>w_body_07_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_01_01.JPG">
+      <Name>w_hand_01_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_01_02.JPG">
+      <Name>w_hand_01_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_02_01.JPG">
+      <Name>w_hand_02_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_02_02.JPG">
+      <Name>w_hand_02_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_03_01.JPG">
+      <Name>w_hand_03_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_03_02.JPG">
+      <Name>w_hand_03_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_04_01.JPG">
+      <Name>w_hand_04_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_04_02.JPG">
+      <Name>w_hand_04_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_05_01.JPG">
+      <Name>w_hand_05_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_05_02.JPG">
+      <Name>w_hand_05_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_06_01.JPG">
+      <Name>w_hand_06_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_06_02.JPG">
+      <Name>w_hand_06_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_07_01.JPG">
+      <Name>w_hand_07_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_hand_07_02.JPG">
+      <Name>w_hand_07_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_head_01_01.JPG">
+      <Name>w_head_01_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_head_01_02.JPG">
+      <Name>w_head_01_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_head_01_03.JPG">
+      <Name>w_head_01_03</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_head_01_04.JPG">
+      <Name>w_head_01_04</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_head_01_05.JPG">
+      <Name>w_head_01_05</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_01_01.JPG">
+      <Name>w_helmet_01_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_01_02.JPG">
+      <Name>w_helmet_01_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_02_01.JPG">
+      <Name>w_helmet_02_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_02_02.JPG">
+      <Name>w_helmet_02_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_03_01.JPG">
+      <Name>w_helmet_03_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_03_02.JPG">
+      <Name>w_helmet_03_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_04_01.JPG">
+      <Name>w_helmet_04_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_04_02.JPG">
+      <Name>w_helmet_04_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_05_01.JPG">
+      <Name>w_helmet_05_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_05_02.JPG">
+      <Name>w_helmet_05_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_06_01.JPG">
+      <Name>w_helmet_06_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_06_02.JPG">
+      <Name>w_helmet_06_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_07_01.JPG">
+      <Name>w_helmet_07_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_helmet_07_02.JPG">
+      <Name>w_helmet_07_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_pants_01_01.JPG">
+      <Name>w_pants_01_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_01_01.JPG">
+      <Name>w_shoes_01_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_02_01.JPG">
+      <Name>w_shoes_02_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_03_01.JPG">
+      <Name>w_shoes_03_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_04_01.JPG">
+      <Name>w_shoes_04_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_05_01.JPG">
+      <Name>w_shoes_05_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_06_01.JPG">
+      <Name>w_shoes_06_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_06_02.JPG">
+      <Name>w_shoes_06_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_07_01.JPG">
+      <Name>w_shoes_07_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoes_07_02.JPG">
+      <Name>w_shoes_07_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_01_01.JPG">
+      <Name>w_shoulder_01_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_01_02.JPG">
+      <Name>w_shoulder_01_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_02_01.JPG">
+      <Name>w_shoulder_02_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_02_02.JPG">
+      <Name>w_shoulder_02_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_03_01.JPG">
+      <Name>w_shoulder_03_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_03_02.JPG">
+      <Name>w_shoulder_03_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_04_01.JPG">
+      <Name>w_shoulder_04_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_04_02.JPG">
+      <Name>w_shoulder_04_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_05_01.JPG">
+      <Name>w_shoulder_05_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_05_02.JPG">
+      <Name>w_shoulder_05_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_06_01.JPG">
+      <Name>w_shoulder_06_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_06_02.JPG">
+      <Name>w_shoulder_06_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_07_01.JPG">
+      <Name>w_shoulder_07_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\ThirdParty\w_shoulder_07_02.JPG">
+      <Name>w_shoulder_07_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\ThirdParty\wepons_01.JPG">
+      <Name>wepons_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\ThirdParty\01_warrior_Anims.xml">
+      <Name>01_warrior_Anims</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </None>
