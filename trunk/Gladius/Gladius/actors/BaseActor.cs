@@ -110,11 +110,13 @@ namespace Gladius.actors
 
                 // test for now.
                 m_animatedModel.SetMeshActive("w_helmet_01", false);
+                m_animatedModel.SetMeshActive("w_shoulder_01", false);
+
                 m_animatedModel.SetMeshActive("bow_01", false);
                 m_animatedModel.SetMeshActive("shield_01", false);
 
 
-                m_animatedModel.PlayAnimation(AnimationEnum.Walk);
+                m_animatedModel.PlayAnimation(AnimationEnum.Idle);
             }
         }
 
