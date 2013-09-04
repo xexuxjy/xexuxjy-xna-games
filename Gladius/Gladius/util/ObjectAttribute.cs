@@ -21,6 +21,7 @@ namespace xexuxjy.Gladius.util
         WaterAffinity,
         LightAffinity,
         DarkAffinity,
+        ActionPoints,
         NumTypes
     }
 

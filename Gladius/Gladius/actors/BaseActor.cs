@@ -12,6 +12,7 @@ using Dhpoware;
 using Gladius.renderer.animation;
 using Microsoft.Xna.Framework.Content;
 using Gladius.util;
+using Gladius.control;
 
 namespace Gladius.actors
 {
@@ -106,6 +107,13 @@ namespace Gladius.actors
             if (m_animatedModel != null)
             {
                 m_animatedModel.LoadContent(contentManager);
+
+                // test for now.
+                m_animatedModel.SetMeshActive("w_helmet_01", false);
+                m_animatedModel.SetMeshActive("bow_01", false);
+                m_animatedModel.SetMeshActive("shield_01", false);
+
+
                 m_animatedModel.PlayAnimation(AnimationEnum.Walk);
             }
         }
@@ -424,6 +432,34 @@ namespace Gladius.actors
         }
 
 
+        public void StartTurn()
+        {
+            UnitActive = true;
+        }
+
+
+        public void EndTurn()
+        {
+            UnitActive = false;
+        }
+
+        public bool TurnComplete
+        {
+            get;
+            set;
+        }
+
+        public bool PlayerControlled
+        {
+            get;
+            set;
+        }
+
+        public TurnManager TurnManager
+        {
+            get;
+            set;
+        }
 
 
         private BaseActor m_currentTarget = null;
