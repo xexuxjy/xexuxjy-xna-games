@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladiusContent", "GladiusContent\GladiusContent\GladiusContent.csproj", "{54484B9D-1E4C-4202-A978-D50A0234ACEF}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "GladiusContentContent", "GladiusContent\GladiusContentContent\GladiusContentContent.contentproj", "{A83A07DE-BA8A-481B-A61B-A86A90A36F88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GladiusContentContent", "GladiusContent\GladiusContentContent\GladiusContentContent.contentproj", "{A83A07DE-BA8A-481B-A61B-A86A90A36F88}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CpuSkinningDataTypes (Windows)", "CpuSkinningDataTypes\CpuSkinningDataTypes (Windows).csproj", "{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}"
 EndProject
@@ -80,6 +80,7 @@ Global
 		{54484B9D-1E4C-4202-A978-D50A0234ACEF}.Windows|Mixed Platforms.ActiveCfg = Windows|Any CPU
 		{54484B9D-1E4C-4202-A978-D50A0234ACEF}.Windows|Mixed Platforms.Build.0 = Windows|Any CPU
 		{54484B9D-1E4C-4202-A978-D50A0234ACEF}.Windows|x86.ActiveCfg = Windows|Any CPU
+		{54484B9D-1E4C-4202-A978-D50A0234ACEF}.Windows|x86.Build.0 = Windows|Any CPU
 		{54484B9D-1E4C-4202-A978-D50A0234ACEF}.Windows8|Any CPU.ActiveCfg = Windows8|Any CPU
 		{54484B9D-1E4C-4202-A978-D50A0234ACEF}.Windows8|Any CPU.Build.0 = Windows8|Any CPU
 		{54484B9D-1E4C-4202-A978-D50A0234ACEF}.Windows8|Mixed Platforms.ActiveCfg = Windows8|Any CPU
@@ -109,6 +110,7 @@ Global
 		{A83A07DE-BA8A-481B-A61B-A86A90A36F88}.Windows|Any CPU.ActiveCfg = Windows|Any CPU
 		{A83A07DE-BA8A-481B-A61B-A86A90A36F88}.Windows|Mixed Platforms.ActiveCfg = Windows|Any CPU
 		{A83A07DE-BA8A-481B-A61B-A86A90A36F88}.Windows|x86.ActiveCfg = Windows|Any CPU
+		{A83A07DE-BA8A-481B-A61B-A86A90A36F88}.Windows|x86.Build.0 = Windows|Any CPU
 		{A83A07DE-BA8A-481B-A61B-A86A90A36F88}.Windows8|Any CPU.ActiveCfg = Windows8|Any CPU
 		{A83A07DE-BA8A-481B-A61B-A86A90A36F88}.Windows8|Mixed Platforms.ActiveCfg = Windows8|Any CPU
 		{A83A07DE-BA8A-481B-A61B-A86A90A36F88}.Windows8|x86.ActiveCfg = Windows8|Any CPU
@@ -150,8 +152,8 @@ Global
 		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows|Any CPU.ActiveCfg = Release|x86
 		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows|Mixed Platforms.ActiveCfg = Release|x86
 		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows|Mixed Platforms.Build.0 = Release|x86
-		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows|x86.ActiveCfg = Release|x86
-		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows|x86.Build.0 = Release|x86
+		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows|x86.ActiveCfg = Debug|x86
+		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows|x86.Build.0 = Debug|x86
 		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows8|Any CPU.ActiveCfg = Release|x86
 		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows8|Mixed Platforms.ActiveCfg = Release|x86
 		{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}.Windows8|Mixed Platforms.Build.0 = Release|x86

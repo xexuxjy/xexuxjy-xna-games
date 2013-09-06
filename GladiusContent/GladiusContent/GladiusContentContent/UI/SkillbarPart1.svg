@@ -62,50 +62,49 @@
        style="fill:#ff00ff;stroke:none"
        id="rect4423"
        width="140"
-       height="80"
+       height="46"
        x="0"
-       y="972.36218" />
+       y="1006.3622" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="ControlLayer"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
        sodipodi:type="arc"
-       style="fill:#ffffff;stroke:none"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.99972534;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="SkillIcon1"
        sodipodi:cx="31.567266"
        sodipodi:cy="1012.0823"
        sodipodi:rx="14.647212"
        sodipodi:ry="10.985409"
        d="m 46.214478,1012.0823 a 14.647212,10.985409 0 1 1 -29.294424,0 14.647212,10.985409 0 1 1 29.294424,0 z"
-       transform="matrix(1.6385371,0,0,2.1847162,-27.724137,-1204.7504)"
+       transform="matrix(1.0923581,0,0,1.4564774,-18.482757,-451.71284)"
        inkscape:label="#path4433" />
     <path
        sodipodi:type="arc"
-       style="fill:#ffffff;stroke:none"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.92060667;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="path4435"
        sodipodi:cx="48.108517"
        sodipodi:cy="1042.7657"
        sodipodi:rx="7.9549513"
        sodipodi:ry="6.8185296"
        d="m 56.063468,1042.7657 a 7.9549513,6.8185296 0 1 1 -15.909903,0 7.9549513,6.8185296 0 1 1 15.909903,0 z"
-       transform="matrix(1.5084945,0,0,1.7599102,-36.571433,-794.81189)" />
+       transform="matrix(1.005663,0,0,1.1732735,-25.162207,-179.08717)" />
     <rect
-       style="fill:#ffffff;stroke:none"
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.00530791;stroke-opacity:1"
        id="rect4437"
-       width="75"
-       height="16"
-       x="48"
-       y="996.36218" />
+       width="107.41656"
+       height="15.994692"
+       x="32.002655"
+       y="1014.3648" />
     <rect
-       style="fill:#ffffff;stroke:none"
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.00620091;stroke-opacity:1"
        id="rect4437-0"
-       width="75"
-       height="16"
-       x="48"
-       y="1032.3622" />
+       width="107.41567"
+       height="15.993799"
+       x="32.003101"
+       y="1036.3652" />
   </g>
 </svg>
