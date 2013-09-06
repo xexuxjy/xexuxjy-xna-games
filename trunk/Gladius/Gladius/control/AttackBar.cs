@@ -6,17 +6,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.events;
 using Gladius.combat;
+using Gladius.gamestatemanagement.screens;
+using Microsoft.Xna.Framework.Content;
 
 namespace Gladius.control
 {
-    public class AttackBar : DrawableGameComponent
+    public class AttackBar : IUIElement
     {
-        public AttackBar(Game game)
-            : base(game)
-        {
-
-        }
-
         public Rectangle Rectangle
         {
             get;
@@ -69,31 +65,21 @@ namespace Gladius.control
             RegisterListeners();
         }
 
-        protected override void LoadContent()
+        public void LoadContent(ContentManager manager)
         {
-            base.LoadContent();
-            m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            //m_coverageTexture = new Texture2D(Game.GraphicsDevice, 1, 1);
-            //Color[] colorData = new Color[1];
-            //m_coverageTexture.GetData<Color>(colorData);
-            //colorData[0] = new Color(Color.White.ToVector3());
-            //colorData[0].A = 50;
-            //m_coverageTexture.SetData(colorData);
         }
 
-        public override void Draw(GameTime gameTime)
+        public void DrawElement(GameTime gameTime,SpriteBatch spriteBatch)
         {
-            base.Draw(gameTime);
-            m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            m_spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), Rectangle, Color.White);
+            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), Rectangle, Color.White);
             
             Rectangle insetRectangle = InsetRectangle(Rectangle,1);
-            m_spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Black), insetRectangle, Color.White);
+            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Black), insetRectangle, Color.White);
             insetRectangle = InsetRectangle(insetRectangle, 1);
             
             for (int i = 0; i < m_attackBarParts.Count; ++i)
             {
-                m_attackBarParts[i].Draw(m_spriteBatch, insetRectangle);
+                m_attackBarParts[i].Draw(spriteBatch, insetRectangle);
             }
 
             float coverage = (float)( m_updateTime / m_totalTime);
@@ -103,12 +89,10 @@ namespace Gladius.control
             Color coverageColor = Color.DarkGray;
             //coverageColor.A = 50;
             coverageColor *= 0.35f;
-            m_spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), coverageRectangle, coverageColor);
-
-            m_spriteBatch.End();
+            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), coverageRectangle, coverageColor);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (m_totalTime > 0)
             {
@@ -229,7 +213,6 @@ namespace Gladius.control
         public float m_totalTime;
         private double m_updateTime;
         private List<AttackBarPart> m_attackBarParts = new List<AttackBarPart>();
-        private SpriteBatch m_spriteBatch;
         private Texture2D m_coverageTexture;
     }
 

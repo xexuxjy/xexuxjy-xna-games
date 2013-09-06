@@ -51,17 +51,27 @@ namespace Gladius.control
                 Debug.Assert(m_turns.Count > 0);
                 CurrentActor = m_turns[0];
                 m_turns.RemoveAt(0);
-                CurrentActor.StartTurn();
-                if (CurrentActor.PlayerControlled)
-                {
-                    WaitingOnPlayerControl = true;
-                }
+                StartTurn();
+            }
 
-
-
+            if (WaitingOnPlayerControl)
+            {
+                //
             }
 
 
+
+        }
+
+        public void StartTurn()
+        {
+            Globals.Camera.LookAt(CurrentActor.Position);
+
+            CurrentActor.StartTurn();
+            if (CurrentActor.PlayerControlled)
+            {
+                WaitingOnPlayerControl = true;
+            }
 
         }
 
@@ -105,6 +115,7 @@ namespace Gladius.control
 
 
         MovementGrid m_movementGrid;
+        
         Arena m_arena;
         List<BaseActor> m_turns = new List<BaseActor>();
     }
