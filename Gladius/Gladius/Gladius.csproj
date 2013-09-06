@@ -55,6 +55,7 @@
     <Compile Include="control\ActionController.cs" />
     <Compile Include="control\AttackBar.cs" />
     <Compile Include="control\MovementGrid.cs" />
+    <Compile Include="control\PlayerChoiceBar.cs" />
     <Compile Include="control\TurnManager.cs" />
     <Compile Include="control\UserControl.cs" />
     <Compile Include="events\EventManager.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="gamestatemanagement\screenmanager\ScreenManager.cs" />
     <Compile Include="gamestatemanagement\screens\BackgroundScreen.cs" />
     <Compile Include="gamestatemanagement\screens\ArenaScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\IUIElement.cs" />
     <Compile Include="gamestatemanagement\screens\LoadingScreen.cs" />
     <Compile Include="gamestatemanagement\screens\MainMenuScreen.cs" />
     <Compile Include="gamestatemanagement\screens\MenuEntry.cs" />
@@ -538,6 +540,22 @@
     </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_07_02.xnb">
       <Link>Content\Models\ThirdParty\w_shoulder_07_02.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\SkillbarPart1.xnb">
+      <Link>Content\UI\SkillbarPart1.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\SkillbarPart2.xnb">
+      <Link>Content\UI\SkillbarPart2.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\SkillIcons.xnb">
+      <Link>Content\UI\SkillIcons.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -22,6 +22,7 @@ using Gladius;
 using Gladius.control;
 using Gladius.combat;
 using Gladius.util;
+using Gladius.gamestatemanagement.screens;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
@@ -103,6 +104,14 @@ namespace GameStateManagement
 
             m_screenComponents.Update(gameTime);
 
+            foreach (IUIElement uiElement in m_uiElementsList)
+            {
+                uiElement.Update(gameTime);
+            }
+
+
+
+
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
                 pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
@@ -135,6 +144,17 @@ namespace GameStateManagement
             base.Draw(gameTime);
 
             m_screenComponents.Draw(gameTime);
+
+
+            m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+            foreach (IUIElement uiElement in m_uiElementsList)
+            {
+                uiElement.DrawElement(gameTime, m_spriteBatch);
+            }
+
+            m_spriteBatch.End();
+
 
             //m_arenaRenderer.Draw(Globals.Camera, ScreenManager.GraphicsDevice);
 
@@ -229,11 +249,21 @@ namespace GameStateManagement
             m_screenComponents.Components.Add(ba4);
 
 
-            AttackBar attackBar = new AttackBar(ScreenManager.Game);
+            AttackBar attackBar = new AttackBar();
             attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
             attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
-            m_screenComponents.Components.Add(attackBar);
+            //m_screenComponents.Components.Add(attackBar);
             Globals.AttackBar = attackBar;
+            m_uiElementsList.Add(attackBar);
+
+
+            PlayerChoiceBar playerChoiceBar = new PlayerChoiceBar();
+            playerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
+
+            m_uiElementsList.Add(playerChoiceBar);
+                
+                 
+
 
             m_turnManager = new TurnManager(ScreenManager.Game,m_arena);
             m_screenComponents.Components.Add(m_turnManager);
@@ -245,6 +275,13 @@ namespace GameStateManagement
 
             
             Globals.CombatEngine = new CombatEngine();
+
+
+            foreach (IUIElement uiElement in m_uiElementsList)
+            {
+                uiElement.LoadContent(m_content);
+            }
+
         }
 
 
@@ -271,6 +308,7 @@ namespace GameStateManagement
         protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();
         protected ScreenGameComponents m_screenComponents;
+        protected List<IUIElement> m_uiElementsList = new List<IUIElement>();
 
         #endregion
 
