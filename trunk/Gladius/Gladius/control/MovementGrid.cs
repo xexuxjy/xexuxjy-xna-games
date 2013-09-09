@@ -23,7 +23,7 @@ namespace Gladius.control
 
         public void Initialize()
         {
-            SetupEvents();
+            //SetupEvents();
         }
 
         public virtual void Cleanup()

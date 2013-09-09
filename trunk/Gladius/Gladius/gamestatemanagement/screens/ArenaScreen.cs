@@ -67,10 +67,10 @@ namespace GameStateManagement
 
             m_screenComponents = new ScreenGameComponents(ScreenManager.Game);
 
-            SetupArena();
+            Globals.AttackSkillDictionary = new AttackSkillDictionary();
+            Globals.AttackSkillDictionary.Populate(m_content);
 
-            AttackSkillDictionary asd = new AttackSkillDictionary();
-            asd.Populate(m_content);
+            SetupArena();
 
         }
 
@@ -200,54 +200,39 @@ namespace GameStateManagement
             m_arenaRenderer = new SimpleArenaRenderer(m_arena,ScreenManager.Game);
             m_screenComponents.Components.Add(m_arenaRenderer);
             //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
-
-
-            BaseActor ba1 = new BaseActor(ScreenManager.Game);
-            BaseActor ba2 = new BaseActor(ScreenManager.Game);
-            BaseActor ba3 = new BaseActor(ScreenManager.Game);
-            BaseActor ba4 = new BaseActor(ScreenManager.Game);
+            m_turnManager = new TurnManager(ScreenManager.Game,m_arena);
+            m_screenComponents.Components.Add(m_turnManager);
 
             //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
             String modelName = "Models/ThirdParty/01_warrior";
 
-            ba1.ModelName = modelName;
-            ba1.LoadContent(ScreenManager.Game.Content);
-            ba1.Arena = m_arena;
-            ba1.PlayerControlled = true;
+            List<BaseActor> actors = new List<BaseActor>();
+            int numActors = 4;
+            for (int i = 0; i < numActors; ++i)
+            {
+                BaseActor ba1 = new BaseActor(ScreenManager.Game);
+                ba1.ModelName = modelName;
+                ba1.LoadContent(ScreenManager.Game.Content);
+                ba1.Arena = m_arena;
+                ba1.PlayerControlled = true;
+                ba1.DebugName = "Monster" + i;
+                actors.Add(ba1);
+                m_screenComponents.Components.Add(ba1);
+                ba1.SetupSkills(Globals.AttackSkillDictionary);
+            }
 
-            ba2.ModelName = modelName;
-            ba2.LoadContent(ScreenManager.Game.Content);
-            ba2.Arena = m_arena;
-            ba2.PlayerControlled = true;
 
-            ba3.ModelName = modelName;
-            ba3.LoadContent(ScreenManager.Game.Content);
-            ba3.Arena = m_arena;
+            actors[0].CurrentPosition = new Point(10, 10);
+            actors[1].CurrentPosition = new Point(10, 20);
+            actors[2].CurrentPosition = new Point(20, 10);
+            actors[3].CurrentPosition = new Point(20, 20);
 
-            ba4.ModelName = modelName;
-            ba4.LoadContent(ScreenManager.Game.Content);
-            ba4.Arena = m_arena;
+            for (int i = 0; i < numActors; ++i)
+            {
+                m_arena.MoveActor(actors[i], actors[i].CurrentPosition);
+                m_turnManager.QueueActor(actors[i]);
 
-            ba1.CurrentPosition = new Point(10, 10);
-            ba2.CurrentPosition = new Point(10, 20);
-            ba3.CurrentPosition = new Point(20, 10);
-            ba4.CurrentPosition = new Point(20, 20);
-
-            ba1.DebugName = "Monster1";
-            ba2.DebugName = "Monster2";
-            ba3.DebugName = "Monster3";
-            ba4.DebugName = "Monster4";
-
-            m_arena.MoveActor(ba1, ba1.CurrentPosition);
-            m_arena.MoveActor(ba2, ba2.CurrentPosition);
-            m_arena.MoveActor(ba3, ba3.CurrentPosition);
-            m_arena.MoveActor(ba4, ba4.CurrentPosition);
-
-            m_screenComponents.Components.Add(ba1);
-            m_screenComponents.Components.Add(ba2);
-            m_screenComponents.Components.Add(ba3);
-            m_screenComponents.Components.Add(ba4);
-
+            }
 
             AttackBar attackBar = new AttackBar();
             attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
@@ -261,18 +246,6 @@ namespace GameStateManagement
             playerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
 
             m_uiElementsList.Add(playerChoiceBar);
-                
-                 
-
-
-            m_turnManager = new TurnManager(ScreenManager.Game,m_arena);
-            m_screenComponents.Components.Add(m_turnManager);
-
-            m_turnManager.QueueActor(ba1);
-            m_turnManager.QueueActor(ba2);
-            m_turnManager.QueueActor(ba3);
-            m_turnManager.QueueActor(ba4);
-
             
             Globals.CombatEngine = new CombatEngine();
 
@@ -281,6 +254,10 @@ namespace GameStateManagement
             {
                 uiElement.LoadContent(m_content);
             }
+
+
+            playerChoiceBar.CurrentActor = actors[0];
+            playerChoiceBar.RegisterListeners();
 
         }
 

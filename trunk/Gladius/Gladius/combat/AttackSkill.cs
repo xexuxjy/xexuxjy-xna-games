@@ -12,22 +12,27 @@ namespace Gladius.combat
     public class AttackSkill
     {
         public String Name;
-        public int Cost;
+        public int UseCost;
+        public int PurchaseCost;
+        public int SkillRow;
 
         public DamageType DamageType;
         public DamageAffects DamageAffects;
         public float BaseDamage;
         public float DamageMultiplier;
 
+        public SkillIcon SkillIcon;
+
         
         // todo - lots of extra abilities on here.
 
 
 
-        public AttackSkill(String name,int cost,DamageType damageType,DamageAffects damageAffects,float baseDamage)
+        public AttackSkill(String name,int row,int useCost,int purchaseCost,DamageType damageType,DamageAffects damageAffects,float baseDamage)
         {
             Name = name;
-            Cost = cost;
+            UseCost = useCost;
+            PurchaseCost = purchaseCost;
             DamageType = damageType;
             DamageAffects = damageAffects;
             BaseDamage = baseDamage;
@@ -37,10 +42,14 @@ namespace Gladius.combat
         public AttackSkill(XmlElement node)
         {
             Name = node.Attributes["name"].Value;
-            Cost = int.Parse(node.Attributes["cost"].Value);
+            SkillRow = int.Parse(node.Attributes["skillRow"].Value);
+            UseCost = int.Parse(node.Attributes["useCost"].Value);
+            PurchaseCost = int.Parse(node.Attributes["purchaseCost"].Value);
             DamageType = (DamageType)Enum.Parse(typeof(DamageType),node.Attributes["damageType"].Value);
             DamageAffects = (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
+            SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
             BaseDamage = float.Parse(node.Attributes["baseDamage"].Value);
+            DamageMultiplier = 1.0f;
         }
 
     }
@@ -93,6 +102,15 @@ namespace Gladius.combat
         Miss,
         Hit,
         Critical
+    }
+
+    public enum SkillIcon
+    {
+        Special = 0,
+        Attack = 1,
+        Defend = 2,
+        Move = 3,
+
     }
 
 
