@@ -463,6 +463,23 @@ namespace Gladius.actors
             set;
         }
 
+        public void SetupSkills(AttackSkillDictionary skillDictionary)
+        {
+            // simple for now.
+            m_knownAttacks = new List<AttackSkill>();
+            foreach (AttackSkill attackSkill in skillDictionary.Data.Values)
+            {
+                m_knownAttacks.Add(attackSkill);
+            }
+        }
+
+        public List<AttackSkill> AttackSkills
+        {
+            get
+            {
+                return m_knownAttacks;
+            }
+        }
 
         private BaseActor m_currentTarget = null;
         private List<BaseActor> m_threatList = new List<BaseActor>();

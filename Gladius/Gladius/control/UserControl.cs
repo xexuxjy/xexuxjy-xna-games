@@ -91,6 +91,22 @@ namespace Gladius.control
             {
                 EventManager.PerformAction(this, ActionButton.ActionButton4);
             }
+            if (CursorLeftPressed())
+            {
+                EventManager.PerformAction(this, ActionButton.ActionLeft);
+            }
+            if (CursorRightPressed())
+            {
+                EventManager.PerformAction(this, ActionButton.ActionRight);
+            }
+            if (CursorUpPressed())
+            {
+                EventManager.PerformAction(this, ActionButton.ActionUp);
+            }
+            if (CursorDownPressed())
+            {
+                EventManager.PerformAction(this, ActionButton.ActionDown);
+            }
 
         }
 
@@ -101,6 +117,10 @@ namespace Gladius.control
 
     public enum ActionButton
     {
+        ActionUp,
+        ActionDown,
+        ActionLeft,
+        ActionRight,
         ActionButton1,
         ActionButton2,
         ActionButton3,

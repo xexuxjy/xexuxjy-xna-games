@@ -7,11 +7,15 @@ using Gladius.events;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.gamestatemanagement.screens;
 using Microsoft.Xna.Framework.Content;
+using Gladius.actors;
+using Gladius.combat;
 
 namespace Gladius.control
 {
     public class PlayerChoiceBar : IUIElement
     {
+        const int numSkillSlots = 4;
+
         public Rectangle Rectangle
         {
             get;
@@ -23,6 +27,13 @@ namespace Gladius.control
             m_skillBar1Bitmap = manager.Load<Texture2D>("UI/SkillbarPart1");
             m_skillBar2Bitmap = manager.Load<Texture2D>("UI/SkillbarPart2");
             m_skillsBitmap= manager.Load<Texture2D>("UI/SkillIcons");
+            m_spriteFont = manager.Load<SpriteFont>("UI/DebugFont8");
+            m_attackSkills = new List<List<AttackSkill>>();
+            for (int i = 0; i < numSkillSlots; ++i)
+            {
+                m_attackSkills.Add( new List<AttackSkill>());
+            }
+            m_currentAttackSkillLine = new List<AttackSkill>(numSkillSlots);
         }
 
         public void Update(GameTime gameTime)
@@ -39,10 +50,8 @@ namespace Gladius.control
 
             barRect.X += m_skillBar1Bitmap.Width;
             barRect.X += 20;
-            SkillIcon[] skills = new SkillIcon[]{SkillIcon.Attack,SkillIcon.Defend,SkillIcon.Move,SkillIcon.Special};
-            SkillIconState[] skillStates = new SkillIconState[]{SkillIconState.Available,SkillIconState.Selected,SkillIconState.Available,SkillIconState.Unavailable};
 
-            DrawSkillBar2(spriteBatch, barRect, skills, skillStates, 10, 100, 20, 100);
+            DrawSkillBar2(spriteBatch, barRect, m_currentAttackSkillLine, null,null);
         }
 
         public void RegisterListeners()
@@ -56,19 +65,104 @@ namespace Gladius.control
 
         void EventManager_BaseActorChanged(object sender, BaseActorChangedArgs e)
         {
+            CurrentActor = e.New;
         }
+
+        public void BuildDataForActor()
+        {
+            foreach (List<AttackSkill> list in m_attackSkills)
+            {
+                list.Clear();
+            }
+            m_currentAttackSkillLine.Clear();
+
+
+            foreach (AttackSkill attackSkill in CurrentActor.AttackSkills)
+            {
+                m_attackSkills[attackSkill.SkillRow].Add(attackSkill);
+            }
+
+            for (int i = 0; i < numSkillSlots; ++i)
+            {
+                m_currentAttackSkillLine.Add(m_attackSkills[i][0]);
+            }
+        }
+
 
         void EventManager_ActionPressed(object sender, ActionButtonPressedArgs e)
         {
+            switch (e.ActionButton)
+            {
+                case (ActionButton.ActionLeft):
+                    {
+                        CursorLeft();
+                        break;
+                    }
+                case (ActionButton.ActionRight):
+                    {
+                        CursorRight();
+                        break;
+                    }
+                case (ActionButton.ActionUp):
+                    {
+                        CursorUp();
+                        break;
+                    }
+                case (ActionButton.ActionDown):
+                    {
+                        CursorDown();
+                        break;
+                    }
+            }
         }
+
+        public void CursorLeft()
+        {
+            m_actionCursor.X--;
+            if (m_actionCursor.X < 0)
+            {
+                m_actionCursor.X += m_attackSkills.Count;
+            }
+            m_actionCursor.Y = 0;
+        }
+
+        public void CursorRight()
+        {
+            m_actionCursor.X++;
+            if (m_actionCursor.X >= m_attackSkills.Count)
+            {
+                m_actionCursor.X -= m_attackSkills.Count;
+            }
+            m_actionCursor.Y = 0;
+        }
+
+        public void CursorUp()
+        {
+            m_actionCursor.Y++;
+            if (m_actionCursor.Y >= m_attackSkills[m_actionCursor.X].Count)
+            {
+                m_actionCursor.Y -= m_attackSkills[m_actionCursor.X].Count;
+            }
+            m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
+
+        }
+
+        public void CursorDown()
+        {
+            m_actionCursor.Y--;
+            if (m_actionCursor.Y < 0 )
+            {
+                m_actionCursor.Y += m_attackSkills[m_actionCursor.X].Count;
+            }
+            m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
+        }
+
 
         public void UnregisterListeners()
         {
             //EventManager.ActionPressed -= new event ActionButtonPressed();
 
         }
-        const int numSkillSLots = 4;
-        String[] m_skillSlots = new String[numSkillSLots];
 
         private void DrawSkillBar1(SpriteBatch spriteBatch, Rectangle rect, String bigIconName, String smallIconName, float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
         {
@@ -82,8 +176,8 @@ namespace Gladius.control
 
 
 
-            Rectangle skillRect1Dims = new Rectangle(31, 21, 108, 17);
-            Rectangle skillRect2Dims = new Rectangle(50, 2, 108 , 17);
+            Rectangle skillRect1Dims = new Rectangle(33, 15, 107, 16);
+            Rectangle skillRect2Dims = new Rectangle(33, 38, 107 , 16);
 
             Rectangle rect1 = new Rectangle(rect.X + skillRect1Dims.X,rect.Y + skillRect1Dims.Y + skillRect1Dims.Height,skillRect1Dims.Width,skillRect1Dims.Height);
             Rectangle rect2 = new Rectangle(rect.X + skillRect2Dims.X, rect.Y + skillRect2Dims.Y + skillRect2Dims.Height, skillRect2Dims.Width, skillRect2Dims.Height);
@@ -111,8 +205,7 @@ namespace Gladius.control
             spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(color2), new Rectangle(start, ypos, width, height), Color.White);
         }
 
-        private void DrawSkillBar2(SpriteBatch spriteBatch, Rectangle rect, SkillIcon[] skillIcons, SkillIconState[] skillIconStates, 
-            float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
+        private void DrawSkillBar2(SpriteBatch spriteBatch, Rectangle rect, List<AttackSkill> skills,StringBuilder bar1Text,StringBuilder bar2Text)
         {
             rect.Width = m_skillBar2Bitmap.Width;
             rect.Height = m_skillBar2Bitmap.Height;
@@ -126,16 +219,22 @@ namespace Gladius.control
             rect.X += xpad;
             rect.Y -= 1;
 
-            for (int i = 0; i < skillIcons.Length; ++i)
+            for (int i = 0; i < skills.Count(); ++i)
             {
                 Point dims;
                 Point uv;
-                GetUVForIcon(skillIcons[i],skillIconStates[i],out uv,out dims);
+
+                SkillIconState iconState = (i == m_actionCursor.X) ? SkillIconState.Selected : SkillIconState.Available;
+
+                GetUVForIcon(m_currentAttackSkillLine[i].SkillIcon,iconState,out uv,out dims);
                 Rectangle dest = new Rectangle(rect.X + (i * (circleRadius+xpad)), rect.Y + 2, circleRadius, circleRadius);
                 Rectangle src = new Rectangle(uv.X,uv.Y,dims.X,dims.Y);
 
                 spriteBatch.Draw(m_skillsBitmap, dest, src, Color.White);
             }
+            Vector2 pos = new Vector2(rect.X,rect.Y);
+            pos += new Vector2(skillRect1Dims.X,skillRect1Dims.Y);
+            spriteBatch.DrawString(m_spriteFont, skills[m_actionCursor.X].Name, pos, Color.Black);
 
         }
 
@@ -157,6 +256,21 @@ namespace Gladius.control
 
         }
 
+        private BaseActor m_currentActor;
+        public BaseActor CurrentActor
+        {
+            get
+            {
+                return m_currentActor;
+            }
+            set
+            {
+                m_currentActor = value;
+                BuildDataForActor();
+            }
+        }
+
+
         public enum SkillIconState
         {
             Available,
@@ -164,28 +278,21 @@ namespace Gladius.control
             Unavailable
         }
 
-
-        public enum SkillIcon
-        {
-            Special=0,
-            Attack=1,
-            Defend=2,
-            Move=3
-        }
-
-
         String m_mode;
         String m_affinityIcon;
-        String m_health;
-        String m_affinity;
-        String m_skillPoints;
-        String m_affinityPoints;
+
+        List<List<AttackSkill>> m_attackSkills;
+        List<AttackSkill> m_currentAttackSkillLine;
+
+        Point m_actionCursor = new Point();        
+
+        
         Texture2D m_skillBar1Bitmap;
         Texture2D m_skillBar2Bitmap;
         Texture2D m_skillsBitmap;
 
         Point m_topLeft = new Point(20, 400);
-
+        SpriteFont m_spriteFont;
 
     }
 }

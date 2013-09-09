@@ -115,6 +115,7 @@ namespace Gladius.control
 
 
         MovementGrid m_movementGrid;
+        PlayerChoiceBar m_playerChoiceBar;
         
         Arena m_arena;
         List<BaseActor> m_turns = new List<BaseActor>();
