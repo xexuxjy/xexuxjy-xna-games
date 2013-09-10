@@ -12,17 +12,11 @@ using Gladius.combat;
 
 namespace Gladius.control
 {
-    public class PlayerChoiceBar : IUIElement
+    public class PlayerChoiceBar : BaseUIElement
     {
         const int numSkillSlots = 4;
 
-        public Rectangle Rectangle
-        {
-            get;
-            set;
-        }
-
-        public void LoadContent(ContentManager manager)
+        public override void LoadContent(ContentManager manager,GraphicsDevice device)
         {
             m_skillBar1Bitmap = manager.Load<Texture2D>("UI/SkillbarPart1");
             m_skillBar2Bitmap = manager.Load<Texture2D>("UI/SkillbarPart2");
@@ -36,12 +30,7 @@ namespace Gladius.control
             m_currentAttackSkillLine = new List<AttackSkill>(numSkillSlots);
         }
 
-        public void Update(GameTime gameTime)
-        {
-
-        }
-
-        public void DrawElement(GameTime gameTime,SpriteBatch spriteBatch)
+        public override void DrawElement(GameTime gameTime,SpriteBatch spriteBatch)
         {
             Rectangle barRect = new Rectangle(Rectangle.X,Rectangle.Y,m_skillBar1Bitmap.Width,m_skillBar1Bitmap.Height);
             DrawSkillBar1(spriteBatch, barRect, "Foo", "Bar", 30, 100, 70, 100);
@@ -54,13 +43,18 @@ namespace Gladius.control
             DrawSkillBar2(spriteBatch, barRect, m_currentAttackSkillLine, null,null);
         }
 
-        public void RegisterListeners()
+        public override void RegisterListeners()
         {
             EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
             EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
 
+        public override void UnregisterListeners()
+        {
+            //EventManager.ActionPressed -= new event ActionButtonPressed();
+
+        }
 
 
         void EventManager_BaseActorChanged(object sender, BaseActorChangedArgs e)
@@ -113,56 +107,82 @@ namespace Gladius.control
                         CursorDown();
                         break;
                     }
+                case(ActionButton.ActionButton1):
+                    {
+                        if (!ActionSelected)
+                        {
+                            ActionSelected = true;
+                        }
+                        else
+                        {
+                            ConfirmAction();
+                        }
+                        break;
+                    }
+                    // cancel
+                case (ActionButton.ActionButton2):
+                    {
+                        CancelAction();
+                        break;
+                    }
             }
         }
 
         public void CursorLeft()
         {
-            m_actionCursor.X--;
-            if (m_actionCursor.X < 0)
+            if (!ActionSelected)
             {
-                m_actionCursor.X += m_attackSkills.Count;
+                m_actionCursor.X--;
+                if (m_actionCursor.X < 0)
+                {
+                    m_actionCursor.X += m_attackSkills.Count;
+                }
+                m_actionCursor.Y = 0;
             }
-            m_actionCursor.Y = 0;
         }
 
         public void CursorRight()
         {
-            m_actionCursor.X++;
-            if (m_actionCursor.X >= m_attackSkills.Count)
+            if (!ActionSelected)
             {
-                m_actionCursor.X -= m_attackSkills.Count;
+                m_actionCursor.X++;
+                if (m_actionCursor.X >= m_attackSkills.Count)
+                {
+                    m_actionCursor.X -= m_attackSkills.Count;
+                }
+                m_actionCursor.Y = 0;
             }
-            m_actionCursor.Y = 0;
         }
 
         public void CursorUp()
         {
-            m_actionCursor.Y++;
-            if (m_actionCursor.Y >= m_attackSkills[m_actionCursor.X].Count)
+            if (!ActionSelected)
             {
-                m_actionCursor.Y -= m_attackSkills[m_actionCursor.X].Count;
+                m_actionCursor.Y++;
+                if (m_actionCursor.Y >= m_attackSkills[m_actionCursor.X].Count)
+                {
+                    m_actionCursor.Y -= m_attackSkills[m_actionCursor.X].Count;
+                }
+                m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
             }
-            m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
-
         }
 
         public void CursorDown()
         {
-            m_actionCursor.Y--;
-            if (m_actionCursor.Y < 0 )
+            if (!ActionSelected)
             {
-                m_actionCursor.Y += m_attackSkills[m_actionCursor.X].Count;
+
+                m_actionCursor.Y--;
+                if (m_actionCursor.Y < 0)
+                {
+                    m_actionCursor.Y += m_attackSkills[m_actionCursor.X].Count;
+                }
+                m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
             }
-            m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
         }
 
+        
 
-        public void UnregisterListeners()
-        {
-            //EventManager.ActionPressed -= new event ActionButtonPressed();
-
-        }
 
         private void DrawSkillBar1(SpriteBatch spriteBatch, Rectangle rect, String bigIconName, String smallIconName, float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
         {
@@ -270,6 +290,52 @@ namespace Gladius.control
             }
         }
 
+        public AttackSkill CurrentlySelectedSkill
+        {
+            get
+            {
+                return m_currentAttackSkillLine[m_actionCursor.X];
+            }
+        }
+
+
+        private bool m_actionSelected;
+        public bool ActionSelected
+        {
+            get
+            {
+                return m_actionSelected;
+            }
+            set
+            {
+                m_actionSelected = value;
+                if (ActionSelected)
+                {
+                    if (CurrentlySelectedSkill.Name == "Move")
+                    {
+                        ArenaScreen.SetMovementGridVisible(true);
+                    }
+
+                }
+            }
+        }
+
+        public void CancelAction()
+        {
+            if (CurrentlySelectedSkill.Name == "Move")
+            {
+                ArenaScreen.SetMovementGridVisible(false);
+            }
+
+            ActionSelected = false;
+        }
+
+
+        public void ConfirmAction()
+        {
+
+        }
+
 
         public enum SkillIconState
         {
@@ -277,9 +343,6 @@ namespace Gladius.control
             Selected,
             Unavailable
         }
-
-        String m_mode;
-        String m_affinityIcon;
 
         List<List<AttackSkill>> m_attackSkills;
         List<AttackSkill> m_currentAttackSkillLine;
