@@ -123,24 +123,6 @@ namespace Gladius.renderer
             DrawDebugText();
         }
 
-        public void DrawBaseActor3(Vector3 scale, Texture2D t, Vector3 position)
-        {
-            Matrix world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
-            foreach (ModelMesh mm in m_baseActorModel.Meshes)
-            {
-                foreach (BasicEffect effect in mm.Effects)
-                {
-                    effect.EnableDefaultLighting();
-                    effect.TextureEnabled = true;
-                    effect.Texture = t;
-                    effect.View = m_view;
-                    effect.Projection = m_projection;
-                    effect.World = m_baseActorBoneTransforms[mm.ParentBone.Index] * world;
-                }
-                mm.Draw();
-            }
-        }
-
 
         public void DrawBox(Vector3 scale, Texture2D t,Vector3 position)
         {

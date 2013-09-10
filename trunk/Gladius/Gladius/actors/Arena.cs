@@ -183,6 +183,26 @@ namespace Gladius.actors
 
         }
 
+        public bool GetRandomEmptySquare(out Point result)
+        {
+            int numAttempts = 5;
+            for (int i = 0; i < numAttempts; ++i)
+            {
+                int x = m_rng.Next(Width);
+                int y = m_rng.Next(Breadth);
+                Point p = new Point(x, y);
+                BaseActor ba;
+                if (!m_baseActorMap.TryGetValue(p, out ba))
+                {
+                    result = p;
+                    return true;
+                }
+            }
+            result = Point.Zero;
+            return false;
+        }
+
+
         public Vector3 Position
         {
             get;
@@ -200,7 +220,7 @@ namespace Gladius.actors
 
         private Dictionary<Point, BaseActor> m_baseActorMap = new Dictionary<Point, BaseActor>();
         private ArenaPathFinder m_pathFinder;
-
+        private Random m_rng = new Random();
     }
 
     public enum SquareType

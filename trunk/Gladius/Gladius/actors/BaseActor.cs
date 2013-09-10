@@ -206,6 +206,20 @@ namespace Gladius.actors
 
         }
 
+        public void Think()
+        {
+            // pick random spot on arena and pathfind for now.
+            Point result;
+            if (Arena.GetRandomEmptySquare(out result))
+            {
+                if (Arena.FindPath(CurrentPosition, result, WayPointList))
+                {
+                    ConfirmMove();
+                }
+            }
+        }
+
+
         private void UpdateMovement(GameTime gameTime)
         {
             if (Turning)
@@ -433,10 +447,22 @@ namespace Gladius.actors
             set;
         }
 
+        public Vector3 CameraFocusPoint
+        {
+            get
+            {
+                return Position + new Vector3(0, 0.5f, 0);
+            }
+        }
+
 
         public void StartTurn()
         {
             UnitActive = true;
+            if (PlayerControlled == false)
+            {
+                Think();
+            }
         }
 
 
@@ -491,6 +517,8 @@ namespace Gladius.actors
 
         private float m_movementSpeed = 1f;
         private float m_turnSpeed = 1f;
+
+        private Random m_rng = new Random();
 
     }
 

@@ -5,47 +5,33 @@ using System.Text;
 using Gladius.actors;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using GameStateManagement;
 
 namespace Gladius.control
 {
-    public class TurnManager : DrawableGameComponent
+    public class TurnManager : GameComponent
     {
-        public TurnManager(Game game,Arena arena)
+        public TurnManager(Game game)
             : base(game)
         {
-            m_arena = arena;
-            m_movementGrid = new MovementGrid(this,m_arena);
-            //movementGrid.CurrentPosition = ba1.CurrentPosition;
-            //m_screenComponents.Components.Add(movementGrid);
-            Globals.MovementGrid = m_movementGrid;
-
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            m_movementGrid.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
-            m_movementGrid.LoadContent(Game.Content, Game.GraphicsDevice);
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            m_movementGrid.Draw(gameTime, Game.GraphicsDevice);
         }
 
         public override void Update(GameTime gameTime)
         {
-            m_movementGrid.Update(gameTime);
+            if (CurrentActor != null)
+            {
+                Globals.Camera.LookAt(CurrentActor.CameraFocusPoint);
+            }
 
             if (CurrentActor == null || CurrentActor.TurnComplete)
             {
                 if (CurrentActor != null && CurrentActor.TurnComplete)
                 {
                     CurrentActor.EndTurn();
+                    if (CurrentActor.PlayerControlled)
+                    {
+                        ArenaScreen.SetPlayerChoiceBarVisible(false);
+                    }
                 }
                 
                 Debug.Assert(m_turns.Count > 0);
@@ -70,6 +56,7 @@ namespace Gladius.control
             CurrentActor.StartTurn();
             if (CurrentActor.PlayerControlled)
             {
+                ArenaScreen.SetPlayerChoiceBarVisible(true);
                 WaitingOnPlayerControl = true;
             }
 
@@ -109,15 +96,23 @@ namespace Gladius.control
             set
             {
                 m_waitForControlResult = value;
-                m_movementGrid.GridMode = value?GridMode.Select:GridMode.Inactive;
+                //m_movementGrid.GridMode = value?GridMode.Select:GridMode.Inactive;
             }
         }
 
+        public Arena Arena
+        {
+            get;
+            set;
+        }
 
-        MovementGrid m_movementGrid;
-        PlayerChoiceBar m_playerChoiceBar;
-        
-        Arena m_arena;
+        public ArenaScreen ArenaScreen
+        {
+            get;
+            set;
+        }
+
+
         List<BaseActor> m_turns = new List<BaseActor>();
     }
 

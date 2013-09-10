@@ -58,8 +58,6 @@ namespace GameStateManagement
                 m_content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
 
-
-
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
@@ -71,7 +69,6 @@ namespace GameStateManagement
             Globals.AttackSkillDictionary.Populate(m_content);
 
             SetupArena();
-
         }
 
 
@@ -146,18 +143,27 @@ namespace GameStateManagement
             m_screenComponents.Draw(gameTime);
 
 
+            // bit yucky... ui elements have one form of draw or another. not both
+            foreach (IUIElement uiElement in m_uiElementsList)
+            {
+                if (uiElement.Visible)
+                {
+                    uiElement.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice,Globals.Camera);
+                }
+            }
+
+
             m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             foreach (IUIElement uiElement in m_uiElementsList)
             {
-                uiElement.DrawElement(gameTime, m_spriteBatch);
+                if (uiElement.Visible)
+                {
+                    uiElement.DrawElement(gameTime, m_spriteBatch);
+                }
             }
 
             m_spriteBatch.End();
-
-
-            //m_arenaRenderer.Draw(Globals.Camera, ScreenManager.GraphicsDevice);
-
 
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0 || pauseAlpha > 0)
@@ -200,7 +206,8 @@ namespace GameStateManagement
             m_arenaRenderer = new SimpleArenaRenderer(m_arena,ScreenManager.Game);
             m_screenComponents.Components.Add(m_arenaRenderer);
             //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
-            m_turnManager = new TurnManager(ScreenManager.Game,m_arena);
+            m_turnManager = new TurnManager(ScreenManager.Game);
+            m_turnManager.ArenaScreen = this;
             m_screenComponents.Components.Add(m_turnManager);
 
             //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
@@ -214,7 +221,6 @@ namespace GameStateManagement
                 ba1.ModelName = modelName;
                 ba1.LoadContent(ScreenManager.Game.Content);
                 ba1.Arena = m_arena;
-                ba1.PlayerControlled = true;
                 ba1.DebugName = "Monster" + i;
                 actors.Add(ba1);
                 m_screenComponents.Components.Add(ba1);
@@ -234,33 +240,75 @@ namespace GameStateManagement
 
             }
 
-            AttackBar attackBar = new AttackBar();
-            attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
-            attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
+            m_attackBar = new AttackBar();
+            m_attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
+            m_attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
             //m_screenComponents.Components.Add(attackBar);
-            Globals.AttackBar = attackBar;
-            m_uiElementsList.Add(attackBar);
+            Globals.AttackBar = m_attackBar;
+            m_uiElementsList.Add(m_attackBar);
 
 
-            PlayerChoiceBar playerChoiceBar = new PlayerChoiceBar();
-            playerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
+            m_playerChoiceBar = new PlayerChoiceBar();
+            m_playerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
 
-            m_uiElementsList.Add(playerChoiceBar);
+            m_uiElementsList.Add(m_playerChoiceBar);
             
             Globals.CombatEngine = new CombatEngine();
 
 
             foreach (IUIElement uiElement in m_uiElementsList)
             {
-                uiElement.LoadContent(m_content);
+                uiElement.LoadContent(m_content,ScreenManager.Game.GraphicsDevice);
+                uiElement.Arena = m_arena;
+                uiElement.ArenaScreen = this;
             }
 
+            m_movementGrid = new MovementGrid(m_arena);
+            m_movementGrid.TurnManager = m_turnManager;
 
-            playerChoiceBar.CurrentActor = actors[0];
-            playerChoiceBar.RegisterListeners();
+            m_playerChoiceBar.CurrentActor = actors[0];
+            actors[0].PlayerControlled = true;
+
 
         }
 
+        public void SetMovementGridVisible(bool value)
+        {
+            m_movementGrid.Visible = value;
+        }
+
+        public void SetPlayerChoiceBarVisible(bool value)
+        {
+            m_playerChoiceBar.Visible = value;
+            {
+                if (value)
+                {
+                    m_playerChoiceBar.RegisterListeners();
+                }
+                else
+                {
+                    m_playerChoiceBar.UnregisterListeners();
+                }
+            }
+        }
+
+        public void SetAttackBarVisible(bool value)
+        {
+            m_attackBar.Visible = value;
+            if (value)
+            {
+                m_attackBar.RegisterListeners();
+            }
+            else
+            {
+                m_attackBar.UnregisterListeners();
+            }
+        }
+
+        public PlayerChoiceBar PlayerChoiceBar
+        {
+            get { return m_playerChoiceBar; }
+        }
 
 
         #endregion
@@ -287,6 +335,9 @@ namespace GameStateManagement
         protected ScreenGameComponents m_screenComponents;
         protected List<IUIElement> m_uiElementsList = new List<IUIElement>();
 
+        MovementGrid m_movementGrid;
+        PlayerChoiceBar m_playerChoiceBar;
+        AttackBar m_attackBar;
         #endregion
 
     }

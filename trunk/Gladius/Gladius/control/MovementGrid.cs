@@ -10,29 +10,18 @@ using Gladius.actors;
 using Gladius.events;
 using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
+using Gladius.gamestatemanagement.screens;
 
 namespace Gladius.control
 {
-    public class MovementGrid 
+    public class MovementGrid : BaseUIElement
     {
-        public MovementGrid(TurnManager turnManager,Arena arena)
+        public MovementGrid(Arena arena)
         {
-            TurnManager = turnManager;
             m_arena = arena;
         }
 
-        public void Initialize()
-        {
-            //SetupEvents();
-        }
-
-        public virtual void Cleanup()
-        {
-            TeardownEvents();
-        }
-
-
-        public void LoadContent(ContentManager content,GraphicsDevice device)
+        public override void LoadContent(ContentManager content,GraphicsDevice device)
         {
             m_simpleCursor = content.Load<Texture2D>("UI/SimpleCursor");
             m_selectCursor = content.Load<Texture2D>("UI/SelectCursor");
@@ -41,51 +30,48 @@ namespace Gladius.control
             m_forwardMoveCursor = content.Load<Texture2D>("UI/ForwardMoveCursor");
             m_turnMoveCursor = content.Load<Texture2D>("UI/TurnMoveCursor");
 
-
             m_simpleQuad = new SimpleQuad(device);
         }
 
-        public void Draw(GameTime gameTime,GraphicsDevice device)
-        {
-            Draw(device, Globals.Camera);
-        }
 
-        public void Draw(GraphicsDevice device, ICamera camera)
+        public override void DrawElement(GameTime gameTime,GraphicsDevice device,ICamera camera)
         {
-            device.BlendState = BlendState.AlphaBlend;
-            //device.DepthStencilState = DepthStencilState.None;
-
-            switch (GridMode)
+            if(Visible)
             {
-                case GridMode.Select:
-                    DrawIfValid(device, camera, CurrentPosition, SelectedActor);
-                    break;
-                case GridMode.Move:
-                    if (SelectedActor != null)
-                    {
-                        DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
-                        foreach (Point p in SelectedActor.WayPointList)
-                        {
-                            DrawIfValid(device, camera, p, SelectedActor);
-                        }
+                device.BlendState = BlendState.AlphaBlend;
+                //device.DepthStencilState = DepthStencilState.None;
+
+                switch (GridMode)
+                {
+                    case GridMode.Select:
                         DrawIfValid(device, camera, CurrentPosition, SelectedActor);
-                    }
-                    break;
-                default:
-                    // calculate type / size of grid to display based on player,skill, etc
-                    int width = ((CurrentCursorSize - 1) / 2);
-
-                    for (int i = -width; i <= width; ++i)
-                    {
-                        for (int j = -width; j <= width; ++j)
+                        break;
+                    case GridMode.Move:
+                        if (SelectedActor != null)
                         {
-                            Point p = new Point(CurrentPosition.X + i, CurrentPosition.Y + j);
-                            DrawIfValid(device, camera, p, SelectedActor);
+                            DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
+                            foreach (Point p in SelectedActor.WayPointList)
+                            {
+                                DrawIfValid(device, camera, p, SelectedActor);
+                            }
+                            DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                         }
-                    }
-                    break;
-            }
+                        break;
+                    default:
+                        // calculate type / size of grid to display based on player,skill, etc
+                        int width = ((CurrentCursorSize - 1) / 2);
 
+                        for (int i = -width; i <= width; ++i)
+                        {
+                            for (int j = -width; j <= width; ++j)
+                            {
+                                Point p = new Point(CurrentPosition.X + i, CurrentPosition.Y + j);
+                                DrawIfValid(device, camera, p, SelectedActor);
+                            }
+                        }
+                        break;
+                }
+            }
         }
 
         public void DrawMovementCross(GraphicsDevice device, ICamera camera,BaseActor actor)
@@ -152,105 +138,6 @@ namespace Gladius.control
             }
         }
 
-
-        public void Update(GameTime gameTime)
-        {
-            UpdateMovement();
-        }
-
-
-
-        public void UpdateMovement()
-        {
-            Vector3 v = new Vector3();
-
-            Vector3 fwd = Globals.Camera.ViewDirection;
-            Vector3 right = Vector3.Cross(fwd, Vector3.Up);
-
-            Point p = CurrentPosition;
-            if (Globals.UserControl.CursorLeftPressed())
-            {
-                v = -right;
-            }
-            if (Globals.UserControl.CursorRightPressed())
-            {
-                v = right;
-            }
-            if (Globals.UserControl.CursorUpPressed())
-            {
-                v = fwd;
-            }
-            if (Globals.UserControl.CursorDownPressed())
-            {
-                v = -fwd;
-            }
-
-            if (v.LengthSquared() > 0)
-            {
-                v.Y = 0;
-                v.Normalize();
-
-                //v = v * vd;
-                //v = result;
-
-                if (Math.Abs(v.X) > Math.Abs(v.Z))
-                {
-                    if (v.X < 0)
-                    {
-                        p.X--;
-                    }
-                    if (v.X > 0)
-                    {
-                        p.X++;
-                    }
-                }
-                else
-                {
-                    if (v.Z < 0)
-                    {
-                        p.Y--;
-                    }
-                    if (v.Z > 0)
-                    {
-                        p.Y++;
-                    }
-                }
-                if (m_arena.InLevel(p))
-                {
-                    CurrentPosition = p;
-
-                    if (SelectedActor != null)
-                    {
-                        GridMode = GridMode.Move;
-                        SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
-                        if (st == SquareType.Empty)
-                        {
-                            // try and find a path.
-                            SelectedActor.WayPointList.Clear();
-                            if (m_arena.FindPath(SelectedActor.CurrentPosition, CurrentPosition, SelectedActor.WayPointList))
-                            {
-
-                            }
-                        }
-                        else if(st == SquareType.Mobile)
-                        {
-                            // still need to pathfind to actor?
-                            SelectedActor.WayPointList.Clear();
-                            BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
-                            Point adjustedPoint = FindClearPointNearTarget(SelectedActor, target);
-
-                            if (m_arena.FindPath(SelectedActor.CurrentPosition, adjustedPoint, SelectedActor.WayPointList))
-                            {
-                                if (Globals.CombatEngine.IsValidTarget(SelectedActor, target))
-                                {
-                                    SelectedActor.SetTarget(target);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         public void ActionComplete()
         {
@@ -324,10 +211,6 @@ namespace Gladius.control
         {
 
             // build a grid of 'x' values centered around player.
-
-
-
-
         }
 
         public BaseActor SelectedActor
@@ -337,7 +220,7 @@ namespace Gladius.control
         }
 
 
-        public void SetupEvents()
+        public void RegisterListeners()
         {
             EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
             EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);    
@@ -361,38 +244,139 @@ namespace Gladius.control
 
         void EventManager_ActionPressed(object sender, ActionButtonPressedArgs e)
         {
-            if (e.ActionButton == ActionButton.ActionButton1)
+            switch(e.ActionButton)
             {
-                switch (GridMode)
-                {
-                    case (GridMode.Select):
-                        {
-                            BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
-                            EventManager.ChangeActor(this, SelectedActor, ba);
-                            ba.UnitActive = true;
-                            break;
-                        }
-                    case (GridMode.Move):
-                        {
-                            if (SelectedActor != null)
+                case(ActionButton.ActionButton1):
+                    switch (GridMode)
+                    {
+                        case (GridMode.Select):
                             {
-                                SelectedActor.ConfirmMove();
-                                if (CursorOnTarget(SelectedActor))
+                                BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
+                                EventManager.ChangeActor(this, SelectedActor, ba);
+                                ba.UnitActive = true;
+                                break;
+                            }
+                        case (GridMode.Move):
+                            {
+                                if (SelectedActor != null)
                                 {
-                                    SelectedActor.AttackRequested = true;
+                                    SelectedActor.ConfirmMove();
+                                    if (CursorOnTarget(SelectedActor))
+                                    {
+                                        SelectedActor.AttackRequested = true;
+                                    }
+                                }
+                                EventManager.ChangeActor(this, SelectedActor, null);
+                                break;
+                            }
+                   }
+                    break;
+                case (ActionButton.ActionButton2):
+                    {
+                        // check dependency issues on this.
+                        ArenaScreen.PlayerChoiceBar.CancelAction();
+                        ArenaScreen.SetMovementGridVisible(false);
+                        break;
+                    }
+                case (ActionButton.ActionLeft):
+                case (ActionButton.ActionRight):
+                case (ActionButton.ActionUp):
+                case (ActionButton.ActionDown):
+                    {
+                        Vector3 fwd = Globals.Camera.ViewDirection;
+                        Vector3 right = Vector3.Cross(fwd, Vector3.Up);
+                        Vector3 v = Vector3.Zero;
+
+                        Point p = CurrentPosition;
+                        if (e.ActionButton == ActionButton.ActionLeft)
+                        {
+                            v = -right;
+                        }
+                        else if (e.ActionButton == ActionButton.ActionRight)
+                        {
+                            v = right;
+                        }
+                        else if (e.ActionButton == ActionButton.ActionUp)
+                        {
+                            v = fwd;
+                        }
+                        else if (e.ActionButton == ActionButton.ActionDown)
+                        {
+                            v = -fwd;
+                        }
+                        if (v.LengthSquared() > 0)
+                        {
+                            v.Y = 0;
+                            v.Normalize();
+
+                            //v = v * vd;
+                            //v = result;
+
+                            if (Math.Abs(v.X) > Math.Abs(v.Z))
+                            {
+                                if (v.X < 0)
+                                {
+                                    p.X--;
+                                }
+                                if (v.X > 0)
+                                {
+                                    p.X++;
                                 }
                             }
-                            EventManager.ChangeActor(this, SelectedActor, null);
+                            else
+                            {
+                                if (v.Z < 0)
+                                {
+                                    p.Y--;
+                                }
+                                if (v.Z > 0)
+                                {
+                                    p.Y++;
+                                }
+                            }
+                            if (m_arena.InLevel(p))
+                            {
+                                CurrentPosition = p;
+
+                                if (SelectedActor != null)
+                                {
+                                    GridMode = GridMode.Move;
+                                    SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
+                                    if (st == SquareType.Empty)
+                                    {
+                                        // try and find a path.
+                                        SelectedActor.WayPointList.Clear();
+                                        if (m_arena.FindPath(SelectedActor.CurrentPosition, CurrentPosition, SelectedActor.WayPointList))
+                                        {
+
+                                        }
+                                    }
+                                    else if (st == SquareType.Mobile)
+                                    {
+                                        // still need to pathfind to actor?
+                                        SelectedActor.WayPointList.Clear();
+                                        BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
+                                        Point adjustedPoint = FindClearPointNearTarget(SelectedActor, target);
+
+                                        if (m_arena.FindPath(SelectedActor.CurrentPosition, adjustedPoint, SelectedActor.WayPointList))
+                                        {
+                                            if (Globals.CombatEngine.IsValidTarget(SelectedActor, target))
+                                            {
+                                                SelectedActor.SetTarget(target);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             break;
                         }
-               }
-
+                    }
+                    break;
             }
-
-
+        
         }
 
-        public void TeardownEvents()
+        public void UnregisterListeners()
         {
             //EventManager.ActionPressed -= new event ActionButtonPressed();
 

@@ -65,6 +65,7 @@
     <Compile Include="gamestatemanagement\screenmanager\ScreenManager.cs" />
     <Compile Include="gamestatemanagement\screens\BackgroundScreen.cs" />
     <Compile Include="gamestatemanagement\screens\ArenaScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\BaseUIElement.cs" />
     <Compile Include="gamestatemanagement\screens\IUIElement.cs" />
     <Compile Include="gamestatemanagement\screens\LoadingScreen.cs" />
     <Compile Include="gamestatemanagement\screens\MainMenuScreen.cs" />
