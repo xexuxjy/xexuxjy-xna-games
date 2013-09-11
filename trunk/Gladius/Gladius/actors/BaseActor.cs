@@ -238,6 +238,9 @@ namespace Gladius.actors
             {
                 if (FollowingWayPoints)
                 {
+                    // this is called every update and animation system doesn't reset if it's current anim
+                    m_animatedModel.PlayAnimation(AnimationEnum.Walk);
+
                     // mvoe towards the next point.
                     if (WayPointList.Count > 0)
                     {
@@ -284,6 +287,7 @@ namespace Gladius.actors
                     {
                         // finished moving.
                         FollowingWayPoints = false;
+                        TurnComplete = true;
                     }
                 }
             }
@@ -459,6 +463,7 @@ namespace Gladius.actors
         public void StartTurn()
         {
             UnitActive = true;
+            TurnComplete = false;
             if (PlayerControlled == false)
             {
                 Think();
@@ -469,6 +474,8 @@ namespace Gladius.actors
         public void EndTurn()
         {
             UnitActive = false;
+            m_animatedModel.PlayAnimation(AnimationEnum.Idle);
+            TurnManager.QueueActor(this);
         }
 
         public bool TurnComplete

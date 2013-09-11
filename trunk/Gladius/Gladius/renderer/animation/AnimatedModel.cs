@@ -147,24 +147,27 @@ namespace Gladius.renderer.animation
 
         public void PlayAnimation(AnimationEnum animationEnum,bool loopClip = true)
         {
-            String clipName;
-            if(m_clipNameDictionary.TryGetValue(animationEnum,out clipName))
+            if (m_currentAnimationEnum != animationEnum)
             {
-                m_currentAnimationEnum = animationEnum;
-                m_currentAnimationClip = m_skinningData.AnimationClips[clipName];
-                if (m_currentAnimationClip != null)
+                String clipName;
+                if (m_clipNameDictionary.TryGetValue(animationEnum, out clipName))
                 {
-                    Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation [{0}] [{1}] [{2}][{3}]", m_baseActor.DebugName,animationEnum, clipName,loopClip));
-                    m_animationPlayer.StartClip(m_currentAnimationClip,loopClip);
-                    if (OnAnimationStarted != null)
+                    m_currentAnimationEnum = animationEnum;
+                    m_currentAnimationClip = m_skinningData.AnimationClips[clipName];
+                    if (m_currentAnimationClip != null)
                     {
-                        OnAnimationStarted(m_currentAnimationEnum);
+                        Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation [{0}] [{1}] [{2}][{3}]", m_baseActor.DebugName, animationEnum, clipName, loopClip));
+                        m_animationPlayer.StartClip(m_currentAnimationClip, loopClip);
+                        if (OnAnimationStarted != null)
+                        {
+                            OnAnimationStarted(m_currentAnimationEnum);
+                        }
                     }
                 }
-            }
-            else
-            {
-                Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation FailedNoMatch [{0}] [{1}]", m_baseActor.DebugName, animationEnum));
+                else
+                {
+                    Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation FailedNoMatch [{0}] [{1}]", m_baseActor.DebugName, animationEnum));
+                }
             }
         }
 

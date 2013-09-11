@@ -51,6 +51,7 @@ namespace Gladius.control
 
         public void StartTurn()
         {
+            //Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.Orbit;
             Globals.Camera.LookAt(CurrentActor.Position);
 
             CurrentActor.StartTurn();
