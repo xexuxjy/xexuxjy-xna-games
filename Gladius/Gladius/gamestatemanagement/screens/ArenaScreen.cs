@@ -267,7 +267,7 @@ namespace GameStateManagement
             m_movementGrid.TurnManager = m_turnManager;
 
             m_playerChoiceBar.CurrentActor = actors[0];
-            actors[0].PlayerControlled = true;
+            //actors[0].PlayerControlled = true;
 
 
         }
