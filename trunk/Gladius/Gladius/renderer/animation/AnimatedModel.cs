@@ -246,6 +246,24 @@ namespace Gladius.renderer.animation
             return new BoundingBox(min, max);
         }
 
+        public bool FindMatrixForBone(String boneName, out Matrix result)
+        {
+        //ModelBone parentbone = model.Model.Bones.Where(x => x.Name == item.Key).Single();
+        //UpdateModelAnimation(item.Value, gameTime, bones[model.SkinningData.SkeletonHierarchy[parentbone.Index - 2]]);
+
+            ModelBone resultBone;
+            if (m_model.Bones.TryGetValue(boneName, out resultBone))
+            {
+                result = m_animationPlayer.BoneTransforms[resultBone.Index];
+                return true;
+            }
+            else
+            {
+                result = Matrix.Identity;
+                return false;
+            }
+        }
+
         public static void ApplyLighting(SkinnedEffect effect)
         {
             effect.DirectionalLight0.Enabled = true; // turn on the lighting subsystem.
@@ -262,6 +280,7 @@ namespace Gladius.renderer.animation
         public delegate void AnimationStopped(AnimationEnum anim);
         public event AnimationStarted OnAnimationStarted;
         public event AnimationStopped OnAnimationStopped;
+
 
 
 

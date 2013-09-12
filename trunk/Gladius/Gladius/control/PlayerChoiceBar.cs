@@ -28,6 +28,7 @@ namespace Gladius.control
                 m_attackSkills.Add( new List<AttackSkill>());
             }
             m_currentAttackSkillLine = new List<AttackSkill>(numSkillSlots);
+            EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
         public override void DrawElement(GameTime gameTime,SpriteBatch spriteBatch)
@@ -46,13 +47,13 @@ namespace Gladius.control
         public override void RegisterListeners()
         {
             EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
-            EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
 
         public override void UnregisterListeners()
         {
             //EventManager.ActionPressed -= new event ActionButtonPressed();
+            EventManager.ActionPressed -= new EventManager.ActionButtonPressed(EventManager_ActionPressed);
 
         }
 

@@ -240,21 +240,22 @@ namespace GameStateManagement
 
             }
 
-            m_attackBar = new AttackBar();
-            m_attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
-            m_attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
+            Globals.AttackBar= new AttackBar();
+            Globals.AttackBar.Rectangle = new Rectangle(20, 300, 600, 30);
+            Globals.AttackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
             //m_screenComponents.Components.Add(attackBar);
-            Globals.AttackBar = m_attackBar;
-            m_uiElementsList.Add(m_attackBar);
+            m_uiElementsList.Add(Globals.AttackBar);
 
 
-            m_playerChoiceBar = new PlayerChoiceBar();
-            m_playerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
+            Globals.PlayerChoiceBar = new PlayerChoiceBar();
+            Globals.PlayerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
 
-            m_uiElementsList.Add(m_playerChoiceBar);
+            m_uiElementsList.Add(Globals.PlayerChoiceBar);
             
             Globals.CombatEngine = new CombatEngine();
 
+            Globals.MovementGrid = new MovementGrid(m_arena);
+            m_uiElementsList.Add(Globals.MovementGrid);
 
             foreach (IUIElement uiElement in m_uiElementsList)
             {
@@ -263,51 +264,58 @@ namespace GameStateManagement
                 uiElement.ArenaScreen = this;
             }
 
-            m_movementGrid = new MovementGrid(m_arena);
-            m_movementGrid.TurnManager = m_turnManager;
+            //Globals.MovementGrid.TurnManager = m_turnManager;
 
-            m_playerChoiceBar.CurrentActor = actors[0];
-            //actors[0].PlayerControlled = true;
+            //Globals.MovementGrid.CurrentActor = actors[0];
+            actors[0].PlayerControlled = true;
 
 
         }
 
         public void SetMovementGridVisible(bool value)
         {
-            m_movementGrid.Visible = value;
+            Globals.MovementGrid.Visible = value;
+            if (value)
+            {
+                Globals.MovementGrid.RegisterListeners();
+            }
+            else
+            {
+                Globals.MovementGrid.UnregisterListeners();
+            }
         }
 
         public void SetPlayerChoiceBarVisible(bool value)
         {
-            m_playerChoiceBar.Visible = value;
+            Globals.PlayerChoiceBar.Visible = value;
             {
                 if (value)
                 {
-                    m_playerChoiceBar.RegisterListeners();
+                    Globals.PlayerChoiceBar.RegisterListeners();
                 }
                 else
                 {
-                    m_playerChoiceBar.UnregisterListeners();
+                    Globals.PlayerChoiceBar.UnregisterListeners();
                 }
             }
         }
 
         public void SetAttackBarVisible(bool value)
         {
-            m_attackBar.Visible = value;
+            Globals.AttackBar.Visible = value;
             if (value)
             {
-                m_attackBar.RegisterListeners();
+                Globals.AttackBar.RegisterListeners();
             }
             else
             {
-                m_attackBar.UnregisterListeners();
+                Globals.AttackBar.UnregisterListeners();
             }
         }
 
         public PlayerChoiceBar PlayerChoiceBar
         {
-            get { return m_playerChoiceBar; }
+            get { return Globals.PlayerChoiceBar; }
         }
 
 
@@ -335,9 +343,9 @@ namespace GameStateManagement
         protected ScreenGameComponents m_screenComponents;
         protected List<IUIElement> m_uiElementsList = new List<IUIElement>();
 
-        MovementGrid m_movementGrid;
-        PlayerChoiceBar m_playerChoiceBar;
-        AttackBar m_attackBar;
+        //MovementGrid m_movementGrid;
+        //PlayerChoiceBar m_playerChoiceBar;
+        //AttackBar m_attackBar;
         #endregion
 
     }

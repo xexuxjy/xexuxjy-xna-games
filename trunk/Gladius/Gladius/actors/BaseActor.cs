@@ -290,6 +290,14 @@ namespace Gladius.actors
                         TurnComplete = true;
                     }
                 }
+                else
+                {
+                    // not sure why not here but
+                    if (!PlayerControlled)
+                    {
+                        TurnComplete = true;
+                    }
+                }
             }
         }
 
@@ -514,6 +522,17 @@ namespace Gladius.actors
             }
         }
 
+
+        public void AttachModelToLeftHand(Model model)
+        {
+            m_leftHandModel = model;
+        }
+
+        public void AttachModelToRightHand(Model model)
+        {
+            m_rightHandModel = model;
+        }
+
         private BaseActor m_currentTarget = null;
         private List<BaseActor> m_threatList = new List<BaseActor>();
         private List<Point> m_wayPointList = new List<Point>();
@@ -522,10 +541,13 @@ namespace Gladius.actors
         private Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
         private AnimatedModel m_animatedModel;
 
-        private float m_movementSpeed = 1f;
+        private float m_movementSpeed = 2f;
         private float m_turnSpeed = 1f;
 
         private Random m_rng = new Random();
+
+        private Model m_leftHandModel;
+        private Model m_rightHandModel;
 
     }
 
