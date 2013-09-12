@@ -87,9 +87,9 @@ namespace Gladius.renderer
             Indices[5] = 3;
         }
 
-        public void Draw(GraphicsDevice device,Texture2D texture, Vector3 position, Vector3 normal,Vector3 scale,ICamera camera)
+        public void Draw(GraphicsDevice device,Texture2D texture, Matrix world, Vector3 normal,Vector3 scale,ICamera camera)
         {
-            BasicEffect.World = Matrix.CreateTranslation(position);
+            BasicEffect.World = world;
             BasicEffect.Texture = texture;
             BasicEffect.View = camera.ViewMatrix;
             BasicEffect.Projection = camera.ProjectionMatrix;

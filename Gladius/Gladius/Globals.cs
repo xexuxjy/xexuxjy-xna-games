@@ -22,6 +22,8 @@ namespace Gladius
         public static EventLogger EventLogger;
         public static MovementGrid MovementGrid;
         public static AttackBar AttackBar;
+        public static PlayerChoiceBar PlayerChoiceBar;
+
         public static AttackSkillDictionary AttackSkillDictionary;
 
 

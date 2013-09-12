@@ -29,6 +29,7 @@ namespace Gladius.control
             m_blockedCursor = content.Load<Texture2D>("UI/BlockedCursor");
             m_forwardMoveCursor = content.Load<Texture2D>("UI/ForwardMoveCursor");
             m_turnMoveCursor = content.Load<Texture2D>("UI/TurnMoveCursor");
+            m_destinationCursor = content.Load<Texture2D>("UI/BlockedCursor");
 
             m_simpleQuad = new SimpleQuad(device);
         }
@@ -50,10 +51,7 @@ namespace Gladius.control
                         if (SelectedActor != null)
                         {
                             DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
-                            foreach (Point p in SelectedActor.WayPointList)
-                            {
-                                DrawIfValid(device, camera, p, SelectedActor);
-                            }
+                            DrawMovementPath(device, camera, SelectedActor, SelectedActor.WayPointList);
                             DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                         }
                         break;
@@ -93,9 +91,53 @@ namespace Gladius.control
             if (cursor != null)
             {
                 Vector3 v3 = V3ForSquare(p);
-                m_simpleQuad.Draw(device, cursor, v3, Vector3.Up, Vector3.One, camera);
+                Matrix m = Matrix.CreateTranslation(v3);
+
+
+                m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera);
             }
         }
+
+
+        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point p, Point nextPoint ,BaseActor actor, Texture2D cursor = null)
+        {
+            if (cursor == null)
+            {
+                cursor = CursorForSquare(p, actor);
+            }
+            if (cursor != null)
+            {
+                Vector3 v3 = V3ForSquare(p);
+                Matrix rot = Matrix.Identity;
+            
+                if (nextPoint.X != 0 || nextPoint.Y != 0)
+                {
+                    Vector3 diff = new Vector3(p.X - nextPoint.X, 0, p.Y - nextPoint.Y);
+                    if (diff.X == 1)
+                    {
+                        Matrix.CreateRotationY((float)Math.PI / 2f,out rot);
+                    }
+                    if (diff.X == -1)
+                    {
+                        Matrix.CreateRotationY((float)(3* Math.PI) / 2f, out rot);
+                    }
+                    if (diff.Z == -1)
+                    {
+                        Matrix.CreateRotationY((float)Math.PI, out rot);
+                    }
+                    if (diff.Z == 1)
+                    {
+                        Matrix.CreateRotationY(0, out rot);
+                    }
+                    
+                }
+
+                Matrix m = rot * Matrix.CreateTranslation(v3);
+
+                m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera);
+            }
+        }
+
 
         public Texture2D CursorForSquare(Point p,BaseActor actor)
         {
@@ -132,23 +174,32 @@ namespace Gladius.control
 
         public void DrawMovementPath(GraphicsDevice device, ICamera camera,BaseActor actor,List<Point> points)
         {
-            foreach (Point p in points)
+            int numPoints = points.Count;
+            for(int i=0;i<numPoints;++i)
             {
-                DrawIfValid(device, camera, p,actor);
+                if (i < numPoints - 1)
+                {
+                    DrawIfValid(device, camera, points[i], points[i + 1], actor);
+                }
+                else
+                {
+                    // last point really needs target icon.
+                    DrawIfValid(device, camera, points[i], actor, m_destinationCursor);
+                }
             }
         }
 
 
-        public void ActionComplete()
-        {
-            TurnManager.WaitingOnPlayerControl = false;
-        }
+        //public void ActionComplete()
+        //{
+        //    TurnManager.WaitingOnPlayerControl = false;
+        //}
 
-        public TurnManager TurnManager
-        {
-            get;
-            set;
-        }
+        //public TurnManager TurnManager
+        //{
+        //    get;
+        //    set;
+        //}
 
         public Point FindClearPointNearTarget(BaseActor from, BaseActor to)
         {
@@ -220,7 +271,7 @@ namespace Gladius.control
         }
 
 
-        public void RegisterListeners()
+        public override void RegisterListeners()
         {
             EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
             EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);    
@@ -232,14 +283,15 @@ namespace Gladius.control
         void EventManager_BaseActorChanged(object sender, BaseActorChangedArgs e)
         {
             SelectedActor = e.New;
-            if(e.Original == e.New)
-            {
-                GridMode = GridMode.Move;
-            }
-            else
-            {
-                GridMode = GridMode.Select;
-            }
+            CurrentPosition = SelectedActor.CurrentPosition;
+            //if(e.Original == e.New)
+            //{
+            //    GridMode = GridMode.Move;
+            //}
+            //else
+            //{
+            //    GridMode = GridMode.Select;
+            //}
         }
 
         void EventManager_ActionPressed(object sender, ActionButtonPressedArgs e)
@@ -252,8 +304,8 @@ namespace Gladius.control
                         case (GridMode.Select):
                             {
                                 BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
-                                EventManager.ChangeActor(this, SelectedActor, ba);
-                                ba.UnitActive = true;
+                                //EventManager.ChangeActor(this, SelectedActor, ba);
+                                //ba.UnitActive = true;
                                 break;
                             }
                         case (GridMode.Move):
@@ -266,7 +318,7 @@ namespace Gladius.control
                                         SelectedActor.AttackRequested = true;
                                     }
                                 }
-                                EventManager.ChangeActor(this, SelectedActor, null);
+                                //EventManager.ChangeActor(this, SelectedActor, null);
                                 break;
                             }
                    }
@@ -376,10 +428,10 @@ namespace Gladius.control
         
         }
 
-        public void UnregisterListeners()
+        public override void UnregisterListeners()
         {
-            //EventManager.ActionPressed -= new event ActionButtonPressed();
-
+            EventManager.ActionPressed -= new EventManager.ActionButtonPressed(EventManager_ActionPressed);
+            EventManager.BaseActorChanged -= new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);    
         }
 
         public Vector3 m_cursorMovement = Vector3.Zero;
@@ -396,7 +448,7 @@ namespace Gladius.control
         public Texture2D m_blockedCursor;
         public Texture2D m_forwardMoveCursor;
         public Texture2D m_turnMoveCursor;
-
+        public Texture2D m_destinationCursor;
 
     }
 

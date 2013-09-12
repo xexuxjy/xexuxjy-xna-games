@@ -6,6 +6,7 @@ using Gladius.actors;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using GameStateManagement;
+using Gladius.events;
 
 namespace Gladius.control
 {
@@ -25,18 +26,7 @@ namespace Gladius.control
 
             if (CurrentActor == null || CurrentActor.TurnComplete)
             {
-                if (CurrentActor != null && CurrentActor.TurnComplete)
-                {
-                    CurrentActor.EndTurn();
-                    if (CurrentActor.PlayerControlled)
-                    {
-                        ArenaScreen.SetPlayerChoiceBarVisible(false);
-                    }
-                }
-                
-                Debug.Assert(m_turns.Count > 0);
-                CurrentActor = m_turns[0];
-                m_turns.RemoveAt(0);
+                EndTurn();
                 StartTurn();
             }
 
@@ -49,12 +39,36 @@ namespace Gladius.control
 
         }
 
+        public void EndTurn()
+        {
+            Globals.MovementGrid.SelectedActor = CurrentActor;
+            ArenaScreen.SetMovementGridVisible(false);
+            if (CurrentActor != null && CurrentActor.TurnComplete)
+            {
+                CurrentActor.EndTurn();
+                if (CurrentActor.PlayerControlled)
+                {
+                    ArenaScreen.SetPlayerChoiceBarVisible(false);
+                }
+            }
+
+            Debug.Assert(m_turns.Count > 0);
+            EventManager.ChangeActor(this,CurrentActor, m_turns[0]);
+            CurrentActor = m_turns[0];
+            m_turns.RemoveAt(0);
+        }
+
         public void StartTurn()
         {
             //Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.Orbit;
             Globals.Camera.LookAt(CurrentActor.Position);
 
             CurrentActor.StartTurn();
+            Globals.MovementGrid.SelectedActor = CurrentActor;
+            Globals.MovementGrid.GridMode = GridMode.Move;
+
+            ArenaScreen.SetMovementGridVisible(true);
+
             if (CurrentActor.PlayerControlled)
             {
                 ArenaScreen.SetPlayerChoiceBarVisible(true);
