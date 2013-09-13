@@ -90,8 +90,8 @@ Global
 		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|Any CPU.ActiveCfg = Release|x86
 		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|Mixed Platforms.ActiveCfg = Release|x86
 		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|Mixed Platforms.Build.0 = Release|x86
-		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|x86.ActiveCfg = Release|x86
-		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|x86.Build.0 = Release|x86
+		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|x86.ActiveCfg = Debug|x86
+		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|x86.Build.0 = Debug|x86
 		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows|Xbox 360.ActiveCfg = Release|x86
 		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows8|Any CPU.ActiveCfg = Release|x86
 		{015B2288-BB08-4FCA-BC69-1024CB968FFE}.Windows8|Mixed Platforms.ActiveCfg = Release|x86

@@ -64,6 +64,11 @@ namespace Gladius.gamestatemanagement.screens
         {
         }
 
+        public int RegisterCount
+        {
+            get;
+            set;
+        }
 
     }
 }

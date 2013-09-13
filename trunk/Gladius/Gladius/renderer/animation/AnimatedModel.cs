@@ -84,6 +84,8 @@ namespace Gladius.renderer.animation
             m_clipNameDictionary[AnimationEnum.Attack2] = "Attack2";
             m_clipNameDictionary[AnimationEnum.Stagger] = "Hit1";
             m_clipNameDictionary[AnimationEnum.Die] = "Death";
+            m_clipNameDictionary[AnimationEnum.Block] = "Block";
+            m_clipNameDictionary[AnimationEnum.Cast] = "Cast";
         }
 
 
