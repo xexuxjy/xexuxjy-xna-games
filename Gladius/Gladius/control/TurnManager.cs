@@ -64,8 +64,7 @@ namespace Gladius.control
             Globals.Camera.LookAt(CurrentActor.Position);
 
             CurrentActor.StartTurn();
-            Globals.MovementGrid.SelectedActor = CurrentActor;
-            Globals.MovementGrid.GridMode = GridMode.Move;
+            //Globals.MovementGrid.SelectedActor = CurrentActor;
 
             ArenaScreen.SetMovementGridVisible(true);
 

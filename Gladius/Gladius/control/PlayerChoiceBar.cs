@@ -113,6 +113,7 @@ namespace Gladius.control
                         if (!ActionSelected)
                         {
                             ActionSelected = true;
+                            CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
                         }
                         else
                         {
@@ -312,18 +313,31 @@ namespace Gladius.control
                 m_actionSelected = value;
                 if (ActionSelected)
                 {
-                    if (CurrentlySelectedSkill.Name == "Move")
+                    if (SkillNeedsMovementGrid(CurrentlySelectedSkill))
                     {
                         ArenaScreen.SetMovementGridVisible(true);
                     }
-
+                    else if (CurrentlySelectedSkill.AttackType == AttackType.Block)
+                    {
+                        CurrentActor.ApplyBlockSkill(CurrentlySelectedSkill);
+                    }
+                    else if (CurrentlySelectedSkill.AttackType == AttackType.EndTurn)
+                    {
+                        CurrentActor.TurnComplete = true;
+                    }
                 }
             }
         }
 
+        public bool SkillNeedsMovementGrid(AttackSkill skill)
+        {
+            return skill.AttackType == AttackType.Move || skill.AttackType == AttackType.Single || skill.AttackType == AttackType.AOE;
+            
+        }
+
         public void CancelAction()
         {
-            if (CurrentlySelectedSkill.Name == "Move")
+            if (SkillNeedsMovementGrid(CurrentlySelectedSkill))
             {
                 ArenaScreen.SetMovementGridVisible(false);
             }

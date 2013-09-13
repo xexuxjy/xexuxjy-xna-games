@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <AttackSkills>
-  <AttackSkill name="Move" purchaseCost="0" useCost="0" skillRow="0" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Move"/>
-  <AttackSkill name="Block" purchaseCost="0" useCost="0" skillRow="0" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Defend"/>
-  <AttackSkill name="EndTurn" purchaseCost="0" useCost="0" skillRow="0" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Move"/>
+  <AttackSkill name="Move" purchaseCost="0" useCost="0" skillRow="0" attackType="Move" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Move"/>
+  <AttackSkill name="Block" purchaseCost="0" useCost="0" skillRow="0" attackType="Block" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Defend"/>
+  <AttackSkill name="EndTurn" purchaseCost="0" useCost="0" skillRow="0" attackType="EndTurn" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Move"/>
 
-  <AttackSkill name="Strike" purchaseCost="2" useCost="1" skillRow="1" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack"/>
-  <AttackSkill name="Strike2" purchaseCost="12" useCost="2" skillRow="1" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack"/>
-  <AttackSkill name="Strike3" purchaseCost="22" useCost="3" skillRow="1" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack"/>
+  <AttackSkill name="Strike" purchaseCost="2" useCost="1" skillRow="1" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack"/>
+  <AttackSkill name="Strike2" purchaseCost="12" useCost="2" skillRow="1" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack"/>
+  <AttackSkill name="Strike3" purchaseCost="22" useCost="3" skillRow="1" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack"/>
 
-  <AttackSkill name="Special1" purchaseCost="2" useCost="1" skillRow="2" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack"/>
-  <AttackSkill name="Special2" purchaseCost="12" useCost="2" skillRow="2" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack"/>
-  <AttackSkill name="Special3" purchaseCost="22" useCost="3" skillRow="2" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack"/>
+  <AttackSkill name="Special1" purchaseCost="2" useCost="1" skillRow="2" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack"/>
+  <AttackSkill name="Special2" purchaseCost="12" useCost="2" skillRow="2" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack"/>
+  <AttackSkill name="Special3" purchaseCost="22" useCost="3" skillRow="2" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack"/>
 
-  <AttackSkill name="Affinity1" purchaseCost="2" useCost="1" skillRow="3" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Special"/>
-  <AttackSkill name="Affinity2" purchaseCost="12" useCost="2" skillRow="3" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Special"/>
-  <AttackSkill name="Affinity3" purchaseCost="22" useCost="3" skillRow="3" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special"/>
+  <AttackSkill name="Affinity1" purchaseCost="2" useCost="1" skillRow="3" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Special"/>
+  <AttackSkill name="Affinity2" purchaseCost="12" useCost="2" skillRow="3" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Special"/>
+  <AttackSkill name="Affinity3" purchaseCost="22" useCost="3" skillRow="3" attackType="Single" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special"/>
 
 </AttackSkills>
