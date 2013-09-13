@@ -183,7 +183,7 @@ namespace GameStateManagement
             // Load the sprite font. The sprite font has a 3 pixel outer glow
             // baked into it so we need to decrease the spacing so that the
             // SpriteFont will render correctly.
-            m_gameFont= ScreenManager.Game.Content.Load<SpriteFont>("GameFont");
+            m_gameFont= m_content.Load<SpriteFont>("GameFont");
             m_gameFont.Spacing = -4.0f;
 
 
@@ -210,6 +210,9 @@ namespace GameStateManagement
             m_turnManager.ArenaScreen = this;
             m_screenComponents.Components.Add(m_turnManager);
 
+            Globals.SoundManager = new SoundManager();
+            Globals.SoundManager.LoadContent(m_content);
+
             //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
             String modelName = "Models/ThirdParty/01_warrior";
 
@@ -219,7 +222,7 @@ namespace GameStateManagement
             {
                 BaseActor ba1 = new BaseActor(ScreenManager.Game);
                 ba1.ModelName = modelName;
-                ba1.LoadContent(ScreenManager.Game.Content);
+                ba1.LoadContent(m_content);
                 ba1.Arena = m_arena;
                 ba1.DebugName = "Monster" + i;
                 actors.Add(ba1);

@@ -56,6 +56,7 @@
     <Compile Include="control\AttackBar.cs" />
     <Compile Include="control\MovementGrid.cs" />
     <Compile Include="control\PlayerChoiceBar.cs" />
+    <Compile Include="control\SoundManager.cs" />
     <Compile Include="control\TurnManager.cs" />
     <Compile Include="control\UserControl.cs" />
     <Compile Include="events\EventManager.cs" />
