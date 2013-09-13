@@ -23,6 +23,8 @@ namespace Gladius
         public static MovementGrid MovementGrid;
         public static AttackBar AttackBar;
         public static PlayerChoiceBar PlayerChoiceBar;
+        public static SoundManager SoundManager;
+
 
         public static AttackSkillDictionary AttackSkillDictionary;
 

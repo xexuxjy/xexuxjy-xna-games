@@ -602,6 +602,8 @@ namespace Gladius.actors
         private Model m_leftHandModel;
         private Model m_rightHandModel;
 
+
+
     }
 
     public enum ActorClass
