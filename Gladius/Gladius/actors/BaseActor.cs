@@ -24,6 +24,7 @@ namespace Gladius.actors
             m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
             m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
+            m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
         }
 
         void m_animatedModel_OnAnimationStarted(AnimationEnum anim)
@@ -379,6 +380,8 @@ namespace Gladius.actors
                 {
                     if (Globals.NextToTarget(this, m_currentTarget))
                     {
+                        SnapToFace(m_currentTarget);
+                        m_currentTarget.SnapToFace(this);
                         StartAttack();
                     }
                 }

@@ -17,7 +17,16 @@ namespace Gladius.renderer.animation
         public AnimatedModel(BaseActor baseActor)
         {
             m_baseActor = baseActor;
+            ModelRotation = Quaternion.Identity;
         }
+
+
+        public Quaternion ModelRotation
+        {
+            get;
+            set;
+        }
+
 
         public void Update(GameTime gameTime)
         {
@@ -97,7 +106,14 @@ namespace Gladius.renderer.animation
             //Matrix[] bones = m_animationPlayer.SkinTransforms;
             Matrix[] bones = m_animationPlayer.SkinTransforms;
 
-            Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateFromQuaternion(m_baseActor.Rotation) * Matrix.CreateTranslation(m_baseActor.Position);
+
+            //Quaternion q = Quaternion.C
+
+
+            Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateFromQuaternion(m_baseActor.Rotation * ModelRotation) * Matrix.CreateTranslation(m_baseActor.Position);
+
+            
+
             // Render the skinned mesh.
             foreach (ModelMesh mesh in m_model.Meshes)
             {
