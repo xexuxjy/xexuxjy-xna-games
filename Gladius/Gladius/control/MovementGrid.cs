@@ -64,6 +64,7 @@ namespace Gladius.control
                         case (AttackType.AOE):
                             break;
                         case (AttackType.Single):
+                            DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                             break;
                         default:
                             // calculate type / size of grid to display based on player,skill, etc
@@ -207,6 +208,12 @@ namespace Gladius.control
             Point tp = to.CurrentPosition;
             Vector3 diff = new Vector3(tp.X, 0, tp.Y) - new Vector3(fp.X, 0, fp.Y);
 
+            // we're next to the target already.
+            if (diff.LengthSquared() == 1)
+            {
+                return fp;
+            }
+
             // find the ordinate square thats closest.
             if (Math.Abs(diff.X) > Math.Abs(diff.Z))
             {
@@ -272,7 +279,12 @@ namespace Gladius.control
 
         public override void RegisterListeners()
         {
-            EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
+            if (RegisterCount == 0)
+            {
+                EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
+                RegisterCount++;
+            }
+            Debug.Assert(RegisterCount == 1);
         }
 
 
@@ -301,9 +313,12 @@ namespace Gladius.control
                             {
                                 if (CursorOnTarget(SelectedActor))
                                 {
-                                    BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
-                                    SelectedActor.SetTarget(ba);
-                                    SelectedActor.AttackRequested = true;
+                                    BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
+                                    if (Globals.CombatEngine.IsValidTarget(SelectedActor, target))
+                                    {
+                                        SelectedActor.SetTarget(target);
+                                        SelectedActor.AttackRequested = true;
+                                    }
                                 }
                                 break;
                             }
@@ -330,31 +345,34 @@ namespace Gladius.control
                         if (m_arena.InLevel(p))
                         {
                             CurrentPosition = p;
+                            SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
+                            BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
 
-                            if (SelectedActor != null)
+                            switch (SelectedActor.CurrentAttackSkill.AttackType)
                             {
-                                SquareType st = m_arena.GetSquareTypeAtLocation(CurrentPosition);
-                                if (st == SquareType.Empty)
-                                {
-                                    // try and find a path.
-                                    SelectedActor.WayPointList.Clear();
-                                    m_arena.FindPath(SelectedActor.CurrentPosition, CurrentPosition, SelectedActor.WayPointList);
-                                }
-                                else if (st == SquareType.Mobile)
-                                {
-                                    // still need to pathfind to actor?
-                                    SelectedActor.WayPointList.Clear();
-                                    BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
-                                    Point adjustedPoint = FindClearPointNearTarget(SelectedActor, target);
-
-                                    if (m_arena.FindPath(SelectedActor.CurrentPosition, adjustedPoint, SelectedActor.WayPointList))
+                                case (AttackType.Move):
                                     {
-                                        if (Globals.CombatEngine.IsValidTarget(SelectedActor, target))
-                                        {
-                                            SelectedActor.SetTarget(target);
-                                        }
+                                        // try and find a path.
+                                        SelectedActor.WayPointList.Clear();
+                                        m_arena.FindPath(SelectedActor.CurrentPosition, CurrentPosition, SelectedActor.WayPointList);
+
+                                        break;
                                     }
-                                }
+
+                                case (AttackType.Single):
+                                    if(!Globals.CombatEngine.IsAttackNextTo(SelectedActor,target))
+                                    {
+                                        SelectedActor.WayPointList.Clear();
+                                        Point adjustedPoint = CurrentPosition;
+                                        if (target != null)
+                                        {
+                                            adjustedPoint = FindClearPointNearTarget(SelectedActor, target);
+                                        }
+
+                                        m_arena.FindPath(SelectedActor.CurrentPosition, adjustedPoint, SelectedActor.WayPointList);
+
+                                    }
+                                    break;
                             }
                         }
                         break;
@@ -426,8 +444,13 @@ namespace Gladius.control
 
         public override void UnregisterListeners()
         {
-            EventManager.ActionPressed -= new EventManager.ActionButtonPressed(EventManager_ActionPressed);
-            //EventManager.BaseActorChanged -= new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
+            if (RegisterCount == 1)
+            {
+                EventManager.ActionPressed -= new EventManager.ActionButtonPressed(EventManager_ActionPressed);
+                RegisterCount--;
+
+            }
+            Debug.Assert(RegisterCount == 0);
         }
 
         public Vector3 m_cursorMovement = Vector3.Zero;

@@ -55,7 +55,16 @@ namespace Gladius.actors
                         StopDeath();
                         break;
                     }
+                default:
+                    PlayAnimation(AnimationEnum.Idle);
+                    break;
             }
+        }
+
+        public void Block(BaseActor actor)
+        {
+            SnapToFace(actor);
+            PlayAnimation(AnimationEnum.Block);
         }
 
 
@@ -225,6 +234,12 @@ namespace Gladius.actors
 
         private void UpdateMovement(GameTime gameTime)
         {
+            if (m_currentMovePoints <= 0)
+            {
+                TurnComplete = true;
+            }
+
+
             if (Turning)
             {
                 TurnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -263,6 +278,10 @@ namespace Gladius.actors
                                 CurrentPosition = WayPointList[0];
 
                                 WayPointList.RemoveAt(0);
+
+                                // we've moved one step so reduce our movement.
+                                m_currentMovePoints--;
+
                                 // check and see if we need to turn
                                 if (WayPointList.Count > 0)
                                 {
@@ -303,6 +322,15 @@ namespace Gladius.actors
                 }
             }
         }
+
+        public void SnapToFace(BaseActor actor)
+        {
+            Vector3 nextDiff = actor.Position - Position;
+            nextDiff.Y = 0;
+            nextDiff.Normalize();
+            Rotation = QuaternionHelper.LookRotation(nextDiff);
+        }
+
 
         public void FaceDirection(Quaternion newDirection, float turnSpeed)
         {
@@ -475,6 +503,9 @@ namespace Gladius.actors
         {
             UnitActive = true;
             TurnComplete = false;
+
+            m_currentMovePoints = m_totalMovePoints;
+
             if (PlayerControlled == false)
             {
                 Think();
@@ -558,6 +589,10 @@ namespace Gladius.actors
 
         private float m_movementSpeed = 2f;
         private float m_turnSpeed = 1f;
+
+        private int m_currentMovePoints;
+        private int m_totalMovePoints = 10;
+
 
         private Random m_rng = new Random();
 

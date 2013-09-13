@@ -229,7 +229,7 @@ namespace GameStateManagement
 
 
             actors[0].CurrentPosition = new Point(10, 10);
-            actors[1].CurrentPosition = new Point(10, 20);
+            actors[1].CurrentPosition = new Point(11, 10);
             actors[2].CurrentPosition = new Point(20, 10);
             actors[3].CurrentPosition = new Point(20, 20);
 
