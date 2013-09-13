@@ -16,6 +16,7 @@ namespace Gladius.combat
         public int PurchaseCost;
         public int SkillRow;
 
+        public AttackType AttackType;
         public DamageType DamageType;
         public DamageAffects DamageAffects;
         public float BaseDamage;
@@ -28,11 +29,12 @@ namespace Gladius.combat
 
 
 
-        public AttackSkill(String name,int row,int useCost,int purchaseCost,DamageType damageType,DamageAffects damageAffects,float baseDamage)
+        public AttackSkill(String name,int row,int useCost,int purchaseCost,AttackType attackType,DamageType damageType,DamageAffects damageAffects,float baseDamage)
         {
             Name = name;
             UseCost = useCost;
             PurchaseCost = purchaseCost;
+            AttackType = attackType;
             DamageType = damageType;
             DamageAffects = damageAffects;
             BaseDamage = baseDamage;
@@ -45,6 +47,7 @@ namespace Gladius.combat
             SkillRow = int.Parse(node.Attributes["skillRow"].Value);
             UseCost = int.Parse(node.Attributes["useCost"].Value);
             PurchaseCost = int.Parse(node.Attributes["purchaseCost"].Value);
+            AttackType = (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
             DamageType = (DamageType)Enum.Parse(typeof(DamageType),node.Attributes["damageType"].Value);
             DamageAffects = (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
             SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
@@ -113,6 +116,14 @@ namespace Gladius.combat
 
     }
 
+    public enum AttackType
+    {
+        Move,
+        Block,
+        EndTurn,
+        Single,
+        AOE
+    }
 
 
 }

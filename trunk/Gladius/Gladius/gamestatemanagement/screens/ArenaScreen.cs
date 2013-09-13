@@ -264,6 +264,11 @@ namespace GameStateManagement
                 uiElement.ArenaScreen = this;
             }
 
+            // these here so that none of the key listeners are setup by default.
+            SetMovementGridVisible(false);
+            SetPlayerChoiceBarVisible(false);
+            SetAttackBarVisible(false);
+
             //Globals.MovementGrid.TurnManager = m_turnManager;
 
             //Globals.MovementGrid.CurrentActor = actors[0];

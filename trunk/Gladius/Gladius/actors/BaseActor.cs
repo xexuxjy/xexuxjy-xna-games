@@ -216,6 +216,9 @@ namespace Gladius.actors
                 {
                     ConfirmMove();
                 }
+
+                // find a movement skill for now.
+                CurrentAttackSkill = m_knownAttacks.First(x=>x.AttackType == AttackType.Move);
             }
         }
 
@@ -520,6 +523,18 @@ namespace Gladius.actors
             {
                 return m_knownAttacks;
             }
+        }
+
+        public void ApplyBlockSkill(AttackSkill skill)
+        {
+            // different blocks may have different bonuses.
+            TurnComplete = true;
+        }
+
+        public AttackSkill CurrentAttackSkill
+        {
+            get;
+            set;
         }
 
 
