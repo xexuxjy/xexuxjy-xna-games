@@ -39,6 +39,9 @@ namespace GameStateManagement
         SpriteFont font;
         Texture2D blankTexture;
 
+        DateTime lastUpdate = DateTime.Now;
+        int fpsCounter = 0;
+        int fps;
 
         bool isInitialized;
 
@@ -168,6 +171,19 @@ namespace GameStateManagement
 
                 bool otherScreenHasFocus = !Game.IsActive;
                 bool coveredByOtherScreen = false;
+
+                if ((DateTime.Now - lastUpdate).TotalMilliseconds >= 1000)
+                {
+                    fps = fpsCounter;
+                    fpsCounter = 0;
+                    lastUpdate = DateTime.Now;
+                }
+                else
+                {
+                    fpsCounter++;
+                }
+
+
 
                 // Loop as long as there are screens waiting to be updated.
                 while (screensToUpdate.Count > 0)
@@ -317,6 +333,11 @@ namespace GameStateManagement
                              Color.Black * alpha);
 
             spriteBatch.End();
+        }
+
+        public int FPS
+        {
+            get { return fps; }
         }
 
 

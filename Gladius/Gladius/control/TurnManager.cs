@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using GameStateManagement;
 using Gladius.events;
+using Gladius.gamestatemanagement.screens;
 
 namespace Gladius.control
 {

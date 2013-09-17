@@ -23,10 +23,11 @@ using Gladius.control;
 using Gladius.combat;
 using Gladius.util;
 using Gladius.gamestatemanagement.screens;
+using GameStateManagement;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
-namespace GameStateManagement
+namespace Gladius.gamestatemanagement.screens
 {
     /// <summary>
     /// This screen implements the actual game logic. It is just a
@@ -190,18 +191,17 @@ namespace GameStateManagement
             Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
             //m_screenComponents.Components.Add(Globals.UserControl);
 
-            m_camera = new Dhpoware.CameraComponent(ScreenManager.Game);
-            m_camera.HandleInput(ScreenManager.input);
+            Globals.Camera = new Dhpoware.CameraComponent(ScreenManager.Game);
+            Globals.Camera.HandleInput(ScreenManager.input);
     
-            IGameComponent igc = m_camera as IGameComponent;
-            m_screenComponents.Components.Add(igc);
+            //IGameComponent igc = m_camera as IGameComponent;
+            m_screenComponents.Components.Add(Globals.Camera);
 
-            m_camera.Position = new Vector3(0, 5, -10);
-            Globals.Camera = m_camera;
+            Globals.Camera.Position = new Vector3(0, 5, -10);
 
             m_arena = new Arena(32, 32);
 
-            m_camera.CurrentBehavior = Camera.Behavior.FirstPerson;
+            Globals.Camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena,ScreenManager.Game);
             m_screenComponents.Components.Add(m_arenaRenderer);
@@ -345,7 +345,6 @@ namespace GameStateManagement
         private SimpleArenaRenderer m_arenaRenderer;
         private Arena m_arena;
 
-        protected CameraComponent m_camera;
         protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();
         protected ScreenGameComponents m_screenComponents;

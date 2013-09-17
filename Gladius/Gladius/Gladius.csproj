@@ -74,6 +74,7 @@
     <Compile Include="gamestatemanagement\screens\MenuScreen.cs" />
     <Compile Include="gamestatemanagement\screens\MessageBoxScreen.cs" />
     <Compile Include="gamestatemanagement\screens\OptionsMenuScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\OverlandScreen.cs" />
     <Compile Include="gamestatemanagement\screens\PauseMenuScreen.cs" />
     <Compile Include="gamestatemanagement\screens\PlayerIndexEventArgs.cs" />
     <Compile Include="gamestatemanagement\screens\ShopScreen.cs" />
@@ -92,6 +93,20 @@
     <Compile Include="renderer\DHPCameraComponent.cs" />
     <Compile Include="renderer\SimpleArenaRenderer.cs" />
     <Compile Include="renderer\SimpleQuad.cs" />
+    <Compile Include="renderer\Terrain.cs" />
+    <Compile Include="Terrain7\BufferManager.cs" />
+    <Compile Include="Terrain7\Culling\ClippingFrustrum.cs" />
+    <Compile Include="Terrain7\Culling\ClipPlane.cs" />
+    <Compile Include="Terrain7\Culling\Intersection.cs" />
+    <Compile Include="Terrain7\Culling\PlaneIntersectType.cs" />
+    <Compile Include="Terrain7\Culling\Rectangle.cs" />
+    <Compile Include="Terrain7\Culling\Utils.cs" />
+    <Compile Include="Terrain7\Culling\ViewClipShape.cs" />
+    <Compile Include="Terrain7\NodeType.cs" />
+    <Compile Include="Terrain7\QuadNode.cs" />
+    <Compile Include="Terrain7\QuadNodeVertex.cs" />
+    <Compile Include="Terrain7\QuadTree.cs" />
+    <Compile Include="Terrain7\TreeVertexCollection.cs" />
     <Compile Include="util\ColouredTextureDictionary.cs" />
     <Compile Include="util\EventLogger.cs" />
     <Compile Include="util\ObjectAttribute.cs" />
@@ -558,6 +573,18 @@
   <ItemGroup>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\SkillIcons.xnb">
       <Link>Content\UI\SkillIcons.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Terrain\WorldHeight.xnb">
+      <Link>Content\Models\Terrain\WorldHeight.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Terrain\WorldSurface.xnb">
+      <Link>Content\Models\Terrain\WorldSurface.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
