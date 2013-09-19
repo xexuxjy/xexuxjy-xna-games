@@ -117,7 +117,7 @@ namespace Gladius.gamestatemanagement.screens
             IGameComponent igc = Globals.Camera as IGameComponent;
             m_screenComponents.Components.Add(igc);
 
-            Globals.Camera.Position = new Vector3(0, 5, -10);
+            Globals.Camera.Position = new Vector3(0, 160, -10);
             Globals.Camera.Acceleration = new Vector3(10);
             Globals.Camera.Velocity = new Vector3(50);
 

@@ -109,6 +109,7 @@
     <Compile Include="Terrain7\TreeVertexCollection.cs" />
     <Compile Include="util\ColouredTextureDictionary.cs" />
     <Compile Include="util\EventLogger.cs" />
+    <Compile Include="util\ObjectArray.cs" />
     <Compile Include="util\ObjectAttribute.cs" />
     <Compile Include="util\QuaternionHelper.cs" />
     <Compile Include="util\ScreenGameComponents.cs" />

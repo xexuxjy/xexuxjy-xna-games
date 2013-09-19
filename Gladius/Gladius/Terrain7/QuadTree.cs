@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.Terrain7.Culling;
+using Gladius.util;
 
 namespace Gladius.Terrain7
 {
@@ -41,21 +42,38 @@ namespace Gladius.Terrain7
 		public Vector3 CameraPosition
 		{
 			get { return _cameraPosition; }
-			set { _cameraPosition = value; }
+			set 
+            {
+                // move camera to local space?
+                _cameraPosition = value-_position; 
+            }
 		}
 		public BoundingFrustum ViewFrustrum { get; private set; }
 		public int IndexCount { get; private set; }
 
 		public bool Cull { get; set; }
 
+        private ObjectArray<VertexPositionNormalTexture> SkirtVertexOA;
+        private ObjectArray<int> SkirtIndexOA;
+
 
 		public QuadTree(Vector3 position, Texture2D heightMap, Matrix viewMatrix, Matrix projectionMatrix, GraphicsDevice device, int scale,float heightScale)
 		{
+            //position = new Vector3(0, -10, 0);
+
+
 			Device = device;
 			_position = position;
-			_topNodeSize = heightMap.Width - 1;
 
-			_vertices = new TreeVertexCollection(position, heightMap, scale,heightScale);
+            
+
+            int hmWidth = heightMap.Width;
+            //hmWidth = 2;
+
+
+			_topNodeSize = hmWidth - 1;
+
+			_vertices = new TreeVertexCollection(heightMap, scale,heightScale);
 			_buffers = new BufferManager(_vertices.Vertices, device);
 			_rootNode = new QuadNode(NodeType.FullNode, _topNodeSize, 1, null, this, 0);
 
@@ -85,8 +103,14 @@ namespace Gladius.Terrain7
 			Effect.Texture = new Texture2D(device, 100, 100);
 			Effect.Projection = projectionMatrix;
 			Effect.View = viewMatrix;
-			Effect.World = Matrix.Identity;
-		}
+            Effect.World = Matrix.CreateTranslation(_position) ;
+
+            int defaultSize = 100;
+            SkirtVertexOA = new ObjectArray<VertexPositionNormalTexture>(defaultSize);
+            SkirtIndexOA = new ObjectArray<int>(defaultSize * 24);
+            
+        
+        }
 
         public Texture2D Texture
         {
@@ -108,7 +132,7 @@ namespace Gladius.Terrain7
 			var clip = ClippingFrustrum.FromFrustrumCorners(VFCorners, CameraPosition);
 			ClipShape = clip.ProjectToTargetY(_position.Y);
 
-			_lastCameraPosition = _cameraPosition;
+			_lastCameraPosition = CameraPosition;
 			IndexCount = 0;
 
 			_rootNode.Merge();
@@ -138,13 +162,29 @@ namespace Gladius.Terrain7
 			Device.Indices = _buffers.IndexBuffer;
             //Device.RasterizerState = _rsWire;
 
+            Effect.World = Matrix.CreateTranslation(_position);
 
-			foreach (var pass in Effect.CurrentTechnique.Passes)
-			{
-				pass.Apply();
-				Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Vertices.Length, 0, IndexCount / 3);
-			}
-            //Device.RasterizerState = _rsDefault;
+            foreach (var pass in Effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Vertices.Length, 0, IndexCount / 3);
+            }
+
+            SkirtVertexOA.Clear();
+            SkirtIndexOA.Clear();
+            _rootNode.BuildSkirt(SkirtVertexOA,SkirtIndexOA);
+            _buffers.SetSkirtData(SkirtVertexOA, SkirtIndexOA);
+            if (SkirtVertexOA.Count > 0)
+            {
+                Device.SetVertexBuffer(_buffers.SkirtVertexBuffer);
+                Device.Indices = _buffers.SkirtIndexBuffer;
+                foreach (var pass in Effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _buffers.SkirtVertexBuffer.VertexCount, 0, _buffers.SkirtIndexBuffer.IndexCount / 3);
+                }
+            }
+            Device.RasterizerState = _rsDefault;
 
 		}
 
