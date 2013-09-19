@@ -1,6 +1,8 @@
 ﻿// Sample taken from http://www.dustinhorne.com/page/XNA-Terrain-Tutorial-Table-of-Contents.aspx - many thanks
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Gladius.util;
 
 namespace Gladius.Terrain7
 {
@@ -62,6 +64,7 @@ namespace Gladius.Terrain7
 			get
 			{
 				return Bounds.Intersects(_parentTree.ClipShape);
+                //return true;
 			}
 		}
 
@@ -172,6 +175,42 @@ namespace Gladius.Terrain7
 
 					break;
 			}
+
+            float skirtSize = 0.3f;
+            int index = 0;
+            m_skirtVertices[0] = _parentTree.Vertices[VertexTopLeft.Index];
+            m_skirtVertices[1] = _parentTree.Vertices[VertexTopRight.Index];
+            m_skirtVertices[2] = _parentTree.Vertices[VertexBottomRight.Index];
+            m_skirtVertices[3] = _parentTree.Vertices[VertexBottomLeft.Index];
+
+
+            //m_skirtVertices[4] = _parentTree.Vertices[VertexTopLeft.Index];
+            //m_skirtVertices[4].Position += new Vector3(-skirtSize,-skirtSize,-skirtSize);
+
+            //m_skirtVertices[5] = _parentTree.Vertices[VertexTopRight.Index];
+            //m_skirtVertices[5].Position += new Vector3(skirtSize, -skirtSize, -skirtSize);
+
+            //m_skirtVertices[6] = _parentTree.Vertices[VertexBottomRight.Index];
+            //m_skirtVertices[6].Position += new Vector3(skirtSize, -skirtSize, skirtSize);
+
+            //m_skirtVertices[7] = _parentTree.Vertices[VertexBottomLeft.Index];
+            //m_skirtVertices[7].Position += new Vector3(-skirtSize, -skirtSize, skirtSize);
+
+
+            Vector3 skirtOffset = new Vector3(0, -skirtSize, 0);
+            m_skirtVertices[4] = _parentTree.Vertices[VertexTopLeft.Index];
+            m_skirtVertices[4].Position += skirtOffset;
+
+            m_skirtVertices[5] = _parentTree.Vertices[VertexTopRight.Index];
+            m_skirtVertices[5].Position += skirtOffset;
+
+            m_skirtVertices[6] = _parentTree.Vertices[VertexBottomRight.Index];
+            m_skirtVertices[6].Position += skirtOffset;
+
+            m_skirtVertices[7] = _parentTree.Vertices[VertexBottomLeft.Index];
+            m_skirtVertices[7].Position += skirtOffset;
+
+
 
 			VertexTop = new QuadNodeVertex
 			{
@@ -533,6 +572,7 @@ namespace Gladius.Terrain7
 		/// </summary>
 		public void Merge()
 		{
+            //return;
 			//Only perform the merge if there are children
 			VertexTop.Activated = false;
 			VertexLeft.Activated = false;
@@ -620,6 +660,73 @@ namespace Gladius.Terrain7
 				if (!neighbor.Parent.IsSplit)
 					neighbor.Parent.Split();
 		}
+
+        public void BuildSkirt(ObjectArray<VertexPositionNormalTexture> vertices, ObjectArray<int> indices)
+        {
+            // only add skirts for active nodes. if we're not then check children.
+            if (IsActive)
+            {
+                int vcount = vertices.Count;
+                for (int i = 0; i < m_skirtVertices.Length; ++i)
+                {
+                    vertices.Add(m_skirtVertices[i]);
+                }
+
+                int icount = vcount;
+
+                indices.Add(icount);
+                indices.Add(icount + 4);
+                indices.Add(icount + 5);
+
+                indices.Add(icount + 5);
+                indices.Add(icount + 1);
+                indices.Add(icount);
+
+                indices.Add(icount + 1);
+                indices.Add(icount + 5);
+                indices.Add(icount + 6);
+
+                indices.Add(icount + 6);
+                indices.Add(icount + 2);
+                indices.Add(icount + 1);
+
+                indices.Add(icount + 2);
+                indices.Add(icount + 6);
+                indices.Add(icount + 7);
+
+                indices.Add(icount + 7);
+                indices.Add(icount + 3);
+                indices.Add(icount + 2);
+
+                indices.Add(icount + 3);
+                indices.Add(icount + 7);
+                indices.Add(icount + 4);
+
+                indices.Add(icount + 4);
+                indices.Add(icount);
+                indices.Add(icount + 3);
+            }
+            else
+            {
+                int depthCheck = 20;
+
+                if (HasChildren && _nodeDepth < depthCheck)
+                {
+                    ChildTopLeft.BuildSkirt(vertices, indices);
+                    ChildTopRight.BuildSkirt(vertices, indices);
+                    ChildBottomLeft.BuildSkirt(vertices, indices);
+                    ChildBottomRight.BuildSkirt(vertices, indices);
+                }
+            }
+        }
+
+
+
+        public VertexPositionNormalTexture[] m_skirtVertices = new VertexPositionNormalTexture[8];
+
+
+
+
 	}
 }
 

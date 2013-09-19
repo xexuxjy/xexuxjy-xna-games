@@ -8,7 +8,6 @@ namespace Gladius.Terrain7
 	public class TreeVertexCollection
 	{
 		public VertexPositionNormalTexture[] Vertices;
-		Vector3 _position;
 		int _topSize;
 		int _halfSize;
 		int _vertexCount;
@@ -22,50 +21,70 @@ namespace Gladius.Terrain7
 		}
 
 
-		public TreeVertexCollection(Vector3 position, Texture2D heightMap, int scale,float heightScaling)
+		public TreeVertexCollection(Texture2D heightMap, int scale,float heightScaling)
 		{
+            int hmWidth = heightMap.Width;
+            //hmWidth = 2;
+
 			_scale = scale;
-			_topSize = heightMap.Width - 1;
+			_topSize = hmWidth - 1;
 			_halfSize = _topSize / 2;
-			_position = position;
-			_vertexCount = heightMap.Width * heightMap.Width;
+            _vertexCount = hmWidth * hmWidth;
             _heightScaling = heightScaling;
 
 			//Initialize our array to hold the vertices
 			Vertices = new VertexPositionNormalTexture[_vertexCount];
 
 			//Our method to populate the vertex collection
-			BuildVertices(heightMap);
+			BuildVertices(heightMap,hmWidth);
 
 			//Our method to  calculate the normals for all vertices
 			CalculateAllNormals();
 		}
 
-		private void BuildVertices(Texture2D heightMap)
+		private void BuildVertices(Texture2D heightMap,int hmWidth)
 		{
-			var heightMapColors = new Color[_vertexCount];
-			heightMap.GetData(heightMapColors);
+            var heightMapColors = new Color[_vertexCount];
+            heightMap.GetData(heightMapColors);
 
-			float x = _position.X;
-			float z = _position.Z;
-			float y = _position.Y;
+			float x = 0;
+			float z = 0;
+			float y = 0;
 			float maxX = x + _topSize;
+
+            float fixHeight = 0f;
 
 			for (int i = 0; i < _vertexCount; i++)
 			{
 				if (x > maxX)
 				{
-					x = _position.X;
+					x = 0;
 					z++;
 				}
 
-				y = _position.Y + (heightMapColors[i].R / _heightScaling);
+				y = (heightMapColors[i].R / _heightScaling);
+                //y = fixHeight;
+
+
 				var vert = new VertexPositionNormalTexture(new Vector3(x * _scale, y * _scale, z * _scale), Vector3.Zero, Vector2.Zero);
-				vert.TextureCoordinate = new Vector2((vert.Position.X - _position.X) / _topSize, (vert.Position.Z - _position.Z) / _topSize);
+				vert.TextureCoordinate = new Vector2((vert.Position.X) / _topSize, (vert.Position.Z) / _topSize);
 				Vertices[i] = vert;
 				x++;
 			}
 		}
+
+        private void BuildSkirts()
+        {
+            // each node level needs an aditional 4 vertices to hold the skirt values.
+            int baseNumVertices = Vertices.Length;
+            int depth = 6;
+
+            int skirtIndicesPerNode = 24;
+            int len = (4 * depth * skirtIndicesPerNode);
+
+
+        }
+
 
 		private void CalculateAllNormals()
 		{
@@ -95,9 +114,22 @@ namespace Gladius.Terrain7
 				SetNormals(i, k, i - 1);
 				SetNormals(i, i - 1, j);
 			}
+
+            for (int n = 0; n < Vertices.Length; ++n)
+            {
+                if (Vertices[n].Normal.LengthSquared() != 0)
+                {
+                    Vertices[n].Normal.Normalize();
+                }
+                else
+                {
+                    Vertices[n].Normal = Vector3.Up;
+                }
+            }
+
 		}
 
-		private void SetNormals(int idx1, int idx2, int idx3)
+        private void SetNormals(int idx1, int idx2, int idx3)
 		{
 			if (idx3 >= Vertices.Length)
 				idx3 = Vertices.Length - 1;
