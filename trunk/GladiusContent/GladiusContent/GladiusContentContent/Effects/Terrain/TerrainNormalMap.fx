@@ -1,13 +1,13 @@
 float TexelWidth;
 texture HeightMapTexture;
 
-float normalStrength = 8.0f;
+uniform float normalStrength = 8.0f;
 
 
 uniform sampler NormalMapSamplerPS = sampler_state
 {
-    Texture   = (HeightMapTexture);
-    MipFilter = None;
+    Texture   = <HeightMapTexture>;
+    MipFilter = Linear;
     MinFilter = Point;
     MagFilter = Point;
     AddressU  = Clamp;
@@ -58,17 +58,27 @@ float4 ComputeNormalsPS(in VertexShaderOutput input) : COLOR0
     //           -2 0 2
     //           -1 0 1
     float dX = tr + 2*r + br -tl - 2*l - bl;
-
+	//float dX = l + r;
     // Compute dy using Sobel:
     //           -1 -2 -1 
     //            0  0  0
     //            1  2  1
     float dY = bl + 2*b + br -tl - 2*t - tr;
+	//float dY = t + b;
+
+
+	float c = tex2D(NormalMapSamplerPS,input.TexCoord).x;
 
     // Compute cross-product and renormalize
-    float4 N = float4(normalize(float3(dX, 1.0f / normalStrength, dY)), 1.0f);
+    //float4 N = float4(normalize(float3(dX, 1.0f / normalStrength, dY)), 1.0f);
+	float3 normalVal = float3(dX, 1.0f / normalStrength, dY);
+	normalVal = normalize(normalVal);
+	float4 N = float4(normalVal, 1);
     //convert (-1.0 , 1.0) to (0.0 , 1.0);
     return N * 0.5f + 0.5f;
+	//return float4(1,0,0,0);
+	//return N;
+	
 }
 
 technique ComputeNormals

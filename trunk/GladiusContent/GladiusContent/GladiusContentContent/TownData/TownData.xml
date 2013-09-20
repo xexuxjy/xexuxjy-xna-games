@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Towns>
+  <Town name="Town1" x="30" y="0" z="30" r="3"/>
+  <Town name="Town2" x="60" y="0" z="30" r="3"/>
+  <Town name="Town3" x="30" y="0" z="60" r="3"/>
+  <Town name="Town4" x="60" y="0" z="60" r="3"/>
+</Towns>
