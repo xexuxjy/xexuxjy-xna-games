@@ -14,12 +14,16 @@ namespace Gladius.renderer.animation
 {
     public class AnimatedModel
     {
-        public AnimatedModel(BaseActor baseActor)
+        public AnimatedModel()
         {
-            m_baseActor = baseActor;
             ModelRotation = Quaternion.Identity;
         }
 
+        public String ModelName
+        {
+            get;
+            set;
+        }
 
         public Quaternion ModelRotation
         {
@@ -61,7 +65,7 @@ namespace Gladius.renderer.animation
         public void LoadContent(ContentManager content)
         {
             // Load the model.
-            m_model = content.Load<Model>(m_baseActor.ModelName);
+            m_model = content.Load<Model>(ModelName);
             BoundingBox bb = new BoundingBox();
             foreach (ModelMesh mesh in m_model.Meshes)
             {
@@ -73,7 +77,8 @@ namespace Gladius.renderer.animation
             Vector3 diff = bb.Max - bb.Min;
             float maxSpan = Math.Max(diff.X, Math.Max(diff.Y, diff.Z));
             //BoundingSphere actorBs = m_model.Meshes[0].BoundingSphere;
-            m_baseActorScale = new Vector3(1f / maxSpan);
+            //m_baseActorScale = new Vector3(1f / maxSpan);
+            m_baseActorScale = Vector3.One;
 
             // Look up our custom skinning information.
             SkinningData skinningData = m_model.Tag as SkinningData;
@@ -97,6 +102,17 @@ namespace Gladius.renderer.animation
             m_clipNameDictionary[AnimationEnum.Cast] = "Cast";
         }
 
+        public Quaternion ActorRotation
+        {
+            get;
+            set;
+        }
+
+        public Vector3 ActorPosition
+        {
+            get;
+            set;
+        }
 
         public void Draw(GraphicsDevice device, ICamera camera, GameTime gameTime)
         {
@@ -110,7 +126,7 @@ namespace Gladius.renderer.animation
             //Quaternion q = Quaternion.C
 
 
-            Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateFromQuaternion(m_baseActor.Rotation * ModelRotation) * Matrix.CreateTranslation(m_baseActor.Position);
+            Matrix world = Matrix.CreateScale(m_baseActorScale) * Matrix.CreateFromQuaternion(ActorRotation * ModelRotation) * Matrix.CreateTranslation(ActorPosition);
 
             
 
@@ -174,7 +190,7 @@ namespace Gladius.renderer.animation
                     m_currentAnimationClip = m_skinningData.AnimationClips[clipName];
                     if (m_currentAnimationClip != null)
                     {
-                        Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation [{0}] [{1}] [{2}][{3}]", m_baseActor.DebugName, animationEnum, clipName, loopClip));
+                        Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation [{0}] [{1}] [{2}][{3}]", DebugName, animationEnum, clipName, loopClip));
                         m_animationPlayer.StartClip(m_currentAnimationClip, loopClip);
                         if (OnAnimationStarted != null)
                         {
@@ -184,7 +200,7 @@ namespace Gladius.renderer.animation
                 }
                 else
                 {
-                    Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation FailedNoMatch [{0}] [{1}]", m_baseActor.DebugName, animationEnum));
+                    Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation FailedNoMatch [{0}] [{1}]", DebugName, animationEnum));
                 }
             }
         }
@@ -292,7 +308,13 @@ namespace Gladius.renderer.animation
             effect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
             effect.EmissiveColor = new Vector3(1);
         }
-    
+
+        public String DebugName
+        {
+            get;
+            set;
+        }
+
         
         public delegate void AnimationStarted(AnimationEnum anim);
         public delegate void AnimationStopped(AnimationEnum anim);
@@ -309,7 +331,6 @@ namespace Gladius.renderer.animation
         private Vector3 m_baseActorScale;
         private AnimationClip m_currentAnimationClip;
         private AnimationEnum m_currentAnimationEnum = AnimationEnum.None;
-        private BaseActor m_baseActor;
         private Model m_model;
         private AnimationPlayer m_animationPlayer;
         private SkinningData m_skinningData;

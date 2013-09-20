@@ -82,6 +82,7 @@
     <Compile Include="gamestatemanagement\screens\TownScreen.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="MainGame.cs" />
+    <Compile Include="modes\overland\Party.cs" />
     <Compile Include="modes\overland\TownManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

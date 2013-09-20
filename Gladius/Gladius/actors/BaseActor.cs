@@ -21,10 +21,11 @@ namespace Gladius.actors
     {
         public BaseActor(GameScreen gameScreen) : base(gameScreen)
         {
-            m_animatedModel = new AnimatedModel(this);
+
             m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
             m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
+            m_animatedModel = new AnimatedModel();
             m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
             SetupAttributes();
         }
@@ -93,14 +94,28 @@ namespace Gladius.actors
 
         public String DebugName
         {
-            get;
-            set;
+            get
+            {
+                return m_debugName;
+            }
+
+            set
+            {
+                m_debugName = value;
+                m_animatedModel.DebugName = value;
+            }
         }
 
         public String ModelName
         {
-            get;
-            set;
+            get
+            {
+                return m_animatedModel.ModelName;
+            }
+            set
+            {
+                m_animatedModel.ModelName = value;
+            }
         }
 
         public Arena Arena
@@ -220,6 +235,8 @@ namespace Gladius.actors
         {
             if (m_animatedModel != null)
             {
+                m_animatedModel.ActorRotation= Rotation;
+                m_animatedModel.ActorPosition = Position;
                 m_animatedModel.Update(gameTime);
             }
 
@@ -633,7 +650,7 @@ namespace Gladius.actors
 
         private Model m_leftHandModel;
         private Model m_rightHandModel;
-
+        private String m_debugName;
 
 
     }
