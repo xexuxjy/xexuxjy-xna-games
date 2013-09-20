@@ -12,6 +12,11 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using System.IO;
+using Gladius.gamestatemanagement.screens;
+using System.Collections.Generic;
+using Gladius.util;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 #endregion
 
 namespace GameStateManagement
@@ -352,5 +357,31 @@ namespace GameStateManagement
 
 
         #endregion
+
+        public ContentManager ContentManager
+        {
+            get
+            {
+                return m_content;
+            }
+        }
+
+
+        protected ContentManager m_content;
+        protected SpriteFont m_gameFont;
+        protected SpriteBatch m_spriteBatch;
+
+        protected float pauseAlpha;
+
+        protected volatile GameTime gameTime;
+
+        protected int m_updateCalls;
+        protected int m_drawCalls;
+
+
+        protected ScreenGameComponents m_screenComponents;
+        protected List<IUIElement> m_uiElementsList = new List<IUIElement>();
+
+
     }
 }

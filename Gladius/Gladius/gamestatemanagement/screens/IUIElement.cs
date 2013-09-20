@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Dhpoware;
 using GameStateManagement;
 using Gladius.actors;
+using Gladius.modes.arena;
 
 namespace Gladius.gamestatemanagement.screens
 {

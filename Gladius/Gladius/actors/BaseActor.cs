@@ -5,7 +5,6 @@ using System.Text;
 using xexuxjy.Gladius.util;
 using Microsoft.Xna.Framework;
 using Gladius.combat;
-using Gladius.actions;
 using Gladius.renderer;
 using Microsoft.Xna.Framework.Graphics;
 using Dhpoware;
@@ -13,19 +12,35 @@ using Gladius.renderer.animation;
 using Microsoft.Xna.Framework.Content;
 using Gladius.util;
 using Gladius.control;
+using Gladius.modes.arena;
+using GameStateManagement;
 
 namespace Gladius.actors
 {
-    public class BaseActor : DrawableGameComponent
+    public class BaseActor : GameScreenComponent
     {
-        public BaseActor(Game game) : base(game)
+        public BaseActor(GameScreen gameScreen) : base(gameScreen)
         {
             m_animatedModel = new AnimatedModel(this);
             m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
             m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
             m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
+            SetupAttributes();
         }
+
+        public void SetupAttributes()
+        {
+            
+            m_attributeDictionary[GameObjectAttributeType.Health] = new BoundedAttribute(100);
+            m_attributeDictionary[GameObjectAttributeType.Agility] = new BoundedAttribute(10);
+
+            
+
+
+
+        }
+
 
         void m_animatedModel_OnAnimationStarted(AnimationEnum anim)
         {
@@ -112,11 +127,11 @@ namespace Gladius.actors
             }
         }
 
-        public void LoadContent(ContentManager contentManager)
+        public void LoadContent()
         {
             if (m_animatedModel != null)
             {
-                m_animatedModel.LoadContent(contentManager);
+                m_animatedModel.LoadContent(ContentManager);
 
                 // test for now.
                 m_animatedModel.SetMeshActive("w_helmet_01", false);
@@ -201,7 +216,7 @@ namespace Gladius.actors
         }
 
 
-        public override void Update(GameTime gameTime)
+        public override void VariableUpdate(GameTime gameTime)
         {
             if (m_animatedModel != null)
             {
@@ -360,16 +375,16 @@ namespace Gladius.actors
             m_animatedModel.PlayAnimation(AnimationEnum.Attack1,false);
             Attacking = true;
             AttackRequested = false;
+            Globals.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
         }
-
-
-
 
         public void StopAttack()
         {
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack stopped.", DebugName));
             m_currentTarget = null;
             Attacking = false;
+            // FIXME - need to worry about out of turn attacks (ripostes, groups etc)
+            TurnComplete = true;
         }
 
         public void UpdateAttack(GameTime gameTime)
@@ -398,6 +413,8 @@ namespace Gladius.actors
         public void StartDeath()
         {
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death started.", DebugName));
+            m_animatedModel.PlayAnimation(AnimationEnum.Die, false);
+
 
         }
 
@@ -414,6 +431,21 @@ namespace Gladius.actors
                 StartDeath();
             }
         }
+
+        public void StartBlock(BaseActor attacker)
+        {
+            SnapToFace(attacker);
+            m_animatedModel.PlayAnimation(AnimationEnum.Block,false);
+        }
+
+        public void EndBlock()
+        {
+
+
+        }
+
+
+
 
         //public virtual void StartAction(ActionTypes actionType)
         //{
@@ -544,7 +576,7 @@ namespace Gladius.actors
         public void SetupSkills(AttackSkillDictionary skillDictionary)
         {
             // simple for now.
-            m_knownAttacks = new List<AttackSkill>();
+            m_knownAttacks.Clear();
             foreach (AttackSkill attackSkill in skillDictionary.Data.Values)
             {
                 m_knownAttacks.Add(attackSkill);
@@ -586,8 +618,8 @@ namespace Gladius.actors
         private List<BaseActor> m_threatList = new List<BaseActor>();
         private List<Point> m_wayPointList = new List<Point>();
 
-        private List<AttackSkill> m_knownAttacks;
-        private Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary;
+        private List<AttackSkill> m_knownAttacks = new List<AttackSkill>();
+        private Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType,BoundedAttribute>();
         private AnimatedModel m_animatedModel;
 
         private float m_movementSpeed = 2f;

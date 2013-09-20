@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Gladius.gamestatemanagement.screens;
 using Gladius.combat;
+using Gladius.modes.arena;
 
 namespace Gladius.control
 {

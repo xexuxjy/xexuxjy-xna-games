@@ -8,6 +8,7 @@ using System.Diagnostics;
 using GameStateManagement;
 using Gladius.events;
 using Gladius.gamestatemanagement.screens;
+using Gladius.modes.arena;
 
 namespace Gladius.control
 {
