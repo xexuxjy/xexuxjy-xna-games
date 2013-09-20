@@ -88,6 +88,10 @@ namespace Gladius.gamestatemanagement.screens
             Globals.DrawCameraDebugText(m_spriteBatch, m_gameFont, ScreenManager.FPS);
 
 
+            ScreenManager.Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            ScreenManager.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0 || pauseAlpha > 0)
             {
@@ -105,14 +109,14 @@ namespace Gladius.gamestatemanagement.screens
             IGameComponent igc = Globals.Camera as IGameComponent;
             m_screenComponents.Components.Add(igc);
 
-            Globals.Camera.Position = new Vector3(0, 160, -10);
+            Globals.Camera.Position = new Vector3(0, 160, 0);
             Globals.Camera.Acceleration = new Vector3(10);
             Globals.Camera.Velocity = new Vector3(50);
 
             Terrain terrain = new Terrain(this);
             terrain.LoadContent(m_content);
 
-            m_townManager = new TownManager(this);
+            m_townManager = new TownManager(this,terrain);
             m_townManager.LoadContent();
 
             m_screenComponents.Components.Add(m_townManager);

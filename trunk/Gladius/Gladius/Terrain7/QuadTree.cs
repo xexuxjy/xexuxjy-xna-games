@@ -107,7 +107,8 @@ namespace Gladius.Terrain7
             int defaultSize = 100;
             SkirtVertexOA = new ObjectArray<VertexPositionNormalTexture>(defaultSize);
             SkirtIndexOA = new ObjectArray<int>(defaultSize * 24);
-            
+
+            MinimumDepth = 7;
         
         }
 
@@ -168,22 +169,24 @@ namespace Gladius.Terrain7
                 pass.Apply();
                 Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Vertices.Length, 0, IndexCount / 3);
             }
-
-            SkirtVertexOA.Clear();
-            SkirtIndexOA.Clear();
-            _rootNode.BuildSkirt(SkirtVertexOA,SkirtIndexOA);
-            _buffers.SetSkirtData(SkirtVertexOA, SkirtIndexOA);
-            if (SkirtVertexOA.Count > 0)
+            if (SkirtsEnabled)
             {
-                Device.SetVertexBuffer(_buffers.SkirtVertexBuffer);
-                Device.Indices = _buffers.SkirtIndexBuffer;
-                foreach (var pass in Effect.CurrentTechnique.Passes)
+                SkirtVertexOA.Clear();
+                SkirtIndexOA.Clear();
+                _rootNode.BuildSkirt(SkirtVertexOA, SkirtIndexOA);
+                _buffers.SetSkirtData(SkirtVertexOA, SkirtIndexOA);
+                if (SkirtVertexOA.Count > 0)
                 {
-                    pass.Apply();
-                    Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _buffers.SkirtVertexBuffer.VertexCount, 0, _buffers.SkirtIndexBuffer.IndexCount / 3);
+                    Device.SetVertexBuffer(_buffers.SkirtVertexBuffer);
+                    Device.Indices = _buffers.SkirtIndexBuffer;
+                    foreach (var pass in Effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _buffers.SkirtVertexBuffer.VertexCount, 0, _buffers.SkirtIndexBuffer.IndexCount / 3);
+                    }
                 }
             }
-            Device.RasterizerState = _rsDefault;
+            //Device.RasterizerState = _rsDefault;
 
 		}
 
@@ -203,22 +206,30 @@ namespace Gladius.Terrain7
                 Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Vertices.Length, 0, IndexCount / 3);
             }
 
-            SkirtVertexOA.Clear();
-            SkirtIndexOA.Clear();
-            _rootNode.BuildSkirt(SkirtVertexOA, SkirtIndexOA);
-            _buffers.SetSkirtData(SkirtVertexOA, SkirtIndexOA);
-            if (SkirtVertexOA.Count > 0)
+            if (SkirtsEnabled)
             {
-                Device.SetVertexBuffer(_buffers.SkirtVertexBuffer);
-                Device.Indices = _buffers.SkirtIndexBuffer;
-                foreach (var pass in effect.CurrentTechnique.Passes)
+                SkirtVertexOA.Clear();
+                SkirtIndexOA.Clear();
+                _rootNode.BuildSkirt(SkirtVertexOA, SkirtIndexOA);
+                _buffers.SetSkirtData(SkirtVertexOA, SkirtIndexOA);
+                if (SkirtVertexOA.Count > 0)
                 {
-                    pass.Apply();
-                    Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _buffers.SkirtVertexBuffer.VertexCount, 0, _buffers.SkirtIndexBuffer.IndexCount / 3);
+                    Device.SetVertexBuffer(_buffers.SkirtVertexBuffer);
+                    Device.Indices = _buffers.SkirtIndexBuffer;
+                    foreach (var pass in effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _buffers.SkirtVertexBuffer.VertexCount, 0, _buffers.SkirtIndexBuffer.IndexCount / 3);
+                    }
                 }
             }
             Device.RasterizerState = _rsDefault;
+        }
 
+        public bool SkirtsEnabled
+        {
+            get;
+            set;
         }
 
 

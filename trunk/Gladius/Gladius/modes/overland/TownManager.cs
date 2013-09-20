@@ -15,10 +15,11 @@ namespace Gladius.modes.overland
 {
     public class TownManager : GameScreenComponent
     {
-        public TownManager(GameScreen gamescreen)
+        public TownManager(GameScreen gamescreen,Terrain terrain)
             : base(gamescreen)
         {
             UpdateFrequency = 10;
+            m_terrain = terrain;
         }
 
         public override void VariableUpdate(GameTime gameTime)
@@ -68,6 +69,8 @@ namespace Gladius.modes.overland
                 foreach (XmlNode node in nodes)
                 {
                     Town town = new Town(node as XmlElement);
+                    //Vector3 temp = town.Bounds.Center;
+                    m_terrain.GetHeightAtPoint(ref town.Bounds.Center);
                     m_towns.Add(town);
                 }
             }
@@ -86,6 +89,7 @@ namespace Gladius.modes.overland
         private List<Town> m_towns = new List<Town>();
         private Model m_townModel;
         private BasicEffect m_basicEffect;
+        private Terrain m_terrain;
     }
 
 

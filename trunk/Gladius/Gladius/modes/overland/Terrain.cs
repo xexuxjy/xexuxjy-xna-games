@@ -43,9 +43,10 @@ namespace Gladius.modes.overland
             m_terrainEffect.Parameters["BaseTexture"].SetValue(m_surface);
             BuildNormalMap(contentManager);
             //m_terrainEffect.Parameters["BaseTexture"].SetValue(m_normalMap);
-            m_position = new Vector3(m_heightMap.Width,0,m_heightMap.Height)/2f;
-
-            m_quadTree = new QuadTree(-m_position, m_heightMap, Globals.Camera.ViewMatrix, Globals.Camera.ProjectionMatrix, Game.GraphicsDevice, 1, 5.0f);
+            //m_position = new Vector3(m_heightMap.Width,0,m_heightMap.Height)/2f;
+            Vector3 position = new Vector3(m_heightMap.Width, 0, m_heightMap.Height) / 2f;
+            m_position = Vector3.Zero;
+            m_quadTree = new QuadTree(-position, m_heightMap, Globals.Camera.ViewMatrix, Globals.Camera.ProjectionMatrix, Game.GraphicsDevice, 1, 5.0f);
             m_quadTree.Texture = m_surface;
         }
 
@@ -144,6 +145,23 @@ namespace Gladius.modes.overland
             Vector3 lightDir = new Vector3(0, 1, -1);
             lightDir.Normalize();
             effect.Parameters["LightDirection"].SetValue(lightDir);
+        }
+
+        public void GetHeightAtPoint(ref Vector3 input)
+        {
+            // find height at x,z
+            int x1 = (int)input.X;
+            int x2 = (int)(input.X+0.5f);
+
+            int z1 = (int)input.Z;
+            int z2 = (int)(input.Z+0.5f);
+
+            input.Y = (m_quadTree.Vertices.GetHeightAtPoint(x1,z1) + 
+                m_quadTree.Vertices.GetHeightAtPoint(x2,z1) + 
+                m_quadTree.Vertices.GetHeightAtPoint(x1,z2) + 
+                m_quadTree.Vertices.GetHeightAtPoint(x2,z2))/4f;
+            
+            input.Y += 1;
         }
 
         private QuadTree m_quadTree;

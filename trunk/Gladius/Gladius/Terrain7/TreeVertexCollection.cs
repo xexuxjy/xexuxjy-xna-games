@@ -2,6 +2,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace Gladius.Terrain7
 {
@@ -40,6 +41,17 @@ namespace Gladius.Terrain7
 			//Our method to  calculate the normals for all vertices
 			CalculateAllNormals();
 		}
+
+        public float GetHeightAtPoint(int x, int z)
+        {
+            int index = (z * (_topSize + 1)) + x;
+            Debug.Assert(index < Vertices.Length);
+            if (index < Vertices.Length)
+            {
+                return Vertices[index].Position.Y;
+            }
+            return 0f;
+        }
 
 		private void BuildVertices(Texture2D heightMap,int hmWidth)
 		{
