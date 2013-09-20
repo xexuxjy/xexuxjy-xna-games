@@ -53,8 +53,9 @@ namespace Gladius.gamestatemanagement.screens
                 uiElement.Update(gameTime);
             }
 
-
-
+            Vector3 pos = new Vector3();
+            m_terrain.GetHeightAtPoint(ref pos);
+            m_party.Position = pos;
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
@@ -113,18 +114,23 @@ namespace Gladius.gamestatemanagement.screens
             Globals.Camera.Acceleration = new Vector3(10);
             Globals.Camera.Velocity = new Vector3(50);
 
-            Terrain terrain = new Terrain(this);
-            terrain.LoadContent(m_content);
+            m_terrain = new Terrain(this);
+            m_terrain.LoadContent(m_content);
 
-            m_townManager = new TownManager(this,terrain);
+            m_townManager = new TownManager(this,m_terrain);
             m_townManager.LoadContent();
 
+            m_party = new Party(this);
+            m_party.LoadContent();
+            m_screenComponents.Components.Add(m_party);
+            
             m_screenComponents.Components.Add(m_townManager);
 
-            m_screenComponents.Components.Add(terrain);
+            m_screenComponents.Components.Add(m_terrain);
         }
 
         TownManager m_townManager;
-
+        Party m_party;
+        Terrain m_terrain;
     }
 }

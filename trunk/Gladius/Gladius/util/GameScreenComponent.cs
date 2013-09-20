@@ -50,6 +50,19 @@ namespace Gladius.util
 
         }
 
+        public virtual void LoadContent()
+        {
+
+        }
+
+        public virtual void RegisterListeners()
+        {
+        }
+
+        public virtual void UnregisterListeners()
+        {
+        }
+
         public Game Game
         {
             get 
