@@ -24,6 +24,7 @@ using Gladius.combat;
 using Gladius.util;
 using Gladius.gamestatemanagement.screens;
 using GameStateManagement;
+using Gladius.modes.arena;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
@@ -203,7 +204,7 @@ namespace Gladius.gamestatemanagement.screens
 
             Globals.Camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
-            m_arenaRenderer = new SimpleArenaRenderer(m_arena,ScreenManager.Game);
+            m_arenaRenderer = new SimpleArenaRenderer(m_arena,this);
             m_screenComponents.Components.Add(m_arenaRenderer);
             //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
             m_turnManager = new TurnManager(ScreenManager.Game);
@@ -220,9 +221,8 @@ namespace Gladius.gamestatemanagement.screens
             int numActors = 4;
             for (int i = 0; i < numActors; ++i)
             {
-                BaseActor ba1 = new BaseActor(ScreenManager.Game);
+                BaseActor ba1 = new BaseActor(this);
                 ba1.ModelName = modelName;
-                ba1.LoadContent(m_content);
                 ba1.Arena = m_arena;
                 ba1.DebugName = "Monster" + i;
                 actors.Add(ba1);
@@ -330,25 +330,11 @@ namespace Gladius.gamestatemanagement.screens
         #endregion
         #region Fields
 
-        protected int m_updateCalls;
-        protected int m_drawCalls;
-
-
-        ContentManager m_content;
-        SpriteFont m_gameFont;
-        SpriteBatch m_spriteBatch;
-
-        float pauseAlpha;
-
-        private volatile GameTime gameTime;
-
         private SimpleArenaRenderer m_arenaRenderer;
         private Arena m_arena;
 
         protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();
-        protected ScreenGameComponents m_screenComponents;
-        protected List<IUIElement> m_uiElementsList = new List<IUIElement>();
 
         //MovementGrid m_movementGrid;
         //PlayerChoiceBar m_playerChoiceBar;

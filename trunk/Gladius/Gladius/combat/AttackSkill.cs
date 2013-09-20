@@ -104,7 +104,8 @@ namespace Gladius.combat
         None,
         Miss,
         Hit,
-        Critical
+        Critical,
+        Blocked
     }
 
     public enum SkillIcon

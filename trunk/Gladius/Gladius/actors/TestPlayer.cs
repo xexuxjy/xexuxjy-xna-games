@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using xexuxjy.Gladius.util;
+using GameStateManagement;
 
 namespace Gladius.actors
 {
     public class TestPlayer : BaseActor
     {
-        public TestPlayer()
+        public TestPlayer(GameScreen gameScreen) : base
+            (gameScreen)
         {
             Name = "Player";
             SetAttributeValue(GameObjectAttributeType.Health, 100);

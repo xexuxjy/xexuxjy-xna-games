@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.renderer;
+using Gladius.modes.overland;
 
 namespace Gladius.gamestatemanagement.screens
 {
@@ -32,7 +33,7 @@ namespace Gladius.gamestatemanagement.screens
             m_screenComponents = new ScreenGameComponents(ScreenManager.Game);
 
             m_spriteBatch = new SpriteBatch(ScreenManager.Game.GraphicsDevice);
-            m_spriteFont = m_content.Load<SpriteFont>("UI/DebugFont8");
+            m_gameFont = m_content.Load<SpriteFont>("UI/DebugFont8");
 
 
             SetupOverland();
@@ -84,20 +85,7 @@ namespace Gladius.gamestatemanagement.screens
                 }
             }
 
-
-            //m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-            //foreach (IUIElement uiElement in m_uiElementsList)
-            //{
-            //    if (uiElement.Visible)
-            //    {
-            //        uiElement.DrawElement(gameTime, m_spriteBatch);
-            //    }
-            //}
-
-            //m_spriteBatch.End();
-
-            Globals.DrawCameraDebugText(m_spriteBatch, m_spriteFont,ScreenManager.FPS);
+            Globals.DrawCameraDebugText(m_spriteBatch, m_gameFont, ScreenManager.FPS);
 
 
             // If the game is transitioning on or off, fade it out to black.
@@ -121,26 +109,18 @@ namespace Gladius.gamestatemanagement.screens
             Globals.Camera.Acceleration = new Vector3(10);
             Globals.Camera.Velocity = new Vector3(50);
 
-            Terrain terrain = new Terrain(ScreenManager.Game);
+            Terrain terrain = new Terrain(this);
             terrain.LoadContent(m_content);
+
+            m_townManager = new TownManager(this);
+            m_townManager.LoadContent();
+
+            m_screenComponents.Components.Add(m_townManager);
 
             m_screenComponents.Components.Add(terrain);
         }
 
-
-        protected int m_updateCalls;
-        protected int m_drawCalls;
-
-
-        ContentManager m_content;
-        SpriteFont m_spriteFont;
-        SpriteBatch m_spriteBatch;
-
-        float pauseAlpha;
-
-        private volatile GameTime gameTime;
-        protected ScreenGameComponents m_screenComponents;
-        protected List<IUIElement> m_uiElementsList = new List<IUIElement>();
+        TownManager m_townManager;
 
     }
 }

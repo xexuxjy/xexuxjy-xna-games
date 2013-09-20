@@ -16,7 +16,7 @@ namespace Gladius.combat
         }
 
 
-        public AttackResult ResolveAttack(BaseActor attacker, BaseActor defender,AttackSkill attackData)
+        public void ResolveAttack(BaseActor attacker, BaseActor defender,AttackSkill attackData)
         {
             AttackResult attackResult = new AttackResult();
 
@@ -37,7 +37,13 @@ namespace Gladius.combat
                 attackResult.resultType = AttackResultType.Hit;
                 attackResult.damageDone = totalDamage;
             }
-            return attackResult;
+
+            attackResult.resultType = AttackResultType.Blocked;
+
+            if (attackResult.resultType == AttackResultType.Blocked)
+            {
+                defender.StartBlock(attacker);
+            }
         }
 
         public bool IsValidTarget(BaseActor attacker, BaseActor defender)

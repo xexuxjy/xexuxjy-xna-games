@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using Gladius.actors;
 
-namespace Gladius.actors
+namespace Gladius.modes.arena
 {
     public class Arena
     {

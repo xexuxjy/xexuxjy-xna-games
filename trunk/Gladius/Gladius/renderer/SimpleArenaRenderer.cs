@@ -9,25 +9,26 @@ using Dhpoware;
 using Gladius.util;
 using Microsoft.Xna.Framework;
 using Gladius.control;
+using Gladius.modes.arena;
+using GameStateManagement;
 
 namespace Gladius.renderer
 {
-    public class SimpleArenaRenderer : DrawableGameComponent
+    public class SimpleArenaRenderer : GameScreenComponent
     {
-        public SimpleArenaRenderer(Arena arena,Game game) : base(game)
+        public SimpleArenaRenderer(Arena arena,GameScreen gameScreen) : base(gameScreen)
         {
             m_arena = arena;
         }
 
-
-        protected override void LoadContent()
-        {
-            m_boxModel = Game.Content.Load<Model>("UnitCube");
+        public void LoadContent()
+        {   
+            m_boxModel = ContentManager.Load<Model>("UnitCube");
             m_boneTransforms = new Matrix[m_boxModel.Bones.Count];
             m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
 
-            m_baseActorTexture = Game.Content.Load<Texture2D>("Models/ThirdParty/test_m");
-            m_baseActorModel = Game.Content.Load<Model>("Models/ThirdParty/test_XNA");
+            m_baseActorTexture = ContentManager.Load<Texture2D>("Models/ThirdParty/test_m");
+            m_baseActorModel = ContentManager.Load<Model>("Models/ThirdParty/test_XNA");
             m_baseActorBoneTransforms = new Matrix[m_baseActorModel.Bones.Count];
             m_baseActorModel.CopyAbsoluteBoneTransformsTo(m_baseActorBoneTransforms);
 
@@ -35,16 +36,16 @@ namespace Gladius.renderer
             m_baseActorScale = Vector3.One;// new Vector3(1f / actorBs.Radius);
 
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            m_spriteFont = Game.Content.Load<SpriteFont>("UI/DebugFont8");
+            m_spriteFont = ContentManager.Load<SpriteFont>("UI/DebugFont8");
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Draw(Globals.Camera, Game.GraphicsDevice);
+            Draw(Globals.Camera, Game.GraphicsDevice,gameTime);
         }
 
 
-        public void Draw(ICamera camera,GraphicsDevice graphicsDevice)
+        public void Draw(CameraComponent camera,GraphicsDevice graphicsDevice,GameTime gameTime)
         {
             float aspectRatio = graphicsDevice.Viewport.AspectRatio;
 

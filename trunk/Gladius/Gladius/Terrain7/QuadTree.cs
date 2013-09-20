@@ -70,10 +70,9 @@ namespace Gladius.Terrain7
             int hmWidth = heightMap.Width;
             //hmWidth = 2;
 
+            _topNodeSize = hmWidth - 1;
 
-			_topNodeSize = hmWidth - 1;
-
-			_vertices = new TreeVertexCollection(heightMap, scale,heightScale);
+			_vertices = new TreeVertexCollection(heightMap, scale,heightScale,hmWidth);
 			_buffers = new BufferManager(_vertices.Vertices, device);
 			_rootNode = new QuadNode(NodeType.FullNode, _topNodeSize, 1, null, this, 0);
 
@@ -187,6 +186,41 @@ namespace Gladius.Terrain7
             Device.RasterizerState = _rsDefault;
 
 		}
+
+
+        public void DrawEffect(GameTime gameTime,Effect effect)
+        {
+            Device.BlendState = BlendState.Opaque;
+            Device.DepthStencilState = DepthStencilState.Default;
+
+            Device.SetVertexBuffer(_buffers.VertexBuffer);
+            Device.Indices = _buffers.IndexBuffer;
+            //Device.RasterizerState = _rsWire;
+
+            foreach (var pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Vertices.Length, 0, IndexCount / 3);
+            }
+
+            SkirtVertexOA.Clear();
+            SkirtIndexOA.Clear();
+            _rootNode.BuildSkirt(SkirtVertexOA, SkirtIndexOA);
+            _buffers.SetSkirtData(SkirtVertexOA, SkirtIndexOA);
+            if (SkirtVertexOA.Count > 0)
+            {
+                Device.SetVertexBuffer(_buffers.SkirtVertexBuffer);
+                Device.Indices = _buffers.SkirtIndexBuffer;
+                foreach (var pass in effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _buffers.SkirtVertexBuffer.VertexCount, 0, _buffers.SkirtIndexBuffer.IndexCount / 3);
+                }
+            }
+            Device.RasterizerState = _rsDefault;
+
+        }
+
 
 		internal void UpdateBuffer(int vIndex)
 		{

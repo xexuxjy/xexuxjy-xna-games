@@ -21,10 +21,9 @@ namespace Gladius.Terrain7
 		}
 
 
-		public TreeVertexCollection(Texture2D heightMap, int scale,float heightScaling)
+		public TreeVertexCollection(Texture2D heightMap, int scale,float heightScaling,int heightOverride=0)
 		{
-            int hmWidth = heightMap.Width;
-            //hmWidth = 2;
+            int hmWidth = heightOverride > 0 ? heightOverride : heightMap.Width;
 
 			_scale = scale;
 			_topSize = hmWidth - 1;
@@ -63,9 +62,6 @@ namespace Gladius.Terrain7
 				}
 
 				y = (heightMapColors[i].R / _heightScaling);
-                //y = fixHeight;
-
-
 				var vert = new VertexPositionNormalTexture(new Vector3(x * _scale, y * _scale, z * _scale), Vector3.Zero, Vector2.Zero);
 				vert.TextureCoordinate = new Vector2((vert.Position.X) / _topSize, (vert.Position.Z) / _topSize);
 				Vertices[i] = vert;

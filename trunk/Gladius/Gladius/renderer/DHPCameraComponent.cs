@@ -204,6 +204,12 @@ namespace Dhpoware
             set;
         }
 
+        BoundingFrustum BoundingFrustum
+        {
+            get;
+            set;
+        }
+
         //BaseActor FollowTarget
         //{
         //    get;
@@ -309,6 +315,7 @@ namespace Dhpoware
             savedEye = eye;
             savedOrientation = orientation;
             savedAccumPitchDegrees = 0.0f;
+            BoundingFrustum = new BoundingFrustum(Matrix.Identity);
         }
 
         /// <summary>
@@ -835,6 +842,8 @@ namespace Dhpoware
             viewDir.X = -zAxis.X;
             viewDir.Y = -zAxis.Y;
             viewDir.Z = -zAxis.Z;
+
+            BoundingFrustum.Matrix = Matrix.Multiply(ViewMatrix, ProjectionMatrix);
         }
 
         #endregion
@@ -981,6 +990,12 @@ namespace Dhpoware
         public Vector3 ZAxis
         {
             get { return zAxis; }
+        }
+
+        public BoundingFrustum BoundingFrustum
+        {
+            get;
+            set;
         }
 
         #endregion
@@ -2140,6 +2155,19 @@ namespace Dhpoware
         {
             get { return camera.ZAxis; }
         }
+
+        public BoundingFrustum BoundingFrustum
+        {
+            get
+            {
+                return camera.BoundingFrustum;
+            }
+            set
+            {
+                camera.BoundingFrustum = value;
+            }
+        }
+
 
         #endregion
     }
