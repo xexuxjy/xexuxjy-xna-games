@@ -154,6 +154,12 @@ namespace GameStateManagement
                 key == Keys.Down || key == Keys.PageUp || key == Keys.PageDown || key == Keys.A ||
                 key == Keys.W || key == Keys.S || key == Keys.D || key == Keys.Q || key == Keys.Z)));
         }
+
+        public bool IsHeldKey(Keys key)
+        {
+            return CurrentKeyboardStates[(int)ControllingPlayer].IsKeyDown(key);//IsHeldKey(ref CurrentKeyboardStates[(int)ControllingPlayer], key);
+        }
+
         //----------------------------------------------------------------------------------------------
 
         private bool WasReleased(ref KeyboardState old, ref KeyboardState current, Keys key)

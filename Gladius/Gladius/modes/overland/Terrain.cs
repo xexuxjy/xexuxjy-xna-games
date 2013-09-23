@@ -151,17 +151,17 @@ namespace Gladius.modes.overland
         {
             // find height at x,z
             int x1 = (int)input.X;
-            int x2 = (int)(input.X+0.5f);
+            int x2 = (int)(input.X+1f);
 
             int z1 = (int)input.Z;
-            int z2 = (int)(input.Z+0.5f);
+            int z2 = (int)(input.Z+1f);
 
             input.Y = (m_quadTree.Vertices.GetHeightAtPoint(x1,z1) + 
                 m_quadTree.Vertices.GetHeightAtPoint(x2,z1) + 
                 m_quadTree.Vertices.GetHeightAtPoint(x1,z2) + 
                 m_quadTree.Vertices.GetHeightAtPoint(x2,z2))/4f;
             
-            input.Y += 1;
+            //input.Y += 1;
         }
 
         private QuadTree m_quadTree;

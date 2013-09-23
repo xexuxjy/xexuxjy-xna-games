@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Gladius.control;
+using Gladius;
 #endregion
 
 namespace GameStateManagement
@@ -109,7 +110,8 @@ namespace GameStateManagement
             base.Initialize();
 
             isInitialized = true;
-            Game.Components.Add(new UserControl(Game,input));
+            Globals.UserControl = new UserControl(Game, input);
+            Game.Components.Add(Globals.UserControl);
 
         }
 
