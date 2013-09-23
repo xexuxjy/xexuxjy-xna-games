@@ -21,29 +21,47 @@ namespace Gladius.control
         public bool CursorLeftPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.J, m_controllingPlayer, out pi);
+            return m_inputState.IsNewKeyPress(_left, m_controllingPlayer, out pi);
         }
 
         public bool CursorRightPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.L, m_controllingPlayer, out pi);
+            return m_inputState.IsNewKeyPress(_right, m_controllingPlayer, out pi);
 
         }
 
         public bool CursorUpPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.I, m_controllingPlayer, out pi);
+            return m_inputState.IsNewKeyPress(_up, m_controllingPlayer, out pi);
 
         }
 
         public bool CursorDownPressed()
         {
             PlayerIndex pi;
-            return m_inputState.IsNewKeyPress(Keys.K, m_controllingPlayer, out pi);
+            return m_inputState.IsNewKeyPress(_down, m_controllingPlayer, out pi);
 
         }
+
+        public bool CursorLeftHeld()
+        {
+            return m_inputState.IsHeldKey(_left);
+        }
+        public bool CursorRightHeld()
+        {
+            return m_inputState.IsHeldKey(_right);
+        }
+        public bool CursorUpHeld()
+        {
+            return m_inputState.IsHeldKey(_up);
+        }
+        public bool CursorDownHeld()
+        {
+            return m_inputState.IsHeldKey(_down);
+        }
+
 
         public bool Action1Pressed()
         {
@@ -109,6 +127,11 @@ namespace Gladius.control
             }
 
         }
+
+        private Keys _left = Keys.J;
+        private Keys _right = Keys.L;
+        private Keys _up = Keys.I;
+        private Keys _down = Keys.K;
 
 
         private PlayerIndex m_controllingPlayer = PlayerIndex.One;

@@ -189,7 +189,7 @@ namespace Gladius.gamestatemanagement.screens
             m_gameFont.Spacing = -4.0f;
 
 
-            Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
+            //Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
             //m_screenComponents.Components.Add(Globals.UserControl);
 
             Globals.Camera = new Dhpoware.CameraComponent(ScreenManager.Game);
@@ -202,9 +202,11 @@ namespace Gladius.gamestatemanagement.screens
 
             m_arena = new Arena(32, 32);
 
+
             Globals.Camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena,this);
+            m_arenaRenderer.LoadContent();
             m_screenComponents.Components.Add(m_arenaRenderer);
             //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
             m_turnManager = new TurnManager(ScreenManager.Game);
@@ -225,6 +227,7 @@ namespace Gladius.gamestatemanagement.screens
                 ba1.ModelName = modelName;
                 ba1.Arena = m_arena;
                 ba1.DebugName = "Monster" + i;
+                ba1.LoadContent();
                 actors.Add(ba1);
                 m_screenComponents.Components.Add(ba1);
                 ba1.SetupSkills(Globals.AttackSkillDictionary);

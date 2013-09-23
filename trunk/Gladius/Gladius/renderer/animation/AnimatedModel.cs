@@ -14,9 +14,10 @@ namespace Gladius.renderer.animation
 {
     public class AnimatedModel
     {
-        public AnimatedModel()
+        public AnimatedModel(float desiredScale=1f)
         {
             ModelRotation = Quaternion.Identity;
+            m_desiredScale = desiredScale;
         }
 
         public String ModelName
@@ -77,8 +78,11 @@ namespace Gladius.renderer.animation
             Vector3 diff = bb.Max - bb.Min;
             float maxSpan = Math.Max(diff.X, Math.Max(diff.Y, diff.Z));
             //BoundingSphere actorBs = m_model.Meshes[0].BoundingSphere;
-            //m_baseActorScale = new Vector3(1f / maxSpan);
-            m_baseActorScale = Vector3.One;
+            m_baseActorScale = new Vector3(m_desiredScale/ maxSpan);
+
+            BoundingBox = new BoundingBox(bb.Min * m_baseActorScale, bb.Max * m_baseActorScale);
+
+            //m_baseActorScale = Vector3.One;
 
             // Look up our custom skinning information.
             SkinningData skinningData = m_model.Tag as SkinningData;
@@ -321,19 +325,25 @@ namespace Gladius.renderer.animation
         public event AnimationStarted OnAnimationStarted;
         public event AnimationStopped OnAnimationStopped;
 
-
+        public BoundingBox BoundingBox
+        {
+            get;
+            set;
+        }
 
 
         private Dictionary<String, bool> m_meshActiveDictionary = new Dictionary<String, bool>();
 
         private Dictionary<AnimationEnum, String> m_clipNameDictionary = new Dictionary<AnimationEnum, string>();
 
+        private float m_desiredScale;
         private Vector3 m_baseActorScale;
         private AnimationClip m_currentAnimationClip;
         private AnimationEnum m_currentAnimationEnum = AnimationEnum.None;
         private Model m_model;
         private AnimationPlayer m_animationPlayer;
         private SkinningData m_skinningData;
+
     }
 
 

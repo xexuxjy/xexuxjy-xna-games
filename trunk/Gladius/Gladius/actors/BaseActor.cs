@@ -22,10 +22,10 @@ namespace Gladius.actors
         public BaseActor(GameScreen gameScreen) : base(gameScreen)
         {
 
+            m_animatedModel = new AnimatedModel();
             m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
             m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
-            m_animatedModel = new AnimatedModel();
             m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
             SetupAttributes();
         }

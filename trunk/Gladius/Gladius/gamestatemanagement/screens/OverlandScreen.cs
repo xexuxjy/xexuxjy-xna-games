@@ -53,9 +53,11 @@ namespace Gladius.gamestatemanagement.screens
                 uiElement.Update(gameTime);
             }
 
-            Vector3 pos = new Vector3();
-            m_terrain.GetHeightAtPoint(ref pos);
-            m_party.Position = pos;
+            Matrix model = Matrix.CreateFromQuaternion(m_party.Rotation);
+            float followDistance = 5f;
+            Vector3 offset = model.Backward* followDistance;
+            Globals.Camera.LookAt(m_party.LookAtPoint + offset, m_party.LookAtPoint, Vector3.Up);
+
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
@@ -73,6 +75,9 @@ namespace Gladius.gamestatemanagement.screens
             m_drawCalls++;
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
+
+            ScreenManager.Game.GraphicsDevice.BlendState = BlendState.Opaque;
+            ScreenManager.Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             m_screenComponents.Draw(gameTime);
 
@@ -120,8 +125,9 @@ namespace Gladius.gamestatemanagement.screens
             m_townManager = new TownManager(this,m_terrain);
             m_townManager.LoadContent();
 
-            m_party = new Party(this);
+            m_party = new Party(this,m_terrain);
             m_party.LoadContent();
+            m_party.RegisterListeners();
             m_screenComponents.Components.Add(m_party);
             
             m_screenComponents.Components.Add(m_townManager);

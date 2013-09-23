@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using System;
 
 namespace Gladius.Terrain7
 {
@@ -44,7 +45,11 @@ namespace Gladius.Terrain7
 
         public float GetHeightAtPoint(int x, int z)
         {
-            int index = (z * (_topSize + 1)) + x;
+            int width = (_topSize + 1);
+            x = MathHelper.Clamp(x,0, width);
+            z = MathHelper.Clamp(z, 0, width);
+
+            int index = (z * width) + x;
             Debug.Assert(index < Vertices.Length);
             if (index < Vertices.Length)
             {
