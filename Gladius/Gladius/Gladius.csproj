@@ -88,7 +88,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="renderer\animation\AnimatedModel.cs" />
     <Compile Include="renderer\animation\AnimationEvent.cs" />
+    <Compile Include="renderer\ChaseCamera.cs" />
     <Compile Include="renderer\DHPCameraComponent.cs" />
+    <Compile Include="renderer\ICamera.cs" />
     <Compile Include="renderer\ScreenQuad.cs" />
     <Compile Include="renderer\SimpleArenaRenderer.cs" />
     <Compile Include="renderer\SimpleQuad.cs" />

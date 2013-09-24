@@ -5,8 +5,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Content;
-using Dhpoware;
 using Microsoft.Xna.Framework.Graphics;
+using Gladius.renderer;
 
 namespace Gladius.util
 {

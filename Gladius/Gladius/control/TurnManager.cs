@@ -23,7 +23,7 @@ namespace Gladius.control
         {
             if (CurrentActor != null)
             {
-                Globals.Camera.LookAt(CurrentActor.CameraFocusPoint);
+                Globals.Camera.Target = CurrentActor.CameraFocusPoint;
             }
 
             if (CurrentActor == null || CurrentActor.TurnComplete)
@@ -63,7 +63,7 @@ namespace Gladius.control
         public void StartTurn()
         {
             //Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.Orbit;
-            Globals.Camera.LookAt(CurrentActor.Position);
+            Globals.Camera.Target = CurrentActor.Position;
 
             CurrentActor.StartTurn();
             //Globals.MovementGrid.SelectedActor = CurrentActor;

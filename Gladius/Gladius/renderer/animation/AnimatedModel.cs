@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Dhpoware;
 using Gladius.actors;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -154,8 +153,8 @@ namespace Gladius.renderer.animation
                         //skinnedEffect.SetBoneTransforms(bones);
                         skinnedEffect.SetBoneTransforms(m_animationPlayer.SkinTransforms);
 
-                        skinnedEffect.View = camera.ViewMatrix;
-                        skinnedEffect.Projection = camera.ProjectionMatrix;
+                        skinnedEffect.View = camera.View;
+                        skinnedEffect.Projection = camera.Projection;
 
                         ApplyLighting(skinnedEffect);
                     }
@@ -167,8 +166,8 @@ namespace Gladius.renderer.animation
                             basicEffect.World = boneWorld;
                             //basicEffect.SetBoneTransforms(bones);
 
-                            basicEffect.View = camera.ViewMatrix;
-                            basicEffect.Projection = camera.ProjectionMatrix;
+                            basicEffect.View = camera.View;
+                            basicEffect.Projection = camera.Projection;
 
                             basicEffect.EnableDefaultLighting();
 

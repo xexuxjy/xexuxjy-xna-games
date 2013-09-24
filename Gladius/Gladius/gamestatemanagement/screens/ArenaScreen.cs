@@ -14,7 +14,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Dhpoware;
 using System.Collections.Generic;
 using Gladius.renderer;
 using Gladius.actors;
@@ -192,8 +191,8 @@ namespace Gladius.gamestatemanagement.screens
             //Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
             //m_screenComponents.Components.Add(Globals.UserControl);
 
-            Globals.Camera = new Dhpoware.CameraComponent(ScreenManager.Game);
-            Globals.Camera.HandleInput(ScreenManager.input);
+            Globals.Camera = new ChaseCamera();
+            Globals.Camera.UpdateInput(ScreenManager.input);
     
             //IGameComponent igc = m_camera as IGameComponent;
             m_screenComponents.Components.Add(Globals.Camera);
@@ -203,7 +202,7 @@ namespace Gladius.gamestatemanagement.screens
             m_arena = new Arena(32, 32);
 
 
-            Globals.Camera.CurrentBehavior = Camera.Behavior.FirstPerson;
+            //Globals.Camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena,this);
             m_arenaRenderer.LoadContent();

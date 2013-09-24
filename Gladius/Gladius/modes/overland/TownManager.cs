@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Xml;
 using Microsoft.Xna.Framework.Content;
-using Dhpoware;
 using Gladius.util;
 using GameStateManagement;
+using Gladius.renderer;
 
 namespace Gladius.modes.overland
 {
@@ -39,10 +39,10 @@ namespace Gladius.modes.overland
             Draw(Globals.Camera, Game.GraphicsDevice,gameTime);
         }
 
-        public void Draw(CameraComponent camera, GraphicsDevice graphicsDevice,GameTime gmmeTime)
+        public void Draw(ICamera camera, GraphicsDevice graphicsDevice,GameTime gmmeTime)
         {
-            m_basicEffect.Projection = camera.ProjectionMatrix;
-            m_basicEffect.View = camera.ViewMatrix;
+            m_basicEffect.Projection = camera.Projection;
+            m_basicEffect.View = camera.View;
 
             foreach (Town town in m_towns)
             {
