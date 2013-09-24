@@ -5,7 +5,6 @@ using System.Text;
 using Gladius.actors;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Dhpoware;
 using Gladius.util;
 using Microsoft.Xna.Framework;
 using Gladius.control;
@@ -45,12 +44,12 @@ namespace Gladius.renderer
         }
 
 
-        public void Draw(CameraComponent camera,GraphicsDevice graphicsDevice,GameTime gameTime)
+        public void Draw(ICamera camera,GraphicsDevice graphicsDevice,GameTime gameTime)
         {
             float aspectRatio = graphicsDevice.Viewport.AspectRatio;
 
-            m_projection = camera.ProjectionMatrix;
-            m_view = camera.ViewMatrix;
+            m_projection = camera.Projection;
+            m_view = camera.View;
 
 
             // Draw the ground....

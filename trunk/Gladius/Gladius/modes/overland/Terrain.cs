@@ -46,14 +46,14 @@ namespace Gladius.modes.overland
             //m_position = new Vector3(m_heightMap.Width,0,m_heightMap.Height)/2f;
             Vector3 position = new Vector3(m_heightMap.Width, 0, m_heightMap.Height) / 2f;
             m_position = Vector3.Zero;
-            m_quadTree = new QuadTree(-position, m_heightMap, Globals.Camera.ViewMatrix, Globals.Camera.ProjectionMatrix, Game.GraphicsDevice, 1, 5.0f);
+            m_quadTree = new QuadTree(-position, m_heightMap, Globals.Camera.View, Globals.Camera.Projection, Game.GraphicsDevice, 1, 5.0f);
             m_quadTree.Texture = m_surface;
         }
 
         public override void VariableUpdate(GameTime gameTime)
         {
-            m_quadTree.View = Globals.Camera.ViewMatrix;
-            m_quadTree.Projection = Globals.Camera.ProjectionMatrix;
+            m_quadTree.View = Globals.Camera.View;
+            m_quadTree.Projection = Globals.Camera.Projection;
             m_quadTree.CameraPosition = Globals.Camera.Position;
             m_quadTree.Update(gameTime);
         }
@@ -61,8 +61,8 @@ namespace Gladius.modes.overland
         public override void Draw(GameTime gameTime)
         {
             //m_terrainEffect.Parameters["CameraPosition"].SetValue(Globals.Camera.Position);
-            m_terrainEffect.Parameters["View"].SetValue(Globals.Camera.ViewMatrix);
-            m_terrainEffect.Parameters["Projection"].SetValue(Globals.Camera.ProjectionMatrix);
+            m_terrainEffect.Parameters["View"].SetValue(Globals.Camera.View);
+            m_terrainEffect.Parameters["Projection"].SetValue(Globals.Camera.Projection);
             m_terrainEffect.Parameters["World"].SetValue(Matrix.CreateTranslation(m_position));
             ApplyLightToEffect(m_terrainEffect);
             m_quadTree.DrawEffect(gameTime,m_terrainEffect);
@@ -156,10 +156,34 @@ namespace Gladius.modes.overland
             int z1 = (int)input.Z;
             int z2 = (int)(input.Z+1f);
 
-            input.Y = (m_quadTree.Vertices.GetHeightAtPoint(x1,z1) + 
-                m_quadTree.Vertices.GetHeightAtPoint(x2,z1) + 
-                m_quadTree.Vertices.GetHeightAtPoint(x1,z2) + 
-                m_quadTree.Vertices.GetHeightAtPoint(x2,z2))/4f;
+            float xrem = input.X%1;
+            float zrem = input.Z % 1;
+
+            float tl = m_quadTree.Vertices.GetHeightAtPoint(x1, z1);
+            float tr = m_quadTree.Vertices.GetHeightAtPoint(x2, z1);
+            float bl = m_quadTree.Vertices.GetHeightAtPoint(x1, z2);
+            float br = m_quadTree.Vertices.GetHeightAtPoint(x2, z2);
+
+            float val1 = MathHelper.Lerp(tl,tr,xrem);
+            float val2 = MathHelper.Lerp(tl,bl,zrem);
+            float val3 = MathHelper.Lerp(bl,br,xrem);
+            float val4 = MathHelper.Lerp(tr,br,zrem);
+
+            float val5 = MathHelper.Lerp(val1,val3,zrem);
+            float val6 = MathHelper.Lerp(val2,val4,xrem);
+
+            input.Y = val5;
+
+
+            //float xdiff = tr - tl;
+            //float zdiff = 
+
+            //float xDiff = Math.lerp((,tl,tr);
+
+            //input.Y = (m_quadTree.Vertices.GetHeightAtPoint(x1,z1) + 
+            //    m_quadTree.Vertices.GetHeightAtPoint(x2,z1) + 
+            //    m_quadTree.Vertices.GetHeightAtPoint(x1,z2) + 
+            //    m_quadTree.Vertices.GetHeightAtPoint(x2,z2))/4f;
             
             //input.Y += 1;
         }

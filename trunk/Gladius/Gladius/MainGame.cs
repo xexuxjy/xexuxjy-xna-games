@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 using Gladius.actors;
 using Gladius.renderer;
-using Dhpoware;
 using GameStateManagement;
 using System.Text;
 using Gladius.control;

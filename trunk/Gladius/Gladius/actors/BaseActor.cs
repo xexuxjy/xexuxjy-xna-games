@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Gladius.combat;
 using Gladius.renderer;
 using Microsoft.Xna.Framework.Graphics;
-using Dhpoware;
 using Gladius.renderer.animation;
 using Microsoft.Xna.Framework.Content;
 using Gladius.util;
@@ -19,7 +18,8 @@ namespace Gladius.actors
 {
     public class BaseActor : GameScreenComponent
     {
-        public BaseActor(GameScreen gameScreen) : base(gameScreen)
+        public BaseActor(GameScreen gameScreen)
+            : base(gameScreen)
         {
 
             m_animatedModel = new AnimatedModel();
@@ -32,11 +32,11 @@ namespace Gladius.actors
 
         public void SetupAttributes()
         {
-            
+
             m_attributeDictionary[GameObjectAttributeType.Health] = new BoundedAttribute(100);
             m_attributeDictionary[GameObjectAttributeType.Agility] = new BoundedAttribute(10);
 
-            
+
 
 
 
@@ -51,7 +51,7 @@ namespace Gladius.actors
                     {
                         break;
                     }
-                case(AnimationEnum.Die):
+                case (AnimationEnum.Die):
                     {
                         break;
                     }
@@ -129,7 +129,7 @@ namespace Gladius.actors
             return m_attributeDictionary[attributeType].CurrentValue;
         }
 
-        public void SetAttributeValue(GameObjectAttributeType attributeType,float val)
+        public void SetAttributeValue(GameObjectAttributeType attributeType, float val)
         {
             m_attributeDictionary[attributeType].CurrentValue = val;
         }
@@ -218,10 +218,10 @@ namespace Gladius.actors
 
         public void TakeDamage(AttackResult attackResult)
         {
-            if(attackResult.resultType != AttackResultType.Miss)
+            if (attackResult.resultType != AttackResultType.Miss)
             {
                 m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue -= attackResult.damageDone;
-                UpdateThreatList(attackResult.damageCauser); 
+                UpdateThreatList(attackResult.damageCauser);
             }
         }
 
@@ -235,12 +235,12 @@ namespace Gladius.actors
         {
             if (m_animatedModel != null)
             {
-                m_animatedModel.ActorRotation= Rotation;
+                m_animatedModel.ActorRotation = Rotation;
                 m_animatedModel.ActorPosition = Position;
                 m_animatedModel.Update(gameTime);
             }
 
-            if(UnitActive)
+            if (UnitActive)
             {
                 UpdateMovement(gameTime);
                 UpdateAttack(gameTime);
@@ -260,7 +260,7 @@ namespace Gladius.actors
                 }
 
                 // find a movement skill for now.
-                CurrentAttackSkill = m_knownAttacks.First(x=>x.AttackType == AttackType.Move);
+                CurrentAttackSkill = m_knownAttacks.First(x => x.AttackType == AttackType.Move);
             }
         }
 
@@ -388,8 +388,8 @@ namespace Gladius.actors
 
         public void StartAttack()
         {
-            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}].", DebugName,m_currentTarget != null ?m_currentTarget.DebugName :"NoActorTarget"));
-            m_animatedModel.PlayAnimation(AnimationEnum.Attack1,false);
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}].", DebugName, m_currentTarget != null ? m_currentTarget.DebugName : "NoActorTarget"));
+            m_animatedModel.PlayAnimation(AnimationEnum.Attack1, false);
             Attacking = true;
             AttackRequested = false;
             Globals.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
@@ -443,7 +443,7 @@ namespace Gladius.actors
 
         public virtual void CheckState()
         {
-            if(m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue <= 0f)
+            if (m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue <= 0f)
             {
                 StartDeath();
             }
@@ -452,7 +452,7 @@ namespace Gladius.actors
         public void StartBlock(BaseActor attacker)
         {
             SnapToFace(attacker);
-            m_animatedModel.PlayAnimation(AnimationEnum.Block,false);
+            m_animatedModel.PlayAnimation(AnimationEnum.Block, false);
         }
 
         public void EndBlock()
@@ -636,7 +636,7 @@ namespace Gladius.actors
         private List<Point> m_wayPointList = new List<Point>();
 
         private List<AttackSkill> m_knownAttacks = new List<AttackSkill>();
-        private Dictionary<GameObjectAttributeType,BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType,BoundedAttribute>();
+        private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
         private AnimatedModel m_animatedModel;
 
         private float m_movementSpeed = 2f;

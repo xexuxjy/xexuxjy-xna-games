@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Dhpoware;
+
 
 namespace Gladius.renderer
 {
@@ -91,8 +91,8 @@ namespace Gladius.renderer
         {
             BasicEffect.World = world;
             BasicEffect.Texture = texture;
-            BasicEffect.View = camera.ViewMatrix;
-            BasicEffect.Projection = camera.ProjectionMatrix;
+            BasicEffect.View = camera.View;
+            BasicEffect.Projection = camera.Projection;
 
             foreach (EffectPass pass in BasicEffect.CurrentTechnique.Passes)
             {

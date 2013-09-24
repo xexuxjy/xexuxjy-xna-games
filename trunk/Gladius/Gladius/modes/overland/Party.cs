@@ -9,7 +9,7 @@ using Gladius.renderer.animation;
 using Gladius.events;
 using Gladius.control;
 using Microsoft.Xna.Framework.Graphics;
-using Dhpoware;
+using Gladius.renderer;
 
 namespace Gladius.modes.overland
 {
@@ -18,7 +18,8 @@ namespace Gladius.modes.overland
         public Party(GameScreen gameScreen,Terrain terrain)
             : base(gameScreen)
         {
-             m_animatedModel = new AnimatedModel(0.2f);
+            ModelHeight = 0.2f;
+            m_animatedModel = new AnimatedModel(ModelHeight);
              m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
              m_animatedModel.ModelName = "Models/ThirdParty/01_warrior";
              m_animatedModel.DebugName = "Party";
@@ -44,6 +45,16 @@ namespace Gladius.modes.overland
         {
             base.VariableUpdate(gameTime);
 
+
+            Matrix model = Matrix.CreateFromQuaternion(Rotation);
+            Globals.Camera.Target = LookAtPoint;
+            Globals.Camera.Up = model.Up;
+
+            //Vector3 direction = (3 * model.Forward) + model.Up;
+            //direction.Normalize();
+
+            Globals.Camera.TargetDirection = model.Forward;
+
             UpdateMovement(gameTime);
 
             m_animatedModel.Update(gameTime);
@@ -65,15 +76,30 @@ namespace Gladius.modes.overland
         public void UpdateMovement(GameTime gameTime)
         {
             float speed = 0f;
-            float multiplier = 10f;
+            float rotateSpeed = (float)Math.PI;
+
+            float multiplier = 1f;
             if (Globals.UserControl.CursorLeftHeld() || Globals.UserControl.CursorRightHeld() || Globals.UserControl.CursorUpHeld() || Globals.UserControl.CursorDownHeld() )
             {
                 speed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            speed *= multiplier;
+
+            if (Globals.UserControl.CursorLeftHeld())
+            {
+                UpdateYaw((float)(rotateSpeed * gameTime.ElapsedGameTime.TotalSeconds));
+            }
+            else if (Globals.UserControl.CursorRightHeld())
+            {
+                UpdateYaw((float)(-rotateSpeed * gameTime.ElapsedGameTime.TotalSeconds));
+            }
+
+            if(Globals.UserControl.CursorUpHeld())
+            {
+                speed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                speed *= multiplier;
+            }
+
             Position += ((Matrix.CreateFromQuaternion(m_animatedModel.ActorRotation).Forward) * speed);
-
-
             
             Vector3 pos = Position;
             m_terrain.GetHeightAtPoint(ref pos);
@@ -86,34 +112,34 @@ namespace Gladius.modes.overland
         {
             switch (e.ActionButton)
             {
-                case (ActionButton.ActionLeft):
-                    {
-                        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI / 2);
+                //case (ActionButton.ActionLeft):
+                //    {
+                //        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI / 2);
                         
-                        Rotation = face;
-                        break;
-                    }
-                case (ActionButton.ActionRight):
-                    {
-                        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)(3*Math.PI) / 2);
-                        Rotation = face;
+                //        Rotation = face;
+                //        break;
+                //    }
+                //case (ActionButton.ActionRight):
+                //    {
+                //        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)(3*Math.PI) / 2);
+                //        Rotation = face;
                         
-                        break;
-                    }
-                case (ActionButton.ActionUp):
-                    {
-                        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
-                        Rotation = face;
+                //        break;
+                //    }
+                //case (ActionButton.ActionUp):
+                //    {
+                //        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
+                //        Rotation = face;
  
-                        break;
-                    }
-                case (ActionButton.ActionDown):
-                    {
-                        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, 0f);
-                        Rotation = face;
+                //        break;
+                //    }
+                //case (ActionButton.ActionDown):
+                //    {
+                //        Quaternion face = Quaternion.CreateFromAxisAngle(Vector3.Up, 0f);
+                //        Rotation = face;
  
-                        break;
-                    }
+                //        break;
+                //    }
                 case (ActionButton.ActionButton1):
                     {
                         
@@ -135,7 +161,7 @@ namespace Gladius.modes.overland
             Draw(Game.GraphicsDevice, Globals.Camera, gameTime);
         }
 
-        public virtual void Draw(GraphicsDevice device, CameraComponent camera, GameTime gameTime)
+        public virtual void Draw(GraphicsDevice device, ICamera camera, GameTime gameTime)
         {
             if (m_animatedModel != null)
             {
@@ -176,7 +202,22 @@ namespace Gladius.modes.overland
             }
         }
 
+        public void UpdateYaw(float val)
+        {
+            m_accumulatedYaw += val;
+            Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, m_accumulatedYaw);
+        }
+
+        public float ModelHeight
+        {
+            get;
+            set;
+        }
+
+        float m_accumulatedYaw;
         AnimatedModel m_animatedModel;
         Terrain m_terrain;
+
+
     }
 }

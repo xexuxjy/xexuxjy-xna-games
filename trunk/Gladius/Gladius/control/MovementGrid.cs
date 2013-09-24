@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Gladius.renderer;
-using Dhpoware;
 using Gladius.actors;
 using Gladius.events;
 using Microsoft.Xna.Framework.Content;
@@ -385,7 +384,7 @@ namespace Gladius.control
 
         public Point ApplyMove(ActionButton button)
         {
-            Vector3 fwd = Globals.Camera.ViewDirection;
+            Vector3 fwd = Globals.Camera.Forward;
             Vector3 right = Vector3.Cross(fwd, Vector3.Up);
             Vector3 v = Vector3.Zero;
 

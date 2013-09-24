@@ -53,11 +53,25 @@ namespace Gladius.gamestatemanagement.screens
                 uiElement.Update(gameTime);
             }
 
-            Matrix model = Matrix.CreateFromQuaternion(m_party.Rotation);
-            float followDistance = 5f;
-            Vector3 offset = model.Backward* followDistance;
-            Globals.Camera.LookAt(m_party.LookAtPoint + offset, m_party.LookAtPoint, Vector3.Up);
+            //Matrix model = Matrix.CreateFromQuaternion(m_party.Rotation);
+            //Globals.Camera.Target = m_party.LookAtPoint;
+            //Globals.Camera.Up = model.Up;
 
+            //Vector3 direction = (3*model.Forward) + model.Up;
+            //direction.Normalize();
+
+            //Globals.Camera.TargetDirection = direction;
+            //float followDistance = 5f;
+            //Vector3 offset = model.Backward* followDistance;
+            //camera.Rotate((forwardSpeed >= 0.0f) ? heading : -heading, 0.0f);
+            //Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.ThirdPerson;
+            //Globals.Camera.Orientation = m_party.Rotation;
+            //Globals.Camera.LookAt(m_party.LookAtPoint);
+            //camera.Update(gameTime);
+
+
+            //Globals.Camera.LookAt(m_party.LookAtPoint + offset, m_party.LookAtPoint, Vector3.Up);
+            //Globals.Camera.
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
@@ -109,15 +123,18 @@ namespace Gladius.gamestatemanagement.screens
 
         public void SetupOverland()
         {
-            Globals.Camera = new Dhpoware.CameraComponent(ScreenManager.Game);
-            Globals.Camera.HandleInput(ScreenManager.input);
+            ChaseCamera chaseCamera = new ChaseCamera();
+            Globals.Camera = chaseCamera;
 
-            IGameComponent igc = Globals.Camera as IGameComponent;
-            m_screenComponents.Components.Add(igc);
+            Globals.Camera.UpdateInput(ScreenManager.input);
+            //Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.ThirdPerson;
+            //Globals.Camera.EnableSpringSystem = true;
+            m_screenComponents.Components.Add(Globals.Camera);
+            //chaseCamera.DesiredPositionOffset = new Vector3(0,0,-3f);
 
             Globals.Camera.Position = new Vector3(0, 160, 0);
-            Globals.Camera.Acceleration = new Vector3(10);
-            Globals.Camera.Velocity = new Vector3(50);
+            //Globals.Camera.Acceleration = new Vector3(5);
+            //Globals.Camera.Velocity = new Vector3(25);
 
             m_terrain = new Terrain(this);
             m_terrain.LoadContent(m_content);
@@ -129,7 +146,12 @@ namespace Gladius.gamestatemanagement.screens
             m_party.LoadContent();
             m_party.RegisterListeners();
             m_screenComponents.Components.Add(m_party);
-            
+
+
+            chaseCamera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
+            chaseCamera.DesiredPositionOffset = new Vector3(0, 0.5f, 4.0f) * m_party.ModelHeight; ;
+
+
             m_screenComponents.Components.Add(m_townManager);
 
             m_screenComponents.Components.Add(m_terrain);
