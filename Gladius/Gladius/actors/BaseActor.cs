@@ -21,8 +21,8 @@ namespace Gladius.actors
         public BaseActor(GameScreen gameScreen)
             : base(gameScreen)
         {
-
-            m_animatedModel = new AnimatedModel();
+            ModelHeight = 1f;
+            m_animatedModel = new AnimatedModel(ModelHeight);
             m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
             m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
@@ -30,15 +30,17 @@ namespace Gladius.actors
             SetupAttributes();
         }
 
+        public float ModelHeight
+        {
+            get;
+            set;
+        }
+
         public void SetupAttributes()
         {
 
             m_attributeDictionary[GameObjectAttributeType.Health] = new BoundedAttribute(100);
             m_attributeDictionary[GameObjectAttributeType.Agility] = new BoundedAttribute(10);
-
-
-
-
 
         }
 
