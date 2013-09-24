@@ -24,6 +24,9 @@ namespace Gladius.control
             if (CurrentActor != null)
             {
                 Globals.Camera.Target = CurrentActor.CameraFocusPoint;
+                Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
+                Globals.Camera.Up = model.Up;
+                Globals.Camera.TargetDirection = model.Forward;
             }
 
             if (CurrentActor == null || CurrentActor.TurnComplete)

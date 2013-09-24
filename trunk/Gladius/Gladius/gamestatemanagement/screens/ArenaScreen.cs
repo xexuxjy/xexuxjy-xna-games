@@ -191,7 +191,9 @@ namespace Gladius.gamestatemanagement.screens
             //Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
             //m_screenComponents.Components.Add(Globals.UserControl);
 
-            Globals.Camera = new ChaseCamera();
+            ChaseCamera chaseCamera = new ChaseCamera();
+
+            Globals.Camera = chaseCamera;
             Globals.Camera.UpdateInput(ScreenManager.input);
     
             //IGameComponent igc = m_camera as IGameComponent;
@@ -278,6 +280,8 @@ namespace Gladius.gamestatemanagement.screens
 
             //Globals.MovementGrid.CurrentActor = actors[0];
             actors[0].PlayerControlled = true;
+            chaseCamera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
+            chaseCamera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f) * actors[0].ModelHeight;
 
 
         }
