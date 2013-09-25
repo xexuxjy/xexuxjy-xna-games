@@ -44,7 +44,7 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.AudioImporters" />
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters" />
     <Reference Include="MonoGameContentProcessors">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\MSBuild\MonoGame\v3.2\MonoGameContentProcessors.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\MSBuild\MonoGame\v3.2\MonoGameContentProcessors.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
