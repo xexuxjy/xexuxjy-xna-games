@@ -11,6 +11,7 @@ using System.IO;
 using Gladius.util;
 using GameStateManagement;
 using Gladius.renderer;
+using Gladius.gamestatemanagement.screens;
 
 namespace Gladius.modes.overland
 {
@@ -24,10 +25,10 @@ namespace Gladius.modes.overland
     {
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Terrain(GameScreen gameScreen)
+        public Terrain(OverlandScreen gameScreen)
             : base(gameScreen)
         {
-        
+            m_overlandScreen = gameScreen;
         }
 
         public void LoadContent(ContentManager contentManager)
@@ -48,6 +49,13 @@ namespace Gladius.modes.overland
             m_position = Vector3.Zero;
             m_quadTree = new QuadTree(-position, m_heightMap, Globals.Camera.View, Globals.Camera.Projection, Game.GraphicsDevice, 1, 5.0f);
             m_quadTree.Texture = m_surface;
+        
+            m_lightingSpans.Add(new LightingSpan(0,4,Color.Black,Color.OrangeRed));
+            m_lightingSpans.Add(new LightingSpan(4,7,Color.OrangeRed,Color.White));
+            m_lightingSpans.Add(new LightingSpan(7,19,Color.White,Color.White));
+            m_lightingSpans.Add(new LightingSpan(19,21,Color.White,Color.OrangeRed));
+            m_lightingSpans.Add(new LightingSpan(21,24,Color.OrangeRed,Color.Black));
+        
         }
 
         public override void VariableUpdate(GameTime gameTime)
@@ -56,6 +64,8 @@ namespace Gladius.modes.overland
             m_quadTree.Projection = Globals.Camera.Projection;
             m_quadTree.CameraPosition = Globals.Camera.Position;
             m_quadTree.Update(gameTime);
+            UpdateTimeOfDay(gameTime.ElapsedGameTime.TotalSeconds);
+
         }
 
         public override void Draw(GameTime gameTime)
@@ -100,7 +110,10 @@ namespace Gladius.modes.overland
 
             normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
             Game.GraphicsDevice.SetRenderTarget(null);
-            
+         
+   
+
+
             //Color[] colorData = new Color[m_normalMap.Width * m_normalMap.Height];
             //m_normalMap.GetData<Color>(colorData);
             //for (int i = 0; i < colorData.Length; ++i)
@@ -113,8 +126,8 @@ namespace Gladius.modes.overland
             //}
             //int ibreak2 = 0;
 
-            
-            //m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMap);
+
+            m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMap);
 
             //using (Stream stream = File.OpenWrite("c:/tmp/glad-nm.png"))
             //{
@@ -132,11 +145,15 @@ namespace Gladius.modes.overland
             Vector3 specularLightColor = new Vector3(1f);
             float specularLightIntensity = 1f;
 
-            effect.Parameters["AmbientLightColor"].SetValue(ambientLightColor);
+            effect.Parameters["AmbientLightColor"].SetValue(m_ambientLightColor);
             effect.Parameters["AmbientLightIntensity"].SetValue(ambientLightIntensity);
 
-            effect.Parameters["DirectionalLightColor"].SetValue(directionalLightColor);
-            effect.Parameters["DirectionalLightIntensity"].SetValue(directionalLightIntensity);
+            //effect.Parameters["DirectionalLightColor"].SetValue(directionalLightColor);
+            //effect.Parameters["DirectionalLightIntensity"].SetValue(directionalLightIntensity);
+            effect.Parameters["PointLightPosition"].SetValue(m_overlandScreen.Party.Position);
+            effect.Parameters["PointLightRadius"].SetValue(0.5f);
+            effect.Parameters["PointLightColor"].SetValue(Vector3.One);
+
 
             //effect.Parameters["SpecularLightColor"].SetValue(specularLightColor);
             //effect.Parameters["SpecularLightIntensity"].SetValue(specularLightIntensity);
@@ -144,8 +161,62 @@ namespace Gladius.modes.overland
             //effect.Parameters["LightPosition"].SetValue(Globals.Camera.Position);
             Vector3 lightDir = new Vector3(0, 1, -1);
             lightDir.Normalize();
-            effect.Parameters["LightDirection"].SetValue(lightDir);
+            //effect.Parameters["LightDirection"].SetValue(lightDir);
         }
+
+        public void UpdateTimeOfDay(double seconds)
+        {
+            m_timeOfDay += (seconds * m_timeMultiplier);
+
+
+
+            double hourMultiplier = 1000 * 60 * 60;
+            double twentyFourHours =  hourMultiplier * 24;
+
+            if (m_timeOfDay > twentyFourHours)
+            {
+                m_timeOfDay = 0;
+            }
+
+
+            double midnight = 0f;
+            double threeAm = 3 * hourMultiplier;
+
+            // 00:00 -> 04:00 black.
+            // 04:00 -> 06:00 black->red / orange
+            // 06:00 -> 07:00 red/orage-> white
+
+            // 07:00 -> 19:00 white
+
+            // 19:00->21:00 white ->red/orange
+            // 21:00-> 00:00 red/orange -> black
+
+
+            foreach(LightingSpan span in m_lightingSpans)
+            {
+                if(m_timeOfDay > span.startTime && m_timeOfDay < span.endTime)
+                {
+                    double lerpVal = (m_timeOfDay - span.startTime) / (span.endTime - span.startTime);
+                    m_ambientLightColor = Vector3.Lerp(span.startColor,span.endColor,(float)lerpVal);
+                    break;
+                }
+            }
+
+        }
+
+        public double Lerp(double val1, double val2, double amount)
+        {
+            if (amount <= 0)
+            {
+                return val1;
+            }
+            if (amount >= 1)
+            {
+                return val2;
+            }
+            return val1 + ((val2-val1) * amount);
+        }
+
 
         public void GetHeightAtPoint(ref Vector3 input)
         {
@@ -188,13 +259,44 @@ namespace Gladius.modes.overland
             //input.Y += 1;
         }
 
-        private QuadTree m_quadTree;
+        public Color AmbientLightColor
+        {
+            get { return new Color(m_ambientLightColor); }
+        }
+
+
+        double m_timeOfDay;
+        // 1 second = 1 hour
+        double m_timeMultiplier = 1000 * 60 * 60;
+
+        Vector3 m_ambientLightColor;
+        float m_ambientLightIntensity;
+
+        OverlandScreen m_overlandScreen;
+        QuadTree m_quadTree;
         Texture2D m_heightMap;
         Texture2D m_surface;
         RenderTarget2D m_normalMap;
         Effect m_terrainEffect;
         ScreenQuad m_screenQuad;
         Vector3 m_position;
+        List<LightingSpan> m_lightingSpans = new List<LightingSpan>();
     }
+
+    struct LightingSpan
+    {
+        public LightingSpan(int startHour,int endHour,Color start,Color end)
+        {
+            startTime = (startHour * (1000 * 60 * 60));
+            endTime = (endHour * (1000 * 60 * 60));
+            startColor = start.ToVector3();
+            endColor = end.ToVector3();
+        }
+
+        public double startTime;
+        public double endTime;
+        public Vector3 startColor;
+        public Vector3 endColor;
+    };
 
 }

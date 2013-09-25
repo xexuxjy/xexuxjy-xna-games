@@ -87,7 +87,8 @@ namespace Gladius.gamestatemanagement.screens
         public override void Draw(GameTime gameTime)
         {
             m_drawCalls++;
-            ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+            //ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+            ScreenManager.GraphicsDevice.Clear(m_terrain.AmbientLightColor);
             base.Draw(gameTime);
 
             ScreenManager.Game.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -155,6 +156,11 @@ namespace Gladius.gamestatemanagement.screens
             m_screenComponents.Components.Add(m_townManager);
 
             m_screenComponents.Components.Add(m_terrain);
+        }
+
+        public Party Party
+        {
+            get { return m_party; }
         }
 
         TownManager m_townManager;
