@@ -26,11 +26,11 @@ namespace Gladius.gamestatemanagement.screens
             set;
         }
 
-        public Arena Arena
-        {
-            get;
-            set;
-        }
+        //public Arena Arena
+        //{
+        //    get;
+        //    set;
+        //}
 
         public ArenaScreen ArenaScreen
         {
@@ -38,6 +38,11 @@ namespace Gladius.gamestatemanagement.screens
             set;
         }
 
+        public OverlandScreen OverlandScreen
+        {
+            get;
+            set;
+        }
 
         public virtual void DrawElement(GameTime gameTime, SpriteBatch spriteBatch)
         {
