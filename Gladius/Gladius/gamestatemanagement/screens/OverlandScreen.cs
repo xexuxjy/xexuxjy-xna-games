@@ -46,6 +46,9 @@ namespace Gladius.gamestatemanagement.screens
             m_updateCalls++;
             base.Update(gameTime, otherScreenHasFocus, false);
 
+            UpdateTimeOfDay(gameTime.ElapsedGameTime.TotalSeconds);
+
+
             m_screenComponents.Update(gameTime);
 
             foreach (IUIElement uiElement in m_uiElementsList)
@@ -81,6 +84,33 @@ namespace Gladius.gamestatemanagement.screens
 
         }
 
+        public void UpdateTimeOfDay(double seconds)
+        {
+            m_timeOfDay += (seconds * m_timeMultiplier);
+
+
+
+            double hourMultiplier = 1000 * 60 * 60;
+            double twentyFourHours = hourMultiplier * 24;
+
+            if (m_timeOfDay > twentyFourHours)
+            {
+                m_timeOfDay = 0;
+            }
+
+            foreach (LightingSpan span in m_lightingSpans)
+            {
+                if (m_timeOfDay > span.startTime && m_timeOfDay < span.endTime)
+                {
+                    double lerpVal = (m_timeOfDay - span.startTime) / (span.endTime - span.startTime);
+                    m_ambientLightColor = Vector3.Lerp(span.startColor, span.endColor, (float)lerpVal);
+                    break;
+                }
+            }
+
+        }
+
+
         /// <summary>
         /// Draws the gameplay screen.
         /// </summary>
@@ -88,7 +118,7 @@ namespace Gladius.gamestatemanagement.screens
         {
             m_drawCalls++;
             //ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
-            ScreenManager.GraphicsDevice.Clear(m_terrain.AmbientLightColor);
+            ScreenManager.GraphicsDevice.Clear(new Color(AmbientLightColor));
             base.Draw(gameTime);
 
             ScreenManager.Game.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -105,6 +135,19 @@ namespace Gladius.gamestatemanagement.screens
                     uiElement.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
                 }
             }
+
+            m_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+            foreach (IUIElement uiElement in m_uiElementsList)
+            {
+                if (uiElement.Visible)
+                {
+                    uiElement.DrawElement(gameTime, m_spriteBatch);
+                }
+            }
+
+            m_spriteBatch.End();
+
 
             Globals.DrawCameraDebugText(m_spriteBatch, m_gameFont, ScreenManager.FPS);
 
@@ -156,6 +199,27 @@ namespace Gladius.gamestatemanagement.screens
             m_screenComponents.Components.Add(m_townManager);
 
             m_screenComponents.Components.Add(m_terrain);
+
+
+            m_lightingSpans.Add(new LightingSpan(0, 4, Color.Black, Color.OrangeRed));
+            m_lightingSpans.Add(new LightingSpan(4, 7, Color.OrangeRed, Color.White));
+            m_lightingSpans.Add(new LightingSpan(7, 19, Color.White, Color.White));
+            m_lightingSpans.Add(new LightingSpan(19, 21, Color.White, Color.OrangeRed));
+            m_lightingSpans.Add(new LightingSpan(21, 24, Color.OrangeRed, Color.Black));
+
+
+            OverlandUI overlandUI = new OverlandUI(this);
+            m_uiElementsList.Add(overlandUI);
+
+
+            foreach (IUIElement uiElement in m_uiElementsList)
+            {
+                uiElement.LoadContent(m_content, ScreenManager.Game.GraphicsDevice);
+                //uiElement.Arena = m_arena;
+                uiElement.OverlandScreen = this;
+            }
+
+
         }
 
         public Party Party
@@ -163,8 +227,53 @@ namespace Gladius.gamestatemanagement.screens
             get { return m_party; }
         }
 
+        public double TimeOfDay
+        {
+            get { return m_timeOfDay; }
+        }
+
+        public int TimeOfDayHours
+        {
+            get 
+            { 
+                int val = (int)(m_timeOfDay / (1000 * 60 * 60));
+                return val;
+            }
+        }
+
+
+        public Vector3 AmbientLightColor
+        {
+            get { return m_ambientLightColor; }
+        }
+
+        double m_timeOfDay;
+        // 1 second = 1 hour
+        double m_timeMultiplier = 1000 * 60 * 60;
+
         TownManager m_townManager;
         Party m_party;
         Terrain m_terrain;
+        List<LightingSpan> m_lightingSpans = new List<LightingSpan>();
+
+        Vector3 m_ambientLightColor;
+        float m_ambientLightIntensity;
     }
+
+    struct LightingSpan
+    {
+        public LightingSpan(int startHour, int endHour, Color start, Color end)
+        {
+            startTime = (startHour * (1000 * 60 * 60));
+            endTime = (endHour * (1000 * 60 * 60));
+            startColor = start.ToVector3();
+            endColor = end.ToVector3();
+        }
+
+        public double startTime;
+        public double endTime;
+        public Vector3 startColor;
+        public Vector3 endColor;
+    };
+
 }

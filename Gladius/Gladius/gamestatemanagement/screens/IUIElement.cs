@@ -39,7 +39,13 @@ namespace Gladius.gamestatemanagement.screens
             get;
             set;
         }
-        Arena Arena
+        //Arena Arena
+        //{
+        //    get;
+        //    set;
+        //}
+
+        OverlandScreen OverlandScreen
         {
             get;
             set;

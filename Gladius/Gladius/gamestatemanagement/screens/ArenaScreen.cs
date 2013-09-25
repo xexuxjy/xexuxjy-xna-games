@@ -267,7 +267,7 @@ namespace Gladius.gamestatemanagement.screens
             foreach (IUIElement uiElement in m_uiElementsList)
             {
                 uiElement.LoadContent(m_content,ScreenManager.Game.GraphicsDevice);
-                uiElement.Arena = m_arena;
+                //uiElement.Arena = m_arena;
                 uiElement.ArenaScreen = this;
             }
 
