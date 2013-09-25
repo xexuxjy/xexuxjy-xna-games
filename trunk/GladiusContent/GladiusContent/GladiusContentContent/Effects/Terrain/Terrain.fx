@@ -12,8 +12,11 @@ uniform float3 LightPosition;
 uniform float3 LightDirection;
 uniform float3 AmbientLightColor;
 uniform float AmbientLightIntensity;
-uniform float3 DirectionalLightColor;
-uniform float DirectionalLightIntensity;
+uniform float3 PointLightColor;
+uniform float PointLightIntensity;
+uniform float3 PointLightPosition;
+uniform float PointLightRadius;
+
 uniform float3 SpecularLightColor;
 uniform float SpecularLightIntensity;
 
@@ -95,27 +98,24 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	//result = result +(noise * 0.3);
 
 	// lighting
-	float3 lightDir = LightDirection;
+	float3 lightDir = normalize(input.pos3d - PointLightPosition);
     
+
 	//float4 smoothedNormal = normalize( 2.0f * (tex2D(NormalMapSamplerPS,input.uv) - 0.5f));
 	float4 smoothedNormal = tex2D(NormalMapSamplerPS,input.uv);
 
     float dotResult = dot(-lightDir, smoothedNormal.xyz);    
 	dotResult = saturate(dotResult);
 
-	float3 directionalComponent = DirectionalLightColor * DirectionalLightIntensity * dotResult;
-	float4 light = float4(directionalComponent + (AmbientLightColor * AmbientLightIntensity),1);
-	//float4 light = float4((AmbientLightColor * AmbientLightIntensity),1);
-	
-	//light.x = 1;
+	float pointDist = length(input.pos3d -PointLightPosition);
+	float pointContribution = saturate(1 - (pointDist/PointLightRadius));
+	pointContribution *= dotResult;
+	float3 pointComponent = PointLightColor * pointContribution;
+
+	float4 light = float4(pointComponent + (AmbientLightColor * AmbientLightIntensity),1);
 
 	result *= light;
 	
-	// Fog stuff.
-	//float fogFactor = ComputeFogFactor(input.pos3d);
-
-	// do something funky as well to provide fog near the boundaries of the world.
-	//result.rgb = lerp(result.rgb,FogColor,fogFactor);
 
 	result.a = 1;
 
