@@ -108,7 +108,7 @@ namespace Gladius.Terrain7
             SkirtVertexOA = new ObjectArray<VertexPositionNormalTexture>(defaultSize);
             SkirtIndexOA = new ObjectArray<int>(defaultSize * 24);
 
-            MinimumDepth = 7;
+            MinimumDepth = 6;
         
         }
 

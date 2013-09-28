@@ -96,6 +96,7 @@ namespace Gladius.gamestatemanagement.screens
             if (m_timeOfDay > twentyFourHours)
             {
                 m_timeOfDay = 0;
+                m_dayCount++;
             }
 
             foreach (LightingSpan span in m_lightingSpans)
@@ -241,6 +242,19 @@ namespace Gladius.gamestatemanagement.screens
             }
         }
 
+        public int DayCount
+        {
+            get { return m_dayCount; }
+        }
+
+        public float TimeOfDayFraction
+        {
+            get
+            {
+                return (float)(m_timeOfDay / (1000 * 60 * 60 * 24));
+            }
+        }
+
 
         public Vector3 AmbientLightColor
         {
@@ -250,6 +264,7 @@ namespace Gladius.gamestatemanagement.screens
         double m_timeOfDay;
         // 1 second = 1 hour
         double m_timeMultiplier = 1000 * 60 * 60;
+        int m_dayCount = 0;
 
         TownManager m_townManager;
         Party m_party;

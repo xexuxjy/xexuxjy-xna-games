@@ -176,7 +176,7 @@ namespace Gladius.Terrain7
 					break;
 			}
 
-            float skirtSize = 0.3f;
+            float skirtSize = 5;
             int index = 0;
             m_skirtVertices[0] = _parentTree.Vertices[VertexTopLeft.Index];
             m_skirtVertices[1] = _parentTree.Vertices[VertexTopRight.Index];
