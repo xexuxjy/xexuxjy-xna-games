@@ -38,8 +38,12 @@ namespace Gladius.modes.overland
 
             m_screenQuad = new ScreenQuad(Game);
 
-            m_heightMap = contentManager.Load<Texture2D>("Models/Terrain/ESHeightMap1");
-            m_surface = Globals.GlobalContentManager.GetColourTexture(Color.DarkGreen);
+            //m_heightMap = contentManager.Load<Texture2D>("Models/Terrain/ESHeightMap1");
+            //m_surface = Globals.GlobalContentManager.GetColourTexture(Color.DarkGreen);
+            m_heightMap = contentManager.Load<Texture2D>("Models/Terrain/TestHeightMap");
+            m_surface = contentManager.Load<Texture2D>("Models/Terrain/Test");
+
+
             m_terrainEffect = contentManager.Load<Effect>("Effects/Terrain/Terrain");
             m_terrainEffect.Parameters["BaseTexture"].SetValue(m_surface);
             BuildNormalMap(contentManager);
@@ -49,6 +53,7 @@ namespace Gladius.modes.overland
             m_position = Vector3.Zero;
             m_quadTree = new QuadTree(-position, m_heightMap, Globals.Camera.View, Globals.Camera.Projection, Game.GraphicsDevice, 1, 5.0f);
             m_quadTree.Texture = m_surface;
+            m_quadTree.SkirtsEnabled = true;
 
         }
 
