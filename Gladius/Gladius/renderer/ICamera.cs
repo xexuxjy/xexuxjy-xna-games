@@ -21,6 +21,9 @@ namespace Gladius.renderer
         Vector3 Acceleration { get; set; }
         Vector3 Forward { get; set; }
         Vector3 Up { get; set; }
+        Vector3 DesiredPositionOffset { get; set; }
+        Vector3 LookAtOffset { get; set; }
 
+        void SnapTo(Vector3 eye, Vector3 lookat);
     }
 }

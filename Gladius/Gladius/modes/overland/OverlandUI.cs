@@ -26,19 +26,28 @@ namespace Gladius.modes.overland
         }
         public override void DrawElement(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Rectangle bounds = new Rectangle(500,10,300,100);
+            Vector4 boxBackgroundV4 = new Vector4(0.5f,0.5f,0.5f,0.3f);
+            Texture2D boxBorder = Globals.GlobalContentManager.GetColourTexture(Color.White);
+            Texture2D boxBackground = Globals.GlobalContentManager.GetV4Texture(boxBackgroundV4);
+            Rectangle topBounds = new Rectangle(500,10,300,100);
             int inset = 3;
-            Rectangle innerBounds = new Rectangle(bounds.X + inset, bounds.Y + inset, bounds.Width - (2 * inset), bounds.Height - (2 * inset));
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), bounds, Color.White);
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Black), innerBounds, Color.White);
+            Rectangle topInnerBounds = Globals.InsetRectangle(topBounds, inset);
+
+            Color coverageColor = Color.White;
+            //coverageColor.A = 50;
+            coverageColor *= 0.35f;
+
+
+            //spriteBatch.Draw(boxBorder, topBounds, Color.White);
+            spriteBatch.Draw(boxBackground, topInnerBounds, coverageColor);
             m_infoText.Clear();
             m_infoText.ConcatFormat("Days : {0}", m_overland.DayCount);
-            spriteBatch.DrawString(m_spriteFont, m_infoText, new Vector2(bounds.X + 100, bounds.Y + 10), Color.White);
+            spriteBatch.DrawString(m_spriteFont, m_infoText, new Vector2(topBounds.X + 100, topBounds.Y + 10), Color.White);
 
 
             float rotation = (MathHelper.TwoPi) * m_overland.TimeOfDayFraction;
             int offset = 32;
-            Vector2 pos = new Vector2(bounds.X + offset, bounds.Y + offset);
+            Vector2 pos = new Vector2(topBounds.X + offset, topBounds.Y + offset);
 
             pos.X += 10;
             pos.Y += 10;
@@ -52,6 +61,20 @@ namespace Gladius.modes.overland
             //spriteBatch.Draw(m_dayNightTexture, destRectangle, null, Color.White, rotation,origin, SpriteEffects.None, 0);
             spriteBatch.Draw(m_dayNightTexture, (pos ), null, Color.White, rotation, origin, 1f, SpriteEffects.None, 1);
                 //spriteBatch.Draw(m_dayNightTexture,shipPosition + origin, null, Color.White, rotation, origin, 1, SpriteEffects.None, 1);
+
+
+            Rectangle bottomBounds = new Rectangle(50, 300, 600, 100);
+            Rectangle bottomInnerBounds = Globals.InsetRectangle(bottomBounds, inset);
+
+            //spriteBatch.Draw(boxBorder, bottomBounds, Color.White);
+
+            spriteBatch.Draw(boxBackground, bottomInnerBounds, coverageColor);
+            m_infoText.Clear();
+            Town nearestTown = m_overland.TownManager.NearestTown(m_overland.Party.Position);
+            m_infoText.ConcatFormat("Gold: {0}\nNearby Town: {1}\nRank: {2} ", m_overland.Party.Gold,nearestTown!= null?nearestTown.Name:"None",m_overland.Party.LeagueRank);
+            spriteBatch.DrawString(m_spriteFont, m_infoText, new Vector2(bottomBounds.X + 10, bottomBounds.Y + 10), Color.White);
+
+
         }
 
         private Texture2D m_dayNightTexture;

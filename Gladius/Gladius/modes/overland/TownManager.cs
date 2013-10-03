@@ -29,9 +29,9 @@ namespace Gladius.modes.overland
 
         public Town NearestTown(Vector3 positions)
         {
-            float checkRadius = 2f;
+            float checkRadius = 5f;
             BoundingSphere bs = new BoundingSphere(positions,checkRadius);
-            return m_towns.First(x => x.Bounds.Intersects(bs));
+            return m_towns.FirstOrDefault(x => x.Bounds.Intersects(bs));
         }
 
         public override void Draw(GameTime gameTime)

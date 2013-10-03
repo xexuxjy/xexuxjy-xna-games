@@ -15,7 +15,7 @@ namespace Gladius.actors
             Name = "Player";
             SetAttributeValue(GameObjectAttributeType.Health, 100);
             SetAttributeValue(GameObjectAttributeType.Defense, 10);
-            SetAttributeValue(GameObjectAttributeType.Agility, 10);
+            SetAttributeValue(GameObjectAttributeType.Accuracy, 10);
             SetAttributeValue(GameObjectAttributeType.Movement, 20);
         }
 

@@ -22,15 +22,25 @@ namespace Gladius.combat
 
             float totalDamage = attackData.BaseDamage;
 
-            // chance for evade.
-            // each 10 points of agility gives 1% evade chance?
-            float defenderAgility = defender.GetAttributeValue(GameObjectAttributeType.Agility);
-            float chance = defenderAgility / 10;
-            chance *= 0.01f;
+            float strengthBonus = attacker.GetAttributeValue(GameObjectAttributeType.Accuracy);
 
-            if (m_combatRandom.NextDouble() < chance)
+            float accuracyBonus = GetCategoryAccuracyBonus(attacker.ActorClass, defender.ActorClass);
+            float categoryMultuplier = GetCategoryDamageMultiplier(attacker.ActorClass,defender.ActorClass);
+
+        http://www.gamefaqs.com/gamecube/561233-gladius/faqs/64758
+            //DIFFERENCE = [ (ACC * 0.97) - DEF ]
+            float totalAccuracy = attacker.GetAttributeValue(GameObjectAttributeType.Accuracy) + accuracyBonus;
+            float diff1 = ( totalAccuracy * 0.97f) - defender.GetAttributeValue(GameObjectAttributeType.Defense);
+
+            //MISS CHANCE = 10 * 1.5 ^ [ DIFFERENCE * (-16 / 100) ]
+            float missChance = 10f * ((float)Math.Pow(1.5f, (diff1 * (-16/100) ) ));
+            missChance *= 0.01f; // (0->1)
+            float hitChance = 1f - missChance;
+
+
+            if (m_combatRandom.NextDouble() < hitChance)
             {
-                attackResult.resultType = AttackResultType.Miss;
+                attackResult.resultType = defender.HasShield?AttackResultType.Blocked:AttackResultType.Miss;
             }
             else
             {
@@ -38,13 +48,73 @@ namespace Gladius.combat
                 attackResult.damageDone = totalDamage;
             }
 
-            attackResult.resultType = AttackResultType.Blocked;
+
+
+            //DAMAGE  =  BASE POWER  x  ( ATTACK MULTIPLIER / 100 )  x  SITUATIONAL FACTORS
+            float baseDamage = attacker.GetAttributeValue(GameObjectAttributeType.Power) * attackData.DamageMultiplier;
+
+
+            //attackResult.resultType = AttackResultType.Blocked;
 
             if (attackResult.resultType == AttackResultType.Blocked)
             {
                 defender.StartBlock(attacker);
             }
+            else
+            {
+                defender.TakeDamage(attackResult);
+            }
         }
+
+        private float GetCategoryDamageMultiplier(ActorCategory attacker, ActorCategory defender)
+        {
+            float categoryMultiplier = 1f;
+            if (attacker != defender)
+            {
+                if (attacker == ActorCategory.Heavy && defender == ActorCategory.Medium)
+                {
+                    categoryMultiplier = 1.5f;
+                }
+                else if (attacker == ActorCategory.Heavy && defender == ActorCategory.Light)
+                {
+                    categoryMultiplier = 0.5f;
+                }
+                else if (attacker == ActorCategory.Medium && defender == ActorCategory.Light)
+                {
+                    categoryMultiplier = 1.5f;
+                }
+                else if (attacker == ActorCategory.Medium && defender == ActorCategory.Heavy)
+                {
+                    categoryMultiplier = 0.5f;
+                }
+                else if (attacker == ActorCategory.Light && defender == ActorCategory.Heavy)
+                {
+                    categoryMultiplier = 1.5f;
+                }
+                else if (attacker == ActorCategory.Light && defender == ActorCategory.Medium)
+                {
+                    categoryMultiplier = 0.5f;
+                }
+            }
+            return categoryMultiplier;
+        }
+
+
+        private float GetCategoryAccuracyBonus(ActorCategory attacker, ActorCategory defender)
+        {
+            float bonus = 0f;
+            if (attacker == ActorCategory.Heavy && defender == ActorCategory.Light)
+            {
+                bonus = -20f;
+            }
+            else if (attacker == ActorCategory.Light && defender == ActorCategory.Heavy)
+            {
+                bonus = 38f;
+            }
+            return bonus;
+        }
+
+
 
         public bool IsValidTarget(BaseActor attacker, BaseActor defender)
         {

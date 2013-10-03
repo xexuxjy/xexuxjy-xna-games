@@ -25,6 +25,7 @@ namespace Gladius.modes.overland
              m_animatedModel.DebugName = "Party";
              Rotation = Quaternion.Identity;
              m_terrain = terrain;
+             Gold = 1000;
         }
 
         public override void LoadContent()
@@ -78,7 +79,7 @@ namespace Gladius.modes.overland
             float speed = 0f;
             float rotateSpeed = (float)Math.PI;
 
-            float multiplier = 1f;
+            float multiplier = 10f;
             if (Globals.UserControl.CursorLeftHeld() || Globals.UserControl.CursorRightHeld() || Globals.UserControl.CursorUpHeld() || Globals.UserControl.CursorDownHeld() )
             {
                 speed = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -213,6 +214,18 @@ namespace Gladius.modes.overland
             get;
             set;
         }
+
+        public int Gold
+        {
+            get;
+            set;
+        }
+
+        public String LeagueRank
+        {
+            get { return "Bronze"; }
+        }
+
 
         float m_accumulatedYaw;
         AnimatedModel m_animatedModel;

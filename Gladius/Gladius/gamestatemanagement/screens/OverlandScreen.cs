@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.renderer;
 using Gladius.modes.overland;
+using Gladius.renderer.particles;
 
 namespace Gladius.gamestatemanagement.screens
 {
@@ -48,6 +49,8 @@ namespace Gladius.gamestatemanagement.screens
 
             UpdateTimeOfDay(gameTime.ElapsedGameTime.TotalSeconds);
 
+
+            //m_rainParticleSystem.AddParticle(m_party.LookAtPoint, new Vector3(0, -10, 0));
 
             m_screenComponents.Update(gameTime);
 
@@ -118,8 +121,8 @@ namespace Gladius.gamestatemanagement.screens
         public override void Draw(GameTime gameTime)
         {
             m_drawCalls++;
-            //ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
-            ScreenManager.GraphicsDevice.Clear(new Color(AmbientLightColor));
+            ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
+            //ScreenManager.GraphicsDevice.Clear(new Color(AmbientLightColor));
             base.Draw(gameTime);
 
             ScreenManager.Game.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -199,11 +202,22 @@ namespace Gladius.gamestatemanagement.screens
 
             m_screenComponents.Components.Add(m_townManager);
 
+    
             m_screenComponents.Components.Add(m_terrain);
 
 
-            m_lightingSpans.Add(new LightingSpan(0, 4, Color.Black, Color.OrangeRed));
-            m_lightingSpans.Add(new LightingSpan(4, 7, Color.OrangeRed, Color.White));
+            //m_rainParticleSystem = new RainParticleSystem(this, "rain");
+            //m_rainParticleSystem.LoadContent();
+            //int numRainDrops = 200;
+            //for (int i = 0; i < numRainDrops; ++i)
+            //{
+            //    m_rainParticleSystem.AddParticle(new Vector3(0, 22, 0), new Vector3(0, -5f, 0));
+            //}
+
+            //m_screenComponents.Components.Add(m_rainParticleSystem);
+
+            m_lightingSpans.Add(new LightingSpan(0, 4, Color.Black, Color.Wheat));
+            m_lightingSpans.Add(new LightingSpan(4, 7, Color.Wheat, Color.White));
             m_lightingSpans.Add(new LightingSpan(7, 19, Color.White, Color.White));
             m_lightingSpans.Add(new LightingSpan(19, 21, Color.White, Color.OrangeRed));
             m_lightingSpans.Add(new LightingSpan(21, 24, Color.OrangeRed, Color.Black));
@@ -221,6 +235,11 @@ namespace Gladius.gamestatemanagement.screens
             }
 
 
+        }
+
+        public TownManager TownManager
+        {
+            get { return m_townManager; }
         }
 
         public Party Party
@@ -263,7 +282,7 @@ namespace Gladius.gamestatemanagement.screens
 
         double m_timeOfDay;
         // 1 second = 1 hour
-        double m_timeMultiplier = 1000 * 60 * 60;
+        double m_timeMultiplier = 1000 * 60 * 60 * 0.2;
         int m_dayCount = 0;
 
         TownManager m_townManager;
@@ -273,6 +292,7 @@ namespace Gladius.gamestatemanagement.screens
 
         Vector3 m_ambientLightColor;
         float m_ambientLightIntensity;
+        RainParticleSystem m_rainParticleSystem;
     }
 
     struct LightingSpan

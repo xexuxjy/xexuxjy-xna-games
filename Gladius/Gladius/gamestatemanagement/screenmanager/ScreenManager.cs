@@ -163,6 +163,9 @@ namespace GameStateManagement
             {
                 // Read the keyboard and gamepad.
                 input.Update();
+                Globals.CameraManager.Update(gameTime);
+                Globals.CameraManager.UpdateInput(input);
+
 
                 // Make a copy of the master screen list, to avoid confusion if
                 // the process of updating one screen adds or removes others.

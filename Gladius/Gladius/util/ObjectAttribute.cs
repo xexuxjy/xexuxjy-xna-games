@@ -8,12 +8,12 @@ namespace xexuxjy.Gladius.util
 {
     public enum GameObjectAttributeType
     {
-        Health,
-        Mana,
-        Movement,
-        Damage,
-        Agility,
+        Accuracy,
         Defense,
+        Power,
+        Constitution,        
+        Health,
+        Movement,
         CriticalChance,
         EarthAffinity,
         AirAffinity,

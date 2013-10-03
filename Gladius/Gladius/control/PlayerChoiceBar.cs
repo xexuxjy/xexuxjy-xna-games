@@ -81,6 +81,7 @@ namespace Gladius.control
             {
                 m_currentAttackSkillLine.Add(m_attackSkills[i][0]);
             }
+            m_actionCursor = new Point();
         }
 
 
@@ -288,6 +289,7 @@ namespace Gladius.control
             set
             {
                 m_currentActor = value;
+                ActionSelected = false;
                 BuildDataForActor();
             }
         }

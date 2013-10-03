@@ -23,11 +23,52 @@ namespace Gladius.control
         {
             if (CurrentActor != null)
             {
-                Globals.Camera.Target = CurrentActor.CameraFocusPoint;
-                Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
-                Globals.Camera.Up = model.Up;
-                Globals.Camera.TargetDirection = model.Forward;
+                if (CurrentActor.Attacking)
+                {
+                    Globals.CameraManager.SetStaticCamera();
+                    // focus on point midway between two characters.
+                    Vector3 a = CurrentActor.CameraFocusPoint;
+                    Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
+
+                    Vector3 forward = model.Forward;
+
+                    if(CurrentActor.Target != null)
+                    {
+                        a += CurrentActor.Target.CameraFocusPoint;
+                        a /= 2.0f;
+                        // view side on
+                        forward = model.Right;
+                    }
+
+                    Globals.Camera.Target = a;
+                    Globals.Camera.TargetDirection = forward;
+                }
+                else
+                {
+                    Globals.CameraManager.SetStaticCamera();
+
+                    if (ArenaScreen.MovementGrid.DrawingMovePath)
+                    {
+                        Globals.Camera.Target = ArenaScreen.MovementGrid.CurrentV3;
+                        Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
+                        Globals.Camera.Up = Vector3.Up;
+                        Globals.Camera.TargetDirection = model.Forward;
+                        Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 8.0f);
+                    }
+                    else
+                    {
+                        Globals.Camera.Target = CurrentActor.CameraFocusPoint;
+                        Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
+                        Globals.Camera.Up = model.Up;
+                        Globals.Camera.TargetDirection = model.Forward;
+                        Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f);
+                    }
+                }
+            
             }
+
+
+
 
             if (CurrentActor == null || CurrentActor.TurnComplete)
             {
@@ -46,7 +87,7 @@ namespace Gladius.control
 
         public void EndTurn()
         {
-            Globals.MovementGrid.SelectedActor = CurrentActor;
+            ArenaScreen.MovementGrid.SelectedActor = CurrentActor;
             ArenaScreen.SetMovementGridVisible(false);
             if (CurrentActor != null && CurrentActor.TurnComplete)
             {
