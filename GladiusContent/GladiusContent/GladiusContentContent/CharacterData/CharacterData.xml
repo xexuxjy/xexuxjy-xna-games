@@ -1,0 +1,18 @@
+﻿<Characters>
+  <Character Name="Urlan">
+    <Attributes Accuracy ="40" Defense= "60" Power= "60" Consitution= "80" Experience="1000" Level ="1"/>
+    <Skills>
+
+    </Skills>
+    <Equipment Head ="" Arm1="" Arm2="" Body="" Special=""/>
+  </Character>
+  <Character Name="Ursula">
+    <Attributes Accuracy ="60" Defense= "60" Power= "40" Consitution= "60" Experience="1000" Level ="1"/>
+    <Skills>
+
+    </Skills>
+    <Equipment Head ="" Arm1="" Arm2="" Body="" Special=""/>
+  </Character>
+</Characters>
+
+
