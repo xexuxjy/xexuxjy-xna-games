@@ -13,6 +13,7 @@ using Gladius.util;
 using Gladius.control;
 using Gladius.modes.arena;
 using GameStateManagement;
+using System.Xml;
 
 namespace Gladius.actors
 {
@@ -40,7 +41,7 @@ namespace Gladius.actors
         {
 
             m_attributeDictionary[GameObjectAttributeType.Health] = new BoundedAttribute(100);
-            m_attributeDictionary[GameObjectAttributeType.Agility] = new BoundedAttribute(10);
+            m_attributeDictionary[GameObjectAttributeType.Accuracy] = new BoundedAttribute(10);
 
         }
 
@@ -212,7 +213,13 @@ namespace Gladius.actors
             set;
         }
 
-        public ActorClass ActorClass
+        public bool HasShield
+        {
+            get;
+            set;
+        }
+
+        public ActorCategory ActorClass
         {
             get;
             set;
@@ -224,6 +231,7 @@ namespace Gladius.actors
             {
                 m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue -= attackResult.damageDone;
                 UpdateThreatList(attackResult.damageCauser);
+                PlayAnimation(AnimationEnum.Stagger);
             }
         }
 
@@ -247,12 +255,13 @@ namespace Gladius.actors
                 UpdateMovement(gameTime);
                 UpdateAttack(gameTime);
             }
-
+            CheckState();
         }
 
         public void Think()
         {
             // pick random spot on arena and pathfind for now.
+            return;
             Point result;
             if (Arena.GetRandomEmptySquare(out result))
             {
@@ -383,9 +392,16 @@ namespace Gladius.actors
 
         }
 
-        public void SetTarget(BaseActor target)
+        public BaseActor Target
         {
-            m_currentTarget = target;
+            get
+            {
+                return m_currentTarget;
+            }
+            set
+            {
+                m_currentTarget = value;
+            }
         }
 
         public void StartAttack()
@@ -431,6 +447,7 @@ namespace Gladius.actors
 
         public void StartDeath()
         {
+            Dead = true;
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death started.", DebugName));
             m_animatedModel.PlayAnimation(AnimationEnum.Die, false);
 
@@ -445,7 +462,7 @@ namespace Gladius.actors
 
         public virtual void CheckState()
         {
-            if (m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue <= 0f)
+            if (m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue <= 0f && !Dead)
             {
                 StartDeath();
             }
@@ -570,6 +587,7 @@ namespace Gladius.actors
         public void EndTurn()
         {
             UnitActive = false;
+            CurrentAttackSkill = null;
             m_animatedModel.PlayAnimation(AnimationEnum.Idle);
             TurnManager.QueueActor(this);
         }
@@ -633,6 +651,47 @@ namespace Gladius.actors
             m_rightHandModel = model;
         }
 
+        public bool Dead
+        {
+            get;
+            set;
+        }
+
+
+        /*
+         *   <Character Name="" Accuracy ="" Defense= "" Power= "" Consitution= "" Experience="" Level ="">
+    <Skills>
+    
+    </Skills>
+    <Equipment Head ="" Arm1="" Arm2="" Body="" Special=""/>
+  </Character>
+*/
+        public void SetupCharacterData(XmlElement element)
+        {
+            Name = element.Attributes["Name"].Value;
+            XmlElement attributes =(XmlElement) element.SelectSingleNode("Attributes");
+            foreach (XmlAttribute attr in attributes.Attributes)
+            {
+                try
+                {
+                    GameObjectAttributeType attrType = (GameObjectAttributeType)Enum.Parse(typeof(GameObjectAttributeType), attr.Name);
+                    float val = float.Parse(attr.Value);
+                    m_attributeDictionary[attrType] = new BoundedAttribute(val);
+                }
+                catch (System.Exception ex)
+                {
+                	
+                }
+
+            }
+
+        }
+
+        public Dictionary<GameObjectAttributeType, BoundedAttribute> AttributeDictionary
+        {
+            get { return m_attributeDictionary; }
+        }
+
         private BaseActor m_currentTarget = null;
         private List<BaseActor> m_threatList = new List<BaseActor>();
         private List<Point> m_wayPointList = new List<Point>();
@@ -657,11 +716,50 @@ namespace Gladius.actors
 
     }
 
-    public enum ActorClass
+    public enum ActorCategory
     {
         Light,
         Medium,
         Heavy
+    }
+
+    public enum ActorClass
+    {
+        Amazon,
+        Archer,
+        Bandit,
+        Barbarian,
+        Bear,
+        Berserker,
+        Centurion,
+        Channeler,
+        Cyclops,
+        Dervish,
+        Eiji,
+        Gungir,
+        Gwazi,
+        Legionnaire,
+        Ludo,
+        Minotaur,
+        Mongrel,
+        MongrelShaman,
+        Murmillo,
+        Ogre,
+        Peltast,
+        PlainsCat,
+        Samnite,
+        Satyr,
+        Scarab,
+        Scorpion,
+        Secutor,
+        Summoner,
+        UndeadLegionnaire,
+        UndeadSummoner,
+        Urlan,
+        Ursula,
+        Valens,
+        Wolf,
+        Yeti
     }
 
 }

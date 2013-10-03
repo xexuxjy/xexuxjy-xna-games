@@ -19,9 +19,11 @@ namespace Gladius
 
         public static UserControl UserControl;
         public static ICamera Camera;
+        public static CameraManager CameraManager;
+
         public static CombatEngine CombatEngine;
         public static EventLogger EventLogger;
-        public static MovementGrid MovementGrid;
+        //public static MovementGrid MovementGrid;
         public static AttackBar AttackBar;
         public static PlayerChoiceBar PlayerChoiceBar;
         public static SoundManager SoundManager;
@@ -95,6 +97,15 @@ namespace Gladius
             }
         }
 
+        public static Rectangle InsetRectangle(Rectangle orig, int inset)
+        {
+            Rectangle insetRectangle = orig;
+            insetRectangle.Width -= (inset * 2);
+            insetRectangle.Height -= (inset * 2);
+            insetRectangle.X += inset;
+            insetRectangle.Y += inset;
+            return insetRectangle;
+        }
 
 
     }

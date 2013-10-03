@@ -30,9 +30,12 @@ namespace Gladius
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 1024;
             Content.RootDirectory = "Content";
             Globals.EventLogger = new EventLogger(this,null);
             Globals.EventLogger.Enabled = true;
+            Globals.CameraManager = new CameraManager(this);
         }
 
         /// <summary>
@@ -61,8 +64,8 @@ namespace Gladius
 
             //SetupArena();
             m_screenManager = new ScreenManager(this);
-            //m_screenManager.AddScreen(new ArenaScreen(), null);
-            m_screenManager.AddScreen(new OverlandScreen(), null);
+            m_screenManager.AddScreen(new ArenaScreen(), null);
+            //m_screenManager.AddScreen(new OverlandScreen(), null);
             Globals.GlobalContentManager = new ThreadSafeContentManager(this, this.Services);
 
             Components.Add(m_screenManager);
@@ -90,6 +93,7 @@ namespace Gladius
             // TODO: Add your update logic here
             //m_inputstate.Update();
             //m_camera.HandleInput(m_inputstate);
+            Globals.CameraManager.Update(gameTime);
             base.Update(gameTime);
         }
 

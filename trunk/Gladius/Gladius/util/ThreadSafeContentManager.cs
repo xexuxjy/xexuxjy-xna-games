@@ -48,8 +48,25 @@ namespace Gladius.util
             return m_colorMap[color];
         }
 
+        public Texture2D GetV4Texture(Vector4 color)
+        {
+            if (!m_v4Map.ContainsKey(color))
+            {
+                Texture2D newTexture = new Texture2D(m_game.GraphicsDevice, 1, 1);
+                Color[] colorData = new Color[1];
+                newTexture.GetData<Color>(colorData);
+                colorData[0] = new Color(color);
+                //colorData[0].A = 128;
+                newTexture.SetData(colorData);
+                m_v4Map[color] = newTexture;
+            }
+            return m_v4Map[color];
+        }
+
+
         private Game m_game;
         private Dictionary<Color, Texture2D> m_colorMap = new Dictionary<Color, Texture2D>();
+        private Dictionary<Vector4, Texture2D> m_v4Map = new Dictionary<Vector4, Texture2D>();
 
     }
 }

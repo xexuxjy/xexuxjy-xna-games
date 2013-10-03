@@ -65,9 +65,9 @@ namespace Gladius.control
             {
                 spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), Rectangle, Color.White);
 
-                Rectangle insetRectangle = InsetRectangle(Rectangle, 1);
+                Rectangle insetRectangle = Globals.InsetRectangle(Rectangle, 1);
                 spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Black), insetRectangle, Color.White);
-                insetRectangle = InsetRectangle(insetRectangle, 1);
+                insetRectangle = Globals.InsetRectangle(insetRectangle, 1);
 
                 for (int i = 0; i < m_attackBarParts.Count; ++i)
                 {
@@ -149,15 +149,6 @@ namespace Gladius.control
 
         }
 
-        public static Rectangle InsetRectangle(Rectangle orig, int inset)
-        {
-            Rectangle insetRectangle = orig;
-            insetRectangle.Width -= (inset * 2);
-            insetRectangle.Height -= (inset * 2);
-            insetRectangle.X += inset;
-            insetRectangle.Y += inset;
-            return insetRectangle;
-        }
 
         public override void RegisterListeners()
         {

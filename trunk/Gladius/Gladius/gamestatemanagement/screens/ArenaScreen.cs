@@ -191,13 +191,13 @@ namespace Gladius.gamestatemanagement.screens
             //Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
             //m_screenComponents.Components.Add(Globals.UserControl);
 
-            ChaseCamera chaseCamera = new ChaseCamera();
+            //ChaseCamera chaseCamera = new ChaseCamera();
 
-            Globals.Camera = chaseCamera;
-            Globals.Camera.UpdateInput(ScreenManager.input);
+            //Globals.Camera = chaseCamera;
+            //Globals.Camera.UpdateInput(ScreenManager.input);
     
             //IGameComponent igc = m_camera as IGameComponent;
-            m_screenComponents.Components.Add(Globals.Camera);
+            //m_screenComponents.Components.Add(Globals.Camera);
 
             Globals.Camera.Position = new Vector3(0, 5, -10);
 
@@ -261,8 +261,8 @@ namespace Gladius.gamestatemanagement.screens
             
             Globals.CombatEngine = new CombatEngine();
 
-            Globals.MovementGrid = new MovementGrid(m_arena);
-            m_uiElementsList.Add(Globals.MovementGrid);
+            m_movementGrid = new MovementGrid(m_arena);
+            m_uiElementsList.Add(m_movementGrid);
 
             foreach (IUIElement uiElement in m_uiElementsList)
             {
@@ -280,22 +280,22 @@ namespace Gladius.gamestatemanagement.screens
 
             //Globals.MovementGrid.CurrentActor = actors[0];
             actors[0].PlayerControlled = true;
-            chaseCamera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
-            chaseCamera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f) * actors[0].ModelHeight;
+            Globals.Camera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
+            Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f) * actors[0].ModelHeight;
 
 
         }
 
         public void SetMovementGridVisible(bool value)
         {
-            Globals.MovementGrid.Visible = value;
+            MovementGrid.Visible = value;
             if (value)
             {
-                Globals.MovementGrid.RegisterListeners();
+                MovementGrid.RegisterListeners();
             }
             else
             {
-                Globals.MovementGrid.UnregisterListeners();
+                MovementGrid.UnregisterListeners();
             }
         }
 
@@ -332,6 +332,10 @@ namespace Gladius.gamestatemanagement.screens
             get { return Globals.PlayerChoiceBar; }
         }
 
+        public MovementGrid MovementGrid
+        {
+            get { return m_movementGrid; }
+        }
 
         #endregion
         #region Fields
@@ -342,7 +346,7 @@ namespace Gladius.gamestatemanagement.screens
         protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();
 
-        //MovementGrid m_movementGrid;
+        MovementGrid m_movementGrid;
         //PlayerChoiceBar m_playerChoiceBar;
         //AttackBar m_attackBar;
         #endregion

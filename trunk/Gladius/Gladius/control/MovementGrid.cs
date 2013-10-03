@@ -59,7 +59,7 @@ namespace Gladius.control
                         case AttackType.Move:
                             DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
                             DrawMovementPath(device, camera, SelectedActor, SelectedActor.WayPointList);
-                            DrawIfValid(device, camera, CurrentPosition, SelectedActor);
+                            //DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                             break;
                         case (AttackType.AOE):
                             break;
@@ -81,6 +81,14 @@ namespace Gladius.control
                             break;
                     }
                 }
+            }
+        }
+
+        public bool DrawingMovePath
+        {
+            get
+            {
+                return (Visible && SelectedActor != null && SelectedActor.CurrentAttackSkill != null && SelectedActor.CurrentAttackSkill.AttackType == AttackType.Move);
             }
         }
 
@@ -189,7 +197,7 @@ namespace Gladius.control
             int numPoints = points.Count;
             for (int i = 0; i < numPoints; ++i)
             {
-                if (i < numPoints - 1)
+                if (i < (numPoints - 1))
                 {
                     DrawIfValid(device, camera, points[i], points[i + 1], actor);
                 }
@@ -316,7 +324,7 @@ namespace Gladius.control
                                     BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
                                     if (Globals.CombatEngine.IsValidTarget(SelectedActor, target))
                                     {
-                                        SelectedActor.SetTarget(target);
+                                        SelectedActor.Target = target;
                                         SelectedActor.AttackRequested = true;
                                     }
                                 }

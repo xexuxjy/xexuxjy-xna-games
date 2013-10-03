@@ -395,6 +395,13 @@ namespace Gladius.renderer
             }
         }
 
+        public void SnapTo(Vector3 eye, Vector3 lookat)
+        {
+            //Position = eye;
+            //LookAt = lookat;
+        }
+
+
 
         public void Initialize()
         {

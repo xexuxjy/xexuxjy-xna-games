@@ -89,13 +89,23 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="renderer\animation\AnimatedModel.cs" />
     <Compile Include="renderer\animation\AnimationEvent.cs" />
+    <Compile Include="renderer\CameraManager.cs" />
     <Compile Include="renderer\ChaseCamera.cs" />
     <Compile Include="renderer\DHPCameraComponent.cs" />
     <Compile Include="renderer\ICamera.cs" />
+    <Compile Include="renderer\particles\ParticleEmitter.cs" />
+    <Compile Include="renderer\particles\ParticleManager.cs" />
+    <Compile Include="renderer\particles\ParticleSettings.cs" />
+    <Compile Include="renderer\particles\ParticleSystem.cs" />
+    <Compile Include="renderer\particles\ParticleVertex.cs" />
+    <Compile Include="renderer\particles\Program.cs" />
+    <Compile Include="renderer\particles\Projectile.cs" />
+    <Compile Include="renderer\particles\RainParticleSystem.cs" />
     <Compile Include="renderer\ScreenQuad.cs" />
     <Compile Include="renderer\SimpleArenaRenderer.cs" />
     <Compile Include="renderer\SimpleQuad.cs" />
     <Compile Include="modes\overland\Terrain.cs" />
+    <Compile Include="renderer\StaticCamera.cs" />
     <Compile Include="Terrain7\BufferManager.cs" />
     <Compile Include="Terrain7\Culling\ClippingFrustrum.cs" />
     <Compile Include="Terrain7\Culling\ClipPlane.cs" />
@@ -109,6 +119,7 @@
     <Compile Include="Terrain7\QuadNodeVertex.cs" />
     <Compile Include="Terrain7\QuadTree.cs" />
     <Compile Include="Terrain7\TreeVertexCollection.cs" />
+    <Compile Include="util\ActorGenerator.cs" />
     <Compile Include="util\ColouredTextureDictionary.cs" />
     <Compile Include="util\EventLogger.cs" />
     <Compile Include="util\GameScreenComponent.cs" />
@@ -135,6 +146,9 @@
     <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\CharacterData\CharacterData.xml">
+      <Link>Content\CharacterData\CharacterData.xml</Link>
+    </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\TownData\TownData.xml">
       <Link>Content\OverlandData\TownData.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -615,6 +629,26 @@
   <ItemGroup>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\OverlandGame.xnb">
       <Link>Content\UI\OverlandGame.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\ParticleEffect.xnb">
+      <Link>Content\Particles\test\ParticleEffect.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\rain.xnb">
+      <Link>Content\Particles\test\rain.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\fire.xnb">
+      <Link>Content\Particles\test\fire.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\smoke.xnb">
+      <Link>Content\Particles\test\smoke.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
