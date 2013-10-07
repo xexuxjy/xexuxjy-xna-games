@@ -59,7 +59,7 @@ namespace Gladius.control
             RegisterListeners();
         }
 
-        public override void DrawElement(GameTime gameTime,SpriteBatch spriteBatch)
+        public override void DrawElement(GameTime gameTime, GraphicsDevice device, SpriteBatch spriteBatch)
         {
             if (Visible)
             {

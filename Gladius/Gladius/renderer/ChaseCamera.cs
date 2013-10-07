@@ -232,7 +232,7 @@ namespace Gladius.renderer
             get { return farPlaneDistance; }
             set { farPlaneDistance = value; }
         }
-        private float farPlaneDistance = 100000.0f;
+        private float farPlaneDistance = 1000.0f;
 
         #endregion
 
@@ -254,7 +254,7 @@ namespace Gladius.renderer
         public Matrix Projection
         {
             get { return projection; }
-            set { Projection = value; }
+            set { projection = value; }
         }
         private Matrix projection;
 

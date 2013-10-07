@@ -31,7 +31,7 @@ namespace Gladius.util
 
         public static void LoadActors(String filename, List<BaseActor> results, GameScreen gameScreen)
         {
-            using (StreamReader sr = new StreamReader(TitleContainer.OpenStream("Content/CharacterData/CharacterData.xml")))
+            using (StreamReader sr = new StreamReader(TitleContainer.OpenStream(filename)))
             {
                 String result = sr.ReadToEnd();
                 XmlDocument doc = new XmlDocument();

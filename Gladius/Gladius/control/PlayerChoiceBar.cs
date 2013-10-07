@@ -31,7 +31,7 @@ namespace Gladius.control
             EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
-        public override void DrawElement(GameTime gameTime,SpriteBatch spriteBatch)
+        public override void DrawElement(GameTime gameTime,GraphicsDevice graphiceDevice,SpriteBatch spriteBatch)
         {
             Rectangle barRect = new Rectangle(Rectangle.X,Rectangle.Y,m_skillBar1Bitmap.Width,m_skillBar1Bitmap.Height);
             DrawSkillBar1(spriteBatch, barRect, "Foo", "Bar", 30, 100, 70, 100);

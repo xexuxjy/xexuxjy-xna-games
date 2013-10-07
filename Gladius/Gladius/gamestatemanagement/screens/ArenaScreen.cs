@@ -24,6 +24,7 @@ using Gladius.util;
 using Gladius.gamestatemanagement.screens;
 using GameStateManagement;
 using Gladius.modes.arena;
+using System.Text;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
@@ -108,6 +109,23 @@ namespace Gladius.gamestatemanagement.screens
             }
 
 
+            if (m_updateCalls % 100 == 0)
+            {
+                StringBuilder textLeft = new StringBuilder("Combat Text "+m_updateCalls+" left");
+                StringBuilder textRight = new StringBuilder("Combat Text " + m_updateCalls+" right");
+
+                Vector3 start1 = m_turnManager.CurrentActor.CameraFocusPoint;
+                start1 -= m_turnManager.CurrentActor.World.Right*5;
+                    
+                Vector3 start2 = m_turnManager.CurrentActor.CameraFocusPoint;
+                start2 += m_turnManager.CurrentActor.World.Right * 5;
+                start2 -= m_turnManager.CurrentActor.World.Forward*5;
+
+
+                m_combatEngineUI.DrawFloatingText(start1, Color.White, textLeft, 4);
+                m_combatEngineUI.DrawFloatingText(start2, Color.White, textRight, 4);
+            }
+
 
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
@@ -160,7 +178,7 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
-                    uiElement.DrawElement(gameTime, m_spriteBatch);
+                    uiElement.DrawElement(gameTime, ScreenManager.GraphicsDevice,m_spriteBatch);
                 }
             }
 
@@ -188,23 +206,9 @@ namespace Gladius.gamestatemanagement.screens
             m_gameFont.Spacing = -4.0f;
 
 
-            //Globals.UserControl = new UserControl(ScreenManager.Game, ScreenManager.input);
-            //m_screenComponents.Components.Add(Globals.UserControl);
-
-            //ChaseCamera chaseCamera = new ChaseCamera();
-
-            //Globals.Camera = chaseCamera;
-            //Globals.Camera.UpdateInput(ScreenManager.input);
-    
-            //IGameComponent igc = m_camera as IGameComponent;
-            //m_screenComponents.Components.Add(Globals.Camera);
-
             Globals.Camera.Position = new Vector3(0, 5, -10);
 
             m_arena = new Arena(32, 32);
-
-
-            //Globals.Camera.CurrentBehavior = Camera.Behavior.FirstPerson;
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena,this);
             m_arenaRenderer.LoadContent();
@@ -224,7 +228,7 @@ namespace Gladius.gamestatemanagement.screens
             int numActors = 4;
             for (int i = 0; i < numActors; ++i)
             {
-                BaseActor ba1 = new BaseActor(this);
+                BaseActor ba1 = ActorGenerator.GenerateActor(1,ActorClass.Barbarian,this);
                 ba1.ModelName = modelName;
                 ba1.Arena = m_arena;
                 ba1.DebugName = "Monster" + i;
@@ -264,6 +268,10 @@ namespace Gladius.gamestatemanagement.screens
             m_movementGrid = new MovementGrid(m_arena);
             m_uiElementsList.Add(m_movementGrid);
 
+            m_combatEngineUI = new CombatEngineUI();
+            m_combatEngineUI.Visible = true;
+            m_uiElementsList.Add(m_combatEngineUI);
+
             foreach (IUIElement uiElement in m_uiElementsList)
             {
                 uiElement.LoadContent(m_content,ScreenManager.Game.GraphicsDevice);
@@ -283,6 +291,9 @@ namespace Gladius.gamestatemanagement.screens
             Globals.Camera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
             Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f) * actors[0].ModelHeight;
 
+            List<BaseActor> loadedActors = new List<BaseActor>();
+            ActorGenerator.LoadActors("Content/CharacterData/CharacterData.xml", loadedActors, this);
+            int ibreak = 0;
 
         }
 
@@ -342,6 +353,8 @@ namespace Gladius.gamestatemanagement.screens
 
         private SimpleArenaRenderer m_arenaRenderer;
         private Arena m_arena;
+
+        private CombatEngineUI m_combatEngineUI;
 
         protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();

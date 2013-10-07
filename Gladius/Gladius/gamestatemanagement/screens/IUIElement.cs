@@ -16,7 +16,7 @@ namespace Gladius.gamestatemanagement.screens
     {
         void LoadContent(ContentManager manager,GraphicsDevice device);
         void Update(GameTime gameTime);
-        void DrawElement(GameTime gameTime, SpriteBatch spriteBatch);
+        void DrawElement(GameTime gameTime, GraphicsDevice device, SpriteBatch spriteBatch);
         void DrawElement(GameTime gameTime, GraphicsDevice device,ICamera camera);
 
         void RegisterListeners();

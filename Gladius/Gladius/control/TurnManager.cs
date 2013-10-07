@@ -28,7 +28,7 @@ namespace Gladius.control
                     Globals.CameraManager.SetStaticCamera();
                     // focus on point midway between two characters.
                     Vector3 a = CurrentActor.CameraFocusPoint;
-                    Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
+                    Matrix model = CurrentActor.World;
 
                     Vector3 forward = model.Forward;
 
@@ -45,12 +45,12 @@ namespace Gladius.control
                 }
                 else
                 {
-                    Globals.CameraManager.SetStaticCamera();
+                    Globals.CameraManager.SetChaseCamera();
 
                     if (ArenaScreen.MovementGrid.DrawingMovePath)
                     {
                         Globals.Camera.Target = ArenaScreen.MovementGrid.CurrentV3;
-                        Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
+                        Matrix model = CurrentActor.World;
                         Globals.Camera.Up = Vector3.Up;
                         Globals.Camera.TargetDirection = model.Forward;
                         Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 8.0f);
@@ -58,7 +58,7 @@ namespace Gladius.control
                     else
                     {
                         Globals.Camera.Target = CurrentActor.CameraFocusPoint;
-                        Matrix model = Matrix.CreateFromQuaternion(CurrentActor.Rotation);
+                        Matrix model = CurrentActor.World;
                         Globals.Camera.Up = model.Up;
                         Globals.Camera.TargetDirection = model.Forward;
                         Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f);
