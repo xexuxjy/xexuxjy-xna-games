@@ -146,7 +146,7 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
-                    uiElement.DrawElement(gameTime, m_spriteBatch);
+                    uiElement.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice,m_spriteBatch);
                 }
             }
 

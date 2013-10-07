@@ -44,7 +44,7 @@ namespace Gladius.gamestatemanagement.screens
             set;
         }
 
-        public virtual void DrawElement(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void DrawElement(GameTime gameTime, GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
         }
 

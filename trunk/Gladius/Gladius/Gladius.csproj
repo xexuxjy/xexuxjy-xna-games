@@ -49,6 +49,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="actors\TestPlayer.cs" />
+    <Compile Include="combat\CombatEngineUI.cs" />
     <Compile Include="modes\arena\Arena.cs" />
     <Compile Include="actors\BaseActor.cs" />
     <Compile Include="combat\AttackSkill.cs" />
@@ -148,6 +149,7 @@
   <ItemGroup>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\CharacterData\CharacterData.xml">
       <Link>Content\CharacterData\CharacterData.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\TownData\TownData.xml">
       <Link>Content\OverlandData\TownData.xml</Link>
@@ -633,10 +635,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\ParticleEffect.xnb">
-      <Link>Content\Particles\test\ParticleEffect.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\rain.xnb">
       <Link>Content\Particles\test\rain.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

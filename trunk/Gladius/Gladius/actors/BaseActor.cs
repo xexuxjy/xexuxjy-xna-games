@@ -195,10 +195,13 @@ namespace Gladius.actors
             set;
         }
 
+        private Matrix m_world;
         public Matrix World
         {
-            get;
-            set;
+            get
+            {
+                return m_world;
+            }
         }
 
         public BoundingBox BoundingBox
@@ -243,6 +246,9 @@ namespace Gladius.actors
 
         public override void VariableUpdate(GameTime gameTime)
         {
+            m_world = Matrix.CreateFromQuaternion(Rotation);
+            m_world.Translation = Position;
+
             if (m_animatedModel != null)
             {
                 m_animatedModel.ActorRotation = Rotation;
