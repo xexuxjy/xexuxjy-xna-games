@@ -43,6 +43,7 @@ namespace Gladius.renderer
                 newCamera.Position = oldCamera.Position;
                 newCamera.View = oldCamera.View;
                 newCamera.Projection = oldCamera.Projection;
+
             }
         }
 

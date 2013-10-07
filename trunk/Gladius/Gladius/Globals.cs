@@ -37,6 +37,8 @@ namespace Gladius
 
         public static ThreadSafeContentManager GlobalContentManager;
 
+        public static Random Random = new Random();
+
 
         public static bool NextToTarget(BaseActor from, BaseActor to)
         {

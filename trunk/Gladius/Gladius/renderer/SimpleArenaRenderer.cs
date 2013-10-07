@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Gladius.control;
 using Gladius.modes.arena;
 using GameStateManagement;
+using Gladius.gamestatemanagement.screens;
 
 namespace Gladius.renderer
 {
@@ -35,7 +36,7 @@ namespace Gladius.renderer
             m_baseActorScale = Vector3.One;// new Vector3(1f / actorBs.Radius);
 
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            m_spriteFont = ContentManager.Load<SpriteFont>("UI/DebugFont8");
+            m_spriteFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
         }
 
         public override void Draw(GameTime gameTime)
@@ -120,6 +121,8 @@ namespace Gladius.renderer
             //}
 
             //m_movementGrid.Draw(graphicsDevice, camera);
+
+
             Globals.DrawCameraDebugText(m_spriteBatch, m_spriteFont,1);
         }
 

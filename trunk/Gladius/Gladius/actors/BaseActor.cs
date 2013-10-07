@@ -137,11 +137,11 @@ namespace Gladius.actors
             m_attributeDictionary[attributeType].CurrentValue = val;
         }
 
-        public void PlayAnimation(AnimationEnum animation)
+        public void PlayAnimation(AnimationEnum animation,bool loopClip=true)
         {
             if (m_animatedModel != null)
             {
-                m_animatedModel.PlayAnimation(animation);
+                m_animatedModel.PlayAnimation(animation,loopClip);
             }
         }
 
@@ -234,7 +234,7 @@ namespace Gladius.actors
             {
                 m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue -= attackResult.damageDone;
                 UpdateThreatList(attackResult.damageCauser);
-                PlayAnimation(AnimationEnum.Stagger);
+                PlayAnimation(AnimationEnum.Stagger,false);
             }
         }
 
@@ -258,27 +258,51 @@ namespace Gladius.actors
 
             if (UnitActive)
             {
-                UpdateMovement(gameTime);
-                UpdateAttack(gameTime);
+                if (FollowingWayPoints)
+                {
+                    UpdateMovement(gameTime);
+                }
+                //if (Attacking)
+                {
+                    UpdateAttack(gameTime);
+                }
             }
             CheckState();
         }
 
         public void Think()
         {
-            // pick random spot on arena and pathfind for now.
-            return;
-            Point result;
-            if (Arena.GetRandomEmptySquare(out result))
+            // Are we next to an enemy
+            BaseActor enemy = Arena.NextToEnemy(this);
+            if (enemy != null)
             {
-                if (Arena.FindPath(CurrentPosition, result, WayPointList))
-                {
-                    ConfirmMove();
-                }
-
-                // find a movement skill for now.
-                CurrentAttackSkill = m_knownAttacks.First(x => x.AttackType == AttackType.Move);
+                Target = enemy;
+                AttackRequested = true;
             }
+            else
+            {
+                // pick random spot on arena and pathfind for now.
+                Point result;
+                BaseActor target = Arena.FindNearestEnemy(this);
+                if (target != null)
+                {
+                    Point nearestPoint = Arena.PointNearestLocation(target.CurrentPosition, false);
+                    if (Arena.FindPath(CurrentPosition, nearestPoint, WayPointList))
+                    {
+                        ConfirmMove();
+                    }
+                }
+            }
+            //if (Arena.GetRandomEmptySquare(out result))
+            //{
+            //    if (Arena.FindPath(CurrentPosition, result, WayPointList))
+            //    {
+            //        ConfirmMove();
+            //    }
+
+            //    // find a movement skill for now.
+            //    CurrentAttackSkill = m_knownAttacks.First(x => x.AttackType == AttackType.Move);
+            //}
         }
 
 
@@ -410,9 +434,15 @@ namespace Gladius.actors
             }
         }
 
+        private void ChooseAttackSkill()
+        {
+            CurrentAttackSkill = m_knownAttacks.First(a => a.AttackType == AttackType.Single);
+        }
+
         public void StartAttack()
         {
-            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}].", DebugName, m_currentTarget != null ? m_currentTarget.DebugName : "NoActorTarget"));
+            ChooseAttackSkill();
+            Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", DebugName, m_currentTarget != null ? m_currentTarget.DebugName : "NoActorTarget",CurrentAttackSkill.Name));
             m_animatedModel.PlayAnimation(AnimationEnum.Attack1, false);
             Attacking = true;
             AttackRequested = false;
@@ -718,6 +748,9 @@ namespace Gladius.actors
         private Model m_leftHandModel;
         private Model m_rightHandModel;
         private String m_debugName;
+
+        public const int MinLevel = 1;
+        public const int MaxLevel = 15;
 
 
     }
