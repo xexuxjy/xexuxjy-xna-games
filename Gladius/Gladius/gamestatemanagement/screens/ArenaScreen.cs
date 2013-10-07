@@ -111,15 +111,15 @@ namespace Gladius.gamestatemanagement.screens
 
             if (m_updateCalls % 100 == 0)
             {
-                StringBuilder textLeft = new StringBuilder("Combat Text "+m_updateCalls+" left");
-                StringBuilder textRight = new StringBuilder("Combat Text " + m_updateCalls+" right");
+                StringBuilder textLeft = new StringBuilder("Combat Text " + m_updateCalls + " left");
+                StringBuilder textRight = new StringBuilder("Combat Text " + m_updateCalls + " right");
 
                 Vector3 start1 = m_turnManager.CurrentActor.CameraFocusPoint;
-                start1 -= m_turnManager.CurrentActor.World.Right*5;
-                    
+                start1 -= m_turnManager.CurrentActor.World.Right * 5;
+
                 Vector3 start2 = m_turnManager.CurrentActor.CameraFocusPoint;
                 start2 += m_turnManager.CurrentActor.World.Right * 5;
-                start2 -= m_turnManager.CurrentActor.World.Forward*5;
+                start2 -= m_turnManager.CurrentActor.World.Forward * 5;
 
 
                 m_combatEngineUI.DrawFloatingText(start1, Color.White, textLeft, 4);
@@ -167,7 +167,7 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
-                    uiElement.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice,Globals.Camera);
+                    uiElement.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
                 }
             }
 
@@ -178,9 +178,11 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
-                    uiElement.DrawElement(gameTime, ScreenManager.GraphicsDevice,m_spriteBatch);
+                    uiElement.DrawElement(gameTime, ScreenManager.GraphicsDevice, m_spriteBatch);
                 }
             }
+
+            m_spriteBatch.DrawString(m_debugFont, Globals.CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
 
             m_spriteBatch.End();
 
@@ -202,15 +204,16 @@ namespace Gladius.gamestatemanagement.screens
             // Load the sprite font. The sprite font has a 3 pixel outer glow
             // baked into it so we need to decrease the spacing so that the
             // SpriteFont will render correctly.
-            m_gameFont= m_content.Load<SpriteFont>("GameFont");
+            m_gameFont = m_content.Load<SpriteFont>("GameFont");
             m_gameFont.Spacing = -4.0f;
 
+            m_debugFont = m_content.Load<SpriteFont>("UI/fonts/DebugFont8");
 
             Globals.Camera.Position = new Vector3(0, 5, -10);
 
             m_arena = new Arena(32, 32);
 
-            m_arenaRenderer = new SimpleArenaRenderer(m_arena,this);
+            m_arenaRenderer = new SimpleArenaRenderer(m_arena, this);
             m_arenaRenderer.LoadContent();
             m_screenComponents.Components.Add(m_arenaRenderer);
             //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
@@ -228,11 +231,12 @@ namespace Gladius.gamestatemanagement.screens
             int numActors = 4;
             for (int i = 0; i < numActors; ++i)
             {
-                BaseActor ba1 = ActorGenerator.GenerateActor(1,ActorClass.Barbarian,this);
+                BaseActor ba1 = ActorGenerator.GenerateActor(1, ActorClass.Barbarian, this);
                 ba1.ModelName = modelName;
                 ba1.Arena = m_arena;
                 ba1.DebugName = "Monster" + i;
                 ba1.LoadContent();
+                ba1.Team = "Team1";
                 actors.Add(ba1);
                 m_screenComponents.Components.Add(ba1);
                 ba1.SetupSkills(Globals.AttackSkillDictionary);
@@ -251,7 +255,7 @@ namespace Gladius.gamestatemanagement.screens
 
             }
 
-            Globals.AttackBar= new AttackBar();
+            Globals.AttackBar = new AttackBar();
             Globals.AttackBar.Rectangle = new Rectangle(20, 300, 600, 30);
             Globals.AttackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
             //m_screenComponents.Components.Add(attackBar);
@@ -262,7 +266,7 @@ namespace Gladius.gamestatemanagement.screens
             Globals.PlayerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
 
             m_uiElementsList.Add(Globals.PlayerChoiceBar);
-            
+
             Globals.CombatEngine = new CombatEngine();
 
             m_movementGrid = new MovementGrid(m_arena);
@@ -274,7 +278,7 @@ namespace Gladius.gamestatemanagement.screens
 
             foreach (IUIElement uiElement in m_uiElementsList)
             {
-                uiElement.LoadContent(m_content,ScreenManager.Game.GraphicsDevice);
+                uiElement.LoadContent(m_content, ScreenManager.Game.GraphicsDevice);
                 //uiElement.Arena = m_arena;
                 uiElement.ArenaScreen = this;
             }
@@ -288,6 +292,7 @@ namespace Gladius.gamestatemanagement.screens
 
             //Globals.MovementGrid.CurrentActor = actors[0];
             actors[0].PlayerControlled = true;
+            actors[0].Team = "PlayerTeam";
             Globals.Camera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
             Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f) * actors[0].ModelHeight;
 
@@ -355,7 +360,7 @@ namespace Gladius.gamestatemanagement.screens
         private Arena m_arena;
 
         private CombatEngineUI m_combatEngineUI;
-
+        private SpriteFont m_debugFont;
         protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();
 

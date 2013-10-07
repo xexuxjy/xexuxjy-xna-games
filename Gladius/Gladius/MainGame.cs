@@ -65,6 +65,7 @@ namespace Gladius
             //SetupArena();
             m_screenManager = new ScreenManager(this);
             m_screenManager.AddScreen(new ArenaScreen(), null);
+            //m_screenManager.AddScreen(new ShopScreen(), null);
             //m_screenManager.AddScreen(new OverlandScreen(), null);
             Globals.GlobalContentManager = new ThreadSafeContentManager(this, this.Services);
 

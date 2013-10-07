@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Content;
 using Gladius.util;
 using GameStateManagement;
 using Gladius.renderer;
+using Gladius.modes.town;
 
 namespace Gladius.modes.overland
 {
@@ -99,6 +100,12 @@ namespace Gladius.modes.overland
         public String Name;
         public BoundingSphere Bounds;
         public Model Model;
+        public String ArenaName;
+        public String ShopName;
+
+        public List<League> Leagues;
+
+
 
         public Town(XmlElement node)
         {

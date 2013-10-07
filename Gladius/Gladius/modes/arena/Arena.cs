@@ -11,7 +11,7 @@ namespace Gladius.modes.arena
     public class Arena
     {
 
-        public Arena(int width,int breadth)
+        public Arena(int width, int breadth)
         {
             m_arenaGrid = new SquareType[width, breadth];
             m_width = width;
@@ -38,7 +38,7 @@ namespace Gladius.modes.arena
             {
                 for (int j = 0; j < Breadth; ++j)
                 {
-                    if(i == 0 || j == 0 || i == Width-1 || j == Breadth -1)
+                    if (i == 0 || j == 0 || i == Width - 1 || j == Breadth - 1)
                     {
                         m_arenaGrid[i, j] = SquareType.Wall;
                     }
@@ -88,7 +88,7 @@ namespace Gladius.modes.arena
         {
             // set current actor square to empty
             //baseActor
-            m_arenaGrid[baseActor.CurrentPosition.X,baseActor.CurrentPosition.Y] = SquareType.Empty;
+            m_arenaGrid[baseActor.CurrentPosition.X, baseActor.CurrentPosition.Y] = SquareType.Empty;
             if (m_baseActorMap.ContainsKey(baseActor.CurrentPosition))
             {
                 m_baseActorMap.Remove(baseActor.CurrentPosition);
@@ -100,7 +100,7 @@ namespace Gladius.modes.arena
 
         public void AssertBounds(Point p)
         {
-            if(p.X < 0 || p.X >= Width || p.Y < 0 || p.Y >= Breadth)
+            if (p.X < 0 || p.X >= Width || p.Y < 0 || p.Y >= Breadth)
             {
                 Debug.Assert(false);
             }
@@ -111,7 +111,7 @@ namespace Gladius.modes.arena
             BaseActor result = null;
             if (InLevel(p))
             {
-                m_baseActorMap.TryGetValue(p,out result);
+                m_baseActorMap.TryGetValue(p, out result);
             }
             return result;
         }
@@ -171,12 +171,12 @@ namespace Gladius.modes.arena
         }
 
 
-        public Vector3 ArenaToWorld(Point p,bool includeHeight=true)
+        public Vector3 ArenaToWorld(Point p, bool includeHeight = true)
         {
             float groundHeight = includeHeight ? GetHeightAtLocation(p) : 0.0f; ;
             Vector3 topLeft = new Vector3(-Width / 2f, 0, -Breadth / 2f);
             topLeft += Position;
-            
+
             Vector3 result = topLeft + new Vector3(p.X, groundHeight, p.Y);
             return result;
             //    //DrawBox(Vector3.One, texture2d, translation);
@@ -215,6 +215,69 @@ namespace Gladius.modes.arena
             return m_pathFinder.FindPath(start, end, result);
         }
 
+        // dumb version for now. doesn't check path
+        public BaseActor FindNearestEnemy(BaseActor searcher)
+        {
+            float closest = float.MaxValue;
+            BaseActor closestActor = null;
+            foreach (BaseActor enemy in m_baseActorMap.Values)
+            {
+                if (enemy.Team != searcher.Team)
+                {
+                    float dist = (enemy.Position - searcher.Position).LengthSquared();
+                    if (dist < closest)
+                    {
+                        closestActor = enemy;
+                    }
+                }
+
+            }
+            return closestActor;
+        }
+
+        public BaseActor NextToEnemy(BaseActor source, bool orthogonal = true)
+        {
+            foreach (Point p2 in orthogonal ? m_orthognalPoints : m_surroundingPoints)
+            {
+                Point adjusted = source.CurrentPosition + p2;
+                if (InLevel(adjusted))
+                {
+                    if (GetSquareTypeAtLocation(adjusted) == SquareType.Mobile)
+                    {
+                        BaseActor ba = m_baseActorMap[adjusted];
+                        if (ba.Team != source.Team)
+                        {
+                            return ba;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        public Point PointNearestLocation(Point location, bool includeSquare = true)
+        {
+            if (includeSquare)
+            {
+                if (GetSquareTypeAtLocation(location) == SquareType.Empty)
+                {
+                    return location;
+                }
+            }
+            foreach (Point p in m_orthognalPoints)
+            {
+                Point adjusted = location + p;
+                if (InLevel(adjusted) && GetSquareTypeAtLocation(adjusted) == SquareType.Empty)
+                {
+                    return adjusted;
+                }
+
+            }
+            return Point.Zero;
+        }
+
+
         private SquareType[,] m_arenaGrid;
         private int m_width;
         private int m_breadth;
@@ -222,6 +285,9 @@ namespace Gladius.modes.arena
         private Dictionary<Point, BaseActor> m_baseActorMap = new Dictionary<Point, BaseActor>();
         private ArenaPathFinder m_pathFinder;
         private Random m_rng = new Random();
+        Point[] m_orthognalPoints = new Point[] { new Point(-1, 0), new Point(1, 0), new Point(0, -1), new Point(0, 1) };
+        Point[] m_surroundingPoints = new Point[] { new Point(-1, -1), new Point(0, -1), new Point(1, -1), new Point(0, -1), 
+            new Point(0,1),new Point(-1,1),new Point(0,1),new Point(1,1)};
     }
 
     public enum SquareType
@@ -267,7 +333,7 @@ namespace Gladius.modes.arena
 
     public class ArenaPathFinder
     {
-                // How much time has passed since the last search step
+        // How much time has passed since the last search step
         private float timeSinceLastSearchStep = 0f;
         // Holds search nodes that are avaliable to search
         private List<SearchNode> openList;
@@ -276,17 +342,16 @@ namespace Gladius.modes.arena
         // Holds all the paths we've creted so far
         private Dictionary<Point, Point> paths;
         // The map we're searching
-        private Arena m_levelMap;        
+        private Arena m_levelMap;
         // Seconds per search step        
         public float timeStep = .5f;
 
         public Point startPoint = new Point();
         public Point endPoint = new Point();
 
-
         public List<Point> stepPoints = new List<Point>(4);
 
-        
+
         #region Properties
 
         // Tells us if the search is stopped, started, finished or failed
@@ -302,7 +367,7 @@ namespace Gladius.modes.arena
             get { return searchMethod; }
         }
         private SearchMethod searchMethod = SearchMethod.BestFirst;
-        
+
         // Seconds per search step
         public float TimeStep
         {
@@ -316,7 +381,7 @@ namespace Gladius.modes.arena
         public bool IsSearching
         {
             get { return searchStatus == SearchStatus.Searching; }
-            set 
+            set
             {
                 if (searchStatus == SearchStatus.Searching)
                 {
@@ -384,7 +449,7 @@ namespace Gladius.modes.arena
                 }
             }
         }
-        
+
         /// <summary>
         /// Draw the search space
         /// </summary>
@@ -430,7 +495,7 @@ namespace Gladius.modes.arena
         /// </summary>
         public void NextSearchType()
         {
-            searchMethod = (SearchMethod)(((int)searchMethod + 1) % 
+            searchMethod = (SearchMethod)(((int)searchMethod + 1) %
                 (int)SearchMethod.Max);
         }
 
@@ -448,14 +513,14 @@ namespace Gladius.modes.arena
             {
                 Point currentPos = newOpenListNode.Position;
                 stepPoints.Clear();
-                OpenMapTiles(currentPos,stepPoints);
+                OpenMapTiles(currentPos, stepPoints);
                 foreach (Point point in stepPoints)
                 {
-                    SearchNode mapTile = new SearchNode(point, 
-                        StepDistanceToEnd(point), 
+                    SearchNode mapTile = new SearchNode(point,
+                        StepDistanceToEnd(point),
                         newOpenListNode.DistanceTraveled + 1);
-                    if (!InList(openList,point) &&
-                        !InList(closedList,point))
+                    if (!InList(openList, point) &&
+                        !InList(closedList, point))
                     {
                         openList.Add(mapTile);
                         paths[point] = newOpenListNode.Position;
@@ -521,7 +586,8 @@ namespace Gladius.modes.arena
                         foreach (SearchNode node in openList)
                         {
                             currentDistance = node.DistanceToGoal;
-                            if(currentDistance < smallestDistance){
+                            if (currentDistance < smallestDistance)
+                            {
                                 success = true;
                                 result = node;
                                 smallestDistance = currentDistance;
@@ -615,7 +681,7 @@ namespace Gladius.modes.arena
             Reset();
             startPoint = start;
             endPoint = end;
-            openList.Add(new SearchNode(start,StepDistance(start, end), 0));
+            openList.Add(new SearchNode(start, StepDistance(start, end), 0));
             IsSearching = true;
             while (IsSearching)
             {
@@ -631,7 +697,7 @@ namespace Gladius.modes.arena
                 {
                     curPrev = paths[curPrev];
                     // copied from link list style. hmm.
-                    result.Insert(0,curPrev);
+                    result.Insert(0, curPrev);
                 }
             }
 
@@ -645,7 +711,7 @@ namespace Gladius.modes.arena
             int y = (int)center.Y + 1;
             object o = null;
 
-            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x,y) == SquareType.Empty)
+            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
             {
                 results.Add(new Point(x, y));
             }

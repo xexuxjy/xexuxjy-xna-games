@@ -88,7 +88,7 @@ namespace Gladius.combat
         public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager manager, GraphicsDevice device)
         {
             base.LoadContent(manager, device);
-            m_spriteFont = manager.Load<SpriteFont>("UI/OverlandGame");
+            m_spriteFont = manager.Load<SpriteFont>("UI/fonts/ShopFont");
         }
 
 

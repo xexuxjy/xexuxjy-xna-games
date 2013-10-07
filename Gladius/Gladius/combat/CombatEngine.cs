@@ -5,6 +5,7 @@ using System.Text;
 using Gladius.actors;
 using xexuxjy.Gladius.util;
 using Microsoft.Xna.Framework;
+using StringLeakTest;
 
 namespace Gladius.combat
 {
@@ -38,7 +39,7 @@ namespace Gladius.combat
             float hitChance = 1f - missChance;
 
 
-            if (m_combatRandom.NextDouble() < hitChance)
+            if (m_combatRandom.NextDouble() > hitChance)
             {
                 attackResult.resultType = defender.HasShield?AttackResultType.Blocked:AttackResultType.Miss;
             }
@@ -64,7 +65,17 @@ namespace Gladius.combat
             {
                 defender.TakeDamage(attackResult);
             }
+
+            m_lastCombatResult.Clear();
+            m_lastCombatResult.ConcatFormat("Attacker [{0}]\nDefender[{1}]\nSkill [{2}]\n", attacker.DebugName, defender.DebugName, attackData.Name);
+            m_lastCombatResult.ConcatFormat("Result [{0}]\nDamage [{1}]", ""+attackResult.resultType, attackResult.damageDone);
         }
+
+        public StringBuilder LastCombatResult
+        {
+            get { return m_lastCombatResult; }
+        }
+
 
         private float GetCategoryDamageMultiplier(ActorCategory attacker, ActorCategory defender)
         {
@@ -144,8 +155,8 @@ namespace Gladius.combat
             }
             return false;
         }
-        
 
+        private StringBuilder m_lastCombatResult = new StringBuilder();
         private Random m_combatRandom;
     }
 

@@ -18,10 +18,10 @@ namespace Gladius.control
 
         public override void LoadContent(ContentManager manager,GraphicsDevice device)
         {
-            m_skillBar1Bitmap = manager.Load<Texture2D>("UI/SkillbarPart1");
-            m_skillBar2Bitmap = manager.Load<Texture2D>("UI/SkillbarPart2");
-            m_skillsBitmap= manager.Load<Texture2D>("UI/SkillIcons");
-            m_spriteFont = manager.Load<SpriteFont>("UI/DebugFont8");
+            m_skillBar1Bitmap = manager.Load<Texture2D>("UI/arena/SkillbarPart1");
+            m_skillBar2Bitmap = manager.Load<Texture2D>("UI/arena/SkillbarPart2");
+            m_skillsBitmap = manager.Load<Texture2D>("UI/arena/SkillIcons");
+            m_spriteFont = manager.Load<SpriteFont>("UI/fonts/DebugFont8");
             m_attackSkills = new List<List<AttackSkill>>();
             for (int i = 0; i < numSkillSlots; ++i)
             {

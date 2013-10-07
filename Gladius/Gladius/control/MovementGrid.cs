@@ -24,13 +24,13 @@ namespace Gladius.control
 
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            m_simpleCursor = content.Load<Texture2D>("UI/SimpleCursor");
-            m_selectCursor = content.Load<Texture2D>("UI/SelectCursor");
-            m_attackCursor = content.Load<Texture2D>("UI/AttackCursor");
-            m_blockedCursor = content.Load<Texture2D>("UI/BlockedCursor");
-            m_forwardMoveCursor = content.Load<Texture2D>("UI/ForwardMoveCursor");
-            m_turnMoveCursor = content.Load<Texture2D>("UI/TurnMoveCursor");
-            m_destinationCursor = content.Load<Texture2D>("UI/BlockedCursor");
+            m_simpleCursor = content.Load<Texture2D>("UI/cursors/SimpleCursor");
+            m_selectCursor = content.Load<Texture2D>("UI/cursors/SelectCursor");
+            m_attackCursor = content.Load<Texture2D>("UI/cursors/AttackCursor");
+            m_blockedCursor = content.Load<Texture2D>("UI/cursors/BlockedCursor");
+            m_forwardMoveCursor = content.Load<Texture2D>("UI/cursors/ForwardMoveCursor");
+            m_turnMoveCursor = content.Load<Texture2D>("UI/cursors/TurnMoveCursor");
+            m_destinationCursor = content.Load<Texture2D>("UI/cursors/BlockedCursor");
 
             m_simpleQuad = new SimpleQuad(device);
 
