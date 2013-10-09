@@ -64,38 +64,43 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\AttackCursor.png">
+    <Compile Include="UI\cursors\AttackCursor.png">
       <Name>AttackCursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\BlockedCursor.png">
+    <Compile Include="UI\cursors\BlockedCursor.png">
       <Name>BlockedCursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\ForwardMoveCursor.png">
+    <Compile Include="UI\cursors\ForwardMoveCursor.png">
       <Name>ForwardMoveCursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\SelectCursor.png">
+    <Compile Include="UI\cursors\SelectCursor.png">
       <Name>SelectCursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\SimpleCursor.png">
+    <Compile Include="UI\cursors\SimpleCursor.png">
       <Name>SimpleCursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\TurnMoveCursor.png">
+    <Compile Include="UI\cursors\TurnMoveCursor.png">
       <Name>TurnMoveCursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\OverlandGame.spritefont">
+    <Compile Include="UI\fonts\OverlandGame.spritefont">
       <Name>OverlandGame</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\ShopFont.spritefont">
+      <Name>ShopFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
@@ -132,7 +137,7 @@
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="UI\DebugFont8.spritefont">
+    <Compile Include="UI\fonts\DebugFont8.spritefont">
       <Name>DebugFont8</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
@@ -161,6 +166,39 @@
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
+    <Content Include="ItemData\CompleteItemData.csv">
+      <Name>CompleteItemData</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="UI\backgrounds\ScrollBackground.jpg">
+      <Name>ScrollBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\BattleOverFont.spritefont">
+      <Name>BattleOverFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <None Include="Models\ThirdParty\02_warrior_Anims.xml">
+      <Name>02_warrior_Anims</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </None>
+    <Compile Include="Models\ThirdParty\02_warrior.FBX">
+      <Name>02_warrior</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>GpuSkinnedModelProcessor</Processor>
+      <ProcessorParameters_DefaultEffect>SkinnedEffect</ProcessorParameters_DefaultEffect>
+    </Compile>
+    <None Include="UI\shop\ShopMap.txt">
+      <Name>ShopMap</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
       <Name>monster-animated-character-XNA_Anims</Name>
       <Importer>XmlImporter</Importer>
@@ -560,19 +598,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\SkillbarPart1.png">
+    <Compile Include="UI\arena\SkillbarPart1.png">
       <Name>SkillbarPart1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\SkillbarPart2.png">
+    <Compile Include="UI\arena\SkillbarPart2.png">
       <Name>SkillbarPart2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\SkillIcons.png">
+    <Compile Include="UI\arena\SkillIcons.png">
       <Name>SkillIcons</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -622,7 +660,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\DayAndNight.png">
+    <Compile Include="UI\overland\DayAndNight.png">
       <Name>DayAndNight</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
