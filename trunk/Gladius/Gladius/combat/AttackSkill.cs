@@ -55,6 +55,16 @@ namespace Gladius.combat
             DamageMultiplier = 1.0f;
         }
 
+        public static bool IsAttackSkill(AttackSkill attackSkill)
+        {
+            return attackSkill.AttackType == AttackType.SingleOrtho || attackSkill.AttackType == AttackType.SingleSurround;
+        }
+
+        public static bool IsMoveSkill(AttackSkill attackSkill)
+        {
+            return attackSkill.AttackType == AttackType.Move;
+        }
+
     }
 
     public class AttackSkillDictionary
@@ -122,7 +132,8 @@ namespace Gladius.combat
         Move,
         Block,
         EndTurn,
-        Single,
+        SingleOrtho,
+        SingleSurround,
         AOE
     }
 

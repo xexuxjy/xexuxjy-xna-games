@@ -14,13 +14,25 @@ namespace Gladius.control
 {
     public class TurnManager : GameComponent
     {
-        public TurnManager(Game game)
+        public TurnManager(Game game,ArenaScreen arenaScreen)
             : base(game)
         {
+            m_arenaScreen = arenaScreen;
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (AllPartyDead())
+            {
+                m_arenaScreen.BattleOverDefeat();
+            }
+            else if (AllOpponentsDead())
+            {
+                m_arenaScreen.BattleOverVictory();
+            }
+
+
+
             if (CurrentActor != null)
             {
                 if (CurrentActor.Attacking)
@@ -129,6 +141,10 @@ namespace Gladius.control
             // to possibly insert this ahead of others.
             actor.TurnManager = this;
             m_turns.Add(actor);
+            if (!m_allActors.Contains(actor))
+            {
+                m_allActors.Add(actor);
+            }
         }
 
 
@@ -172,8 +188,35 @@ namespace Gladius.control
             set;
         }
 
+        public bool AllPartyDead()
+        {
+            foreach (BaseActor ba in m_allActors)
+            {
+                // someone still alive.
+                if (ba.Team == Globals.PlayerTeam && !ba.Dead)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
+        public bool AllOpponentsDead()
+        {
+            foreach (BaseActor ba in m_allActors)
+            {
+                // someone still alive.
+                if (ba.Team != Globals.PlayerTeam && !ba.Dead)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private ArenaScreen m_arenaScreen;
         List<BaseActor> m_turns = new List<BaseActor>();
+        List<BaseActor> m_allActors = new List<BaseActor>();
     }
 
 }

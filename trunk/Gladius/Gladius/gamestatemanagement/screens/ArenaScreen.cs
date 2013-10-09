@@ -101,31 +101,39 @@ namespace Gladius.gamestatemanagement.screens
             m_updateCalls++;
             base.Update(gameTime, otherScreenHasFocus, false);
 
-            m_screenComponents.Update(gameTime);
-
-            foreach (IUIElement uiElement in m_uiElementsList)
+            if (!m_battleOver)
             {
-                uiElement.Update(gameTime);
+                m_screenComponents.Update(gameTime);
+
+                foreach (IUIElement uiElement in m_uiElementsList)
+                {
+                    uiElement.Update(gameTime);
+                }
+
+
+                if (m_updateCalls % 100 == 0)
+                {
+                    StringBuilder textLeft = new StringBuilder("Combat Text " + m_updateCalls + " left");
+                    StringBuilder textRight = new StringBuilder("Combat Text " + m_updateCalls + " right");
+
+                    Vector3 start1 = m_turnManager.CurrentActor.CameraFocusPoint;
+                    start1 -= m_turnManager.CurrentActor.World.Right * 5;
+
+                    Vector3 start2 = m_turnManager.CurrentActor.CameraFocusPoint;
+                    start2 += m_turnManager.CurrentActor.World.Right * 5;
+                    start2 -= m_turnManager.CurrentActor.World.Forward * 5;
+
+
+                    m_combatEngineUI.DrawFloatingText(start1, Color.White, textLeft, 4);
+                    m_combatEngineUI.DrawFloatingText(start2, Color.White, textRight, 4);
+                }
             }
-
-
-            if (m_updateCalls % 100 == 0)
+            else
             {
-                StringBuilder textLeft = new StringBuilder("Combat Text " + m_updateCalls + " left");
-                StringBuilder textRight = new StringBuilder("Combat Text " + m_updateCalls + " right");
-
-                Vector3 start1 = m_turnManager.CurrentActor.CameraFocusPoint;
-                start1 -= m_turnManager.CurrentActor.World.Right * 5;
-
-                Vector3 start2 = m_turnManager.CurrentActor.CameraFocusPoint;
-                start2 += m_turnManager.CurrentActor.World.Right * 5;
-                start2 -= m_turnManager.CurrentActor.World.Forward * 5;
+                String text = m_battleWon ? "Victory!" : "Defeat!";
 
 
-                m_combatEngineUI.DrawFloatingText(start1, Color.White, textLeft, 4);
-                m_combatEngineUI.DrawFloatingText(start2, Color.White, textRight, 4);
             }
-
 
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
@@ -184,6 +192,20 @@ namespace Gladius.gamestatemanagement.screens
 
             m_spriteBatch.DrawString(m_debugFont, Globals.CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
 
+            if (m_battleOver)
+            {
+                m_spriteBatch.DrawString(m_debugFont, Globals.CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
+                String text = m_battleWon ? "Victory!" : "Defeat!";
+                
+                Vector2 midScreen = new Vector2(ScreenManager.GraphicsDevice.Viewport.Width,ScreenManager.GraphicsDevice.Viewport.Height);
+                midScreen /= 2f;
+                Vector2 centeredText = Globals.CenterText(m_battleOverFont, text, midScreen);
+                m_spriteBatch.DrawString(m_battleOverFont, text, centeredText, Color.White);    
+
+
+            }
+
+
             m_spriteBatch.End();
 
             // If the game is transitioning on or off, fade it out to black.
@@ -208,6 +230,8 @@ namespace Gladius.gamestatemanagement.screens
             m_gameFont.Spacing = -4.0f;
 
             m_debugFont = m_content.Load<SpriteFont>("UI/fonts/DebugFont8");
+            m_battleOverFont = m_content.Load<SpriteFont>("UI/fonts/BattleOverFont");
+
 
             Globals.Camera.Position = new Vector3(0, 5, -10);
 
@@ -217,7 +241,7 @@ namespace Gladius.gamestatemanagement.screens
             m_arenaRenderer.LoadContent();
             m_screenComponents.Components.Add(m_arenaRenderer);
             //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
-            m_turnManager = new TurnManager(ScreenManager.Game);
+            m_turnManager = new TurnManager(ScreenManager.Game,this);
             m_turnManager.ArenaScreen = this;
             m_screenComponents.Components.Add(m_turnManager);
 
@@ -225,18 +249,31 @@ namespace Gladius.gamestatemanagement.screens
             Globals.SoundManager.LoadContent(m_content);
 
             //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
-            String modelName = "Models/ThirdParty/01_warrior";
+            String playerTeamModelName = "Models/ThirdParty/01_warrior";
+            String enemyTeamModelName = "Models/ThirdParty/02_warrior";
 
             List<BaseActor> actors = new List<BaseActor>();
             int numActors = 4;
+
             for (int i = 0; i < numActors; ++i)
             {
                 BaseActor ba1 = ActorGenerator.GenerateActor(1, ActorClass.Barbarian, this);
-                ba1.ModelName = modelName;
+
+                if (i < 2)
+                {
+                    ba1.ModelName = playerTeamModelName;
+                    ba1.Team = Globals.PlayerTeam;
+                    ba1.DebugName = "Player" + i;
+                    ba1.PlayerControlled = true;
+                }
+                else
+                {
+                    ba1.DebugName = "Monster" + i;
+                    ba1.ModelName = enemyTeamModelName;
+                    ba1.Team = "EnemyTeam";
+                }
                 ba1.Arena = m_arena;
-                ba1.DebugName = "Monster" + i;
                 ba1.LoadContent();
-                ba1.Team = "Team1";
                 actors.Add(ba1);
                 m_screenComponents.Components.Add(ba1);
                 ba1.SetupSkills(Globals.AttackSkillDictionary);
@@ -291,8 +328,6 @@ namespace Gladius.gamestatemanagement.screens
             //Globals.MovementGrid.TurnManager = m_turnManager;
 
             //Globals.MovementGrid.CurrentActor = actors[0];
-            actors[0].PlayerControlled = true;
-            actors[0].Team = "PlayerTeam";
             Globals.Camera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
             Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f) * actors[0].ModelHeight;
 
@@ -353,14 +388,33 @@ namespace Gladius.gamestatemanagement.screens
             get { return m_movementGrid; }
         }
 
+        public void BattleOverVictory()
+        {
+            m_battleOver = true;
+            m_battleWon = true;
+            
+        }
+
+        public void BattleOverDefeat()
+        {
+            m_battleOver = true;
+            m_battleWon = false;
+        }
+
+
         #endregion
         #region Fields
+
+        private bool m_battleOver;
+        private bool m_battleWon;
 
         private SimpleArenaRenderer m_arenaRenderer;
         private Arena m_arena;
 
         private CombatEngineUI m_combatEngineUI;
         private SpriteFont m_debugFont;
+        private SpriteFont m_battleOverFont;
+
         protected TurnManager m_turnManager;
         //protected GameComponentCollection Components = new GameComponentCollection();
 

@@ -272,38 +272,33 @@ namespace Gladius.actors
 
         public void Think()
         {
-            // Are we next to an enemy
-            BaseActor enemy = Arena.NextToEnemy(this);
-            if (enemy != null)
+            if (!FollowingWayPoints)
             {
-                Target = enemy;
-                AttackRequested = true;
-            }
-            else
-            {
-                // pick random spot on arena and pathfind for now.
-                Point result;
-                BaseActor target = Arena.FindNearestEnemy(this);
-                if (target != null)
+                // Are we next to an enemy
+                BaseActor enemy = Arena.NextToEnemy(this);
+                if (enemy != null)
                 {
-                    Point nearestPoint = Arena.PointNearestLocation(target.CurrentPosition, false);
-                    if (Arena.FindPath(CurrentPosition, nearestPoint, WayPointList))
+                    Target = enemy;
+                    AttackRequested = true;
+                }
+                else
+                {
+                    // pick random spot on arena and pathfind for now.
+                    Point result;
+                    BaseActor target = Arena.FindNearestEnemy(this);
+                    if (target != null)
                     {
-                        ConfirmMove();
+                        Point nearestPoint = Arena.PointNearestLocation(target.CurrentPosition, false);
+                        if (Arena.FindPath(CurrentPosition, nearestPoint, WayPointList))
+                        {
+                            ConfirmMove();
+                        }
                     }
                 }
             }
-            //if (Arena.GetRandomEmptySquare(out result))
-            //{
-            //    if (Arena.FindPath(CurrentPosition, result, WayPointList))
-            //    {
-            //        ConfirmMove();
-            //    }
-
-            //    // find a movement skill for now.
-            //    CurrentAttackSkill = m_knownAttacks.First(x => x.AttackType == AttackType.Move);
-            //}
         }
+
+
 
 
         private void UpdateMovement(GameTime gameTime)
@@ -332,7 +327,7 @@ namespace Gladius.actors
                 {
                     // this is called every update and animation system doesn't reset if it's current anim
                     m_animatedModel.PlayAnimation(AnimationEnum.Walk);
-
+                    ChooseWalkSkill();
                     // mvoe towards the next point.
                     if (WayPointList.Count > 0)
                     {
@@ -369,6 +364,13 @@ namespace Gladius.actors
                                     }
                                 }
                             }
+                            else
+                            {
+                                // we've been blocked from where we were hoping for.
+                                // clear state and force a rethink.
+                                WayPointList.Clear();
+                                Think();
+                            }
 
                         }
                         else
@@ -383,7 +385,9 @@ namespace Gladius.actors
                     {
                         // finished moving.
                         FollowingWayPoints = false;
-                        TurnComplete = true;
+                        // reached our end point. think and see if we do something else.
+                        Think();
+                        //TurnComplete = true;
                     }
                 }
                 else
@@ -436,8 +440,14 @@ namespace Gladius.actors
 
         private void ChooseAttackSkill()
         {
-            CurrentAttackSkill = m_knownAttacks.First(a => a.AttackType == AttackType.Single);
+            CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.AttackType == AttackType.SingleOrtho);
         }
+
+        private void ChooseWalkSkill()
+        {
+            CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Move");
+        }
+
 
         public void StartAttack()
         {

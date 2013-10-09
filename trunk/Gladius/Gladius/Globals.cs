@@ -109,6 +109,14 @@ namespace Gladius
             return insetRectangle;
         }
 
+        public static Vector2 CenterText(SpriteFont font, String text, Vector2 pos)
+        {
+            Vector2 dims = font.MeasureString(text);
+            dims /= 2f;
+            return pos - dims;
+        }
 
+
+        public const String PlayerTeam = "Player";
     }
 }
