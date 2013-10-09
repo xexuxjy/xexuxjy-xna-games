@@ -667,6 +667,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\fonts\BattleOverFont.xnb">
+      <Link>Content\UI\fonts\BattleOverFont.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\fonts\OverlandGame.xnb">
+      <Link>Content\UI\fonts\OverlandGame.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\02_warrior.xnb">
+      <Link>Content\Models\ThirdParty\02_warrior.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

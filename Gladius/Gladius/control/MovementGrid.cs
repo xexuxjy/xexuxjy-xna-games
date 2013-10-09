@@ -63,7 +63,8 @@ namespace Gladius.control
                             break;
                         case (AttackType.AOE):
                             break;
-                        case (AttackType.Single):
+                        case (AttackType.SingleOrtho):
+                        case(AttackType.SingleSurround):
                             DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                             break;
                         default:
@@ -83,6 +84,8 @@ namespace Gladius.control
                 }
             }
         }
+
+
 
         public bool DrawingMovePath
         {
@@ -168,12 +171,16 @@ namespace Gladius.control
                 {
                     case (SquareType.Empty):
                         {
+                            if (AttackSkill.IsAttackSkill(actor.CurrentAttackSkill))
+                            {
+                                return m_blockedCursor;
+                            }
                             return m_forwardMoveCursor;
                         }
                     case (SquareType.Mobile):
                         {
                             BaseActor target = m_arena.GetActorAtPosition(p);
-                            if (Globals.CombatEngine.IsValidTarget(SelectedActor, target))
+                            if (Globals.CombatEngine.IsValidTarget(SelectedActor, target,SelectedActor.CurrentAttackSkill))
                             {
                                 return m_attackCursor;
                             }
@@ -240,7 +247,7 @@ namespace Gladius.control
         public bool CursorOnTarget(BaseActor source)
         {
             BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
-            return (ba != null && Globals.CombatEngine.IsValidTarget(source, ba));
+            return (ba != null && Globals.CombatEngine.IsValidTarget(source, ba,source.CurrentAttackSkill));
         }
 
 
@@ -316,13 +323,13 @@ namespace Gladius.control
                 case (ActionButton.ActionButton1):
                     switch (SelectedActor.CurrentAttackSkill.AttackType)
                     {
-                        case (AttackType.Single):
+                        case (AttackType.SingleOrtho):
                         case (AttackType.AOE):
                             {
                                 if (CursorOnTarget(SelectedActor))
                                 {
                                     BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
-                                    if (Globals.CombatEngine.IsValidTarget(SelectedActor, target))
+                                    if (Globals.CombatEngine.IsValidTarget(SelectedActor, target,SelectedActor.CurrentAttackSkill))
                                     {
                                         SelectedActor.Target = target;
                                         SelectedActor.AttackRequested = true;
@@ -367,7 +374,7 @@ namespace Gladius.control
                                         break;
                                     }
 
-                                case (AttackType.Single):
+                                case (AttackType.SingleOrtho):
                                     if(!Globals.CombatEngine.IsAttackNextTo(SelectedActor,target))
                                     {
                                         SelectedActor.WayPointList.Clear();

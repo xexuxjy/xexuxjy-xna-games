@@ -127,9 +127,25 @@ namespace Gladius.combat
 
 
 
-        public bool IsValidTarget(BaseActor attacker, BaseActor defender)
+        public bool IsValidTarget(BaseActor attacker, BaseActor defender,AttackSkill skill)
         {
-            return attacker != null && defender != null && attacker != defender;
+            if (attacker != null && defender != null)
+            {
+                if (attacker == defender && skill.DamageAffects == DamageAffects.Self)
+                {
+                    return true;
+                }
+                if (attacker.Team == defender.Team && skill.DamageAffects == DamageAffects.Team)
+                {
+                    return true;
+                }
+                if (attacker != defender)
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
 
         public bool IsAttackNextTo(BaseActor attacker, BaseActor defender)

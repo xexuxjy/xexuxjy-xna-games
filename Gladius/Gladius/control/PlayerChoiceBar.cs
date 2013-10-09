@@ -333,7 +333,7 @@ namespace Gladius.control
 
         public bool SkillNeedsMovementGrid(AttackSkill skill)
         {
-            return skill.AttackType == AttackType.Move || skill.AttackType == AttackType.Single || skill.AttackType == AttackType.AOE;
+            return skill.AttackType == AttackType.Move || skill.AttackType == AttackType.SingleOrtho || skill.AttackType == AttackType.AOE;
             
         }
 

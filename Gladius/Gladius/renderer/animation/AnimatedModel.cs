@@ -186,6 +186,11 @@ namespace Gladius.renderer.animation
         {
             if (m_currentAnimationEnum != animationEnum)
             {
+                if (animationEnum == AnimationEnum.Stagger)
+                {
+                    int ibreak = 0;
+                }
+
                 String clipName;
                 if (m_clipNameDictionary.TryGetValue(animationEnum, out clipName))
                 {
