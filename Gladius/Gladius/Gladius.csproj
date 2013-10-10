@@ -2,6 +2,21 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <StartupObject>Gladius.Program</StartupObject>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.ContentPipeline.targets" />
   <PropertyGroup>
@@ -201,372 +216,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\01_warrior.xnb">
-      <Link>Content\Models\ThirdParty\01_warrior.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\monster-animated-character-XNA.xnb">
-      <Link>Content\Models\ThirdParty\monster-animated-character-XNA.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\monster.xnb">
-      <Link>Content\Models\ThirdParty\monster.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\monster_0.xnb">
-      <Link>Content\Models\ThirdParty\monster_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\test_m.xnb">
-      <Link>Content\Models\ThirdParty\test_m.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\test_m_0.xnb">
-      <Link>Content\Models\ThirdParty\test_m_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\test_XNA.xnb">
-      <Link>Content\Models\ThirdParty\test_XNA.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\wepons_01.xnb">
-      <Link>Content\Models\ThirdParty\wepons_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\wepons_01_0.xnb">
-      <Link>Content\Models\ThirdParty\wepons_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_01_01.xnb">
-      <Link>Content\Models\ThirdParty\w_body_01_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_01_01_0.xnb">
-      <Link>Content\Models\ThirdParty\w_body_01_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_01_02.xnb">
-      <Link>Content\Models\ThirdParty\w_body_01_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_01_03.xnb">
-      <Link>Content\Models\ThirdParty\w_body_01_03.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_01_04.xnb">
-      <Link>Content\Models\ThirdParty\w_body_01_04.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_02_01.xnb">
-      <Link>Content\Models\ThirdParty\w_body_02_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_02_02.xnb">
-      <Link>Content\Models\ThirdParty\w_body_02_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_03_01.xnb">
-      <Link>Content\Models\ThirdParty\w_body_03_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_03_02.xnb">
-      <Link>Content\Models\ThirdParty\w_body_03_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_03_03.xnb">
-      <Link>Content\Models\ThirdParty\w_body_03_03.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_03_04.xnb">
-      <Link>Content\Models\ThirdParty\w_body_03_04.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_04_01.xnb">
-      <Link>Content\Models\ThirdParty\w_body_04_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_04_02.xnb">
-      <Link>Content\Models\ThirdParty\w_body_04_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_05_01.xnb">
-      <Link>Content\Models\ThirdParty\w_body_05_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_05_02.xnb">
-      <Link>Content\Models\ThirdParty\w_body_05_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_06_01.xnb">
-      <Link>Content\Models\ThirdParty\w_body_06_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_06_02.xnb">
-      <Link>Content\Models\ThirdParty\w_body_06_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_07_01.xnb">
-      <Link>Content\Models\ThirdParty\w_body_07_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_07_02.xnb">
-      <Link>Content\Models\ThirdParty\w_body_07_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_01_01.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_01_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_01_01_0.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_01_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_01_02.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_01_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_02_01.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_02_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_02_02.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_02_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_03_01.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_03_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_03_02.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_03_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_04_01.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_04_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_04_02.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_04_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_05_01.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_05_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_05_02.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_05_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_06_01.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_06_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_06_02.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_06_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_07_01.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_07_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_07_02.xnb">
-      <Link>Content\Models\ThirdParty\w_hand_07_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_01.xnb">
-      <Link>Content\Models\ThirdParty\w_head_01_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_01_0.xnb">
-      <Link>Content\Models\ThirdParty\w_head_01_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_02.xnb">
-      <Link>Content\Models\ThirdParty\w_head_01_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_03.xnb">
-      <Link>Content\Models\ThirdParty\w_head_01_03.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_04.xnb">
-      <Link>Content\Models\ThirdParty\w_head_01_04.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_05.xnb">
-      <Link>Content\Models\ThirdParty\w_head_01_05.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_01_01.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_01_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_01_01_0.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_01_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_01_02.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_01_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_02_01.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_02_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_02_02.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_02_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_03_01.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_03_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_03_02.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_03_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_04_01.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_04_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_04_02.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_04_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_05_01.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_05_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_05_02.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_05_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_06_01.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_06_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_06_02.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_06_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_07_01.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_07_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_07_02.xnb">
-      <Link>Content\Models\ThirdParty\w_helmet_07_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_pants_01_01.xnb">
-      <Link>Content\Models\ThirdParty\w_pants_01_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_pants_01_01_0.xnb">
-      <Link>Content\Models\ThirdParty\w_pants_01_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_01_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_01_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_01_01_0.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_01_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_02_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_02_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_03_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_03_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_04_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_04_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_05_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_05_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_06_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_06_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_06_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_06_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_07_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_07_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_07_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoes_07_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_01_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_01_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_01_01_0.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_01_01_0.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_01_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_01_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_02_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_02_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_02_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_02_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_03_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_03_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_03_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_03_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_04_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_04_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_04_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_04_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_05_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_05_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_05_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_05_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_06_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_06_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_06_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_06_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_07_01.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_07_01.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_07_02.xnb">
-      <Link>Content\Models\ThirdParty\w_shoulder_07_02.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Effects\Terrain\Terrain.xnb">
       <Link>Content\Effects\Terrain\Terrain.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -678,8 +327,91 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\02_warrior.xnb">
       <Link>Content\Models\ThirdParty\02_warrior.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\wepons_01_0.xnb">
+      <Link>Content\Models\ThirdParty\wepons_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_01_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_body_01_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_body_02_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_body_02_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_01_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_hand_01_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_hand_02_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_hand_02_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_head_01_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_head_01_02_0.xnb">
+      <Link>Content\Models\ThirdParty\w_head_01_02_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_01_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_helmet_01_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_helmet_02_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_helmet_02_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_pants_01_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_pants_01_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_01_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_shoes_01_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoes_02_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_shoes_02_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_01_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_shoulder_01_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\w_shoulder_02_01_0.xnb">
+      <Link>Content\Models\ThirdParty\w_shoulder_02_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Models\ThirdParty\01_warrior.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
