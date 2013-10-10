@@ -347,10 +347,15 @@ namespace Gladius.control
             ActionSelected = false;
         }
 
+        public TurnManager TurnManager
+        {
+            get;
+            set;
+        }
 
         public void ConfirmAction()
         {
-
+            TurnManager.WaitingOnPlayerControl = false;
         }
 
 

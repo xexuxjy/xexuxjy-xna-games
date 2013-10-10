@@ -116,6 +116,12 @@ namespace Gladius
             return pos - dims;
         }
 
+        public static int PointDist2(Point start, Point end)
+        {
+            Point diff = end -start;
+            return (diff.X * diff.X) + (diff.Y * diff.Y);
+        }
+
 
         public const String PlayerTeam = "Player";
     }

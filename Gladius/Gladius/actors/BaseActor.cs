@@ -272,29 +272,38 @@ namespace Gladius.actors
 
         public void Think()
         {
-            if (!FollowingWayPoints)
+            if (!PlayerControlled)
             {
-                // Are we next to an enemy
-                BaseActor enemy = Arena.NextToEnemy(this);
-                if (enemy != null)
+
+                if (!FollowingWayPoints)
                 {
-                    Target = enemy;
-                    AttackRequested = true;
-                }
-                else
-                {
-                    // pick random spot on arena and pathfind for now.
-                    Point result;
-                    BaseActor target = Arena.FindNearestEnemy(this);
-                    if (target != null)
+                    // Are we next to an enemy
+                    BaseActor enemy = Arena.NextToEnemy(this);
+                    if (enemy != null)
                     {
-                        Point nearestPoint = Arena.PointNearestLocation(target.CurrentPosition, false);
-                        if (Arena.FindPath(CurrentPosition, nearestPoint, WayPointList))
+                        Target = enemy;
+                        AttackRequested = true;
+                    }
+                    else
+                    {
+                        // pick random spot on arena and pathfind for now.
+                        Point result;
+                        BaseActor target = Arena.FindNearestEnemy(this);
+                        if (target != null)
                         {
-                            ConfirmMove();
+                            Point nearestPoint = Arena.PointNearestLocation(CurrentPosition,target.CurrentPosition, false);
+                            if (Arena.FindPath(CurrentPosition, nearestPoint, WayPointList))
+                            {
+                                ConfirmMove();
+                            }
                         }
                     }
                 }
+            }
+            else
+            {
+                // if we've been asked to think as a player then its probably end of turn
+                TurnComplete = true;
             }
         }
 
@@ -622,8 +631,7 @@ namespace Gladius.actors
             TurnComplete = false;
 
             m_currentMovePoints = m_totalMovePoints;
-
-            if (PlayerControlled == false)
+            if (!PlayerControlled)
             {
                 Think();
             }

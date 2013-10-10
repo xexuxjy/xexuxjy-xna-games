@@ -301,6 +301,7 @@ namespace Gladius.gamestatemanagement.screens
 
             Globals.PlayerChoiceBar = new PlayerChoiceBar();
             Globals.PlayerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
+            Globals.PlayerChoiceBar.TurnManager = m_turnManager;
 
             m_uiElementsList.Add(Globals.PlayerChoiceBar);
 
