@@ -256,7 +256,7 @@ namespace Gladius.modes.arena
         }
 
 
-        public Point PointNearestLocation(Point location, bool includeSquare = true)
+        public Point PointNearestLocation(Point startLocation,Point location, bool includeSquare = true)
         {
             if (includeSquare)
             {
@@ -265,16 +265,20 @@ namespace Gladius.modes.arena
                     return location;
                 }
             }
+            int closest = int.MaxValue;
+            Point closestPoint = Point.Zero;
             foreach (Point p in m_orthognalPoints)
             {
                 Point adjusted = location + p;
                 if (InLevel(adjusted) && GetSquareTypeAtLocation(adjusted) == SquareType.Empty)
                 {
-                    return adjusted;
+                    if (Globals.PointDist2(adjusted, startLocation) < closest)
+                    {
+                        closestPoint = adjusted;
+                    }
                 }
-
             }
-            return Point.Zero;
+            return closestPoint;
         }
 
 
