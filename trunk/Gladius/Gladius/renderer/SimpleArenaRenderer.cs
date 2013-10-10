@@ -27,13 +27,13 @@ namespace Gladius.renderer
             m_boneTransforms = new Matrix[m_boxModel.Bones.Count];
             m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
 
-            m_baseActorTexture = ContentManager.Load<Texture2D>("Models/ThirdParty/test_m");
-            m_baseActorModel = ContentManager.Load<Model>("Models/ThirdParty/test_XNA");
-            m_baseActorBoneTransforms = new Matrix[m_baseActorModel.Bones.Count];
-            m_baseActorModel.CopyAbsoluteBoneTransformsTo(m_baseActorBoneTransforms);
+            //m_baseActorTexture = ContentManager.Load<Texture2D>("Models/ThirdParty/test_m");
+            //m_baseActorModel = ContentManager.Load<Model>("Models/ThirdParty/test_XNA");
+            //m_baseActorBoneTransforms = new Matrix[m_baseActorModel.Bones.Count];
+            //m_baseActorModel.CopyAbsoluteBoneTransformsTo(m_baseActorBoneTransforms);
 
-            BoundingSphere actorBs = m_baseActorModel.Meshes[0].BoundingSphere;
-            m_baseActorScale = Vector3.One;// new Vector3(1f / actorBs.Radius);
+            //BoundingSphere actorBs = m_baseActorModel.Meshes[0].BoundingSphere;
+            //m_baseActorScale = Vector3.One;// new Vector3(1f / actorBs.Radius);
 
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             m_spriteFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
@@ -157,9 +157,9 @@ namespace Gladius.renderer
         Arena m_arena;
 
 
-        Model m_baseActorModel;
-        Matrix[] m_baseActorBoneTransforms;
-        Vector3 m_baseActorScale;
-        Texture2D m_baseActorTexture;
+        //Model m_baseActorModel;
+        //Matrix[] m_baseActorBoneTransforms;
+        //Vector3 m_baseActorScale;
+        //Texture2D m_baseActorTexture;
     }
 }

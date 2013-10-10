@@ -251,7 +251,7 @@ namespace Gladius.gamestatemanagement.screens
             //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
             String playerTeamModelName = "Models/ThirdParty/01_warrior";
             String enemyTeamModelName = "Models/ThirdParty/02_warrior";
-
+            //String playerTeamModelName = enemyTeamModelName;
             List<BaseActor> actors = new List<BaseActor>();
             int numActors = 4;
 
