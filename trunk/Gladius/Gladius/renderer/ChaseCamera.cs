@@ -17,6 +17,11 @@ namespace Gladius.renderer
     {
         #region Chased object properties (set externally each frame)
 
+        public ChaseCamera(CameraManager cameraManager)
+        {
+            m_cameraManager = cameraManager;
+        }
+
         /// <summary>
         /// Position of object being chased.
         /// </summary>
@@ -423,7 +428,7 @@ namespace Gladius.renderer
         Vector3[] m_positionSamples = new Vector3[m_numberOfSamples];
         Vector3[] m_lookAtSamples = new Vector3[m_numberOfSamples];
 
-
+        private CameraManager m_cameraManager;
         #endregion
     }
 }

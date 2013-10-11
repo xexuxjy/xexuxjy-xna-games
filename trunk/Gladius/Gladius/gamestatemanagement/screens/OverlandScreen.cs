@@ -171,8 +171,10 @@ namespace Gladius.gamestatemanagement.screens
 
         public void SetupOverland()
         {
-            ChaseCamera chaseCamera = new ChaseCamera();
-            Globals.Camera = chaseCamera;
+            //ChaseCamera chaseCamera = new ChaseCamera();
+            //Globals.Camera = chaseCamera;
+            Globals.CameraManager = new CameraManager(ScreenManager.Game);
+
 
             Globals.Camera.UpdateInput(ScreenManager.input);
             //Globals.Camera.CurrentBehavior = Dhpoware.Camera.Behavior.ThirdPerson;
@@ -196,8 +198,8 @@ namespace Gladius.gamestatemanagement.screens
             m_screenComponents.Components.Add(m_party);
 
 
-            chaseCamera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
-            chaseCamera.DesiredPositionOffset = new Vector3(0, 0.5f, 4.0f) * m_party.ModelHeight; ;
+            Globals.Camera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
+            Globals.Camera.DesiredPositionOffset = new Vector3(0, 0.5f, 4.0f) * m_party.ModelHeight; ;
 
 
             m_screenComponents.Components.Add(m_townManager);

@@ -101,6 +101,9 @@ namespace GameStateManagement
             }
 
             TouchState = TouchPanel.GetState();
+            LastMouseState = CurrentMouseState;
+            CurrentMouseState = Mouse.GetState();
+
 
             Gestures.Clear();
             while (TouchPanel.IsGestureAvailable)
@@ -177,6 +180,13 @@ namespace GameStateManagement
         /// If this is null, it will accept input from any player. When a keypress
         /// is detected, the output playerIndex reports which player pressed it.
         /// </summary>
+        public bool IsNewKeyPress(Keys key)
+        {
+            PlayerIndex outIndex;
+            return IsNewKeyPress(key, null, out outIndex);
+        
+        }
+        
         public bool IsNewKeyPress(Keys key, PlayerIndex? controllingPlayer,
                                             out PlayerIndex playerIndex)
         {
