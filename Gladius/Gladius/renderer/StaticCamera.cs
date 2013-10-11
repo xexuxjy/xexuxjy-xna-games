@@ -8,6 +8,11 @@ namespace Gladius.renderer
 {
     public class StaticCamera : ICamera
     {
+        public StaticCamera(CameraManager cameraManager) 
+        {
+            m_cameraManager = cameraManager;
+        }
+
         #region ICamera Members
 
         public Microsoft.Xna.Framework.Matrix View
@@ -136,7 +141,7 @@ namespace Gladius.renderer
 
 
         private BoundingFrustum m_boundingFrustum;
-
+        private CameraManager m_cameraManager;
         #endregion
     }
 }

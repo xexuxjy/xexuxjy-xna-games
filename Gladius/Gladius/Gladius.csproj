@@ -111,6 +111,7 @@
     <Compile Include="renderer\CameraManager.cs" />
     <Compile Include="renderer\ChaseCamera.cs" />
     <Compile Include="renderer\DHPCameraComponent.cs" />
+    <Compile Include="renderer\FreeCamera.cs" />
     <Compile Include="renderer\ICamera.cs" />
     <Compile Include="renderer\particles\ParticleEmitter.cs" />
     <Compile Include="renderer\particles\ParticleManager.cs" />
@@ -177,10 +178,6 @@
       <Link>Content\OverlandData\TownData.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\shop\ShopMap.txt">
-      <Link>Content\UI\shop\ShopMap.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\CombatData\Skills.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -242,22 +239,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\rain.xnb">
-      <Link>Content\Particles\test\rain.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\fire.xnb">
-      <Link>Content\Particles\test\fire.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Particles\test\smoke.xnb">
-      <Link>Content\Particles\test\smoke.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Content\Particles\test\" />
+    <Folder Include="Content\UI\shop\" />
     <Folder Include="modes\shop\" />
   </ItemGroup>
   <ItemGroup>
@@ -411,7 +394,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Models\ThirdParty\01_warrior.xnb">
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\ThirdParty\01_warrior.xnb">
+      <Link>Content\Models\ThirdParty\01_warrior.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
