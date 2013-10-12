@@ -86,16 +86,20 @@ namespace Gladius.modes.arena
         // move actor - assumes any validity checks have already taken place.
         public void MoveActor(BaseActor baseActor, Point newPoint)
         {
-            // set current actor square to empty
-            //baseActor
-            m_arenaGrid[baseActor.CurrentPosition.X, baseActor.CurrentPosition.Y] = SquareType.Empty;
-            if (m_baseActorMap.ContainsKey(baseActor.CurrentPosition))
+            Debug.Assert(CanMoveActor(baseActor,newPoint));
+            if (m_arenaGrid[newPoint.X, newPoint.Y] == SquareType.Empty)
             {
-                m_baseActorMap.Remove(baseActor.CurrentPosition);
+                // set current actor square to empty
+                //baseActor
+                m_arenaGrid[baseActor.CurrentPosition.X, baseActor.CurrentPosition.Y] = SquareType.Empty;
+                if (m_baseActorMap.ContainsKey(baseActor.CurrentPosition))
+                {
+                    m_baseActorMap.Remove(baseActor.CurrentPosition);
+                }
+                m_arenaGrid[newPoint.X, newPoint.Y] = SquareType.Mobile;
+                baseActor.CurrentPosition = newPoint;
+                m_baseActorMap[baseActor.CurrentPosition] = baseActor;
             }
-            m_arenaGrid[newPoint.X, newPoint.Y] = SquareType.Mobile;
-            baseActor.CurrentPosition = newPoint;
-            m_baseActorMap[baseActor.CurrentPosition] = baseActor;
         }
 
         public void AssertBounds(Point p)

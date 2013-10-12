@@ -24,13 +24,15 @@ namespace Gladius.control
 
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            m_simpleCursor = content.Load<Texture2D>("UI/cursors/SimpleCursor");
+            m_defaultTile = content.Load<Texture2D>("UI/cursors/SimpleCursor");
             m_selectCursor = content.Load<Texture2D>("UI/cursors/SelectCursor");
-            m_attackCursor = content.Load<Texture2D>("UI/cursors/AttackCursor");
-            m_blockedCursor = content.Load<Texture2D>("UI/cursors/BlockedCursor");
-            m_forwardMoveCursor = content.Load<Texture2D>("UI/cursors/ForwardMoveCursor");
-            m_turnMoveCursor = content.Load<Texture2D>("UI/cursors/TurnMoveCursor");
-            m_destinationCursor = content.Load<Texture2D>("UI/cursors/BlockedCursor");
+            m_targetCursor = content.Load<Texture2D>("UI/cursors/TargetCursor");
+            m_targetAndSelectCursor = content.Load<Texture2D>("UI/cursors/TargetSelectCursor");
+
+            m_startMoveCursor = content.Load<Texture2D>("UI/cursors/StartMove");
+            m_interMoveCursor = content.Load<Texture2D>("UI/cursors/InterMove");
+            m_turnMoveCursor = content.Load<Texture2D>("UI/cursors/CornerTurn");
+            m_endMoveCursor = content.Load<Texture2D>("UI/cursors/EndMove");
 
             m_simpleQuad = new SimpleQuad(device);
 
@@ -43,9 +45,10 @@ namespace Gladius.control
         {
             if (Visible && SelectedActor != null)
             {
-                device.BlendState = BlendState.AlphaBlend;
+                //device.BlendState = BlendState.AlphaBlend;
                 //device.DepthStencilState = DepthStencilState.None;
 
+                DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,device,camera);
 
                 if (SelectedActor.CurrentAttackSkill == null)
                 {
@@ -85,6 +88,22 @@ namespace Gladius.control
             }
         }
 
+
+        public void DrawCenteredGrid(BaseActor actor,int size,GraphicsDevice device, ICamera camera)
+        {
+            int width = size;//((size - 1) / 2);
+
+            for (int i = -width; i <= width; ++i)
+            {
+                for (int j = -width; j <= width; ++j)
+                {
+                    Point p = new Point(actor.CurrentPosition.X + i, actor.CurrentPosition.Y + j);
+                    DrawIfValid(device, camera, p, actor, m_defaultTile);
+                }
+            }
+
+            
+        }
 
 
         public bool DrawingMovePath
@@ -171,22 +190,29 @@ namespace Gladius.control
                 {
                     case (SquareType.Empty):
                         {
-                            if (AttackSkill.IsAttackSkill(actor.CurrentAttackSkill))
-                            {
-                                return m_blockedCursor;
-                            }
-                            return m_forwardMoveCursor;
+                            //if (AttackSkill.IsAttackSkill(actor.CurrentAttackSkill))
+                            //{
+                            //    return m_blockedCursor;
+                            //}
+                            return m_interMoveCursor;
                         }
                     case (SquareType.Mobile):
                         {
                             BaseActor target = m_arena.GetActorAtPosition(p);
                             if (Globals.CombatEngine.IsValidTarget(SelectedActor, target,SelectedActor.CurrentAttackSkill))
                             {
-                                return m_attackCursor;
+                                if (Globals.NextToTarget(actor, target))
+                                {
+                                    return m_targetAndSelectCursor;
+                                }
+                                else
+                                {
+                                    return m_targetCursor;
+                                }
                             }
                             else
                             {
-                                return m_blockedCursor;
+                                return m_selectCursor;
                             }
                         }
                     default:
@@ -211,7 +237,7 @@ namespace Gladius.control
                 else
                 {
                     // last point really needs target icon.
-                    DrawIfValid(device, camera, points[i], actor, m_destinationCursor);
+                    DrawIfValid(device, camera, points[i], actor, m_endMoveCursor);
                 }
             }
         }
@@ -475,14 +501,20 @@ namespace Gladius.control
         public Point m_currentPosition;
         public SimpleQuad m_simpleQuad;
 
-        public Texture2D m_simpleCursor;
-        public Texture2D m_selectCursor;
-        public Texture2D m_attackCursor;
-        public Texture2D m_blockedCursor;
-        public Texture2D m_forwardMoveCursor;
-        public Texture2D m_turnMoveCursor;
-        public Texture2D m_destinationCursor;
 
+        public Texture2D m_defaultTile;
+        public Texture2D m_selectCursor;
+        public Texture2D m_targetCursor;
+        public Texture2D m_targetAndSelectCursor;
+
+        //public Texture2D m_blockedCursor;
+        //public Texture2D m_forwardMoveCursor;
+        //public Texture2D m_destinationCursor;
+
+        public Texture2D m_startMoveCursor;
+        public Texture2D m_interMoveCursor;
+        public Texture2D m_turnMoveCursor;
+        public Texture2D m_endMoveCursor;
     }
 
 

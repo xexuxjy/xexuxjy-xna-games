@@ -399,6 +399,36 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\CornerTurn.xnb">
+      <Link>Content\UI\cursors\CornerTurn.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\EndMove.xnb">
+      <Link>Content\UI\cursors\EndMove.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\InterMove.xnb">
+      <Link>Content\UI\cursors\InterMove.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\TargetCursor.xnb">
+      <Link>Content\UI\cursors\TargetCursor.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\TargetSelectCursor.xnb">
+      <Link>Content\UI\cursors\TargetSelectCursor.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\StartMove.xnb">
+      <Link>Content\UI\cursors\StartMove.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

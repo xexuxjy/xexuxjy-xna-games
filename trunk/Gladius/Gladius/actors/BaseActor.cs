@@ -192,7 +192,7 @@ namespace Gladius.actors
         public Vector3 Position
         {
             get;
-            set;
+            private set;
         }
 
         private Matrix m_world;
@@ -744,6 +744,17 @@ namespace Gladius.actors
         public Dictionary<GameObjectAttributeType, BoundedAttribute> AttributeDictionary
         {
             get { return m_attributeDictionary; }
+        }
+
+        public int CurrentMovePoints
+        {
+            get { return m_currentMovePoints; }
+            
+        }
+
+        public int TotalMovePoints
+        {
+            get { return m_totalMovePoints; }
         }
 
         private BaseActor m_currentTarget = null;
