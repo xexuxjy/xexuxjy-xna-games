@@ -167,6 +167,11 @@ namespace Gladius.gamestatemanagement.screens
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
+            if (m_movementGrid.Visible)
+            {
+                m_movementGrid.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
+            }
+
             m_screenComponents.Draw(gameTime);
 
 
@@ -175,6 +180,10 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
+                    if (uiElement is MovementGrid)
+                    {
+                        continue;
+                    }
                     uiElement.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
                 }
             }
@@ -186,6 +195,10 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
+                    if (uiElement is MovementGrid)
+                    {
+                        continue;
+                    }
                     uiElement.DrawElement(gameTime, ScreenManager.GraphicsDevice, m_spriteBatch);
                 }
             }
