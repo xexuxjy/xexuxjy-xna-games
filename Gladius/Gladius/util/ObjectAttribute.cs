@@ -21,7 +21,8 @@ namespace xexuxjy.Gladius.util
         WaterAffinity,
         LightAffinity,
         DarkAffinity,
-        ActionPoints,
+        SkillPoints,
+        Affinity,
         NumTypes
     }
 
@@ -228,8 +229,8 @@ namespace xexuxjy.Gladius.util
 
         public BoundedAttribute(float startValue,bool limitless)
         {
-            MinValue = float.MinValue;
-            MaxValue = float.MaxValue;
+            MinValue = 0;
+            MaxValue = startValue;
             BaseValue = startValue;
             CurrentValue = startValue;
             m_limitless = limitless;

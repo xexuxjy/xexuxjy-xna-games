@@ -6,6 +6,7 @@ using Gladius.gamestatemanagement.screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StringLeakTest;
+using Gladius.actors;
 
 namespace Gladius.combat
 {
@@ -20,16 +21,16 @@ namespace Gladius.combat
 
         public override void Update(GameTime gameTime)
         {
-            //Matrix cameraView = Matrix.Invert(Globals.Camera.View);
-            Matrix cameraView = Globals.Camera.View;
-            int active = m_activeFloatingText.Count-1;
-            for(int i=active;i>=0;)
+            Matrix cameraView = Matrix.Invert(Globals.Camera.View);
+            //Matrix cameraView = Globals.Camera.View;
+            int active = m_activeFloatingText.Count - 1;
+            for (int i = active; i >= 0; )
             {
                 FloatingText ft = m_activeFloatingText[i];
                 ft.Update(gameTime);
-                if(!ft.Complete)
+                if (!ft.Complete)
                 {
-                    ft.CameraPosition = Vector3.TransformNormal(ft.WorldPosition,cameraView);
+                    ft.CameraPosition = Vector3.TransformNormal(ft.WorldPosition, cameraView);
                     i--;
                 }
                 else
@@ -90,6 +91,31 @@ namespace Gladius.combat
             base.LoadContent(manager, device);
             m_spriteFont = manager.Load<SpriteFont>("UI/fonts/ShopFont");
         }
+
+        public void DrawNameAndHealth(BaseActor actor, GraphicsDevice device, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        {
+            Vector3 worldPoint = actor.CameraFocusPoint;
+            worldPoint.Y += actor.ModelHeight;
+            Vector3 result = device.Viewport.Project(worldPoint, Globals.Camera.Projection, Globals.Camera.View, Matrix.Identity);
+
+            // swap up/down
+            //result.Y = graphicsDevice.Viewport.Height - result.Y;
+            // measure the text so it's centered - can only do at this point?
+            Vector2 textDims = m_spriteFont.MeasureString(actor.Name);
+            if (result.Z > 1)
+            {
+                result = -result;
+            }
+
+            Vector2 pos = new Vector2(result.X, result.Y);
+            pos.X -= (textDims.X / 2f);
+            spriteBatch.DrawString(m_spriteFont, actor.Name, pos, Color.White);
+            pos.Y += textDims.Y + 2;
+            Rectangle healthBarDims = new Rectangle((int)pos.X,(int)pos.Y, 50, 10);
+            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), healthBarDims, Color.White);
+
+        }
+
 
 
         private List<FloatingText> m_activeFloatingText = new List<FloatingText>();
