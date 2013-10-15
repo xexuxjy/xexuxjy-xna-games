@@ -14,7 +14,7 @@ namespace Gladius.control
 {
     public class PlayerChoiceBar : BaseUIElement
     {
-        const int numSkillSlots = 4;
+        const int numSkillSlots = 5;
 
         public override void LoadContent(ContentManager manager,GraphicsDevice device)
         {

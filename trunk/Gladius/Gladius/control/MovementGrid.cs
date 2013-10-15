@@ -43,12 +43,13 @@ namespace Gladius.control
 
         public override void DrawElement(GameTime gameTime, GraphicsDevice device, ICamera camera)
         {
+            //return;
             if (Visible && SelectedActor != null)
             {
                 //device.BlendState = BlendState.AlphaBlend;
                 //device.DepthStencilState = DepthStencilState.None;
 
-                DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,device,camera);
+                //DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,device,camera);
 
                 if (SelectedActor.CurrentAttackSkill == null)
                 {
@@ -61,13 +62,14 @@ namespace Gladius.control
                     {
                         case AttackType.Move:
                             DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
+                            //DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, Globals.GlobalContentManager.GetColourTexture(Color.White));
                             DrawMovementPath(device, camera, SelectedActor, SelectedActor.WayPointList);
                             //DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                             break;
                         case (AttackType.AOE):
                             break;
                         case (AttackType.SingleOrtho):
-                        case(AttackType.SingleSurround):
+                        case (AttackType.SingleSurround):
                             DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                             break;
                         default:
@@ -88,8 +90,17 @@ namespace Gladius.control
             }
         }
 
+        public void DrawAttackSkillCursor(BaseActor actor, Point centerPoint, AttackSkill attackSkill, GraphicsDevice device, ICamera camera)
+        {
+            int distance = Globals.PathDistance(actor.CurrentPosition,centerPoint);
+            if(distance >= attackSkill.MinRange && distance <= attackSkill.MaxRange)
+            {
+                DrawCenteredGrid(actor, attackSkill.Radius, device, camera);
+            }
+        }
 
-        public void DrawCenteredGrid(BaseActor actor,int size,GraphicsDevice device, ICamera camera)
+
+        public void DrawCenteredGrid(BaseActor actor, int size, GraphicsDevice device, ICamera camera)
         {
             int width = size;//((size - 1) / 2);
 
@@ -101,8 +112,6 @@ namespace Gladius.control
                     DrawIfValid(device, camera, p, actor, m_defaultTile);
                 }
             }
-
-            
         }
 
 
@@ -141,39 +150,87 @@ namespace Gladius.control
         }
 
 
-        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point p, Point nextPoint, BaseActor actor, Texture2D cursor = null)
+        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point prevPoint, Point point, Point nextPoint, BaseActor actor, Texture2D cursor = null)
         {
             if (cursor == null)
             {
-                cursor = CursorForSquare(p, actor);
+                cursor = CursorForSquare(point, actor);
             }
             if (cursor != null)
             {
-                Vector3 v3 = V3ForSquare(p);
+                Vector3 v3 = V3ForSquare(point);
+                Vector3 v3p = V3ForSquare(prevPoint);
+                Vector3 v3n = V3ForSquare(nextPoint);
+
                 Matrix rot = Matrix.Identity;
 
-                if (nextPoint.X != 0 || nextPoint.Y != 0)
+                Vector3 diffPrevious = v3 - v3p;
+                diffPrevious.Y = 0;
+                Vector3 diffNext = v3n - v3;
+                diffNext.Y = 0;
+                bool corner = false;
+                // we've turned a corner.
+                if ((Math.Abs(diffPrevious.X) != 0 && Math.Abs(diffNext.Z) != 0) ||
+                    (Math.Abs(diffPrevious.Z) != 0 && Math.Abs(diffNext.X) != 0))
                 {
-                    Vector3 diff = new Vector3(p.X - nextPoint.X, 0, p.Y - nextPoint.Y);
-                    if (diff.X == 1)
-                    {
-                        Matrix.CreateRotationY((float)Math.PI / 2f, out rot);
-                    }
-                    if (diff.X == -1)
-                    {
-                        Matrix.CreateRotationY((float)(3 * Math.PI) / 2f, out rot);
-                    }
-                    if (diff.Z == -1)
-                    {
-                        Matrix.CreateRotationY((float)Math.PI, out rot);
-                    }
-                    if (diff.Z == 1)
+                    corner = true;
+                }
+
+                if (corner)
+                {
+                    cursor = m_turnMoveCursor;
+                    if (diffPrevious.X == 1 && diffNext.Z == 1)
                     {
                         Matrix.CreateRotationY(0, out rot);
                     }
-
+                    else if (diffPrevious.X == 1 && diffNext.Z == -1)
+                    {
+                        Matrix.CreateRotationY((float)Math.PI / 2f, out rot);
+                    }
+                    else if (diffPrevious.X == -1 && diffNext.Z == 1)
+                    {
+                        Matrix.CreateRotationY((float)Math.PI, out rot);
+                    }
+                    else if (diffPrevious.X == -1 && diffNext.Z == -1)
+                    {
+                        Matrix.CreateRotationY((float)(3 * Math.PI) / 2f, out rot);
+                    }
+                    else if (diffPrevious.Z == 1 && diffNext.X == 1)
+                    {
+                        Matrix.CreateRotationY((float)(Math.PI) / 2f, out rot);
+                    }
+                    else if (diffPrevious.Z == 1 && diffNext.X == -1)
+                    {
+                        Matrix.CreateRotationY((float)Math.PI, out rot);
+                    }
+                    else if (diffPrevious.Z == -1 && diffNext.X == 1)
+                    {
+                        Matrix.CreateRotationY(0, out rot);
+                    }
+                    else if (diffPrevious.Z == -1 && diffNext.X == -1)
+                    {
+                        Matrix.CreateRotationY((float)(3 * Math.PI) / 2f, out rot);
+                    }
                 }
-
+                else
+                {
+                    if (diffNext.X == 1)
+                    {
+                        Matrix.CreateRotationY((float)Math.PI / 2f, out rot);
+                    }
+                    else if (diffNext.X == -1)
+                    {
+                        Matrix.CreateRotationY((float)(3 * Math.PI) / 2f, out rot);
+                    }
+                    else if (diffNext.Z == -1)
+                    {
+                        Matrix.CreateRotationY((float)Math.PI, out rot);
+                    }
+                    else if (diffNext.Z == 1)
+                    {
+                        Matrix.CreateRotationY(0, out rot);
+                    }
+                }
                 Matrix m = rot * Matrix.CreateTranslation(v3);
 
                 m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera);
@@ -199,7 +256,7 @@ namespace Gladius.control
                     case (SquareType.Mobile):
                         {
                             BaseActor target = m_arena.GetActorAtPosition(p);
-                            if (Globals.CombatEngine.IsValidTarget(SelectedActor, target,SelectedActor.CurrentAttackSkill))
+                            if (Globals.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
                             {
                                 if (Globals.NextToTarget(actor, target))
                                 {
@@ -228,11 +285,17 @@ namespace Gladius.control
         public void DrawMovementPath(GraphicsDevice device, ICamera camera, BaseActor actor, List<Point> points)
         {
             int numPoints = points.Count;
+            Point prev = new Point();
+            Point curr = new Point();
+            Point next = new Point();
             for (int i = 0; i < numPoints; ++i)
             {
+                prev = curr;
+                curr = points[i];
                 if (i < (numPoints - 1))
                 {
-                    DrawIfValid(device, camera, points[i], points[i + 1], actor);
+                    next = points[i + 1];
+                    DrawIfValid(device, camera, prev, curr, next, actor);
                 }
                 else
                 {
@@ -273,7 +336,7 @@ namespace Gladius.control
         public bool CursorOnTarget(BaseActor source)
         {
             BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
-            return (ba != null && Globals.CombatEngine.IsValidTarget(source, ba,source.CurrentAttackSkill));
+            return (ba != null && Globals.CombatEngine.IsValidTarget(source, ba, source.CurrentAttackSkill));
         }
 
 
@@ -355,7 +418,7 @@ namespace Gladius.control
                                 if (CursorOnTarget(SelectedActor))
                                 {
                                     BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
-                                    if (Globals.CombatEngine.IsValidTarget(SelectedActor, target,SelectedActor.CurrentAttackSkill))
+                                    if (Globals.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
                                     {
                                         SelectedActor.Target = target;
                                         SelectedActor.AttackRequested = true;
@@ -401,7 +464,7 @@ namespace Gladius.control
                                     }
 
                                 case (AttackType.SingleOrtho):
-                                    if(!Globals.CombatEngine.IsAttackNextTo(SelectedActor,target))
+                                    if (!Globals.CombatEngine.IsAttackNextTo(SelectedActor, target))
                                     {
                                         SelectedActor.WayPointList.Clear();
                                         Point adjustedPoint = CurrentPosition;

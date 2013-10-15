@@ -214,6 +214,11 @@ namespace Gladius.control
             return true;
         }
 
+        public List<BaseActor> AllActors
+        {
+            get { return m_allActors; }
+        }
+
         private ArenaScreen m_arenaScreen;
         List<BaseActor> m_turns = new List<BaseActor>();
         List<BaseActor> m_allActors = new List<BaseActor>();

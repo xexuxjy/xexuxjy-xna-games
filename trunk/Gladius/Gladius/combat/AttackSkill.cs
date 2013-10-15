@@ -24,7 +24,9 @@ namespace Gladius.combat
 
         public SkillIcon SkillIcon;
 
-        
+        public int MinRange;
+        public int MaxRange;
+        public int Radius;
         // todo - lots of extra abilities on here.
 
 
@@ -39,6 +41,7 @@ namespace Gladius.combat
             DamageAffects = damageAffects;
             BaseDamage = baseDamage;
             DamageMultiplier = 1.0f;
+            Radius = 1;
         }
 
         public AttackSkill(XmlElement node)
@@ -52,6 +55,31 @@ namespace Gladius.combat
             DamageAffects = (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
             SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
             BaseDamage = float.Parse(node.Attributes["baseDamage"].Value);
+            if(node.HasAttribute("minRange"))
+            {
+                MinRange = int.Parse(node.Attributes["minRange"].Value);
+            }
+            else
+            {
+                MinRange = 1;
+            }
+            if(node.HasAttribute("maxRange"))
+            {
+                MaxRange = int.Parse(node.Attributes["maxRange"].Value);
+            }
+            else
+            {
+                MaxRange = 1;
+            }
+            if (node.HasAttribute("radius"))
+            {
+                Radius = int.Parse(node.Attributes["radius"].Value);
+            }
+            else
+            {
+                Radius = 1;
+            }
+
             DamageMultiplier = 1.0f;
         }
 

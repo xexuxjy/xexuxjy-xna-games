@@ -42,6 +42,12 @@ namespace Gladius.actors
 
             m_attributeDictionary[GameObjectAttributeType.Health] = new BoundedAttribute(100);
             m_attributeDictionary[GameObjectAttributeType.Accuracy] = new BoundedAttribute(10);
+            m_attributeDictionary[GameObjectAttributeType.Power] = new BoundedAttribute(10);
+            m_attributeDictionary[GameObjectAttributeType.Defense] = new BoundedAttribute(10);
+            m_attributeDictionary[GameObjectAttributeType.Constitution] = new BoundedAttribute(10);
+
+            m_attributeDictionary[GameObjectAttributeType.SkillPoints] = new BoundedAttribute(0,0,10);
+            m_attributeDictionary[GameObjectAttributeType.Affinity] = new BoundedAttribute(0, 0, 10);
 
         }
 
@@ -91,8 +97,22 @@ namespace Gladius.actors
 
         public String Name
         {
-            get;
-            set;
+            get
+            {
+                if (m_name != null)
+                {
+                    return m_name;
+                }
+                else
+                {
+                    return DebugName;
+                }
+
+            }
+            set
+            {
+                m_name = value;
+            }
         }
 
         public String DebugName
@@ -203,6 +223,55 @@ namespace Gladius.actors
                 return m_world;
             }
         }
+
+        public float Health
+        {
+            get
+            {
+                return m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue;
+            }
+        }
+
+        public float MaxHealth
+        {
+            get
+            {
+                return m_attributeDictionary[GameObjectAttributeType.Health].MaxValue;
+            }
+        }
+
+        public float SkillPoints
+        {
+            get
+            {
+                return m_attributeDictionary[GameObjectAttributeType.SkillPoints].CurrentValue;
+            }
+        }
+
+        public float MaxSkillPoints
+        {
+            get
+            {
+                return m_attributeDictionary[GameObjectAttributeType.SkillPoints].MaxValue;
+            }
+        }
+
+        public float Affinity
+        {
+            get
+            {
+                return m_attributeDictionary[GameObjectAttributeType.Accuracy].CurrentValue;
+            }
+        }
+
+        public float MaxAffinity
+        {
+            get
+            {
+                return m_attributeDictionary[GameObjectAttributeType.Affinity].MaxValue;
+            }
+        }
+
 
         public BoundingBox BoundingBox
         {
@@ -741,6 +810,24 @@ namespace Gladius.actors
 
         }
 
+        public void AddItem(int itemKey)
+        {
+            m_itemKeys.Add(itemKey);
+            UpdateStats();
+        }
+
+        public void RemoveItem(int itemKey)
+        {
+            m_itemKeys.Remove(itemKey);
+            UpdateStats();
+        }
+
+        private void UpdateStats()
+        {
+
+        }
+
+
         public Dictionary<GameObjectAttributeType, BoundedAttribute> AttributeDictionary
         {
             get { return m_attributeDictionary; }
@@ -765,6 +852,8 @@ namespace Gladius.actors
         private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
         private AnimatedModel m_animatedModel;
 
+        private List<int> m_itemKeys = new List<int>();
+
         private float m_movementSpeed = 2f;
         private float m_turnSpeed = 1f;
 
@@ -777,6 +866,7 @@ namespace Gladius.actors
         private Model m_leftHandModel;
         private Model m_rightHandModel;
         private String m_debugName;
+        private String m_name;
 
         public const int MinLevel = 1;
         public const int MaxLevel = 15;

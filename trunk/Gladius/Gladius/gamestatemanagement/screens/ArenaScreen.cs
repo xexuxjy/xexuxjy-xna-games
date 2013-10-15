@@ -124,8 +124,8 @@ namespace Gladius.gamestatemanagement.screens
                     start2 -= m_turnManager.CurrentActor.World.Forward * 5;
 
 
-                    m_combatEngineUI.DrawFloatingText(start1, Color.White, textLeft, 4);
-                    m_combatEngineUI.DrawFloatingText(start2, Color.White, textRight, 4);
+                    //m_combatEngineUI.DrawFloatingText(start1, Color.White, textLeft, 4);
+                    //m_combatEngineUI.DrawFloatingText(start2, Color.White, textRight, 4);
                 }
             }
             else
@@ -167,14 +167,19 @@ namespace Gladius.gamestatemanagement.screens
             ScreenManager.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
 
+
+            m_screenComponents.Draw(gameTime);
+
+            ScreenManager.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
             if (m_movementGrid.Visible)
             {
                 m_movementGrid.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
             }
 
-            m_screenComponents.Draw(gameTime);
-
-
+            
+            //ScreenManager.GraphicsDevice.DepthStencilState = DepthStencilState.None;
+            //ScreenManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             // bit yucky... ui elements have one form of draw or another. not both
             foreach (IUIElement uiElement in m_uiElementsList)
             {
@@ -204,6 +209,13 @@ namespace Gladius.gamestatemanagement.screens
             }
 
             m_spriteBatch.DrawString(m_debugFont, Globals.CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
+
+
+            foreach (BaseActor baseActor in m_turnManager.AllActors)
+            {
+                m_combatEngineUI.DrawNameAndHealth(baseActor, ScreenManager.GraphicsDevice, m_spriteBatch);
+            }
+
 
             if (m_battleOver)
             {

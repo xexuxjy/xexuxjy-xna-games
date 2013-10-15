@@ -122,6 +122,14 @@ namespace Gladius
             return (diff.X * diff.X) + (diff.Y * diff.Y);
         }
 
+        public static int PathDistance(Point start, Point end)
+        {
+            int xdiff = Math.Abs(start.X - end.X);
+            int ydiff = Math.Abs(start.Y - end.Y);
+            return xdiff + ydiff;
+        }
+
+
 
         public const String PlayerTeam = "Player";
     }

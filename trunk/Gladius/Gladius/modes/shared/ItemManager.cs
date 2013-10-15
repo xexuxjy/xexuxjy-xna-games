@@ -74,20 +74,16 @@ namespace Gladius.modes.shared
             m_itemId = int.Parse(fields[(int)ItemColumn.ID]) ;
             m_itemName = fields[(int)ItemColumn.NAME];
             m_itemLocation = ToLocation(fields[(int)ItemColumn.NAME]);
+            BuildStat(fields[(int)ItemColumn.PWR],GameObjectAttributeType.Power);
+            BuildStat(fields[(int)ItemColumn.ACC], GameObjectAttributeType.Accuracy);
+            BuildStat(fields[(int)ItemColumn.DEF], GameObjectAttributeType.Defense);
+            //BuildStat(fields[(int)ItemColumn.INI], GameObjectAttributeType.Ini);
 
+            
+            
+            //            if(
 
         }
-
-        public ItemLocation ToLocation(String val)
-        {
-            if (val == "Armor") return ItemLocation.Body;
-            if (val == "Weapon") return ItemLocation.RHand;
-            if (val == "Shield") return ItemLocation.LHand;
-            if (val == "Helmet") return ItemLocation.Head;
-            if (val == "Accessory") return ItemLocation.Special;
-            return ItemLocation.Special;
-        }
-
 
         public enum ItemColumn
         {
@@ -118,6 +114,25 @@ namespace Gladius.modes.shared
             DESC
         }
 
+        public void BuildStat(String val,GameObjectAttributeType attrType)
+        {
+            if(!String.IsNullOrEmpty(val))
+            {
+                int ival = int.Parse(val);
+                GameObjectAttributeModifier modifier = new GameObjectAttributeModifier(attrType,GameObjectAttributeModifierDurationType.InstantPermanent,GameObjectAttributeModifierType.Add,ival,0f);
+                m_modifiers.Add(modifier);
+            }
+        }
+
+        public ItemLocation ToLocation(String val)
+        {
+            if (val == "Armor") return ItemLocation.Body;
+            if (val == "Weapon") return ItemLocation.RHand;
+            if (val == "Shield") return ItemLocation.LHand;
+            if (val == "Helmet") return ItemLocation.Head;
+            if (val == "Accessory") return ItemLocation.Special;
+            return ItemLocation.Special;
+        }
 
         public String ItemName
         {
@@ -158,7 +173,7 @@ namespace Gladius.modes.shared
         private List<ActorClass> RequiredClasses = new List<ActorClass>();
         private List<ActorClass> ProhibitedClasses = new List<ActorClass>();
         private ItemLocation m_itemLocation;
-        private List<GameObjectAttributeModifier> m_modifiers;
+        private List<GameObjectAttributeModifier> m_modifiers = new List<GameObjectAttributeModifier>();
     }
 
 
