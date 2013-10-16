@@ -92,8 +92,8 @@ namespace Gladius.control
 
         public void DrawAttackSkillCursor(BaseActor actor, Point centerPoint, AttackSkill attackSkill, GraphicsDevice device, ICamera camera)
         {
-            int distance = Globals.PathDistance(actor.CurrentPosition,centerPoint);
-            if(distance >= attackSkill.MinRange && distance <= attackSkill.MaxRange)
+            int distance = Globals.PathDistance(actor.CurrentPosition, centerPoint);
+            if (distance >= attackSkill.MinRange && distance <= attackSkill.MaxRange)
             {
                 DrawCenteredGrid(actor, attackSkill.Radius, device, camera);
             }
@@ -150,7 +150,9 @@ namespace Gladius.control
         }
 
 
-        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point prevPoint, Point point, Point nextPoint, BaseActor actor, Texture2D cursor = null)
+
+
+        public void DrawIfValid(GraphicsDevice device, ICamera camera, Point prevPoint, Point point, Point nextPoint, BaseActor actor, bool prevExists,bool nextExists, Texture2D cursor = null)
         {
             if (cursor == null)
             {
@@ -164,77 +166,124 @@ namespace Gladius.control
 
                 Matrix rot = Matrix.Identity;
 
+
+
+                float rotation = 0f;
+
                 Vector3 diffPrevious = v3 - v3p;
                 diffPrevious.Y = 0;
                 Vector3 diffNext = v3n - v3;
                 diffNext.Y = 0;
-                bool corner = false;
-                // we've turned a corner.
-                if ((Math.Abs(diffPrevious.X) != 0 && Math.Abs(diffNext.Z) != 0) ||
-                    (Math.Abs(diffPrevious.Z) != 0 && Math.Abs(diffNext.X) != 0))
-                {
-                    corner = true;
-                }
 
-                if (corner)
+
+                if (prevExists)
                 {
-                    cursor = m_turnMoveCursor;
-                    if (diffPrevious.X == 1 && diffNext.Z == 1)
+
+                    Side enterSide = Side.Left;
+                    Side exitSide = Side.Right;
+                    if (diffPrevious.X == 1)
                     {
-                        Matrix.CreateRotationY(0, out rot);
+                        enterSide = Side.Left;
                     }
-                    else if (diffPrevious.X == 1 && diffNext.Z == -1)
+                    else if (diffPrevious.X == -1)
                     {
-                        Matrix.CreateRotationY((float)Math.PI / 2f, out rot);
+                        enterSide = Side.Right;
                     }
-                    else if (diffPrevious.X == -1 && diffNext.Z == 1)
+                    else if (diffPrevious.Z == 1)
                     {
-                        Matrix.CreateRotationY((float)Math.PI, out rot);
+                        enterSide = Side.Bottom;
                     }
-                    else if (diffPrevious.X == -1 && diffNext.Z == -1)
+                    else
                     {
-                        Matrix.CreateRotationY((float)(3 * Math.PI) / 2f, out rot);
+                        enterSide = Side.Top;
                     }
-                    else if (diffPrevious.Z == 1 && diffNext.X == 1)
+
+                    if (diffNext.X == 1)
                     {
-                        Matrix.CreateRotationY((float)(Math.PI) / 2f, out rot);
+                        exitSide = Side.Right;
                     }
-                    else if (diffPrevious.Z == 1 && diffNext.X == -1)
+                    else if (diffNext.X == -1)
                     {
-                        Matrix.CreateRotationY((float)Math.PI, out rot);
+                        exitSide = Side.Left;
                     }
-                    else if (diffPrevious.Z == -1 && diffNext.X == 1)
+                    else if (diffNext.Z == 1)
                     {
-                        Matrix.CreateRotationY(0, out rot);
+                        exitSide = Side.Top;
                     }
-                    else if (diffPrevious.Z == -1 && diffNext.X == -1)
+                    else
                     {
-                        Matrix.CreateRotationY((float)(3 * Math.PI) / 2f, out rot);
+                        exitSide = Side.Bottom;
+                    }
+
+                    if (nextExists)
+                    {
+
+                        if (CompareSide(enterSide, exitSide, Side.Left, Side.Right))
+                        {
+                            cursor = m_interMoveCursor;
+                            rotation = (float)Math.PI / 2f;
+                        }
+                        else if (CompareSide(enterSide, exitSide, Side.Top, Side.Bottom))
+                        {
+                            cursor = m_interMoveCursor;
+                        }
+                        else if (CompareSide(enterSide, exitSide, Side.Left, Side.Top))
+                        {
+                            cursor = m_turnMoveCursor;
+                            //rotation = (float)Math.PI / 2f;
+                            rotation = ((float)(3 * Math.PI) / 2f);
+                        }
+                        else if (CompareSide(enterSide, exitSide, Side.Left, Side.Bottom))
+                        {
+                            cursor = m_turnMoveCursor;
+                            rotation = ((float)Math.PI);
+                        }
+                        else if (CompareSide(enterSide, exitSide, Side.Right, Side.Top))
+                        {
+                            cursor = m_turnMoveCursor;
+                            rotation =0;
+                        }
+                        else if (CompareSide(enterSide, exitSide, Side.Right, Side.Bottom))
+                        {
+                            cursor = m_turnMoveCursor;
+                            rotation = (float)Math.PI/2f;
+                        }
+                    }
+                    else
+                    {
+                        cursor = m_endMoveCursor;
+                        switch(enterSide)
+                        {
+                            case(Side.Left):
+                                rotation = ((float)(3 * Math.PI) / 2f);
+                                break;
+                            case(Side.Right):
+                                rotation = ((float)(Math.PI) / 2f);
+                                break;
+                            case(Side.Top):
+                                rotation = 0f;
+                                break;
+                            case(Side.Bottom):
+                                rotation = ((float)Math.PI);
+                                break;
+                        }
                     }
                 }
                 else
                 {
-                    if (diffNext.X == 1)
-                    {
-                        Matrix.CreateRotationY((float)Math.PI / 2f, out rot);
-                    }
-                    else if (diffNext.X == -1)
-                    {
-                        Matrix.CreateRotationY((float)(3 * Math.PI) / 2f, out rot);
-                    }
-                    else if (diffNext.Z == -1)
-                    {
-                        Matrix.CreateRotationY((float)Math.PI, out rot);
-                    }
-                    else if (diffNext.Z == 1)
-                    {
-                        Matrix.CreateRotationY(0, out rot);
-                    }
+                    cursor = m_startMoveCursor;
                 }
+
+                Matrix.CreateRotationY(rotation, out rot);
                 Matrix m = rot * Matrix.CreateTranslation(v3);
 
                 m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera);
             }
+        }
+
+        public bool CompareSide(Side side1, Side side2, Side check1, Side check2)
+        {
+            return (side1 == check1 && side2 == check2) || (side1 == check2 && side2 == check1);
         }
 
 
@@ -295,12 +344,12 @@ namespace Gladius.control
                 if (i < (numPoints - 1))
                 {
                     next = points[i + 1];
-                    DrawIfValid(device, camera, prev, curr, next, actor);
+                    DrawIfValid(device, camera, prev, curr, next, actor,(i>0),true);
                 }
                 else
                 {
                     // last point really needs target icon.
-                    DrawIfValid(device, camera, points[i], actor, m_endMoveCursor);
+                    DrawIfValid(device, camera, prev,curr,next, actor,true,false,m_endMoveCursor);
                 }
             }
         }
@@ -578,6 +627,14 @@ namespace Gladius.control
         public Texture2D m_interMoveCursor;
         public Texture2D m_turnMoveCursor;
         public Texture2D m_endMoveCursor;
+    }
+
+    public enum Side
+    {
+        Left,
+        Right,
+        Top,
+        Bottom
     }
 
 
