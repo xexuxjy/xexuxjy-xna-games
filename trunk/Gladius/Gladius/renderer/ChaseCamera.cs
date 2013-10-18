@@ -20,6 +20,13 @@ namespace Gladius.renderer
         public ChaseCamera(CameraManager cameraManager)
         {
             m_cameraManager = cameraManager;
+            NearPlaneDistance = m_cameraManager.DefaultNearPlane;
+
+            FarPlaneDistance = m_cameraManager.DefaultFarPlane;
+
+            AspectRatio = m_cameraManager.DefaultAspectRatio;
+
+            FieldOfView = m_cameraManager.DefaultFOV;          
         }
 
         /// <summary>

@@ -13,16 +13,17 @@ namespace Gladius.renderer
 
         public CameraManager(Game game)
         {
-            m_chaseCamera = new ChaseCamera(this);
-            m_freeCamera = new FreeCamera(this);
-            m_freeCamera.Game = game;
-            m_staticCamera = new StaticCamera(this);
-            SetChaseCamera();
             m_fov = MathHelper.PiOver4;
             m_aspect = (float)game.Window.ClientBounds.Width/(float)game.Window.ClientBounds.Height;
             m_near = 1f;
             m_far = 200f;
             RebuildProjection();
+            m_chaseCamera = new ChaseCamera(this);
+            m_freeCamera = new FreeCamera(this);
+            m_freeCamera.Game = game;
+            m_staticCamera = new StaticCamera(this);
+            SetChaseCamera();
+
         }
 
         public float DefaultFOV
@@ -180,7 +181,10 @@ namespace Gladius.renderer
         private void RebuildProjection()
         {
             Matrix.CreatePerspectiveFieldOfView(m_fov,m_aspect,m_near,m_far,out m_projection);
-            m_activeCamera.Projection = m_projection;
+            if (m_activeCamera != null)
+            {
+                m_activeCamera.Projection = m_projection;
+            }
         }
 
 

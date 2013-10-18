@@ -103,6 +103,7 @@ namespace Gladius.renderer.animation
             m_clipNameDictionary[AnimationEnum.Die] = "Death";
             m_clipNameDictionary[AnimationEnum.Block] = "Block";
             m_clipNameDictionary[AnimationEnum.Cast] = "Cast";
+
         }
 
         public Quaternion ActorRotation
@@ -333,6 +334,16 @@ namespace Gladius.renderer.animation
         {
             get;
             set;
+        }
+
+        public void RegisterEvent(AnimationEnum animationEnum,String eventName,CpuSkinningDataTypes.AnimationPlayer.EventCallback callback)
+        {
+            m_animationPlayer.RegisteredEvents[animationEnum.ToString()].Add(eventName, callback);
+        }
+
+        public void UnregisterEvent(AnimationEnum animationEnum, String eventName)
+        {
+            m_animationPlayer.RegisteredEvents[animationEnum.ToString()].Remove(eventName);
         }
 
 

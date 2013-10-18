@@ -28,7 +28,14 @@ namespace Gladius.actors
             m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
             m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
+
             SetupAttributes();
+        }
+
+        private void AttackAnimHitPoint(String name)
+        {
+            // only do this at the animation hitpoint.
+            Globals.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
         }
 
         public float ModelHeight
@@ -174,10 +181,13 @@ namespace Gladius.actors
                 // test for now.
                 m_animatedModel.SetMeshActive("w_helmet_01", false);
                 m_animatedModel.SetMeshActive("w_shoulder_01", false);
+                m_animatedModel.SetMeshActive("w_helmet_02", false);
+                m_animatedModel.SetMeshActive("w_shoulder_02", false);
 
                 m_animatedModel.SetMeshActive("bow_01", false);
                 m_animatedModel.SetMeshActive("shield_01", false);
 
+                m_animatedModel.RegisterEvent(AnimationEnum.Attack1, "HitPoint", new CpuSkinningDataTypes.AnimationPlayer.EventCallback(AttackAnimHitPoint));
 
                 m_animatedModel.PlayAnimation(AnimationEnum.Idle);
             }
@@ -534,7 +544,6 @@ namespace Gladius.actors
             m_animatedModel.PlayAnimation(AnimationEnum.Attack1, false);
             Attacking = true;
             AttackRequested = false;
-            Globals.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
         }
 
         public void StopAttack()
