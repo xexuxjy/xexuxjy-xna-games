@@ -720,8 +720,11 @@ namespace Gladius.actors
         {
             UnitActive = false;
             CurrentAttackSkill = null;
-            m_animatedModel.PlayAnimation(AnimationEnum.Idle);
-            TurnManager.QueueActor(this);
+            if (!Dead)
+            {
+                m_animatedModel.PlayAnimation(AnimationEnum.Idle);
+                TurnManager.QueueActor(this);
+            }
         }
 
         public bool TurnComplete

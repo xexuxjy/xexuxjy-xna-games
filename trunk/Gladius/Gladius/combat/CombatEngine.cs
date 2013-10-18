@@ -131,9 +131,18 @@ namespace Gladius.combat
         {
             if (attacker != null && defender != null)
             {
-                if (attacker == defender && skill.DamageAffects == DamageAffects.Self)
+                if (defender.Dead)
+                {
+                    return false;
+                }
+
+                if (attacker == defender && skill != null && skill.DamageAffects == DamageAffects.Self)
                 {
                     return true;
+                }
+                if (attacker.Team == defender.Team && (skill== null || skill.AttackType == AttackType.Move))
+                {
+                    return false;
                 }
                 if (attacker.Team == defender.Team && skill.DamageAffects == DamageAffects.Team)
                 {

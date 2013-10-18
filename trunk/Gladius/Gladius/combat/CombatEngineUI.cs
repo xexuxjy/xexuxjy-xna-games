@@ -109,12 +109,36 @@ namespace Gladius.combat
 
             Vector2 pos = new Vector2(result.X, result.Y);
             pos.X -= (textDims.X / 2f);
-            spriteBatch.DrawString(m_spriteFont, actor.Name, pos, Color.White);
+            // Shadow text.
+            spriteBatch.DrawString(m_spriteFont, actor.Name, pos, Color.Black);
+            spriteBatch.DrawString(m_spriteFont, actor.Name, pos + new Vector2(1), Color.White);
             pos.Y += textDims.Y + 2;
-            Rectangle healthBarDims = new Rectangle((int)pos.X,(int)pos.Y, 50, 10);
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), healthBarDims, Color.White);
+            int barHeight = 16;
+            DrawHealthBar(spriteBatch, actor.Health, actor.MaxHealth, Color.Green, Color.Red, pos,(int)textDims.X,barHeight);
+
+            //Rectangle healthBarDims = new Rectangle((int)pos.X,(int)pos.Y, 50, 10);
+            //spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), healthBarDims, Color.White);
 
         }
+
+        private void DrawHealthBar(SpriteBatch spriteBatch,float value, float maxValue, Color colour1, Color colour2,Vector2 topLeft,int width,int height)
+        {
+            Color borderColour = Color.Black;
+            int inset = 2;
+            Rectangle rect = new Rectangle((int)topLeft.X, (int)topLeft.Y, width, height);
+            Rectangle insetRect = Globals.InsetRectangle(rect, inset);
+            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(borderColour), rect,Color.White);
+            float scale = maxValue > 0 ? (value / maxValue) : 1;
+            
+            // draw bad health below 30%
+            Color drawColour = scale > 0.3f? colour1:colour2;
+            insetRect.Width = (int)((float)insetRect.Width*scale);
+            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(drawColour), insetRect,Color.White);
+
+        }
+
+
+
 
 
 
