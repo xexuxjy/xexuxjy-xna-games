@@ -94,8 +94,8 @@ namespace Gladius.combat
 
         public void DrawNameAndHealth(BaseActor actor, GraphicsDevice device, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
-            Vector3 worldPoint = actor.CameraFocusPoint;
-            worldPoint.Y += actor.ModelHeight;
+            Vector3 worldPoint = actor.Position;
+            worldPoint.Y += (actor.ModelHeight*2);
             Vector3 result = device.Viewport.Project(worldPoint, Globals.Camera.Projection, Globals.Camera.View, Matrix.Identity);
 
             // swap up/down
