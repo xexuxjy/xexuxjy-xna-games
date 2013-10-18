@@ -226,7 +226,7 @@ namespace Gladius.modes.arena
             BaseActor closestActor = null;
             foreach (BaseActor enemy in m_baseActorMap.Values)
             {
-                if (enemy.Team != searcher.Team)
+                if (Globals.CombatEngine.IsValidTarget(searcher,enemy,searcher.CurrentAttackSkill))
                 {
                     float dist = (enemy.Position - searcher.Position).LengthSquared();
                     if (dist < closest)

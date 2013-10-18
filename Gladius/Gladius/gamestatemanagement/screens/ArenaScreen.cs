@@ -289,7 +289,7 @@ namespace Gladius.gamestatemanagement.screens
                     ba1.ModelName = playerTeamModelName;
                     ba1.Team = Globals.PlayerTeam;
                     ba1.DebugName = "Player" + i;
-                    ba1.PlayerControlled = true;
+                    //ba1.PlayerControlled = true;
                 }
                 else
                 {
