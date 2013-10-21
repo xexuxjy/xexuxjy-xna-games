@@ -5,14 +5,16 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using Gladius.actors;
+using Gladius.gamestatemanagement.screens;
 
 namespace Gladius.modes.arena
 {
     public class Arena
     {
 
-        public Arena(int width, int breadth)
+        public Arena(ArenaScreen arenaScreen,int width, int breadth)
         {
+            m_arenaScreen = arenaScreen;
             m_arenaGrid = new SquareType[width, breadth];
             m_width = width;
             m_breadth = breadth;
@@ -226,7 +228,7 @@ namespace Gladius.modes.arena
             BaseActor closestActor = null;
             foreach (BaseActor enemy in m_baseActorMap.Values)
             {
-                if (Globals.CombatEngine.IsValidTarget(searcher,enemy,searcher.CurrentAttackSkill))
+                if (m_arenaScreen.CombatEngine.IsValidTarget(searcher,enemy,searcher.CurrentAttackSkill))
                 {
                     float dist = (enemy.Position - searcher.Position).LengthSquared();
                     if (dist < closest)
@@ -286,6 +288,7 @@ namespace Gladius.modes.arena
         }
 
 
+        private ArenaScreen m_arenaScreen;
         private SquareType[,] m_arenaGrid;
         private int m_width;
         private int m_breadth;

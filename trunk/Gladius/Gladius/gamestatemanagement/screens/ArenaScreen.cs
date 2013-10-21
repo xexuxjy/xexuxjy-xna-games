@@ -208,7 +208,7 @@ namespace Gladius.gamestatemanagement.screens
                 }
             }
 
-            m_spriteBatch.DrawString(m_debugFont, Globals.CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
+            m_spriteBatch.DrawString(m_debugFont, CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
 
 
             foreach (BaseActor baseActor in m_turnManager.AllActors)
@@ -219,7 +219,7 @@ namespace Gladius.gamestatemanagement.screens
 
             if (m_battleOver)
             {
-                m_spriteBatch.DrawString(m_debugFont, Globals.CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
+                m_spriteBatch.DrawString(m_debugFont, CombatEngine.LastCombatResult, new Vector2(600, 1), Color.Yellow);
                 String text = m_battleWon ? "Victory!" : "Defeat!";
                 
                 Vector2 midScreen = new Vector2(ScreenManager.GraphicsDevice.Viewport.Width,ScreenManager.GraphicsDevice.Viewport.Height);
@@ -260,7 +260,7 @@ namespace Gladius.gamestatemanagement.screens
 
             Globals.Camera.Position = new Vector3(0, 5, -10);
 
-            m_arena = new Arena(32, 32);
+            m_arena = new Arena(this,32, 32);
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena, this);
             m_arenaRenderer.LoadContent();
@@ -307,8 +307,8 @@ namespace Gladius.gamestatemanagement.screens
 
             actors[0].CurrentPosition = new Point(10, 10);
             actors[1].CurrentPosition = new Point(11, 10);
-            actors[2].CurrentPosition = new Point(20, 10);
-            actors[3].CurrentPosition = new Point(20, 20);
+            actors[2].CurrentPosition = new Point(15, 10);
+            actors[3].CurrentPosition = new Point(15, 15);
 
             for (int i = 0; i < numActors; ++i)
             {
@@ -317,22 +317,22 @@ namespace Gladius.gamestatemanagement.screens
 
             }
 
-            Globals.AttackBar = new AttackBar();
-            Globals.AttackBar.Rectangle = new Rectangle(20, 300, 600, 30);
-            Globals.AttackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
+            m_attackBar = new AttackBar();
+            m_attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
+            m_attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
             //m_screenComponents.Components.Add(attackBar);
-            m_uiElementsList.Add(Globals.AttackBar);
+            m_uiElementsList.Add(m_attackBar);
 
 
-            Globals.PlayerChoiceBar = new PlayerChoiceBar();
-            Globals.PlayerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
-            Globals.PlayerChoiceBar.TurnManager = m_turnManager;
+            m_playerChoiceBar = new PlayerChoiceBar();
+            m_playerChoiceBar.Rectangle = new Rectangle(20, 400, 600, 30);
+            m_playerChoiceBar.TurnManager = m_turnManager;
 
-            m_uiElementsList.Add(Globals.PlayerChoiceBar);
+            m_uiElementsList.Add(m_playerChoiceBar);
 
-            Globals.CombatEngine = new CombatEngine();
+            m_combatEngine = new CombatEngine();
 
-            m_movementGrid = new MovementGrid(m_arena);
+            m_movementGrid = new MovementGrid(m_arena,this);
             m_uiElementsList.Add(m_movementGrid);
 
             m_combatEngineUI = new CombatEngineUI();
@@ -378,35 +378,35 @@ namespace Gladius.gamestatemanagement.screens
 
         public void SetPlayerChoiceBarVisible(bool value)
         {
-            Globals.PlayerChoiceBar.Visible = value;
+            m_playerChoiceBar.Visible = value;
             {
                 if (value)
                 {
-                    Globals.PlayerChoiceBar.RegisterListeners();
+                    m_playerChoiceBar.RegisterListeners();
                 }
                 else
                 {
-                    Globals.PlayerChoiceBar.UnregisterListeners();
+                    m_playerChoiceBar.UnregisterListeners();
                 }
             }
         }
 
         public void SetAttackBarVisible(bool value)
         {
-            Globals.AttackBar.Visible = value;
+            m_attackBar.Visible = value;
             if (value)
             {
-                Globals.AttackBar.RegisterListeners();
+                m_attackBar.RegisterListeners();
             }
             else
             {
-                Globals.AttackBar.UnregisterListeners();
+                m_attackBar.UnregisterListeners();
             }
         }
 
         public PlayerChoiceBar PlayerChoiceBar
         {
-            get { return Globals.PlayerChoiceBar; }
+            get { return m_playerChoiceBar; }
         }
 
         public MovementGrid MovementGrid
@@ -427,6 +427,20 @@ namespace Gladius.gamestatemanagement.screens
             m_battleWon = false;
         }
 
+        public TurnManager TurnManager
+        {
+            get { return m_turnManager; }
+        }
+
+        public CombatEngine CombatEngine
+        {
+            get { return m_combatEngine; }
+        }
+
+        public CombatEngineUI CombatEngineUI
+        {
+            get { return m_combatEngineUI; }
+        }
 
         #endregion
         #region Fields
@@ -445,8 +459,9 @@ namespace Gladius.gamestatemanagement.screens
         //protected GameComponentCollection Components = new GameComponentCollection();
 
         MovementGrid m_movementGrid;
-        //PlayerChoiceBar m_playerChoiceBar;
-        //AttackBar m_attackBar;
+        PlayerChoiceBar m_playerChoiceBar;
+        AttackBar m_attackBar;
+        CombatEngine m_combatEngine;
         #endregion
 
     }
