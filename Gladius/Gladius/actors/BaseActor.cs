@@ -14,6 +14,7 @@ using Gladius.control;
 using Gladius.modes.arena;
 using GameStateManagement;
 using System.Xml;
+using Gladius.gamestatemanagement.screens;
 
 namespace Gladius.actors
 {
@@ -32,10 +33,12 @@ namespace Gladius.actors
             SetupAttributes();
         }
 
+
+
         private void AttackAnimHitPoint(String name)
         {
             // only do this at the animation hitpoint.
-            Globals.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
+            ArenaScreen.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
         }
 
         public float ModelHeight
@@ -536,12 +539,20 @@ namespace Gladius.actors
             CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Move");
         }
 
+        public ArenaScreen ArenaScreen
+        {
+            get
+            {
+                return m_gameScreen as ArenaScreen;
+            }
+        }
 
         public void StartAttack()
         {
             ChooseAttackSkill();
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", DebugName, m_currentTarget != null ? m_currentTarget.DebugName : "NoActorTarget",CurrentAttackSkill.Name));
             m_animatedModel.PlayAnimation(AnimationEnum.Attack1, false);
+            ArenaScreen.CombatEngineUI.DrawFloatingText(CameraFocusPoint, Color.White, CurrentAttackSkill.Name, 2f);
             Attacking = true;
             AttackRequested = false;
         }

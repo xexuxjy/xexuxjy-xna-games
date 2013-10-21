@@ -17,9 +17,10 @@ namespace Gladius.control
 {
     public class MovementGrid : BaseUIElement
     {
-        public MovementGrid(Arena arena)
+        public MovementGrid(Arena arena,ArenaScreen arenaScreen)
         {
             m_arena = arena;
+            m_arenaScreen = arenaScreen;
         }
 
         public override void LoadContent(ContentManager content, GraphicsDevice device)
@@ -85,6 +86,15 @@ namespace Gladius.control
                                 }
                             }
                             break;
+                    }
+                }
+
+                // draw target markers under all players of different team.
+                foreach(BaseActor actor in m_arenaScreen.TurnManager.AllActors)
+                {
+                    if (actor.Team != SelectedActor.Team)
+                    {
+                        DrawIfValid(device, camera, actor.CurrentPosition, actor,m_targetCursor);
                     }
                 }
             }
@@ -305,7 +315,7 @@ namespace Gladius.control
                     case (SquareType.Mobile):
                         {
                             BaseActor target = m_arena.GetActorAtPosition(p);
-                            if (Globals.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
+                            if (m_arenaScreen.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
                             {
                                 if (Globals.NextToTarget(actor, target))
                                 {
@@ -385,7 +395,7 @@ namespace Gladius.control
         public bool CursorOnTarget(BaseActor source)
         {
             BaseActor ba = m_arena.GetActorAtPosition(CurrentPosition);
-            return (ba != null && Globals.CombatEngine.IsValidTarget(source, ba, source.CurrentAttackSkill));
+            return (ba != null && m_arenaScreen.CombatEngine.IsValidTarget(source, ba, source.CurrentAttackSkill));
         }
 
 
@@ -467,7 +477,7 @@ namespace Gladius.control
                                 if (CursorOnTarget(SelectedActor))
                                 {
                                     BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
-                                    if (Globals.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
+                                    if (m_arenaScreen.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
                                     {
                                         SelectedActor.Target = target;
                                         SelectedActor.AttackRequested = true;
@@ -513,7 +523,7 @@ namespace Gladius.control
                                     }
 
                                 case (AttackType.SingleOrtho):
-                                    if (!Globals.CombatEngine.IsAttackNextTo(SelectedActor, target))
+                                    if (!m_arenaScreen.CombatEngine.IsAttackNextTo(SelectedActor, target))
                                     {
                                         SelectedActor.WayPointList.Clear();
                                         Point adjustedPoint = CurrentPosition;
@@ -610,6 +620,7 @@ namespace Gladius.control
         public int CurrentCursorSize = 5;
         public const float m_hover = 0.01f;
         public Arena m_arena;
+        public ArenaScreen m_arenaScreen;
         public Point m_currentPosition;
         public SimpleQuad m_simpleQuad;
 

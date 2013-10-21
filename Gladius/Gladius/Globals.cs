@@ -21,13 +21,13 @@ namespace Gladius
         public static ICamera Camera;
         public static CameraManager CameraManager;
 
-        public static CombatEngine CombatEngine;
         public static EventLogger EventLogger;
         //public static MovementGrid MovementGrid;
-        public static AttackBar AttackBar;
-        public static PlayerChoiceBar PlayerChoiceBar;
-        public static SoundManager SoundManager;
+        //public static AttackBar AttackBar;
+        //public static PlayerChoiceBar PlayerChoiceBar;
+        //public static CombatEngine CombatEngine;
 
+        public static SoundManager SoundManager;
 
         public static BoundingFrustum BoundingFrustum;
 

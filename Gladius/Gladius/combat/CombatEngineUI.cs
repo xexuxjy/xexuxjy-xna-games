@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StringLeakTest;
 using Gladius.actors;
+using Gladius.events;
 
 namespace Gladius.combat
 {
@@ -18,6 +19,14 @@ namespace Gladius.combat
             ft.Initialise(initialPosition, text, textColor, age);
             m_activeFloatingText.Add(ft);
         }
+
+        public void DrawFloatingText(Vector3 initialPosition, Color textColor, String text, float age)
+        {
+            FloatingText ft = GetFloatingText();
+            ft.Initialise(initialPosition, text, textColor, age);
+            m_activeFloatingText.Add(ft);
+        }
+
 
         public override void Update(GameTime gameTime)
         {
@@ -90,6 +99,8 @@ namespace Gladius.combat
         {
             base.LoadContent(manager, device);
             m_spriteFont = manager.Load<SpriteFont>("UI/fonts/ShopFont");
+
+            EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
         public void DrawNameAndHealth(BaseActor actor, GraphicsDevice device, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
@@ -139,9 +150,13 @@ namespace Gladius.combat
 
 
 
+        void EventManager_BaseActorChanged(object sender, BaseActorChangedArgs e)
+        {
+            //CurrentActor = e.New;
+        }
 
 
-
+            
         private List<FloatingText> m_activeFloatingText = new List<FloatingText>();
         private Stack<FloatingText> m_floatingTextPool = new Stack<FloatingText>();
         private SpriteFont m_spriteFont;
@@ -196,6 +211,17 @@ namespace Gladius.combat
             StringData.Clear();
             StringData.Append(textToCopy);
         }
+
+        public void Initialise(Vector3 worldPosition, String textToCopy, Color color, float maxAge)
+        {
+            Age = 0f;
+            WorldPosition = worldPosition;
+            TextColor = color;
+            MaxAge = maxAge;
+            StringData.Clear();
+            StringData.Append(textToCopy);
+        }
+
 
         public void Update(GameTime gameTime)
         {
