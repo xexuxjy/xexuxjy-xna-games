@@ -77,7 +77,9 @@ namespace Gladius.combat
                 pos -= viewPortAdjust;
 
                 pos.X -= (textDims.X / 2f);
-                spriteBatch.DrawString(m_spriteFont, ft.StringData, pos, ft.TextColor);
+                spriteBatch.DrawString(m_spriteFont, ft.StringData, pos, Color.Black);
+                spriteBatch.DrawString(m_spriteFont, ft.StringData, pos + new Vector2(1), ft.TextColor);
+
             }
         }
 

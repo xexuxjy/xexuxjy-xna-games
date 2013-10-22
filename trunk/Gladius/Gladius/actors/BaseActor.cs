@@ -459,6 +459,8 @@ namespace Gladius.actors
                             {
                                 // we've been blocked from where we were hoping for.
                                 // clear state and force a rethink.
+                                // pop our character 'back' to last square.
+                                CurrentPosition = CurrentPosition;
                                 WayPointList.Clear();
                                 Think();
                             }
@@ -786,6 +788,46 @@ namespace Gladius.actors
             set;
         }
 
+        public void FilterAttackSkills()
+        {
+            m_availableAttacks.Clear();
+            foreach (AttackSkill skill in m_knownAttacks)
+            {
+                if (skill.UseCost <= SkillPoints)
+                {
+                    m_availableAttacks.Add(skill);
+                }
+            }
+        }
+
+
+        public BaseActor ChooseTarget()
+        {
+
+
+            // if theres an actor nearby with low health , prioritise that target to finish it off.
+            foreach (BaseActor actor in TurnManager.AllActors)
+            {
+                if (ArenaScreen.CombatEngine.IsValidTarget(this,actor,null))
+                {
+                    if (ArenaScreen.CombatEngine.IsNearDeath(actor))
+                    {
+                        int distance = Globals.PointDist2(this.CurrentPosition, actor.CurrentPosition);
+                        // do we have a skill 
+
+                    }
+                }
+
+
+            }
+
+
+
+            return null;
+        }
+
+
+
 
         public void AttachModelToLeftHand(Model model)
         {
@@ -867,11 +909,16 @@ namespace Gladius.actors
             get { return m_totalMovePoints; }
         }
 
+
+        private Dictionary<BaseActor, int> m_threatMap = new Dictionary<BaseActor,int>();
+
         private BaseActor m_currentTarget = null;
-        private List<BaseActor> m_threatList = new List<BaseActor>();
+        //private List<BaseActor> m_threatList = new List<BaseActor>();
         private List<Point> m_wayPointList = new List<Point>();
 
         private List<AttackSkill> m_knownAttacks = new List<AttackSkill>();
+        private List<AttackSkill> m_availableAttacks = new List<AttackSkill>();
+
         private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
         private AnimatedModel m_animatedModel;
 
