@@ -125,6 +125,11 @@ namespace Gladius.combat
             return bonus;
         }
 
+        public bool IsNearDeath(BaseActor actor)
+        {
+            return actor.Health / actor.MaxHealth < 0.2f;
+        }
+
 
 
         public bool IsValidTarget(BaseActor attacker, BaseActor defender,AttackSkill skill)
