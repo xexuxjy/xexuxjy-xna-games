@@ -47,6 +47,7 @@ namespace Gladius.renderer
             
             BasicEffect = new BasicEffect(device);
             BasicEffect.TextureEnabled = true;
+            
             //sBasicEffect.EnableDefaultLighting();
             FillVertices();
         }
@@ -87,12 +88,18 @@ namespace Gladius.renderer
             Indices[5] = 3;
         }
 
-        public void Draw(GraphicsDevice device,Texture2D texture, Matrix world, Vector3 normal,Vector3 scale,ICamera camera)
+        public void Draw(GraphicsDevice device,Texture2D texture, Matrix world, Vector3 normal,Vector3 scale,ICamera camera,float alpha =1f)
         {
             BasicEffect.World = world;
             BasicEffect.Texture = texture;
             BasicEffect.View = camera.View;
             BasicEffect.Projection = camera.Projection;
+            BasicEffect.Alpha = alpha;
+
+            if (alpha < 1f)
+            {
+                int ibreak = 0;
+            }
 
             foreach (EffectPass pass in BasicEffect.CurrentTechnique.Passes)
             {

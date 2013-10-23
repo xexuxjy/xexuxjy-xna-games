@@ -12,66 +12,73 @@ using System.Diagnostics;
 using Gladius.gamestatemanagement.screens;
 using Gladius.combat;
 using Gladius.modes.arena;
+using Gladius.util;
 
 namespace Gladius.control
 {
-    public class MovementGrid : BaseUIElement
+    public class MovementGrid : GameScreenComponent
     {
-        public MovementGrid(Arena arena,ArenaScreen arenaScreen)
+        public MovementGrid(Arena arena,ArenaScreen arenaScreen) : base(arenaScreen)
         {
             m_arena = arena;
             m_arenaScreen = arenaScreen;
+            DrawOrder = Globals.MoveGridDrawOrder;
         }
 
-        public override void LoadContent(ContentManager content, GraphicsDevice device)
+        public override void LoadContent()
         {
-            m_defaultTile = content.Load<Texture2D>("UI/cursors/SimpleCursor");
-            m_selectCursor = content.Load<Texture2D>("UI/cursors/SelectCursor");
-            m_targetCursor = content.Load<Texture2D>("UI/cursors/TargetCursor");
-            m_targetAndSelectCursor = content.Load<Texture2D>("UI/cursors/TargetSelectCursor");
+            m_defaultTile = ContentManager.Load<Texture2D>("UI/cursors/DefaultCursor");
+            m_selectCursor = ContentManager.Load<Texture2D>("UI/cursors/SelectCursor");
+            m_targetCursor = ContentManager.Load<Texture2D>("UI/cursors/TargetCursor");
+            m_targetAndSelectCursor = ContentManager.Load<Texture2D>("UI/cursors/TargetSelectCursor");
 
-            m_startMoveCursor = content.Load<Texture2D>("UI/cursors/StartMove");
-            m_interMoveCursor = content.Load<Texture2D>("UI/cursors/InterMove");
-            m_turnMoveCursor = content.Load<Texture2D>("UI/cursors/CornerTurn");
-            m_endMoveCursor = content.Load<Texture2D>("UI/cursors/EndMove");
+            m_startMoveCursor = ContentManager.Load<Texture2D>("UI/cursors/StartMove");
+            m_interMoveCursor = ContentManager.Load<Texture2D>("UI/cursors/InterMove");
+            m_turnMoveCursor = ContentManager.Load<Texture2D>("UI/cursors/CornerTurn");
+            m_endMoveCursor = ContentManager.Load<Texture2D>("UI/cursors/EndMove");
 
-            m_simpleQuad = new SimpleQuad(device);
+            m_simpleQuad = new SimpleQuad(Game.GraphicsDevice);
 
             // always want to know about actor changes. unlike actionevents.
             EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
-
-        public override void DrawElement(GameTime gameTime, GraphicsDevice device, ICamera camera)
+        public ArenaScreen ArenaScreen
         {
+            get { return m_gameScreen as ArenaScreen; }
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            ICamera camera = Globals.Camera;
             //return;
             if (Visible && SelectedActor != null)
             {
                 //device.BlendState = BlendState.AlphaBlend;
                 //device.DepthStencilState = DepthStencilState.None;
 
-                //DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,device,camera);
+                DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,Game.GraphicsDevice,camera);
 
                 if (SelectedActor.CurrentAttackSkill == null)
                 {
                     // draw normal selection cursor
-                    DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
+                    DrawIfValid(Game.GraphicsDevice, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
                 }
                 else
                 {
                     switch (SelectedActor.CurrentAttackSkill.AttackType)
                     {
                         case AttackType.Move:
-                            DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
+                            DrawIfValid(Game.GraphicsDevice, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
                             //DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, Globals.GlobalContentManager.GetColourTexture(Color.White));
-                            DrawMovementPath(device, camera, SelectedActor, SelectedActor.WayPointList);
+                            DrawMovementPath(Game.GraphicsDevice, camera, SelectedActor, SelectedActor.WayPointList);
                             //DrawIfValid(device, camera, CurrentPosition, SelectedActor);
                             break;
                         case (AttackType.AOE):
                             break;
                         case (AttackType.SingleOrtho):
                         case (AttackType.SingleSurround):
-                            DrawIfValid(device, camera, CurrentPosition, SelectedActor);
+                            DrawIfValid(Game.GraphicsDevice, camera, CurrentPosition, SelectedActor);
                             break;
                         default:
                             // calculate type / size of grid to display based on player,skill, etc
@@ -82,7 +89,7 @@ namespace Gladius.control
                                 for (int j = -width; j <= width; ++j)
                                 {
                                     Point p = new Point(CurrentPosition.X + i, CurrentPosition.Y + j);
-                                    DrawIfValid(device, camera, p, SelectedActor);
+                                    DrawIfValid(Game.GraphicsDevice, camera, p, SelectedActor);
                                 }
                             }
                             break;
@@ -94,7 +101,7 @@ namespace Gladius.control
                 {
                     if (actor.Team != SelectedActor.Team)
                     {
-                        DrawIfValid(device, camera, actor.CurrentPosition, actor,m_targetCursor);
+                        DrawIfValid(Game.GraphicsDevice, camera, actor.CurrentPosition, actor, m_targetCursor);
                     }
                 }
             }
@@ -154,8 +161,8 @@ namespace Gladius.control
                 Vector3 v3 = V3ForSquare(p);
                 Matrix m = Matrix.CreateTranslation(v3);
 
-
-                m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera);
+                float alpha = (cursor == m_defaultTile) ? 0.2f : 1.0f;
+                m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera,alpha);
             }
         }
 
@@ -287,7 +294,9 @@ namespace Gladius.control
                 Matrix.CreateRotationY(rotation, out rot);
                 Matrix m = rot * Matrix.CreateTranslation(v3);
 
-                m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera);
+                // not sure why it's not getting this from the texture.
+                float alpha = (cursor == m_defaultTile) ? 0.2f : 1.0f;
+                m_simpleQuad.Draw(device, cursor, m, Vector3.Up, Vector3.One, camera,alpha);
             }
         }
 
@@ -638,6 +647,7 @@ namespace Gladius.control
         public Texture2D m_interMoveCursor;
         public Texture2D m_turnMoveCursor;
         public Texture2D m_endMoveCursor;
+        int RegisterCount = 0;
     }
 
     public enum Side

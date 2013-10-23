@@ -19,6 +19,7 @@ namespace Gladius.renderer
         public SimpleArenaRenderer(Arena arena,GameScreen gameScreen) : base(gameScreen)
         {
             m_arena = arena;
+            DrawOrder = Globals.ArenaDrawOrder;
         }
 
         public void LoadContent()
