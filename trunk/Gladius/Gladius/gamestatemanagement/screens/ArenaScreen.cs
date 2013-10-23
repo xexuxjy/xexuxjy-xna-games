@@ -172,10 +172,10 @@ namespace Gladius.gamestatemanagement.screens
 
             ScreenManager.GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            if (m_movementGrid.Visible)
-            {
-                m_movementGrid.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
-            }
+            //if (m_movementGrid.Visible)
+            //{
+            //    m_movementGrid.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
+            //}
 
             
             //ScreenManager.GraphicsDevice.DepthStencilState = DepthStencilState.None;
@@ -185,10 +185,10 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
-                    if (uiElement is MovementGrid)
-                    {
-                        continue;
-                    }
+                    //if (uiElement is MovementGrid)
+                    //{
+                    //    continue;
+                    //}
                     uiElement.DrawElement(gameTime, ScreenManager.Game.GraphicsDevice, Globals.Camera);
                 }
             }
@@ -200,10 +200,10 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
-                    if (uiElement is MovementGrid)
-                    {
-                        continue;
-                    }
+                    //if (uiElement is MovementGrid)
+                    //{
+                    //    continue;
+                    //}
                     uiElement.DrawElement(gameTime, ScreenManager.GraphicsDevice, m_spriteBatch);
                 }
             }
@@ -333,7 +333,8 @@ namespace Gladius.gamestatemanagement.screens
             m_combatEngine = new CombatEngine();
 
             m_movementGrid = new MovementGrid(m_arena,this);
-            m_uiElementsList.Add(m_movementGrid);
+            m_movementGrid.LoadContent();
+            m_screenComponents.Components.Add(m_movementGrid);
 
             m_combatEngineUI = new CombatEngineUI();
             m_combatEngineUI.Visible = true;

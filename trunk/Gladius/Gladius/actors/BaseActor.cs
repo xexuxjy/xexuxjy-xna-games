@@ -31,6 +31,7 @@ namespace Gladius.actors
             m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
 
             SetupAttributes();
+            DrawOrder = Globals.CharacterDrawOrder;
         }
 
 
@@ -175,7 +176,7 @@ namespace Gladius.actors
             }
         }
 
-        public void LoadContent()
+        public override void LoadContent()
         {
             if (m_animatedModel != null)
             {
@@ -800,34 +801,85 @@ namespace Gladius.actors
             }
         }
 
-
-        public BaseActor ChooseTarget()
+        public bool HaveAvailableSkillForRange(int range)
         {
-
-
-            // if theres an actor nearby with low health , prioritise that target to finish it off.
-            foreach (BaseActor actor in TurnManager.AllActors)
+            foreach (AttackSkill skill in m_availableAttacks)
             {
-                if (ArenaScreen.CombatEngine.IsValidTarget(this,actor,null))
+                if (skill.MinRange >= range && skill.MaxRange <= range)
                 {
-                    if (ArenaScreen.CombatEngine.IsNearDeath(actor))
-                    {
-                        int distance = Globals.PointDist2(this.CurrentPosition, actor.CurrentPosition);
-                        // do we have a skill 
-
-                    }
+                    return true;
                 }
-
-
             }
-
-
-
-            return null;
+            return false;
         }
 
 
+        public BaseActor ChooseTarget()
+        {
+            
+            // if theres an actor nearby with low health , prioritise that target to finish it off.
+            bool foundTargetInRange = false;
+            foreach (BaseActor actor in TurnManager.AllActors)
+            {
+                // reset threats
+                UpdateThreat(actor, 0, false);
+                if (ArenaScreen.CombatEngine.IsValidTarget(this,actor,null))
+                {
+                    int weighting = 0;
+                    int distance = Globals.PointDist2(this.CurrentPosition, actor.CurrentPosition);
+                    // weight score based on how far away. (may need to confirm via pathfind as well).
+                    int distanceAdjust = 10 - distance;
+                    UpdateThreat(actor, distanceAdjust);
+    
+                    // do we have a skill 
+                    if (HaveAvailableSkillForRange(distance))
+                    {
+                        foundTargetInRange = true;
+                        // prioritise finishing off targets.
+                        if (ArenaScreen.CombatEngine.IsNearDeath(actor))
+                        {
+                            UpdateThreat(actor, 5);
+                        }
+                        else
+                        {
+                            UpdateThreat(actor, 2);
+                        }
+                    }
+                }
 
+            }
+
+            // now choose one with highest score. (may want to randomise this slightly if a few are 'close'
+            BaseActor result = null;
+            int bestScore = 0;
+            foreach (BaseActor actor in m_threatMap.Keys)
+            {
+                int score = m_threatMap[actor];
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    result = actor;
+                }
+            }
+
+            return result;
+        }
+
+
+        public void UpdateThreat(BaseActor actor, int value,bool modify=true)
+        {
+            int val = 0;
+            if (modify)
+            {
+                m_threatMap.TryGetValue(actor, out val);
+                val += value;
+            }
+            else
+            {
+                val = value;
+            }
+            m_threatMap[actor] = val;
+        }
 
         public void AttachModelToLeftHand(Model model)
         {
