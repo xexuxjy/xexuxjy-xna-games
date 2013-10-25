@@ -42,7 +42,7 @@ namespace Gladius.modes.arena
                 {
                     if (i == 0 || j == 0 || i == Width - 1 || j == Breadth - 1)
                     {
-                        m_arenaGrid[i, j] = SquareType.Wall;
+                        //m_arenaGrid[i, j] = SquareType.Wall;
                     }
                     else
                     {

@@ -11,6 +11,7 @@ using Gladius.control;
 using Gladius.modes.arena;
 using GameStateManagement;
 using Gladius.gamestatemanagement.screens;
+using Gladius.renderer;
 
 namespace Gladius.renderer
 {
@@ -24,9 +25,13 @@ namespace Gladius.renderer
 
         public void LoadContent()
         {   
-            m_boxModel = ContentManager.Load<Model>("UnitCube");
-            m_boneTransforms = new Matrix[m_boxModel.Bones.Count];
-            m_boxModel.CopyAbsoluteBoneTransformsTo(m_boneTransforms);
+            Model model = ContentManager.Load<Model>("UnitCube");
+            m_boxModelData = new ModelData(model, null);
+
+            m_floorModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Floor"), ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaFloor_0"));
+            m_wallModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Wall"), ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaWall_0"));
+
+            //Model pillarModel = ContentManager.Load<Model>("Models/Arena/Common/Pillar1");
 
             //m_baseActorTexture = ContentManager.Load<Texture2D>("Models/ThirdParty/test_m");
             //m_baseActorModel = ContentManager.Load<Model>("Models/ThirdParty/test_XNA");
@@ -57,12 +62,26 @@ namespace Gladius.renderer
             // Draw the ground....
             Vector3 topLeft = new Vector3(-m_arena.Width / 2f, 0, -m_arena.Breadth / 2f);
 
-            Vector3 scale = new Vector3(m_arena.Width, 1f, m_arena.Breadth) / 2f;
+            //Vector3 scale = new Vector3(m_arena.Width, 1f, m_arena.Breadth) / 2f;
 
 
-            Vector3 translation = new Vector3(0, -0.5f, 0);
+            Vector3 translation = new Vector3(0, 0, 0);
 
-            DrawBox(scale, ColouredTextureDictionary.GetTexture(Color.LawnGreen, graphicsDevice), translation);
+            // draw floor and walls.
+            DrawModelData(m_floorModelData, translation);
+            translation = new Vector3(0,0,topLeft.Z);
+            //Matrix rotation = Matrix.CreateRotationY()
+            DrawModelData(m_wallModelData, translation);
+            translation = new Vector3(0, 0, -topLeft.Z);
+            DrawModelData(m_wallModelData, translation);
+            Matrix rotation = Matrix.CreateRotationY(MathHelper.PiOver2);
+            translation = new Vector3(topLeft.X, 0, 0);
+            DrawModelData(m_wallModelData, translation,Vector3.One,rotation);
+            translation = new Vector3(-topLeft.X, 0, 0);
+            DrawModelData(m_wallModelData, translation, Vector3.One, rotation);
+
+
+            //DrawBox(scale, ColouredTextureDictionary.GetTexture(Color.LawnGreen, graphicsDevice), translation);
             Texture2D texture2d = null;
 
             for (int i = 0; i < m_arena.Width; ++i)
@@ -110,18 +129,6 @@ namespace Gladius.renderer
                 }
             }
 
-            // Draw Actors.
-            texture2d = ColouredTextureDictionary.GetTexture(Color.Pink, graphicsDevice);
-
-            //foreach (BaseActor ba in m_arena.PointActorMap.Values)
-            //{
-            //    float groundHeight = m_arena.GetHeightAtLocation(ba.CurrentPoint);
-            //    translation = topLeft + new Vector3(ba.CurrentPoint.X, groundHeight+0.5f, ba.CurrentPoint.Y);
-            //    //DrawBox(Vector3.One, texture2d, translation);
-            //    DrawBaseActor3(m_baseActorScale, m_baseActorTexture, translation);
-            //}
-
-            //m_movementGrid.Draw(graphicsDevice, camera);
 
 
             Globals.DrawCameraDebugText(m_spriteBatch, m_spriteFont,1);
@@ -132,7 +139,7 @@ namespace Gladius.renderer
         {
             Matrix world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
             //Matrix world = Matrix.CreateTranslation(position);
-            foreach (ModelMesh mm in m_boxModel.Meshes)
+            foreach (ModelMesh mm in m_boxModelData.Model.Meshes)
             {
                 foreach (BasicEffect effect in mm.Effects)
                 {
@@ -141,26 +148,49 @@ namespace Gladius.renderer
                     effect.Texture = t;
                     effect.View = m_view;
                     effect.Projection = m_projection;
-                    effect.World = m_boneTransforms[mm.ParentBone.Index] * world;
+                    effect.World = m_boxModelData.BoneTransforms[mm.ParentBone.Index] * world;
                 }
                 mm.Draw();
             }
         }
+
+        public void DrawModelData(ModelData modelData, Vector3 position)
+        {
+            DrawModelData(modelData, position, Vector3.One,Matrix.Identity);
+        }
+
+        public void DrawModelData(ModelData modelData,Vector3 position,Vector3 scale,Matrix rotation)
+        {
+            Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
+            //Matrix world = Matrix.CreateTranslation(position);
+            foreach (ModelMesh mm in modelData.Model.Meshes)
+            {
+                foreach (BasicEffect effect in mm.Effects)
+                {
+                    effect.EnableDefaultLighting();
+                    effect.TextureEnabled = true;
+                    effect.Texture = modelData.Texture;
+                    effect.View = m_view;
+                    effect.Projection = m_projection;
+                    effect.World = modelData.BoneTransforms[mm.ParentBone.Index] * world;
+                }
+                mm.Draw();
+            }
+        }
+
 
         SpriteBatch m_spriteBatch;
         SpriteFont m_spriteFont;
 
         Matrix m_view;
         Matrix m_projection;
-        Matrix[] m_boneTransforms;
-        Model m_boxModel;
+        
+        ModelData m_boxModelData;
+        ModelData m_floorModelData;
+        ModelData m_wallModelData;
+        ModelData m_viewingBoxModelData;
+
         //MovementGrid m_movementGrid;
         Arena m_arena;
-
-
-        //Model m_baseActorModel;
-        //Matrix[] m_baseActorBoneTransforms;
-        //Vector3 m_baseActorScale;
-        //Texture2D m_baseActorTexture;
     }
 }
