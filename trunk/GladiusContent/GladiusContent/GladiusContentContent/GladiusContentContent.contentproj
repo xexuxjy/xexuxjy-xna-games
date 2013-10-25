@@ -182,6 +182,84 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <Compile Include="UI\cursors\CornerTurn.png">
+      <Name>CornerTurn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\CursorWork.png">
+      <Name>CursorWork</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\EndMove.png">
+      <Name>EndMove</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\InterMove.png">
+      <Name>InterMove</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\TargetCursor.png">
+      <Name>TargetCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\TargetSelectCursor.png">
+      <Name>TargetSelectCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\StartMove.png">
+      <Name>StartMove</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Arena\Common\PillarTexture.png">
+      <Name>PillarTexture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Arena\Common\Pillar1.fbx">
+      <Name>Pillar1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Arena\Common\ViewingBox.fbx">
+      <Name>ViewingBox</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Arena\Arena2\ArenaFloor.png">
+      <Name>ArenaFloor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
+      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
+    </Compile>
+    <Compile Include="Models\Arena\Arena2\ArenaWall.png">
+      <Name>ArenaWall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
+    </Compile>
+    <Compile Include="Models\Arena\Common\ArenaViewingBox.png">
+      <Name>ArenaViewingBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Arena\Arena2\Floor.fbx">
+      <Name>Floor</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Arena\Arena2\Wall.fbx">
+      <Name>Wall</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <None Include="Models\ThirdParty\02_warrior_Anims.xml">
       <Name>02_warrior_Anims</Name>
       <Importer>XmlImporter</Importer>
@@ -193,12 +271,6 @@
       <Processor>GpuSkinnedModelProcessor</Processor>
       <ProcessorParameters_DefaultEffect>SkinnedEffect</ProcessorParameters_DefaultEffect>
     </Compile>
-    <None Include="UI\shop\ShopMap.txt">
-      <Name>ShopMap</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
       <Name>monster-animated-character-XNA_Anims</Name>
       <Importer>XmlImporter</Importer>
@@ -617,21 +689,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Particles\test\font.spritefont">
-      <Name>font</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-    <Compile Include="Particles\test\grid.x">
-      <Name>grid</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Particles\test\ParticleEffect.fx">
-      <Name>ParticleEffect</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>MGEffectProcessor</Processor>
-    </Compile>
     <None Include="TownData\TownData.xml">
       <Name>TownData</Name>
       <Importer>XmlImporter</Importer>
@@ -667,36 +724,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Particles\test\checker.bmp">
-      <Name>checker</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Particles\test\explosion.png">
-      <Name>explosion</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Particles\test\fire.png">
-      <Name>fire</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Particles\test\smoke.png">
-      <Name>smoke</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="NewFolder1\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Particles\test\rain.png">
-      <Name>rain</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
+    <Folder Include="Particles\test\" />
+    <Folder Include="UI\shop\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterData\CharacterData.xml">
