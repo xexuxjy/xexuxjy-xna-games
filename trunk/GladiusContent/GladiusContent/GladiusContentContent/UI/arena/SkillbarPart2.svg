@@ -7,7 +7,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="744.09448819"
@@ -29,7 +28,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.5040893"
-     inkscape:cx="118.18428"
+     inkscape:cx="89.841717"
      inkscape:cy="21.125807"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
@@ -55,92 +54,167 @@
      inkscape:label="BackgroundLayer"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline" />
+     style="display:inline"
+     sodipodi:insensitive="true" />
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="ControlLayer"
      style="display:inline">
-    <g
-       id="g5817"
-       transform="translate(-31.566579,11.627719)">
-      <rect
-         y="990.36218"
-         x="32"
-         height="30"
-         width="30"
-         id="rect5815"
-         style="fill:#ff00ff;fill-opacity:1;stroke:none" />
-      <path
-         transform="matrix(0.29879298,0,0,0.35741695,22.66344,655.12736)"
-         d="m 130.01099,979.90546 c 0,22.42074 -21.74169,40.59634 -48.56142,40.59634 -26.81973,0 -48.561417,-18.1756 -48.561417,-40.59634 0,-22.42073 21.741687,-40.59632 48.561417,-40.59632 26.81973,0 48.56142,18.17559 48.56142,40.59632 z"
-         sodipodi:ry="40.596313"
-         sodipodi:rx="48.561417"
-         sodipodi:cy="979.90546"
-         sodipodi:cx="81.44957"
-         id="path5813"
-         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-         sodipodi:type="arc" />
-    </g>
-    <use
-       x="0"
-       y="0"
-       xlink:href="#g5817"
-       id="use5821"
-       transform="translate(30,0)"
-       width="744.09448"
-       height="1052.3622" />
-    <use
-       x="0"
-       y="0"
-       xlink:href="#use5821"
-       id="use5823"
-       transform="translate(30.000001,0)"
-       width="744.09448"
-       height="1052.3622" />
-    <use
-       x="0"
-       y="0"
-       xlink:href="#use5823"
-       id="use5825"
-       transform="translate(30,0)"
-       width="744.09448"
-       height="1052.3622" />
-    <use
-       x="0"
-       y="0"
-       xlink:href="#use5825"
-       id="use5827"
-       transform="translate(30,0)"
-       width="744.09448"
-       height="1052.3622" />
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
+       style="fill:#000000;fill-opacity:0;stroke:none"
+       id="rect5815"
+       width="30"
+       height="30"
+       x="0.43342099"
+       y="1001.9899"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path5813"
+       sodipodi:cx="81.44957"
+       sodipodi:cy="979.90546"
+       sodipodi:rx="48.561417"
+       sodipodi:ry="40.596313"
+       d="m 130.01099,979.90546 a 48.561417,40.596313 0 1 1 -97.122837,0 48.561417,40.596313 0 1 1 97.122837,0 z"
+       transform="matrix(0.29879298,0,0,0.35741695,-8.903139,666.75508)"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       y="1001.9899"
+       x="30.43342"
+       height="30"
+       width="30"
+       id="rect3764"
+       style="fill:#000000;fill-opacity:0;stroke:none"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(0.29879298,0,0,0.35741695,21.096861,666.75508)"
+       d="m 130.01099,979.90546 a 48.561417,40.596313 0 1 1 -97.122837,0 48.561417,40.596313 0 1 1 97.122837,0 z"
+       sodipodi:ry="40.596313"
+       sodipodi:rx="48.561417"
+       sodipodi:cy="979.90546"
+       sodipodi:cx="81.44957"
+       id="path3766"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:type="arc"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:none"
+       id="rect3772"
+       width="30"
+       height="30"
+       x="60.433422"
+       y="1001.9899"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3774"
+       sodipodi:cx="81.44957"
+       sodipodi:cy="979.90546"
+       sodipodi:rx="48.561417"
+       sodipodi:ry="40.596313"
+       d="m 130.01099,979.90546 a 48.561417,40.596313 0 1 1 -97.122837,0 48.561417,40.596313 0 1 1 97.122837,0 z"
+       transform="matrix(0.29879298,0,0,0.35741695,51.096862,666.75508)"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       y="1001.9899"
+       x="90.433418"
+       height="30"
+       width="30"
+       id="rect3780"
+       style="fill:#000000;fill-opacity:0;stroke:none"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(0.29879298,0,0,0.35741695,81.096862,666.75508)"
+       d="m 130.01099,979.90546 a 48.561417,40.596313 0 1 1 -97.122837,0 48.561417,40.596313 0 1 1 97.122837,0 z"
+       sodipodi:ry="40.596313"
+       sodipodi:rx="48.561417"
+       sodipodi:cy="979.90546"
+       sodipodi:cx="81.44957"
+       id="path3782"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:type="arc"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:none"
+       id="rect3788"
+       width="30"
+       height="30"
+       x="120.43342"
+       y="1001.9899"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3790"
+       sodipodi:cx="81.44957"
+       sodipodi:cy="979.90546"
+       sodipodi:rx="48.561417"
+       sodipodi:ry="40.596313"
+       d="m 130.01099,979.90546 a 48.561417,40.596313 0 1 1 -97.122837,0 48.561417,40.596313 0 1 1 97.122837,0 z"
+       transform="matrix(0.29879298,0,0,0.35741695,111.09686,666.75508)"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:none"
        id="rect5831"
        width="150.38541"
        height="16.187138"
        x="-6.7217201e-009"
-       y="1032.064" />
+       y="1032.064"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
+       style="fill:#000000;fill-opacity:0;stroke:none"
        id="rect5833"
        width="63.407402"
        height="46.147507"
        x="150.25192"
-       y="1002.0361" />
+       y="1002.0361"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.04299903;stroke-opacity:1"
        id="rect5839"
        width="203.44208"
        height="14.957001"
        x="9.6507025"
-       y="1032.4783" />
+       y="1032.4783"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect5841"
        width="61.227203"
        height="15.988112"
        x="151.70538"
-       y="1015.1171" />
+       y="1015.1171"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\arena\SkillbarPart2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>

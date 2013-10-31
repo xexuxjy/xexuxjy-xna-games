@@ -69,7 +69,7 @@
      inkscape:label="Icon"
      style="display:inline">
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none;display:inline"
+       style="fill:#000000;fill-opacity:0;stroke:none;display:inline"
        id="rect6005"
        width="32"
        height="32"
@@ -272,7 +272,7 @@
        d="m 111.2756,1028.6217 -4.5083,4.7396"
        style="fill:none;stroke:#000000;stroke-width:2.77524209;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none;display:inline"
+       style="fill:#000000;fill-opacity:0;stroke:none;display:inline"
        id="rect6005-1"
        width="32"
        height="32"
@@ -476,7 +476,7 @@
        d="m 111.2756,996.62153 -4.5083,4.73957"
        style="fill:none;stroke:#000000;stroke-width:2.77524209;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none;display:inline"
+       style="fill:#000000;fill-opacity:0;stroke:none;display:inline"
        id="rect6005-9"
        width="32"
        height="32"
