@@ -14,7 +14,10 @@
    id="svg3988"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="MoveCursorWork.svg">
+   sodipodi:docname="MoveCursorWork.svg"
+   inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs3990" />
   <sodipodi:namedview
@@ -25,8 +28,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="269.78513"
-     inkscape:cy="117.427"
+     inkscape:cx="190.99323"
+     inkscape:cy="155.90565"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -54,15 +57,16 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
-       id="rect3996"
+       style="fill:#000000;fill-opacity:0;stroke:none"
+       id="background1"
        width="256"
        height="256"
        x="14.285718"
        y="784.93359"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\InterMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\InterMove.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-ydpi="90"
+       inkscape:label="background1" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.39556026;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect4508"
@@ -70,7 +74,7 @@
        height="114.76183"
        x="116.72462"
        y="924.00293"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\InterMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\InterMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
@@ -80,17 +84,17 @@
        height="111.77444"
        x="116.70307"
        y="787.6109"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\InterMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\InterMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
+       style="fill:#000000;fill-opacity:0;stroke:none"
        id="rect3996-3"
        width="256"
        height="256"
        x="17.736813"
        y="497.33231"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
@@ -100,7 +104,7 @@
        height="98.836487"
        x="120.05717"
        y="652.52325"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
@@ -111,7 +115,7 @@
        x="-651.00427"
        y="170.87448"
        transform="matrix(0,-1,1,0,0,0)"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -126,17 +130,17 @@
        sodipodi:start="3.1415927"
        sodipodi:end="4.712389"
        transform="matrix(1.1102184,0,0,1.0841334,19.979205,201.47096)"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\CornerTurn.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
+       style="fill:#000000;fill-opacity:0;stroke:none"
        id="rect3996-3-3"
        width="256"
        height="256"
        x="21.999998"
        y="180.07648"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
@@ -146,26 +150,17 @@
        height="98.836487"
        x="124.32034"
        y="335.26743"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 109.28571,346.07647 44.28571,-84.28571 37.14286,82.85714 -38.57142,22.85714 z"
-       id="path4619"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
+       style="fill:#000000;fill-opacity:0;stroke:none"
        id="rect3996-5"
        width="256"
        height="256"
        x="299.14285"
        y="785.79071"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
@@ -175,7 +170,7 @@
        height="86.905891"
        x="-368.96997"
        y="795.6723"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
@@ -186,7 +181,7 @@
        height="86.905891"
        x="-974.90765"
        y="-279.01395"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)" />
@@ -197,7 +192,7 @@
        height="86.905891"
        x="318.46884"
        y="-1100.8032"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)" />
@@ -208,9 +203,34 @@
        height="86.905891"
        x="921.56787"
        y="408.42487"
-       inkscape:export-filename="C:\GoogleCode\xexuxjy-xna-games\trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\StartMove.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 96.51018,339.69957 55.05331,-87.3782 50.00255,87.88327"
+       id="path3771"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 96.974644,339.69957 26.263966,-4.54569"
+       id="path3773"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 201.52543,340.20464 -25.75889,-5.05076"
+       id="path3775"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="D:\GoogleCodeBranches\xexuxjy-xna-games\Trunk\GladiusContent\GladiusContent\GladiusContentContent\UI\cursors\EndMove.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>
