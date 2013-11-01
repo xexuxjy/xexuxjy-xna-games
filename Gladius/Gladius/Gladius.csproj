@@ -113,6 +113,7 @@
     <Compile Include="renderer\DHPCameraComponent.cs" />
     <Compile Include="renderer\FreeCamera.cs" />
     <Compile Include="renderer\ICamera.cs" />
+    <Compile Include="renderer\ModelData.cs" />
     <Compile Include="renderer\particles\ParticleEmitter.cs" />
     <Compile Include="renderer\particles\ParticleManager.cs" />
     <Compile Include="renderer\particles\ParticleSettings.cs" />
@@ -432,6 +433,51 @@
   <ItemGroup>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\DefaultCursor.xnb">
       <Link>Content\UI\cursors\DefaultCursor.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\ArenaFloor.xnb">
+      <Link>Content\Models\Arena\Arena2\ArenaFloor.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\ArenaFloor_0.xnb">
+      <Link>Content\Models\Arena\Arena2\ArenaFloor_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\ArenaWall.xnb">
+      <Link>Content\Models\Arena\Arena2\ArenaWall.xnb</Link>
+    </None>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\ArenaWall_0.xnb">
+      <Link>Content\Models\Arena\Arena2\ArenaWall_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\Floor.xnb">
+      <Link>Content\Models\Arena\Arena2\Floor.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\Wall.xnb">
+      <Link>Content\Models\Arena\Arena2\Wall.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Common\ArenaViewingBox.xnb">
+      <Link>Content\Models\Arena\Common\ArenaViewingBox.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Common\Pillar1.xnb">
+      <Link>Content\Models\Arena\Common\Pillar1.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Common\PillarTexture.xnb">
+      <Link>Content\Models\Arena\Common\PillarTexture.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Common\PillarTexture_0.xnb">
+      <Link>Content\Models\Arena\Common\PillarTexture_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Common\ViewingBox.xnb">
+      <Link>Content\Models\Arena\Common\ViewingBox.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
