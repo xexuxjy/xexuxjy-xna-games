@@ -12,6 +12,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.gamestatemanagement.screenmanager;
+using System.Threading.Tasks;
 #endregion
 
 namespace Gladius.gamestatemanagement.screens
@@ -35,14 +36,21 @@ namespace Gladius.gamestatemanagement.screens
         #region Fields
 
         bool loadingIsSlow;
+
+        Task<bool> m_loadTask;
+
         bool otherScreensAreGone;
+        float rotation = 0f;
+        Texture2D m_swordTexture;
 
         GameScreen[] screensToLoad;
+
+
 
         #endregion
 
         #region Initialization
-
+    
 
         /// <summary>
         /// The constructor is private: loading screens should
@@ -55,6 +63,11 @@ namespace Gladius.gamestatemanagement.screens
             this.screensToLoad = screensToLoad;
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
+        }
+
+        public override void LoadContent()
+        {
+            m_swordTexture = ScreenManager.Game.Content.Load<Texture2D>("UI/backgrounds/Gladii");
         }
 
 
@@ -91,27 +104,41 @@ namespace Gladius.gamestatemanagement.screens
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
+            float spinSpeed = 0.5f;
+            rotation += (MathHelper.TwoPi * (float)gameTime.ElapsedGameTime.TotalSeconds * spinSpeed);
+
             // If all the previous screens have finished transitioning
             // off, it is time to actually perform the load.
             if (otherScreensAreGone)
             {
-                ScreenManager.RemoveScreen(this);
 
-                foreach (GameScreen screen in screensToLoad)
+                if (m_loadTask == null)
                 {
-                    if (screen != null)
-                    {
-                        ScreenManager.AddScreen(screen, ControllingPlayer);
-                    }
+                    m_loadTask = Task.Factory.StartNew<bool>(DoLoadTask);
                 }
-
-                // Once the load has finished, we use ResetElapsedTime to tell
-                // the  game timing mechanism that we have just finished a very
-                // long frame, and that it should not try to catch up.
-                ScreenManager.Game.ResetElapsedTime();
+                if(m_loadTask.IsCompleted)
+                {
+                    ScreenManager.RemoveScreen(this);
+                    // Once the load has finished, we use ResetElapsedTime to tell
+                    // the  game timing mechanism that we have just finished a very
+                    // long frame, and that it should not try to catch up.
+                    ScreenManager.Game.ResetElapsedTime();
+                }
             }
         }
 
+
+        private bool DoLoadTask()
+        {
+            foreach (GameScreen screen in screensToLoad)
+            {
+                if (screen != null)
+                {
+                    ScreenManager.AddScreen(screen, ControllingPlayer);
+                }
+            }
+            return true;
+        }
 
         /// <summary>
         /// Draws the loading screen.
@@ -148,11 +175,19 @@ namespace Gladius.gamestatemanagement.screens
                 Vector2 textSize = font.MeasureString(message);
                 Vector2 textPosition = (viewportSize - textSize) / 2;
 
+                Vector2 swordPosition = textPosition;
+                swordPosition.Y += (m_swordTexture.Height / 2) + 40;
+
                 Color color = Color.White * TransitionAlpha;
 
                 // Draw the text.
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, message, textPosition, color);
+
+                Vector2 origin = new Vector2(m_swordTexture.Width / 2);
+
+                spriteBatch.Draw(m_swordTexture, swordPosition, null, Color.White, rotation, origin, 1f, SpriteEffects.None, 1);
+
                 spriteBatch.End();
             }
         }
