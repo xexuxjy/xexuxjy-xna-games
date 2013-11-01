@@ -9,9 +9,9 @@ using Gladius.util;
 using Microsoft.Xna.Framework;
 using Gladius.control;
 using Gladius.modes.arena;
-using GameStateManagement;
 using Gladius.gamestatemanagement.screens;
 using Gladius.renderer;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.renderer
 {

@@ -19,7 +19,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 #endregion
 
-namespace GameStateManagement
+namespace Gladius.gamestatemanagement.screenmanager
 {
     /// <summary>
     /// Enum describes the screen transition state.

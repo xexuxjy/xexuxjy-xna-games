@@ -5,7 +5,7 @@ using System.Text;
 using Gladius.actors;
 using Microsoft.Xna.Framework;
 using Gladius.util;
-using GameStateManagement;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.modes.town
 {

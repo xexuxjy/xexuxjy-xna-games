@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GameStateManagement;
 using Microsoft.Xna.Framework;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.renderer.particles
 {

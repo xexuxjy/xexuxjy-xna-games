@@ -12,7 +12,8 @@ using System;
 using Microsoft.Xna.Framework;
 #endregion
 
-namespace GameStateManagement
+namespace Gladius.gamestatemanagement.screens
+
 {
     /// <summary>
     /// Custom event argument which includes the index of the player who

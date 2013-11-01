@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using xexuxjy.Gladius.util;
-using GameStateManagement;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.actors
 {

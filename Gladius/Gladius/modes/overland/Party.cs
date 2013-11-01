@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Gladius.util;
-using GameStateManagement;
 using Microsoft.Xna.Framework;
 using Gladius.renderer.animation;
 using Gladius.events;
 using Gladius.control;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.renderer;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.modes.overland
 {

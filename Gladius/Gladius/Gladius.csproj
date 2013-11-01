@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="actors\TestPlayer.cs" />
     <Compile Include="combat\CombatEngineUI.cs" />
+    <Compile Include="gamestatemanagement\screens\GameOverScreen.cs" />
     <Compile Include="modes\arena\Arena.cs" />
     <Compile Include="actors\BaseActor.cs" />
     <Compile Include="combat\AttackSkill.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="renderer\ChaseCamera.cs" />
     <Compile Include="renderer\DHPCameraComponent.cs" />
     <Compile Include="renderer\FreeCamera.cs" />
+    <Compile Include="renderer\GraphicsHelper.cs" />
     <Compile Include="renderer\ICamera.cs" />
     <Compile Include="renderer\ModelData.cs" />
     <Compile Include="renderer\particles\ParticleEmitter.cs" />

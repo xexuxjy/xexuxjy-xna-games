@@ -12,9 +12,9 @@ using Microsoft.Xna.Framework.Content;
 using Gladius.util;
 using Gladius.control;
 using Gladius.modes.arena;
-using GameStateManagement;
 using System.Xml;
 using Gladius.gamestatemanagement.screens;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.actors
 {

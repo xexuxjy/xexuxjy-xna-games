@@ -19,7 +19,7 @@ using Gladius.control;
 using Gladius;
 #endregion
 
-namespace GameStateManagement
+namespace Gladius.gamestatemanagement.screenmanager
 {
     /// <summary>
     /// The screen manager is a component which manages one or more GameScreen
@@ -125,8 +125,8 @@ namespace GameStateManagement
             ContentManager content = Game.Content;
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            //font = content.Load<SpriteFont>("fonts/menufont");
-            //blankTexture = content.Load<Texture2D>("textures/ui/blank");
+            font = content.Load<SpriteFont>("UI/fonts/BattleOverFont");
+            blankTexture = Globals.GlobalContentManager.GetColourTexture(Color.Black);
 
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)

@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 
 namespace Gladius.renderer
 {
-    public class ModelData
+    public class ModelData2
     {
-        public ModelData(Model model, Texture2D texture)
+        public ModelData2(Model model, Texture2D texture)
         {
             Model = model;
             Texture = texture;
