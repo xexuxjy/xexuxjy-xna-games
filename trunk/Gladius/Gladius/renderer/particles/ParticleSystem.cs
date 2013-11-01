@@ -263,7 +263,7 @@ namespace Gladius.renderer.particles
 
 			// Load the particle texture, and set it onto the effect.
             //Texture2D texture = m_gameScreen.ContentManager.Load<Texture2D>(settings.TextureName);
-            Texture2D texture = Globals.GlobalContentManager.GetColourTexture(Color.Magenta);
+            Texture2D texture = ContentManager.GetColourTexture(Color.Magenta);
 			parameters ["Texture"].SetValue (texture);
 		}
 

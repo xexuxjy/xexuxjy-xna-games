@@ -57,7 +57,8 @@ namespace Gladius.gamestatemanagement.screens
         {
             if (m_content == null)
             {
-                m_content = new ContentManager(ScreenManager.Game.Services, "Content");
+                m_content = new ThreadSafeContentManager(ScreenManager.Game,ScreenManager.Game.Services);
+                m_content.RootDirectory = "Content";
             }
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -68,7 +69,7 @@ namespace Gladius.gamestatemanagement.screens
             m_screenComponents = new ScreenGameComponents(ScreenManager.Game);
 
             Globals.AttackSkillDictionary = new AttackSkillDictionary();
-            Globals.AttackSkillDictionary.Populate(m_content);
+            Globals.AttackSkillDictionary.Populate(ContentManager);
 
             SetupArena();
         }
@@ -251,11 +252,11 @@ namespace Gladius.gamestatemanagement.screens
             // Load the sprite font. The sprite font has a 3 pixel outer glow
             // baked into it so we need to decrease the spacing so that the
             // SpriteFont will render correctly.
-            m_gameFont = m_content.Load<SpriteFont>("GameFont");
+            m_gameFont = ContentManager.Load<SpriteFont>("GameFont");
             m_gameFont.Spacing = -4.0f;
 
-            m_debugFont = m_content.Load<SpriteFont>("UI/fonts/DebugFont8");
-            m_battleOverFont = m_content.Load<SpriteFont>("UI/fonts/BattleOverFont");
+            m_debugFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
+            m_battleOverFont = ContentManager.Load<SpriteFont>("UI/fonts/BattleOverFont");
 
 
             Globals.Camera.Position = new Vector3(0, 5, -10);
@@ -271,7 +272,7 @@ namespace Gladius.gamestatemanagement.screens
             m_screenComponents.Components.Add(m_turnManager);
 
             Globals.SoundManager = new SoundManager();
-            Globals.SoundManager.LoadContent(m_content);
+            Globals.SoundManager.LoadContent(ContentManager);
 
             //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
             String playerTeamModelName = "Models/ThirdParty/01_warrior";
@@ -289,7 +290,7 @@ namespace Gladius.gamestatemanagement.screens
                     ba1.ModelName = playerTeamModelName;
                     ba1.Team = Globals.PlayerTeam;
                     ba1.DebugName = "Player" + i;
-                    //ba1.PlayerControlled = true;
+                    ba1.PlayerControlled = true;
                 }
                 else
                 {
@@ -342,7 +343,7 @@ namespace Gladius.gamestatemanagement.screens
 
             foreach (IUIElement uiElement in m_uiElementsList)
             {
-                uiElement.LoadContent(m_content, ScreenManager.Game.GraphicsDevice);
+                uiElement.LoadContent(ContentManager, ScreenManager.Game.GraphicsDevice);
                 //uiElement.Arena = m_arena;
                 uiElement.ArenaScreen = this;
             }

@@ -140,13 +140,13 @@ namespace Gladius.combat
             int inset = 2;
             Rectangle rect = new Rectangle((int)topLeft.X, (int)topLeft.Y, width, height);
             Rectangle insetRect = Globals.InsetRectangle(rect, inset);
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(borderColour), rect,Color.White);
+            spriteBatch.Draw(ArenaScreen.ContentManager.GetColourTexture(borderColour), rect,Color.White);
             float scale = maxValue > 0 ? (value / maxValue) : 1;
             
             // draw bad health below 30%
             Color drawColour = scale > 0.3f? colour1:colour2;
             insetRect.Width = (int)((float)insetRect.Width*scale);
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(drawColour), insetRect,Color.White);
+            spriteBatch.Draw(ArenaScreen.ContentManager.GetColourTexture(drawColour), insetRect,Color.White);
 
         }
 

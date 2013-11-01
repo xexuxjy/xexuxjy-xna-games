@@ -23,7 +23,8 @@ namespace Gladius.gamestatemanagement.screens
         {
             if (m_content == null)
             {
-                m_content = new ContentManager(ScreenManager.Game.Services, "Content");
+                m_content = new ThreadSafeContentManager(ScreenManager.Game,ScreenManager.Game.Services);
+                m_content.RootDirectory = "Content";
             }
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -34,7 +35,7 @@ namespace Gladius.gamestatemanagement.screens
             m_screenComponents = new ScreenGameComponents(ScreenManager.Game);
 
             m_spriteBatch = new SpriteBatch(ScreenManager.Game.GraphicsDevice);
-            m_gameFont = m_content.Load<SpriteFont>("UI/DebugFont8");
+            m_gameFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
 
 
             SetupOverland();
@@ -187,7 +188,7 @@ namespace Gladius.gamestatemanagement.screens
             //Globals.Camera.Velocity = new Vector3(25);
 
             m_terrain = new Terrain(this);
-            m_terrain.LoadContent(m_content);
+            m_terrain.LoadContent(ContentManager);
 
             m_townManager = new TownManager(this,m_terrain);
             m_townManager.LoadContent();
@@ -231,7 +232,7 @@ namespace Gladius.gamestatemanagement.screens
 
             foreach (IUIElement uiElement in m_uiElementsList)
             {
-                uiElement.LoadContent(m_content, ScreenManager.Game.GraphicsDevice);
+                uiElement.LoadContent(ContentManager, ScreenManager.Game.GraphicsDevice);
                 //uiElement.Arena = m_arena;
                 uiElement.OverlandScreen = this;
             }

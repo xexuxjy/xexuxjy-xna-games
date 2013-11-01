@@ -21,14 +21,14 @@ namespace Gladius.modes.overland
 
         public override void LoadContent(ContentManager manager, GraphicsDevice device)
         {
-            m_spriteFont = manager.Load<SpriteFont>("UI/OverlandGame");
-            m_dayNightTexture = manager.Load<Texture2D>("UI/DayAndNight");
+            m_spriteFont = manager.Load<SpriteFont>("UI/fonts/OverlandGame");
+            m_dayNightTexture = manager.Load<Texture2D>("UI/overland/DayAndNight");
         }
         public override void DrawElement(GameTime gameTime, GraphicsDevice device, SpriteBatch spriteBatch)
         {
             Vector4 boxBackgroundV4 = new Vector4(0.5f,0.5f,0.5f,0.3f);
-            Texture2D boxBorder = Globals.GlobalContentManager.GetColourTexture(Color.White);
-            Texture2D boxBackground = Globals.GlobalContentManager.GetV4Texture(boxBackgroundV4);
+            Texture2D boxBorder = OverlandScreen.ContentManager.GetColourTexture(Color.White);
+            Texture2D boxBackground = OverlandScreen.ContentManager.GetV4Texture(boxBackgroundV4);
             Rectangle topBounds = new Rectangle(500,10,300,100);
             int inset = 3;
             Rectangle topInnerBounds = Globals.InsetRectangle(topBounds, inset);

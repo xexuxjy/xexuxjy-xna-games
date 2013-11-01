@@ -45,7 +45,7 @@ namespace Gladius.modes.overland
 
             m_terrainEffect = contentManager.Load<Effect>("Effects/Terrain/Terrain");
             m_terrainEffect.Parameters["BaseTexture"].SetValue(m_surface);
-            BuildNormalMap(contentManager);
+            //BuildNormalMap(contentManager);
             //m_terrainEffect.Parameters["BaseTexture"].SetValue(m_normalMap);
             //m_position = new Vector3(m_heightMap.Width,0,m_heightMap.Height)/2f;
             Vector3 position = new Vector3(m_heightMap.Width, 0, m_heightMap.Height) / 2f;
@@ -106,7 +106,7 @@ namespace Gladius.modes.overland
             normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
             Game.GraphicsDevice.SetRenderTarget(null);
 
-            m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMap);
+            //m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMap);
 
         }
 
