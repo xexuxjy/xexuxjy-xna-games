@@ -176,6 +176,8 @@
       <Name>ScrollBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
+      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
     </Compile>
     <Compile Include="UI\fonts\BattleOverFont.spritefont">
       <Name>BattleOverFont</Name>
@@ -259,6 +261,18 @@
       <Name>Wall</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\DefaultCursor.png">
+      <Name>DefaultCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\backgrounds\Gladii.png">
+      <Name>Gladii</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
+      <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
     </Compile>
     <None Include="Models\ThirdParty\02_warrior_Anims.xml">
       <Name>02_warrior_Anims</Name>
