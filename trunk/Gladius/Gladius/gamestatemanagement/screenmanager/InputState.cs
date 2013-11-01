@@ -18,7 +18,7 @@ using Gladius;
 using Gladius.util;
 #endregion
 
-namespace GameStateManagement
+namespace Gladius.gamestatemanagement.screenmanager
 {
     /// <summary>
     /// Helper for reading input from keyboard, gamepad, and touch input. This class 

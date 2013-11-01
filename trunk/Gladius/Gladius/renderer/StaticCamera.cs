@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.renderer
 {
@@ -51,7 +52,7 @@ namespace Gladius.renderer
             View = Matrix.CreateLookAt(Position, Target, Vector3.Up);
         }
 
-        public void UpdateInput(GameStateManagement.InputState inputState)
+        public void UpdateInput(InputState inputState)
         {
             
         }

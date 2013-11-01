@@ -8,9 +8,9 @@ using System.IO;
 using System.Xml;
 using Microsoft.Xna.Framework.Content;
 using Gladius.util;
-using GameStateManagement;
 using Gladius.renderer;
 using Gladius.modes.town;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.modes.overland
 {

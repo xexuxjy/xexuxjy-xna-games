@@ -22,9 +22,9 @@ using Gladius.control;
 using Gladius.combat;
 using Gladius.util;
 using Gladius.gamestatemanagement.screens;
-using GameStateManagement;
 using Gladius.modes.arena;
 using System.Text;
+using Gladius.gamestatemanagement.screenmanager;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 

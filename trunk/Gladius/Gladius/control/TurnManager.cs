@@ -5,7 +5,6 @@ using System.Text;
 using Gladius.actors;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
-using GameStateManagement;
 using Gladius.events;
 using Gladius.gamestatemanagement.screens;
 using Gladius.modes.arena;

@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Content;
 using Gladius.Terrain7;
 using System.IO;
 using Gladius.util;
-using GameStateManagement;
 using Gladius.renderer;
 using Gladius.gamestatemanagement.screens;
 

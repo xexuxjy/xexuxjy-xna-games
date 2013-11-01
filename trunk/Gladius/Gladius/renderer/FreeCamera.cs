@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.renderer
 {
@@ -124,7 +125,7 @@ namespace Gladius.renderer
 
         }
 
-        public void UpdateInput(GameStateManagement.InputState inputState)
+        public void UpdateInput(InputState inputState)
         {
             DeltaPosition = Vector3.Zero;
                  

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GameStateManagement;
 using Microsoft.Xna.Framework.Content;
 using Gladius.util;
 using Gladius.modes.shared;
@@ -10,6 +9,7 @@ using Gladius.events;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.IO;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.gamestatemanagement.screens
 {

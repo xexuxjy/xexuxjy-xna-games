@@ -14,7 +14,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Gladius.util;
-using GameStateManagement;
+using Gladius.gamestatemanagement.screenmanager;
+
 
 #endregion
 

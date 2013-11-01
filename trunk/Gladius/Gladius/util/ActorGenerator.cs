@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using System.IO;
 using System.Xml;
-using GameStateManagement;
+using Gladius.gamestatemanagement.screenmanager;
 
 namespace Gladius.util
 {
