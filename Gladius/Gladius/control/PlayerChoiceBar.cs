@@ -222,10 +222,10 @@ namespace Gladius.control
             int start = baseRectangle.X;
 
             int width = (int)(fillPercentage * baseRectangle.Width);
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(color1), new Rectangle(start, ypos, width, height), Color.White);
+            spriteBatch.Draw(ArenaScreen.ContentManager.GetColourTexture(color1), new Rectangle(start, ypos, width, height), Color.White);
             start += width;
             width = baseRectangle.Width - width;
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(color2), new Rectangle(start, ypos, width, height), Color.White);
+            spriteBatch.Draw(ArenaScreen.ContentManager.GetColourTexture(color2), new Rectangle(start, ypos, width, height), Color.White);
         }
 
         private void DrawSkillBar2(SpriteBatch spriteBatch, Rectangle rect, List<AttackSkill> skills,StringBuilder bar1Text,StringBuilder bar2Text)

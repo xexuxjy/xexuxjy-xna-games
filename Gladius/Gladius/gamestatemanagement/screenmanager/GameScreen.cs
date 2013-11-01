@@ -358,16 +358,20 @@ namespace Gladius.gamestatemanagement.screenmanager
 
         #endregion
 
-        public ContentManager ContentManager
+        public ThreadSafeContentManager ContentManager
         {
             get
             {
-                return m_content;
+                if (m_content != null)
+                {
+                    return m_content;
+                }
+                return ScreenManager.ContentManager;
             }
         }
 
 
-        protected ContentManager m_content;
+        protected ThreadSafeContentManager m_content;
         protected SpriteFont m_gameFont;
         protected SpriteBatch m_spriteBatch;
 

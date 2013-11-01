@@ -35,7 +35,7 @@ namespace Gladius
         public static AttackSkillDictionary AttackSkillDictionary;
 
 
-        public static ThreadSafeContentManager GlobalContentManager;
+        //public static ThreadSafeContentManager GlobalContentManager;
 
         public static Random Random = new Random();
 

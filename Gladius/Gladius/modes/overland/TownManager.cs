@@ -78,7 +78,7 @@ namespace Gladius.modes.overland
 
             m_basicEffect = new BasicEffect(Game.GraphicsDevice);
             m_basicEffect.TextureEnabled = true;
-            m_basicEffect.Texture = Globals.GlobalContentManager.GetColourTexture(Color.Pink);
+            m_basicEffect.Texture = ContentManager.GetColourTexture(Color.Pink);
 
             m_townModel = ContentManager.Load<Model>("UnitCube");
             Globals.RemapModel(m_townModel, m_basicEffect);

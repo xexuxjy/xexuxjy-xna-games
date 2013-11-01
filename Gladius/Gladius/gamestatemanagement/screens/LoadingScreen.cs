@@ -45,7 +45,7 @@ namespace Gladius.gamestatemanagement.screens
 
         GameScreen[] screensToLoad;
 
-
+        public Texture2D m_screenBackground;
 
         #endregion
 
@@ -68,6 +68,7 @@ namespace Gladius.gamestatemanagement.screens
         public override void LoadContent()
         {
             m_swordTexture = ScreenManager.Game.Content.Load<Texture2D>("UI/backgrounds/Gladii");
+            m_screenBackground = ScreenManager.Game.Content.Load<Texture2D>("UI/backgrounds/ScrollBackground");
         }
 
 
@@ -175,13 +176,13 @@ namespace Gladius.gamestatemanagement.screens
                 Vector2 textSize = font.MeasureString(message);
                 Vector2 textPosition = (viewportSize - textSize) / 2;
 
-                Vector2 swordPosition = textPosition;
-                swordPosition.Y += (m_swordTexture.Height / 2) + 40;
+                Vector2 swordPosition = viewportSize*0.8f;
 
                 Color color = Color.White * TransitionAlpha;
 
                 // Draw the text.
                 spriteBatch.Begin();
+                spriteBatch.Draw(m_screenBackground, viewport.Bounds, Color.White);
                 spriteBatch.DrawString(font, message, textPosition, color);
 
                 Vector2 origin = new Vector2(m_swordTexture.Width / 2);

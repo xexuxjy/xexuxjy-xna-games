@@ -71,7 +71,7 @@ namespace Gladius.util
             }
         }
 
-        public ContentManager ContentManager
+        public ThreadSafeContentManager ContentManager
         {
             get
             {

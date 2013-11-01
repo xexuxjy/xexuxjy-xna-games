@@ -29,7 +29,7 @@ namespace Gladius.control
 
             for (int i = 0; i < numAttacks; ++i)
             {
-                part = new AttackBarPart();
+                part = new AttackBarPart(this);
                 if (i == 0)
                 {
                     CurrentPart = part;
@@ -63,10 +63,10 @@ namespace Gladius.control
         {
             if (Visible)
             {
-                spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), Rectangle, Color.White);
+                spriteBatch.Draw(ArenaScreen.ContentManager.GetColourTexture(Color.White), Rectangle, Color.White);
 
                 Rectangle insetRectangle = Globals.InsetRectangle(Rectangle, 1);
-                spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Black), insetRectangle, Color.White);
+                spriteBatch.Draw(ArenaScreen.ContentManager.GetColourTexture(Color.Black), insetRectangle, Color.White);
                 insetRectangle = Globals.InsetRectangle(insetRectangle, 1);
 
                 for (int i = 0; i < m_attackBarParts.Count; ++i)
@@ -81,7 +81,7 @@ namespace Gladius.control
                 Color coverageColor = Color.DarkGray;
                 //coverageColor.A = 50;
                 coverageColor *= 0.35f;
-                spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), coverageRectangle, coverageColor);
+                spriteBatch.Draw(ArenaScreen.ContentManager.GetColourTexture(Color.White), coverageRectangle, coverageColor);
             }
         }
 
@@ -214,7 +214,12 @@ namespace Gladius.control
         public ActionButton buttonRequired;
         public AttackBarPart nextPart;
         private AttackResultType barResult = AttackResultType.None;
+        AttackBar myOwner;
 
+        public AttackBarPart(AttackBar owner)
+        {
+            myOwner = owner;
+        }
 
         public AttackResultType BarResult
         {
@@ -239,13 +244,13 @@ namespace Gladius.control
             int start = baseRectangle.X + (int)startPoint;
 
             int width = (int)(critPoint - startPoint);
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Yellow), new Rectangle(start, ypos, width, height), Color.White);
+            spriteBatch.Draw(myOwner.ArenaScreen.ContentManager.GetColourTexture(Color.Yellow), new Rectangle(start, ypos, width, height), Color.White);
             start += width;
             width = (int)critPointWidth;
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Red), new Rectangle(start, ypos, width, height), Color.White);
+            spriteBatch.Draw(myOwner.ArenaScreen.ContentManager.GetColourTexture(Color.Red), new Rectangle(start, ypos, width, height), Color.White);
             start += width;
             width = (int)(endPoint-start);
-            spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.Blue), new Rectangle(start, ypos, width, height), Color.White);
+            spriteBatch.Draw(myOwner.ArenaScreen.ContentManager.GetColourTexture(Color.Blue), new Rectangle(start, ypos, width, height), Color.White);
 
 
         }

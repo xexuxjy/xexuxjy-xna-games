@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Gladius.control;
 using Gladius;
+using Gladius.util;
 #endregion
 
 namespace Gladius.gamestatemanagement.screenmanager
@@ -40,6 +41,8 @@ namespace Gladius.gamestatemanagement.screenmanager
         SpriteFont font;
         Texture2D blankTexture;
 
+        //ContentManager contentManager = new ThreadSafeCo
+        ThreadSafeContentManager contentManager;
         DateTime lastUpdate = DateTime.Now;
         int fpsCounter = 0;
         int fps;
@@ -52,6 +55,14 @@ namespace Gladius.gamestatemanagement.screenmanager
 
         #region Properties
 
+
+        public ThreadSafeContentManager ContentManager
+        {
+            get
+            {
+                return contentManager;
+            }
+        }
 
         /// <summary>
         /// A default SpriteBatch shared by all the screens. This saves
@@ -99,6 +110,8 @@ namespace Gladius.gamestatemanagement.screenmanager
             // we must set EnabledGestures before we can query for them, but
             // we don't assume the game wants to read them.
             TouchPanel.EnabledGestures = GestureType.None;
+            contentManager = new ThreadSafeContentManager(game, game.Services);
+            contentManager.RootDirectory = "Content";
         }
 
 
@@ -122,11 +135,10 @@ namespace Gladius.gamestatemanagement.screenmanager
         protected override void LoadContent()
         {
             // Load content belonging to the screen manager.
-            ContentManager content = Game.Content;
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = content.Load<SpriteFont>("UI/fonts/BattleOverFont");
-            blankTexture = Globals.GlobalContentManager.GetColourTexture(Color.Black);
+            font = ContentManager.Load<SpriteFont>("UI/fonts/BattleOverFont");
+            blankTexture = ContentManager.GetColourTexture(Color.Black);
 
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)
