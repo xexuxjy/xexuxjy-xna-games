@@ -50,7 +50,10 @@ namespace Gladius.control
                         // view side on
                         forward = model.Right;
                     }
+                    Vector3 newPosition = a - (forward * 3);
+                    newPosition.Y = 4;
 
+                    Globals.Camera.Position = newPosition;
                     Globals.Camera.Target = a;
                     Globals.Camera.TargetDirection = forward;
                 }

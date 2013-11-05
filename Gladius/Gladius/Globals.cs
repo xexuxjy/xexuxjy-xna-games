@@ -136,5 +136,9 @@ namespace Gladius
 
 
         public const String PlayerTeam = "Player";
+        public const String EnemyTeam1 = "Enemy1";
+        public const String EnemyTeam2 = "Enemy2";
+        public const String EnemyTeam3 = "Enemy3";
+
     }
 }

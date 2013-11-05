@@ -46,7 +46,7 @@ namespace Gladius.combat
             else
             {
                 attackResult.resultType = AttackResultType.Hit;
-                attackResult.damageDone = totalDamage;
+                attackResult.damageDone = (int)totalDamage;
             }
 
 
@@ -145,7 +145,7 @@ namespace Gladius.combat
                 {
                     return true;
                 }
-                if (attacker.Team == defender.Team && (skill== null || skill.AttackType == AttackType.Move))
+                if (attacker.Team == defender.Team && (skill == null || skill.HasMovementPath()))
                 {
                     return false;
                 }
@@ -166,7 +166,6 @@ namespace Gladius.combat
         {
             if (defender != null && attacker != null)
             {
-
                 Point fp = attacker.CurrentPosition;
                 Point tp = defender.CurrentPosition;
                 Vector3 diff = new Vector3(tp.X, 0, tp.Y) - new Vector3(fp.X, 0, fp.Y);
@@ -202,7 +201,7 @@ namespace Gladius.combat
     public class AttackResult
     {
         public AttackResultType resultType;
-        public float damageDone;
+        public int damageDone;
         public BaseActor damageCauser;
     }
 

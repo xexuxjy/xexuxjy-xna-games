@@ -32,16 +32,16 @@ namespace Gladius.renderer
             m_surface = contentManager.Load<Texture2D>("Models/Terrain/WorldSurface");
             Vector3 bounds = new Vector3(512, 10, 512);
 
-            m_quadTree = new QuadTree(-bounds,m_heightMap,Globals.Camera.ViewMatrix,Globals.Camera.ProjectionMatrix,Game.GraphicsDevice,1,1.0f);
+            m_quadTree = new QuadTree(-bounds,m_heightMap,Globals.Camera.View,Globals.Camera.Projection,Game.GraphicsDevice,1,1.0f);
             m_quadTree.Texture = m_surface;
         }
 
         public override void Update(GameTime gameTime)
         {
-            m_quadTree.View = Globals.Camera.ViewMatrix;
-            m_quadTree.Projection = Globals.Camera.ProjectionMatrix;
+            m_quadTree.View = Globals.Camera.View;
+            m_quadTree.Projection = Globals.Camera.Projection;
             m_quadTree.CameraPosition = Globals.Camera.Position;
-            m_quadTree.Update(gameTime);
+            m_quadTree.Update(gameTime);  
         }
 
         public override void Draw(GameTime gameTime)

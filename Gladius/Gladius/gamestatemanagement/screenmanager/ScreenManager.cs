@@ -262,12 +262,15 @@ namespace Gladius.gamestatemanagement.screenmanager
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            foreach (GameScreen screen in screens)
+            lock (GraphicsDevice)
             {
-                if (screen.ScreenState == ScreenState.Hidden)
-                    continue;
+                foreach (GameScreen screen in screens)
+                {
+                    if (screen.ScreenState == ScreenState.Hidden)
+                        continue;
 
-                screen.Draw(gameTime);
+                    screen.Draw(gameTime);
+                }
             }
         }
 

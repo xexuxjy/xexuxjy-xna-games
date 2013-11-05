@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using Gladius.actors;
 using Gladius.gamestatemanagement.screens;
+using System.IO;
 
 namespace Gladius.modes.arena
 {
@@ -22,6 +23,16 @@ namespace Gladius.modes.arena
             m_pathFinder.Initialize(this);
             BuildDefaultArena();
         }
+
+        public Arena(ArenaScreen arenaScreen, String arenaDataName)
+        {
+            m_arenaScreen = arenaScreen;
+            BuildArena(arenaDataName);
+            m_pathFinder = new ArenaPathFinder();
+            m_pathFinder.Initialize(this);
+        }
+
+
 
         public bool InLevel(Point p)
         {
@@ -53,11 +64,47 @@ namespace Gladius.modes.arena
         }
 
 
+        public void BuildArena(String arenaDataName)
+        {
+            List<String> lines = new List<String>();
+            using (StreamReader sr = new StreamReader(TitleContainer.OpenStream(arenaDataName)))
+            {
+                while (!sr.EndOfStream)
+                {
+                    lines.Add(sr.ReadLine());
+                }
+
+                Width = lines[0].Length;
+                Breadth = lines.Count;
+
+                m_arenaGrid = new SquareType[Width, Breadth];
+
+                for (int i = 0; i < Width; ++i)
+                {
+                    for (int j = 0; j < Breadth; ++j)
+                    {
+                        if (lines[j][i] == '#')
+                        {
+                            m_arenaGrid[j, i] = SquareType.Wall;
+                        }
+                        else if (lines[j][i] == 'P')
+                        {
+                            m_arenaGrid[j, i] = SquareType.Pillar;
+                        }
+                    }
+                }
+            }
+        }
+
         public int Width
         {
             get
             {
                 return m_width;
+            }
+            set
+            {
+                m_width = value;
             }
         }
         public int Breadth
@@ -65,6 +112,10 @@ namespace Gladius.modes.arena
             get
             {
                 return m_breadth;
+            }
+            set
+            {
+                m_breadth = value;
             }
         }
 
@@ -278,8 +329,10 @@ namespace Gladius.modes.arena
                 Point adjusted = location + p;
                 if (InLevel(adjusted) && GetSquareTypeAtLocation(adjusted) == SquareType.Empty)
                 {
-                    if (Globals.PointDist2(adjusted, startLocation) < closest)
+                    int dist = Globals.PointDist2(adjusted, startLocation);
+                    if (dist < closest)
                     {
+                        closest = dist;
                         closestPoint = adjusted;
                     }
                 }
@@ -310,6 +363,7 @@ namespace Gladius.modes.arena
         Unaccesible,
         Wall,
         Crowd,
+        Pillar,
         Mobile
     }
 
@@ -689,6 +743,10 @@ namespace Gladius.modes.arena
 
         public bool FindPath(Point start, Point end, List<Point> result)
         {
+            if (start == end)
+            {
+                return true;
+            }
             Reset();
             startPoint = start;
             endPoint = end;
@@ -721,6 +779,10 @@ namespace Gladius.modes.arena
             int x = (int)center.X;
             int y = (int)center.Y + 1;
             object o = null;
+
+            float currentHeight = m_levelMap.GetHeightAtLocation(center);
+            float allowableHeightDifference = 0.5f;
+
 
             if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
             {

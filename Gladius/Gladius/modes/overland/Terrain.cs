@@ -45,7 +45,7 @@ namespace Gladius.modes.overland
 
             m_terrainEffect = contentManager.Load<Effect>("Effects/Terrain/Terrain");
             m_terrainEffect.Parameters["BaseTexture"].SetValue(m_surface);
-            //BuildNormalMap(contentManager);
+            BuildNormalMap(contentManager);
             //m_terrainEffect.Parameters["BaseTexture"].SetValue(m_normalMap);
             //m_position = new Vector3(m_heightMap.Width,0,m_heightMap.Height)/2f;
             Vector3 position = new Vector3(m_heightMap.Width, 0, m_heightMap.Height) / 2f;
@@ -78,36 +78,38 @@ namespace Gladius.modes.overland
         private void BuildNormalMap(ContentManager contentManager)
         {
             //m_terrainEffect.Parameters["NormalMapTexture"].SetValue((Texture)null);
-
-            int width = m_heightMap.Width;
-
-            Effect normalsEffect = contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
-            m_normalMap = new RenderTarget2D(Game.GraphicsDevice, width, width, false, SurfaceFormat.Color, DepthFormat.None);
-
-            Game.GraphicsDevice.SetRenderTarget(m_normalMap);
-            Game.GraphicsDevice.Clear(Color.White);
-
-            normalsEffect.CurrentTechnique = normalsEffect.Techniques["ComputeNormals"];
-            normalsEffect.Parameters["HeightMapTexture"].SetValue(m_heightMap);
-
-            float texelWidth = 1f / (float)width;
-            normalsEffect.Parameters["TexelWidth"].SetValue(texelWidth);
-            normalsEffect.Parameters["normalStrength"].SetValue(8f);
-
-            Matrix projection = Matrix.CreateOrthographicOffCenter(0, width, width, 0, 0, 1);
-            Matrix halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-            foreach (EffectPass pass in normalsEffect.CurrentTechnique.Passes)
+            lock (m_overlandScreen.ScreenManager.GraphicsDevice)
             {
-                pass.Apply();
-                m_screenQuad.Draw();
+
+                int width = m_heightMap.Width;
+
+                Effect normalsEffect = contentManager.Load<Effect>("Effects/Terrain/TerrainNormalMap");
+                m_normalMap = new RenderTarget2D(Game.GraphicsDevice, width, width, false, SurfaceFormat.Color, DepthFormat.None);
+
+                Game.GraphicsDevice.SetRenderTarget(m_normalMap);
+                Game.GraphicsDevice.Clear(Color.White);
+
+                normalsEffect.CurrentTechnique = normalsEffect.Techniques["ComputeNormals"];
+                normalsEffect.Parameters["HeightMapTexture"].SetValue(m_heightMap);
+
+                float texelWidth = 1f / (float)width;
+                normalsEffect.Parameters["TexelWidth"].SetValue(texelWidth);
+                normalsEffect.Parameters["normalStrength"].SetValue(8f);
+
+                Matrix projection = Matrix.CreateOrthographicOffCenter(0, width, width, 0, 0, 1);
+                Matrix halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+
+                foreach (EffectPass pass in normalsEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    m_screenQuad.Draw();
+                }
+
+                normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
+                Game.GraphicsDevice.SetRenderTarget(null);
+
+                //m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMap);
             }
-
-            normalsEffect.Parameters["HeightMapTexture"].SetValue((Texture)null);
-            Game.GraphicsDevice.SetRenderTarget(null);
-
-            //m_terrainEffect.Parameters["NormalMapTexture"].SetValue(m_normalMap);
-
         }
 
         public void ApplyLightToEffect(Effect effect)

@@ -50,9 +50,20 @@ namespace xexuxjy.Gladius.util
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public GameObjectAttributeModifier(GameObjectAttributeType attributeType, int modifier)
+        {
+            m_attributeType = attributeType;
+            ModiferType = GameObjectAttributeModifierType.Add;
+            DurationType = GameObjectAttributeModifierDurationType.InstantTemporary;
+            m_duration = 1;
+            m_currentTime = 0f;
+            m_modifier = modifier;
+        }
+
+
         public GameObjectAttributeModifier(GameObjectAttributeType attributeType, 
             GameObjectAttributeModifierDurationType durationType,
-            GameObjectAttributeModifierType modifierType, float modifier, float duration)
+            GameObjectAttributeModifierType modifierType, int modifier, int duration)
         {
             m_attributeType = attributeType;
             ModiferType = modifierType;
@@ -66,7 +77,7 @@ namespace xexuxjy.Gladius.util
 
         public void Initialize(GameObjectAttributeType attributeType, BaseActor appliedTo,
             GameObjectAttributeModifierDurationType durationType,
-            GameObjectAttributeModifierType modifierType, float modifier, float duration) 
+            GameObjectAttributeModifierType modifierType, int modifier, float duration) 
         {
             m_appliedTo = appliedTo;
             m_attributeType = attributeType;
@@ -93,7 +104,7 @@ namespace xexuxjy.Gladius.util
                 DurationType == GameObjectAttributeModifierDurationType.OverTimeTemporary)
             {
 
-                float newValue = m_originalValue;
+                int newValue = m_originalValue;
                 if (ModiferType == GameObjectAttributeModifierType.Add)
                 {
                     newValue += m_modifier;
@@ -136,7 +147,7 @@ namespace xexuxjy.Gladius.util
             m_currentTime += elapsedSeconds;
             if (!Complete)
             {
-                float newValue = m_originalValue;
+                int newValue = m_originalValue;
                 if (m_modifierType == GameObjectAttributeModifierType.Add)
                 {
                     newValue += m_modifier;
@@ -212,8 +223,8 @@ namespace xexuxjy.Gladius.util
         private BaseActor m_appliedTo;
         private float m_duration;
         private float m_currentTime;
-        private float m_modifier;
-        private float m_originalValue;
+        private int m_modifier;
+        private int m_originalValue;
         public const float INFINITE_DURATION = -1f;
     }
 
@@ -223,11 +234,11 @@ namespace xexuxjy.Gladius.util
         // object array ctor.
         public BoundedAttribute() { }
 
-        public BoundedAttribute(float startValue) : this(startValue,false)
+        public BoundedAttribute(int startValue) : this(startValue,false)
         {}
             
 
-        public BoundedAttribute(float startValue,bool limitless)
+        public BoundedAttribute(int startValue,bool limitless)
         {
             MinValue = 0;
             MaxValue = startValue;
@@ -236,23 +247,23 @@ namespace xexuxjy.Gladius.util
             m_limitless = limitless;
         }
 
-        public BoundedAttribute(float startValue,float minValue,float maxValue)
+        public BoundedAttribute(int startValue,int minValue,int maxValue)
         {
             MinValue = minValue;
             MaxValue = maxValue;
             BaseValue = maxValue;
             CurrentValue = startValue;
         }
-        private float m_baseValue;
+        private int m_baseValue;
 
-        public float BaseValue
+        public int BaseValue
         {
             get { return m_baseValue; }
             set { m_baseValue = value; }
         }
-        private float m_currentValue;
+        private int m_currentValue;
 
-        public float CurrentValue
+        public int CurrentValue
         {
             get { return m_currentValue; }
             set 
@@ -263,16 +274,16 @@ namespace xexuxjy.Gladius.util
                 }
             }
         }
-        private float m_maxValue;
+        private int m_maxValue;
 
-        public float MaxValue
+        public int MaxValue
         {
             get { return m_maxValue; }
             set { m_maxValue = value; }
         }
-        private float m_minValue;
+        private int m_minValue;
 
-        public float MinValue
+        public int MinValue
         {
             get { return m_minValue; }
             set { m_minValue = value; }

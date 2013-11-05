@@ -30,6 +30,7 @@ namespace Gladius.util
 
 
 
+
         public void Update(GameTime gameTime)
         {
             ++m_updateCounter;

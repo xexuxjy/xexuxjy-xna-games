@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 
 namespace Gladius.renderer
 {
     public class SimpleQuad
     {
-
-        public BasicEffect BasicEffect;
-
-
+        public Effect Effect;
 
         public Vector3 Origin;
         public Vector3 UpperLeft;
@@ -27,7 +25,7 @@ namespace Gladius.renderer
         public VertexPositionNormalTexture[] Vertices;
         public int[] Indices;
 
-        public SimpleQuad(GraphicsDevice device)
+        public SimpleQuad(ContentManager content)
         {
             Vertices = new VertexPositionNormalTexture[4];
             Indices = new int[6];
@@ -44,9 +42,8 @@ namespace Gladius.renderer
             LowerLeft.Z = halfDims.Z;
 
             LowerRight = halfDims;
-            
-            BasicEffect = new BasicEffect(device);
-            BasicEffect.TextureEnabled = true;
+
+            Effect = content.Load<Effect>("Effects/MovementGrid/MovementGrid");
             
             //sBasicEffect.EnableDefaultLighting();
             FillVertices();
@@ -88,20 +85,17 @@ namespace Gladius.renderer
             Indices[5] = 3;
         }
 
-        public void Draw(GraphicsDevice device,Texture2D texture, Matrix world, Vector3 normal,Vector3 scale,ICamera camera,float alpha =1f)
+        public void Draw(GraphicsDevice device,Texture2D texture, Matrix world, Vector3 normal,Vector3 scale,ICamera camera,Color teamColour,float alpha =1f)
         {
-            BasicEffect.World = world;
-            BasicEffect.Texture = texture;
-            BasicEffect.View = camera.View;
-            BasicEffect.Projection = camera.Projection;
-            BasicEffect.Alpha = alpha;
+            Effect.Parameters["World"].SetValue(world);            
+            Effect.Parameters["Texture"].SetValue(texture);
+            Effect.Parameters["View"].SetValue(camera.View);
+            Effect.Parameters["Projection"].SetValue(camera.Projection);
+            Effect.Parameters["Alpha"].SetValue(alpha);
+            Effect.Parameters["TeamColour"].SetValue(teamColour.ToVector3());
+            Effect.Parameters["BaseColour"].SetValue(Color.White.ToVector3());
 
-            if (alpha < 1f)
-            {
-                int ibreak = 0;
-            }
-
-            foreach (EffectPass pass in BasicEffect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(

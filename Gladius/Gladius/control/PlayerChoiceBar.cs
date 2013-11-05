@@ -319,9 +319,9 @@ namespace Gladius.control
                     {
                         ArenaScreen.SetMovementGridVisible(true);
                     }
-                    else if (CurrentlySelectedSkill.AttackType == AttackType.Block)
+                    else if (CurrentlySelectedSkill.HasModifiers())
                     {
-                        CurrentActor.ApplyBlockSkill(CurrentlySelectedSkill);
+                        CurrentActor.ApplyModifiers(CurrentlySelectedSkill);
                     }
                     else if (CurrentlySelectedSkill.AttackType == AttackType.EndTurn)
                     {
@@ -333,7 +333,7 @@ namespace Gladius.control
 
         public bool SkillNeedsMovementGrid(AttackSkill skill)
         {
-            return skill.AttackType == AttackType.Move || skill.AttackType == AttackType.SingleOrtho || skill.AttackType == AttackType.AOE;
+            return skill.HasMovementPath();
             
         }
 
