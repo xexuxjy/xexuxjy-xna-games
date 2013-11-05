@@ -119,7 +119,7 @@ namespace Gladius.modes.shared
             if(!String.IsNullOrEmpty(val))
             {
                 int ival = int.Parse(val);
-                GameObjectAttributeModifier modifier = new GameObjectAttributeModifier(attrType,GameObjectAttributeModifierDurationType.InstantPermanent,GameObjectAttributeModifierType.Add,ival,0f);
+                GameObjectAttributeModifier modifier = new GameObjectAttributeModifier(attrType,GameObjectAttributeModifierDurationType.InstantPermanent,GameObjectAttributeModifierType.Add,ival,0);
                 m_modifiers.Add(modifier);
             }
         }

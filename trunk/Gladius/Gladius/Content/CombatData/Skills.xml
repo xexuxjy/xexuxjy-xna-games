@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <AttackSkills>
-  <AttackSkill name="Move" purchaseCost="0" useCost="0" skillRow="0" attackType="Move" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Move" />
-  <AttackSkill name="Block" purchaseCost="0" useCost="0" skillRow="0" attackType="Block" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Defend"/>
-  <AttackSkill name="EndTurn" purchaseCost="0" useCost="0" skillRow="0" attackType="EndTurn" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Move"/>
+  <AttackSkill id="1" name="Strike" purchaseCost="0" useCost="0" skillRow="0" attackType="Move" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Move" minRange="1" maxRange="6"/>
+  <AttackSkill id="2" name="Block" purchaseCost="0" useCost="0" skillRow="0" attackType="Block" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Defend" minRange="0" maxRange="0">
+    <Modifier stat="Defense" amount="20"/>
+  </AttackSkill>
+  <AttackSkill id="3" name="Pass" purchaseCost="0" useCost="0" skillRow="0" attackType="EndTurn" damageType="Physical" damageAffects="Default" baseDamage="0" skillIcon="Move" minRange="0" maxRange="0"/>
 
-  <AttackSkill name="Strike" purchaseCost="2" useCost="1" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack"/>
-  <AttackSkill name="Strike2" purchaseCost="12" useCost="2" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack"/>
-  <AttackSkill name="Strike3" purchaseCost="22" useCost="3" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack"/>
+  <AttackSkill id="4" name="Strike1" purchaseCost="2" useCost="1" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack" minRange="1" maxRange="6"/>
+  <AttackSkill id="5" name="Strike2" purchaseCost="12" useCost="2" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack" minRange="1" maxRange="6"/>
+  <AttackSkill id="6" name="Strike3" purchaseCost="22" useCost="3" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack" minRange="1" maxRange="6"/>
 
-  <AttackSkill name="Combo1" purchaseCost="2" useCost="1" skillRow="2" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack"/>
-  <AttackSkill name="Combo2" purchaseCost="12" useCost="2" skillRow="2" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack"/>
-  <AttackSkill name="Combo3" purchaseCost="22" useCost="3" skillRow="2" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack"/>
+  <AttackSkill id="7" name="Combo1" purchaseCost="2" useCost="1" skillRow="2" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack" minRange="1" maxRange="1"/> 
+  <AttackSkill id="8" name="Combo2" purchaseCost="12" useCost="2" skillRow="2" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack" minRange="1" maxRange="1"/>
+  <AttackSkill id="9" name="Combo3" purchaseCost="22" useCost="3" skillRow="2" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack" minRange="1" maxRange="1"/>
 
-  <AttackSkill name="Special1" purchaseCost="2" useCost="1" skillRow="3" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack"/>
-  <AttackSkill name="Special2" purchaseCost="12" useCost="2" skillRow="3" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack"/>
-  <AttackSkill name="Special3" purchaseCost="22" useCost="3" skillRow="3" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack"/>
+  <AttackSkill id="10" name="Special1" purchaseCost="2" useCost="1" skillRow="3" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Attack" minRange="1" maxRange="1"/> />
+  <AttackSkill id="11" name="Special2" purchaseCost="12" useCost="2" skillRow="3" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Attack" minRange="1" maxRange="1"/> />
+  <AttackSkill id="12" name="Special3" purchaseCost="22" useCost="3" skillRow="3" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Attack" minRange="1" maxRange="1"/> />
 
-  <AttackSkill name="Affinity1" purchaseCost="2" useCost="1" skillRow="4" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Special"/>
-  <AttackSkill name="Affinity2" purchaseCost="12" useCost="2" skillRow="4" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Special"/>
-  <AttackSkill name="Affinity3" purchaseCost="22" useCost="3" skillRow="4" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special"/>
+  <AttackSkill id="13" name="Affinity1" purchaseCost="2" useCost="1" skillRow="4" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="10" skillIcon="Special" minRange="1" maxRange="1"/> />
+  <AttackSkill id="14" name="Affinity2" purchaseCost="12" useCost="2" skillRow="4" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="20" skillIcon="Special" minRange="1" maxRange="1"/> />
+  <AttackSkill id="15" name="Affinity3" purchaseCost="22" useCost="3" skillRow="4" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special" minRange="1" maxRange="1"/> />
+
+  <AttackSkill id="16" name="Roam" purchaseCost="22" useCost="2" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special" minRange="1" maxRange="12"/> />
 
 </AttackSkills>

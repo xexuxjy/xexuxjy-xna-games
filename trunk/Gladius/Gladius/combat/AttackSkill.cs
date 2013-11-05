@@ -6,11 +6,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using System.IO;
 using System.Xml;
+using xexuxjy.Gladius.util;
 
 namespace Gladius.combat
 {
     public class AttackSkill
     {
+        public int Id;
         public String Name;
         public int UseCost;
         public int PurchaseCost;
@@ -27,16 +29,23 @@ namespace Gladius.combat
         public int MinRange;
         public int MaxRange;
         public int Radius;
+        public bool EightSquare;
         // todo - lots of extra abilities on here.
 
+        public List<GameObjectAttributeModifier> StatModifiers = new List<GameObjectAttributeModifier>();
 
 
-        public AttackSkill(String name,int row,int useCost,int purchaseCost,AttackType attackType,DamageType damageType,DamageAffects damageAffects,float baseDamage)
+        public bool HasMovementPath()
+        {
+            return MaxRange > 1;
+        }
+
+
+        public AttackSkill(String name,int row,int useCost,int purchaseCost,DamageType damageType,DamageAffects damageAffects,float baseDamage)
         {
             Name = name;
             UseCost = useCost;
             PurchaseCost = purchaseCost;
-            AttackType = attackType;
             DamageType = damageType;
             DamageAffects = damageAffects;
             BaseDamage = baseDamage;
@@ -46,11 +55,12 @@ namespace Gladius.combat
 
         public AttackSkill(XmlElement node)
         {
+            Id = int.Parse(node.Attributes["id"].Value);
             Name = node.Attributes["name"].Value;
             SkillRow = int.Parse(node.Attributes["skillRow"].Value);
             UseCost = int.Parse(node.Attributes["useCost"].Value);
             PurchaseCost = int.Parse(node.Attributes["purchaseCost"].Value);
-            AttackType = (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
+            //AttackType = (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
             DamageType = (DamageType)Enum.Parse(typeof(DamageType),node.Attributes["damageType"].Value);
             DamageAffects = (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
             SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
@@ -81,17 +91,36 @@ namespace Gladius.combat
             }
 
             DamageMultiplier = 1.0f;
+
+            if (node.HasChildNodes)
+            {
+                XmlNodeList modifiers = node.GetElementsByTagName("Modifier");
+                foreach (XmlNode modifier in modifiers)
+                {
+                    String sval = modifier.Attributes["stat"].Value;
+                    GameObjectAttributeType goat = (GameObjectAttributeType)Enum.Parse(typeof(GameObjectAttributeType), sval);
+                    int val = int.Parse(modifier.Attributes["amount"].Value);
+                    GameObjectAttributeModifier statModifier = new GameObjectAttributeModifier(goat,val);
+                    StatModifiers.Add(statModifier);
+                }
+
+            }
         }
 
-        public static bool IsAttackSkill(AttackSkill attackSkill)
+        public bool HasModifiers()
         {
-            return attackSkill.AttackType == AttackType.SingleOrtho || attackSkill.AttackType == AttackType.SingleSurround;
+            return StatModifiers.Count > 0;
         }
 
-        public static bool IsMoveSkill(AttackSkill attackSkill)
-        {
-            return attackSkill.AttackType == AttackType.Move;
-        }
+        //public static bool IsAttackSkill(AttackSkill attackSkill)
+        //{
+        //    return attackSkill.AttackType == AttackType.SingleOrtho || attackSkill.AttackType == AttackType.SingleSurround;
+        //}
+
+        //public static bool IsMoveSkill(AttackSkill attackSkill)
+        //{
+        //    return attackSkill.AttackType == AttackType.Move;
+        //}
 
     }
 
@@ -108,7 +137,7 @@ namespace Gladius.combat
                 foreach (XmlNode node in nodes)
                 {
                     AttackSkill attackSkill = new AttackSkill(node as XmlElement);
-                    Data[attackSkill.Name] = attackSkill;
+                    Data[attackSkill.Id] = attackSkill;
                 }
 
                 //XmlSource xs = contentManager.Load<XmlSource>("CombatData/Skills");
@@ -116,7 +145,7 @@ namespace Gladius.combat
             }
         }
 
-        public Dictionary<String, AttackSkill> Data = new Dictionary<String, AttackSkill>();
+        public Dictionary<int, AttackSkill> Data = new Dictionary<int, AttackSkill>();
     }
 
     public enum DamageType
@@ -157,12 +186,9 @@ namespace Gladius.combat
 
     public enum AttackType
     {
-        Move,
+        Attack,
         Block,
-        EndTurn,
-        SingleOrtho,
-        SingleSurround,
-        AOE
+        EndTurn
     }
 
 

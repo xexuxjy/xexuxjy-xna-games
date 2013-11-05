@@ -158,12 +158,12 @@ namespace Gladius.actors
             set;
         }
 
-        public float GetAttributeValue(GameObjectAttributeType attributeType)
+        public int GetAttributeValue(GameObjectAttributeType attributeType)
         {
             return m_attributeDictionary[attributeType].CurrentValue;
         }
 
-        public void SetAttributeValue(GameObjectAttributeType attributeType, float val)
+        public void SetAttributeValue(GameObjectAttributeType attributeType, int val)
         {
             m_attributeDictionary[attributeType].CurrentValue = val;
         }
@@ -534,12 +534,12 @@ namespace Gladius.actors
 
         private void ChooseAttackSkill()
         {
-            CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.AttackType == AttackType.SingleOrtho);
+            CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Strike");
         }
 
         private void ChooseWalkSkill()
         {
-            CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Move");
+            CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Strike");
         }
 
         public ArenaScreen ArenaScreen
@@ -777,8 +777,12 @@ namespace Gladius.actors
             }
         }
 
-        public void ApplyBlockSkill(AttackSkill skill)
+        public void ApplyModifiers(AttackSkill skill)
         {
+            foreach (GameObjectAttributeModifier modifier in skill.StatModifiers)
+            {
+                modifier.ApplyTo(this);
+            }
             // different blocks may have different bonuses.
             TurnComplete = true;
         }
@@ -915,7 +919,7 @@ namespace Gladius.actors
                 try
                 {
                     GameObjectAttributeType attrType = (GameObjectAttributeType)Enum.Parse(typeof(GameObjectAttributeType), attr.Name);
-                    float val = float.Parse(attr.Value);
+                    int val = int.Parse(attr.Value);
                     m_attributeDictionary[attrType] = new BoundedAttribute(val);
                 }
                 catch (System.Exception ex)
@@ -959,6 +963,31 @@ namespace Gladius.actors
         public int TotalMovePoints
         {
             get { return m_totalMovePoints; }
+        }
+
+        public Color TeamColour
+        {
+            get
+            {
+                if (Team == Globals.PlayerTeam)
+                {
+                    return Color.Blue;
+                }
+                else if (Team == Globals.EnemyTeam1)
+                {
+                    return Color.Red;
+                }
+                else if (Team == Globals.EnemyTeam2)
+                {
+                    return Color.Orange;
+                }
+                else if (Team == Globals.EnemyTeam3)
+                {
+                    return Color.MediumSeaGreen;
+                }
+                return Color.Black;
+            }
+
         }
 
 

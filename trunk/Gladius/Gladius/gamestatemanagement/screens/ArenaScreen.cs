@@ -259,9 +259,12 @@ namespace Gladius.gamestatemanagement.screens
             m_battleOverFont = ContentManager.Load<SpriteFont>("UI/fonts/BattleOverFont");
 
 
+
+            //Model barrel = m_content.Load<Model>("Models/TP2/f1_barrel");
             Globals.Camera.Position = new Vector3(0, 5, -10);
 
-            m_arena = new Arena(this,32, 32);
+            //m_arena = new Arena(this,32, 32);
+            m_arena = new Arena(this, "Content/Models/Arena/Arena2/Arena2Data.txt");
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena, this);
             m_arenaRenderer.LoadContent();
@@ -290,7 +293,7 @@ namespace Gladius.gamestatemanagement.screens
                     ba1.ModelName = playerTeamModelName;
                     ba1.Team = Globals.PlayerTeam;
                     ba1.DebugName = "Player" + i;
-                    ba1.PlayerControlled = true;
+                    //ba1.PlayerControlled = true;
                 }
                 else
                 {

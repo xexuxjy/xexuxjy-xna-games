@@ -70,7 +70,7 @@ namespace Gladius.renderer.animation
             foreach (ModelMesh mesh in m_model.Meshes)
             {
                 int ibreak = 0;
-                CalculateBoundingBox(mesh, ref bb);
+                GraphicsHelper.CalculateBoundingBox(mesh, ref bb);
                 m_meshActiveDictionary[mesh.Name] = true;
                 
             }
@@ -212,81 +212,6 @@ namespace Gladius.renderer.animation
                     Globals.EventLogger.LogEvent(EventTypes.Animation, String.Format("PlayAnimation FailedNoMatch [{0}] [{1}]", DebugName, animationEnum));
                 }
             }
-        }
-
-        public static void CalculateBoundingBox(ModelMesh mm, ref BoundingBox bb)
-        {
-            bb = new BoundingBox();
-            bool first = true;
-            Matrix x = Matrix.Identity;
-            ModelBone mb = mm.ParentBone;
-            while (mb != null)
-            {
-                x = x * mb.Transform;
-                mb = mb.Parent;
-            }
-
-
-            Vector3 meshMax = new Vector3(float.MinValue);
-            Vector3 meshMin = new Vector3(float.MaxValue);
-
-            foreach (ModelMeshPart part in mm.MeshParts)
-            {
-                int stride = part.VertexBuffer.VertexDeclaration.VertexStride;
-
-                //VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[part.NumVertices];
-                Vector3[] vertexData = new Vector3[part.NumVertices];
-                //int num = (part.NumVertices - part.VertexOffset);
-                int num = part.NumVertices;
-
-                //GetData(offsetFromStartOfVertexBufferInBytes, arrayOfVector3, 0, arrayOfVector3.Length, sizeOfEachVertexInBytes);
-
-                part.VertexBuffer.GetData(0, vertexData, 0, num, stride);
-                //part.VertexBuffer.GetData(part.VertexOffset * stride, vertexData, 0, num, stride);
-
-                // Find minimum and maximum xyz values for this mesh part
-                //Vector3 vertPosition = new Vector3();
-
-                for (int i = 0; i < vertexData.Length; i++)
-                {
-                    Vector3 vertPosition = vertexData[i];
-                    //vertPosition.X = vertexData[i];
-                    //vertPosition.Y = vertexData[i + 1];
-                    //vertPosition.Z = vertexData[i + 2];
-
-                    // update our values from this vertex
-                    meshMin = Vector3.Min(meshMin, vertPosition);
-                    meshMax = Vector3.Max(meshMax, vertPosition);
-                    i += stride;
-                }
-            }
-
-            // transform by mesh bone matrix
-            //meshMin = Vector3.Transform(meshMin, meshTransform);
-            //meshMax = Vector3.Transform(meshMax, meshTransform);
-
-            // Create the bounding box
-            //BoundingBox box = new BoundingBox(meshMin, meshMax);
-
-            BoundingBox newbox  = new BoundingBox(meshMin, meshMax);
-            bb = MergeBoxes(bb, newbox);
-            //return box;
-        }
-
-        public static BoundingBox MergeBoxes(BoundingBox one, BoundingBox two)
-        {
-            Vector3 min = one.Min;
-            Vector3 max = one.Max;
-
-            min.X = Math.Min(one.Min.X, two.Min.X);
-            min.Y = Math.Min(one.Min.Y, two.Min.Y);
-            min.Z = Math.Min(one.Min.Z, two.Min.Z);
-
-            max.X = Math.Max(one.Max.X, two.Max.X);
-            max.Y = Math.Max(one.Max.Y, two.Max.Y);
-            max.Z = Math.Max(one.Max.Z, two.Max.Z);
-
-            return new BoundingBox(min, max);
         }
 
         public bool FindMatrixForBone(String boneName, out Matrix result)
