@@ -229,11 +229,6 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\Arena\Common\ViewingBox.fbx">
-      <Name>ViewingBox</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
     <Compile Include="Models\Arena\Arena2\ArenaFloor.png">
       <Name>ArenaFloor</Name>
       <Importer>TextureImporter</Importer>
@@ -274,6 +269,16 @@
       <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
       <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
     </Compile>
+    <Compile Include="Effects\MovementGrid\MovementGrid.fx">
+      <Name>MovementGrid</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>MGEffectProcessor</Processor>
+    </Compile>
+    <None Include="Models\Arena\Arena2\Arena2Data.txt">
+      <Name>Arena2Data</Name>
+      <Importer>XmlImporter</Importer>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Models\ThirdParty\02_warrior_Anims.xml">
       <Name>02_warrior_Anims</Name>
       <Importer>XmlImporter</Importer>
