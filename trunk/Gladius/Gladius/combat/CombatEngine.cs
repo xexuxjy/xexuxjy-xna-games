@@ -162,7 +162,7 @@ namespace Gladius.combat
             return false;
         }
 
-        public bool IsAttackNextTo(BaseActor attacker, BaseActor defender)
+        public bool IsAttackerInRange(BaseActor attacker, BaseActor defender)
         {
             if (defender != null && attacker != null)
             {
@@ -171,7 +171,8 @@ namespace Gladius.combat
                 Vector3 diff = new Vector3(tp.X, 0, tp.Y) - new Vector3(fp.X, 0, fp.Y);
 
                 // we're next to the target already.
-                int len = (int)diff.LengthSquared();
+                //int len = (int)diff.LengthSquared();
+                int len = (int)diff.Length();
                 if (len == 1)
                 {
                     return true;
@@ -181,6 +182,12 @@ namespace Gladius.combat
                 {
                     return true;
                 }
+
+                if (attacker.CurrentAttackSkill.RangedAttack && (len >= attacker.CurrentAttackSkill.MinRange && len <= attacker.CurrentAttackSkill.MaxRange))
+                {
+                    return true;
+                }
+
             }
             return false;
         }

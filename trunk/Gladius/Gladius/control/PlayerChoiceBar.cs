@@ -113,12 +113,12 @@ namespace Gladius.control
                     {
                         if (!ActionSelected)
                         {
-                            ActionSelected = true;
                             CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
+                            ActionSelected = true;
                         }
                         else
                         {
-                            ConfirmAction();
+                            //ConfirmAction();
                         }
                         break;
                     }
@@ -319,13 +319,9 @@ namespace Gladius.control
                     {
                         ArenaScreen.SetMovementGridVisible(true);
                     }
-                    else if (CurrentlySelectedSkill.HasModifiers())
+                    if (CurrentlySelectedSkill.AttackType == AttackType.EndTurn)
                     {
-                        CurrentActor.ApplyModifiers(CurrentlySelectedSkill);
-                    }
-                    else if (CurrentlySelectedSkill.AttackType == AttackType.EndTurn)
-                    {
-                        CurrentActor.TurnComplete = true;
+                        CurrentActor.ConfirmAttackSkill();
                     }
                 }
             }
@@ -333,7 +329,7 @@ namespace Gladius.control
 
         public bool SkillNeedsMovementGrid(AttackSkill skill)
         {
-            return skill.HasMovementPath();
+            return skill.HasMovementPath() || skill.RangedAttack;
             
         }
 
@@ -355,7 +351,8 @@ namespace Gladius.control
 
         public void ConfirmAction()
         {
-            TurnManager.WaitingOnPlayerControl = false;
+            //TurnManager.WaitingOnPlayerControl = false;
+            //CurrentActor.StartAttackSkill();
         }
 
 

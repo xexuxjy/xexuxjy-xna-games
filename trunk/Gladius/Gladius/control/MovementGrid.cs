@@ -57,7 +57,7 @@ namespace Gladius.control
                 //device.BlendState = BlendState.AlphaBlend;
                 //device.DepthStencilState = DepthStencilState.None;
 
-                DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,Game.GraphicsDevice,camera);
+                //DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,Game.GraphicsDevice,camera);
 
                 if (SelectedActor.CurrentAttackSkill == null)
                 {
@@ -66,12 +66,14 @@ namespace Gladius.control
                 }
                 else
                 {
-                    if(SelectedActor.CurrentAttackSkill.HasMovementPath())
+                    if (SelectedActor.CurrentAttackSkill.HasMovementPath())
                     {
-                            DrawIfValid(Game.GraphicsDevice, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
-                            //DrawIfValid(device, camera, SelectedActor.CurrentPosition, SelectedActor, Globals.GlobalContentManager.GetColourTexture(Color.White));
-                            DrawMovementPath(Game.GraphicsDevice, camera, SelectedActor, SelectedActor.WayPointList);
-                            //DrawIfValid(device, camera, CurrentPosition, SelectedActor);
+                        DrawIfValid(Game.GraphicsDevice, camera, SelectedActor.CurrentPosition, SelectedActor, m_selectCursor);
+                        DrawMovementPath(Game.GraphicsDevice, camera, SelectedActor, SelectedActor.WayPointList);
+                    }
+                    else
+                    {
+                        DrawIfValid(Game.GraphicsDevice, camera, CurrentPosition, SelectedActor, m_selectCursor);
                     }
                             //DrawIfValid(Game.GraphicsDevice, camera, CurrentPosition, SelectedActor);
                         //    break;
@@ -325,7 +327,7 @@ namespace Gladius.control
                             BaseActor target = m_arena.GetActorAtPosition(p);
                             if (m_arenaScreen.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
                             {
-                                if (Globals.NextToTarget(actor, target))
+                                if (m_arenaScreen.CombatEngine.IsAttackerInRange(actor, target))
                                 {
                                     return m_targetAndSelectCursor;
                                 }
@@ -478,20 +480,23 @@ namespace Gladius.control
             switch (e.ActionButton)
             {
                 case (ActionButton.ActionButton1):
-                    if (CursorOnTarget(SelectedActor))
-                    {
-                        BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
                         int pathLength = SelectedActor.WayPointList.Count;
                         if (pathLength >= SelectedActor.CurrentAttackSkill.MinRange && pathLength <= SelectedActor.CurrentAttackSkill.MaxRange)
                         {
-                            if (m_arenaScreen.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
+                            if (CursorOnTarget(SelectedActor))
                             {
-                                SelectedActor.ConfirmMove();
-                                SelectedActor.Target = target;
-                                SelectedActor.AttackRequested = true;
+                                BaseActor target = m_arena.GetActorAtPosition(CurrentPosition);
+                                if (m_arenaScreen.CombatEngine.IsValidTarget(SelectedActor, target, SelectedActor.CurrentAttackSkill))
+                                {
+                                    SelectedActor.Target = target;
+                                    SelectedActor.ConfirmAttackSkill();
+                                }
+                            }
+                            else
+                            {
+                                SelectedActor.ConfirmAttackSkill();
                             }
                         }
-                    }
                     break;
                 case (ActionButton.ActionButton2):
                     {

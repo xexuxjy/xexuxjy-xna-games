@@ -28,7 +28,8 @@ namespace Gladius.renderer
             Model model = ContentManager.Load<Model>("UnitCube");
             m_boxModelData = new ModelData(model, 1f,0,null);
 
-            m_floorModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Floor"), 1f, 0f, ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaFloor_0"));
+            Vector3 floorScale = new Vector3(m_arena.Width, 1, m_arena.Breadth);
+            m_floorModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Floor"), floorScale, 0f, ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaFloor_0"));
             m_wallModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Wall"), 1f, 0f, ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaWall_0"));
             m_pillarModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Common/Pillar1"), new Vector3(0.5f,3,0.5f), 0.5f, ContentManager.Load<Texture2D>("Models/Arena/Common/PillarTexture_0"));
 
