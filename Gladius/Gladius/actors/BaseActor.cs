@@ -83,6 +83,9 @@ namespace Gladius.actors
             switch (anim)
             {
                 case (AnimationEnum.Attack1):
+                case (AnimationEnum.Attack2):
+                case (AnimationEnum.Attack3):
+                case (AnimationEnum.BowShot):
                     {
                         StopAttack();
                         break;
@@ -382,6 +385,7 @@ namespace Gladius.actors
                         }
                     }
                 }
+                StartAttackSkill();
             }
             else
             {
@@ -534,7 +538,10 @@ namespace Gladius.actors
 
         private void ChooseAttackSkill()
         {
-            CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Strike");
+            if (CurrentAttackSkill == null)
+            {
+                CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Strike");
+            }
         }
 
         private void ChooseWalkSkill()
@@ -554,7 +561,8 @@ namespace Gladius.actors
         {
             ChooseAttackSkill();
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", DebugName, m_currentTarget != null ? m_currentTarget.DebugName : "NoActorTarget",CurrentAttackSkill.Name));
-            m_animatedModel.PlayAnimation(AnimationEnum.Attack1, false);
+            AnimationEnum attackAnim = CurrentAttackSkill.Animation != AnimationEnum.None ? CurrentAttackSkill.Animation : AnimationEnum.Attack1;
+            m_animatedModel.PlayAnimation(attackAnim, false);
             ArenaScreen.CombatEngineUI.DrawFloatingText(CameraFocusPoint, Color.White, CurrentAttackSkill.Name, 2f);
             Attacking = true;
             AttackRequested = false;
@@ -565,6 +573,7 @@ namespace Gladius.actors
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack stopped.", DebugName));
             m_currentTarget = null;
             Attacking = false;
+            CurrentAttackSkill = null;
             // FIXME - need to worry about out of turn attacks (ripostes, groups etc)
             TurnComplete = true;
         }
@@ -575,7 +584,8 @@ namespace Gladius.actors
             {
                 if (!FollowingWayPoints)
                 {
-                    if (Globals.NextToTarget(this, m_currentTarget))
+
+                    if (ArenaScreen.CombatEngine.IsAttackerInRange(this, m_currentTarget))
                     {
                         SnapToFace(m_currentTarget);
                         m_currentTarget.SnapToFace(this);
@@ -730,10 +740,44 @@ namespace Gladius.actors
         }
 
 
+        public void ConfirmAttackSkill()
+        {
+            if (!CurrentAttackSkill.RangedAttack)
+            {
+                ConfirmMove();
+            }
+            StartAttackSkill();
+        }
+
+        public void StartAttackSkill()
+        {
+            if (PlayerControlled)
+            {
+                TurnManager.WaitingOnPlayerControl = false;
+            }
+
+            AttackRequested = true;
+
+            if (CurrentAttackSkill.HasModifiers())
+            {
+                ApplyModifiers(CurrentAttackSkill);
+            }
+            else if (CurrentAttackSkill.AttackType == AttackType.EndTurn)
+            {
+                TurnComplete = true;
+            }
+        }
+
+        public void EndAttackSkill()
+        {
+            CurrentAttackSkill = null;
+        }
+
+
         public void EndTurn()
         {
+            EndAttackSkill();
             UnitActive = false;
-            CurrentAttackSkill = null;
             if (!Dead)
             {
                 m_animatedModel.PlayAnimation(AnimationEnum.Idle);

@@ -99,6 +99,8 @@ namespace Gladius.renderer.animation
             m_clipNameDictionary[AnimationEnum.Walk] = "Walk";
             m_clipNameDictionary[AnimationEnum.Attack1] = "Attack1";
             m_clipNameDictionary[AnimationEnum.Attack2] = "Attack2";
+            m_clipNameDictionary[AnimationEnum.Attack3] = "Attack3";
+            m_clipNameDictionary[AnimationEnum.BowShot] = "BowShot";
             m_clipNameDictionary[AnimationEnum.Stagger] = "Hit1";
             m_clipNameDictionary[AnimationEnum.Die] = "Death";
             m_clipNameDictionary[AnimationEnum.Block] = "Block";
@@ -298,6 +300,7 @@ namespace Gladius.renderer.animation
         Attack1,
         Attack2,
         Attack3,
+        BowShot,
         Miss,
         Block,
         Stagger,

@@ -23,5 +23,6 @@
   <AttackSkill id="15" name="Affinity3" purchaseCost="22" useCost="3" skillRow="4" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special" minRange="1" maxRange="1"/> />
 
   <AttackSkill id="16" name="Roam" purchaseCost="22" useCost="2" skillRow="1" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special" minRange="1" maxRange="12"/> />
+  <AttackSkill id="17" name="BowShot" purchaseCost="22" useCost="0" skillRow="0" attackType="SingleOrtho" damageType="Physical" damageAffects="Default" baseDamage="30" skillIcon="Special" minRange="3" maxRange="12" animation="BowShot"/> />
 
 </AttackSkills>

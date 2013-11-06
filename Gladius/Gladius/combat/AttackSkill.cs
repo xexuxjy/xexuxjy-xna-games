@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using System.Xml;
 using xexuxjy.Gladius.util;
+using Gladius.renderer.animation;
 
 namespace Gladius.combat
 {
@@ -26,6 +27,8 @@ namespace Gladius.combat
 
         public SkillIcon SkillIcon;
 
+        public AnimationEnum Animation = AnimationEnum.None;
+
         public int MinRange;
         public int MaxRange;
         public int Radius;
@@ -37,7 +40,13 @@ namespace Gladius.combat
 
         public bool HasMovementPath()
         {
-            return MaxRange > 1;
+            return MaxRange > 1 && !RangedAttack;
+        }
+
+
+        public bool RangedAttack
+        {
+            get { return Animation == AnimationEnum.BowShot; }
         }
 
 
@@ -60,7 +69,7 @@ namespace Gladius.combat
             SkillRow = int.Parse(node.Attributes["skillRow"].Value);
             UseCost = int.Parse(node.Attributes["useCost"].Value);
             PurchaseCost = int.Parse(node.Attributes["purchaseCost"].Value);
-            //AttackType = (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
+            AttackType = (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
             DamageType = (DamageType)Enum.Parse(typeof(DamageType),node.Attributes["damageType"].Value);
             DamageAffects = (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
             SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
@@ -88,6 +97,11 @@ namespace Gladius.combat
             else
             {
                 Radius = 1;
+            }
+
+            if (node.HasAttribute("animation"))
+            {
+                Animation = (AnimationEnum)Enum.Parse(typeof(AnimationEnum), node.Attributes["animation"].Value);
             }
 
             DamageMultiplier = 1.0f;
@@ -188,6 +202,8 @@ namespace Gladius.combat
     {
         Attack,
         Block,
+        SingleOrtho,
+        Move,
         EndTurn
     }
 

@@ -293,7 +293,7 @@ namespace Gladius.gamestatemanagement.screens
                     ba1.ModelName = playerTeamModelName;
                     ba1.Team = Globals.PlayerTeam;
                     ba1.DebugName = "Player" + i;
-                    //ba1.PlayerControlled = true;
+                    ba1.PlayerControlled = true;
                 }
                 else
                 {
@@ -311,8 +311,8 @@ namespace Gladius.gamestatemanagement.screens
 
             actors[0].CurrentPosition = new Point(10, 10);
             actors[1].CurrentPosition = new Point(11, 10);
-            actors[2].CurrentPosition = new Point(15, 10);
-            actors[3].CurrentPosition = new Point(15, 15);
+            actors[2].CurrentPosition = new Point(13, 10);
+            actors[3].CurrentPosition = new Point(13, 13);
 
             for (int i = 0; i < numActors; ++i)
             {
