@@ -90,14 +90,6 @@ namespace Gladius.control
                 EndTurn();
                 StartTurn();
             }
-
-            if (WaitingOnPlayerControl)
-            {
-                //
-            }
-
-
-
         }
 
         public void EndTurn()

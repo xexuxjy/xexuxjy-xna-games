@@ -183,7 +183,7 @@ namespace Gladius.combat
                     return true;
                 }
 
-                if (len >= attacker.CurrentAttackSkill.MinRange && len <= attacker.CurrentAttackSkill.MaxRange)
+                if (attacker.CurrentAttackSkill.InRange(len))
                 {
                     if(cursorOnly ||attacker.CurrentAttackSkill.RangedAttack )
                     {

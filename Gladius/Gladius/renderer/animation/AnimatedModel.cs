@@ -35,6 +35,11 @@ namespace Gladius.renderer.animation
         public void Update(GameTime gameTime)
         {
             m_animationPlayer.Update(gameTime.ElapsedGameTime, true, Matrix.Identity);
+            if (m_currentAnimationEnum == AnimationEnum.Attack1)
+            {
+                int ibreak = 0;
+            }
+
             // send notification if we haven't already.
             if (m_animationPlayer.ClipComplete && m_currentAnimationEnum != AnimationEnum.None)
             {
@@ -42,6 +47,7 @@ namespace Gladius.renderer.animation
                 {
                     OnAnimationStopped(m_currentAnimationEnum);
                 }
+
                 m_currentAnimationEnum = AnimationEnum.None;
             }
 
@@ -187,6 +193,12 @@ namespace Gladius.renderer.animation
 
         public void PlayAnimation(AnimationEnum animationEnum,bool loopClip = true)
         {
+            if (m_currentAnimationEnum == AnimationEnum.Attack1)
+            {
+                int ibreak = 0;
+            }
+
+
             if (m_currentAnimationEnum != animationEnum)
             {
                 if (animationEnum == AnimationEnum.Stagger)
