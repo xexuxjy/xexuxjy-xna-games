@@ -337,6 +337,7 @@ namespace Gladius.gamestatemanagement.screens
             m_combatEngine = new CombatEngine();
 
             m_movementGrid = new MovementGrid(m_arena,this);
+            m_movementGrid.Visible = true;
             m_movementGrid.LoadContent();
             m_screenComponents.Components.Add(m_movementGrid);
 
@@ -352,7 +353,7 @@ namespace Gladius.gamestatemanagement.screens
             }
 
             // these here so that none of the key listeners are setup by default.
-            SetMovementGridVisible(false);
+            //SetMovementGridVisible(false);
             SetPlayerChoiceBarVisible(false);
             SetAttackBarVisible(false);
 
@@ -368,18 +369,18 @@ namespace Gladius.gamestatemanagement.screens
 
         }
 
-        public void SetMovementGridVisible(bool value)
-        {
-            MovementGrid.Visible = value;
-            if (value)
-            {
-                MovementGrid.RegisterListeners();
-            }
-            else
-            {
-                MovementGrid.UnregisterListeners();
-            }
-        }
+        //public void SetMovementGridVisible(bool value)
+        //{
+        //    MovementGrid.Visible = value;
+        //    if (value)
+        //    {
+        //        MovementGrid.RegisterListeners();
+        //    }
+        //    else
+        //    {
+        //        MovementGrid.UnregisterListeners();
+        //    }
+        //}
 
         public void SetPlayerChoiceBarVisible(bool value)
         {
@@ -445,6 +446,11 @@ namespace Gladius.gamestatemanagement.screens
         public CombatEngineUI CombatEngineUI
         {
             get { return m_combatEngineUI; }
+        }
+
+        public Arena Arena
+        {
+            get { return m_arena; }
         }
 
         #endregion

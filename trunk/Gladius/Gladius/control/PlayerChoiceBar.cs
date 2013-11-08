@@ -9,6 +9,7 @@ using Gladius.gamestatemanagement.screens;
 using Microsoft.Xna.Framework.Content;
 using Gladius.actors;
 using Gladius.combat;
+using Gladius.modes.arena;
 
 namespace Gladius.control
 {
@@ -87,8 +88,23 @@ namespace Gladius.control
 
         void EventManager_ActionPressed(object sender, ActionButtonPressedArgs e)
         {
+            if(TurnManager.CurrentControlState== Gladius.control.TurnManager.ControlState.ChoosingSkill)
+            {
+                HandleSkillChoiceAction(e);
+            }
+            else if (TurnManager.CurrentControlState == Gladius.control.TurnManager.ControlState.UsingGrid)
+            {
+                HandleMovementGridAction(e);
+            }
+        }
+
+
+
+        private void HandleSkillChoiceAction(ActionButtonPressedArgs e)
+        {
             switch (e.ActionButton)
             {
+
                 case (ActionButton.ActionLeft):
                     {
                         CursorLeft();
@@ -109,12 +125,13 @@ namespace Gladius.control
                         CursorDown();
                         break;
                     }
-                case(ActionButton.ActionButton1):
+                case (ActionButton.ActionButton1):
                     {
-                        if (!ActionSelected)
+                        if (CurrentlySelectedSkill.NeedsGrid)
                         {
+                            MovementGrid.CurrentPosition = CurrentActor.CurrentPosition;
                             CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
-                            ActionSelected = true;
+                            TurnManager.CurrentControlState = Gladius.control.TurnManager.ControlState.UsingGrid;                            
                         }
                         else
                         {
@@ -122,69 +139,52 @@ namespace Gladius.control
                         }
                         break;
                     }
-                    // cancel
+                // cancel
                 case (ActionButton.ActionButton2):
                     {
                         CancelAction();
                         break;
                     }
+
             }
         }
 
-        public void CursorLeft()
+
+        private void UpdateCursor(Point delta)
         {
-            if (!ActionSelected)
+            m_actionCursor += delta;
+
+            m_actionCursor.X = (m_actionCursor.X + m_attackSkills.Count) % m_attackSkills.Count;
+
+            if (delta.X != 0)
             {
-                m_actionCursor.X--;
-                if (m_actionCursor.X < 0)
-                {
-                    m_actionCursor.X += m_attackSkills.Count;
-                }
                 m_actionCursor.Y = 0;
             }
+            m_actionCursor.Y = (m_actionCursor.Y + m_attackSkills[m_actionCursor.X].Count) % m_attackSkills[m_actionCursor.X].Count;
+            m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
+            CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
+        }
+
+
+        public void CursorLeft()
+        {
+            UpdateCursor(new Point(-1,0));
         }
 
         public void CursorRight()
         {
-            if (!ActionSelected)
-            {
-                m_actionCursor.X++;
-                if (m_actionCursor.X >= m_attackSkills.Count)
-                {
-                    m_actionCursor.X -= m_attackSkills.Count;
-                }
-                m_actionCursor.Y = 0;
-            }
+            UpdateCursor(new Point(1, 0));
         }
 
         public void CursorUp()
         {
-            if (!ActionSelected)
-            {
-                m_actionCursor.Y++;
-                if (m_actionCursor.Y >= m_attackSkills[m_actionCursor.X].Count)
-                {
-                    m_actionCursor.Y -= m_attackSkills[m_actionCursor.X].Count;
-                }
-                m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
-            }
+            UpdateCursor(new Point(0, 1));
         }
 
         public void CursorDown()
         {
-            if (!ActionSelected)
-            {
-
-                m_actionCursor.Y--;
-                if (m_actionCursor.Y < 0)
-                {
-                    m_actionCursor.Y += m_attackSkills[m_actionCursor.X].Count;
-                }
-                m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
-            }
+            UpdateCursor(new Point(0, -1));
         }
-
-        
 
 
         private void DrawSkillBar1(SpriteBatch spriteBatch, Rectangle rect, String bigIconName, String smallIconName, float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
@@ -289,7 +289,7 @@ namespace Gladius.control
             set
             {
                 m_currentActor = value;
-                ActionSelected = false;
+                TurnManager.CurrentControlState = Gladius.control.TurnManager.ControlState.ChoosingSkill;
                 BuildDataForActor();
             }
         }
@@ -303,44 +303,44 @@ namespace Gladius.control
         }
 
 
-        private bool m_actionSelected;
-        public bool ActionSelected
-        {
-            get
-            {
-                return m_actionSelected;
-            }
-            set
-            {
-                m_actionSelected = value;
-                if (ActionSelected)
-                {
-                    if (SkillNeedsMovementGrid(CurrentlySelectedSkill))
-                    {
-                        ArenaScreen.SetMovementGridVisible(true);
-                    }
-                    if (CurrentlySelectedSkill.AttackType == AttackType.EndTurn)
-                    {
-                        CurrentActor.ConfirmAttackSkill();
-                    }
-                }
-            }
-        }
+        //private bool m_actionSelected;
+        //public bool ActionSelected
+        //{
+        //    get
+        //    {
+        //        return m_actionSelected;
+        //    }
+        //    set
+        //    {
+        //        m_actionSelected = value;
+        //        m_controlState = ControlState.UsingGrid;
+        //        if (ActionSelected)
+        //        {
+        //            if (SkillNeedsMovementGrid(CurrentlySelectedSkill))
+        //            {
+        //                //ArenaScreen.SetMovementGridVisible(true);
+        //            }
+        //            if (CurrentlySelectedSkill.AttackType == AttackType.EndTurn)
+        //            {
+        //                CurrentActor.ConfirmAttackSkill();
+        //            }
+        //        }
+        //    }
+        //}
 
-        public bool SkillNeedsMovementGrid(AttackSkill skill)
-        {
-            return skill.HasMovementPath() || skill.RangedAttack;
+        //public bool SkillNeedsMovementGrid(AttackSkill skill)
+        //{
+        //    return skill.HasMovementPath() || skill.RangedAttack;
             
-        }
+        //}
 
         public void CancelAction()
         {
-            if (SkillNeedsMovementGrid(CurrentlySelectedSkill))
+            if (TurnManager.CurrentControlState == Gladius.control.TurnManager.ControlState.UsingGrid)
             {
-                ArenaScreen.SetMovementGridVisible(false);
+                CurrentActor.WayPointList.Clear();
+                TurnManager.CurrentControlState = Gladius.control.TurnManager.ControlState.ChoosingSkill;
             }
-
-            ActionSelected = false;
         }
 
         public TurnManager TurnManager
@@ -355,6 +355,134 @@ namespace Gladius.control
             //CurrentActor.StartAttackSkill();
         }
 
+        public MovementGrid MovementGrid
+        {
+            get { return ArenaScreen.MovementGrid; }
+        }
+
+        public Arena Arena
+        {
+            get { return ArenaScreen.Arena; }
+        }
+
+
+        public Point ApplyMoveToGrid(ActionButton button)
+        {
+            Vector3 fwd = Globals.Camera.Forward;
+            Vector3 right = Vector3.Cross(fwd, Vector3.Up);
+            Vector3 v = Vector3.Zero;
+
+            Point p = MovementGrid.CurrentPosition;
+            if (button == ActionButton.ActionLeft)
+            {
+                v = -right;
+            }
+            else if (button == ActionButton.ActionRight)
+            {
+                v = right;
+            }
+            else if (button == ActionButton.ActionUp)
+            {
+                v = fwd;
+            }
+            else if (button == ActionButton.ActionDown)
+            {
+                v = -fwd;
+            }
+            if (v.LengthSquared() > 0)
+            {
+                v.Y = 0;
+                v.Normalize();
+
+                //v = v * vd;
+                //v = result;
+
+                if (Math.Abs(v.X) > Math.Abs(v.Z))
+                {
+                    if (v.X < 0)
+                    {
+                        p.X--;
+                    }
+                    if (v.X > 0)
+                    {
+                        p.X++;
+                    }
+                }
+                else
+                {
+                    if (v.Z < 0)
+                    {
+                        p.Y--;
+                    }
+                    if (v.Z > 0)
+                    {
+                        p.Y++;
+                    }
+                }
+
+            }
+            return p;
+        }
+
+
+
+
+        private void HandleMovementGridAction(ActionButtonPressedArgs e)
+        {
+            switch (e.ActionButton)
+            {
+                case (ActionButton.ActionButton1):
+                    int pathLength = CurrentActor.WayPointList.Count;
+                    if (CurrentActor.CurrentAttackSkill.InRange(pathLength))
+                    {
+                        if (MovementGrid.CursorOnTarget(CurrentActor))
+                        {
+                            BaseActor target = Arena.GetActorAtPosition(MovementGrid.CurrentPosition);
+                            if (ArenaScreen.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
+                            {
+                                CurrentActor.Target = target;
+                                CurrentActor.ConfirmAttackSkill();
+                            }
+                        }
+                        else
+                        {
+                            CurrentActor.ConfirmAttackSkill();
+                        }
+                    }
+                    break;
+                case (ActionButton.ActionButton2):
+                    {
+                        CancelAction();
+                        break;
+                    }
+                case (ActionButton.ActionLeft):
+                case (ActionButton.ActionRight):
+                case (ActionButton.ActionUp):
+                case (ActionButton.ActionDown):
+                    {
+                        Point p = ApplyMoveToGrid(e.ActionButton);
+                        if (Arena.InLevel(p))
+                        {
+                            Point lastPoint = MovementGrid.CurrentPosition;
+                            MovementGrid.CurrentPosition = p;
+                            SquareType st = Arena.GetSquareTypeAtLocation(MovementGrid.CurrentPosition);
+                            BaseActor target = Arena.GetActorAtPosition(MovementGrid.CurrentPosition);
+                            //int pathLength = 
+                            CurrentActor.WayPointList.Clear();
+
+                            Point adjustedPoint = MovementGrid.CurrentPosition;
+                            if (target != null && target != CurrentActor)
+                            {
+                                adjustedPoint = lastPoint;
+                            }
+
+                            Arena.FindPath(CurrentActor.CurrentPosition, adjustedPoint, CurrentActor.WayPointList);
+                        }
+                        break;
+                    }
+            }
+
+        }
 
         public enum SkillIconState
         {

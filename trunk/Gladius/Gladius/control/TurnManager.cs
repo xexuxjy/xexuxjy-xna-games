@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Gladius.events;
 using Gladius.gamestatemanagement.screens;
 using Gladius.modes.arena;
+using Gladius.combat;
 
 namespace Gladius.control
 {
@@ -61,13 +62,13 @@ namespace Gladius.control
                 {
                     Globals.CameraManager.SetChaseCamera();
 
-                    if (ArenaScreen.MovementGrid.DrawingMovePath)
+                    if (CurrentControlState == ControlState.UsingGrid)
                     {
                         Globals.Camera.Target = ArenaScreen.MovementGrid.CurrentV3;
                         Matrix model = CurrentActor.World;
                         Globals.Camera.Up = Vector3.Up;
                         Globals.Camera.TargetDirection = model.Forward;
-                        Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 8.0f);
+                        Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f);
                     }
                     else
                     {
@@ -101,8 +102,7 @@ namespace Gladius.control
 
         public void EndTurn()
         {
-            ArenaScreen.MovementGrid.SelectedActor = CurrentActor;
-            ArenaScreen.SetMovementGridVisible(false);
+            ArenaScreen.MovementGrid.CurrentActor = CurrentActor;
             if (CurrentActor != null && CurrentActor.TurnComplete)
             {
                 CurrentActor.EndTurn();
@@ -124,9 +124,6 @@ namespace Gladius.control
             Globals.Camera.Target = CurrentActor.Position;
 
             CurrentActor.StartTurn();
-            //Globals.MovementGrid.SelectedActor = CurrentActor;
-
-            ArenaScreen.SetMovementGridVisible(true);
 
             if (CurrentActor.PlayerControlled)
             {
@@ -174,7 +171,6 @@ namespace Gladius.control
             set
             {
                 m_waitForControlResult = value;
-                //m_movementGrid.GridMode = value?GridMode.Select:GridMode.Inactive;
             }
         }
 
@@ -220,6 +216,37 @@ namespace Gladius.control
         {
             get { return m_allActors; }
         }
+
+
+        public ControlState CurrentControlState
+        {
+            get
+            {
+                return m_controlState;
+            }
+            set
+            {
+                m_controlState = value;
+                if (CurrentControlState == ControlState.UsingGrid)
+                {
+                    if (CurrentActor.CurrentAttackSkill.AttackType == AttackType.EndTurn)
+                    {
+                        CurrentActor.ConfirmAttackSkill();
+                    }
+                }
+
+            }
+        }
+
+
+        public enum ControlState
+        {
+            None,
+            ChoosingSkill,
+            UsingGrid
+        }
+
+        ControlState m_controlState = ControlState.None;
 
         private ArenaScreen m_arenaScreen;
         List<BaseActor> m_turns = new List<BaseActor>();

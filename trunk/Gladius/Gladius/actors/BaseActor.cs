@@ -742,7 +742,7 @@ namespace Gladius.actors
 
         public void ConfirmAttackSkill()
         {
-            if (!CurrentAttackSkill.RangedAttack)
+            if (CurrentAttackSkill.HasMovementPath())
             {
                 ConfirmMove();
             }
@@ -853,7 +853,7 @@ namespace Gladius.actors
         {
             foreach (AttackSkill skill in m_availableAttacks)
             {
-                if (skill.MinRange >= range && skill.MaxRange <= range)
+                if (skill.InRange(range))
                 {
                     return true;
                 }
