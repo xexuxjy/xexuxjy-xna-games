@@ -142,7 +142,7 @@ namespace Gladius.renderer
 
 
 
-            Globals.DrawCameraDebugText(m_spriteBatch, m_spriteFont,1);
+            Globals.DrawCameraDebugText(m_spriteBatch, m_spriteFont, m_gameScreen.ScreenManager.FPS);
         }
 
 
