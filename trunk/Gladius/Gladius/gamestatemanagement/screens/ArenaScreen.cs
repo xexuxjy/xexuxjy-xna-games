@@ -86,6 +86,7 @@ namespace Gladius.gamestatemanagement.screens
 
 
 
+
         #endregion
 
         #region Update and Draw
@@ -96,13 +97,44 @@ namespace Gladius.gamestatemanagement.screens
         /// property, so the game will stop updating when the pause menu is active,
         /// or if you tab away to a different application.
         /// </summary>
+        /// 
+
+        private bool IsBattleOver(GameTime gameTime)
+        {
+            if (m_battleOver)
+            {
+                m_battleOverScreenTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                Vector3 target = TurnManager.CurrentActor.CameraFocusPoint;
+                float dist = 10f;
+
+                float rads = (m_battleOverScreenTimer / m_battleOverScreenDuration) * MathHelper.TwoPi;
+                float x = target.X + (float)(Math.Cos(rads) * dist);
+                float z = target.Z + (float)(Math.Sin(rads) * dist);
+
+                Vector3 pos = new Vector3(x, 10, z);
+
+
+                Globals.Camera.Position = pos;
+                Globals.Camera.Target = target;
+                Globals.Camera.TargetDirection = Vector3.Normalize(target-pos);
+
+                if (m_battleOverScreenTimer > m_battleOverScreenDuration)
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
             m_updateCalls++;
             base.Update(gameTime, otherScreenHasFocus, false);
 
-            if (!m_battleOver)
+            if (!IsBattleOver(gameTime))
             {
                 m_screenComponents.Update(gameTime);
 
@@ -201,10 +233,6 @@ namespace Gladius.gamestatemanagement.screens
             {
                 if (uiElement.Visible)
                 {
-                    //if (uiElement is MovementGrid)
-                    //{
-                    //    continue;
-                    //}
                     uiElement.DrawElement(gameTime, ScreenManager.GraphicsDevice, m_spriteBatch);
                 }
             }
@@ -293,7 +321,7 @@ namespace Gladius.gamestatemanagement.screens
                     ba1.ModelName = playerTeamModelName;
                     ba1.Team = Globals.PlayerTeam;
                     ba1.DebugName = "Player" + i;
-                    ba1.PlayerControlled = true;
+                    //ba1.PlayerControlled = true;
                 }
                 else
                 {
@@ -424,13 +452,16 @@ namespace Gladius.gamestatemanagement.screens
         {
             m_battleOver = true;
             m_battleWon = true;
-            
+            m_battleOverScreenDuration = 10;
+            TurnManager.Enabled = false;
         }
 
         public void BattleOverDefeat()
         {
             m_battleOver = true;
             m_battleWon = false;
+            m_battleOverScreenDuration = 10;
+            TurnManager.Enabled = false;
         }
 
         public TurnManager TurnManager
@@ -458,6 +489,8 @@ namespace Gladius.gamestatemanagement.screens
 
         private bool m_battleOver;
         private bool m_battleWon;
+        private float m_battleOverScreenDuration;
+        private float m_battleOverScreenTimer;
 
         private SimpleArenaRenderer m_arenaRenderer;
         private Arena m_arena;

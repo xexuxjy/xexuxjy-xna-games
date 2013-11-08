@@ -72,12 +72,13 @@ namespace Gladius.control
                             DrawMovementPath(camera, CurrentActor, CurrentActor.WayPointList);
                         }
 
+                        // draw the cursor for attackskill (different to move path);
+                        DrawAttackSkillCursor(CurrentPosition, CurrentActor, camera);
 
                         // if the current position is on a valid target(which wouldn't be in the movement list
                         // then draw a target/select icon.
                         if (CursorOnTarget(CurrentActor))
                         {
-
                             DrawIfValid(camera, CurrentPosition, CurrentActor);
                         }
                     }
@@ -98,27 +99,34 @@ namespace Gladius.control
 
         }
 
-        public void DrawAttackSkillCursor(BaseActor actor, Point centerPoint, ICamera camera)
+        public void DrawAttackSkillCursor(Point centerPoint, BaseActor actor, ICamera camera)
         {
-            int distance = Globals.PathDistance(actor.CurrentPosition, centerPoint);
-            if (distance >= actor.CurrentAttackSkill.MinRange && distance <= actor.CurrentAttackSkill.MaxRange)
+            //int distance = Globals.PathDistance(actor.CurrentPosition, centerPoint);
+            //if (distance >= actor.CurrentAttackSkill.InRaMinRange && distance <= actor.CurrentAttackSkill.MaxRange)
             {
-                DrawCenteredGrid(actor, actor.CurrentAttackSkill.Radius, camera);
+                DrawCenteredGrid(centerPoint,actor, actor.CurrentAttackSkill.Radius, camera);
             }
         }
 
 
-        public void DrawCenteredGrid(BaseActor actor, int size, ICamera camera)
+        public void DrawCenteredGrid(Point centerPoint,BaseActor actor, int size, ICamera camera)
         {
-            int width = size;//((size - 1) / 2);
-
-            for (int i = -width; i <= width; ++i)
+            if (size > 0)
             {
-                for (int j = -width; j <= width; ++j)
+                int width = size;//((size - 1) / 2);
+
+                for (int i = -width; i <= width; ++i)
                 {
-                    Point p = new Point(actor.CurrentPosition.X + i, actor.CurrentPosition.Y + j);
-                    DrawIfValid(camera, p, actor, m_defaultTile);
+                    for (int j = -width; j <= width; ++j)
+                    {
+                        Point p = new Point(centerPoint.X + i, centerPoint.Y + j);
+                        DrawIfValid(camera, p, actor, m_defaultTile);
+                    }
                 }
+            }
+            else
+            {
+                DrawIfValid(camera, centerPoint, actor);
             }
         }
 
@@ -310,7 +318,7 @@ namespace Gladius.control
                             //{
                             //    return m_blockedCursor;
                             //}
-                            return m_interMoveCursor;
+                            return m_targetCursor;
                         }
                     case (SquareType.Mobile):
                         {

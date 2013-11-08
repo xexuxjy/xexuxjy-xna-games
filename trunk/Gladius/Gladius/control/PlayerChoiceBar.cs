@@ -291,6 +291,7 @@ namespace Gladius.control
                 m_currentActor = value;
                 TurnManager.CurrentControlState = Gladius.control.TurnManager.ControlState.ChoosingSkill;
                 BuildDataForActor();
+                CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
             }
         }
 
@@ -433,6 +434,10 @@ namespace Gladius.control
             {
                 case (ActionButton.ActionButton1):
                     int pathLength = CurrentActor.WayPointList.Count;
+                    if (pathLength == 0)
+                    {
+                        pathLength = 1;
+                    }
                     if (CurrentActor.CurrentAttackSkill.InRange(pathLength))
                     {
                         if (MovementGrid.CursorOnTarget(CurrentActor))

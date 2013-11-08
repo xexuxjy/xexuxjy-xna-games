@@ -39,6 +39,10 @@ namespace Gladius.util
                 {
                     updateable.Update(gameTime);
                 }
+                else
+                {
+                    int ibreak = 0;
+                }
             }
             currentlyUpdatingComponents.Clear();
             //FrameworkDispatcher.Update();

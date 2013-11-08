@@ -61,7 +61,7 @@ namespace Gladius.combat
             DamageAffects = damageAffects;
             BaseDamage = baseDamage;
             DamageMultiplier = 1.0f;
-            Radius = 1;
+            Radius = 0;
         }
 
         public AttackSkill(XmlElement node)
@@ -76,9 +76,9 @@ namespace Gladius.combat
             DamageAffects = GetDamageAffects(node);
             SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
             BaseDamage = GetIntAttribute(node, "baseDamage", 0);
-            MinRange = GetIntAttribute(node, "minRange", 1);
-            MaxRange = GetIntAttribute(node, "maxRange", 1);
-            Radius = GetIntAttribute(node, "radius", 1);
+            MinRange = GetIntAttribute(node, "minRange", 0);
+            MaxRange = GetIntAttribute(node, "maxRange", 0);
+            Radius = GetIntAttribute(node, "radius", 0);
             MovementRange = GetIntAttribute(node, "movementRange", 0);
             if (node.HasAttribute("animation"))
             {

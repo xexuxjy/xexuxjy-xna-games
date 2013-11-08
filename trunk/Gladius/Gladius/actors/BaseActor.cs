@@ -218,12 +218,12 @@ namespace Gladius.actors
 
         }
 
-        private bool m_attackRequested;
-        public bool AttackRequested
-        {
-            get { return m_attackRequested; }
-            set { m_attackRequested = value; }
-        }
+        //private bool m_attackRequested;
+        //public bool AttackRequested
+        //{
+        //    get { return m_attackRequested; }
+        //    set { m_attackRequested = value; }
+        //}
 
 
         public Vector3 Position
@@ -332,29 +332,54 @@ namespace Gladius.actors
 
         public override void VariableUpdate(GameTime gameTime)
         {
-            m_world = Matrix.CreateFromQuaternion(Rotation);
-            m_world.Translation = Position;
-
-            if (m_animatedModel != null)
+            try
             {
-                m_animatedModel.ActorRotation = Rotation;
-                m_animatedModel.ActorPosition = Position;
-                m_animatedModel.Update(gameTime);
-            }
+                m_world = Matrix.CreateFromQuaternion(Rotation);
+                m_world.Translation = Position;
 
-            if (UnitActive)
-            {
-                if (FollowingWayPoints)
+                if (m_animatedModel != null)
+                {
+                    m_animatedModel.ActorRotation = Rotation;
+                    m_animatedModel.ActorPosition = Position;
+                    m_animatedModel.Update(gameTime);
+                }
+
+                if (UnitActive)
                 {
                     UpdateMovement(gameTime);
-                }
-                //if (Attacking)
-                {
                     UpdateAttack(gameTime);
+                    TurnComplete = CheckTurnComplete();
                 }
+                CheckState();
             }
-            CheckState();
+            catch (Exception e)
+            {
+                int ibreak = 0;
+            }
         }
+
+
+        public bool CheckTurnComplete()
+        {
+            if (UnitActive && PlayerControlled && TurnManager.WaitingOnPlayerControl)
+            {
+                return false;
+            }
+
+            if (FollowingWayPoints && m_currentMovePoints > 0)
+            {
+                return false;
+            }
+
+            if (Attacking)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
 
         public void Think()
         {
@@ -368,7 +393,6 @@ namespace Gladius.actors
                     if (enemy != null)
                     {
                         Target = enemy;
-                        AttackRequested = true;
                     }
                     else
                     {
@@ -385,12 +409,7 @@ namespace Gladius.actors
                         }
                     }
                 }
-                StartAttackSkill();
-            }
-            else
-            {
-                // if we've been asked to think as a player then its probably end of turn
-                TurnComplete = true;
+                ConfirmAttackSkill();
             }
         }
 
@@ -399,12 +418,6 @@ namespace Gladius.actors
 
         private void UpdateMovement(GameTime gameTime)
         {
-            if (m_currentMovePoints <= 0)
-            {
-                TurnComplete = true;
-            }
-
-
             if (Turning)
             {
                 TurnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -467,7 +480,7 @@ namespace Gladius.actors
                                 // pop our character 'back' to last square.
                                 CurrentPosition = CurrentPosition;
                                 WayPointList.Clear();
-                                Think();
+                                FollowingWayPoints = false;
                             }
 
                         }
@@ -483,17 +496,6 @@ namespace Gladius.actors
                     {
                         // finished moving.
                         FollowingWayPoints = false;
-                        // reached our end point. think and see if we do something else.
-                        Think();
-                        //TurnComplete = true;
-                    }
-                }
-                else
-                {
-                    // not sure why not here but
-                    if (!PlayerControlled)
-                    {
-                        TurnComplete = true;
                     }
                 }
             }
@@ -562,10 +564,9 @@ namespace Gladius.actors
             ChooseAttackSkill();
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", DebugName, m_currentTarget != null ? m_currentTarget.DebugName : "NoActorTarget",CurrentAttackSkill.Name));
             AnimationEnum attackAnim = CurrentAttackSkill.Animation != AnimationEnum.None ? CurrentAttackSkill.Animation : AnimationEnum.Attack1;
-            m_animatedModel.PlayAnimation(attackAnim, false);
+            m_animatedModel.PlayAnimation(attackAnim, loopClip: false);
             ArenaScreen.CombatEngineUI.DrawFloatingText(CameraFocusPoint, Color.White, CurrentAttackSkill.Name, 2f);
             Attacking = true;
-            AttackRequested = false;
         }
 
         public void StopAttack()
@@ -575,22 +576,18 @@ namespace Gladius.actors
             Attacking = false;
             CurrentAttackSkill = null;
             // FIXME - need to worry about out of turn attacks (ripostes, groups etc)
-            TurnComplete = true;
         }
 
         public void UpdateAttack(GameTime gameTime)
         {
-            if (AttackRequested)
+            if (!Attacking && !FollowingWayPoints)
             {
-                if (!FollowingWayPoints)
-                {
 
-                    if (ArenaScreen.CombatEngine.IsAttackerInRange(this, m_currentTarget))
-                    {
-                        SnapToFace(m_currentTarget);
-                        m_currentTarget.SnapToFace(this);
-                        StartAttack();
-                    }
+                if (ArenaScreen.CombatEngine.IsAttackerInRange(this, m_currentTarget))
+                {
+                    SnapToFace(m_currentTarget);
+                    m_currentTarget.SnapToFace(this);
+                    StartAttack();
                 }
             }
         }
@@ -606,7 +603,7 @@ namespace Gladius.actors
         {
             Dead = true;
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death started.", DebugName));
-            m_animatedModel.PlayAnimation(AnimationEnum.Die, false);
+            m_animatedModel.PlayAnimation(AnimationEnum.Die, loopClip:false);
 
 
         }
@@ -614,7 +611,9 @@ namespace Gladius.actors
         public void StopDeath()
         {
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death stopped.", DebugName));
-
+            // For now - we're invisible
+            Visible = false;
+            Enabled = false;
         }
 
         public virtual void CheckState()
@@ -628,7 +627,7 @@ namespace Gladius.actors
         public void StartBlock(BaseActor attacker)
         {
             SnapToFace(attacker);
-            m_animatedModel.PlayAnimation(AnimationEnum.Block, false);
+            m_animatedModel.PlayAnimation(AnimationEnum.Block, loopClip: false);
         }
 
         public void EndBlock()
@@ -742,6 +741,10 @@ namespace Gladius.actors
 
         public void ConfirmAttackSkill()
         {
+            if (UnitActive && PlayerControlled && TurnManager.WaitingOnPlayerControl)
+            {
+                TurnManager.WaitingOnPlayerControl = false;
+            }
             if (CurrentAttackSkill.HasMovementPath())
             {
                 ConfirmMove();
@@ -751,13 +754,6 @@ namespace Gladius.actors
 
         public void StartAttackSkill()
         {
-            if (PlayerControlled)
-            {
-                TurnManager.WaitingOnPlayerControl = false;
-            }
-
-            AttackRequested = true;
-
             if (CurrentAttackSkill.HasModifiers())
             {
                 ApplyModifiers(CurrentAttackSkill);
@@ -783,12 +779,20 @@ namespace Gladius.actors
                 m_animatedModel.PlayAnimation(AnimationEnum.Idle);
                 TurnManager.QueueActor(this);
             }
+            else
+            {
+
+            }
         }
 
+        bool tc;
         public bool TurnComplete
         {
-            get;
-            set;
+            get { return tc; }
+            set
+            {
+                tc = value;
+            }
         }
 
         public bool PlayerControlled
