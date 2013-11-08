@@ -11,18 +11,20 @@ namespace Gladius.util
     // based on ThreadSafeContentManager from http://konaju.com/?p=27
     public class ThreadSafeContentManager : ContentManager
     {
-        static object loadLock = new object();
+        object loadLock;
 
         public ThreadSafeContentManager(Game game,IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
             m_game = game;
+            loadLock = game.GraphicsDevice;
         }
 
         public ThreadSafeContentManager(Game game, IServiceProvider serviceProvider, string rootDirectory)
             : base(serviceProvider, rootDirectory)
         {
             m_game = game;
+            loadLock = game.GraphicsDevice;
         }
 
         public override T Load<T>(string assetName)

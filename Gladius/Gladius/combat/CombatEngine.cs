@@ -162,7 +162,7 @@ namespace Gladius.combat
             return false;
         }
 
-        public bool IsAttackerInRange(BaseActor attacker, BaseActor defender)
+        public bool IsAttackerInRange(BaseActor attacker, BaseActor defender,bool cursorOnly=false)
         {
             if (defender != null && attacker != null)
             {
@@ -183,9 +183,12 @@ namespace Gladius.combat
                     return true;
                 }
 
-                if (attacker.CurrentAttackSkill.RangedAttack && (len >= attacker.CurrentAttackSkill.MinRange && len <= attacker.CurrentAttackSkill.MaxRange))
+                if (len >= attacker.CurrentAttackSkill.MinRange && len <= attacker.CurrentAttackSkill.MaxRange)
                 {
-                    return true;
+                    if(cursorOnly ||attacker.CurrentAttackSkill.RangedAttack )
+                    {
+                        return true;
+                    }
                 }
 
             }

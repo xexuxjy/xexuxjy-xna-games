@@ -22,7 +22,7 @@ namespace Gladius.combat
         public AttackType AttackType;
         public DamageType DamageType;
         public DamageAffects DamageAffects;
-        public float BaseDamage;
+        public int BaseDamage;
         public float DamageMultiplier;
 
         public SkillIcon SkillIcon;
@@ -31,6 +31,9 @@ namespace Gladius.combat
 
         public int MinRange;
         public int MaxRange;
+        // how far we can move to do the attack.
+        public int MovementRange;
+
         public int Radius;
         public bool EightSquare;
         // todo - lots of extra abilities on here.
@@ -40,17 +43,16 @@ namespace Gladius.combat
 
         public bool HasMovementPath()
         {
-            return MaxRange > 1 && !RangedAttack;
+            return MovementRange > 0;
         }
 
 
         public bool RangedAttack
         {
-            get { return Animation == AnimationEnum.BowShot; }
+            get { return MinRange > 1; }
         }
 
-
-        public AttackSkill(String name,int row,int useCost,int purchaseCost,DamageType damageType,DamageAffects damageAffects,float baseDamage)
+        public AttackSkill(String name,int row,int useCost,int purchaseCost,DamageType damageType,DamageAffects damageAffects,int baseDamage)
         {
             Name = name;
             UseCost = useCost;
@@ -69,36 +71,15 @@ namespace Gladius.combat
             SkillRow = int.Parse(node.Attributes["skillRow"].Value);
             UseCost = int.Parse(node.Attributes["useCost"].Value);
             PurchaseCost = int.Parse(node.Attributes["purchaseCost"].Value);
-            AttackType = (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
-            DamageType = (DamageType)Enum.Parse(typeof(DamageType),node.Attributes["damageType"].Value);
-            DamageAffects = (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
+            AttackType = GetAttackType(node);
+            DamageType = GetDamageType(node);
+            DamageAffects = GetDamageAffects(node);
             SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
-            BaseDamage = float.Parse(node.Attributes["baseDamage"].Value);
-            if(node.HasAttribute("minRange"))
-            {
-                MinRange = int.Parse(node.Attributes["minRange"].Value);
-            }
-            else
-            {
-                MinRange = 1;
-            }
-            if(node.HasAttribute("maxRange"))
-            {
-                MaxRange = int.Parse(node.Attributes["maxRange"].Value);
-            }
-            else
-            {
-                MaxRange = 1;
-            }
-            if (node.HasAttribute("radius"))
-            {
-                Radius = int.Parse(node.Attributes["radius"].Value);
-            }
-            else
-            {
-                Radius = 1;
-            }
-
+            BaseDamage = GetIntAttribute(node, "baseDamage", 0);
+            MinRange = GetIntAttribute(node, "minRange", 1);
+            MaxRange = GetIntAttribute(node, "maxRange", 1);
+            Radius = GetIntAttribute(node, "radius", 1);
+            MovementRange = GetIntAttribute(node, "movementRange", 0);
             if (node.HasAttribute("animation"))
             {
                 Animation = (AnimationEnum)Enum.Parse(typeof(AnimationEnum), node.Attributes["animation"].Value);
@@ -121,21 +102,56 @@ namespace Gladius.combat
             }
         }
 
+        public DamageType GetDamageType(XmlElement node)
+        {
+            if (node.HasAttribute("damageType"))
+            {
+                return (DamageType)Enum.Parse(typeof(DamageType), node.Attributes["damageType"].Value);
+            }
+            return DamageType.Physical;
+        }
+
+        public DamageAffects GetDamageAffects(XmlElement node)
+        {
+            if (node.HasAttribute("damageAffects"))
+            {
+                return (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
+            }
+            return DamageAffects.Default;
+        }
+
+        public AttackType GetAttackType(XmlElement node)
+        {
+            if (node.HasAttribute("attackType"))
+            {
+                return (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
+            }
+            return AttackType.SingleOrtho;
+        }
+
+        private int GetIntAttribute(XmlElement node, string name, int defaultVal)
+        {
+            if (node.HasAttribute(name))
+            {
+                return  int.Parse(node.Attributes[name].Value);
+            }
+            return defaultVal;
+        }
+
         public bool HasModifiers()
         {
             return StatModifiers.Count > 0;
         }
 
-        //public static bool IsAttackSkill(AttackSkill attackSkill)
-        //{
-        //    return attackSkill.AttackType == AttackType.SingleOrtho || attackSkill.AttackType == AttackType.SingleSurround;
-        //}
+        public bool NeedsGrid
+        {
+            get { return AttackType != AttackType.EndTurn; }
+        }
 
-        //public static bool IsMoveSkill(AttackSkill attackSkill)
-        //{
-        //    return attackSkill.AttackType == AttackType.Move;
-        //}
-
+        public bool InRange(int dist)
+        {
+            return (dist >= MinRange && dist <= (MovementRange + MaxRange));
+        }
     }
 
     public class AttackSkillDictionary

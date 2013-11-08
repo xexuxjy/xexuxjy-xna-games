@@ -33,6 +33,8 @@ namespace Gladius.gamestatemanagement.screenmanager
         #region Fields
 
         List<GameScreen> screens = new List<GameScreen>();
+        List<GameScreen> screensToAdd = new List<GameScreen>();
+        List<GameScreen> screensToRemove = new List<GameScreen>();
         List<GameScreen> screensToUpdate = new List<GameScreen>();
 
         public InputState input = new InputState();
@@ -145,6 +147,10 @@ namespace Gladius.gamestatemanagement.screenmanager
             {
                 screen.LoadContent();
             }
+            foreach (GameScreen screen in screensToAdd)
+            {
+                screen.LoadContent();
+            }
         }
 
 
@@ -178,6 +184,18 @@ namespace Gladius.gamestatemanagement.screenmanager
                 Globals.CameraManager.Update(gameTime);
                 Globals.CameraManager.UpdateInput(input);
 
+
+                // add/remove screens
+                foreach (GameScreen screen in screensToRemove)
+                {
+                    screens.Remove(screen);
+                }
+                foreach (GameScreen screen in screensToAdd)
+                {
+                    screens.Add(screen);
+                }
+                screensToAdd.Clear();
+                screensToRemove.Clear(); 
 
                 // Make a copy of the master screen list, to avoid confusion if
                 // the process of updating one screen adds or removes others.
@@ -295,7 +313,8 @@ namespace Gladius.gamestatemanagement.screenmanager
                 screen.LoadContent();
             }
 
-            screens.Add(screen);
+            screensToAdd.Add(screen);
+            //screens.Add(screen);
 
             // update the TouchPanel to respond to gestures this screen is interested in
             TouchPanel.EnabledGestures = screen.EnabledGestures;
@@ -316,8 +335,10 @@ namespace Gladius.gamestatemanagement.screenmanager
                 screen.UnloadContent();
             }
 
-            screens.Remove(screen);
-            screensToUpdate.Remove(screen);
+
+            //screens.Remove(screen);
+            screensToRemove.Add(screen);
+            //screensToUpdate.Remove(screen);
 
             // if there is a screen still in the manager, update TouchPanel
             // to respond to gestures that screen is interested in.
