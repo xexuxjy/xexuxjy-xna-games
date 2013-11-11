@@ -60,6 +60,10 @@ namespace Gladius.util
                 IDrawable drawable = currentlyDrawingComponents[index];
                 if (drawable.Visible)
                 {
+                    if (drawable is Gladius.actors.Projectile)
+                    {
+                        int ibreak = 0;
+                    }
                     drawable.Draw(gameTime);
                 }
             }

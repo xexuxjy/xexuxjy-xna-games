@@ -25,7 +25,7 @@ namespace Gladius.renderer
 
         public void LoadContent()
         {   
-            Model model = ContentManager.Load<Model>("UnitCube");
+            Model model = ContentManager.Load<Model>("Models/Shapes/UnitCube");
             m_boxModelData = new ModelData(model, 1f,0,null);
 
             Vector3 floorScale = new Vector3(m_arena.Width, 1, m_arena.Breadth);
@@ -47,9 +47,6 @@ namespace Gladius.renderer
         {
             float aspectRatio = graphicsDevice.Viewport.AspectRatio;
 
-            m_projection = camera.Projection;
-            m_view = camera.View;
-
 
             // Draw the ground....
             Vector3 topLeft = new Vector3(-m_arena.Width / 2f, 0, -m_arena.Breadth / 2f);
@@ -62,17 +59,17 @@ namespace Gladius.renderer
             Vector3 translation = new Vector3(0, 0, 0);
 
             // draw floor and walls.
-            DrawModelData(m_floorModelData, translation);
+            m_floorModelData.Draw(camera, translation);
             translation = new Vector3(0,0,topLeft.Z);
             //Matrix rotation = Matrix.CreateRotationY()
-            DrawModelData(m_wallModelData, translation);
+            m_wallModelData.Draw(camera, translation);
             translation = new Vector3(0, 0, -topLeft.Z);
-            DrawModelData(m_wallModelData, translation);
+            m_wallModelData.Draw(camera, translation);
             Matrix rotation = Matrix.CreateRotationY(MathHelper.PiOver2);
             translation = new Vector3(topLeft.X, 0, 0);
-            DrawModelData(m_wallModelData, translation,Vector3.One,rotation);
+            m_wallModelData.Draw(camera, translation,Vector3.One,rotation);
             translation = new Vector3(-topLeft.X, 0, 0);
-            DrawModelData(m_wallModelData, translation, Vector3.One, rotation);
+            m_wallModelData.Draw(camera, translation, Vector3.One, rotation);
 
 
             translation = new Vector3(6,0,6);
@@ -124,7 +121,7 @@ namespace Gladius.renderer
                             {
                                 rotation = Matrix.Identity;
                                 translation = m_arena.ArenaToWorld(new Point(i, j));
-                                DrawModelData(m_pillarModelData, translation, m_pillarModelData.ModelScale, rotation);
+                                m_pillarModelData.Draw(camera, translation, m_pillarModelData.ModelScale, rotation);
                                 break;
                             }
 
@@ -135,7 +132,7 @@ namespace Gladius.renderer
                         translation = m_arena.ArenaToWorld(new Point(i, j));
                         translation += new Vector3(0.5f, 0, 0.5f);
                         translation.Y += boxScale.Y;
-                        DrawBox(boxScale, texture2d, translation);
+                        DrawBox(boxScale, texture2d, translation,camera);
                     }
                 }
             }
@@ -146,7 +143,7 @@ namespace Gladius.renderer
         }
 
 
-        public void DrawBox(Vector3 scale, Texture2D t,Vector3 position)
+        public void DrawBox(Vector3 scale, Texture2D t,Vector3 position,ICamera camera)
         {
             Matrix world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
             //Matrix world = Matrix.CreateTranslation(position);
@@ -157,69 +154,14 @@ namespace Gladius.renderer
                     effect.EnableDefaultLighting();
                     effect.TextureEnabled = true;
                     effect.Texture = t;
-                    effect.View = m_view;
-                    effect.Projection = m_projection;
+                    effect.View = camera.View;
+                    effect.Projection = camera.Projection;
                     effect.World = m_boxModelData.BoneTransforms[mm.ParentBone.Index] * world;
                 }
                 mm.Draw();
             }
         }
 
-        public void DrawModelData(ModelData modelData, Vector3 position)
-        {
-            DrawModelData(modelData, position, modelData.ModelScale,Matrix.Identity);
-        }
-
-        public void DrawModelData(ModelData modelData,Vector3 position,Vector3 scale,Matrix rotation)
-        {
-            position.Y += modelData.HeightOffset;
-
-            if (modelData.Texture2 == null)
-            {
-                Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
-                foreach (ModelMesh mm in modelData.Model.Meshes)
-                {
-                    foreach (BasicEffect effect in mm.Effects)
-                    {
-                        effect.EnableDefaultLighting();
-                        effect.TextureEnabled = true;
-                        effect.Texture = modelData.Texture;
-                        effect.View = m_view;
-                        effect.Projection = m_projection;
-                        effect.World = modelData.BoneTransforms[mm.ParentBone.Index] * world;
-                    }
-                    mm.Draw();
-                }
-            }
-            else
-            {
-                DrawModelDataParts(modelData, position, scale, rotation);
-            }
-        }
-
-        public void DrawModelDataParts(ModelData modelData, Vector3 position, Vector3 scale, Matrix rotation)
-        {
-            Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
-            //Matrix world = Matrix.CreateTranslation(position);
-            foreach (ModelMesh mm in modelData.Model.Meshes)
-            {
-                int count = 0;
-                foreach (ModelMeshPart mp in mm.MeshParts)
-                {
-                    //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-                    //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
-                    ++count;
-                    BasicEffect effect = mp.Effect as BasicEffect;
-                    effect.EnableDefaultLighting();
-                    effect.TextureEnabled = true;
-                    effect.Texture = (count == 2 && modelData.Texture2 != null) ? modelData.Texture : modelData.Texture2;
-                    effect.View = m_view;
-                    effect.Projection = m_projection;
-                    effect.World = modelData.BoneTransforms[mm.ParentBone.Index] * world;
-                }
-                mm.Draw();
-            }
-        }
 
         public void DrawBarrel(GraphicsDevice device,ModelData modelData, Vector3 position, Vector3 scale, Matrix rotation)
         {

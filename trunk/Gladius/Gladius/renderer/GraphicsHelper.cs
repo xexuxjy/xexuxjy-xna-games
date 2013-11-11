@@ -154,6 +154,65 @@ namespace Gladius.renderer
             BoundingBox = new BoundingBox(bb.Min * ModelScale, bb.Max * ModelScale);
         }
 
+
+
+        public void Draw(ICamera camera,Vector3 position)
+        {
+            Draw(camera,position, ModelScale, Matrix.Identity);
+        }
+
+        public void Draw(ICamera camera, Vector3 position, Vector3 scale, Matrix rotation)
+        {
+            position.Y += HeightOffset;
+
+            if (Texture2 == null)
+            {
+                Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
+                foreach (ModelMesh mm in Model.Meshes)
+                {
+                    foreach (BasicEffect effect in mm.Effects)
+                    {
+                        effect.EnableDefaultLighting();
+                        effect.TextureEnabled = true;
+                        effect.Texture = Texture;
+                        effect.View = camera.View;
+                        effect.Projection = camera.Projection;
+                        effect.World = BoneTransforms[mm.ParentBone.Index] * world;
+                    }
+                    mm.Draw();
+                }
+            }
+            else
+            {
+                DrawParts(camera, position, scale, rotation);
+            }
+        }
+
+        public void DrawParts(ICamera camera,Vector3 position, Vector3 scale, Matrix rotation)
+        {
+            Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
+            //Matrix world = Matrix.CreateTranslation(position);
+            foreach (ModelMesh mm in Model.Meshes)
+            {
+                int count = 0;
+                foreach (ModelMeshPart mp in mm.MeshParts)
+                {
+                    //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
+                    //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
+                    ++count;
+                    BasicEffect effect = mp.Effect as BasicEffect;
+                    effect.EnableDefaultLighting();
+                    effect.TextureEnabled = true;
+                    effect.Texture = (count == 2 && Texture2 != null) ? Texture : Texture2;
+                    effect.View = camera.View;
+                    effect.Projection = camera.Projection;
+                    effect.World = BoneTransforms[mm.ParentBone.Index] * world;
+                }
+                mm.Draw();
+            }
+        }
+
+
     }
 
 }

@@ -72,6 +72,14 @@ namespace Gladius.renderer.animation
         {
             // Load the model.
             m_model = content.Load<Model>(ModelName);
+
+            //List<String> names = new List<String>();
+            //IEnumerator<ModelBone> bones = m_model.Bones.GetEnumerator();
+            //foreach (ModelBone bone in m_model.Bones)
+            //{
+            //    names.Add(bone.Name);
+            //}
+
             BoundingBox bb = new BoundingBox();
             foreach (ModelMesh mesh in m_model.Meshes)
             {
@@ -228,7 +236,7 @@ namespace Gladius.renderer.animation
             }
         }
 
-        public bool FindMatrixForBone(String boneName, out Matrix result)
+        public bool FindRelativeMatrixForBone(String boneName, out Matrix result)
         {
         //ModelBone parentbone = model.Model.Bones.Where(x => x.Name == item.Key).Single();
         //UpdateModelAnimation(item.Value, gameTime, bones[model.SkinningData.SkeletonHierarchy[parentbone.Index - 2]]);
@@ -245,6 +253,33 @@ namespace Gladius.renderer.animation
                 return false;
             }
         }
+
+        public bool FindAbsoluteMatrixForBone(String boneName, out Matrix result)
+        {
+            //ModelBone parentbone = model.Model.Bones.Where(x => x.Name == item.Key).Single();
+            //UpdateModelAnimation(item.Value, gameTime, bones[model.SkinningData.SkeletonHierarchy[parentbone.Index - 2]]);
+
+            ModelBone resultBone;
+            if (m_model.Bones.TryGetValue(boneName, out resultBone))
+            {
+                result = m_animationPlayer.WorldTransforms[resultBone.Index];
+                result.Translation *= m_baseActorScale;
+                //ModelBone parentBone = resultBone.Parent;
+                //while (parentBone != null)
+                //{
+                //    result *= m_animationPlayer.BoneTransforms[parentBone.Index];
+                //    parentBone = parentBone.Parent;
+                //}
+                return true;
+            }
+            else
+            {
+                result = Matrix.Identity;
+                return false;
+            }
+        }
+
+
 
         public static void ApplyLighting(SkinnedEffect effect)
         {

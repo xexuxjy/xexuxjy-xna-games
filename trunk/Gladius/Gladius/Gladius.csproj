@@ -63,6 +63,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="actors\Projectile.cs" />
     <Compile Include="actors\TestPlayer.cs" />
     <Compile Include="combat\CombatEngineUI.cs" />
     <Compile Include="gamestatemanagement\screens\GameOverScreen.cs" />
@@ -205,12 +206,6 @@
   <ItemGroup>
     <Content Include="Content\CombatData\Skills.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\GameFont.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UnitCube.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -488,6 +483,22 @@
     </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\backgrounds\Gladii.xnb">
       <Link>Content\UI\backgrounds\Gladii.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Shapes\UnitCone.xnb">
+      <Link>Content\Models\Shapes\UnitCone.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Shapes\UnitCube.xnb">
+      <Link>Content\Models\Shapes\UnitCube.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Shapes\UnitCylinder.xnb">
+      <Link>Content\Models\Shapes\UnitCylinder.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Shapes\UnitSphere.xnb">
+      <Link>Content\Models\Shapes\UnitSphere.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

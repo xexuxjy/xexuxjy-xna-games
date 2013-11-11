@@ -280,8 +280,8 @@ namespace Gladius.gamestatemanagement.screens
             // Load the sprite font. The sprite font has a 3 pixel outer glow
             // baked into it so we need to decrease the spacing so that the
             // SpriteFont will render correctly.
-            m_gameFont = ContentManager.Load<SpriteFont>("GameFont");
-            m_gameFont.Spacing = -4.0f;
+            //m_gameFont = ContentManager.Load<SpriteFont>("GameFont");
+            //m_gameFont.Spacing = -4.0f;
 
             m_debugFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
             m_battleOverFont = ContentManager.Load<SpriteFont>("UI/fonts/BattleOverFont");
@@ -296,11 +296,11 @@ namespace Gladius.gamestatemanagement.screens
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena, this);
             m_arenaRenderer.LoadContent();
-            m_screenComponents.Components.Add(m_arenaRenderer);
+            AddComponent(m_arenaRenderer);
             //m_arenaRenderer.LoadContent(ScreenManager.Game, ScreenManager.Game.GraphicsDevice);
             m_turnManager = new TurnManager(ScreenManager.Game,this);
             m_turnManager.ArenaScreen = this;
-            m_screenComponents.Components.Add(m_turnManager);
+            AddComponent(m_turnManager);
 
             Globals.SoundManager = new SoundManager();
             Globals.SoundManager.LoadContent(ContentManager);
@@ -321,7 +321,7 @@ namespace Gladius.gamestatemanagement.screens
                     ba1.ModelName = playerTeamModelName;
                     ba1.Team = Globals.PlayerTeam;
                     ba1.DebugName = "Player" + i;
-                    //ba1.PlayerControlled = true;
+                    ba1.PlayerControlled = true;
                 }
                 else
                 {
@@ -332,7 +332,7 @@ namespace Gladius.gamestatemanagement.screens
                 ba1.Arena = m_arena;
                 ba1.LoadContent();
                 actors.Add(ba1);
-                m_screenComponents.Components.Add(ba1);
+                AddComponent(ba1);
                 ba1.SetupSkills(Globals.AttackSkillDictionary);
             }
 
@@ -352,7 +352,7 @@ namespace Gladius.gamestatemanagement.screens
             m_attackBar = new AttackBar();
             m_attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
             m_attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
-            //m_screenComponents.Components.Add(attackBar);
+            //AddComponent(attackBar);
             m_uiElementsList.Add(m_attackBar);
 
 
@@ -367,7 +367,7 @@ namespace Gladius.gamestatemanagement.screens
             m_movementGrid = new MovementGrid(m_arena,this);
             m_movementGrid.Visible = true;
             m_movementGrid.LoadContent();
-            m_screenComponents.Components.Add(m_movementGrid);
+            AddComponent(m_movementGrid);
 
             m_combatEngineUI = new CombatEngineUI();
             m_combatEngineUI.Visible = true;
