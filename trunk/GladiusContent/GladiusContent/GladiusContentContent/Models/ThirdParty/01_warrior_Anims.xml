@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent>
+  
+  <Asset Type="CpuSkinningPipelineExtensions.AnimationDefinition">
+
+    <!-- The original name of the clip we are breaking up -->
+    <OriginalClipName>Take 001</OriginalClipName>
+    
+    <!-- The total number of frames in the original clip -->
+    <OriginalFrameCount>3170</OriginalFrameCount>
+
+    <!-- The new parts we want -->
+    <ClipParts>
+      <!-- Each item is one of our new clips -->
+      <Item>
+        <ClipName>Walk</ClipName>
+        <StartFrame>11</StartFrame>
+        <EndFrame>40</EndFrame>
+      </Item>
+      <Item>
+        <ClipName>Idle</ClipName>
+        <StartFrame>590</StartFrame>
+        <EndFrame>790</EndFrame>
+      </Item>
+      <Item>
+        <ClipName>Hit1</ClipName>
+        <StartFrame>790</StartFrame>
+        <EndFrame>800</EndFrame>
+      </Item>
+      <Item>
+        <ClipName>Death</ClipName>
+        <StartFrame>815</StartFrame>
+        <EndFrame>880</EndFrame>
+      </Item>
+      <Item>
+        <ClipName>Attack1</ClipName>
+        <StartFrame>2090</StartFrame>
+        <EndFrame>2120</EndFrame>
+        <Events>
+          <Item>
+            <Name>HitPoint</Name>
+            <Keyframe>2105</Keyframe>
+          </Item>
+        </Events>
+      </Item>
+      <Item>
+        <ClipName>Attack2</ClipName>
+        <StartFrame>2120</StartFrame>
+        <EndFrame>2155</EndFrame>
+      </Item>
+      <Item>
+        <ClipName>Block</ClipName>
+        <StartFrame>2550</StartFrame>
+        <EndFrame>2580</EndFrame>
+      </Item>
+      <Item>
+        <ClipName>Cast</ClipName>
+        <StartFrame>2590</StartFrame>
+        <EndFrame>2790</EndFrame>
+      </Item>
+      <Item>
+        <ClipName>BowShot</ClipName>
+        <StartFrame>2500</StartFrame>
+        <EndFrame>2550</EndFrame>
+        <Events>
+          <Item>
+            <Name>FirePoint</Name>
+            <Keyframe>2525</Keyframe>
+          </Item>
+        </Events>
+      </Item>
+    </ClipParts>
+  </Asset>
+</XnaContent>
