@@ -370,6 +370,16 @@ namespace Gladius.gamestatemanagement.screenmanager
             }
         }
 
+        public void AddComponent(IGameComponent component)
+        {
+            m_screenComponents.Components.Add(component);
+        }
+
+        public void RemoveComponent(IGameComponent component)
+        {
+            m_screenComponents.Components.Remove(component);
+        }
+
 
         protected ThreadSafeContentManager m_content;
         protected SpriteFont m_gameFont;

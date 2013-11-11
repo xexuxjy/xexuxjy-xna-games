@@ -48,7 +48,7 @@ namespace Gladius.util
 
         public virtual void Draw(GameTime gameTime)
         {
-
+            Draw(gameTime, Globals.Camera);
         }
 
         public virtual void LoadContent()

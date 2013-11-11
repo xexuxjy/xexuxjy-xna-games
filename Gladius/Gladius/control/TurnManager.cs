@@ -20,6 +20,51 @@ namespace Gladius.control
             m_arenaScreen = arenaScreen;
         }
 
+        public void DoProjectileCamera()
+        {
+            Globals.CameraManager.SetStaticCamera();
+            // focus on point midway between two characters.
+            Vector3 a = CurrentActor.GetProjectile().Position;
+
+            Matrix model = CurrentActor.GetProjectile().World;
+
+            Vector3 forward = model.Forward;
+
+            Vector3 newPosition = a - (forward * 3);
+            newPosition.Y += 2;
+
+            Globals.Camera.Position = newPosition;
+            Globals.Camera.Target = a;
+            Globals.Camera.TargetDirection = forward;
+
+        }
+
+        public void DoMeleeCamera()
+        {
+            Globals.CameraManager.SetStaticCamera();
+            // focus on point midway between two characters.
+            Vector3 a = CurrentActor.CameraFocusPoint;
+            Matrix model = CurrentActor.World;
+
+            Vector3 forward = model.Forward;
+
+            if(CurrentActor.Target != null)
+            {
+                a += CurrentActor.Target.CameraFocusPoint;
+                a /= 2.0f;
+                // view side on
+                forward = model.Right;
+            }
+            Vector3 newPosition = a - (forward * 3);
+            newPosition.Y = 4;
+
+            Globals.Camera.Position = newPosition;
+            Globals.Camera.Target = a;
+            Globals.Camera.TargetDirection = forward;
+        }
+
+
+
         public override void Update(GameTime gameTime)
         {
             if (AllPartyDead())
@@ -37,26 +82,14 @@ namespace Gladius.control
             {
                 if (CurrentActor.Attacking)
                 {
-                    Globals.CameraManager.SetStaticCamera();
-                    // focus on point midway between two characters.
-                    Vector3 a = CurrentActor.CameraFocusPoint;
-                    Matrix model = CurrentActor.World;
-
-                    Vector3 forward = model.Forward;
-
-                    if(CurrentActor.Target != null)
+                    if (CurrentActor.FiringProjectile)
                     {
-                        a += CurrentActor.Target.CameraFocusPoint;
-                        a /= 2.0f;
-                        // view side on
-                        forward = model.Right;
+                        DoProjectileCamera();
                     }
-                    Vector3 newPosition = a - (forward * 3);
-                    newPosition.Y = 4;
-
-                    Globals.Camera.Position = newPosition;
-                    Globals.Camera.Target = a;
-                    Globals.Camera.TargetDirection = forward;
+                    else
+                    {
+                        DoMeleeCamera();
+                    }
                 }
                 else
                 {

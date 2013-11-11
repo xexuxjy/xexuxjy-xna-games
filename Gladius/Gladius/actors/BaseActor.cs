@@ -25,6 +25,7 @@ namespace Gladius.actors
         {
             ModelHeight = 1f;
             m_animatedModel = new AnimatedModel(ModelHeight);
+
             m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
             m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
             Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
@@ -40,6 +41,45 @@ namespace Gladius.actors
         {
             // only do this at the animation hitpoint.
             ArenaScreen.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
+        }
+
+        private void BowShotAnimFirePoint(String name)
+        {
+            // only do this at the animation hitpoint.
+            Projectile projectile = GetProjectile();
+
+            // find hand position
+            Matrix handPos;
+
+            if (m_animatedModel.FindAbsoluteMatrixForBone("Bip01 L Hand", out handPos))
+            {
+                Vector3 scaledModelVal= handPos.Translation;
+                scaledModelVal = Vector3.Transform(scaledModelVal,World);
+                projectile.Position = scaledModelVal;
+            }
+
+            projectile.Target = m_currentTarget;
+
+            projectile.Enabled = true;
+            projectile.Visible = true;
+
+        }
+
+        public Projectile GetProjectile()
+        {
+            if (m_projectile == null)
+            {
+                m_projectile = new Projectile(ArenaScreen);
+                m_projectile.Owner = this;
+                m_projectile.LoadContent();
+                ArenaScreen.AddComponent(m_projectile);
+            }
+            return m_projectile;
+        }
+
+        public bool FiringProjectile
+        {
+            get { return m_projectile != null && m_projectile.Enabled; }
         }
 
         public float ModelHeight
@@ -195,6 +235,7 @@ namespace Gladius.actors
                 m_animatedModel.SetMeshActive("shield_01", false);
 
                 m_animatedModel.RegisterEvent(AnimationEnum.Attack1, "HitPoint", new CpuSkinningDataTypes.AnimationPlayer.EventCallback(AttackAnimHitPoint));
+                m_animatedModel.RegisterEvent(AnimationEnum.BowShot, "FirePoint", new CpuSkinningDataTypes.AnimationPlayer.EventCallback(BowShotAnimFirePoint));
 
                 m_animatedModel.PlayAnimation(AnimationEnum.Idle);
             }
@@ -372,6 +413,11 @@ namespace Gladius.actors
             }
 
             if (Attacking)
+            {
+                return false;
+            }
+
+            if (FiringProjectile)
             {
                 return false;
             }
@@ -1038,6 +1084,7 @@ namespace Gladius.actors
 
         }
 
+        private Projectile m_projectile;
 
         private Dictionary<BaseActor, int> m_threatMap = new Dictionary<BaseActor,int>();
 
