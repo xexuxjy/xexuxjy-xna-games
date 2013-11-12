@@ -389,5 +389,11 @@ namespace Gladius.renderer
         private Vector2 m_smoothedMouseMovement = Vector2.Zero;
         private CameraManager m_cameraManager;
         #endregion
+
+        public String Name
+        {
+            get { return "Free Camera"; }
+        }
+
     }
 }

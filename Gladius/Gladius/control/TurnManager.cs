@@ -31,7 +31,7 @@ namespace Gladius.control
             Vector3 forward = model.Forward;
 
             Vector3 newPosition = a - (forward * 3);
-            newPosition.Y += 2;
+            newPosition.Y += 0.5f;
 
             Globals.Camera.Position = newPosition;
             Globals.Camera.Target = a;
@@ -90,6 +90,10 @@ namespace Gladius.control
                     {
                         DoMeleeCamera();
                     }
+                }
+                else if (CurrentActor.FiringProjectile)
+                {
+                    DoProjectileCamera();
                 }
                 else
                 {

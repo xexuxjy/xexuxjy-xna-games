@@ -79,7 +79,10 @@ namespace Gladius.actors
 
         public bool FiringProjectile
         {
-            get { return m_projectile != null && m_projectile.Enabled; }
+            get 
+            { 
+                return m_projectile != null && m_projectile.Enabled; 
+            }
         }
 
         public float ModelHeight
@@ -125,9 +128,8 @@ namespace Gladius.actors
                 case (AnimationEnum.Attack1):
                 case (AnimationEnum.Attack2):
                 case (AnimationEnum.Attack3):
-                case (AnimationEnum.BowShot):
                     {
-                        StopAttack();
+                        Attacking = false;
                         break;
                     }
                 case (AnimationEnum.Die):
@@ -552,6 +554,7 @@ namespace Gladius.actors
             Vector3 nextDiff = actor.Position - Position;
             nextDiff.Y = 0;
             nextDiff.Normalize();
+            OriginalRotation = Rotation;
             Rotation = QuaternionHelper.LookRotation(nextDiff);
         }
 
@@ -810,15 +813,16 @@ namespace Gladius.actors
             }
         }
 
-        public void EndAttackSkill()
-        {
-            CurrentAttackSkill = null;
-        }
+        //public void EndAttackSkill()
+        //{
+        //    CurrentAttackSkill = null;
+        //}
 
 
         public void EndTurn()
         {
-            EndAttackSkill();
+            StopAttack();
+            FaceOrthogonal();
             UnitActive = false;
             if (!Dead)
             {
@@ -1039,7 +1043,6 @@ namespace Gladius.actors
 
         private void UpdateStats()
         {
-
         }
 
 
@@ -1081,8 +1084,25 @@ namespace Gladius.actors
                 }
                 return Color.Black;
             }
-
+            
         }
+
+        public void FaceOrthogonal()
+        {
+            float minDot = float.MaxValue;
+            Quaternion bestFace = Quaternion.Identity;
+            for(int i=0;i<OrthoDirs.Length;++i)
+            {
+                float dot = Quaternion.Dot(Rotation,OrthoDirs[i]);
+                if(dot < minDot)
+                {
+                    minDot = dot;
+                    bestFace = OrthoDirs[i];
+                }
+            }
+            Rotation = bestFace;
+        }
+
 
         private Projectile m_projectile;
 
@@ -1116,6 +1136,9 @@ namespace Gladius.actors
 
         public const int MinLevel = 1;
         public const int MaxLevel = 15;
+
+        static Quaternion[] OrthoDirs = new Quaternion[] { Quaternion.CreateFromAxisAngle(Vector3.Up, 0), Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.Pi), Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.PiOver2), Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.PiOver2 + MathHelper.Pi) };
+
 
 
     }

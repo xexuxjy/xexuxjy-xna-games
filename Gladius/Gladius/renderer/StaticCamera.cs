@@ -144,5 +144,11 @@ namespace Gladius.renderer
         private BoundingFrustum m_boundingFrustum;
         private CameraManager m_cameraManager;
         #endregion
+
+        public String Name
+        {
+            get { return "Static Camera"; }
+        }
+
     }
 }
