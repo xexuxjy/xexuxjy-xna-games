@@ -272,6 +272,10 @@ namespace Gladius.renderer
 
         #endregion
 
+        public String Name
+        {
+            get { return "Chase Camera"; }
+        }
 
         #region Methods
 

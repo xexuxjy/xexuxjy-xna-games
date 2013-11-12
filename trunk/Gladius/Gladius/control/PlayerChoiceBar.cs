@@ -88,6 +88,11 @@ namespace Gladius.control
 
         void EventManager_ActionPressed(object sender, ActionButtonPressedArgs e)
         {
+            if (!InputAllowed)
+            {
+                return;
+            }
+
             if(TurnManager.CurrentControlState== Gladius.control.TurnManager.ControlState.ChoosingSkill)
             {
                 HandleSkillChoiceAction(e);
@@ -292,6 +297,7 @@ namespace Gladius.control
                 TurnManager.CurrentControlState = Gladius.control.TurnManager.ControlState.ChoosingSkill;
                 BuildDataForActor();
                 CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
+                InputAllowed = true;
             }
         }
 
@@ -354,6 +360,8 @@ namespace Gladius.control
         {
             //TurnManager.WaitingOnPlayerControl = false;
             //CurrentActor.StartAttackSkill();
+            CurrentActor.ConfirmAttackSkill();
+            InputAllowed = false;
         }
 
         public MovementGrid MovementGrid
@@ -446,12 +454,13 @@ namespace Gladius.control
                             if (ArenaScreen.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
                             {
                                 CurrentActor.Target = target;
-                                CurrentActor.ConfirmAttackSkill();
+                                ConfirmAction();
+                                
                             }
                         }
                         else
                         {
-                            CurrentActor.ConfirmAttackSkill();
+                            ConfirmAction();
                         }
                     }
                     break;
@@ -487,6 +496,12 @@ namespace Gladius.control
                     }
             }
 
+        }
+
+        public bool InputAllowed
+        {
+            get;
+            set;
         }
 
         public enum SkillIconState

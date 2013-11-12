@@ -9,6 +9,7 @@ namespace Gladius.renderer
 {
     public interface ICamera : IGameComponent,IUpdateable
     {
+        String Name { get; }
         Matrix View { get; set; }
         Matrix Projection { get; set; }
         Vector3 Position { get; set; }

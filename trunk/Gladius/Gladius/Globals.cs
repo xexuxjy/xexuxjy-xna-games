@@ -61,7 +61,7 @@ namespace Gladius
             StringBuilder buffer = new StringBuilder();
             Vector2 fontPos = new Vector2(1.0f, 1.0f);
             buffer.AppendFormat("FPS: {0} \n", fps);
-            buffer.Append("Camera:\n");
+            buffer.AppendFormat("Camera {0}:\n",Globals.Camera.Name);
             buffer.AppendFormat("  Position: x:{0} y:{1} z:{2}\n",
                 Globals.Camera.Position.X.ToString("#0.00"),
                 Globals.Camera.Position.Y.ToString("#0.00"),

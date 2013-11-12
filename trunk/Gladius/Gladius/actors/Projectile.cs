@@ -16,7 +16,7 @@ namespace Gladius.actors
         public Projectile(GameScreen gameScreen)
             : base(gameScreen)
         {
-            Speed = 0.1f;
+            Speed =1f;
         }
 
         public ArenaScreen ArenaScreen
@@ -36,14 +36,21 @@ namespace Gladius.actors
             // don't care about height check.
             diff.Y = 0;
             float closeEnough = 0.1f;
-            if (diff.Length() < closeEnough)
+            float len = diff.Length();
+            if (len < 1)
+            {
+                int ibreak = 0;
+            }
+            if (len < closeEnough)
             {
                 // do damage.
                 // end state.
                 ArenaScreen.CombatEngine.ResolveAttack(Owner, Target, Owner.CurrentAttackSkill);
-
+                //Owner.Attacking = false;
+                Owner.StopAttack(); 
                 Enabled = false;
-                Visible = false;
+                //Visible = false;
+
             }
 
             Matrix newWorld = Matrix.CreateTranslation(Position);
@@ -57,14 +64,16 @@ namespace Gladius.actors
 
         public override void Draw(GameTime gameTime, ICamera camera)
         {
-            m_modelData.Draw(camera, Position);
+            m_modelData.Draw(camera,World);
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
-            ModelName = "Models/Shapes/UnitSphere";
-            m_modelData = new ModelData(ContentManager.Load<Model>(ModelName), 1f, 0f, ContentManager.GetColourTexture(Color.Magenta));
+            ModelName = "Models/Shapes/UnitCylinder";
+            m_modelData = new ModelData(ContentManager.Load<Model>(ModelName), new Vector3(0.05f,0.5f,0.05f),0f, ContentManager.GetColourTexture(Color.Magenta));
+            m_modelData.ModelRotation = Matrix.CreateFromYawPitchRoll(0, MathHelper.PiOver2, 0);
+            DrawOrder = Globals.CharacterDrawOrder;
         }
 
         public Matrix World
@@ -89,6 +98,7 @@ namespace Gladius.actors
             {
                 m_target = value;
                 Vector3 diff = m_target.Position - Position;
+                diff.Y = 0;
                 diff.Normalize();
                 m_velocity = diff * Speed;
 

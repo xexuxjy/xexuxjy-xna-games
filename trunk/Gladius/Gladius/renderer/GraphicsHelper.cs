@@ -96,6 +96,7 @@ namespace Gladius.renderer
         public float HeightOffset;
         public BoundingBox BoundingBox;
         public Vector3 ModelScale;
+        public Matrix ModelRotation = Matrix.Identity;
 
         public ModelData(Model _model, float desiredScale,float _heightOffset,Texture2D _texture, Texture2D _texture2=null)
         {
@@ -161,13 +162,25 @@ namespace Gladius.renderer
             Draw(camera,position, ModelScale, Matrix.Identity);
         }
 
-        public void Draw(ICamera camera, Vector3 position, Vector3 scale, Matrix rotation)
+        public void Draw(ICamera camera, Matrix world)
         {
+            Draw(camera, world.Translation, ModelScale, world);
+        }
+
+
+        public void Draw(ICamera camera, Vector3 position, Vector3 scale, Matrix origRotation)
+        {
+            // just want rotation bit.
+            Matrix rotation = origRotation;
+            rotation.Translation = Vector3.Zero;
+
             position.Y += HeightOffset;
 
             if (Texture2 == null)
             {
-                Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
+                Matrix rot = ModelRotation * rotation;
+
+                Matrix world = Matrix.CreateScale(scale) * rot * Matrix.CreateTranslation(position);
                 foreach (ModelMesh mm in Model.Meshes)
                 {
                     foreach (BasicEffect effect in mm.Effects)
@@ -190,7 +203,9 @@ namespace Gladius.renderer
 
         public void DrawParts(ICamera camera,Vector3 position, Vector3 scale, Matrix rotation)
         {
-            Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
+            Matrix rot = ModelRotation * rotation;
+
+            Matrix world = Matrix.CreateScale(scale) * rot * Matrix.CreateTranslation(position);
             //Matrix world = Matrix.CreateTranslation(position);
             foreach (ModelMesh mm in Model.Meshes)
             {
