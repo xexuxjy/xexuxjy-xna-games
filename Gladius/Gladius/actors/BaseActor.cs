@@ -129,7 +129,8 @@ namespace Gladius.actors
                 case (AnimationEnum.Attack2):
                 case (AnimationEnum.Attack3):
                     {
-                        Attacking = false;
+                        //Attacking = false;
+                        StopAttack();
                         break;
                     }
                 case (AnimationEnum.Die):
@@ -261,14 +262,6 @@ namespace Gladius.actors
 
         }
 
-        //private bool m_attackRequested;
-        //public bool AttackRequested
-        //{
-        //    get { return m_attackRequested; }
-        //    set { m_attackRequested = value; }
-        //}
-
-
         public Vector3 Position
         {
             get;
@@ -389,9 +382,14 @@ namespace Gladius.actors
 
                 if (UnitActive)
                 {
-                    UpdateMovement(gameTime);
-                    UpdateAttack(gameTime);
+                    //TurnComplete = CheckTurnComplete();
+                    if (!TurnComplete)
+                    {
+                        UpdateMovement(gameTime);
+                        UpdateAttack(gameTime);
+                    }
                     TurnComplete = CheckTurnComplete();
+
                 }
                 CheckState();
             }
@@ -641,11 +639,17 @@ namespace Gladius.actors
             }
         }
 
-
+        private bool m_attacking;
         public bool Attacking
         {
-            get;
-            set;
+            get
+            {
+                return m_attacking;
+            }
+            set
+            {
+                m_attacking = value;
+            }
         }
 
         public void StartDeath()
@@ -653,16 +657,18 @@ namespace Gladius.actors
             Dead = true;
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death started.", DebugName));
             m_animatedModel.PlayAnimation(AnimationEnum.Die, loopClip:false);
-
-
+            TurnManager.RemoveActor(this);
         }
 
         public void StopDeath()
         {
             Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death stopped.", DebugName));
+            Arena.RemoveActor(this);
+
             // For now - we're invisible
             Visible = false;
             Enabled = false;
+
         }
 
         public virtual void CheckState()
@@ -774,11 +780,14 @@ namespace Gladius.actors
             }
         }
 
+        private bool TurnStarted
+        { get; set; }
 
         public void StartTurn()
         {
             UnitActive = true;
             TurnComplete = false;
+            TurnStarted = true;
 
             m_currentMovePoints = m_totalMovePoints;
             if (!PlayerControlled)
@@ -1102,7 +1111,6 @@ namespace Gladius.actors
             }
             Rotation = bestFace;
         }
-
 
         private Projectile m_projectile;
 
