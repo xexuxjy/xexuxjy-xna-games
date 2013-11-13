@@ -37,10 +37,6 @@ namespace Gladius.actors
             diff.Y = 0;
             float closeEnough = 0.1f;
             float len = diff.Length();
-            if (len < 1)
-            {
-                int ibreak = 0;
-            }
             if (len < closeEnough)
             {
                 // do damage.
@@ -49,7 +45,7 @@ namespace Gladius.actors
                 //Owner.Attacking = false;
                 Owner.StopAttack(); 
                 Enabled = false;
-                //Visible = false;
+                Visible = false;
 
             }
 

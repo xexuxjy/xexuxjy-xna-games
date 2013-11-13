@@ -175,6 +175,11 @@ namespace Gladius.control
             }
         }
 
+        public void RemoveActor(BaseActor actor)
+        {
+            m_turns.RemoveAll(v => v == actor);
+        }
+
 
         BaseActor m_currentActor;
         public BaseActor CurrentActor

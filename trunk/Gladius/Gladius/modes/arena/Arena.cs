@@ -125,6 +125,14 @@ namespace Gladius.modes.arena
 
         }
 
+        public void RemoveActor(BaseActor actor)
+        {
+            Point p = actor.CurrentPosition;
+            m_baseActorMap.Remove(p);
+            m_arenaGrid[p.X, p.Y] = SquareType.Empty;
+        }
+
+
         public bool CanMoveActor(BaseActor baseActor, Point newPoint)
         {
             // deal with moving to same position
