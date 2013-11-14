@@ -283,6 +283,7 @@
       <Name>02_warrior_Anims</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
+      <SubType>Designer</SubType>
     </None>
     <Compile Include="Models\ThirdParty\02_warrior.FBX">
       <Name>02_warrior</Name>
