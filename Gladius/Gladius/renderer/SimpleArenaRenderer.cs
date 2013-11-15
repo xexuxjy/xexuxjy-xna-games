@@ -90,6 +90,7 @@ namespace Gladius.renderer
                     Vector3 boxScale = new Vector3(0.5f);
 
                     SquareType squareType = m_arena.GetSquareTypeAtLocation(i, j);
+                    float heightAtPoint = m_arena.GetHeightAtLocation(new Point(i, j));
                     texture2d = null;
                     switch (squareType)
                     {
@@ -100,21 +101,11 @@ namespace Gladius.renderer
                                 break;
                             }
                         case (SquareType.Level1):
-                            {
-                                texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
-                                boxScale = new Vector3(0.5f, 0.25f, 0.5f);
-                                break;
-                            }
                         case (SquareType.Level2):
-                            {
-                                texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
-                                boxScale = new Vector3(0.5f,0.5f,0.5f);
-                                break;
-                            }
                         case (SquareType.Level3):
                             {
                                 texture2d = ColouredTextureDictionary.GetTexture(Color.Wheat, graphicsDevice);
-                                boxScale = new Vector3(0.5f, 0.75f, 0.5f);
+                                boxScale = new Vector3(0.5f, heightAtPoint/2f, 0.5f);
                                 break;
                             }
                         case (SquareType.Pillar):
@@ -124,14 +115,13 @@ namespace Gladius.renderer
                                 m_pillarModelData.Draw(camera, translation, m_pillarModelData.ModelScale, rotation);
                                 break;
                             }
-
                     }
 
                     if (texture2d != null)
                     {
                         translation = m_arena.ArenaToWorld(new Point(i, j));
-                        translation += new Vector3(0.5f, 0, 0.5f);
-                        translation.Y += boxScale.Y;
+                        //translation += new Vector3(0.5f, 0, 0.5f);
+                        translation.Y -= boxScale.Y; 
                         DrawBox(boxScale, texture2d, translation,camera);
                     }
                 }

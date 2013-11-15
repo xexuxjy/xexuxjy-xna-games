@@ -133,6 +133,9 @@ namespace Gladius
         public const int MoveGridDrawOrder = 2;
         public const int CharacterDrawOrder = 3;
 
+        public static Point[] OrthognalPoints = new Point[] { new Point(-1, 0), new Point(1, 0), new Point(0, -1), new Point(0, 1) };
+        public static Point[] SurroundingPoints = new Point[] { new Point(-1, -1), new Point(0, -1), new Point(1, -1), new Point(0, -1), 
+            new Point(0,1),new Point(-1,1),new Point(0,1),new Point(1,1)};
 
 
         public const String PlayerTeam = "Player";

@@ -54,10 +54,7 @@ namespace Gladius.control
             //return;
             if (Visible && CurrentActor != null)
             {
-                //device.BlendState = BlendState.AlphaBlend;
-                //device.DepthStencilState = DepthStencilState.None;
-
-                //DrawCenteredGrid(SelectedActor,SelectedActor.CurrentMovePoints,Game.GraphicsDevice,camera);
+                DrawCenteredGrid(CurrentActor.CurrentPosition,CurrentActor, CurrentActor.CurrentMovePoints, camera);
 
                 // draw at current actor.
                 DrawIfValid(camera, CurrentActor.CurrentPosition, CurrentActor, m_selectCursor);
@@ -131,22 +128,12 @@ namespace Gladius.control
         }
 
 
-        //public bool DrawingMovePath
-        //{
-        //    get
-        //    {
-        //        return (Visible && CurrentActor != null && CurrentActor.CurrentAttackSkill != null && CurrentActor.CurrentAttackSkill.MaxRange >1);
-        //    }
-        //}
-
         public void DrawMovementCross(ICamera camera, BaseActor actor)
         {
-            //Vector3 topLeft = new Vector3(CurrentCursorSize - 1, 0, CurrentCursorSize - 1);
-            //topLeft /= -2f;
-            DrawIfValid(camera, new Point(CurrentPosition.X - 1, CurrentPosition.Y), actor);
-            DrawIfValid(camera, new Point(CurrentPosition.X + 1, CurrentPosition.Y), actor);
-            DrawIfValid(camera, new Point(CurrentPosition.X, CurrentPosition.Y - 1), actor);
-            DrawIfValid(camera, new Point(CurrentPosition.X, CurrentPosition.Y + 1), actor);
+            foreach (Point p in Globals.OrthognalPoints)
+            {
+                DrawIfValid(camera, CurrentPosition + p, actor);
+            }
         }
 
         public void DrawIfValid(ICamera camera, Point p, BaseActor actor, Texture2D cursor = null)
@@ -246,7 +233,6 @@ namespace Gladius.control
                         else if (CompareSide(enterSide, exitSide, Side.Left, Side.Top))
                         {
                             cursor = m_turnMoveCursor;
-                            //rotation = (float)Math.PI / 2f;
                             rotation = ((float)(3 * Math.PI) / 2f);
                         }
                         else if (CompareSide(enterSide, exitSide, Side.Left, Side.Bottom))
@@ -314,10 +300,6 @@ namespace Gladius.control
                 {
                     case (SquareType.Empty):
                         {
-                            //if (AttackSkill.IsAttackSkill(actor.CurrentAttackSkill))
-                            //{
-                            //    return m_blockedCursor;
-                            //}
                             return m_targetCursor;
                         }
                     case (SquareType.Mobile):
@@ -447,39 +429,11 @@ namespace Gladius.control
             set;
         }
 
-
-        //public override void RegisterListeners()
-        //{
-        //    if (RegisterCount == 0)
-        //    {
-        //        EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
-        //        RegisterCount++;
-        //    }
-        //    Debug.Assert(RegisterCount == 1);
-        //}
-
-
-
-
         void EventManager_BaseActorChanged(object sender, BaseActorChangedArgs e)
         {
             CurrentActor = e.New;
             CurrentPosition = CurrentActor.CurrentPosition;
         }
-
-
-
-
-        //public override void UnregisterListeners()
-        //{
-        //    if (RegisterCount == 1)
-        //    {
-        //        EventManager.ActionPressed -= new EventManager.ActionButtonPressed(EventManager_ActionPressed);
-        //        RegisterCount--;
-
-        //    }
-        //    Debug.Assert(RegisterCount == 0);
-        //}
 
         public Vector3 m_cursorMovement = Vector3.Zero;
         public int CurrentCursorSize = 5;
@@ -499,7 +453,6 @@ namespace Gladius.control
         public Texture2D m_interMoveCursor;
         public Texture2D m_turnMoveCursor;
         public Texture2D m_endMoveCursor;
-        int RegisterCount = 0;
     }
 
     public enum Side
@@ -509,13 +462,5 @@ namespace Gladius.control
         Top,
         Bottom
     }
-
-
-    //public enum GridMode
-    //{
-    //    Inactive,
-    //    Select,
-    //    Move
-    //}
 
 }
