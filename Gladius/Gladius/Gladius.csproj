@@ -501,6 +501,38 @@
       <Link>Content\Models\Shapes\UnitSphere.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\arena\AttackSkillBar.xnb">
+      <Link>Content\UI\arena\AttackSkillBar.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\arena\ShieldSkilllbar.xnb">
+      <Link>Content\UI\arena\ShieldSkilllbar.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\fonts\UIFontLarge.xnb">
+      <Link>Content\UI\fonts\UIFontLarge.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\fonts\UIFontSmall.xnb">
+      <Link>Content\UI\fonts\UIFontSmall.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\arena\AzureWaters.xnb">
+      <Link>Content\UI\arena\AzureWaters.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\arena\DarkAle.xnb">
+      <Link>Content\UI\arena\DarkAle.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\arena\FireOpal.xnb">
+      <Link>Content\UI\arena\FireOpal.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\arena\LightMarble.xnb">
+      <Link>Content\UI\arena\LightMarble.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

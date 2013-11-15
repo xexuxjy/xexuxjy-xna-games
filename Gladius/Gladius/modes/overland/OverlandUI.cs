@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using StringLeakTest;
+using Gladius.util;
 
 
 namespace Gladius.modes.overland
@@ -19,7 +20,7 @@ namespace Gladius.modes.overland
             m_overland = overland;
         }
 
-        public override void LoadContent(ContentManager manager, GraphicsDevice device)
+        public override void LoadContent(ThreadSafeContentManager manager, GraphicsDevice device)
         {
             m_spriteFont = manager.Load<SpriteFont>("UI/fonts/OverlandGame");
             m_dayNightTexture = manager.Load<Texture2D>("UI/overland/DayAndNight");

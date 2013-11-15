@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using StringLeakTest;
 using Gladius.actors;
 using Gladius.events;
+using Gladius.renderer;
+using Gladius.util;
 
 namespace Gladius.combat
 {
@@ -97,7 +99,7 @@ namespace Gladius.combat
             m_floatingTextPool.Push(ft);
         }
 
-        public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager manager, GraphicsDevice device)
+        public override void LoadContent(ThreadSafeContentManager manager, GraphicsDevice device)
         {
             base.LoadContent(manager, device);
             m_spriteFont = manager.Load<SpriteFont>("UI/fonts/ShopFont");
@@ -122,15 +124,11 @@ namespace Gladius.combat
 
             Vector2 pos = new Vector2(result.X, result.Y);
             pos.X -= (textDims.X / 2f);
-            // Shadow text.
-            spriteBatch.DrawString(m_spriteFont, actor.Name, pos, Color.Black);
-            spriteBatch.DrawString(m_spriteFont, actor.Name, pos + new Vector2(1), Color.White);
+            GraphicsHelper.DrawShadowedText(spriteBatch, m_spriteFont, actor.Name, pos);
+
             pos.Y += textDims.Y + 2;
             int barHeight = 16;
             DrawHealthBar(spriteBatch, actor.Health, actor.MaxHealth, Color.Green, Color.Red, pos,(int)textDims.X,barHeight);
-
-            //Rectangle healthBarDims = new Rectangle((int)pos.X,(int)pos.Y, 50, 10);
-            //spriteBatch.Draw(Globals.GlobalContentManager.GetColourTexture(Color.White), healthBarDims, Color.White);
 
         }
 

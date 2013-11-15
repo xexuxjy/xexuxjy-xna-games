@@ -8,12 +8,13 @@ using Microsoft.Xna.Framework.Content;
 using Gladius.actors;
 using Gladius.modes.arena;
 using Gladius.renderer;
+using Gladius.util;
 
 namespace Gladius.gamestatemanagement.screens
 {
     public interface IUIElement
     {
-        void LoadContent(ContentManager manager,GraphicsDevice device);
+        void LoadContent(ThreadSafeContentManager manager, GraphicsDevice device);
         void Update(GameTime gameTime);
         void DrawElement(GameTime gameTime, GraphicsDevice device, SpriteBatch spriteBatch);
         void DrawElement(GameTime gameTime, GraphicsDevice device,ICamera camera);
