@@ -35,6 +35,23 @@ namespace Gladius.actors
             DrawOrder = Globals.CharacterDrawOrder;
         }
 
+        public DamageType WeaponAffinityType
+        {
+            get
+            {
+                return DamageType.Water;
+            }
+        }
+
+
+        public DamageType ArmourAffinityType
+        {
+            get
+            {
+                return DamageType.Water;
+            }
+        }
+
 
 
         private void AttackAnimHitPoint(String name)

@@ -9,6 +9,18 @@ namespace Gladius.renderer
 {
     public static class GraphicsHelper
     {
+        public static void DrawShadowedText(SpriteBatch sb, SpriteFont font, String text, Vector2 pos)
+        {
+            DrawShadowedText(sb,font,text,pos,Color.White);
+        }
+
+        public static void DrawShadowedText(SpriteBatch sb, SpriteFont font, String text, Vector2 pos,Color textColor)
+        {
+            // Shadow text.
+            sb.DrawString(font, text, pos, Color.Black);
+            sb.DrawString(font, text, pos + new Vector2(1), textColor);
+        }
+
         public static void CalculateBoundingBox(ModelMesh mm, ref BoundingBox bb)
         {
             //bb = new BoundingBox();
@@ -226,6 +238,8 @@ namespace Gladius.renderer
                 mm.Draw();
             }
         }
+
+        
 
 
     }

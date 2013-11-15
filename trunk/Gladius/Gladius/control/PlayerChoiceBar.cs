@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Content;
 using Gladius.actors;
 using Gladius.combat;
 using Gladius.modes.arena;
+using Gladius.renderer;
+using Gladius.util;
 
 namespace Gladius.control
 {
@@ -17,12 +19,24 @@ namespace Gladius.control
     {
         const int numSkillSlots = 5;
 
-        public override void LoadContent(ContentManager manager,GraphicsDevice device)
+        public override void LoadContent(ThreadSafeContentManager manager, GraphicsDevice device)
         {
-            m_skillBar1Bitmap = manager.Load<Texture2D>("UI/arena/SkillbarPart1");
+            m_shieldBarBitMap = manager.Load<Texture2D>("UI/arena/ShieldSkilllbar");
+            m_attackBarBitMap = manager.Load<Texture2D>("UI/arena/AttackSkillBar");
+
             m_skillBar2Bitmap = manager.Load<Texture2D>("UI/arena/SkillbarPart2");
             m_skillsBitmap = manager.Load<Texture2D>("UI/arena/SkillIcons");
-            m_spriteFont = manager.Load<SpriteFont>("UI/fonts/DebugFont8");
+            m_smallFont = manager.Load<SpriteFont>("UI/fonts/UIFontSmall");
+            m_largeFont = manager.Load<SpriteFont>("UI/fonts/UIFontLarge");
+
+            m_damageTypeTextures[DamageType.Physical] = manager.GetColourTexture(Color.Green);
+            m_damageTypeTextures[DamageType.Light] = manager.GetColourTexture(Color.White); ;
+            m_damageTypeTextures[DamageType.Dark] = manager.GetColourTexture(Color.Black);
+            m_damageTypeTextures[DamageType.Fire] = manager.Load<Texture2D>("UI/arena/FireOpal");
+            m_damageTypeTextures[DamageType.Water] = manager.Load<Texture2D>("UI/arena/AzureWaters");
+            m_damageTypeTextures[DamageType.Earth] = manager.Load<Texture2D>("UI/arena/DarkAle");
+            m_damageTypeTextures[DamageType.Air] = manager.Load<Texture2D>("UI/arena/LightMarble");
+
             m_attackSkills = new List<List<AttackSkill>>();
             for (int i = 0; i < numSkillSlots; ++i)
             {
@@ -34,12 +48,18 @@ namespace Gladius.control
 
         public override void DrawElement(GameTime gameTime,GraphicsDevice graphiceDevice,SpriteBatch spriteBatch)
         {
-            Rectangle barRect = new Rectangle(Rectangle.X,Rectangle.Y,m_skillBar1Bitmap.Width,m_skillBar1Bitmap.Height);
-            DrawSkillBar1(spriteBatch, barRect, CurrentActor.Name, "Bar", CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
-            barRect.X += m_skillBar1Bitmap.Width;
-            DrawSkillBar1(spriteBatch, barRect, "Foo", "Bar", 50, 100, 20, 100);
+            Rectangle barRect = new Rectangle(Rectangle.X,Rectangle.Y,m_shieldBarBitMap.Width,m_shieldBarBitMap.Height);
 
-            barRect.X += m_skillBar1Bitmap.Width;
+            Vector2 textDims = m_largeFont.MeasureString(CurrentActor.Name);
+            Vector2 textPos = new Vector2(Rectangle.X+5,Rectangle.Y-textDims.Y-3);
+
+            GraphicsHelper.DrawShadowedText(spriteBatch, m_largeFont, CurrentActor.Name, textPos);
+
+            DrawSkillBar1(spriteBatch, m_shieldBarBitMap,barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
+            barRect.X += m_shieldBarBitMap.Width;
+            DrawSkillBar1(spriteBatch, m_attackBarBitMap, barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints,CurrentActor.MaxArenaSkillPoints,1,1);
+
+            barRect.X += m_shieldBarBitMap.Width;
             barRect.X += 20;
 
             DrawSkillBar2(spriteBatch, barRect, m_currentAttackSkillLine, null,null);
@@ -192,25 +212,25 @@ namespace Gladius.control
         }
 
 
-        private void DrawSkillBar1(SpriteBatch spriteBatch, Rectangle rect, String bigIconName, String smallIconName, float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
+        private void DrawSkillBar1(SpriteBatch spriteBatch, Texture2D background,Rectangle rect, DamageType damageType, float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
         {
-            // ideally read in values from svg. but.
-
-            float bigCircleRadius = 32;
-            float bigCircleYOffset = 16;
-
-            float smallCircleRadius = 16;
-            float smallircleYOffset = 0;
-
-
+            int smallCircleDiameter = 16;
+            int smallircleYOffset = 0;
 
             Rectangle skillRect1Dims = new Rectangle(33, 15, 107, 16);
             Rectangle skillRect2Dims = new Rectangle(33, 38, 107 , 16);
 
+            Rectangle affinityRect = skillRect2Dims;
+            affinityRect.X -= smallCircleDiameter-2;
+            affinityRect.Width = affinityRect.Height = smallCircleDiameter;
+
+            // draw 
+            spriteBatch.Draw(m_damageTypeTextures[damageType], affinityRect, Color.White);
+
             Rectangle rect1 = new Rectangle(rect.X + skillRect1Dims.X,rect.Y + skillRect1Dims.Y + skillRect1Dims.Height,skillRect1Dims.Width,skillRect1Dims.Height);
             Rectangle rect2 = new Rectangle(rect.X + skillRect2Dims.X, rect.Y + skillRect2Dims.Y + skillRect2Dims.Height, skillRect2Dims.Width, skillRect2Dims.Height);
 
-            spriteBatch.Draw(m_skillBar1Bitmap, rect, Color.White);
+            spriteBatch.Draw(background, rect, Color.White);
 
             DrawMiniBar(spriteBatch,rect1, bar1Value, bar1MaxValue, Color.Green, Color.Black);
             DrawMiniBar(spriteBatch,rect2, bar2Value, bar2MaxValue, Color.Yellow, Color.Black);
@@ -267,7 +287,8 @@ namespace Gladius.control
             }
             Vector2 pos = new Vector2(rect.X,rect.Y);
             pos += new Vector2(skillRect1Dims.X,skillRect1Dims.Y);
-            spriteBatch.DrawString(m_spriteFont, skills[m_actionCursor.X].Name, pos, Color.Black);
+            GraphicsHelper.DrawShadowedText(spriteBatch, m_smallFont, skills[m_actionCursor.X].Name, pos);
+            //spriteBatch.DrawString(m_smallFont, skills[m_actionCursor.X].Name, pos, Color.Black);
 
         }
 
@@ -495,13 +516,20 @@ namespace Gladius.control
 
         Point m_actionCursor = new Point();        
 
+
+
+        // this may need to be somewhere more common...
+        Dictionary<DamageType, Texture2D> m_damageTypeTextures = new Dictionary<DamageType, Texture2D>();
         
-        Texture2D m_skillBar1Bitmap;
+
+
+        Texture2D m_shieldBarBitMap;
+        Texture2D m_attackBarBitMap;
         Texture2D m_skillBar2Bitmap;
         Texture2D m_skillsBitmap;
 
         Point m_topLeft = new Point(20, 500);
-        SpriteFont m_spriteFont;
-
+        SpriteFont m_smallFont;
+        SpriteFont m_largeFont;
     }
 }

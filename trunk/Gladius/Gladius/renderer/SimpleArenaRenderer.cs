@@ -56,23 +56,27 @@ namespace Gladius.renderer
             graphicsDevice.BlendState = BlendState.Opaque;
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            Vector3 translation = new Vector3(0, 0, 0);
-
+            Vector3 position = new Vector3(0, 0, 0);
+            Matrix rotation = Matrix.Identity;
+            Vector3 scale = new Vector3(1,1,1);
             // draw floor and walls.
-            m_floorModelData.Draw(camera, translation);
-            translation = new Vector3(0,0,topLeft.Z);
-            //Matrix rotation = Matrix.CreateRotationY()
-            m_wallModelData.Draw(camera, translation);
-            translation = new Vector3(0, 0, -topLeft.Z);
-            m_wallModelData.Draw(camera, translation);
-            Matrix rotation = Matrix.CreateRotationY(MathHelper.PiOver2);
-            translation = new Vector3(topLeft.X, 0, 0);
-            m_wallModelData.Draw(camera, translation,Vector3.One,rotation);
-            translation = new Vector3(-topLeft.X, 0, 0);
-            m_wallModelData.Draw(camera, translation, Vector3.One, rotation);
+            m_floorModelData.Draw(camera,position,scale ,rotation);
+
+            position = new Vector3(0,0,topLeft.Z);
+            //scale = new Vector3(m_arena.Width, 1, 1);
+            m_wallModelData.Draw(camera, position, scale, rotation);
+            position = new Vector3(0, 0, -topLeft.Z);
+            m_wallModelData.Draw(camera, position, scale, rotation);
+
+            rotation = Matrix.CreateRotationY(MathHelper.PiOver2);
+            //scale = new Vector3(1, 1, m_arena.Breadth);
+            position = new Vector3(topLeft.X, 0, 0);
+            m_wallModelData.Draw(camera, position, scale, rotation);
+            position = new Vector3(-topLeft.X, 0, 0);
+            m_wallModelData.Draw(camera, position, scale, rotation);
 
 
-            translation = new Vector3(6,0,6);
+            position = new Vector3(6,0,6);
             rotation = Matrix.Identity;
             //DrawBarrel(graphicsDevice,m_barrelModelData, translation, Vector3.One, rotation);
             //DrawModelData(m_pillarModelData, translation, Vector3.One, rotation);
@@ -111,18 +115,18 @@ namespace Gladius.renderer
                         case (SquareType.Pillar):
                             {
                                 rotation = Matrix.Identity;
-                                translation = m_arena.ArenaToWorld(new Point(i, j));
-                                m_pillarModelData.Draw(camera, translation, m_pillarModelData.ModelScale, rotation);
+                                position = m_arena.ArenaToWorld(new Point(i, j));
+                                m_pillarModelData.Draw(camera, position, m_pillarModelData.ModelScale, rotation);
                                 break;
                             }
                     }
 
                     if (texture2d != null)
                     {
-                        translation = m_arena.ArenaToWorld(new Point(i, j));
+                        position = m_arena.ArenaToWorld(new Point(i, j));
                         //translation += new Vector3(0.5f, 0, 0.5f);
-                        translation.Y -= boxScale.Y; 
-                        DrawBox(boxScale, texture2d, translation,camera);
+                        position.Y -= boxScale.Y;
+                        DrawBox(boxScale, texture2d, position, camera);
                     }
                 }
             }

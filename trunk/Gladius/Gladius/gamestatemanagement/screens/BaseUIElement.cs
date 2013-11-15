@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Gladius.actors;
 using Gladius.modes.arena;
 using Gladius.renderer;
+using Gladius.util;
 
 namespace Gladius.gamestatemanagement.screens
 {
@@ -56,7 +57,7 @@ namespace Gladius.gamestatemanagement.screens
         {
         }
 
-        public virtual void LoadContent(ContentManager manager,GraphicsDevice device)
+        public virtual void LoadContent(ThreadSafeContentManager manager,GraphicsDevice device)
         {
 
         }
