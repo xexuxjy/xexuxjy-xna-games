@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using xexuxjy.Gladius.util;
 using Gladius.renderer.animation;
+using Gladius.actors;
 
 namespace Gladius.combat
 {
@@ -15,7 +16,8 @@ namespace Gladius.combat
     {
         public int Id;
         public String Name;
-        public int UseCost;
+        public int UseCost; // how many points needed to use
+        public int UseGain; // how many points you gain on using - normally only for affinity skills.
         public int PurchaseCost;
         public int SkillRow;
 
@@ -69,7 +71,8 @@ namespace Gladius.combat
             Id = int.Parse(node.Attributes["id"].Value);
             Name = node.Attributes["name"].Value;
             SkillRow = int.Parse(node.Attributes["skillRow"].Value);
-            UseCost = int.Parse(node.Attributes["useCost"].Value);
+            UseCost = GetIntAttribute(node, "useCost", 1); 
+            UseGain = GetIntAttribute(node, "useGain", 0);
             PurchaseCost = int.Parse(node.Attributes["purchaseCost"].Value);
             AttackType = GetAttackType(node);
             DamageType = GetDamageType(node);
@@ -80,6 +83,8 @@ namespace Gladius.combat
             MaxRange = GetIntAttribute(node, "maxRange", 0);
             Radius = GetIntAttribute(node, "radius", 0);
             MovementRange = GetIntAttribute(node, "movementRange", 0);
+
+
             if (node.HasAttribute("animation"))
             {
                 Animation = (AnimationEnum)Enum.Parse(typeof(AnimationEnum), node.Attributes["animation"].Value);
@@ -152,6 +157,18 @@ namespace Gladius.combat
         {
             return (dist >= MinRange && dist <= (MovementRange + MaxRange));
         }
+
+        public bool Available(BaseActor actor)
+        {
+            // need to make sure actor has enough skillpoints or affinity points to use this.
+            if (UseCost <= actor.ArenaSkillPoints)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
     }
 
     public class AttackSkillDictionary

@@ -91,6 +91,18 @@ namespace Gladius.modes.arena
                         {
                             m_arenaGrid[j, i] = SquareType.Pillar;
                         }
+                        else if (lines[j][i] == '1')
+                        {
+                            m_arenaGrid[j, i] = SquareType.Level1;
+                        }
+                        else if (lines[j][i] == '2')
+                        {
+                            m_arenaGrid[j, i] = SquareType.Level2;
+                        }
+                        else if (lines[j][i] == '3')
+                        {
+                            m_arenaGrid[j, i] = SquareType.Level3;
+                        }
                     }
                 }
             }
@@ -239,6 +251,10 @@ namespace Gladius.modes.arena
         public Vector3 ArenaToWorld(Point p, bool includeHeight = true)
         {
             float groundHeight = includeHeight ? GetHeightAtLocation(p) : 0.0f; ;
+            if (groundHeight > 0)
+            {
+                int ibreak = 0;
+            }
             Vector3 topLeft = new Vector3(-Width / 2f, 0, -Breadth / 2f);
             topLeft += Position;
 
@@ -302,7 +318,7 @@ namespace Gladius.modes.arena
 
         public BaseActor NextToEnemy(BaseActor source, bool orthogonal = true)
         {
-            foreach (Point p2 in orthogonal ? m_orthognalPoints : m_surroundingPoints)
+            foreach (Point p2 in orthogonal ? Globals.OrthognalPoints : Globals.SurroundingPoints)
             {
                 Point adjusted = source.CurrentPosition + p2;
                 if (InLevel(adjusted))
@@ -332,7 +348,7 @@ namespace Gladius.modes.arena
             }
             int closest = int.MaxValue;
             Point closestPoint = Point.Zero;
-            foreach (Point p in m_orthognalPoints)
+            foreach (Point p in Globals.OrthognalPoints)
             {
                 Point adjusted = location + p;
                 if (InLevel(adjusted) && GetSquareTypeAtLocation(adjusted) == SquareType.Empty)
@@ -357,9 +373,6 @@ namespace Gladius.modes.arena
         private Dictionary<Point, BaseActor> m_baseActorMap = new Dictionary<Point, BaseActor>();
         private ArenaPathFinder m_pathFinder;
         private Random m_rng = new Random();
-        Point[] m_orthognalPoints = new Point[] { new Point(-1, 0), new Point(1, 0), new Point(0, -1), new Point(0, 1) };
-        Point[] m_surroundingPoints = new Point[] { new Point(-1, -1), new Point(0, -1), new Point(1, -1), new Point(0, -1), 
-            new Point(0,1),new Point(-1,1),new Point(0,1),new Point(1,1)};
     }
 
     public enum SquareType
@@ -791,31 +804,42 @@ namespace Gladius.modes.arena
             float currentHeight = m_levelMap.GetHeightAtLocation(center);
             float allowableHeightDifference = 0.5f;
 
-
-            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
+            foreach (Point p in Globals.OrthognalPoints)
             {
-                results.Add(new Point(x, y));
+                if (m_levelMap.InLevel(p) && m_levelMap.GetSquareTypeAtLocation(p) == SquareType.Empty)
+                {
+                    // check for height differnces.
+                    if (Math.Abs(m_levelMap.GetHeightAtLocation(p) - currentHeight) <= allowableHeightDifference)
+                    {
+                        results.Add(p);
+                    }
+                }
             }
 
-            y = (int)center.Y - 1;
-            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
-            {
-                results.Add(new Point(x, y));
-            }
+            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
+            //{
+            //    results.Add(new Point(x, y));
+            //}
 
-            y = (int)center.Y;
-            x = (int)center.X + 1;
+            //y = (int)center.Y - 1;
+            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
+            //{
+            //    results.Add(new Point(x, y));
+            //}
 
-            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
-            {
-                results.Add(new Point(x, y));
-            }
-            x = (int)center.X - 1;
+            //y = (int)center.Y;
+            //x = (int)center.X + 1;
 
-            if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
-            {
-                results.Add(new Point(x, y));
-            }
+            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
+            //{
+            //    results.Add(new Point(x, y));
+            //}
+            //x = (int)center.X - 1;
+
+            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
+            //{
+            //    results.Add(new Point(x, y));
+            //}
         }
 
 

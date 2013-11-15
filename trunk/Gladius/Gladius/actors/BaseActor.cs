@@ -100,7 +100,7 @@ namespace Gladius.actors
             m_attributeDictionary[GameObjectAttributeType.Defense] = new BoundedAttribute(10);
             m_attributeDictionary[GameObjectAttributeType.Constitution] = new BoundedAttribute(10);
 
-            m_attributeDictionary[GameObjectAttributeType.SkillPoints] = new BoundedAttribute(0,0,10);
+            m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints] = new BoundedAttribute(0,5,5);
             m_attributeDictionary[GameObjectAttributeType.Affinity] = new BoundedAttribute(0, 0, 10);
 
         }
@@ -277,15 +277,19 @@ namespace Gladius.actors
             }
         }
 
-        public float Health
+        public int Health
         {
             get
             {
                 return m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue;
             }
+            set
+            {
+                m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue = value;
+            }
         }
 
-        public float MaxHealth
+        public int MaxHealth
         {
             get
             {
@@ -293,31 +297,51 @@ namespace Gladius.actors
             }
         }
 
-        public float SkillPoints
+        public int CharacterSkillPoints
         {
             get
             {
-                return m_attributeDictionary[GameObjectAttributeType.SkillPoints].CurrentValue;
+                return m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints].CurrentValue;
+            }
+            set
+            {
+                m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints].CurrentValue = value;
             }
         }
 
-        public float MaxSkillPoints
+        public int ArenaSkillPoints
         {
             get
             {
-                return m_attributeDictionary[GameObjectAttributeType.SkillPoints].MaxValue;
+                return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue;
+            }
+            set
+            {
+                m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue = value;
             }
         }
 
-        public float Affinity
+        public int MaxArenaSkillPoints
         {
             get
             {
-                return m_attributeDictionary[GameObjectAttributeType.Accuracy].CurrentValue;
+                return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].MaxValue;
             }
         }
 
-        public float MaxAffinity
+        public int Affinity
+        {
+            get
+            {
+                return m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue;
+            }
+            set
+            {
+                m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue = value;
+            }
+        }
+
+        public int MaxAffinity
         {
             get
             {
@@ -354,7 +378,7 @@ namespace Gladius.actors
         {
             if (attackResult.resultType != AttackResultType.Miss)
             {
-                m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue -= attackResult.damageDone;
+                Health -= attackResult.damageDone;
                 UpdateThreatList(attackResult.damageCauser);
                 PlayAnimation(AnimationEnum.Stagger,false);
             }
@@ -434,6 +458,9 @@ namespace Gladius.actors
 
                 if (!FollowingWayPoints)
                 {
+
+                    ChooseTarget();
+
                     // Are we next to an enemy
                     BaseActor enemy = Arena.NextToEnemy(this);
                     if (enemy != null)
@@ -673,7 +700,7 @@ namespace Gladius.actors
 
         public virtual void CheckState()
         {
-            if (m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue <= 0f && !Dead)
+            if (Health <= 0f && !Dead)
             {
                 StartDeath();
             }
@@ -788,6 +815,7 @@ namespace Gladius.actors
             UnitActive = true;
             TurnComplete = false;
             TurnStarted = true;
+            
 
             m_currentMovePoints = m_totalMovePoints;
             if (!PlayerControlled)
@@ -799,6 +827,10 @@ namespace Gladius.actors
 
         public void ConfirmAttackSkill()
         {
+            // adjust our skill points.
+            ArenaSkillPoints -= CurrentAttackSkill.UseCost;
+            ArenaSkillPoints += CurrentAttackSkill.UseGain;
+
             if (UnitActive && PlayerControlled && TurnManager.WaitingOnPlayerControl)
             {
                 TurnManager.WaitingOnPlayerControl = false;
@@ -905,7 +937,7 @@ namespace Gladius.actors
             m_availableAttacks.Clear();
             foreach (AttackSkill skill in m_knownAttacks)
             {
-                if (skill.UseCost <= SkillPoints)
+                if (skill.UseCost <= ArenaSkillPoints)
                 {
                     m_availableAttacks.Add(skill);
                 }
@@ -916,7 +948,7 @@ namespace Gladius.actors
         {
             foreach (AttackSkill skill in m_availableAttacks)
             {
-                if (skill.InRange(range))
+                if (skill.InRange(range) && skill.Available(this))
                 {
                     return true;
                 }
@@ -1007,6 +1039,20 @@ namespace Gladius.actors
             get;
             set;
         }
+
+        // called after we've chosen a target.
+        public AttackSkill ChooseAttackSkillForTarget(BaseActor target)
+        {
+            int distance = Globals.PointDist2(this.CurrentPosition, target.CurrentPosition);
+            AttackSkill result = null;
+            foreach (AttackSkill skill in AttackSkills.FindAll(skill=>HaveAvailableSkillForRange(distance)))
+            {
+
+            }
+            return result;
+        }
+
+
 
 
         /*

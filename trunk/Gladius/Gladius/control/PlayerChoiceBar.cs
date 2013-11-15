@@ -35,7 +35,7 @@ namespace Gladius.control
         public override void DrawElement(GameTime gameTime,GraphicsDevice graphiceDevice,SpriteBatch spriteBatch)
         {
             Rectangle barRect = new Rectangle(Rectangle.X,Rectangle.Y,m_skillBar1Bitmap.Width,m_skillBar1Bitmap.Height);
-            DrawSkillBar1(spriteBatch, barRect, "Foo", "Bar", 30, 100, 70, 100);
+            DrawSkillBar1(spriteBatch, barRect, CurrentActor.Name, "Bar", CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
             barRect.X += m_skillBar1Bitmap.Width;
             DrawSkillBar1(spriteBatch, barRect, "Foo", "Bar", 50, 100, 20, 100);
 
@@ -249,12 +249,17 @@ namespace Gladius.control
 
             for (int i = 0; i < skills.Count(); ++i)
             {
+                AttackSkill skill = skills[i];
                 Point dims;
                 Point uv;
 
                 SkillIconState iconState = (i == m_actionCursor.X) ? SkillIconState.Selected : SkillIconState.Available;
+                if (!skill.Available(CurrentActor))
+                {
+                    iconState = SkillIconState.Unavailable;
+                }
 
-                GetUVForIcon(m_currentAttackSkillLine[i].SkillIcon,iconState,out uv,out dims);
+                GetUVForIcon(skill.SkillIcon,iconState,out uv,out dims);
                 Rectangle dest = new Rectangle(rect.X + (i * (circleRadius+xpad)), rect.Y + 2, circleRadius, circleRadius);
                 Rectangle src = new Rectangle(uv.X,uv.Y,dims.X,dims.Y);
 
@@ -309,38 +314,6 @@ namespace Gladius.control
             }
         }
 
-
-        //private bool m_actionSelected;
-        //public bool ActionSelected
-        //{
-        //    get
-        //    {
-        //        return m_actionSelected;
-        //    }
-        //    set
-        //    {
-        //        m_actionSelected = value;
-        //        m_controlState = ControlState.UsingGrid;
-        //        if (ActionSelected)
-        //        {
-        //            if (SkillNeedsMovementGrid(CurrentlySelectedSkill))
-        //            {
-        //                //ArenaScreen.SetMovementGridVisible(true);
-        //            }
-        //            if (CurrentlySelectedSkill.AttackType == AttackType.EndTurn)
-        //            {
-        //                CurrentActor.ConfirmAttackSkill();
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public bool SkillNeedsMovementGrid(AttackSkill skill)
-        //{
-        //    return skill.HasMovementPath() || skill.RangedAttack;
-            
-        //}
-
         public void CancelAction()
         {
             if (TurnManager.CurrentControlState == Gladius.control.TurnManager.ControlState.UsingGrid)
@@ -358,10 +331,16 @@ namespace Gladius.control
 
         public void ConfirmAction()
         {
-            //TurnManager.WaitingOnPlayerControl = false;
-            //CurrentActor.StartAttackSkill();
-            CurrentActor.ConfirmAttackSkill();
-            InputAllowed = false;
+            if (CurrentActor.CurrentAttackSkill.Available(CurrentActor))
+            {
+                CurrentActor.ConfirmAttackSkill();
+                InputAllowed = false;
+            }
+            else
+            {
+                // output some 'not available' text?
+                ArenaScreen.CombatEngineUI.DrawFloatingText(CurrentActor.Position, Color.Red, "Skill Not Available.", 2f);
+            }
         }
 
         public MovementGrid MovementGrid
@@ -521,7 +500,7 @@ namespace Gladius.control
         Texture2D m_skillBar2Bitmap;
         Texture2D m_skillsBitmap;
 
-        Point m_topLeft = new Point(20, 400);
+        Point m_topLeft = new Point(20, 500);
         SpriteFont m_spriteFont;
 
     }
