@@ -62,12 +62,6 @@
         <ClipName>BowShot</ClipName>
         <StartFrame>2500</StartFrame>
         <EndFrame>2550</EndFrame>
-        <Events>
-          <Item>
-            <Name>FirePoint</Name>
-            <Keyframe>2525</Keyframe>
-          </Item>
-        </Events>
       </Item>
     </ClipParts>
   </Asset>

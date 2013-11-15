@@ -64,6 +64,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="UI\arena\ShieldSkilllbar.png">
+      <Name>ShieldSkilllbar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="UI\cursors\AttackCursor.png">
       <Name>AttackCursor</Name>
       <Importer>TextureImporter</Importer>
@@ -101,6 +106,16 @@
     </Compile>
     <Compile Include="UI\fonts\ShopFont.spritefont">
       <Name>ShopFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\UIFontLarge.spritefont">
+      <Name>UIFontLarge</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\UIFontSmall.spritefont">
+      <Name>UIFontSmall</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
@@ -273,6 +288,32 @@
       <Name>MovementGrid</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\AttackSkillBar.png">
+      <Name>AttackSkillBar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_TextureFormat>NoChange</ProcessorParameters_TextureFormat>
+    </Compile>
+    <Compile Include="UI\arena\AzureWaters.png">
+      <Name>AzureWaters</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\DarkAle.png">
+      <Name>DarkAle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\FireOpal.png">
+      <Name>FireOpal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\LightMarble.png">
+      <Name>LightMarble</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
     <None Include="Models\Arena\Arena2\Arena2Data.txt">
       <Name>Arena2Data</Name>
