@@ -32,6 +32,9 @@ namespace Gladius.renderer
             m_floorModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Floor"), floorScale, 0f, ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaFloor_0"));
             m_wallModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Wall"), 1f, 0f, ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaWall_0"));
             m_pillarModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Common/Pillar1"), new Vector3(0.5f,3,0.5f), 0.5f, ContentManager.Load<Texture2D>("Models/Arena/Common/PillarTexture_0"));
+            Model m = ContentManager.Load<Model>("Models/TP2/free_house");
+            Texture2D t = ContentManager.Load<Texture2D>("Models/TP2/doorwindow_set");
+            m_houseModelData = new ModelData(m,new Vector3(2f), 0f, t);
 
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             m_spriteFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
@@ -81,6 +84,8 @@ namespace Gladius.renderer
             //DrawBarrel(graphicsDevice,m_barrelModelData, translation, Vector3.One, rotation);
             //DrawModelData(m_pillarModelData, translation, Vector3.One, rotation);
 
+            m_houseModelData.Draw(camera, position, Vector3.One, rotation);
+            
 
             //DrawBox(scale, ColouredTextureDictionary.GetTexture(Color.LawnGreen, graphicsDevice), translation);
             Texture2D texture2d = null;
@@ -198,6 +203,7 @@ namespace Gladius.renderer
         ModelData m_viewingBoxModelData;
         ModelData m_barrelModelData;
         ModelData m_pillarModelData;
+        ModelData m_houseModelData;
 
         //MovementGrid m_movementGrid;
         Arena m_arena;

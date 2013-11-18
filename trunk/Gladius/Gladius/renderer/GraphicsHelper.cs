@@ -199,7 +199,7 @@ namespace Gladius.renderer
                     {
                         effect.EnableDefaultLighting();
                         effect.TextureEnabled = true;
-                        effect.Texture = Texture;
+                        //effect.Texture = Texture;
                         effect.View = camera.View;
                         effect.Projection = camera.Projection;
                         effect.World = BoneTransforms[mm.ParentBone.Index] * world;
@@ -230,7 +230,7 @@ namespace Gladius.renderer
                     BasicEffect effect = mp.Effect as BasicEffect;
                     effect.EnableDefaultLighting();
                     effect.TextureEnabled = true;
-                    effect.Texture = (count == 2 && Texture2 != null) ? Texture : Texture2;
+                    //effect.Texture = (count == 2 && Texture2 != null) ? Texture : Texture2;
                     effect.View = camera.View;
                     effect.Projection = camera.Projection;
                     effect.World = BoneTransforms[mm.ParentBone.Index] * world;
