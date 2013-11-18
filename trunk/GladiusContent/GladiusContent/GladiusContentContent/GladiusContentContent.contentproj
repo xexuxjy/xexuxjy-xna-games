@@ -48,6 +48,71 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\TP2\medieval_free_mesh\14_lod0.x">
+      <Name>14_lod0</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Fantasy_Tree1.x">
+      <Name>Fantasy_Tree1</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\SkillbarPart1.png">
+      <Name>SkillbarPart1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\ShieldSkilllbar.png">
+      <Name>ShieldSkilllbar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\AttackCursor.png">
+      <Name>AttackCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\SkillIcons.png">
+      <Name>SkillIcons</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\backgrounds\Gladii.png">
+      <Name>Gladii</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\backgrounds\ScrollBackground.jpg">
+      <Name>ScrollBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\BattleOverFont.spritefont">
+      <Name>BattleOverFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\DebugFont8.spritefont">
+      <Name>DebugFont8</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\OverlandGame.spritefont">
+      <Name>OverlandGame</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\fonts\ShopFont.spritefont">
+      <Name>ShopFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\overland\DayAndNight.png">
+      <Name>DayAndNight</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <None Include="CombatData\Skills.xml">
       <Name>Skills</Name>
       <Importer>XImporter</Importer>
@@ -63,51 +128,6 @@
       <Name>test_m</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\arena\ShieldSkilllbar.png">
-      <Name>ShieldSkilllbar</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\AttackCursor.png">
-      <Name>AttackCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\BlockedCursor.png">
-      <Name>BlockedCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\ForwardMoveCursor.png">
-      <Name>ForwardMoveCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\SelectCursor.png">
-      <Name>SelectCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\SimpleCursor.png">
-      <Name>SimpleCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\TurnMoveCursor.png">
-      <Name>TurnMoveCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\fonts\OverlandGame.spritefont">
-      <Name>OverlandGame</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\fonts\ShopFont.spritefont">
-      <Name>ShopFont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
     </Compile>
     <Compile Include="UI\fonts\UIFontLarge.spritefont">
       <Name>UIFontLarge</Name>
@@ -152,11 +172,6 @@
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="UI\fonts\DebugFont8.spritefont">
-      <Name>DebugFont8</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CpuSkinningPipelineExtensions\CpuSkinningPipelineExtensions.csproj">
@@ -187,53 +202,6 @@
       <Processor>PassThroughProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="UI\backgrounds\ScrollBackground.jpg">
-      <Name>ScrollBackground</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
-      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
-    </Compile>
-    <Compile Include="UI\fonts\BattleOverFont.spritefont">
-      <Name>BattleOverFont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\CornerTurn.png">
-      <Name>CornerTurn</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\CursorWork.png">
-      <Name>CursorWork</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\EndMove.png">
-      <Name>EndMove</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\InterMove.png">
-      <Name>InterMove</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\TargetCursor.png">
-      <Name>TargetCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\TargetSelectCursor.png">
-      <Name>TargetSelectCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\cursors\StartMove.png">
-      <Name>StartMove</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Models\Arena\Common\PillarTexture.png">
       <Name>PillarTexture</Name>
       <Importer>TextureImporter</Importer>
@@ -272,23 +240,355 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="UI\cursors\DefaultCursor.png">
-      <Name>DefaultCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="UI\backgrounds\Gladii.png">
-      <Name>Gladii</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
-      <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
-    </Compile>
     <Compile Include="Effects\MovementGrid\MovementGrid.fx">
       <Name>MovementGrid</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\booth01_B.tga">
+      <Name>booth01_B</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\booth01_D.tga">
+      <Name>booth01_D</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\booth01_DISP.tga">
+      <Name>booth01_DISP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\booth01_S.tga">
+      <Name>booth01_S</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\clothes_patternplain5_beard copy.png">
+      <Name>clothes_patternplain5_beard copy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\clothes_patternplain5_beard_disp.png">
+      <Name>clothes_patternplain5_beard_disp</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\con_dirt_01.tga">
+      <Name>con_dirt_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\con_dirt_01_n.tga">
+      <Name>con_dirt_01_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\con_dirt_01_s.tga">
+      <Name>con_dirt_01_s</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\doorwindow_set.tga">
+      <Name>doorwindow_set</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\doorwindow_set_N.tga">
+      <Name>doorwindow_set_N</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\door_004.tga">
+      <Name>door_004</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\door_004_n.tga">
+      <Name>door_004_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\flowers_Alpha.tga">
+      <Name>flowers_Alpha</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\flowers_DF.tga">
+      <Name>flowers_DF</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\flowers_spec.tga">
+      <Name>flowers_spec</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\haywagon_B.tga">
+      <Name>haywagon_B</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\haywagon_D.tga">
+      <Name>haywagon_D</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\haywagon_DISP.tga">
+      <Name>haywagon_DISP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\haywagon_S.tga">
+      <Name>haywagon_S</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\house_door_001.tga">
+      <Name>house_door_001</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\house_door_001_n.tga">
+      <Name>house_door_001_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\ivy26_DF.tga">
+      <Name>ivy26_DF</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\ivy26_OP.tga">
+      <Name>ivy26_OP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\ivy3_DF.tga">
+      <Name>ivy3_DF</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\ivy3_OP.tga">
+      <Name>ivy3_OP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Leaf_DF.tga">
+      <Name>Leaf_DF</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Leaf_N.tga">
+      <Name>Leaf_N</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Leaf_OP.tga">
+      <Name>Leaf_OP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Leaf_s.tga">
+      <Name>Leaf_s</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\litGrA.tga">
+      <Name>litGrA</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\litGrC.tga">
+      <Name>litGrC</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\litGrN.tga">
+      <Name>litGrN</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\litGrS.tga">
+      <Name>litGrS</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\mediterranean7_DF.tga">
+      <Name>mediterranean7_DF</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\mediterranean7_N.tga">
+      <Name>mediterranean7_N</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\mediterranean7_OP.tga">
+      <Name>mediterranean7_OP</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\metal01_d.tga">
+      <Name>metal01_d</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\metal01_n.tga">
+      <Name>metal01_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\metal01_s.tga">
+      <Name>metal01_s</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\roof_01.tga">
+      <Name>roof_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\roof_01_N.tga">
+      <Name>roof_01_N</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\stone_005_c.tga">
+      <Name>stone_005_c</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\stone_005_n.tga">
+      <Name>stone_005_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Tree_01_N.tga">
+      <Name>Tree_01_N</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Tree_DF.tga">
+      <Name>Tree_DF</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\Tree_N.tga">
+      <Name>Tree_N</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\wood_planks_01.tga">
+      <Name>wood_planks_01</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\wood_planks_01_N.tga">
+      <Name>wood_planks_01_N</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\AzureWaters.png">
+      <Name>AzureWaters</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\DarkAle.png">
+      <Name>DarkAle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\FireOpal.png">
+      <Name>FireOpal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\LightMarble.png">
+      <Name>LightMarble</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\arena\SkillbarPart1_2.png">
+      <Name>SkillbarPart1_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\AttackCursor.png">
+      <Name>AttackCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\BlockedCursor.png">
+      <Name>BlockedCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\CornerTurn.png">
+      <Name>CornerTurn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\CursorWork.png">
+      <Name>CursorWork</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\DefaultCursor.png">
+      <Name>DefaultCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\EndMove.png">
+      <Name>EndMove</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\ForwardMoveCursor.png">
+      <Name>ForwardMoveCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\InterMove.png">
+      <Name>InterMove</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\SelectCursor.png">
+      <Name>SelectCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\SimpleCursor.png">
+      <Name>SimpleCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\StartMove.png">
+      <Name>StartMove</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\TargetCursor.png">
+      <Name>TargetCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\TargetSelectCursor.png">
+      <Name>TargetSelectCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\TurnMoveCursor.png">
+      <Name>TurnMoveCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Content Include="UI\shop\ShopMap.txt">
+      <Name>ShopMap</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="UI\arena\AttackSkillBar.png">
       <Name>AttackSkillBar</Name>
       <Importer>TextureImporter</Importer>
@@ -731,25 +1031,51 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\arena\SkillbarPart1.png">
-      <Name>SkillbarPart1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Models\TP2\medieval_free_mesh\booth01_lod01.x">
+      <Name>booth01_lod01</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="UI\arena\SkillbarPart2.png">
-      <Name>SkillbarPart2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Models\TP2\medieval_free_mesh\f1_barrel.x">
+      <Name>f1_barrel</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="UI\arena\SkillIcons.png">
-      <Name>SkillIcons</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Models\TP2\medieval_free_mesh\flower_10.x">
+      <Name>flower_10</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Models\TP2\medieval_free_mesh\flower_6.x">
+      <Name>flower_6</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\free_house.x">
+      <Name>free_house</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\haywagon.x">
+      <Name>haywagon</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\ivy03_lod0.x">
+      <Name>ivy03_lod0</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\litGr.x">
+      <Name>litGr</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TP2\medieval_free_mesh\villager_free.x">
+      <Name>villager_free</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <None Include="TownData\TownData.xml">
       <Name>TownData</Name>
       <Importer>XmlImporter</Importer>
@@ -778,16 +1104,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\overland\DayAndNight.png">
-      <Name>DayAndNight</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="NewFolder1\" />
     <Folder Include="Particles\test\" />
-    <Folder Include="UI\shop\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterData\CharacterData.xml">
