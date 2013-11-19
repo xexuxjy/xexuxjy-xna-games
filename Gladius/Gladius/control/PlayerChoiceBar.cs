@@ -221,7 +221,10 @@ namespace Gladius.control
             Rectangle skillRect2Dims = new Rectangle(33, 38, 107 , 16);
 
             Rectangle affinityRect = skillRect2Dims;
-            affinityRect.X -= smallCircleDiameter-2;
+            GraphicsHelper.OffsetRect(ref rect, ref affinityRect);
+
+            affinityRect.X -= (int)((float)smallCircleDiameter*1.0f);
+            affinityRect.Y -= smallCircleDiameter/2;
             affinityRect.Width = affinityRect.Height = smallCircleDiameter;
 
             // draw 

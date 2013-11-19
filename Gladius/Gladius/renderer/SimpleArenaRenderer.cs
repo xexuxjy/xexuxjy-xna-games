@@ -32,15 +32,19 @@ namespace Gladius.renderer
             m_floorModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Floor"), floorScale, 0f, ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaFloor_0"));
             m_wallModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Arena2/Wall"), 1f, 0f, ContentManager.Load<Texture2D>("Models/Arena/Arena2/ArenaWall_0"));
             m_pillarModelData = new ModelData(ContentManager.Load<Model>("Models/Arena/Common/Pillar1"), new Vector3(0.5f,3,0.5f), 0.5f, ContentManager.Load<Texture2D>("Models/Arena/Common/PillarTexture_0"));
-            Model m = ContentManager.Load<Model>("Models/TP2/free_house");
-            Texture2D t = ContentManager.Load<Texture2D>("Models/TP2/doorwindow_set");
+            //Model m = ContentManager.Load<Model>("Models/TP2/free_house");
+            //Texture2D t = ContentManager.Load<Texture2D>("Models/TP2/doorwindow_set");
+            Model m = ContentManager.Load<Model>("Models/TP2/booth01_lod01");
+            Texture2D t = null;
+
+            
             m_houseModelData = new ModelData(m,new Vector3(2f), 0f, t);
 
             m_spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             m_spriteFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime) 
         {
             Draw(Globals.Camera, Game.GraphicsDevice,gameTime);
         }

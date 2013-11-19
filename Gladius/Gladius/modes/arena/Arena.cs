@@ -806,12 +806,13 @@ namespace Gladius.modes.arena
 
             foreach (Point p in Globals.OrthognalPoints)
             {
-                if (m_levelMap.InLevel(p) && m_levelMap.GetSquareTypeAtLocation(p) == SquareType.Empty)
+                Point adjusted = center + p;
+                if (m_levelMap.InLevel(adjusted) && m_levelMap.GetSquareTypeAtLocation(adjusted) == SquareType.Empty)
                 {
                     // check for height differnces.
-                    if (Math.Abs(m_levelMap.GetHeightAtLocation(p) - currentHeight) <= allowableHeightDifference)
+                    if (Math.Abs(m_levelMap.GetHeightAtLocation(adjusted) - currentHeight) <= allowableHeightDifference)
                     {
-                        results.Add(p);
+                        results.Add(adjusted);
                     }
                 }
             }

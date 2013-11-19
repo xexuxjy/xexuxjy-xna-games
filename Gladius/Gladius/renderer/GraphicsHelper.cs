@@ -21,6 +21,12 @@ namespace Gladius.renderer
             sb.DrawString(font, text, pos + new Vector2(1), textColor);
         }
 
+        public static void OffsetRect(ref Rectangle src, ref Rectangle dst)
+        {
+            dst.X += src.X;
+            dst.Y += src.Y;
+        }
+
         public static void CalculateBoundingBox(ModelMesh mm, ref BoundingBox bb)
         {
             //bb = new BoundingBox();

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <StartupObject>Gladius.Program</StartupObject>
@@ -241,6 +241,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\Models\NewFolder1\" />
     <Folder Include="Content\Particles\test\" />
     <Folder Include="Content\UI\shop\" />
     <Folder Include="modes\shop\" />
@@ -450,9 +451,9 @@
       <Link>Content\Effects\MovementGrid\MovementGrid.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\ArenaWall.xnb">
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\ArenaWall.xnb">
       <Link>Content\Models\Arena\Arena2\ArenaWall.xnb</Link>
-    </None>
+    </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Arena\Arena2\ArenaWall_0.xnb">
       <Link>Content\Models\Arena\Arena2\ArenaWall_0.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -499,6 +500,318 @@
     </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Shapes\UnitSphere.xnb">
       <Link>Content\Models\Shapes\UnitSphere.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\14_lod0.xnb">
+      <Link>Content\Models\TP2\14_lod0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\booth01_B.xnb">
+      <Link>Content\Models\TP2\booth01_B.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\booth01_D.xnb">
+      <Link>Content\Models\TP2\booth01_D.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\booth01_DISP.xnb">
+      <Link>Content\Models\TP2\booth01_DISP.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\booth01_D_0.xnb">
+      <Link>Content\Models\TP2\booth01_D_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\booth01_lod01.xnb">
+      <Link>Content\Models\TP2\booth01_lod01.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\booth01_S.xnb">
+      <Link>Content\Models\TP2\booth01_S.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\clothes_patternplain5_beard copy.xnb">
+      <Link>Content\Models\TP2\clothes_patternplain5_beard copy.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\clothes_patternplain5_beard copy_0.xnb">
+      <Link>Content\Models\TP2\clothes_patternplain5_beard copy_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\clothes_patternplain5_beard_disp.xnb">
+      <Link>Content\Models\TP2\clothes_patternplain5_beard_disp.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\con_dirt_01.xnb">
+      <Link>Content\Models\TP2\con_dirt_01.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\con_dirt_01_0.xnb">
+      <Link>Content\Models\TP2\con_dirt_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\con_dirt_01_n.xnb">
+      <Link>Content\Models\TP2\con_dirt_01_n.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\con_dirt_01_s.xnb">
+      <Link>Content\Models\TP2\con_dirt_01_s.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\doorwindow_set.xnb">
+      <Link>Content\Models\TP2\doorwindow_set.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\doorwindow_set_0.xnb">
+      <Link>Content\Models\TP2\doorwindow_set_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\doorwindow_set_N.xnb">
+      <Link>Content\Models\TP2\doorwindow_set_N.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\door_004.xnb">
+      <Link>Content\Models\TP2\door_004.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\door_004_0.xnb">
+      <Link>Content\Models\TP2\door_004_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\door_004_n.xnb">
+      <Link>Content\Models\TP2\door_004_n.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\f1_barrel.xnb">
+      <Link>Content\Models\TP2\f1_barrel.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Fantasy_Tree1.xnb">
+      <Link>Content\Models\TP2\Fantasy_Tree1.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\flowers_Alpha.xnb">
+      <Link>Content\Models\TP2\flowers_Alpha.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\flowers_DF.xnb">
+      <Link>Content\Models\TP2\flowers_DF.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\flowers_DF_0.xnb">
+      <Link>Content\Models\TP2\flowers_DF_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\flowers_spec.xnb">
+      <Link>Content\Models\TP2\flowers_spec.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\flower_10.xnb">
+      <Link>Content\Models\TP2\flower_10.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\flower_6.xnb">
+      <Link>Content\Models\TP2\flower_6.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\free_house.xnb">
+      <Link>Content\Models\TP2\free_house.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\haywagon.xnb">
+      <Link>Content\Models\TP2\haywagon.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\haywagon_B.xnb">
+      <Link>Content\Models\TP2\haywagon_B.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\haywagon_D.xnb">
+      <Link>Content\Models\TP2\haywagon_D.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\haywagon_DISP.xnb">
+      <Link>Content\Models\TP2\haywagon_DISP.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\haywagon_D_0.xnb">
+      <Link>Content\Models\TP2\haywagon_D_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\haywagon_S.xnb">
+      <Link>Content\Models\TP2\haywagon_S.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\house_door_001.xnb">
+      <Link>Content\Models\TP2\house_door_001.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\house_door_001_0.xnb">
+      <Link>Content\Models\TP2\house_door_001_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\house_door_001_n.xnb">
+      <Link>Content\Models\TP2\house_door_001_n.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\ivy03_lod0.xnb">
+      <Link>Content\Models\TP2\ivy03_lod0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\ivy26_DF.xnb">
+      <Link>Content\Models\TP2\ivy26_DF.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\ivy26_DF_0.xnb">
+      <Link>Content\Models\TP2\ivy26_DF_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\ivy26_OP.xnb">
+      <Link>Content\Models\TP2\ivy26_OP.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\ivy3_DF.xnb">
+      <Link>Content\Models\TP2\ivy3_DF.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\ivy3_DF_0.xnb">
+      <Link>Content\Models\TP2\ivy3_DF_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\ivy3_OP.xnb">
+      <Link>Content\Models\TP2\ivy3_OP.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Leaf_DF.xnb">
+      <Link>Content\Models\TP2\Leaf_DF.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Leaf_DF_0.xnb">
+      <Link>Content\Models\TP2\Leaf_DF_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Leaf_N.xnb">
+      <Link>Content\Models\TP2\Leaf_N.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Leaf_OP.xnb">
+      <Link>Content\Models\TP2\Leaf_OP.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Leaf_s.xnb">
+      <Link>Content\Models\TP2\Leaf_s.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\litGr.xnb">
+      <Link>Content\Models\TP2\litGr.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\litGrA.xnb">
+      <Link>Content\Models\TP2\litGrA.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\litGrC.xnb">
+      <Link>Content\Models\TP2\litGrC.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\litGrC_0.xnb">
+      <Link>Content\Models\TP2\litGrC_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\litGrN.xnb">
+      <Link>Content\Models\TP2\litGrN.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\litGrS.xnb">
+      <Link>Content\Models\TP2\litGrS.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\mediterranean7_DF.xnb">
+      <Link>Content\Models\TP2\mediterranean7_DF.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\mediterranean7_DF_0.xnb">
+      <Link>Content\Models\TP2\mediterranean7_DF_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\mediterranean7_N.xnb">
+      <Link>Content\Models\TP2\mediterranean7_N.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\mediterranean7_OP.xnb">
+      <Link>Content\Models\TP2\mediterranean7_OP.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\metal01_d.xnb">
+      <Link>Content\Models\TP2\metal01_d.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\metal01_d_0.xnb">
+      <Link>Content\Models\TP2\metal01_d_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\metal01_n.xnb">
+      <Link>Content\Models\TP2\metal01_n.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\metal01_s.xnb">
+      <Link>Content\Models\TP2\metal01_s.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\roof_01.xnb">
+      <Link>Content\Models\TP2\roof_01.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\roof_01_0.xnb">
+      <Link>Content\Models\TP2\roof_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\roof_01_N.xnb">
+      <Link>Content\Models\TP2\roof_01_N.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\stone_005_c.xnb">
+      <Link>Content\Models\TP2\stone_005_c.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\stone_005_c_0.xnb">
+      <Link>Content\Models\TP2\stone_005_c_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\stone_005_n.xnb">
+      <Link>Content\Models\TP2\stone_005_n.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Tree_01_N.xnb">
+      <Link>Content\Models\TP2\Tree_01_N.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Tree_DF.xnb">
+      <Link>Content\Models\TP2\Tree_DF.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Tree_DF_0.xnb">
+      <Link>Content\Models\TP2\Tree_DF_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\Tree_N.xnb">
+      <Link>Content\Models\TP2\Tree_N.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\villager_free.xnb">
+      <Link>Content\Models\TP2\villager_free.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\wood_planks_01.xnb">
+      <Link>Content\Models\TP2\wood_planks_01.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\wood_planks_01_0.xnb">
+      <Link>Content\Models\TP2\wood_planks_01_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\TP2\medieval_free_mesh\wood_planks_01_N.xnb">
+      <Link>Content\Models\TP2\wood_planks_01_N.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\arena\AttackSkillBar.xnb">
