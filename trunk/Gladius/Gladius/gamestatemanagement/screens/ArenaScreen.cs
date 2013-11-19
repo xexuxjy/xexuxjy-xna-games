@@ -397,6 +397,7 @@ namespace Gladius.gamestatemanagement.screens
 
         }
 
+
         //public void SetMovementGridVisible(bool value)
         //{
         //    MovementGrid.Visible = value;

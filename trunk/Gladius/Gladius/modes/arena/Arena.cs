@@ -32,6 +32,28 @@ namespace Gladius.modes.arena
             m_pathFinder.Initialize(this);
         }
 
+        public bool IsPointOccupied(Point p)
+        {
+            BaseActor ba = null;
+            if (m_baseActorMap.TryGetValue(p, out ba))
+            {
+                return true;
+            }
+            if (m_arenaGrid[p.X, p.Y] == SquareType.Pillar)
+            {
+                return true;
+            }
+            if (m_arenaGrid[p.X, p.Y] == SquareType.Unaccesible)
+            {
+                return true;
+            }
+            if (m_arenaGrid[p.X, p.Y] == SquareType.Wall)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
 
         public bool InLevel(Point p)
@@ -131,17 +153,17 @@ namespace Gladius.modes.arena
             }
         }
 
-        public void SetActorAtPosition(int x, int y, BaseActor actor)
-        {
-            m_arenaGrid[x, y] = SquareType.Mobile;
+        //public void SetActorAtPosition(int x, int y, BaseActor actor)
+        //{
+        //    m_arenaGrid[x, y] = SquareType.Mobile;
 
-        }
+        //}
 
         public void RemoveActor(BaseActor actor)
         {
             Point p = actor.CurrentPosition;
             m_baseActorMap.Remove(p);
-            m_arenaGrid[p.X, p.Y] = SquareType.Empty;
+            //m_arenaGrid[p.X, p.Y] = SquareType.Empty;
         }
 
 
@@ -152,24 +174,24 @@ namespace Gladius.modes.arena
             {
                 return true;
             }
-            return m_arenaGrid[newPoint.X, newPoint.Y] == SquareType.Empty;
-
+            //return m_arenaGrid[newPoint.X, newPoint.Y] == SquareType.Empty;
+            return !IsPointOccupied(newPoint);
         }
 
         // move actor - assumes any validity checks have already taken place.
         public void MoveActor(BaseActor baseActor, Point newPoint)
         {
             Debug.Assert(CanMoveActor(baseActor,newPoint));
-            if (m_arenaGrid[newPoint.X, newPoint.Y] == SquareType.Empty)
+            if (CanMoveActor(baseActor, newPoint))
             {
                 // set current actor square to empty
                 //baseActor
-                m_arenaGrid[baseActor.CurrentPosition.X, baseActor.CurrentPosition.Y] = SquareType.Empty;
+                //m_arenaGrid[baseActor.CurrentPosition.X, baseActor.CurrentPosition.Y] = SquareType.Empty;
                 if (m_baseActorMap.ContainsKey(baseActor.CurrentPosition))
                 {
                     m_baseActorMap.Remove(baseActor.CurrentPosition);
                 }
-                m_arenaGrid[newPoint.X, newPoint.Y] = SquareType.Mobile;
+                //m_arenaGrid[newPoint.X, newPoint.Y] = SquareType.Mobile;
                 baseActor.CurrentPosition = newPoint;
                 m_baseActorMap[baseActor.CurrentPosition] = baseActor;
             }
@@ -323,9 +345,9 @@ namespace Gladius.modes.arena
                 Point adjusted = source.CurrentPosition + p2;
                 if (InLevel(adjusted))
                 {
-                    if (GetSquareTypeAtLocation(adjusted) == SquareType.Mobile)
+                    BaseActor ba = null;
+                    if(m_baseActorMap.TryGetValue(adjusted,out ba))
                     {
-                        BaseActor ba = m_baseActorMap[adjusted];
                         if (ba.Team != source.Team)
                         {
                             return ba;
@@ -341,7 +363,7 @@ namespace Gladius.modes.arena
         {
             if (includeSquare)
             {
-                if (GetSquareTypeAtLocation(location) == SquareType.Empty)
+                if (!IsPointOccupied(location))
                 {
                     return location;
                 }
@@ -351,7 +373,7 @@ namespace Gladius.modes.arena
             foreach (Point p in Globals.OrthognalPoints)
             {
                 Point adjusted = location + p;
-                if (InLevel(adjusted) && GetSquareTypeAtLocation(adjusted) == SquareType.Empty)
+                if (InLevel(adjusted) && !IsPointOccupied(adjusted))
                 {
                     int dist = Globals.PointDist2(adjusted, startLocation);
                     if (dist < closest)
@@ -384,8 +406,8 @@ namespace Gladius.modes.arena
         Unaccesible,
         Wall,
         Crowd,
-        Pillar,
-        Mobile
+        Pillar
+        //Mobile
     }
 
 
@@ -807,7 +829,7 @@ namespace Gladius.modes.arena
             foreach (Point p in Globals.OrthognalPoints)
             {
                 Point adjusted = center + p;
-                if (m_levelMap.InLevel(adjusted) && m_levelMap.GetSquareTypeAtLocation(adjusted) == SquareType.Empty)
+                if (m_levelMap.InLevel(adjusted) && !m_levelMap.IsPointOccupied(adjusted))
                 {
                     // check for height differnces.
                     if (Math.Abs(m_levelMap.GetHeightAtLocation(adjusted) - currentHeight) <= allowableHeightDifference)
