@@ -58,6 +58,11 @@
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
+    <Compile Include="UI\arena\AttackSkillBar.png">
+      <Name>AttackSkillBar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="UI\arena\SkillbarPart1.png">
       <Name>SkillbarPart1</Name>
       <Importer>TextureImporter</Importer>
@@ -85,6 +90,11 @@
     </Compile>
     <Compile Include="UI\backgrounds\ScrollBackground.jpg">
       <Name>ScrollBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\cursors\DefaultCursor.png">
+      <Name>DefaultCursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -535,11 +545,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="UI\cursors\DefaultCursor.png">
-      <Name>DefaultCursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="UI\cursors\EndMove.png">
       <Name>EndMove</Name>
       <Importer>TextureImporter</Importer>
@@ -585,16 +590,15 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="UI\arena\SkillbarPart2.png">
+      <Name>SkillbarPart2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="UI\shop\ShopMap.txt">
       <Name>ShopMap</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="UI\arena\AttackSkillBar.png">
-      <Name>AttackSkillBar</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_TextureFormat>NoChange</ProcessorParameters_TextureFormat>
-    </Compile>
     <Compile Include="UI\arena\AzureWaters.png">
       <Name>AzureWaters</Name>
       <Importer>TextureImporter</Importer>
@@ -620,17 +624,17 @@
       <Importer>XmlImporter</Importer>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Models\ThirdParty\02_warrior_Anims.xml">
-      <Name>02_warrior_Anims</Name>
-      <Importer>XmlImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-      <SubType>Designer</SubType>
-    </None>
     <Compile Include="Models\ThirdParty\02_warrior.FBX">
       <Name>02_warrior</Name>
       <Importer>FbxImporter</Importer>
       <Processor>GpuSkinnedModelProcessor</Processor>
       <ProcessorParameters_DefaultEffect>SkinnedEffect</ProcessorParameters_DefaultEffect>
+    </Compile>
+    <Compile Include="Models\ThirdParty\02_warrior_Anims.xml">
+      <SubType>Designer</SubType>
+      <Name>02_warrior_Anims</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
     </Compile>
     <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
       <Name>monster-animated-character-XNA_Anims</Name>
