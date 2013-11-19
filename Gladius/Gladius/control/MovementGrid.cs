@@ -138,17 +138,20 @@ namespace Gladius.control
 
         public void DrawIfValid(ICamera camera, Point p, BaseActor actor, Texture2D cursor = null)
         {
-            if (cursor == null)
+            if (m_arena.InLevel(p))
             {
-                cursor = CursorForSquare(p, actor);
-            }
-            if (cursor != null)
-            {
-                Vector3 v3 = V3ForSquare(p);
-                Matrix m = Matrix.CreateTranslation(v3);
+                if (cursor == null)
+                {
+                    cursor = CursorForSquare(p, actor);
+                }
+                if (cursor != null)
+                {
+                    Vector3 v3 = V3ForSquare(p);
+                    Matrix m = Matrix.CreateTranslation(v3);
 
-                float alpha = (cursor == m_defaultTile) ? 0.2f : 1.0f;
-                m_simpleQuad.Draw(Game.GraphicsDevice, cursor, m, Vector3.Up, Vector3.One, camera,actor.TeamColour,alpha);
+                    float alpha = (cursor == m_defaultTile) ? 0.2f : 1.0f;
+                    m_simpleQuad.Draw(Game.GraphicsDevice, cursor, m, Vector3.Up, Vector3.One, camera, actor.TeamColour, alpha);
+                }
             }
         }
 
@@ -295,34 +298,28 @@ namespace Gladius.control
         {
             if (m_arena.InLevel(p))
             {
-                SquareType type = m_arena.GetSquareTypeAtLocation(p);
-                switch (type)
+                if (m_arena.IsPointOccupied(p))
                 {
-                    case (SquareType.Empty):
+                    return m_targetCursor;
+                }
+                else
+                {
+                    BaseActor target = m_arena.GetActorAtPosition(p);
+                    if (m_arenaScreen.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
+                    {
+                        if (m_arenaScreen.CombatEngine.IsAttackerInRange(actor, target, cursorOnly: true))
+                        {
+                            return m_targetAndSelectCursor;
+                        }
+                        else
                         {
                             return m_targetCursor;
                         }
-                    case (SquareType.Mobile):
-                        {
-                            BaseActor target = m_arena.GetActorAtPosition(p);
-                            if (m_arenaScreen.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
-                            {
-                                if (m_arenaScreen.CombatEngine.IsAttackerInRange(actor, target,cursorOnly:true))
-                                {
-                                    return m_targetAndSelectCursor;
-                                }
-                                else
-                                {
-                                    return m_targetCursor;
-                                }
-                            }
-                            else
-                            {
-                                return m_selectCursor;
-                            }
-                        }
-                    default:
-                        return null;
+                    }
+                    else
+                    {
+                        return m_selectCursor;
+                    }
                 }
             }
             else
