@@ -198,8 +198,7 @@ namespace Gladius.modes.arena
 
         public List<ModelData> ModelData
         {
-            get;
-            set;
+            get { return m_modelData; }
         }
 
 
@@ -442,6 +441,7 @@ namespace Gladius.modes.arena
         private int m_width;
         private int m_breadth;
 
+        private List<ModelData> m_modelData = new List<ModelData>();
         private Dictionary<Point, BaseActor> m_baseActorMap = new Dictionary<Point, BaseActor>();
         private ArenaPathFinder m_pathFinder;
         private Random m_rng = new Random();
