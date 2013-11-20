@@ -48,6 +48,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Arena\Arena2\ArenaFloor.png">
+      <Name>ArenaFloor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Models\TP2\medieval_free_mesh\14_lod0.x">
       <Name>14_lod0</Name>
       <Importer>XImporter</Importer>
@@ -221,13 +226,6 @@
       <Name>Pillar1</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Arena\Arena2\ArenaFloor.png">
-      <Name>ArenaFloor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_ColorKeyEnabled>False</ProcessorParameters_ColorKeyEnabled>
-      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
     </Compile>
     <Compile Include="Models\Arena\Arena2\ArenaWall.png">
       <Name>ArenaWall</Name>
@@ -619,11 +617,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <None Include="Models\Arena\Arena2\Arena2Data.txt">
-      <Name>Arena2Data</Name>
-      <Importer>XmlImporter</Importer>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Compile Include="Models\ThirdParty\02_warrior.FBX">
       <Name>02_warrior</Name>
       <Importer>FbxImporter</Importer>
@@ -636,6 +629,12 @@
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>
+    <Content Include="Models\Arena\Arena2\Arena2Data.xml">
+      <Name>Arena2Data</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
       <Name>monster-animated-character-XNA_Anims</Name>
       <Importer>XmlImporter</Importer>
