@@ -7,6 +7,8 @@ using System.Diagnostics;
 using Gladius.actors;
 using Gladius.gamestatemanagement.screens;
 using System.IO;
+using System.Xml;
+using Gladius.renderer;
 
 namespace Gladius.modes.arena
 {
@@ -24,13 +26,17 @@ namespace Gladius.modes.arena
             BuildDefaultArena();
         }
 
-        public Arena(ArenaScreen arenaScreen, String arenaDataName)
+        public Arena(ArenaScreen arenaScreen)
         {
             m_arenaScreen = arenaScreen;
-            BuildArena(arenaDataName);
+        }
+
+        public void InitialisePathFinding()
+        {
             m_pathFinder = new ArenaPathFinder();
             m_pathFinder.Initialize(this);
         }
+
 
         public bool IsPointOccupied(Point p)
         {
@@ -54,7 +60,6 @@ namespace Gladius.modes.arena
 
             return false;
         }
-
 
         public bool InLevel(Point p)
         {
@@ -91,9 +96,18 @@ namespace Gladius.modes.arena
             List<String> lines = new List<String>();
             using (StreamReader sr = new StreamReader(TitleContainer.OpenStream(arenaDataName)))
             {
-                while (!sr.EndOfStream)
+                String result = sr.ReadToEnd();
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(result);
+
+                ModelName = doc.SelectSingleNode("Arena/Model").Value;
+                TextureName = doc.SelectSingleNode("Arena/Texture").Value;
+
+
+                XmlNodeList nodes = doc.SelectNodes("Arena/Layout//row");
+                foreach (XmlNode node in nodes)
                 {
-                    lines.Add(sr.ReadLine());
+                    lines.Add(node.InnerText);
                 }
 
                 Width = lines[0].Length;
@@ -127,8 +141,17 @@ namespace Gladius.modes.arena
                         }
                     }
                 }
+
+                // fixme man - arena model, texture, skybox, and static models specified in file.
+                
+                // models.
+                XmlNodeList modelnodes = doc.SelectNodes("Arena//Model");
+
+
+
             }
         }
+
 
         public int Width
         {
@@ -152,6 +175,33 @@ namespace Gladius.modes.arena
                 m_breadth = value;
             }
         }
+
+
+        public SquareType[,] ArenaGrid
+        {
+            get { return m_arenaGrid; }
+            set { m_arenaGrid = value; }
+        }
+        
+        public String ModelName
+        {
+            get;
+            set;
+        }
+
+        public String TextureName
+        {
+            get;
+            set;
+        }
+
+
+        public List<ModelData> ModelData
+        {
+            get;
+            set;
+        }
+
 
         //public void SetActorAtPosition(int x, int y, BaseActor actor)
         //{
@@ -513,6 +563,9 @@ namespace Gladius.modes.arena
 
         #endregion
 
+
+
+
         #region Initialization
 
         /// <summary>
@@ -869,6 +922,8 @@ namespace Gladius.modes.arena
         #endregion
 
     }
+
+
 
     #region Search Status Enum
     public enum SearchStatus

@@ -140,7 +140,10 @@ namespace Gladius.renderer
                 }
             }
 
-
+            foreach (ModelData modelData in m_arena.ModelData)
+            {
+                modelData.DrawInstances(camera);
+            }
 
             Globals.DrawCameraDebugText(m_spriteBatch, m_spriteFont, m_gameScreen.ScreenManager.FPS);
         }
@@ -166,32 +169,32 @@ namespace Gladius.renderer
         }
 
 
-        public void DrawBarrel(GraphicsDevice device,ModelData modelData, Vector3 position, Vector3 scale, Matrix rotation)
-        {
-            Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
-            //Matrix world = Matrix.CreateTranslation(position);
-            device.SamplerStates[0].AddressU = TextureAddressMode.Mirror;
-            device.SamplerStates[0].AddressV = TextureAddressMode.Mirror;
+        //public void DrawBarrel(GraphicsDevice device,ModelData modelData, Vector3 position, Vector3 scale, Matrix rotation)
+        //{
+        //    Matrix world = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
+        //    //Matrix world = Matrix.CreateTranslation(position);
+        //    device.SamplerStates[0].AddressU = TextureAddressMode.Mirror;
+        //    device.SamplerStates[0].AddressV = TextureAddressMode.Mirror;
             
-            foreach (ModelMesh mm in modelData.Model.Meshes)
-            {
-                int count = 0;
-                foreach (ModelMeshPart mp in mm.MeshParts)
-                {
-                    BasicEffect effect = mp.Effect as BasicEffect;
-                    effect.EnableDefaultLighting();
-                    effect.TextureEnabled = true;
-                    effect.Texture = (count == 0 )? modelData.Texture2 : modelData.Texture;
-                    effect.View = m_view;
-                    effect.Projection = m_projection;
-                    effect.World = modelData.BoneTransforms[mm.ParentBone.Index] * world;
-                    ++count;
-                }
-                mm.Draw();
-            }
-            device.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-            device.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
-        }
+        //    foreach (ModelMesh mm in modelData.Model.Meshes)
+        //    {
+        //        int count = 0;
+        //        foreach (ModelMeshPart mp in mm.MeshParts)
+        //        {
+        //            BasicEffect effect = mp.Effect as BasicEffect;
+        //            effect.EnableDefaultLighting();
+        //            effect.TextureEnabled = true;
+        //            effect.Texture = (count == 0 )? modelData.Texture2 : modelData.Texture;
+        //            effect.View = m_view;
+        //            effect.Projection = m_projection;
+        //            effect.World = modelData.BoneTransforms[mm.ParentBone.Index] * world;
+        //            ++count;
+        //        }
+        //        mm.Draw();
+        //    }
+        //    device.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
+        //    device.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
+        //}
 
 
 
