@@ -68,7 +68,7 @@ namespace Gladius.modes.arena
                 // fixme man - arena model, texture, skybox, and static models specified in file.
 
                 // models.
-                XmlNodeList modelNodes = doc.SelectNodes("Arena//Model");
+                XmlNodeList modelNodes = doc.SelectNodes("Arena/Models//Model");
                 foreach (XmlNode node in modelNodes)
                 {
                     String modelName = node.Attributes["meshName"].Value;
@@ -95,7 +95,7 @@ namespace Gladius.modes.arena
 
                         modelData.AddInstance(position, rotation, scale);
                     }
-
+                    arena.ModelData.Add(modelData);
                 }
 
 
