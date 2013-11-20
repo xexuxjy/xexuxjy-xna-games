@@ -277,22 +277,12 @@ namespace Gladius.gamestatemanagement.screens
 
             m_spriteBatch = new SpriteBatch(ScreenManager.GraphicsDevice);
 
-            // Load the sprite font. The sprite font has a 3 pixel outer glow
-            // baked into it so we need to decrease the spacing so that the
-            // SpriteFont will render correctly.
-            //m_gameFont = ContentManager.Load<SpriteFont>("GameFont");
-            //m_gameFont.Spacing = -4.0f;
-
             m_debugFont = ContentManager.Load<SpriteFont>("UI/fonts/DebugFont8");
             m_battleOverFont = ContentManager.Load<SpriteFont>("UI/fonts/BattleOverFont");
 
-
-
-            //Model barrel = m_content.Load<Model>("Models/TP2/f1_barrel");
             Globals.Camera.Position = new Vector3(0, 5, -10);
 
-            //m_arena = new Arena(this,32, 32);
-            m_arena = new Arena(this, "Content/Models/Arena/Arena2/Arena2Data.txt");
+            m_arena = ArenaLoader.BuildArena(this, "Content/Models/Arena/Arena2/Arena2Data.xml",ContentManager);
 
             m_arenaRenderer = new SimpleArenaRenderer(m_arena, this);
             m_arenaRenderer.LoadContent();
@@ -305,7 +295,6 @@ namespace Gladius.gamestatemanagement.screens
             Globals.SoundManager = new SoundManager();
             Globals.SoundManager.LoadContent(ContentManager);
 
-            //String modelName = "Models/ThirdParty/monster-animated-character-XNA";
             String playerTeamModelName = "Models/ThirdParty/01_warrior";
             String enemyTeamModelName = "Models/ThirdParty/02_warrior";
             //String playerTeamModelName = enemyTeamModelName;
@@ -352,7 +341,6 @@ namespace Gladius.gamestatemanagement.screens
             m_attackBar = new AttackBar();
             m_attackBar.Rectangle = new Rectangle(20, 300, 600, 30);
             m_attackBar.InitializeCombatBar(3, 0.7f, 0.85f, 5f);
-            //AddComponent(attackBar);
             m_uiElementsList.Add(m_attackBar);
 
 
@@ -376,18 +364,12 @@ namespace Gladius.gamestatemanagement.screens
             foreach (IUIElement uiElement in m_uiElementsList)
             {
                 uiElement.LoadContent(ContentManager, ScreenManager.Game.GraphicsDevice);
-                //uiElement.Arena = m_arena;
                 uiElement.ArenaScreen = this;
             }
 
-            // these here so that none of the key listeners are setup by default.
-            //SetMovementGridVisible(false);
             SetPlayerChoiceBarVisible(false);
             SetAttackBarVisible(false);
 
-            //Globals.MovementGrid.TurnManager = m_turnManager;
-
-            //Globals.MovementGrid.CurrentActor = actors[0];
             Globals.Camera.LookAtOffset = Vector3.Zero;//new Vector3(0.0f, 2, -2.2f) *  m_party.ModelHeight;
             Globals.Camera.DesiredPositionOffset = new Vector3(0, 2f, 4.0f) * actors[0].ModelHeight;
 
@@ -396,20 +378,6 @@ namespace Gladius.gamestatemanagement.screens
             int ibreak = 0;
 
         }
-
-
-        //public void SetMovementGridVisible(bool value)
-        //{
-        //    MovementGrid.Visible = value;
-        //    if (value)
-        //    {
-        //        MovementGrid.RegisterListeners();
-        //    }
-        //    else
-        //    {
-        //        MovementGrid.UnregisterListeners();
-        //    }
-        //}
 
         public void SetPlayerChoiceBarVisible(bool value)
         {
@@ -501,7 +469,6 @@ namespace Gladius.gamestatemanagement.screens
         private SpriteFont m_battleOverFont;
 
         protected TurnManager m_turnManager;
-        //protected GameComponentCollection Components = new GameComponentCollection();
 
         MovementGrid m_movementGrid;
         PlayerChoiceBar m_playerChoiceBar;

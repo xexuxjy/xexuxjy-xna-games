@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Gladius.util;
 
 namespace Gladius.renderer
 {
@@ -29,8 +30,6 @@ namespace Gladius.renderer
 
         public static void CalculateBoundingBox(ModelMesh mm, ref BoundingBox bb)
         {
-            //bb = new BoundingBox();
-            bool first = true;
             Matrix x = Matrix.Identity;
             ModelBone mb = mm.ParentBone;
             while (mb != null)
@@ -39,7 +38,6 @@ namespace Gladius.renderer
                 mb = mb.Parent;
             }
 
-
             Vector3 meshMax = new Vector3(float.MinValue);
             Vector3 meshMin = new Vector3(float.MaxValue);
 
@@ -47,39 +45,20 @@ namespace Gladius.renderer
             {
                 int stride = part.VertexBuffer.VertexDeclaration.VertexStride;
 
-                //VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[part.NumVertices];
                 Vector3[] vertexData = new Vector3[part.NumVertices];
-                //int num = (part.NumVertices - part.VertexOffset);
                 int num = part.NumVertices;
 
-                //GetData(offsetFromStartOfVertexBufferInBytes, arrayOfVector3, 0, arrayOfVector3.Length, sizeOfEachVertexInBytes);
-
                 part.VertexBuffer.GetData(0, vertexData, 0, num, stride);
-                //part.VertexBuffer.GetData(part.VertexOffset * stride, vertexData, 0, num, stride);
-
-                // Find minimum and maximum xyz values for this mesh part
-                //Vector3 vertPosition = new Vector3();
 
                 for (int i = 0; i < vertexData.Length; i++)
                 {
                     Vector3 vertPosition = vertexData[i];
-                    //vertPosition.X = vertexData[i];
-                    //vertPosition.Y = vertexData[i + 1];
-                    //vertPosition.Z = vertexData[i + 2];
-
                     // update our values from this vertex
                     meshMin = Vector3.Min(meshMin, vertPosition);
                     meshMax = Vector3.Max(meshMax, vertPosition);
                     i += stride;
                 }
             }
-
-            // transform by mesh bone matrix
-            //meshMin = Vector3.Transform(meshMin, meshTransform);
-            //meshMax = Vector3.Transform(meshMax, meshTransform);
-
-            // Create the bounding box
-            //BoundingBox box = new BoundingBox(meshMin, meshMax);
 
             BoundingBox newbox = new BoundingBox(meshMin, meshMax);
             bb = MergeBoxes(bb, newbox);
@@ -101,6 +80,21 @@ namespace Gladius.renderer
             return new BoundingBox(min, max);
         }
 
+        public static Vector3 StringToVector3(String value)
+        {
+            string[] temp = value.Split(',');
+
+            float x = float.Parse(temp[0]);
+
+            float y = float.Parse(temp[1]);
+
+            float z = float.Parse(temp[2]);
+
+            Vector3 rValue = new Vector3(x, y, z);
+
+            return rValue;
+        }
+
 
     }
 
@@ -110,37 +104,47 @@ namespace Gladius.renderer
         public Model Model;
         public Matrix[] BoneTransforms;
         public Texture2D Texture;
-        public Texture2D Texture2;
         public float HeightOffset;
         public BoundingBox BoundingBox;
+        public Vector3 OriginalModelScale;
         public Vector3 ModelScale;
         public Matrix ModelRotation = Matrix.Identity;
 
-        public ModelData(Model _model, float desiredScale,float _heightOffset,Texture2D _texture, Texture2D _texture2=null)
-        {
-            Model = _model;
-            HeightOffset = _heightOffset;
-            Texture = _texture;
-            Texture2 = _texture2;
-            BoneTransforms = new Matrix[_model.Bones.Count];
-            _model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
-            CalcBounds(desiredScale);
-        }
+        public List<ModelDataInstance> Instances = new List<ModelDataInstance>();
 
-        public ModelData(Model _model, Vector3 desiredScale, float _heightOffset, Texture2D _texture, Texture2D _texture2 = null)
+        public ModelData(String modelName, String textureName, ThreadSafeContentManager contentManager)
         {
-            Model = _model;
-            HeightOffset = _heightOffset;
-            Texture = _texture;
-            Texture2 = _texture2;
-            BoneTransforms = new Matrix[_model.Bones.Count];
-            _model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
-            CalcBounds(desiredScale);
+            Model = contentManager.Load<Model>(modelName);
+            Texture = contentManager.Load<Texture2D>(textureName);
+            BoneTransforms = new Matrix[Model.Bones.Count];
+            Model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
         }
 
 
 
-        private void CalcBounds(float desiredScale)
+        public ModelData(Model _model, float desiredScale,float _heightOffset,Texture2D _texture)
+        {
+            Model = _model;
+            HeightOffset = _heightOffset;
+            Texture = _texture;
+            BoneTransforms = new Matrix[_model.Bones.Count];
+            _model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
+            CalcBounds(desiredScale,out BoundingBox,out ModelScale);
+        }
+
+        public ModelData(Model _model, Vector3 desiredScale, float _heightOffset, Texture2D _texture)
+        {
+            Model = _model;
+            HeightOffset = _heightOffset;
+            Texture = _texture;
+            BoneTransforms = new Matrix[_model.Bones.Count];
+            _model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
+            CalcBounds(desiredScale,out BoundingBox,out ModelScale);
+        }
+
+
+
+        public void CalcBounds(float desiredScale,out BoundingBox boundingBox,out Vector3 scale)
         {
             BoundingBox bb = new BoundingBox();
             foreach (ModelMesh mesh in Model.Meshes)
@@ -151,33 +155,27 @@ namespace Gladius.renderer
             }
             Vector3 diff = bb.Max - bb.Min;
             float maxSpan = Math.Max(diff.X, Math.Max(diff.Y, diff.Z));
-            //BoundingSphere actorBs = m_model.Meshes[0].BoundingSphere;
-            ModelScale = new Vector3(desiredScale / maxSpan);
+            scale = new Vector3(desiredScale / maxSpan);
 
-            BoundingBox = new BoundingBox(bb.Min * ModelScale, bb.Max * ModelScale);
+            boundingBox = new BoundingBox(bb.Min * scale, bb.Max * scale);
         }
 
-        private void CalcBounds(Vector3 desiredScale)
+        public void CalcBounds(Vector3 desiredScale,out BoundingBox boundingBox,out Vector3 scale)
         {
             BoundingBox bb = new BoundingBox();
             foreach (ModelMesh mesh in Model.Meshes)
             {
-                int ibreak = 0;
                 GraphicsHelper.CalculateBoundingBox(mesh, ref bb);
-
             }
             Vector3 diff = bb.Max - bb.Min;
-            //float maxSpan = Math.Max(diff.X, Math.Max(diff.Y, diff.Z));
-            //BoundingSphere actorBs = m_model.Meshes[0].BoundingSphere;
-            ModelScale = new Vector3(desiredScale.X / diff.X, desiredScale.Y / diff.Y, desiredScale.Z / diff.Z);
-            BoundingBox = new BoundingBox(bb.Min * ModelScale, bb.Max * ModelScale);
+            scale = new Vector3(desiredScale.X / diff.X, desiredScale.Y / diff.Y, desiredScale.Z / diff.Z);
+            boundingBox = new BoundingBox(bb.Min * scale, bb.Max * scale);
         }
 
 
-
-        public void Draw(ICamera camera,Vector3 position)
+        public void Draw(ICamera camera, Vector3 position)
         {
-            Draw(camera,position, ModelScale, Matrix.Identity);
+            Draw(camera, position, ModelScale, Matrix.Identity);
         }
 
         public void Draw(ICamera camera, Matrix world)
@@ -185,68 +183,87 @@ namespace Gladius.renderer
             Draw(camera, world.Translation, ModelScale, world);
         }
 
-
         public void Draw(ICamera camera, Vector3 position, Vector3 scale, Matrix origRotation)
         {
             // just want rotation bit.
             Matrix rotation = origRotation;
             rotation.Translation = Vector3.Zero;
-
-            position.Y += HeightOffset;
-
-            if (Texture2 == null)
-            {
-                Matrix rot = ModelRotation * rotation;
-
-                Matrix world = Matrix.CreateScale(scale) * rot * Matrix.CreateTranslation(position);
-                foreach (ModelMesh mm in Model.Meshes)
-                {
-                    foreach (BasicEffect effect in mm.Effects)
-                    {
-                        effect.EnableDefaultLighting();
-                        effect.TextureEnabled = true;
-                        //effect.Texture = Texture;
-                        effect.View = camera.View;
-                        effect.Projection = camera.Projection;
-                        effect.World = BoneTransforms[mm.ParentBone.Index] * world;
-                    }
-                    mm.Draw();
-                }
-            }
-            else
-            {
-                DrawParts(camera, position, scale, rotation);
-            }
-        }
-
-        public void DrawParts(ICamera camera,Vector3 position, Vector3 scale, Matrix rotation)
-        {
             Matrix rot = ModelRotation * rotation;
 
             Matrix world = Matrix.CreateScale(scale) * rot * Matrix.CreateTranslation(position);
-            //Matrix world = Matrix.CreateTranslation(position);
             foreach (ModelMesh mm in Model.Meshes)
             {
-                int count = 0;
-                foreach (ModelMeshPart mp in mm.MeshParts)
+                foreach (BasicEffect effect in mm.Effects)
                 {
-                    //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-                    //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
-                    ++count;
-                    BasicEffect effect = mp.Effect as BasicEffect;
                     effect.EnableDefaultLighting();
                     effect.TextureEnabled = true;
-                    //effect.Texture = (count == 2 && Texture2 != null) ? Texture : Texture2;
+                    //effect.Texture = Texture;
                     effect.View = camera.View;
                     effect.Projection = camera.Projection;
                     effect.World = BoneTransforms[mm.ParentBone.Index] * world;
                 }
                 mm.Draw();
             }
+
         }
 
-        
+        public void AddInstance(Vector3 position, Vector3 euler, Vector3 scale)
+        {
+            ModelDataInstance instance = new ModelDataInstance();
+            instance.Parent = this;
+            instance.Position = position;
+            instance.DesiredScale = scale;
+            instance.Euler = euler;
+            instance.Initialise();
+            Instances.Add(instance);
+        }
 
+        public void DrawInstances(ICamera camera)
+        {
+            foreach (ModelDataInstance instance in Instances)
+            {
+                instance.Draw(camera);
+            }
+        }
+    }
+
+
+    public class ModelDataInstance
+    {
+        public Vector3 Position;
+        public Vector3 DesiredScale;
+        public Vector3 ModelScale;
+        public Vector3 Euler;
+        public Matrix Rotation;
+        public BoundingBox BoundingBox;
+        public ModelData Parent;
+
+        public void Initialise()
+        {
+            Parent.CalcBounds(DesiredScale,out BoundingBox,out ModelScale);
+        }
+
+        public void Draw(ICamera camera)
+        {
+            // just want rotation bit.
+
+            Matrix rot = Parent.ModelRotation * Rotation;
+
+            Matrix world = Matrix.CreateScale(ModelScale) * rot * Matrix.CreateTranslation(Position);
+            foreach (ModelMesh mm in Parent.Model.Meshes)
+            {
+                foreach (BasicEffect effect in mm.Effects)
+                {
+                    effect.EnableDefaultLighting();
+                    effect.TextureEnabled = true;
+                    //effect.Texture = Texture;
+                    effect.View = camera.View;
+                    effect.Projection = camera.Projection;
+                    effect.World = Parent.BoneTransforms[mm.ParentBone.Index] * world;
+                }
+                mm.Draw();
+            }
+        }
 
     }
 

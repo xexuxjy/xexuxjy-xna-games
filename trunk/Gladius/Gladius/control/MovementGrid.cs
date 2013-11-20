@@ -54,7 +54,7 @@ namespace Gladius.control
             //return;
             if (Visible && CurrentActor != null)
             {
-                DrawCenteredGrid(CurrentActor.CurrentPosition,CurrentActor, CurrentActor.CurrentMovePoints, camera);
+                //DrawCenteredGrid(CurrentActor.CurrentPosition,CurrentActor, CurrentActor.CurrentMovePoints, camera);
 
                 // draw at current actor.
                 DrawIfValid(camera, CurrentActor.CurrentPosition, CurrentActor, m_selectCursor);
