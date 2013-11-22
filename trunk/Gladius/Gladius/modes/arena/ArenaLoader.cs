@@ -100,6 +100,7 @@ namespace Gladius.modes.arena
 
 
             }
+            arena.InitialisePathFinding();
             return arena;
         }
 

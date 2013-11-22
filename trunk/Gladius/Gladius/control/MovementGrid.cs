@@ -36,6 +36,7 @@ namespace Gladius.control
             m_interMoveCursor = ContentManager.Load<Texture2D>("UI/cursors/InterMove");
             m_turnMoveCursor = ContentManager.Load<Texture2D>("UI/cursors/CornerTurn");
             m_endMoveCursor = ContentManager.Load<Texture2D>("UI/cursors/EndMove");
+            m_allCursors = ContentManager.Load<Texture2D>("UI/cursors/MoveCursorSheet");
 
             m_simpleQuad = new SimpleQuad(ContentManager);
 
@@ -155,11 +156,32 @@ namespace Gladius.control
             }
         }
 
+        public void DrawIfValidCursorType(ICamera camera, Point p, BaseActor actor, CursorType cursorType=CursorType.None)
+        {
+            if (m_arena.InLevel(p))
+            {
+                if (cursorType == CursorType.None)
+                {
+                    cursorType = CursorTypeForSquare(p, actor);
+                }
+                if (cursorType != CursorType.None)
+                {
+                    Vector3 v3 = V3ForSquare(p);
+                    Matrix m = Matrix.CreateTranslation(v3);
+
+                    Vector4 texCoords = new Vector4();
+                    CursorTexCoords(cursorType,actor,ref texCoords);
+                    //float alpha = (cursor == m_defaultTile) ? 0.2f : 1.0f;
+                    m_simpleQuad.Draw(Game.GraphicsDevice, m_allCursors, m, Vector3.Up, Vector3.One, camera, actor.TeamColour, texCoords);
+                }
+            }
+        }
 
 
 
         public void DrawIfValid(ICamera camera, Point prevPoint, Point point, Point nextPoint, BaseActor actor, bool prevExists,bool nextExists, Texture2D cursor = null)
         {
+            CursorType cursorType = CursorType.None;
             if (cursor == null)
             {
                 cursor = CursorForSquare(point, actor);
@@ -227,36 +249,43 @@ namespace Gladius.control
                         if (CompareSide(enterSide, exitSide, Side.Left, Side.Right))
                         {
                             cursor = m_interMoveCursor;
+                            cursorType = CursorType.InterMove;
                             rotation = (float)Math.PI / 2f;
                         }
                         else if (CompareSide(enterSide, exitSide, Side.Top, Side.Bottom))
                         {
                             cursor = m_interMoveCursor;
+                            cursorType = CursorType.InterMove;
                         }
                         else if (CompareSide(enterSide, exitSide, Side.Left, Side.Top))
                         {
                             cursor = m_turnMoveCursor;
+                            cursorType = CursorType.TurnMove;
                             rotation = ((float)(3 * Math.PI) / 2f);
                         }
                         else if (CompareSide(enterSide, exitSide, Side.Left, Side.Bottom))
                         {
                             cursor = m_turnMoveCursor;
+                            cursorType = CursorType.TurnMove;
                             rotation = ((float)Math.PI);
                         }
                         else if (CompareSide(enterSide, exitSide, Side.Right, Side.Top))
                         {
                             cursor = m_turnMoveCursor;
+                            cursorType = CursorType.TurnMove;
                             rotation =0;
                         }
                         else if (CompareSide(enterSide, exitSide, Side.Right, Side.Bottom))
                         {
                             cursor = m_turnMoveCursor;
+                            cursorType = CursorType.TurnMove;
                             rotation = (float)Math.PI/2f;
                         }
                     }
                     else
                     {
                         cursor = m_endMoveCursor;
+                        cursorType = CursorType.EndMove;
                         switch(enterSide)
                         {
                             case(Side.Left):
@@ -277,6 +306,7 @@ namespace Gladius.control
                 else
                 {
                     cursor = m_startMoveCursor;
+                    cursorType = CursorType.StartMove;
                 }
 
                 Matrix.CreateRotationY(rotation, out rot);
@@ -284,7 +314,12 @@ namespace Gladius.control
 
                 // not sure why it's not getting this from the texture.
                 float alpha = (cursor == m_defaultTile) ? 0.2f : 1.0f;
-                m_simpleQuad.Draw(Game.GraphicsDevice, cursor, m, Vector3.Up, Vector3.One, camera,actor.TeamColour,alpha);
+                //m_simpleQuad.Draw(Game.GraphicsDevice, cursor, m, Vector3.Up, Vector3.One, camera,actor.TeamColour,alpha);
+                Vector4 texCoords = new Vector4();
+                CursorTexCoords(cursorType, actor, ref texCoords);
+                //float alpha = (cursor == m_defaultTile) ? 0.2f : 1.0f;
+                m_simpleQuad.Draw(Game.GraphicsDevice, m_allCursors, m, Vector3.Up, Vector3.One, camera, actor.TeamColour, texCoords);
+
             }
         }
 
@@ -432,6 +467,99 @@ namespace Gladius.control
             CurrentPosition = CurrentActor.CurrentPosition;
         }
 
+        public void CursorTexCoords(CursorType type,BaseActor actor,ref Vector4 result)
+        {
+            // 512 texture - end, inter , turn , start
+            // blue,green,pink, white.
+            float teamOffset = 0;
+            if (actor.Team== Globals.PlayerTeam)
+            {
+                teamOffset = 0.5f;
+            }
+            else if (actor.Team == Globals.EnemyTeam1)
+            {
+                teamOffset = 0f;
+            }
+            else if (actor.Team == Globals.EnemyTeam2)
+            {
+                teamOffset = 0.25f;
+            }
+            else if (actor.Team == Globals.EnemyTeam3)
+            {
+                teamOffset = 0.5f;
+            }
+
+            float cursorOffset = 0f;
+            switch (type)
+            {
+                case CursorType.StartMove:
+                    {
+                        cursorOffset = 0f;
+                        break;
+                    }
+                case CursorType.InterMove:
+                    {
+                        cursorOffset = 0.25f;
+                        break;
+                    }
+                case CursorType.TurnMove:
+                    {
+                        cursorOffset = 0.5f;
+                        break;
+                    }
+                case CursorType.EndMove:
+                    {
+                        cursorOffset = 0.75f;
+                        break;
+                    }
+            }
+
+            result.X = teamOffset;
+            result.Y = cursorOffset;
+            result.Z = result.X + 0.25f;
+            result.W = result.Y + 0.25f;
+        }
+
+        public CursorType CursorTypeForSquare(Point p, BaseActor actor)
+        {
+            if (m_arena.InLevel(p))
+            {
+                if (m_arena.IsPointOccupied(p))
+                {
+                    return CursorType.Target;
+                }
+                else
+                {
+                    BaseActor target = m_arena.GetActorAtPosition(p);
+                    if (m_arenaScreen.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
+                    {
+                        if (m_arenaScreen.CombatEngine.IsAttackerInRange(actor, target, cursorOnly: true))
+                        {
+                            return CursorType.TargetSelect;
+                        }
+                        else
+                        {
+                            return CursorType.Target;
+                        }
+                    }
+                    else
+                    {
+                        return CursorType.Select;
+                    }
+                }
+            }
+            else
+            {
+                return CursorType.None;
+            }
+        }
+
+        public bool IsTeamColouredCursor(CursorType type)
+        {
+            return type == CursorType.EndMove || type == CursorType.StartMove || type == CursorType.InterMove || type == CursorType.TurnMove;
+        }
+
+
         public Vector3 m_cursorMovement = Vector3.Zero;
         public int CurrentCursorSize = 5;
         public const float m_hover = 0.01f;
@@ -450,7 +578,22 @@ namespace Gladius.control
         public Texture2D m_interMoveCursor;
         public Texture2D m_turnMoveCursor;
         public Texture2D m_endMoveCursor;
+        public Texture2D m_allCursors;
     }
+
+    public enum CursorType
+    {
+        None,
+        Default,
+        Select,
+        Target,
+        TargetSelect,
+        StartMove,
+        InterMove,
+        TurnMove,
+        EndMove
+    }
+
 
     public enum Side
     {

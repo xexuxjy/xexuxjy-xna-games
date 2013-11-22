@@ -51,13 +51,6 @@ namespace Gladius.renderer
 
         private void FillVertices()
         {
-            // Fill in texture coordinates to display full texture
-            // on quad
-            Vector2 textureUpperLeft = new Vector2(0.0f, 0.0f);
-            Vector2 textureUpperRight = new Vector2(1.0f, 0.0f);
-            Vector2 textureLowerLeft = new Vector2(0.0f, 1.0f);
-            Vector2 textureLowerRight = new Vector2(1.0f, 1.0f);
-
             // Provide a normal for each vertex
             for (int i = 0; i < Vertices.Length; i++)
             {
@@ -91,9 +84,15 @@ namespace Gladius.renderer
             Effect.Parameters["Texture"].SetValue(texture);
             Effect.Parameters["View"].SetValue(camera.View);
             Effect.Parameters["Projection"].SetValue(camera.Projection);
-            Effect.Parameters["Alpha"].SetValue(alpha);
-            Effect.Parameters["TeamColour"].SetValue(teamColour.ToVector3());
-            Effect.Parameters["BaseColour"].SetValue(Color.White.ToVector3());
+            //Effect.Parameters["Alpha"].SetValue(alpha);
+            //Effect.Parameters["TeamColour"].SetValue(teamColour.ToVector3());
+            //Effect.Parameters["BaseColour"].SetValue(Color.White.ToVector3());
+
+            // ugly.
+            Vertices[0].TextureCoordinate = textureLowerLeft;
+            Vertices[1].TextureCoordinate = textureUpperLeft;
+            Vertices[2].TextureCoordinate = textureLowerRight;
+            Vertices[3].TextureCoordinate = textureUpperRight;
 
             foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
             {
@@ -102,7 +101,38 @@ namespace Gladius.renderer
                     PrimitiveType.TriangleList, Vertices, 0, Vertices.Length, Indices, 0, Indices.Length/3);
             }
         }
-    
+
+
+        public void Draw(GraphicsDevice device, Texture2D texture, Matrix world, Vector3 normal, Vector3 scale, ICamera camera, Color teamColour, Vector4 texcoords,float alpha = 1f)
+        {
+            Effect.Parameters["World"].SetValue(world);
+            Effect.Parameters["Texture"].SetValue(texture);
+            Effect.Parameters["View"].SetValue(camera.View);
+            Effect.Parameters["Projection"].SetValue(camera.Projection);
+            //Effect.Parameters["Alpha"].SetValue(alpha);
+            //Effect.Parameters["TeamColour"].SetValue(teamColour.ToVector3());
+            //Effect.Parameters["BaseColour"].SetValue(Color.White.ToVector3());
+
+            Vertices[0].TextureCoordinate = new Vector2(texcoords.X, texcoords.Y);
+            Vertices[1].TextureCoordinate = new Vector2(texcoords.X, texcoords.W);
+            Vertices[2].TextureCoordinate = new Vector2(texcoords.Z, texcoords.Y);
+            Vertices[3].TextureCoordinate = new Vector2(texcoords.Z, texcoords.W);
+
+
+            foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                    PrimitiveType.TriangleList, Vertices, 0, Vertices.Length, Indices, 0, Indices.Length / 3);
+            }
+        }
+
+
+        Vector2 textureUpperLeft = new Vector2(0.0f, 0.0f);
+        Vector2 textureUpperRight = new Vector2(1.0f, 0.0f);
+        Vector2 textureLowerLeft = new Vector2(0.0f, 1.0f);
+        Vector2 textureLowerRight = new Vector2(1.0f, 1.0f);
+
     }
 
     
