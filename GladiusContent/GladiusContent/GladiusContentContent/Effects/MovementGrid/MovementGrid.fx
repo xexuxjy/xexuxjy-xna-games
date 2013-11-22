@@ -25,6 +25,7 @@ struct VertexShaderInput
 
 float4 AssignOwnerColour(float4 input)
 {
+/*
 	float4 result = input;
 	result.a = min(result.a,Alpha);
 	if(input.r == BaseColour.r && input.g == BaseColour.g && input.b == BaseColour.b)
@@ -33,6 +34,8 @@ float4 AssignOwnerColour(float4 input)
 	}
 
 	return result;
+*/
+return input;
 	//return  TeamColour.rgb;
 }
 

@@ -593,6 +593,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="UI\cursors\MoveCursorSheet.png">
+      <Name>MoveCursorSheet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="UI\shop\ShopMap.txt">
       <Name>ShopMap</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -634,6 +639,7 @@
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
       <Name>monster-animated-character-XNA_Anims</Name>
