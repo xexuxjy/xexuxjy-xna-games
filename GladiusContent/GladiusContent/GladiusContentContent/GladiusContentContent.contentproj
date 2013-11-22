@@ -598,6 +598,36 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Models\Skybox\SkyBox1\skybox_back.JPG">
+      <Name>skybox_back</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Skybox\SkyBox1\skybox_bottom.JPG">
+      <Name>skybox_bottom</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Skybox\SkyBox1\skybox_front.JPG">
+      <Name>skybox_front</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Skybox\SkyBox1\skybox_left.JPG">
+      <Name>skybox_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Skybox\SkyBox1\skybox_right.JPG">
+      <Name>skybox_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Skybox\SkyBox1\skybox_top.JPG">
+      <Name>skybox_top</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="UI\shop\ShopMap.txt">
       <Name>ShopMap</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -641,6 +671,11 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Models\Skybox\SkyBox1\skybox.x">
+      <Name>skybox</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
       <Name>monster-animated-character-XNA_Anims</Name>
       <Importer>XmlImporter</Importer>
