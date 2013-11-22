@@ -23,9 +23,10 @@ namespace Gladius.modes.arena
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(result);
 
-                arena.ModelName = doc.SelectSingleNode("Arena/Model").Value;
-                arena.TextureName = doc.SelectSingleNode("Arena/Texture").Value;
-
+                arena.ModelName = doc.SelectSingleNode("Arena/Model").InnerText;
+                arena.TextureName = doc.SelectSingleNode("Arena/Texture").InnerText;
+                String str = doc.SelectSingleNode("Arena/SkyBoxModel").InnerText;
+                arena.SkyBoxModelName = doc.SelectSingleNode("Arena/SkyBoxModel").InnerText;
 
                 XmlNodeList nodes = doc.SelectNodes("Arena/Layout//row");
                 foreach (XmlNode node in nodes)

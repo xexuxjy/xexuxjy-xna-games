@@ -130,6 +130,7 @@
     <Compile Include="renderer\SimpleArenaRenderer.cs" />
     <Compile Include="renderer\SimpleQuad.cs" />
     <Compile Include="modes\overland\Terrain.cs" />
+    <Compile Include="renderer\SkyBox.cs" />
     <Compile Include="renderer\StaticCamera.cs" />
     <Compile Include="Terrain7\BufferManager.cs" />
     <Compile Include="Terrain7\Culling\ClippingFrustrum.cs" />
@@ -851,6 +852,60 @@
   <ItemGroup>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\cursors\MoveCursorSheet.xnb">
       <Link>Content\UI\cursors\MoveCursorSheet.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\skybox.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\skybox.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\skybox_back.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\skybox_back.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\SkyBox_Back_0.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\SkyBox_Back_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\skybox_bottom.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\skybox_bottom.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\SkyBox_Bottom_0.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\SkyBox_Bottom_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\skybox_front.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\skybox_front.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\SkyBox_Front_0.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\SkyBox_Front_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\skybox_left.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\skybox_left.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\SkyBox_Left_0.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\SkyBox_Left_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\skybox_right.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\skybox_right.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\SkyBox_Right_0.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\SkyBox_Right_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\skybox_top.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\skybox_top.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\SkyBox_Top_0.xnb">
+      <Link>Content\Models\SkyBox\SkyBox1\SkyBox_Top_0.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

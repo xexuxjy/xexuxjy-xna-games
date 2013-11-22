@@ -211,7 +211,7 @@ namespace Gladius.renderer
         ModelData m_barrelModelData;
         ModelData m_pillarModelData;
         ModelData m_houseModelData;
-
+       
         //MovementGrid m_movementGrid;
         Arena m_arena;
     }
