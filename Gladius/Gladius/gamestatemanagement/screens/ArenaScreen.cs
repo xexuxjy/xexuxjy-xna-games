@@ -284,6 +284,12 @@ namespace Gladius.gamestatemanagement.screens
 
             m_arena = ArenaLoader.BuildArena(this, "Content/Models/Arena/Arena2/Arena2Data.xml",ContentManager);
 
+            m_skyBox = new SkyBox(this);
+            m_skyBox.ModelName = m_arena.SkyBoxModelName;
+            m_skyBox.LoadContent();
+            AddComponent(m_skyBox);
+
+
             m_arenaRenderer = new SimpleArenaRenderer(m_arena, this);
             m_arenaRenderer.LoadContent();
             AddComponent(m_arenaRenderer);
@@ -462,6 +468,7 @@ namespace Gladius.gamestatemanagement.screens
         private float m_battleOverScreenTimer;
 
         private SimpleArenaRenderer m_arenaRenderer;
+        private SkyBox m_skyBox;
         private Arena m_arena;
 
         private CombatEngineUI m_combatEngineUI;

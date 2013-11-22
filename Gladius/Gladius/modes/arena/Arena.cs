@@ -195,6 +195,13 @@ namespace Gladius.modes.arena
             set;
         }
 
+        public String SkyBoxModelName
+        {
+            get;
+            set;
+
+        }
+
 
         public List<ModelData> ModelData
         {

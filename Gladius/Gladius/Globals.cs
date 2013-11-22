@@ -129,6 +129,8 @@ namespace Gladius
             return xdiff + ydiff;
         }
 
+
+        public const int SkyBoxDrawOrder = 0;
         public const int ArenaDrawOrder = 1;
         public const int MoveGridDrawOrder = 2;
         public const int CharacterDrawOrder = 3;
