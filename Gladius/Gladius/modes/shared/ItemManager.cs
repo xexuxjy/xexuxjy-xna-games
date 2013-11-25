@@ -176,14 +176,14 @@ namespace Gladius.modes.shared
         private List<GameObjectAttributeModifier> m_modifiers = new List<GameObjectAttributeModifier>();
     }
 
-
     public enum ItemLocation
     {
-        Head,
-        LHand,
-        RHand,
-        Body,
-        Special
+        Head=0,
+        LHand=1,
+        RHand=2,
+        Body=3,
+        Special=4,
+        NumItems=5
     }
 
 

@@ -309,13 +309,23 @@ namespace Gladius.gamestatemanagement.screens
 
             for (int i = 0; i < numActors; ++i)
             {
-                BaseActor ba1 = ActorGenerator.GenerateActor(1, ActorClass.Barbarian, this);
+                ActorClass actorClass = ActorClass.Barbarian;
+                if (i == 0)
+                {
+                    actorClass = ActorClass.Urlan;
+                }
+                if (i == 1)
+                {
+                    actorClass = ActorClass.Ursula;
+                }
+
+                BaseActor ba1 = ActorGenerator.GenerateActor(1, actorClass, this);
 
                 if (i < 2)
                 {
                     ba1.ModelName = playerTeamModelName;
                     ba1.Team = Globals.PlayerTeam;
-                    ba1.DebugName = "Player" + i;
+                    ba1.DebugName = i == 0 ? "Urlan" : "Ursula";
                     ba1.PlayerControlled = true;
                 }
                 else

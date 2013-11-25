@@ -104,6 +104,8 @@
     <Compile Include="modes\overland\OverlandUI.cs" />
     <Compile Include="modes\overland\Party.cs" />
     <Compile Include="modes\overland\TownManager.cs" />
+    <Compile Include="modes\shared\CharacterData.cs" />
+    <Compile Include="modes\shared\GladiatorSchool.cs" />
     <Compile Include="modes\shared\ItemManager.cs" />
     <Compile Include="modes\town\League.cs" />
     <Compile Include="modes\town\TownScreen.cs" />

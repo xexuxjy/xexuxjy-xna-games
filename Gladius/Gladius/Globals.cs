@@ -10,6 +10,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Gladius.renderer;
+using Gladius.modes.shared;
 
 namespace Gladius
 {
@@ -33,6 +34,9 @@ namespace Gladius
 
 
         public static AttackSkillDictionary AttackSkillDictionary;
+        public static ItemManager ItemManager;
+
+        public const int MaxLevel = 20;
 
 
         //public static ThreadSafeContentManager GlobalContentManager;

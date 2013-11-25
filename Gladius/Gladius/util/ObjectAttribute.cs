@@ -24,6 +24,7 @@ namespace xexuxjy.Gladius.util
         CharacterSkillPoints, // used for advancing character, buying skills etc
         ArenaSkillPoints,     // used for limiting skills in arena combat.
         Affinity,
+        Experience,
         NumTypes
     }
 
