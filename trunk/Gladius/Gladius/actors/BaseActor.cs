@@ -15,6 +15,7 @@ using Gladius.modes.arena;
 using System.Xml;
 using Gladius.gamestatemanagement.screens;
 using Gladius.gamestatemanagement.screenmanager;
+using Gladius.modes.shared;
 
 namespace Gladius.actors
 {
@@ -34,6 +35,17 @@ namespace Gladius.actors
             SetupAttributes();
             DrawOrder = Globals.CharacterDrawOrder;
         }
+
+
+        public void SetupCharacterData(CharacterData characterData)
+        {
+            Name = characterData.Name;
+            foreach (GameObjectAttributeType key in characterData.Attributes.Keys)
+            {
+                m_attributeDictionary[key] = new BoundedAttribute(characterData.Attributes[key].BaseValue);
+            }
+        }
+
 
         public DamageType WeaponAffinityType
         {
@@ -385,11 +397,14 @@ namespace Gladius.actors
             set;
         }
 
-        public ActorCategory ActorClass
+        public ActorClass ActorClass
         {
             get;
             set;
         }
+
+
+
 
         public void TakeDamage(AttackResult attackResult)
         {
@@ -1069,55 +1084,6 @@ namespace Gladius.actors
             return result;
         }
 
-
-
-
-        /*
-         *   <Character Name="" Accuracy ="" Defense= "" Power= "" Consitution= "" Experience="" Level ="">
-    <Skills>
-    
-    </Skills>
-    <Equipment Head ="" Arm1="" Arm2="" Body="" Special=""/>
-  </Character>
-*/
-        public void SetupCharacterData(XmlElement element)
-        {
-            Name = element.Attributes["Name"].Value;
-            XmlElement attributes =(XmlElement) element.SelectSingleNode("Attributes");
-            foreach (XmlAttribute attr in attributes.Attributes)
-            {
-                try
-                {
-                    GameObjectAttributeType attrType = (GameObjectAttributeType)Enum.Parse(typeof(GameObjectAttributeType), attr.Name);
-                    int val = int.Parse(attr.Value);
-                    m_attributeDictionary[attrType] = new BoundedAttribute(val);
-                }
-                catch (System.Exception ex)
-                {
-                	
-                }
-
-            }
-
-        }
-
-        public void AddItem(int itemKey)
-        {
-            m_itemKeys.Add(itemKey);
-            UpdateStats();
-        }
-
-        public void RemoveItem(int itemKey)
-        {
-            m_itemKeys.Remove(itemKey);
-            UpdateStats();
-        }
-
-        private void UpdateStats()
-        {
-        }
-
-
         public Dictionary<GameObjectAttributeType, BoundedAttribute> AttributeDictionary
         {
             get { return m_attributeDictionary; }
@@ -1189,8 +1155,6 @@ namespace Gladius.actors
         private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
         private AnimatedModel m_animatedModel;
 
-        private List<int> m_itemKeys = new List<int>();
-
         private float m_movementSpeed = 2f;
         private float m_turnSpeed = 1f;
 
@@ -1218,7 +1182,9 @@ namespace Gladius.actors
     {
         Light,
         Medium,
-        Heavy
+        Heavy,
+        Support,
+        Arcane
     }
 
     public enum ActorClass

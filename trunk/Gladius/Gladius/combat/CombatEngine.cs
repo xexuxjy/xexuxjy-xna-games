@@ -6,6 +6,7 @@ using Gladius.actors;
 using xexuxjy.Gladius.util;
 using Microsoft.Xna.Framework;
 using StringLeakTest;
+using Gladius.util;
 
 namespace Gladius.combat
 {
@@ -25,8 +26,8 @@ namespace Gladius.combat
 
             float strengthBonus = attacker.GetAttributeValue(GameObjectAttributeType.Accuracy);
 
-            float accuracyBonus = GetCategoryAccuracyBonus(attacker.ActorClass, defender.ActorClass);
-            float categoryMultuplier = GetCategoryDamageMultiplier(attacker.ActorClass,defender.ActorClass);
+            float accuracyBonus = GetCategoryAccuracyBonus(ActorGenerator.CategoryClass[attacker.ActorClass], ActorGenerator.CategoryClass[defender.ActorClass]);
+            float categoryMultuplier = GetCategoryDamageMultiplier(ActorGenerator.CategoryClass[attacker.ActorClass],ActorGenerator.CategoryClass[defender.ActorClass]);
 
         http://www.gamefaqs.com/gamecube/561233-gladius/faqs/64758
             //DIFFERENCE = [ (ACC * 0.97) - DEF ]
