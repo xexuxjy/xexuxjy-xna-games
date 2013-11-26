@@ -50,5 +50,12 @@ namespace Gladius.gamestatemanagement.screens
             get;
             set;
         }
+
+        GladiatorChoiceScreen GladiatorChoiceScreen
+        {
+            get;
+            set;
+        }
+    
     }
 }

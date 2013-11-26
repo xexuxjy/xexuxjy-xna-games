@@ -74,8 +74,14 @@ namespace Gladius.modes.shared
             return -1;
         }
 
-        SchoolRank m_currentRank;
-        List<CharacterData> m_recruits;
+        public List<CharacterData> Gladiators
+        {
+            get { return m_recruits; }
+        }
+
+
+        SchoolRank m_currentRank = SchoolRank.Bronze;
+        List<CharacterData> m_recruits = new List<CharacterData>();
     }
 
     public enum SchoolRank

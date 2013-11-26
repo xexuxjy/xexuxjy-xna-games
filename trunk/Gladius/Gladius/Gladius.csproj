@@ -67,6 +67,7 @@
     <Compile Include="actors\TestPlayer.cs" />
     <Compile Include="combat\CombatEngineUI.cs" />
     <Compile Include="gamestatemanagement\screens\GameOverScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\GladiatorChoiceScreen.cs" />
     <Compile Include="modes\arena\Arena.cs" />
     <Compile Include="actors\BaseActor.cs" />
     <Compile Include="combat\AttackSkill.cs" />
@@ -908,6 +909,12 @@
     </Content>
     <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\Models\Skybox\SkyBox1\SkyBox_Top_0.xnb">
       <Link>Content\Models\SkyBox\SkyBox1\SkyBox_Top_0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\backgrounds\GladiatorChoiceBackground.xnb">
+      <Link>Content\UI\backgrounds\GladiatorChoiceBackground.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
