@@ -44,6 +44,12 @@ namespace Gladius.gamestatemanagement.screens
             set;
         }
 
+        public GladiatorChoiceScreen GladiatorChoiceScreen
+        {
+            get;
+            set;
+        }
+
         public virtual void DrawElement(GameTime gameTime, GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
         }
