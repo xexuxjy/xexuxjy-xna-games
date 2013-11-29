@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 using Gladius.events;
 using Gladius.modes.shared;
 using Gladius.control;
+using Gladius.renderer;
+using ThirdPartyNinjas.XnaUtility;
 using Gladius.actors;
 
 namespace Gladius.gamestatemanagement.screens
@@ -17,11 +19,16 @@ namespace Gladius.gamestatemanagement.screens
         public override void LoadContent()
         {
             base.LoadContent();
-            m_screenBackground = ContentManager.Load<Texture2D>("UI/backgrounds/GladiatorChoiceBackground");
+            m_screenBackground = ContentManager.Load<Texture2D>("UI/backgrounds/PlainBackground");
             m_gladiatorSchool = new GladiatorSchool();
             m_gladiatorSchool.Load("Content/CharacterData/CharacterData.xml");
             m_smallFont = ContentManager.Load<SpriteFont>("UI/Fonts/DebugFont8");
+            m_headerFont = ContentManager.Load<SpriteFont>("UI/Fonts/UIFontLarge");
+            m_atlasTexture = ContentManager.Load<Texture2D>("UI/Characters/thumbnail/atlas_texture");
+            m_textureAtlas = ContentManager.Load<TextureAtlas>("UI/Characters/thumbnail/atlas");
+
             BuildCharacterData();
+            FocusMode = GCSFocus.Selected;
 
             RegisterListeners();
         }
@@ -33,10 +40,13 @@ namespace Gladius.gamestatemanagement.screens
             SpriteFont font = ScreenManager.Font;
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
-                 
+
             spriteBatch.Begin();
             spriteBatch.Draw(m_screenBackground, viewport.Bounds, Color.White);
-            DrawGladiatorGrid(spriteBatch);
+            DrawGladiatorGrid(m_selectedCharacters, spriteBatch, m_selectedCharactersRectangle, "Orins School", m_headerFont, FocusMode == GCSFocus.Selected);
+            DrawGladiatorGrid(m_availableCharacters, spriteBatch, m_availableCharactersRectangle, "Available Gladiators", m_headerFont, FocusMode == GCSFocus.Available);
+
+
             spriteBatch.End();
         }
 
@@ -79,138 +89,311 @@ namespace Gladius.gamestatemanagement.screens
                 case (ActionButton.ActionUp):
                     {
                         m_cursorPoint.Y--;
+                        m_curentViewPort.ScrollUp();
                         break;
                     }
                 case (ActionButton.ActionDown):
                     {
                         m_cursorPoint.Y++;
+                        m_curentViewPort.ScrollDown();
                         break;
                     }
                 case (ActionButton.ActionButton1):
                     {
+                        if (FocusMode == GCSFocus.Available)
+                        {
+                            // add character to selection
+                            AddCharacterToSelected(CharacterDataForPoint(m_availableCharacters, m_cursorPoint));
+                        }
+
                         break;
                     }
                 // cancel
                 case (ActionButton.ActionButton2):
                     {
+                        if (FocusMode == GCSFocus.Available)
+                        {
+                            // add character to selection
+                            RemoveCharacterFromSelected(CharacterDataForPoint(m_selectedCharacters, m_cursorPoint));
+                        }
                         break;
                     }
 
             }
 
-            m_cursorPoint.X = MathHelper.Clamp(m_cursorPoint.X, 0, m_numGladiatorsX-1);
-            m_cursorPoint.Y = MathHelper.Clamp(m_cursorPoint.Y, 0, m_numGladiatorsY-1);
+            m_cursorPoint.X = MathHelper.Clamp(m_cursorPoint.X, 0, m_numGladiatorsX - 1);
+
+            int totalYRange = m_numGladiatorsY + m_availableCharacters.Count() % m_numGladiatorsX;
+
+            m_cursorPoint.Y = MathHelper.Clamp(m_cursorPoint.Y, 0, totalYRange);
+
+            FocusMode = FocusModeForPoint(m_cursorPoint);
+        }
+
+        bool InSelectionWindow(Point p)
+        {
+            int bottomOfSelectedWindow = m_numGladiatorsY;
+            return (p.Y < bottomOfSelectedWindow);
+        }
+
+        bool InAvailableWindow(Point p)
+        {
+            return !InSelectionWindow(p);
+        }
+
+        public GCSFocus FocusModeForPoint(Point p)
+        {
+            // left and right always handled by width.
+            p.X = MathHelper.Clamp(p.X, 0, m_numGladiatorsX - 1);
+            // up and down depend... on where we are.
+            // bottom of 
+            // chain next/previous windows?
+            int bottomOfSelectedWindow = m_numGladiatorsY;
+
+            if (p.Y >= bottomOfSelectedWindow)
+            {
+                return GCSFocus.Available;
+            }
+
+            return GCSFocus.Selected;
 
         }
 
-        public void DrawGladiatorGrid(SpriteBatch spriteBatch)
+
+        public void AddCharacterToSelected(CharacterData characterData)
         {
-            spriteBatch.Draw(ContentManager.GetColourTexture(Color.White), m_gladiatorsRectangle, Color.White);
-            Rectangle dims = new Rectangle(0, 0, m_gladiatorsRectangle.Width / m_numGladiatorsX, m_gladiatorsRectangle.Height / m_numGladiatorsY);
+            if (!m_selectedCharacters.Contains(characterData))
+            {
+                m_selectedCharacters.Add(characterData);
+            }
+        }
+
+        public void RemoveCharacterFromSelected(CharacterData characterData)
+        {
+            m_selectedCharacters.Remove(characterData);
+        }
+
+        public void DrawGladiatorGrid(List<CharacterData> list, SpriteBatch spriteBatch, Rectangle toDraw, String header, SpriteFont headerFont, bool hasFocus)
+        {
+            Rectangle adjustedRect = toDraw;
+
+            Vector2 textDims = headerFont.MeasureString(header);
+            GraphicsHelper.DrawShadowedText(spriteBatch, headerFont, header, adjustedRect.Location);
+
+            adjustedRect.Y += (int)textDims.Y + 3;
+
+            Rectangle dims = ThumbnailDims;//new Rectangle(0, 0, adjustedRect.Width / m_numGladiatorsX, adjustedRect.Height / m_numGladiatorsY);
             for (int i = 0; i < m_numGladiatorsX; i++)
             {
                 for (int j = 0; j < m_numGladiatorsY; ++j)
                 {
-                    Color borderColour = Color.White;
                     Point p = new Point(i, j);
-                    if (p == m_cursorPoint)
-                    {
-                        borderColour = Color.Black;
-                    }
-                    CharacterData currentCharacter = m_characterData[p.X, p.Y];
-
                     Rectangle r = new Rectangle(p.X * dims.Width, p.Y * dims.Height, dims.Width, dims.Height);
-                    r.Location += m_gladiatorsRectangle.Location;
-                    spriteBatch.Draw(ContentManager.GetColourTexture(borderColour), r, Color.White);
-                    r = Globals.InsetRectangle(r, 2);
-                    //spriteBatch.Draw(ContentManager.GetColourTexture(Color.Wheat), r, Color.White);
-                    Texture2D tex = ThumbnailTextureForChar(currentCharacter);
-                    if(tex == null)
+                    r.Location += adjustedRect.Location;
+                    if (hasFocus)
                     {
-                        tex = ContentManager.GetColourTexture(Color.Wheat);
+                        Color borderColour = Color.White;
+                        if (p == m_cursorPoint)
+                        {
+                            borderColour = Color.Black;
+                        }
+                        spriteBatch.Draw(ContentManager.GetColourTexture(borderColour), r, Color.White);
                     }
-                    spriteBatch.Draw(tex, r, Color.White);
+                    r = Globals.InsetRectangle(r, 2);
 
-                    String data = "None";
+                    p = WindowForAvailable(p);
+
+                    CharacterData currentCharacter = CharacterDataForPoint(list, p);
+                    TextureRegion region = RegionForChar(currentCharacter);
+                    spriteBatch.Draw(m_atlasTexture, r, region.Bounds, Color.White);
+
                     if (currentCharacter != null)
                     {
-                        data = currentCharacter.Name;
+                        Vector2 levelTextPos = new Vector2(r.X, r.Y) + (new Vector2(dims.Width) * 0.7f);
+                        GraphicsHelper.DrawShadowedText(spriteBatch, headerFont, "" + currentCharacter.Level, levelTextPos);
                     }
-                    spriteBatch.DrawString(m_smallFont, data, new Vector2(r.X + 2, r.Y + (r.Height / 2)), Color.Black);
                 }
             }
+        }
+
+
+        Point WindowForAvailable(Point p)
+        {
+            if (InAvailableWindow(p))
+            {
+                int numRows = m_availableCharacters.Count() % m_numGladiatorsX;
+                // update for selected
+                p.Y -= m_numGladiatorsY; 
+
+            }
+            return p;
+        }
+
+
+
+        public void DrawSelectedCharacterInfo()
+        {
+
+        }
+
+
+
+
+
+        public CharacterData CharacterDataForPoint(List<CharacterData> list, Point p)
+        {
+            int index = (p.Y * m_numGladiatorsX) + p.X;
+            if (index < list.Count)
+            {
+                return list[index];
+            }
+            return null;
         }
 
         private void BuildCharacterData()
         {
             int counter = 0;
             List<CharacterData> gladiators = m_gladiatorSchool.Gladiators;
-            for (int i = 0; i < m_numGladiatorsX; ++i)
-            {
-                for (int j = 0; j < m_numGladiatorsY; ++j)
-                {
-                    if (counter < gladiators.Count)
-                    {
-                        m_characterData[i, j] = gladiators[counter++];
-                    }
-                    else
-                    {
-                        m_characterData[i, j] = null;
-                    }
-                }
-            }
+            m_availableCharacters.Clear();
+            m_availableCharacters.AddRange(gladiators);
+            m_selectedCharacters.Clear();
+
+            m_availableViewPort = new ViewPort(new Rectangle(0, 0, m_numGladiatorsX, m_selectedCharacters.Count % m_numGladiatorsY),new Rectangle(0,0,m_numGladiatorsX,m_numGladiatorsY),this);
+            m_selectedViewPort = new ViewPort(new Rectangle(0, 0, m_numGladiatorsX, m_numGladiatorsY), new Rectangle(0, 0, m_numGladiatorsX, m_numGladiatorsY),this);
+            m_curentViewPort = m_availableViewPort;
+            m_selectedViewPort.Next = m_availableViewPort;
+            m_availableViewPort.Prev = m_selectedViewPort;
         }
 
-        private Texture2D ThumbnailTextureForChar(CharacterData characterData)
-        {
-            String path = ThumbnailNameForChar(characterData);
-            if(path != null)
-            {
-            return ContentManager.Load<Texture2D>(path);
-            }
-            return null;
 
-        }
-
-        private String ThumbnailNameForChar(CharacterData characterData)
+        private TextureRegion RegionForChar(CharacterData characterData)
         {
             if (characterData != null)
             {
-                String directory = "UI/characters/small/";
                 switch (characterData.ActorClass)
                 {
-                    case ActorClass.Urlan: return directory + "barbarian-male";
-                    case ActorClass.Ursula: return directory + "channeller";
-                    case ActorClass.Amazon: return directory + "channeller";
-                    case ActorClass.Barbarian: return directory + "barbarian-male";
+                    case ActorClass.Urlan: return m_textureAtlas.GetRegion("barbarian-male.png");
+                    case ActorClass.Ursula: return m_textureAtlas.GetRegion("channeller.png");
+                    case ActorClass.Amazon: return m_textureAtlas.GetRegion("channeller.png");
+                    case ActorClass.Barbarian: return m_textureAtlas.GetRegion("barbarian-male.png");
                 }
             }
-            return null;
+            return m_textureAtlas.GetRegion("unavailableSlot.png");
         }
 
 
+        private CharacterData SelectedCharacter
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        private GCSFocus FocusMode
+        {
+            get;
+            set;
+        }
+
+        public void ViewPortChanged(ViewPort oldvp, ViewPort newvp)
+        {
+            m_curentViewPort = newvp;
+        }
+
+        ViewPort m_curentViewPort;
+        ViewPort m_availableViewPort;
+        ViewPort m_selectedViewPort;
 
         private Point m_cursorPoint = new Point();
-        
-        private const int thumbnailDim = 64;        
-        public const int m_numGladiatorsX = 8;
-        public const int m_numGladiatorsY = 4;
 
-        private Rectangle m_gladiatorsRectangle = new Rectangle(16, 16, thumbnailDim * m_numGladiatorsX,thumbnailDim * m_numGladiatorsY );
-        
+        private Rectangle m_selectedCharactersRectangle = new Rectangle(16, 16, 400, 300);
+        private Rectangle m_availableCharactersRectangle = new Rectangle(16, 350, 400, 300);
+        private Rectangle m_currentCharacterRectangle = new Rectangle(450, 16, 300, 600);
 
-        public CharacterData[,] m_characterData = new CharacterData[m_numGladiatorsX, m_numGladiatorsY];
+        public static Rectangle ThumbnailDims = new Rectangle(0, 0, 96, 96);
+
+        public List<CharacterData> m_availableCharacters = new List<CharacterData>();
+        public List<CharacterData> m_selectedCharacters = new List<CharacterData>();
 
         private SpriteFont m_smallFont;
+        private SpriteFont m_headerFont;
+
         private GladiatorSchool m_gladiatorSchool;
+        private BattleData m_currentBattle;
+
         private Texture2D m_screenBackground;
+        private Texture2D m_atlasTexture;
+        private TextureAtlas m_textureAtlas;
+
+        public const int m_numGladiatorsX = 5;
+        public const int m_numGladiatorsY = 2;
+    }
+
+
+    public class ViewPort
+    {
+        private Rectangle m_total;
+        private Rectangle m_visibleArea;
+        private Rectangle m_currentlyVisible;
+        private GladiatorChoiceScreen m_callback;
+
+        public ViewPort(Rectangle total, Rectangle visible,GladiatorChoiceScreen callback)
+        {
+            m_total = total;
+            m_visibleArea = visible;
+            m_currentlyVisible = m_visibleArea;
+            m_callback = callback;
+        }
+
+        public Rectangle CurrentlyVisible
+        {
+            get
+            {
+                return m_currentlyVisible;
+            }
+         
+        }
+
+        public void ScrollUp()
+        {
+            m_currentlyVisible.Y--;
+
+            if (m_currentlyVisible.Y < 0 && Prev != null)
+            {
+                m_callback.ViewPortChanged(this,Prev);
+            }
+            m_currentlyVisible.Y = MathHelper.Clamp(m_currentlyVisible.Y, 0, m_total.Y);
+            
+        }
+
+        public void ScrollDown()
+        {
+            m_currentlyVisible.Y++;
+            m_currentlyVisible.Y = MathHelper.Clamp(m_currentlyVisible.Y, 0, m_total.Y);
+        }
+
+        public ViewPort Next
+        {
+            get;
+            set;
+        }
+
+        public ViewPort Prev
+        {
+            get;
+            set;
+        }
+
 
     }
 
-    enum GCSFocus
+
+
+    public enum GCSFocus
     {
-        Gladiators,
-        Arena
+        Available,
+        Selected
     }
 
 }

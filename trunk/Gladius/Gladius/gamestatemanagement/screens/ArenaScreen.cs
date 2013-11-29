@@ -287,6 +287,7 @@ namespace Gladius.gamestatemanagement.screens
             m_skyBox = new SkyBox(this);
             m_skyBox.ModelName = m_arena.SkyBoxModelName;
             m_skyBox.LoadContent();
+            m_skyBox.Position = new Vector3(0,2,0);
             AddComponent(m_skyBox);
 
 

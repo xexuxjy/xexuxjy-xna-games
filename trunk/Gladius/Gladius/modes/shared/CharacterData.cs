@@ -41,7 +41,7 @@ namespace Gladius.modes.shared
         public void Save(StreamWriter streamWriter )
         {
             StringBuilder data = new StringBuilder();
-            data.AppendFormat("<Character Name=\"{0}\">", Name);
+            data.AppendFormat("<Character Name=\"{0}\" Class=\"{1}\" Level=\"{2}\">", Name,ActorClass.ToString(),Level);
             data.Append("<Attributes ");
             foreach (GameObjectAttributeType attrType in m_attributeDictionary.Keys)
             {
@@ -106,6 +106,7 @@ namespace Gladius.modes.shared
         {
             Name = element.Attributes["Name"].Value;
             ActorClass = (ActorClass)Enum.Parse(typeof(ActorClass), element.Attributes["Class"].Value);
+            Level = int.Parse(element.Attributes["Level"].Value);
             m_male = (element.Attributes["Sex"].Value == "M");
 
             XmlElement attributes = (XmlElement)element.SelectSingleNode("Attributes");
