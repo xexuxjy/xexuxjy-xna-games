@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Gladius.events;
 using Gladius.modes.shared;
 using Gladius.control;
+using Gladius.actors;
 
 namespace Gladius.gamestatemanagement.screens
 {
@@ -116,13 +117,20 @@ namespace Gladius.gamestatemanagement.screens
                     {
                         borderColour = Color.Black;
                     }
+                    CharacterData currentCharacter = m_characterData[p.X, p.Y];
 
                     Rectangle r = new Rectangle(p.X * dims.Width, p.Y * dims.Height, dims.Width, dims.Height);
                     r.Location += m_gladiatorsRectangle.Location;
                     spriteBatch.Draw(ContentManager.GetColourTexture(borderColour), r, Color.White);
                     r = Globals.InsetRectangle(r, 2);
-                    spriteBatch.Draw(ContentManager.GetColourTexture(Color.Wheat), r, Color.White);
-                    CharacterData currentCharacter = m_characterData[p.X, p.Y];
+                    //spriteBatch.Draw(ContentManager.GetColourTexture(Color.Wheat), r, Color.White);
+                    Texture2D tex = ThumbnailTextureForChar(currentCharacter);
+                    if(tex == null)
+                    {
+                        tex = ContentManager.GetColourTexture(Color.Wheat);
+                    }
+                    spriteBatch.Draw(tex, r, Color.White);
+
                     String data = "None";
                     if (currentCharacter != null)
                     {
@@ -153,13 +161,44 @@ namespace Gladius.gamestatemanagement.screens
             }
         }
 
+        private Texture2D ThumbnailTextureForChar(CharacterData characterData)
+        {
+            String path = ThumbnailNameForChar(characterData);
+            if(path != null)
+            {
+            return ContentManager.Load<Texture2D>(path);
+            }
+            return null;
+
+        }
+
+        private String ThumbnailNameForChar(CharacterData characterData)
+        {
+            if (characterData != null)
+            {
+                String directory = "UI/characters/small/";
+                switch (characterData.ActorClass)
+                {
+                    case ActorClass.Urlan: return directory + "barbarian-male";
+                    case ActorClass.Ursula: return directory + "channeller";
+                    case ActorClass.Amazon: return directory + "channeller";
+                    case ActorClass.Barbarian: return directory + "barbarian-male";
+                }
+            }
+            return null;
+        }
+
 
 
         private Point m_cursorPoint = new Point();
-
-        private Rectangle m_gladiatorsRectangle = new Rectangle(16, 16, 400, 300);
+        
+        private const int thumbnailDim = 64;        
         public const int m_numGladiatorsX = 8;
-        public const int m_numGladiatorsY = 6;
+        public const int m_numGladiatorsY = 4;
+
+        private Rectangle m_gladiatorsRectangle = new Rectangle(16, 16, thumbnailDim * m_numGladiatorsX,thumbnailDim * m_numGladiatorsY );
+        
+
         public CharacterData[,] m_characterData = new CharacterData[m_numGladiatorsX, m_numGladiatorsY];
 
         private SpriteFont m_smallFont;
