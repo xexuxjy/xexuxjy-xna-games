@@ -105,6 +105,9 @@ namespace Gladius.modes.shared
         public void SetupCharacterData(XmlElement element)
         {
             Name = element.Attributes["Name"].Value;
+            ActorClass = (ActorClass)Enum.Parse(typeof(ActorClass), element.Attributes["Class"].Value);
+            m_male = (element.Attributes["Sex"].Value == "M");
+
             XmlElement attributes = (XmlElement)element.SelectSingleNode("Attributes");
             foreach (XmlAttribute attr in attributes.Attributes)
             {
@@ -155,6 +158,7 @@ namespace Gladius.modes.shared
             }
         }
 
+        private bool m_male;
         private Item[] m_items = new Item[(int)ItemLocation.NumItems];
         private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
 
