@@ -2,6 +2,7 @@
   <Model>Models/Arena/Arena2/Floor</Model>
   <Texture>Models/Arena/Arena2/ArenaFloor_0</Texture>
   <SkyBoxModel>Models/Skybox/SkyBox1/skybox</SkyBoxModel>
+  <PreviewTexture></PreviewTexture>
 <Layout>
 <row>................................</row>
 <row>................................</row>

@@ -53,6 +53,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Models\Skybox\SkyBox1\skybox_back.JPG">
+      <Name>skybox_back</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Models\TP2\medieval_free_mesh\14_lod0.x">
       <Name>14_lod0</Name>
       <Importer>XImporter</Importer>
@@ -154,6 +159,11 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <Compile Include="UI\characters\small-atlas\Atlas.taxml">
+      <Name>Atlas</Name>
+      <Importer>TextureAtlasImporter</Importer>
+      <Processor>TextureAtlasProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Shapes\UnitCone.fbx">
@@ -176,12 +186,6 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\ThirdParty\monster-animated-character-XNA.X">
-      <Name>monster-animated-character-XNA</Name>
-      <Importer>XImporter</Importer>
-      <Processor>GpuSkinnedModelProcessor</Processor>
-      <ProcessorParameters_DefaultEffect>SkinnedEffect</ProcessorParameters_DefaultEffect>
-    </Compile>
     <Compile Include="Models\ThirdParty\test_XNA.X">
       <Name>test_XNA</Name>
       <Importer>XImporter</Importer>
@@ -192,6 +196,10 @@
     <ProjectReference Include="..\..\CpuSkinningPipelineExtensions\CpuSkinningPipelineExtensions.csproj">
       <Project>{C74E3173-73C2-4357-87E2-E433D279A948}</Project>
       <Name>CpuSkinningPipelineExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ThirdPartyNinjas.XnaUtility.Content\ThirdPartyNinjas.XnaUtility.Content.csproj">
+      <Project>{2588E0CE-3D79-48D4-9999-519435EC690D}</Project>
+      <Name>ThirdPartyNinjas.XnaUtility.Content</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +219,12 @@
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
+    <None Include="CharacterData\ExperienceTable.xml">
+      <Name>ExperienceTable</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="ItemData\CompleteItemData.csv">
       <Name>CompleteItemData</Name>
       <Importer>XmlImporter</Importer>
@@ -598,11 +612,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Models\Skybox\SkyBox1\skybox_back.JPG">
-      <Name>skybox_back</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Models\Skybox\SkyBox1\skybox_bottom.JPG">
       <Name>skybox_bottom</Name>
       <Importer>TextureImporter</Importer>
@@ -625,6 +634,131 @@
     </Compile>
     <Compile Include="Models\Skybox\SkyBox1\skybox_top.JPG">
       <Name>skybox_top</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\backgrounds\GladiatorChoiceBackground.png">
+      <Name>GladiatorChoiceBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\Amazon.jpg">
+      <Name>Amazon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\art-001_sm.jpg">
+      <Name>art-001_sm</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\art-002_sm.jpg">
+      <Name>art-002_sm</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\art-003.jpg">
+      <Name>art-003</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\barbarian-male.jpg">
+      <Name>barbarian-male</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\berserker.jpg">
+      <Name>berserker</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\Centurion.jpg">
+      <Name>Centurion</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\channeler-full.jpg">
+      <Name>channeler-full</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\Channeler.jpg">
+      <Name>Channeler</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\dervish-female.jpg">
+      <Name>dervish-female</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\legionairre.jpg">
+      <Name>legionairre</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\mongrel.jpg">
+      <Name>mongrel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\murmillo-female.jpg">
+      <Name>murmillo-female</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\murmillo-male.jpg">
+      <Name>murmillo-male</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\samnite-female.jpg">
+      <Name>samnite-female</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\samnite-male.jpg">
+      <Name>samnite-male</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\secutor-male.jpg">
+      <Name>secutor-male</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\small\barbarian-male.png">
+      <Name>barbarian-male</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\small\channeller.png">
+      <Name>channeller</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\summoner.jpg">
+      <Name>summoner</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\urlan.jpg">
+      <Name>urlan</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\Ursula.jpg">
+      <Name>Ursula</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\backgrounds\PlainBackground.png">
+      <Name>PlainBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\characters\small-atlas\atlas_texture.png">
+      <Name>atlas_texture</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -676,11 +810,6 @@
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <None Include="Models\ThirdParty\monster-animated-character-XNA_Anims.xml">
-      <Name>monster-animated-character-XNA_Anims</Name>
-      <Importer>XmlImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ThirdParty\w_body_01_01.JPG">
