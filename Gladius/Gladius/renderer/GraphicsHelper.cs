@@ -10,11 +10,23 @@ namespace Gladius.renderer
 {
     public static class GraphicsHelper
     {
+        public static void DrawShadowedText(SpriteBatch sb, SpriteFont font, String text, Point pos)
+        {
+            Vector2 vpos = new Vector2(pos.X, pos.Y);
+            DrawShadowedText(sb, font, text, vpos, Color.White);
+        }
+
         public static void DrawShadowedText(SpriteBatch sb, SpriteFont font, String text, Vector2 pos)
         {
             DrawShadowedText(sb,font,text,pos,Color.White);
         }
 
+        public static void DrawShadowedText(SpriteBatch sb, SpriteFont font, String text, Point pos, Color textColor)
+        {
+            Vector2 vpos = new Vector2(pos.X, pos.Y);
+            DrawShadowedText(sb, font, text, vpos, textColor);
+        }
+        
         public static void DrawShadowedText(SpriteBatch sb, SpriteFont font, String text, Vector2 pos,Color textColor)
         {
             // Shadow text.

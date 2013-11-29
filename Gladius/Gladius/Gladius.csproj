@@ -68,6 +68,7 @@
     <Compile Include="combat\CombatEngineUI.cs" />
     <Compile Include="gamestatemanagement\screens\GameOverScreen.cs" />
     <Compile Include="gamestatemanagement\screens\GladiatorChoiceScreen.cs" />
+    <Compile Include="gamestatemanagement\screens\GladiatorPlacementScreen.cs" />
     <Compile Include="modes\arena\Arena.cs" />
     <Compile Include="actors\BaseActor.cs" />
     <Compile Include="combat\AttackSkill.cs" />
@@ -105,9 +106,11 @@
     <Compile Include="modes\overland\OverlandUI.cs" />
     <Compile Include="modes\overland\Party.cs" />
     <Compile Include="modes\overland\TownManager.cs" />
+    <Compile Include="modes\shared\BattleData.cs" />
     <Compile Include="modes\shared\CharacterData.cs" />
     <Compile Include="modes\shared\GladiatorSchool.cs" />
     <Compile Include="modes\shared\ItemManager.cs" />
+    <Compile Include="modes\shared\LeagueData.cs" />
     <Compile Include="modes\town\League.cs" />
     <Compile Include="modes\town\TownScreen.cs" />
     <Compile Include="Program.cs" />
@@ -170,10 +173,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\MonoGame\v3.2\Assemblies\WindowsGL\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="RuminateGuiMonoGame, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\RuminateGuiMonoGame.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL" />
@@ -217,6 +216,10 @@
     <ProjectReference Include="..\CpuSkinningDataTypes\CpuSkinningDataTypes %28Windows%29.csproj">
       <Project>{73AEAD46-79FA-4C9C-B8A9-0317AB2AA385}</Project>
       <Name>CpuSkinningDataTypes %28Windows%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdPartyNinjas.XnaUtility\ThirdPartyNinjas.XnaUtility.Windows.csproj">
+      <Project>{4E64A11C-6561-48DB-8AD0-254B3B906D65}</Project>
+      <Name>ThirdPartyNinjas.XnaUtility.Windows</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -919,16 +922,18 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\characters\small\barbarian-male.xnb">
-      <Link>Content\UI\characters\small\barbarian-male.xnb</Link>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\backgrounds\PlainBackground.xnb">
+      <Link>Content\UI\backgrounds\PlainBackground.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\characters\small\berkserker-male.xnb">
-      <Link>Content\UI\characters\small\berkserker-male.xnb</Link>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\characters\small-atlas\Atlas.xnb">
+      <Link>Content\UI\characters\thumbnail\Atlas.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\characters\small\channeller.xnb">
-      <Link>Content\UI\characters\small\channeller.xnb</Link>
+    <Content Include="..\..\GladiusContent\GladiusContent\GladiusContent\bin\Windows\Content\UI\characters\small-atlas\atlas_texture.xnb">
+      <Link>Content\UI\characters\thumbnail\atlas_texture.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
