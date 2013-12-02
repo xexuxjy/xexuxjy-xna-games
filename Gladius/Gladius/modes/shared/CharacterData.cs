@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using Gladius.actors;
 using Gladius.util;
+using Microsoft.Xna.Framework;
 
 namespace Gladius.modes.shared
 {
@@ -87,6 +88,10 @@ namespace Gladius.modes.shared
             get;
             set;
         }
+
+        public Point? StartPosition
+        { get; set; }
+
 
         public Item GetItemAtLocation(ItemLocation location)
         {

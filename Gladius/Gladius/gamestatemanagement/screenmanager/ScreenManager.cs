@@ -189,10 +189,12 @@ namespace Gladius.gamestatemanagement.screenmanager
                 foreach (GameScreen screen in screensToRemove)
                 {
                     screens.Remove(screen);
+                    screen.UnregisterListeners();
                 }
                 foreach (GameScreen screen in screensToAdd)
                 {
                     screens.Add(screen);
+                    screen.RegisterListeners();
                 }
                 screensToAdd.Clear();
                 screensToRemove.Clear(); 

@@ -66,6 +66,7 @@
     <Compile Include="actors\Projectile.cs" />
     <Compile Include="actors\TestPlayer.cs" />
     <Compile Include="combat\CombatEngineUI.cs" />
+    <Compile Include="gamestatemanagement\screens\BattleOverScreen.cs" />
     <Compile Include="gamestatemanagement\screens\GameOverScreen.cs" />
     <Compile Include="gamestatemanagement\screens\GladiatorChoiceScreen.cs" />
     <Compile Include="gamestatemanagement\screens\GladiatorPlacementScreen.cs" />

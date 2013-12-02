@@ -28,8 +28,6 @@ namespace Gladius.gamestatemanagement.screens
             m_textureAtlas = ContentManager.Load<TextureAtlas>("UI/Characters/thumbnail/atlas");
 
             BuildCharacterData();
-
-            RegisterListeners();
         }
 
 
@@ -50,13 +48,13 @@ namespace Gladius.gamestatemanagement.screens
         }
 
 
-        public void RegisterListeners()
+        public override void RegisterListeners()
         {
             EventManager.ActionPressed += new EventManager.ActionButtonPressed(EventManager_ActionPressed);
         }
 
 
-        public void UnregisterListeners()
+        public override void UnregisterListeners()
         {
             //EventManager.ActionPressed -= new event ActionButtonPressed();
             EventManager.ActionPressed -= new EventManager.ActionButtonPressed(EventManager_ActionPressed);
@@ -159,8 +157,12 @@ namespace Gladius.gamestatemanagement.screens
             m_availableCharacters.AddRange(gladiators);
             m_selectedCharacters.Clear();
 
-            m_availableViewPort = new ViewPort(new Rectangle(0, 0, m_numGladiatorsX, m_selectedCharacters.Count % m_numGladiatorsY), new Rectangle(0, 0, m_numGladiatorsX, m_numGladiatorsY), this, m_availableCharacters);
-            m_selectedViewPort = new ViewPort(new Rectangle(0, 0, m_numGladiatorsX, m_numGladiatorsY), new Rectangle(0, 0, m_numGladiatorsX, m_numGladiatorsY), this, m_selectedCharacters);
+            Rectangle standardRect = new Rectangle(0, 0, m_numGladiatorsX, m_numGladiatorsY);
+
+            int totalHeight = (m_availableCharacters.Count / m_numGladiatorsY) + (((m_availableCharacters.Count % m_numGladiatorsY) == 0) ? 0 : 1);
+
+            m_availableViewPort = new ViewPort(new Rectangle(0, 0, m_numGladiatorsX, totalHeight), standardRect, this, m_availableCharacters);
+            m_selectedViewPort = new ViewPort(standardRect, standardRect, this, m_selectedCharacters);
             m_currentViewPort = m_availableViewPort;
             m_selectedViewPort.Next = m_availableViewPort;
             m_availableViewPort.Prev = m_selectedViewPort;
@@ -191,9 +193,14 @@ namespace Gladius.gamestatemanagement.screens
             }
         }
 
-        public void ViewPortChanged(ViewPort oldvp, ViewPort newvp)
+        public void ViewPortChanged(ViewPort oldvp, ViewPort newvp,bool up)
         {
             m_currentViewPort = newvp;
+            Point p = oldvp.m_cursorPoint;
+            p.Y = up?newvp.m_total.Height-1:0;
+            newvp.m_cursorPoint= p;
+            //if(upnewbp.
+
         }
 
         public ViewPort CurrentViewPort
@@ -235,12 +242,12 @@ namespace Gladius.gamestatemanagement.screens
 
     public class ViewPort
     {
-        private Rectangle m_total;
+        public Rectangle m_total;
         private Rectangle m_visibleArea;
         private Rectangle m_currentlyVisible;
         private GladiatorChoiceScreen m_callback;
-        private Point m_cursorPoint = new Point();
-        public List<CharacterData> m_characterList = new List<CharacterData>();
+        public Point m_cursorPoint = new Point();
+        private List<CharacterData> m_characterList = new List<CharacterData>();
 
         public ViewPort(Rectangle total, Rectangle visible, GladiatorChoiceScreen callback, List<CharacterData> characterList)
         {
@@ -263,6 +270,9 @@ namespace Gladius.gamestatemanagement.screens
 
         public void AdjustWindow()
         {
+            m_cursorPoint.X = MathHelper.Clamp(m_cursorPoint.X, 0, m_total.Width-1);
+            m_cursorPoint.Y = MathHelper.Clamp(m_cursorPoint.Y, 0, m_total.Height- 1);
+
             m_currentlyVisible.X = MathHelper.Clamp(m_currentlyVisible.X, 0, m_total.X);
             m_currentlyVisible.Y = MathHelper.Clamp(m_currentlyVisible.Y, 0, m_total.Y);
 
@@ -284,29 +294,23 @@ namespace Gladius.gamestatemanagement.screens
         {
             m_cursorPoint.Y--;
 
-            if (m_currentlyVisible.Y < 0 && Prev != null)
+            if (m_cursorPoint.Y < 0 && Prev != null)
             {
-                m_callback.ViewPortChanged(this, Prev);
+                m_callback.ViewPortChanged(this, Prev,true);
             }
-            else
-            {
-                AdjustWindow();
-            }
-
+            AdjustWindow();
         }
 
         public void ScrollDown()
         {
             m_cursorPoint.Y++;
 
-            if (m_currentlyVisible.Y > 2 && Next != null)
+            if (m_cursorPoint.Y > m_total.Height -1 && Next != null)
             {
-                m_callback.ViewPortChanged(this, Next);
+                m_callback.ViewPortChanged(this, Next,false);
+
             }
-            else
-            {
-                AdjustWindow();
-            }
+            AdjustWindow();
         }
 
         public ViewPort Next
@@ -345,9 +349,9 @@ namespace Gladius.gamestatemanagement.screens
             adjustedRect.Y += (int)textDims.Y + 3;
 
             Rectangle dims = GladiatorChoiceScreen.ThumbnailDims;
-            for (int i = 0; i < m_visibleArea.X; i++)
+            for (int i = 0; i < m_visibleArea.Width; i++)
             {
-                for (int j = 0; j < m_visibleArea.Y; ++j)
+                for (int j = 0; j < m_visibleArea.Height; ++j)
                 {
                     Point p = new Point(i, j);
                     Rectangle r = new Rectangle(p.X * dims.Width, p.Y * dims.Height, dims.Width, dims.Height);
