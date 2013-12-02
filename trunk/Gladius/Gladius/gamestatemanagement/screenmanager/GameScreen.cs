@@ -335,6 +335,17 @@ namespace Gladius.gamestatemanagement.screenmanager
 
         #region Public Methods
 
+        public virtual void RegisterListeners()
+        {
+            
+        }
+
+
+        public virtual void UnregisterListeners()
+        {
+            
+
+        }
 
         /// <summary>
         /// Tells the screen to go away. Unlike ScreenManager.RemoveScreen, which

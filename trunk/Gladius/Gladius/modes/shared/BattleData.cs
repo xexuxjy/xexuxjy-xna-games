@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Gladius.actors;
+using Microsoft.Xna.Framework;
 
 namespace Gladius.modes.shared
 {
@@ -17,7 +18,7 @@ namespace Gladius.modes.shared
 
 
 
-
+        List<Point> m_availableStartPoints = new List<Point>();
         List<CharacterData> m_opponentList = new List<CharacterData>();
         List<ActorClass> PermittedClasses = new List<ActorClass>();
         List<ActorClass> ProhibitedClasses = new List<ActorClass>();

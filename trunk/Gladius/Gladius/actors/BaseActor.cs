@@ -40,9 +40,15 @@ namespace Gladius.actors
         public void SetupCharacterData(CharacterData characterData)
         {
             Name = characterData.Name;
+
             foreach (GameObjectAttributeType key in characterData.Attributes.Keys)
             {
                 m_attributeDictionary[key] = new BoundedAttribute(characterData.Attributes[key].BaseValue);
+            }
+
+            if (characterData.StartPosition.HasValue)
+            {
+                CurrentPosition = characterData.StartPosition.Value;
             }
         }
 

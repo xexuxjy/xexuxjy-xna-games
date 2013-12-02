@@ -25,6 +25,7 @@ using Gladius.gamestatemanagement.screens;
 using Gladius.modes.arena;
 using System.Text;
 using Gladius.gamestatemanagement.screenmanager;
+using Gladius.modes.shared;
 //using com.xexuxjy.magiccarpet.control;
 #endregion
 
@@ -469,6 +470,13 @@ namespace Gladius.gamestatemanagement.screens
         {
             get { return m_arena; }
         }
+
+        public BattleData BattleData
+        {
+            get;
+            set;
+        }
+
 
         #endregion
         #region Fields

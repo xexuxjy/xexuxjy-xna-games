@@ -7,5 +7,6 @@ namespace Gladius.modes.shared
 {
     public class LeagueData
     {
+        
     }
 }
