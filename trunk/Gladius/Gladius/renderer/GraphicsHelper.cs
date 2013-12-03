@@ -26,13 +26,22 @@ namespace Gladius.renderer
             Vector2 vpos = new Vector2(pos.X, pos.Y);
             DrawShadowedText(sb, font, text, vpos, textColor);
         }
-        
+
         public static void DrawShadowedText(SpriteBatch sb, SpriteFont font, String text, Vector2 pos,Color textColor)
         {
             // Shadow text.
             sb.DrawString(font, text, pos, Color.Black);
             sb.DrawString(font, text, pos + new Vector2(1), textColor);
         }
+
+        public static void DrawCenteredText(SpriteBatch sb, SpriteFont font, String text, Vector2 centerPos, Color textColor)
+        {
+            Vector2 textDims = font.MeasureString(text);
+            Vector2 offsetCenter = centerPos - (textDims / 2f);
+            sb.DrawString(font, text, offsetCenter, textColor);
+        }
+
+
 
         public static void OffsetRect(ref Rectangle src, ref Rectangle dst)
         {

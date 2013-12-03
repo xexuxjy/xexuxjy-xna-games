@@ -11,10 +11,11 @@ using Gladius.control;
 using Gladius.renderer;
 using ThirdPartyNinjas.XnaUtility;
 using Gladius.actors;
+using Gladius.util;
 
 namespace Gladius.gamestatemanagement.screens
 {
-    public class GladiatorChoiceScreen : GameScreen
+    public class GladiatorChoiceScreen : GameScreen, ICharacterViewPortCallback
     {
         public override void LoadContent()
         {
@@ -41,8 +42,11 @@ namespace Gladius.gamestatemanagement.screens
             spriteBatch.Begin();
             spriteBatch.Draw(m_screenBackground, viewport.Bounds, Color.White);
 
-            m_selectedViewPort.Draw(spriteBatch, m_selectedCharactersRectangle, "Orins School", m_headerFont);
-            m_availableViewPort.Draw(spriteBatch, m_availableCharactersRectangle, "Available Gladiators", m_headerFont);
+            m_selectedViewPort.Draw(spriteBatch, m_selectedCharactersRectangle);
+            m_availableViewPort.Draw(spriteBatch, m_availableCharactersRectangle);
+            DrawSelectedCharacterInfo(spriteBatch);
+
+            m_nextButton.Draw(spriteBatch, m_nextButtonRectangle);
 
             spriteBatch.End();
         }
@@ -75,27 +79,27 @@ namespace Gladius.gamestatemanagement.screens
 
                 case (ActionButton.ActionLeft):
                     {
-                        m_currentViewPort.ScrollLeft();
+                        CurrentControl.ScrollLeft();
                         break;
                     }
                 case (ActionButton.ActionRight):
                     {
-                        m_currentViewPort.ScrollRight();
+                        CurrentControl.ScrollRight();
                         break;
                     }
                 case (ActionButton.ActionUp):
                     {
-                        m_currentViewPort.ScrollUp();
+                        CurrentControl.ScrollUp();
                         break;
                     }
                 case (ActionButton.ActionDown):
                     {
-                        m_currentViewPort.ScrollDown();
+                        CurrentControl.ScrollDown();
                         break;
                     }
                 case (ActionButton.ActionButton1):
                     {
-                        if (m_currentViewPort == m_availableViewPort)
+                        if (CurrentControl == m_availableViewPort)
                         {
                             // add character to selection
                             AddCharacterToSelected(SelectedCharacter);
@@ -106,7 +110,7 @@ namespace Gladius.gamestatemanagement.screens
                 // cancel
                 case (ActionButton.ActionButton2):
                     {
-                        if (m_currentViewPort == m_availableViewPort)
+                        if (CurrentControl == m_availableViewPort)
                         {
                             // add character to selection
                             RemoveCharacterFromSelected(SelectedCharacter);
@@ -130,9 +134,9 @@ namespace Gladius.gamestatemanagement.screens
             m_selectedCharacters.Remove(characterData);
         }
 
-        public void DrawSelectedCharacterInfo()
+        public void DrawSelectedCharacterInfo(SpriteBatch spriteBatch)
         {
-
+            spriteBatch.Draw(ContentManager.GetColourTexture(Color.White), m_currentCharacterRectangle, Color.White);
         }
 
 
@@ -161,11 +165,26 @@ namespace Gladius.gamestatemanagement.screens
 
             int totalHeight = (m_availableCharacters.Count / m_numGladiatorsY) + (((m_availableCharacters.Count % m_numGladiatorsY) == 0) ? 0 : 1);
 
-            m_availableViewPort = new ViewPort(new Rectangle(0, 0, m_numGladiatorsX, totalHeight), standardRect, this, m_availableCharacters);
-            m_selectedViewPort = new ViewPort(standardRect, standardRect, this, m_selectedCharacters);
-            m_currentViewPort = m_availableViewPort;
+            m_availableViewPort = new CharacterViewPort(new Rectangle(0, 0, m_numGladiatorsX, totalHeight), standardRect, this, m_availableCharacters);
+            m_availableViewPort.Text = "Orin's School";
+            m_selectedViewPort = new CharacterViewPort(standardRect, standardRect, this, m_selectedCharacters);
+            m_selectedViewPort.Text = "Available";
+
+            m_selectedViewPort.SpriteFont = m_headerFont;
+            m_availableViewPort.SpriteFont = m_headerFont;
+
+            m_nextButton = new Button();
+            m_nextButton.Text = "Next";
+            m_nextButton.SpriteFont = m_headerFont;
+            m_nextButton.ContentManager = ContentManager;
+            
+
+            CurrentControl = m_availableViewPort;
             m_selectedViewPort.Next = m_availableViewPort;
             m_availableViewPort.Prev = m_selectedViewPort;
+            m_availableViewPort.Next = m_nextButton;
+            m_nextButton.Prev = m_availableViewPort;
+
         }
 
 
@@ -193,32 +212,51 @@ namespace Gladius.gamestatemanagement.screens
             }
         }
 
-        public void ViewPortChanged(ViewPort oldvp, ViewPort newvp,bool up)
+        public void UIControlChanged(UIControl oldControl, UIControl newControl, bool up)
         {
-            m_currentViewPort = newvp;
-            Point p = oldvp.m_cursorPoint;
-            p.Y = up?newvp.m_total.Height-1:0;
-            newvp.m_cursorPoint= p;
-            //if(upnewbp.
-
+            CurrentControl = newControl;
+            CharacterViewPort oldvp = oldControl as CharacterViewPort;
+            CharacterViewPort newvp = newControl as CharacterViewPort;
+            if (oldvp != null && newvp != null)
+            {
+                Point p = oldvp.m_cursorPoint;
+                p.Y = up ? newvp.m_total.Height - 1 : 0;
+                newvp.m_cursorPoint = p;
+            }
         }
 
-        public ViewPort CurrentViewPort
+        public Texture2D AtlasTexture
+        {
+            get { return m_atlasTexture; }
+        }
+
+        public UIControl CurrentControl
         {
             get
             {
-                return m_currentViewPort;
+                return m_currentControl;
+            }
+            set
+            {
+                if (m_currentControl != null)
+                {
+                    m_currentControl.HasFocus = false;
+                }
+                m_currentControl = value;
+                m_currentControl.HasFocus = true;
             }
         }
 
 
-        ViewPort m_currentViewPort;
-        ViewPort m_availableViewPort;
-        ViewPort m_selectedViewPort;
+        UIControl m_currentControl;
+        CharacterViewPort m_availableViewPort;
+        CharacterViewPort m_selectedViewPort;
+        Button m_nextButton;
 
         private Rectangle m_selectedCharactersRectangle = new Rectangle(16, 16, 400, 300);
         private Rectangle m_availableCharactersRectangle = new Rectangle(16, 350, 400, 300);
-        private Rectangle m_currentCharacterRectangle = new Rectangle(450, 16, 300, 600);
+        private Rectangle m_currentCharacterRectangle = new Rectangle(550, 16, 300, 500);
+        private Rectangle m_nextButtonRectangle = new Rectangle(550, 550, 80, 40);
 
         public static Rectangle ThumbnailDims = new Rectangle(0, 0, 96, 96);
 
@@ -239,21 +277,110 @@ namespace Gladius.gamestatemanagement.screens
         public const int m_numGladiatorsY = 2;
     }
 
+    public interface IUIControlCallback
+    {
+        void UIControlChanged(UIControl oldvp, UIControl newvp, bool up);
 
-    public class ViewPort
+    }
+
+    public interface ICharacterViewPortCallback : IUIControlCallback
+    {
+        UIControl CurrentControl { get; }
+        ThreadSafeContentManager ContentManager { get; }
+        Texture2D AtlasTexture {get;}
+        TextureRegion RegionForChar(CharacterData characterData);
+    }
+
+
+    public abstract class UIControl
+    {
+        public UIControl Prev
+        {
+            get;
+            set;
+        }
+        public UIControl Next
+        {
+            get;
+            set;
+        }
+
+        public String Text
+        {
+            get;
+            set;
+        }
+
+        public SpriteFont SpriteFont
+        {
+            get;
+            set;
+        }
+
+        public Rectangle VisibleArea
+        {
+            get;
+            set;
+        }
+
+        public bool HasFocus
+        {
+            get;
+            set;
+        }
+
+        public ThreadSafeContentManager ContentManager
+        {
+            get;
+            set;
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle toDraw) { }
+
+        public virtual void ScrollUp() { }
+        public virtual void ScrollDown() { }
+        public virtual void ScrollLeft() { }
+        public virtual void ScrollRight() { }
+    }
+
+
+    public class Button : UIControl
+    {
+        public override void Draw(SpriteBatch spriteBatch, Rectangle toDraw)
+        {
+            if (HasFocus)
+            {
+                spriteBatch.Draw(ContentManager.GetColourTexture(Color.White), toDraw, Color.Black);
+                Rectangle inset = Globals.InsetRectangle(toDraw, 2);
+                spriteBatch.Draw(ContentManager.GetColourTexture(Color.White), inset, Color.White);
+            }
+            else
+            {
+                spriteBatch.Draw(ContentManager.GetColourTexture(Color.White), toDraw, Color.White);
+            }
+            Vector2 centerOfRect = new Vector2(toDraw.Width,toDraw.Height) / 2f;
+            centerOfRect += new Vector2(toDraw.X,toDraw.Y);
+            GraphicsHelper.DrawCenteredText(spriteBatch, SpriteFont, Text, centerOfRect, Color.Black);
+        }
+        
+    
+    }
+
+
+
+    public class CharacterViewPort : UIControl
     {
         public Rectangle m_total;
-        private Rectangle m_visibleArea;
         private Rectangle m_currentlyVisible;
-        private GladiatorChoiceScreen m_callback;
+        private ICharacterViewPortCallback m_callback;
         public Point m_cursorPoint = new Point();
         private List<CharacterData> m_characterList = new List<CharacterData>();
 
-        public ViewPort(Rectangle total, Rectangle visible, GladiatorChoiceScreen callback, List<CharacterData> characterList)
+        public CharacterViewPort(Rectangle total, Rectangle visible, ICharacterViewPortCallback callback, List<CharacterData> characterList)
         {
             m_total = total;
-            m_visibleArea = visible;
-            m_currentlyVisible = m_visibleArea;
+            VisibleArea = visible;
+            m_currentlyVisible = VisibleArea;
             m_callback = callback;
             m_characterList = characterList;
         }
@@ -263,9 +390,7 @@ namespace Gladius.gamestatemanagement.screens
             get
             {
                 return m_currentlyVisible;
-
             }
-
         }
 
         public void AdjustWindow()
@@ -278,58 +403,46 @@ namespace Gladius.gamestatemanagement.screens
 
         }
 
-        public void ScrollLeft()
+        public override void ScrollLeft()
         {
             m_cursorPoint.X--;
             AdjustWindow();
         }
 
-        public void ScrollRight()
+        public override void ScrollRight()
         {
             m_cursorPoint.X++;
             AdjustWindow();
         }
 
-        public void ScrollUp()
+        public override void ScrollUp()
         {
             m_cursorPoint.Y--;
 
             if (m_cursorPoint.Y < 0 && Prev != null)
             {
-                m_callback.ViewPortChanged(this, Prev,true);
+                m_callback.UIControlChanged(this, Prev,true);
             }
             AdjustWindow();
         }
 
-        public void ScrollDown()
+        public override void ScrollDown()
         {
             m_cursorPoint.Y++;
 
             if (m_cursorPoint.Y > m_total.Height -1 && Next != null)
             {
-                m_callback.ViewPortChanged(this, Next,false);
+                m_callback.UIControlChanged(this, Next, false);
 
             }
             AdjustWindow();
-        }
-
-        public ViewPort Next
-        {
-            get;
-            set;
-        }
-
-        public ViewPort Prev
-        {
-            get;
-            set;
         }
 
         public CharacterData SelectedCharacter
         {
             get
             {
-                int index = ((m_cursorPoint.Y) * m_visibleArea.Width) + m_cursorPoint.X;
+                int index = ((m_cursorPoint.Y) * VisibleArea.Width) + m_cursorPoint.X;
                 if (index < m_characterList.Count)
                 {
                     return m_characterList[index];
@@ -339,24 +452,24 @@ namespace Gladius.gamestatemanagement.screens
         }
 
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle toDraw, String header, SpriteFont headerFont)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle toDraw)
         {
             Rectangle adjustedRect = toDraw;
 
-            Vector2 textDims = headerFont.MeasureString(header);
-            GraphicsHelper.DrawShadowedText(spriteBatch, headerFont, header, adjustedRect.Location);
+            Vector2 textDims = SpriteFont.MeasureString(Text);
+            GraphicsHelper.DrawShadowedText(spriteBatch, SpriteFont, Text, adjustedRect.Location);
 
             adjustedRect.Y += (int)textDims.Y + 3;
 
             Rectangle dims = GladiatorChoiceScreen.ThumbnailDims;
-            for (int i = 0; i < m_visibleArea.Width; i++)
+            for (int i = 0; i < VisibleArea.Width; i++)
             {
-                for (int j = 0; j < m_visibleArea.Height; ++j)
+                for (int j = 0; j < VisibleArea.Height; ++j)
                 {
                     Point p = new Point(i, j);
                     Rectangle r = new Rectangle(p.X * dims.Width, p.Y * dims.Height, dims.Width, dims.Height);
                     r.Location += adjustedRect.Location;
-                    if (m_callback.CurrentViewPort == this)
+                    if (m_callback.CurrentControl == this)
                     {
                         Color borderColour = Color.White;
                         if (p == m_cursorPoint)
@@ -367,7 +480,7 @@ namespace Gladius.gamestatemanagement.screens
                     }
                     r = Globals.InsetRectangle(r, 2);
 
-                    int index = (j * m_visibleArea.Width) + i;
+                    int index = (j * VisibleArea.Width) + i;
                     CharacterData currentCharacter = null;
                     if (index < m_characterList.Count)
                     {
@@ -375,13 +488,13 @@ namespace Gladius.gamestatemanagement.screens
                     }
 
                     TextureRegion region = m_callback.RegionForChar(currentCharacter);
-                    spriteBatch.Draw(m_callback.m_atlasTexture, r, region.Bounds, Color.White);
+                    spriteBatch.Draw(m_callback.AtlasTexture, r, region.Bounds, Color.White);
 
                     // draw level indicator.
                     if (currentCharacter != null)
                     {
                         Vector2 levelTextPos = new Vector2(r.X, r.Y) + (new Vector2(dims.Width) * 0.7f);
-                        GraphicsHelper.DrawShadowedText(spriteBatch, headerFont, "" + currentCharacter.Level, levelTextPos);
+                        GraphicsHelper.DrawShadowedText(spriteBatch, SpriteFont, "" + currentCharacter.Level, levelTextPos);
                     }
                 }
             }
