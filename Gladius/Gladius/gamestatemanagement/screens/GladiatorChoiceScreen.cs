@@ -211,7 +211,6 @@ namespace Gladius.gamestatemanagement.screens
             SetCommonProperties(m_nextButton);
 
 
-            CurrentControl = m_availableViewPort;
             m_selectedViewPort.Next = m_availableViewPort;
             m_availableViewPort.Prev = m_selectedViewPort;
             m_availableViewPort.Next = m_nextButton;
@@ -220,6 +219,10 @@ namespace Gladius.gamestatemanagement.screens
             m_selectedViewPort.ActionPressed += new EventManager.ActionButtonPressed(m_selectedViewPort_ActionPressed);
             m_availableViewPort.ActionPressed +=new EventManager.ActionButtonPressed(m_availableViewPort_ActionPressed);
             m_nextButton.ActionPressed +=new EventManager.ActionButtonPressed(m_nextButton_ActionPressed);
+
+
+            //CurrentControl = m_availableViewPort;
+            CurrentControl = m_nextButton;
 
         }
 
@@ -265,6 +268,8 @@ namespace Gladius.gamestatemanagement.screens
         public void MoveToNextScreen()
         {
             int ibreak = 0;
+            ScreenManager.AddScreen(new GladiatorPlacementScreen(m_selectedCharacters),null);
+            ExitScreen();
         }
 
         public TextureRegion RegionForChar(CharacterData characterData)
@@ -348,7 +353,6 @@ namespace Gladius.gamestatemanagement.screens
         private GladiatorSchool m_gladiatorSchool;
         private BattleData m_currentBattle;
 
-        private Texture2D m_screenBackground;
         public Texture2D m_atlasTexture;
         private TextureAtlas m_textureAtlas;
 

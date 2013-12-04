@@ -395,6 +395,7 @@ namespace Gladius.gamestatemanagement.screenmanager
         protected ThreadSafeContentManager m_content;
         protected SpriteFont m_gameFont;
         protected SpriteBatch m_spriteBatch;
+        protected Texture2D m_screenBackground;
 
         protected float pauseAlpha;
 
