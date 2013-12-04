@@ -15,7 +15,7 @@ using Gladius.util;
 
 namespace Gladius.gamestatemanagement.screens
 {
-    public class GladiatorChoiceScreen : GameScreen, ICharacterViewPortCallback
+    public class GladiatorChoiceScreen : GameScreen, ICharacterViewPortCallback,IUIManager
     {
         public override void LoadContent()
         {
@@ -32,6 +32,9 @@ namespace Gladius.gamestatemanagement.screens
         }
 
 
+
+
+
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
@@ -46,9 +49,80 @@ namespace Gladius.gamestatemanagement.screens
             m_availableViewPort.Draw(spriteBatch, m_availableCharactersRectangle);
             DrawSelectedCharacterInfo(spriteBatch);
 
+
             m_nextButton.Draw(spriteBatch, m_nextButtonRectangle);
 
             spriteBatch.End();
+        }
+
+        void  m_availableViewPort_ActionPressed(object sender, ActionButtonPressedArgs e)
+        {
+            switch (e.ActionButton)
+            {
+
+                case (ActionButton.ActionLeft):
+                    {
+                        m_availableViewPort.ScrollLeft();
+                        break;
+                    }
+                case (ActionButton.ActionRight):
+                    {
+                        m_availableViewPort.ScrollRight();
+                        break;
+                    }
+                case (ActionButton.ActionUp):
+                    {
+                        m_availableViewPort.ScrollUp();
+                        break;
+                    }
+                case (ActionButton.ActionDown):
+                    {
+                        m_availableViewPort.ScrollDown();
+                        break;
+                    }
+                case (ActionButton.ActionButton1):
+                    {
+                        // add character to selection
+                        AddCharacterToSelected(SelectedCharacter);
+
+                        break;
+                    }
+                // cancel
+                case (ActionButton.ActionButton2):
+                    {
+                        // add character to selection
+                        RemoveCharacterFromSelected(SelectedCharacter);
+                        break;
+                    }
+            }
+        }
+
+        void m_selectedViewPort_ActionPressed(object sender, ActionButtonPressedArgs e)
+        {
+            switch (e.ActionButton)
+            {
+
+                case (ActionButton.ActionLeft):
+                    {
+                        m_selectedViewPort.ScrollLeft();
+                        break;
+                    }
+                case (ActionButton.ActionRight):
+                    {
+                        m_selectedViewPort.ScrollRight();
+                        break;
+                    }
+                case (ActionButton.ActionUp):
+                    {
+                        m_selectedViewPort.ScrollUp();
+                        break;
+                    }
+                case (ActionButton.ActionDown):
+                    {
+                        m_selectedViewPort.ScrollDown();
+                        break;
+                    }
+            }
         }
 
 
@@ -74,51 +148,7 @@ namespace Gladius.gamestatemanagement.screens
 
         private void HandleAction(ActionButtonPressedArgs e)
         {
-            switch (e.ActionButton)
-            {
-
-                case (ActionButton.ActionLeft):
-                    {
-                        CurrentControl.ScrollLeft();
-                        break;
-                    }
-                case (ActionButton.ActionRight):
-                    {
-                        CurrentControl.ScrollRight();
-                        break;
-                    }
-                case (ActionButton.ActionUp):
-                    {
-                        CurrentControl.ScrollUp();
-                        break;
-                    }
-                case (ActionButton.ActionDown):
-                    {
-                        CurrentControl.ScrollDown();
-                        break;
-                    }
-                case (ActionButton.ActionButton1):
-                    {
-                        if (CurrentControl == m_availableViewPort)
-                        {
-                            // add character to selection
-                            AddCharacterToSelected(SelectedCharacter);
-                        }
-
-                        break;
-                    }
-                // cancel
-                case (ActionButton.ActionButton2):
-                    {
-                        if (CurrentControl == m_availableViewPort)
-                        {
-                            // add character to selection
-                            RemoveCharacterFromSelected(SelectedCharacter);
-                        }
-                        break;
-                    }
-
-            }
+            CurrentControl.OnActionPressed(this,e);
         }
 
         public void AddCharacterToSelected(CharacterData characterData)
@@ -165,19 +195,21 @@ namespace Gladius.gamestatemanagement.screens
 
             int totalHeight = (m_availableCharacters.Count / m_numGladiatorsY) + (((m_availableCharacters.Count % m_numGladiatorsY) == 0) ? 0 : 1);
 
-            m_availableViewPort = new CharacterViewPort(new Rectangle(0, 0, m_numGladiatorsX, totalHeight), standardRect, this, m_availableCharacters);
+            m_availableViewPort = new CharacterViewPort(this,new Rectangle(0, 0, m_numGladiatorsX, totalHeight), standardRect, this, m_availableCharacters);
             m_availableViewPort.Text = "Orin's School";
-            m_selectedViewPort = new CharacterViewPort(standardRect, standardRect, this, m_selectedCharacters);
+            
+
+            m_selectedViewPort = new CharacterViewPort(this, standardRect, standardRect, this, m_selectedCharacters);
             m_selectedViewPort.Text = "Available";
 
-            m_selectedViewPort.SpriteFont = m_headerFont;
-            m_availableViewPort.SpriteFont = m_headerFont;
 
-            m_nextButton = new Button();
+            m_nextButton = new Button(this);
             m_nextButton.Text = "Next";
-            m_nextButton.SpriteFont = m_headerFont;
-            m_nextButton.ContentManager = ContentManager;
-            
+
+            SetCommonProperties(m_selectedViewPort);
+            SetCommonProperties(m_availableViewPort);
+            SetCommonProperties(m_nextButton);
+
 
             CurrentControl = m_availableViewPort;
             m_selectedViewPort.Next = m_availableViewPort;
@@ -185,8 +217,55 @@ namespace Gladius.gamestatemanagement.screens
             m_availableViewPort.Next = m_nextButton;
             m_nextButton.Prev = m_availableViewPort;
 
+            m_selectedViewPort.ActionPressed += new EventManager.ActionButtonPressed(m_selectedViewPort_ActionPressed);
+            m_availableViewPort.ActionPressed +=new EventManager.ActionButtonPressed(m_availableViewPort_ActionPressed);
+            m_nextButton.ActionPressed +=new EventManager.ActionButtonPressed(m_nextButton_ActionPressed);
+
         }
 
+        public void SetCommonProperties(IUIControl control)
+        {
+            control.SpriteFont = m_headerFont;
+            control.ContentManager = ContentManager;
+
+        }
+
+        void  m_nextButton_ActionPressed(object sender, ActionButtonPressedArgs e)
+        {
+            switch (e.ActionButton)
+            {
+
+                case (ActionButton.ActionLeft):
+                case (ActionButton.ActionUp):
+                    {
+                        if (m_nextButton.Prev != null)
+                        {
+                            UIControlChanged(m_nextButton, m_nextButton.Prev,true);
+                        }
+                        break;
+                    }
+                case (ActionButton.ActionRight):
+                case (ActionButton.ActionDown):
+
+                    {
+                        if (m_nextButton.Next != null)
+                        {
+                            UIControlChanged(m_nextButton, m_nextButton.Next, true);
+                        }
+                        break;
+                    }
+                case(ActionButton.ActionButton1):
+                    {
+                        MoveToNextScreen();
+                        break;
+                    }
+            }
+        }
+
+        public void MoveToNextScreen()
+        {
+            int ibreak = 0;
+        }
 
         public TextureRegion RegionForChar(CharacterData characterData)
         {
@@ -212,7 +291,7 @@ namespace Gladius.gamestatemanagement.screens
             }
         }
 
-        public void UIControlChanged(UIControl oldControl, UIControl newControl, bool up)
+        public void UIControlChanged(IUIControl oldControl, IUIControl newControl, bool up)
         {
             CurrentControl = newControl;
             CharacterViewPort oldvp = oldControl as CharacterViewPort;
@@ -230,7 +309,7 @@ namespace Gladius.gamestatemanagement.screens
             get { return m_atlasTexture; }
         }
 
-        public UIControl CurrentControl
+        public IUIControl CurrentControl
         {
             get
             {
@@ -248,7 +327,7 @@ namespace Gladius.gamestatemanagement.screens
         }
 
 
-        UIControl m_currentControl;
+        IUIControl m_currentControl;
         CharacterViewPort m_availableViewPort;
         CharacterViewPort m_selectedViewPort;
         Button m_nextButton;
@@ -279,27 +358,30 @@ namespace Gladius.gamestatemanagement.screens
 
     public interface IUIControlCallback
     {
-        void UIControlChanged(UIControl oldvp, UIControl newvp, bool up);
+        void UIControlChanged(IUIControl oldvp, IUIControl newvp, bool up);
 
     }
 
     public interface ICharacterViewPortCallback : IUIControlCallback
     {
-        UIControl CurrentControl { get; }
-        ThreadSafeContentManager ContentManager { get; }
         Texture2D AtlasTexture {get;}
         TextureRegion RegionForChar(CharacterData characterData);
     }
 
 
-    public abstract class UIControl
+    public abstract class UIControl : IUIControl
     {
-        public UIControl Prev
+    	public UIControl(IUIManager manager)
+    	{
+            m_manager = manager;
+    	}
+    
+        public IUIControl Prev
         {
             get;
             set;
         }
-        public UIControl Next
+        public IUIControl Next
         {
             get;
             set;
@@ -335,17 +417,29 @@ namespace Gladius.gamestatemanagement.screens
             set;
         }
 
+        public void OnActionPressed(object sender, ActionButtonPressedArgs e)
+        {
+            if(ActionPressed != null)
+            {
+                ActionPressed(sender, e);
+            }
+        }
+
+        public event Gladius.events.EventManager.ActionButtonPressed ActionPressed;
+
+
+        protected IUIManager m_manager;
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle toDraw) { }
 
-        public virtual void ScrollUp() { }
-        public virtual void ScrollDown() { }
-        public virtual void ScrollLeft() { }
-        public virtual void ScrollRight() { }
     }
 
 
     public class Button : UIControl
     {
+    	public Button(IUIManager uiManager) : base(uiManager)
+    	{
+    	}
+    
         public override void Draw(SpriteBatch spriteBatch, Rectangle toDraw)
         {
             if (HasFocus)
@@ -376,7 +470,7 @@ namespace Gladius.gamestatemanagement.screens
         public Point m_cursorPoint = new Point();
         private List<CharacterData> m_characterList = new List<CharacterData>();
 
-        public CharacterViewPort(Rectangle total, Rectangle visible, ICharacterViewPortCallback callback, List<CharacterData> characterList)
+        public CharacterViewPort(IUIManager uiManager,Rectangle total, Rectangle visible, ICharacterViewPortCallback callback, List<CharacterData> characterList) : base(uiManager)
         {
             m_total = total;
             VisibleArea = visible;
@@ -403,19 +497,19 @@ namespace Gladius.gamestatemanagement.screens
 
         }
 
-        public override void ScrollLeft()
+        public void ScrollLeft()
         {
             m_cursorPoint.X--;
             AdjustWindow();
         }
 
-        public override void ScrollRight()
+        public void ScrollRight()
         {
             m_cursorPoint.X++;
             AdjustWindow();
         }
 
-        public override void ScrollUp()
+        public void ScrollUp()
         {
             m_cursorPoint.Y--;
 
@@ -426,7 +520,7 @@ namespace Gladius.gamestatemanagement.screens
             AdjustWindow();
         }
 
-        public override void ScrollDown()
+        public void ScrollDown()
         {
             m_cursorPoint.Y++;
 
@@ -469,14 +563,14 @@ namespace Gladius.gamestatemanagement.screens
                     Point p = new Point(i, j);
                     Rectangle r = new Rectangle(p.X * dims.Width, p.Y * dims.Height, dims.Width, dims.Height);
                     r.Location += adjustedRect.Location;
-                    if (m_callback.CurrentControl == this)
+                    if (m_manager.CurrentControl == this)
                     {
                         Color borderColour = Color.White;
                         if (p == m_cursorPoint)
                         {
                             borderColour = Color.Black;
                         }
-                        spriteBatch.Draw(m_callback.ContentManager.GetColourTexture(borderColour), r, Color.White);
+                        spriteBatch.Draw(ContentManager.GetColourTexture(borderColour), r, Color.White);
                     }
                     r = Globals.InsetRectangle(r, 2);
 
