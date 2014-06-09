@@ -47,6 +47,12 @@ namespace Gladius.combat
             missChance *= 0.01f; // (0->1)
             float hitChance = 1f - missChance;
 
+            if (attackSkill.CantMiss)
+            {
+                hitChance = 1f;
+            }
+
+
 
             if (m_combatRandom.NextDouble() > hitChance)
             {
@@ -188,8 +194,12 @@ namespace Gladius.combat
 
 
             return 0;
-        }   
+        }
 
+
+        public void CheckInnateSkills(BaseActor attacker, BaseActor defender, AttackSkill skill,AttackResult attackResult)
+        {
+        }
 
         public bool IsValidTarget(BaseActor attacker, BaseActor defender,AttackSkill skill)
         {
@@ -200,23 +210,8 @@ namespace Gladius.combat
                     return false;
                 }
 
-                if (attacker == defender && skill != null && skill.DamageAffects == DamageAffects.Self)
-                {
-                    return true;
-                }
-                if (attacker.Team == defender.Team && (skill == null || skill.HasMovementPath()))
-                {
-                    return false;
-                }
-                if (attacker.Team == defender.Team && skill.DamageAffects == DamageAffects.Team)
-                {
-                    return true;
-                }
-                if (attacker != defender)
-                {
-                    return true;
-                }
-
+                bool skillValid= skill.ValidForTarget(attacker, defender, new Point());
+                return skillValid;
             }
             return false;
         }
@@ -237,19 +232,7 @@ namespace Gladius.combat
                     return true;
                 }
 
-                if (attacker.CurrentAttackSkill.DamageAffects == DamageAffects.Self)
-                {
-                    return true;
-                }
-
-                if (attacker.CurrentAttackSkill.InRange(len))
-                {
-                    if(cursorOnly ||attacker.CurrentAttackSkill.RangedAttack )
-                    {
-                        return true;
-                    }
-                }
-
+                return len <= attacker.CurrentAttackSkill.m_skillEffect.Range;
             }
             return false;
         }

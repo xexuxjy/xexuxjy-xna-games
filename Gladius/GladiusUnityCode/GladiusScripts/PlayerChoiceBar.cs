@@ -578,7 +578,7 @@ public class PlayerChoiceBar : MonoBehaviour
                     }
                     else
                     {
-                        if (CurrentActor.CurrentAttackSkill.RequiresActorTarget)
+                        if (!CurrentActor.CurrentAttackSkill.IsOkWithNoTargets)
                         {
                             // some indication here that we can't confirm the action at this point.
                         }
