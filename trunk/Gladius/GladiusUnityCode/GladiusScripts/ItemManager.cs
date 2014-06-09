@@ -204,12 +204,7 @@ namespace Gladius
 
         public static ItemLocation ToLocation(String val)
         {
-            if (val == "Armor") return ItemLocation.Body;
-            if (val == "Weapon") return ItemLocation.RHand;
-            if (val == "Shield") return ItemLocation.LHand;
-            if (val == "Helmet") return ItemLocation.Head;
-            if (val == "Accessory") return ItemLocation.Special;
-            return ItemLocation.Special;
+            return (ItemLocation)Enum.Parse(typeof(ItemLocation),val);
         }
 
 

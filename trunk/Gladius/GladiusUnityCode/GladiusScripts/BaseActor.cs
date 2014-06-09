@@ -48,7 +48,15 @@ public class BaseActor : MonoBehaviour
     public BaseActor()
     {
         ModelHeight = 1f;
+        //m_animatedModel = new AnimatedModel(ModelHeight);
+
+        //m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
+        //m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
+        //Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
+        //m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
+
         SetupAttributes();
+        //DrawOrder = Globals.CharacterDrawOrder;
     }
 
     void Start()
@@ -63,6 +71,16 @@ public class BaseActor : MonoBehaviour
         SetAnimationData();
         
         PlayAnimation(AnimationEnum.Idle);
+
+        //PlayAnimation(AnimationEnum.BowShot);
+
+        //Debug.Log ("Bounds " + gameObject.renderer.bounds);
+        //Component[] components = gameObject.GetComponentsInChildren<Component>();
+        //foreach (Component comp in components)
+        //{
+        //    Debug.Log("Comp : " + comp.GetType());
+        //}
+
 
     }
 
@@ -434,6 +452,15 @@ public class BaseActor : MonoBehaviour
             transform.position = value;
         }
     }
+
+    //        private Transform m_world;
+    //        public Transform World
+    //        {
+    //            get
+    //            {
+    //                return m_world;
+    //            }
+    //        }
 
     public int Health
     {
@@ -807,6 +834,7 @@ public class BaseActor : MonoBehaviour
         GladiusGlobals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", Name, m_currentTarget != null ? m_currentTarget.Name : "NoActorTarget", CurrentAttackSkill.Name));
         AnimationEnum attackAnim = CurrentAttackSkill.Animation != AnimationEnum.None ? CurrentAttackSkill.Animation : AnimationEnum.Attack1;
         PlayAnimation(attackAnim, loopClip: false);
+        //GladiusGlobals.CombatEngineUI.DrawFloatingText(CameraFocusPoint, Color.white, CurrentAttackSkill.Name, 2f);
         Attacking = true;
     }
 
@@ -826,7 +854,10 @@ public class BaseActor : MonoBehaviour
 
             if (GladiusGlobals.CombatEngine.IsAttackerInRange(this, m_currentTarget))
             {
-                SnapToFace(m_currentTarget);
+                if (CurrentAttackSkill.FaceOnAttack)
+                {
+                    SnapToFace(m_currentTarget);
+                }
                 m_currentTarget.SnapToFace(this);
                 StartAttack();
             }
@@ -885,6 +916,30 @@ public class BaseActor : MonoBehaviour
 
 
     }
+
+
+    //public virtual void StartAction(ActionTypes actionType)
+    //{
+    //    Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] started.", DebugName, actionType));
+    //}
+
+    //public virtual void StopAction(ActionTypes actionType)
+    //{
+    //    Globals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] [{1}] stopped.", DebugName, actionType));
+    //}
+
+    //public override void Draw(GameTime gameTime)
+    //{
+    //    Draw(Game.GraphicsDevice, Globals.Camera, gameTime);
+    //}
+
+    //public virtual void Draw(GraphicsDevice device, ICamera camera, GameTime gameTime)
+    //{
+    //    if (m_animatedModel != null)
+    //    {
+    //        m_animatedModel.Draw(device, camera, gameTime);
+    //    }
+    //}
 
     public List<Point> WayPointList
     {
@@ -986,13 +1041,13 @@ public class BaseActor : MonoBehaviour
         {
             // adjust our skill points.
             ArenaSkillPoints -= CurrentAttackSkill.UseCost;
-            ArenaSkillPoints += CurrentAttackSkill.UseGain;
+            //ArenaSkillPoints += CurrentAttackSkill.UseGain;
 
             if (UnitActive && PlayerControlled && TurnManager.WaitingOnPlayerControl)
             {
                 TurnManager.WaitingOnPlayerControl = false;
             }
-            if (CurrentAttackSkill.HasMovementPath())
+            if (CurrentAttackSkill.IsMoveToAttack)
             {
                 ConfirmMove();
             }
@@ -1002,14 +1057,14 @@ public class BaseActor : MonoBehaviour
 
     public void StartAttackSkill()
     {
-        if (CurrentAttackSkill.HasModifiers())
-        {
-            ApplyModifiers(CurrentAttackSkill);
-        }
-        else if (CurrentAttackSkill.AttackType == AttackType.EndTurn)
-        {
-            TurnComplete = true;
-        }
+        //if (CurrentAttackSkill.HasModifiers())
+        //{
+        //    ApplyModifiers(CurrentAttackSkill);
+        //}
+        //else if (CurrentAttackSkill.AttackType == AttackType.EndTurn)
+        //{
+        //    TurnComplete = true;
+        //}
     }
 
     //public void EndAttackSkill()
@@ -1078,12 +1133,12 @@ public class BaseActor : MonoBehaviour
     public void ApplyModifiers(AttackSkill skill)
     {
             //need to change the implementation of this so its based on turns not elapsed time
-        foreach (GameObjectAttributeModifier modifier in skill.StatModifiers)
-        {
-            GameObjectAttributeModifier modifierCopy = modifier.Copy();
-            modifierCopy.ApplyTo(this);
-            m_attributeModifiers.Add(modifierCopy);
-        }
+        //foreach (GameObjectAttributeModifier modifier in skill.StatModifiers)
+        //{
+        //    GameObjectAttributeModifier modifierCopy = modifier.Copy();
+        //    modifierCopy.ApplyTo(this);
+        //    m_attributeModifiers.Add(modifierCopy);
+        //}
         // different blocks may have different bonuses.
         TurnComplete = true;
     }
@@ -1160,12 +1215,7 @@ public class BaseActor : MonoBehaviour
                         UpdateThreat(actor, -10);
                     }
                     // and if it is a ranged skill then we need to do an arena los check.
-                    if (CurrentAttackSkill.RequiresLOS)
-                    {
-                        if (GladiusGlobals.Arena.HasLOS(ArenaPoint, actor.ArenaPoint))
-                        {
-                        }
-                    }
+
 
                     // more tests on self/team buffing skills
 
@@ -1341,6 +1391,8 @@ public class BaseActor : MonoBehaviour
     private List<Point> m_wayPointList = new List<Point>();
     private List<AttackSkill> m_knownAttacks = new List<AttackSkill>();
     private List<AttackSkill> m_availableAttacks = new List<AttackSkill>();
+    private List<AttackSkill> m_innateSkills = new List<AttackSkill>();
+
     private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
     private List<GameObjectAttributeModifier> m_attributeModifiers = new List<GameObjectAttributeModifier>();
     

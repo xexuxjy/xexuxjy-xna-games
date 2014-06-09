@@ -28,7 +28,7 @@ namespace Gladius
         {
             Point startp = new Point();//GladiusGlobals.Arena.Width
             Point endp = new Point();//
-            GladiusGlobals.Arena.GetLOSPoints(startp, endp, m_arenaPoints);
+            //GladiusGlobals.Arena.GetLOSPoints(startp, endp, m_arenaPoints);
             ResetBoxes();
             BuildBoxes();
         }

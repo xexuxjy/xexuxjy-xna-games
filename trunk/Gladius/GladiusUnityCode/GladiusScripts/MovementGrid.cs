@@ -32,9 +32,11 @@ public class MovementGrid : MonoBehaviour
             for (int j = 0; j < GridSize; ++j)
             {
                 m_arenaSquares[i, j] = GridSquareType.None;
+                m_skillActiveSquares[i, j] = false;
             }
         }
     }
+
 
     public void Start()
     {
@@ -42,6 +44,7 @@ public class MovementGrid : MonoBehaviour
         //        String atlasName = "MovementGridAtlas";
         GridSize = 32;
         m_arenaSquares = new GridSquareType[GridSize, GridSize];
+        m_skillActiveSquares = new bool[GridSize, GridSize];
 
         // always want to know about actor changes. unlike actionevents.
         EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
@@ -102,6 +105,196 @@ public class MovementGrid : MonoBehaviour
 
 
 
+    public void BuildMaskForGrid(BaseActor actor, Point centerPoint, AttackSkill skill)
+    {
+        int distance = GladiusGlobals.PathDistance(actor.ArenaPoint, centerPoint);
+        DrawSkill(skill.SkillRangeName, skill.SkillRange, actor.ArenaPoint, centerPoint, true);
+        DrawSkill(skill.SkillExcludeRangeName, skill.SkillExcludeRange, actor.ArenaPoint, centerPoint, false);
+    }
+
+    
+
+    public void DrawSkill(String name, int range, Point start,Point end,bool val)
+    {
+        int distance = GladiusGlobals.PathDistance(start, end);
+        if (distance > range)
+        {
+            return;
+        }
+
+        switch (name)
+        {
+            case "Self":
+                SetSkillActivePoint(start, val);
+                break;
+
+            case "Square":
+            case "Square2x2":
+                break;
+
+            case "Plus":
+                BuildCross(end, 1, val);
+                break;
+            case "Plus2x2":
+                BuildCross(end, 2, val);
+                break;
+            case "Plus3x3":
+                BuildCross(end, 3, val);
+                break;
+            case "Linear":
+                break;
+            case "Star":
+                BuildStar(start, range, val);
+                break;
+            case "Diamond":
+                BuildDiamond(start, range, val);
+                break;
+            case "Cone":
+                BuildCone(start, end, range, val);
+                break;
+        }
+    }
+    public void BuildCross(Point start, int armLength, bool val)
+    {
+        for (int i = 0; i < armLength; ++i)
+        {
+            SetSkillActivePoint(Point.Add(start, new Point(i, 0)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(start, new Point(-i, 0)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(start, new Point(0, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(start, new Point(0, -i)), val);
+        }
+    }
+
+    private int[] m_coneSlots = new int[] { 1, 3, 3, 5, 5, 5, 7, 7, 7, 7 };
+
+    public void BuildCone(Point startPoint, Point endPoint,  int length, bool val)
+    {
+        Point offset1 = GladiusGlobals.CardinalNormalize(GladiusGlobals.Subtract(endPoint,startPoint));
+        Point offset2 = GladiusGlobals.Cross(offset1);
+
+        for (int i = 0; i < length; ++i)
+        {
+            int slotCount = m_coneSlots[i];
+            Point rowPoint = GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(offset1, i));
+            int midPoint = slotCount / 2;
+            for (int j = 0; j < slotCount; ++j)
+            {
+                int diff = j - midPoint;
+                Point offPoint = GladiusGlobals.Mult(offset2, diff);
+                Point p = GladiusGlobals.Add(rowPoint, offPoint);
+                SetSkillActivePoint(p, val);
+            }
+        }
+    }
+
+    public void BuildDiamond(Point startPoint, int armLength, bool val)
+    {
+        int rowCount = 1;
+        Point offset2 = new Point(0, 1);
+
+        for (int i = armLength; i >=0; --i)
+        {
+            int midPoint = rowCount / 2;
+            for (int j = 0; j < rowCount; ++j)
+            {
+                int diff = j - midPoint;
+                Point offPoint = GladiusGlobals.Mult(offset2, diff);
+                Point p = GladiusGlobals.Add(startPoint, offPoint);
+            }
+            rowCount += 2;
+        }
+        
+        offset2 = new Point(0, -1);
+
+        for (int i = armLength; i >= 0; --i)
+        {
+            int midPoint = rowCount / 2;
+            for (int j = 0; j < rowCount; ++j)
+            {
+                int diff = j - midPoint;
+                Point offPoint = GladiusGlobals.Mult(offset2, diff);
+                Point p = GladiusGlobals.Add(startPoint, offPoint);
+            }
+            rowCount += 2;
+        }
+    }
+
+    public void BuildStar(Point startPoint, int armLength, bool val)
+    {
+        Point tl = new Point(-1, 1);
+        Point t = new Point(0, 1);
+        Point tr = new Point(1, 1);
+        Point l = new Point(-1, 0);
+        Point r = new Point(1, 0);
+        Point bl = new Point(-1, -1);
+        Point b = new Point(0, -1);
+        Point br = new Point(1, -1);
+
+        for (int i = 0; i < armLength; ++i)
+        {
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, tl), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, t), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, tr), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, l), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, r), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, bl), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, b), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, br), val);
+        }
+
+    }
+
+    public void BuildCenteredGrid(Point centerPoint, int size,bool val)
+    {
+        if (size > 0)
+        {
+            int width = size;//((size - 1) / 2);
+
+            for (int i = -width; i <= width; ++i)
+            {
+                for (int j = -width; j <= width; ++j)
+                {
+                    Point p = new Point(centerPoint.X + i, centerPoint.Y + j);
+                    SetSkillActivePoint(p, val);
+                }
+            }
+        }
+    }
+
+
+
+    public void BuildMinMaxCircle(Point centerPoint, int min, int max,bool val)
+    {
+        int width = ((max - 1) / 2);
+        float min2 = min * min;
+        float max2 = max * max;
+        for (int i = -width; i <= width; ++i)
+        {
+            for (int j = -width; j <= width; ++j)
+            {
+                Point p = new Point(centerPoint.X + i, centerPoint.Y + j);
+                float dist2 = GladiusGlobals.PointDist2(p, centerPoint);
+                if (dist2 >= min2 && dist2 <= max2)
+                {
+                    SetSkillActivePoint(p, val);
+                }
+            }
+        }
+
+    }
+
+
+
+    public void SetSkillActivePoint(Point p, bool val)
+    {
+        if (p.X > 0 && p.X < GridSize && p.Y > 0 && p.Y < GridSize)
+        {
+            m_skillActiveSquares[p.X, p.Y] = val;
+        }
+    }
+
+
+
     private void RebuildForActor()
     {
         ResetGrid();
@@ -112,13 +305,25 @@ public class MovementGrid : MonoBehaviour
 
             if (CurrentActor.CurrentAttackSkill != null)
             {
-                if (CurrentActor.CurrentAttackSkill.HasMovementPath())
+                if (CurrentActor.CurrentAttackSkill.IsMoveToAttack)
                 {
                     DrawMovementPath(CurrentActor, CurrentActor.WayPointList);
                 }
 
+                for (int i = 0; i < GridSize; ++i)
+                {
+                    for (int j = 0; j < GridSize; ++j)
+                    {
+                        if (m_skillActiveSquares[i, j])
+                        {
+                            m_arenaSquares[i, j] = CursorForSquare(new Point(i, j), CurrentActor);
+                        }
+                    }
+                }
+
+
                 // draw the cursor for attackskill (different to move path);
-                DrawAttackSkillCursor(CurrentCursorPoint, CurrentActor);
+                //DrawAttackSkillCursor(CurrentCursorPoint, CurrentActor);
 
                 // if the current position is on a valid target(which wouldn't be in the movement list
                 // then draw a target/select icon.
@@ -156,106 +361,6 @@ public class MovementGrid : MonoBehaviour
         }
     }
 
-    public void DrawAttackSkillCursor(Point centerPoint, BaseActor actor)
-    {
-        //int distance = GladiusGlobals.PathDistance(actor.CurrentPosition, centerPoint);
-        //if (distance >= actor.CurrentAttackSkill.InRaMinRange && distance <= actor.CurrentAttackSkill.MaxRange)
-
-        if (actor.CurrentAttackSkill.Name == "BowShot")
-        {
-            DrawMinMaxCircle(actor.ArenaPoint, actor, actor.CurrentAttackSkill.MinRange, actor.CurrentAttackSkill.MaxRange);
-            DrawIfValid(CurrentCursorPoint, CurrentActor, GridSquareType.Select);
-        }
-        else
-        {
-            DrawCenteredGrid(centerPoint, actor, actor.CurrentAttackSkill.Radius);
-        }
-    }
-
-    // draw a circle (or torus ) around the center point based on min/max
-    public void DrawMinMaxCircle(Point centerPoint, BaseActor actor, int min, int max)
-    {
-        int width = ((max - 1) / 2);
-        float min2 = min * min;
-        float max2 = max * max;
-        for (int i = -width; i <= width; ++i)
-        {
-            for (int j = -width; j <= width; ++j)
-            {
-                Point p = new Point(centerPoint.X + i, centerPoint.Y + j);
-                float dist2 = GladiusGlobals.PointDist2(p, centerPoint);
-                if (dist2 >= min2 && dist2 <= max2)
-                {
-                    GridSquareType squareType = GridSquareType.Blank;
-                    if(GladiusGlobals.CombatEngine.IsValidTarget(CurrentActor, Arena.GetActorAtPosition(p), CurrentActor.CurrentAttackSkill))
-                    {
-                        if (p == m_currentPosition)
-                        {
-                            squareType = GridSquareType.TargetSelect;
-                        }
-                        else
-                        {
-                            squareType = GridSquareType.Target;
-                        }
-                    }
-                    DrawIfValid(p, actor, squareType);
-
-                }
-            }
-        }
-
-
-    }
-
-
-    public void DrawCenteredCross(Point centerPoint, BaseActor actor, int armSize)
-    {
-        if (armSize > 0)
-        {
-            Point offset = new Point(1,0);
-            for (int i = 0; i < armSize; ++i)
-            {
-                DrawIfValid(GladiusGlobals.Add(centerPoint,new Point(i,0)), actor);
-                DrawIfValid(GladiusGlobals.Add(centerPoint, new Point(-i, 0)), actor);
-                DrawIfValid(GladiusGlobals.Add(centerPoint, new Point(0, i)), actor);
-                DrawIfValid(GladiusGlobals.Add(centerPoint, new Point(0, -i)), actor);
-            }
-
-        }
-
-    }
-
-
-
-    public void DrawCenteredGrid(Point centerPoint, BaseActor actor, int size)
-    {
-        if (size > 0)
-        {
-            int width = size;//((size - 1) / 2);
-
-            for (int i = -width; i <= width; ++i)
-            {
-                for (int j = -width; j <= width; ++j)
-                {
-                    Point p = new Point(centerPoint.X + i, centerPoint.Y + j);
-                    DrawIfValid(p, actor, GridSquareType.None);
-                }
-            }
-        }
-        else
-        {
-            DrawIfValid(centerPoint, actor, GridSquareType.Select);
-        }
-    }
-
-
-    public void DrawMovementCross(BaseActor actor)
-    {
-        foreach (Point p in GladiusGlobals.CardinalPoints)
-        {
-            DrawIfValid(GladiusGlobals.Add(CurrentCursorPoint, p), actor);
-        }
-    }
 
     public void DrawIfValid(Point p, BaseActor actor, GridSquareType cursor = GridSquareType.None)
     {
@@ -425,7 +530,7 @@ public class MovementGrid : MonoBehaviour
         Point curr = new Point();
         Point next = new Point();
 
-        int skillRange = CurrentActor.CurrentAttackSkill.MovementRange;
+        int skillRange = CurrentActor.CurrentAttackSkill.TotalSkillRange;
 
         for (int i = 0; i < numPoints; ++i)
         {
@@ -652,6 +757,9 @@ public class MovementGrid : MonoBehaviour
     }
 
     private Vector2[] m_uvCopy;
+    private bool[,] m_skillActiveSquares;
+
+
     private GridSquareType[,] m_arenaSquares;
     private TextureAtlas m_moveAtlas;
     private Texture2D m_moveAtlasTexture;

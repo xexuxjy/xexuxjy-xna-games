@@ -396,12 +396,12 @@ namespace Gladius.arena
             rhs = temp;
         }
 
-        public bool HasLOS(Point start, Point end)
+        public bool HasLineOfSight(Point start, Point end)
         {
-            return HasLOS(start.X, start.Y, end.X, end.Y);
+            return HasLineOfSight(start.X, start.Y, end.X, end.Y);
         }
 
-        public bool HasLOS(int x0, int y0, int x1, int y1)
+        public bool HasLineOfSight(int x0, int y0, int x1, int y1)
         {
             bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
             if (steep)
@@ -443,53 +443,6 @@ namespace Gladius.arena
             return true;
         }
 
-        public bool GetLOSPoints(Point start, Point end, List<Point> results)
-        {
-            return GetLOSPoints(start.X, start.Y, end.X, end.Y,results);
-        }
-
-        public bool GetLOSPoints(int x0, int y0, int x1, int y1, List<Point> results)
-        {
-            results.Clear();
-            bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
-            if (steep)
-            {
-                Swap<int>(ref x0, ref y0);
-                Swap<int>(ref x1, ref y1);
-            }
-            if (x0 > x1)
-            {
-                Swap<int>(ref x0, ref x1);
-                Swap<int>(ref y0, ref y1);
-            }
-
-            var dX = (x1 - x0);
-            var dY = (y1 - y0);
-            var err = (dX / 2);
-            var ystep = (y0 < y1 ? 1 : -1);
-            var y = y0;
-
-            for (var x = x0; x <= x1; ++x)
-            {
-                // it's blocked so no LOS....
-                //if (IsPointOccupied(new Point(x, y)))
-                //{
-                //    return false;
-                //}
-                //if (!(steep ? plot(y, x) : plot(x, y)))
-                //    return;
-
-                err = err - dY;
-                if (err < 0)
-                {
-                    y += ystep;
-                    err += dX;
-                }
-                results.Add(new Point(x, y));
-            }
-            // got here so we should have LOS
-            return results.Count > 0;
-        }
 
         // dumb version for now. doesn't check path
         public BaseActor FindNearestEnemy(BaseActor searcher)

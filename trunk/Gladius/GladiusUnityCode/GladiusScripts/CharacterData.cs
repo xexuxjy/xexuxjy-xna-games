@@ -27,14 +27,17 @@ namespace Gladius
             m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints] = new BoundedAttribute(10);
             m_attributeDictionary[GameObjectAttributeType.Experience] = new BoundedAttribute(10);
 
-        }
+            // go through all the other attributes and add them if empty.
+            foreach (GameObjectAttributeType attr in EnumUtil.GetValues<GameObjectAttributeType>())
+            {
+                BoundedAttribute ba = null;
+                if (!m_attributeDictionary.TryGetValue(attr, out ba))
+                {
+                    m_attributeDictionary[attr] = new BoundedAttribute(0);
+                }
+            }
 
-        public void SetAttributeValue(GameObjectAttributeType attr, int val)
-        {
-        }
 
-        public void AddSkill(String skillName)
-        {
         }
 
         public void Load(XmlElement xmlElement)
@@ -54,8 +57,8 @@ namespace Gladius
             data.Append(" />");
 
             data.AppendFormat("<Equipment Head=\"{0}\" Arm1=\"{1}\" Arm2=\"{2}\" Body=\"{3}\" Special=\"{4}\" />\n",
-            m_items[(int)ItemLocation.Head], m_items[(int)ItemLocation.LHand], m_items[(int)ItemLocation.RHand],
-            m_items[(int)ItemLocation.Body], m_items[(int)ItemLocation.Special]);
+            m_items[(int)ItemLocation.Helmet], m_items[(int)ItemLocation.Shield], m_items[(int)ItemLocation.Weapon],
+            m_items[(int)ItemLocation.Armor], m_items[(int)ItemLocation.Accessory]);
 
             data.Append("</Character>");
             streamWriter.WriteLine(data);
@@ -94,6 +97,18 @@ namespace Gladius
             set;
         }
 
+        public int Experience
+        {
+            get;
+            set;
+        }
+
+        public int JobPoints
+        {
+            get;
+            set;
+        }
+
         public ActorClass ActorClass
         {
             get;
@@ -109,6 +124,24 @@ namespace Gladius
             return m_items[(int)location];
         }
 
+        //            	CON, PWR, ACC, DEF, INT, MOVE
+        public int CON
+        { get; set; }
+
+        public int PWR
+        { get; set; }
+
+        public int ACC
+        { get; set; }
+
+        public int DEF
+        { get; set; }
+
+        public int INT
+        { get; set; }
+
+        public int MOVE
+        { get; set; }
 
         /*
          *   <Character Name="" Accuracy ="" Defense= "" Power= "" Consitution= "" Experience="" Level ="">
@@ -213,6 +246,23 @@ namespace Gladius
         }
 
 
+        public void AddSkill(String skillName)
+        {
+            m_skillList.Add(skillName);
+        }
+
+        public void AddItemByNameAndLoc(String itemName,ItemLocation loc)
+        {
+            if (!String.IsNullOrEmpty(itemName))
+            {
+                m_itemNames[(int)loc] = itemName;
+            }
+        }
+
+        public String GetItemNameAtLoc(ItemLocation loc)
+        {
+            return m_itemNames[(int)loc];
+        }
 
         public bool Selected
         {
@@ -221,7 +271,12 @@ namespace Gladius
         }
         private bool m_male;
         private Item[] m_items = new Item[(int)ItemLocation.NumItems];
+        private String[] m_itemNames = new String[(int)ItemLocation.NumItems];
         private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
         private String m_infoString;
+        public List<String> m_skillList = new List<String>();
+
+
+
     }
 }

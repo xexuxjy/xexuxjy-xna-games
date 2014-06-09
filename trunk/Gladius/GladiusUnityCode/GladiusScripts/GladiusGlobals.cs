@@ -11,8 +11,6 @@ namespace Gladius
 
     public static class GladiusGlobals
     {
-
-
         public const float MovementStepTime = 2f;
 
         public static MovementGrid MovementGrid;
@@ -207,6 +205,31 @@ namespace Gladius
         public static Point Subtract(Point value1, Point value2)
         {
             return new Point(value1.X - value2.X, value1.Y - value2.Y);
+        }
+
+        public static Point Cross(Point value)
+        {
+            return new Point(value.Y, -value.X);
+        }
+
+        public static Point Mult(Point value, int scalar)
+        {
+            return new Point(value.X * scalar, value.Y * scalar);
+        }
+
+        public static Point CardinalNormalize(Point a)
+        {
+            if(Math.Abs(a.X) > Math.Abs(a.Y))
+            {
+                if(a.X < 0) return new Point(-1,0);
+                else return new Point(1,0);
+            }
+            else
+            {
+                if(a.Y < 0) return new Point(0,-1);
+                else return new Point(0,1);
+
+            }
         }
 
         // yucky way of passing data between scenes.

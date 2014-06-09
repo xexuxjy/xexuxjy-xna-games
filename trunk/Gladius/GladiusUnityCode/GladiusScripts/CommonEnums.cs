@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System;
 namespace Gladius
 {
 
@@ -21,7 +23,11 @@ namespace Gladius
         Affinity,
         Experience,
         Initiative,
-        JobPoints,
+        NumKills,
+        TotalDamageDone,
+        TotalDamageReceived,
+        NumberOfHits,
+        NumberOfCriticalHits,
         NumTypes
     }
 
@@ -41,12 +47,12 @@ namespace Gladius
 
     public enum ItemLocation
     {
-        Head = 0,
-        LHand = 1,
-        RHand = 2,
-        Body = 3,
-        Special = 4,
-        NumItems = 5
+        Weapon,	
+        Armor,	
+        Shield,	
+        Helmet,	
+        Accessory,
+        NumItems
     }
 
     public enum ActorCategory
@@ -62,38 +68,69 @@ namespace Gladius
     {
         Amazon,
         Archer,
-        Bandit,
+        ArcherF,
+        BanditA,
+        BanditAF,
+        BanditB,
         Barbarian,
+        BarbarianF,
         Bear,
+        BearGreater,
         Berserker,
+        BerserkerF,
+        Cat,
+        CatGreater,
         Centurion,
-        Channeler,
+        CenturionF,
+        ChannelerImp,
         Cyclops,
+        CyclopsGreater,
+        DarkLegionnaire,
         Dervish,
+        DervishF,
         Eiji,
-        Gungir,
+        Galdr,
+        Galverg,
+        Gungnir,
+        GungnirF,
         Gwazi,
         Legionnaire,
+        LegionnaireF,
         Ludo,
         Minotaur,
         Mongrel,
         MongrelShaman,
         Murmillo,
+        MurmilloF,
+        Mutuus,
         Ogre,
         Peltast,
-        PlainsCat,
-        Samnite,
+        PeltastF,
+        SamniteExp,
+        SamniteExpF,
+        SamniteImp,
+        SamniteImpF,
+        SamniteSte,
+        SamniteSteF,
         Satyr,
-        Scarab,
-        Scorpion,
-        Secutor,
-        Summoner,
-        UndeadLegionnaire,
-        UndeadSummoner,
         Urlan,
         Ursula,
         Valens,
+        Scarab,
+        Scorpion,
+        SecutorImp,
+        SecutorImpF,
+        SecutorSte,
+        SecutorSteF,
+        Summoner,
+        UndeadCasterA,
+        UndeadMeleeImpA,
+        UrsulaCostumeA,
+        UrsulaCostumeB,
+        ValensCostumeA,
+        ValensCostumeB,
         Wolf,
+        WolfGreater,
         Yeti
     }
 
@@ -109,11 +146,13 @@ namespace Gladius
         Dark
     };
 
-    public enum DamageAffects
+    public enum TargetCondition
     {
         Default,
         Self,
-        Team
+        FriendOnlyNotSelf,
+        AnySquare,
+        EnemyOnly,
     }
 
     public enum AttackResultType
@@ -139,16 +178,6 @@ namespace Gladius
         Combo=2,
         Special=3,
         Affinity=4
-    }
-
-    public enum AffinityType
-    {
-        Light,
-        Dark,
-        Air,
-        Earth,
-        Fire,
-        Water
     }
 
     public enum AttackType
@@ -223,13 +252,27 @@ namespace Gladius
         Gold
     }
 
-    public enum AttackSkillRange
+    public enum SkillEffectRangeType
     {
         Self,
-        Plus,
-        Plus2x2,
         Plus3x3,
         Square,
-        Diamond
+        Cone,
+        Linear,
+        Square2x2,
+        SrcLinear2x2,
+        SrcLinear3x3,
+        SourceSquare,
+        SourceDiamond,
+        SourceLinear,
+        SourceCone
+    }
+
+    public static class EnumUtil
+    {
+        public static IEnumerable<T> GetValues<T>()
+        {
+            return (T[])Enum.GetValues(typeof(T));
+        }
     }
 }

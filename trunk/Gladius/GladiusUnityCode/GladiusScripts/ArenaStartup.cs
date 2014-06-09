@@ -18,7 +18,6 @@ public class ArenaStartup : MonoBehaviour
         if (GladiusGlobals.AttackSkillDictionary == null)
         {
             GladiusGlobals.AttackSkillDictionary = new AttackSkillDictionary();
-            GladiusGlobals.AttackSkillDictionary.Populate(null);
             GladiusGlobals.AttackSkillDictionary.LoadExtractedData(null);
         }
 
@@ -29,13 +28,6 @@ public class ArenaStartup : MonoBehaviour
 
         ActorGenerator.InitCategories();
 
-
-        ClassDefDictionary classDefDictonary = new ClassDefDictionary();
-        classDefDictonary.LoadExtractedData(null);
-
-
-
-        
         //if (GladiusGlobals.TurnManager == null)
         //{
         //    GladiusGlobals.TurnManager = new TurnManager();

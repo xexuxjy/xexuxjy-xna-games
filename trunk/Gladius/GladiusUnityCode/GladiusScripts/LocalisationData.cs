@@ -18,7 +18,7 @@ namespace Gladius
             {
                 String line = lines[counter];
                 String[] lineTokens = line.Split('^');
-                this[int.Parse(lineTokens[0])] = lineTokens[1];
+                this[int.Parse(lineTokens[0])] = lineTokens[3];
 
 
             }
