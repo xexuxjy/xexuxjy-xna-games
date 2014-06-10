@@ -161,7 +161,8 @@ namespace Gladius
         Miss,
         Hit,
         Critical,
-        Blocked
+        Blocked,
+        Avoided
     }
 
     public enum SkillIconState

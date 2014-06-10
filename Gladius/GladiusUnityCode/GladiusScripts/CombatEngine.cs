@@ -17,7 +17,7 @@ namespace Gladius.combat
             m_combatRandom = new System.Random();
         }
 
-        public float CalculateExpectedDamage(BaseActor attacker, BaseActor defender,AttackSkill attackSkill)
+        public float CalculateExpectedDamage(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
         {
             //float totalDamage = attackSkill.BaseDamage;
 
@@ -29,21 +29,21 @@ namespace Gladius.combat
 
         }
 
-        public void ResolveAttack(BaseActor attacker, BaseActor defender,AttackSkill attackSkill)
+        public void ResolveAttack(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
         {
             AttackResult attackResult = new AttackResult();
 
             float accuracyBonus = GetCategoryAccuracyBonus(ActorGenerator.CategoryClass[attacker.ActorClass], ActorGenerator.CategoryClass[defender.ActorClass]);
             float totalDamage = CalculateExpectedDamage(attacker, defender, attackSkill);
 
-            
-            http://www.gamefaqs.com/gamecube/561233-gladius/faqs/64758
+
+        http://www.gamefaqs.com/gamecube/561233-gladius/faqs/64758
             //DIFFERENCE = [ (ACC * 0.97) - DEF ]
             float totalAccuracy = attacker.GetAttributeValue(GameObjectAttributeType.Accuracy) + accuracyBonus;
-            float diff1 = ( totalAccuracy * 0.97f) - defender.GetAttributeValue(GameObjectAttributeType.Defense);
+            float diff1 = (totalAccuracy * 0.97f) - defender.GetAttributeValue(GameObjectAttributeType.Defense);
 
             //MISS CHANCE = 10 * 1.5 ^ [ DIFFERENCE * (-16 / 100) ]
-            float missChance = 10f * ((float)Math.Pow(1.5f, (diff1 * (-16/100) ) ));
+            float missChance = 10f * ((float)Math.Pow(1.5f, (diff1 * (-16 / 100))));
             missChance *= 0.01f; // (0->1)
             float hitChance = 1f - missChance;
 
@@ -56,7 +56,7 @@ namespace Gladius.combat
 
             if (m_combatRandom.NextDouble() > hitChance)
             {
-                attackResult.resultType = defender.HasShield?AttackResultType.Blocked:AttackResultType.Miss;
+                attackResult.resultType = defender.HasShield ? AttackResultType.Blocked : AttackResultType.Miss;
             }
             else
             {
@@ -79,11 +79,11 @@ namespace Gladius.combat
                 defender.TakeDamage(attackResult);
             }
 
-            DrawCombatResult(attackSkill,attackResult,attacker,defender);
-            
+            DrawCombatResult(attackSkill, attackResult, attacker, defender);
+
         }
 
-        private void DrawCombatResult(AttackSkill attackSkill, AttackResult attackResult,BaseActor attacker,BaseActor defender)
+        private void DrawCombatResult(AttackSkill attackSkill, AttackResult attackResult, BaseActor attacker, BaseActor defender)
         {
             String text = null;
             Color color = Color.white;
@@ -95,7 +95,7 @@ namespace Gladius.combat
             {
                 text = "Blocked";
             }
-            else 
+            else
             {
                 text = "" + attackResult.damageDone;
                 if (attackResult.resultType == AttackResultType.Critical)
@@ -197,11 +197,11 @@ namespace Gladius.combat
         }
 
 
-        public void CheckInnateSkills(BaseActor attacker, BaseActor defender, AttackSkill skill,AttackResult attackResult)
+        public void CheckInnateSkills(BaseActor attacker, BaseActor defender, AttackSkill skill, AttackResult attackResult)
         {
         }
 
-        public bool IsValidTarget(BaseActor attacker, BaseActor defender,AttackSkill skill)
+        public bool IsValidTarget(BaseActor attacker, BaseActor defender, AttackSkill skill)
         {
             if (attacker != null && defender != null)
             {
@@ -210,13 +210,13 @@ namespace Gladius.combat
                     return false;
                 }
 
-                bool skillValid= skill.ValidForTarget(attacker, defender, new Point());
+                bool skillValid = skill.ValidForTarget(attacker, defender, new Point());
                 return skillValid;
             }
             return false;
         }
 
-        public bool IsAttackerInRange(BaseActor attacker, BaseActor defender,bool cursorOnly=false)
+        public bool IsAttackerInRange(BaseActor attacker, BaseActor defender, bool cursorOnly = false)
         {
             if (defender != null && attacker != null)
             {
@@ -237,11 +237,72 @@ namespace Gladius.combat
             return false;
         }
 
+        public void ApplySkill(AttackSkill skill, BaseActor attacker, BaseActor defender, AttackResult result)
+        {
+            switch (skill.SkillEffectName)
+            {
+                case "Shield Break":
+                    if (GladiusGlobals.Random100() < skill.SkillEffectModifier1)
+                    {
+                        defender.BreakShield();
+                    }
+                    break;
+                case "Shield Restore":
+                    if (GladiusGlobals.Random100() < skill.SkillEffectModifier1)
+                    {
+                        defender.RestoreShield();
+                    }
+                    break;
+                case "Helmet Break":
+                    if (GladiusGlobals.Random100() < skill.SkillEffectModifier1)
+                    {
+                        defender.BreakHelmet();
+                    }
+                    break;
+                case "Knockback":
+                    defender.Knockback(attacker);
+                    break;
+                case "Knockdown":
+                    defender.Knockdown(2);
+                    break;
+                case "Counterattack":
+                    defender.QueueCounterAttack(attacker);
+                    break;
+                case "Change Crowd Source":
+                    GladiusGlobals.Crowd.UpdateTeamScore(attacker.Team, (int)skill.SkillEffectModifier1);
+                    break;
+                case "Change Crowd Target":
+                    GladiusGlobals.Crowd.UpdateTeamScore(defender.Team, (int)skill.SkillEffectModifier1);
+                    break;
+                case "Avoid":
+                    result.resultType = AttackResultType.Avoided;
+                    break;
+                case "Blocked":
+                    result.resultType = AttackResultType.Blocked;
+                    break;
+                case "Retreat":
+                    defender.Retreat(attacker);
+                    break;
+                case "Remove Condition":
+                    break;
+                case "Random Teleport":
+                    break;
+            
+                case "Remove Status":
+                    break;
+
+            }
+
+        }
+
+
+
+
         private StringBuilder m_lastCombatResult = new StringBuilder();
         private System.Random m_combatRandom;
     }
 
-    
+
 
     public class AttackResult
     {
