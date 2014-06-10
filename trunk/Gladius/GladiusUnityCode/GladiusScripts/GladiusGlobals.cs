@@ -30,6 +30,7 @@ namespace Gladius
         public static GladiatorSchool GladiatorSchool;
         public static BattleData CurrentBattleData;
 
+        public static Crowd Crowd;
 
         public const int MaxLevel = 20;
 
@@ -38,6 +39,13 @@ namespace Gladius
         //public static ThreadSafeContentManager GlobalContentManager;
 
         public static System.Random Random = new System.Random();
+
+        public static int Random100()
+        {
+            return Random.Next(1, 100);
+        }
+
+
 
         public static Arena Arena;
 

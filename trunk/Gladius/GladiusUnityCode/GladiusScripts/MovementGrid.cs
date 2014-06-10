@@ -112,9 +112,9 @@ public class MovementGrid : MonoBehaviour
         DrawSkill(skill.SkillExcludeRangeName, skill.SkillExcludeRange, actor.ArenaPoint, centerPoint, false);
     }
 
-    
 
-    public void DrawSkill(String name, int range, Point start,Point end,bool val)
+
+    public void DrawSkill(String name, int range, Point start, Point end, bool val)
     {
         int distance = GladiusGlobals.PathDistance(start, end);
         if (distance > range)
@@ -154,6 +154,7 @@ public class MovementGrid : MonoBehaviour
                 break;
         }
     }
+
     public void BuildCross(Point start, int armLength, bool val)
     {
         for (int i = 0; i < armLength; ++i)
@@ -167,9 +168,9 @@ public class MovementGrid : MonoBehaviour
 
     private int[] m_coneSlots = new int[] { 1, 3, 3, 5, 5, 5, 7, 7, 7, 7 };
 
-    public void BuildCone(Point startPoint, Point endPoint,  int length, bool val)
+    public void BuildCone(Point startPoint, Point endPoint, int length, bool val)
     {
-        Point offset1 = GladiusGlobals.CardinalNormalize(GladiusGlobals.Subtract(endPoint,startPoint));
+        Point offset1 = GladiusGlobals.CardinalNormalize(GladiusGlobals.Subtract(endPoint, startPoint));
         Point offset2 = GladiusGlobals.Cross(offset1);
 
         for (int i = 0; i < length; ++i)
@@ -189,33 +190,25 @@ public class MovementGrid : MonoBehaviour
 
     public void BuildDiamond(Point startPoint, int armLength, bool val)
     {
-        int rowCount = 1;
-        Point offset2 = new Point(0, 1);
+        int rowCount = armLength;
+        Point offset2 = new Point(1, 0);
 
-        for (int i = armLength; i >=0; --i)
+        for (int i = 0; i < armLength; i++)
         {
             int midPoint = rowCount / 2;
             for (int j = 0; j < rowCount; ++j)
             {
                 int diff = j - midPoint;
                 Point offPoint = GladiusGlobals.Mult(offset2, diff);
+                offPoint.Y = i;
+                Point offPoint2 = new Point(offPoint.X, -offPoint.Y);
                 Point p = GladiusGlobals.Add(startPoint, offPoint);
-            }
-            rowCount += 2;
-        }
-        
-        offset2 = new Point(0, -1);
+                Point p2 = GladiusGlobals.Add(startPoint, offPoint2);
+                SetSkillActivePoint(p, val);
+                SetSkillActivePoint(p2, val);
 
-        for (int i = armLength; i >= 0; --i)
-        {
-            int midPoint = rowCount / 2;
-            for (int j = 0; j < rowCount; ++j)
-            {
-                int diff = j - midPoint;
-                Point offPoint = GladiusGlobals.Mult(offset2, diff);
-                Point p = GladiusGlobals.Add(startPoint, offPoint);
             }
-            rowCount += 2;
+            rowCount -= 2;
         }
     }
 
@@ -232,19 +225,19 @@ public class MovementGrid : MonoBehaviour
 
         for (int i = 0; i < armLength; ++i)
         {
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, tl), val);
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, t), val);
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, tr), val);
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, l), val);
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, r), val);
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, bl), val);
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, b), val);
-            SetSkillActivePoint(GladiusGlobals.Add(startPoint, br), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(tl, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(t, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(tr, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(l, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(r, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(bl, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(b, i)), val);
+            SetSkillActivePoint(GladiusGlobals.Add(startPoint, GladiusGlobals.Mult(br, i)), val);
         }
 
     }
 
-    public void BuildCenteredGrid(Point centerPoint, int size,bool val)
+    public void BuildCenteredGrid(Point centerPoint, int size, bool val)
     {
         if (size > 0)
         {
@@ -263,9 +256,9 @@ public class MovementGrid : MonoBehaviour
 
 
 
-    public void BuildMinMaxCircle(Point centerPoint, int min, int max,bool val)
+    public void BuildMinMaxCircle(Point centerPoint, int min, int max, bool val)
     {
-        int width = ((max - 1) / 2);
+        int width = max;//((max - 1) / 2);
         float min2 = min * min;
         float max2 = max * max;
         for (int i = -width; i <= width; ++i)
@@ -329,7 +322,7 @@ public class MovementGrid : MonoBehaviour
                 // then draw a target/select icon.
                 if (CursorOnTarget(CurrentActor))
                 {
-                    DrawIfValid(CurrentCursorPoint, CurrentActor,GridSquareType.TargetSelect);
+                    DrawIfValid(CurrentCursorPoint, CurrentActor, GridSquareType.TargetSelect);
                 }
             }
 
@@ -375,7 +368,7 @@ public class MovementGrid : MonoBehaviour
     }
 
 
-    public void DrawIfValid(Point prevPoint, Point point, Point nextPoint, BaseActor actor, bool prevExists, bool nextExists, bool disabled,GridSquareType cursor = GridSquareType.None)
+    public void DrawIfValid(Point prevPoint, Point point, Point nextPoint, BaseActor actor, bool prevExists, bool nextExists, bool disabled, GridSquareType cursor = GridSquareType.None)
     {
 
         if (cursor == GridSquareType.None)
@@ -440,27 +433,27 @@ public class MovementGrid : MonoBehaviour
 
                     if (CompareSide(enterSide, exitSide, Side.Left, Side.Right))
                     {
-                        cursor = disabled?GridSquareType.FHD : GridSquareType.FH;
+                        cursor = disabled ? GridSquareType.FHD : GridSquareType.FH;
                     }
                     else if (CompareSide(enterSide, exitSide, Side.Top, Side.Bottom))
                     {
-                        cursor = disabled?GridSquareType.FVD:GridSquareType.FV;
+                        cursor = disabled ? GridSquareType.FVD : GridSquareType.FV;
                     }
                     else if (CompareSide(enterSide, exitSide, Side.Left, Side.Top))
                     {
-                        cursor = disabled?GridSquareType.TLD:GridSquareType.TL;
+                        cursor = disabled ? GridSquareType.TLD : GridSquareType.TL;
                     }
                     else if (CompareSide(enterSide, exitSide, Side.Left, Side.Bottom))
                     {
-                        cursor = disabled?GridSquareType.BLD:GridSquareType.BL;
+                        cursor = disabled ? GridSquareType.BLD : GridSquareType.BL;
                     }
                     else if (CompareSide(enterSide, exitSide, Side.Right, Side.Top))
                     {
-                        cursor = disabled?GridSquareType.TRD:GridSquareType.TR;
+                        cursor = disabled ? GridSquareType.TRD : GridSquareType.TR;
                     }
                     else if (CompareSide(enterSide, exitSide, Side.Right, Side.Bottom))
                     {
-                        cursor = disabled?GridSquareType.BRD:GridSquareType.BR;
+                        cursor = disabled ? GridSquareType.BRD : GridSquareType.BR;
                     }
                 }
                 else
@@ -468,16 +461,16 @@ public class MovementGrid : MonoBehaviour
                     switch (enterSide)
                     {
                         case (Side.Left):
-                            cursor = disabled?GridSquareType.ZLD:GridSquareType.ZL;
+                            cursor = disabled ? GridSquareType.ZLD : GridSquareType.ZL;
                             break;
                         case (Side.Right):
-                            cursor = disabled?GridSquareType.ZRD:GridSquareType.ZR;
+                            cursor = disabled ? GridSquareType.ZRD : GridSquareType.ZR;
                             break;
                         case (Side.Top):
-                            cursor = disabled?GridSquareType.ZTD:GridSquareType.ZT;
+                            cursor = disabled ? GridSquareType.ZTD : GridSquareType.ZT;
                             break;
                         case (Side.Bottom):
-                            cursor = disabled?GridSquareType.ZBD:GridSquareType.ZB;
+                            cursor = disabled ? GridSquareType.ZBD : GridSquareType.ZB;
                             break;
                     }
                 }
@@ -545,7 +538,7 @@ public class MovementGrid : MonoBehaviour
             if (i < (numPoints - 1))
             {
                 next = points[i + 1];
-                DrawIfValid(prev, curr, next, actor, (i > 0), true, disabled,squareType);
+                DrawIfValid(prev, curr, next, actor, (i > 0), true, disabled, squareType);
             }
             else
             {
@@ -675,7 +668,7 @@ public class MovementGrid : MonoBehaviour
         topLeft += new Vector3(-0.5f, 0, -0.5f);
 
         Rect bounds = textureRegion.BoundsUV3;
-        
+
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)

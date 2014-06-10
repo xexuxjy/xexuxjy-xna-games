@@ -580,6 +580,16 @@ public class BaseActor : MonoBehaviour
 
         if (UnitActive)
         {
+            if (m_knockedDown && m_knockDownTurns > 0)
+            {
+                m_knockDownTurns--;
+                if (m_knockDownTurns == 0)
+                {
+                    GetUp();
+                }
+            }
+
+
             //TurnComplete = CheckTurnComplete();
             if (!TurnComplete)
             {
@@ -589,6 +599,12 @@ public class BaseActor : MonoBehaviour
             TurnComplete = CheckTurnComplete();
 
         }
+
+        if (m_knockedBack)
+        {
+            UpdateKnockBack();
+        }
+
         CheckState();
         //            }
         //            catch (Exception e)
@@ -671,6 +687,24 @@ public class BaseActor : MonoBehaviour
             ConfirmAttackSkill();
         }
     }
+
+    private void UpdateKnockBack()
+    {
+        Vector3 targetPoint = Arena.ArenaToWorld(ArenaPoint);
+        Vector3 diff = Position - targetPoint;
+        diff.Normalize();
+        float closeEnough = 0.01f;
+        if (diff.sqrMagnitude < closeEnough)
+        {
+            m_knockedBack = false;
+        }
+        else
+        {
+            Position += diff * (float)Time.deltaTime * m_movementSpeed;
+        }
+     
+    }
+
 
     private void UpdateMovement()
     {
@@ -916,6 +950,8 @@ public class BaseActor : MonoBehaviour
 
 
     }
+
+
 
 
     //public virtual void StartAction(ActionTypes actionType)
@@ -1366,8 +1402,6 @@ public class BaseActor : MonoBehaviour
 
     public void FaceCardinal()
     {
-        
-
         return;
 
         float minDot = float.MaxValue;
@@ -1384,14 +1418,69 @@ public class BaseActor : MonoBehaviour
         Rotation = bestFace;
     }
 
+    public void BreakShield()
+    {
+
+    }
+
+    public void RestoreShield()
+    {
+
+    }
+
+    public void BreakHelmet()
+    {
+
+    }
+
+    public void QueueCounterAttack(BaseActor attacker)
+    {
+
+    }
+
+
+    public void Knockdown(int numTurns)
+    {
+        m_knockedDown = true;
+        m_knockDownTurns = numTurns;
+    }
+
+    public void GetUp()
+    {
+        m_knockedDown = false;
+        // queue getup anim
+    }
+
+    public void Knockback(BaseActor attacker)
+    {
+        Point direction = GladiusGlobals.Subtract(attacker.ArenaPoint, ArenaPoint);
+        direction = GladiusGlobals.CardinalNormalize(direction);
+        Point newSquare = GladiusGlobals.Add(ArenaPoint, direction);
+        if (!Arena.IsPointOccupied(newSquare))
+        {
+            m_knockedBack = true;
+            m_knockBackArenaPoint = newSquare;
+
+        }
+    }
+
+    public void Retreat(BaseActor attacker)
+    {
+
+    }
+
+
     private Projectile m_projectile;
 
     private Dictionary<BaseActor, int> m_threatMap = new Dictionary<BaseActor, int>();
     private BaseActor m_currentTarget = null;
     private List<Point> m_wayPointList = new List<Point>();
+    
     private List<AttackSkill> m_knownAttacks = new List<AttackSkill>();
     private List<AttackSkill> m_availableAttacks = new List<AttackSkill>();
-    private List<AttackSkill> m_innateSkills = new List<AttackSkill>();
+    
+    public List<AttackSkill> m_innateSkills = new List<AttackSkill>();
+    public List<AttackSkill> m_activeSkills = new List<AttackSkill>();
 
     private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
     private List<GameObjectAttributeModifier> m_attributeModifiers = new List<GameObjectAttributeModifier>();
@@ -1405,6 +1494,12 @@ public class BaseActor : MonoBehaviour
     private System.Random m_rng = new System.Random();
 
     private Transform m_projectileHandTransform;
+    private Point m_knockBackArenaPoint = new Point();
+    private bool m_knockedBack;
+
+    private bool m_knockedDown;
+    private int m_knockDownTurns = 0;
+
 
     //private Model m_leftHandModel;
     //private Model m_rightHandModel;
