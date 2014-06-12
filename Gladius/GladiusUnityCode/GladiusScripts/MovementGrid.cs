@@ -41,7 +41,6 @@ public class MovementGrid : MonoBehaviour
     public void Start()
     {
         GladiusGlobals.MovementGrid = this;
-        //        String atlasName = "MovementGridAtlas";
         GridSize = 32;
         m_arenaSquares = new GridSquareType[GridSize, GridSize];
         m_skillActiveSquares = new bool[GridSize, GridSize];
@@ -96,14 +95,6 @@ public class MovementGrid : MonoBehaviour
         get;
         set;
     }
-
-
-    //public ArenaScreen ArenaScreen
-    //{
-    //    get { return m_gameScreen as ArenaScreen; }
-    //}
-
-
 
     public void BuildMaskForGrid(BaseActor actor, Point centerPoint, AttackSkill skill)
     {
