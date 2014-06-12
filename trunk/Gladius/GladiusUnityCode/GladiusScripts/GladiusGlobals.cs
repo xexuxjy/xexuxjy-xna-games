@@ -30,6 +30,9 @@ namespace Gladius
         public static GladiatorSchool GladiatorSchool;
         public static BattleData CurrentBattleData;
 
+        public static ShopManager ShopManager;
+        public static Shop CurrentShop;
+
         public static Crowd Crowd;
 
         public const int MaxLevel = 20;
