@@ -34,7 +34,7 @@ namespace ModelNamer
         {
             this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
-            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", -1);
+            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
             ChangeModelNext();
 
 
@@ -283,7 +283,13 @@ namespace ModelNamer
         {
             m_points = m_modelReader.m_models[m_currentModel].m_points;
             Vector3 mid = new Vector3(m_modelReader.m_models[m_currentModel].MaxBB = m_modelReader.m_models[m_currentModel].MinBB) / 2f;
+
+            location = m_modelReader.m_models[m_currentModel].Center;
+            
             location = mid - (Vector3.UnitX * 2f);
+
+            
+
             facing = 0;
             pitch = 0;
 
