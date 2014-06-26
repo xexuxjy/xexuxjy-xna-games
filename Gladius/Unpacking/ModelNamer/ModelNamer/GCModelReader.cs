@@ -39,6 +39,7 @@ namespace ModelNamer
         public List<Vector3> m_normals = new List<Vector3>();
         public Vector3 MinBB;
         public Vector3 MaxBB;
+        public Vector3 Center;
     }
 
     public class GCModelReader
@@ -92,6 +93,16 @@ namespace ModelNamer
                         {
                             GCModel model = new GCModel(sourceFile.Name);
                             m_models.Add(model);
+
+                            if (Common.FindCharsInStream(binReader, cntrTag,true))
+                            {
+                                int unk1 = binReader.ReadInt32();
+                                int unk2 = binReader.ReadInt32();
+                                int unk3 = binReader.ReadInt32();
+
+                                model.Center = Common.FromStreamVector3BE(binReader);
+                                int ibreak = 0;
+                            }
                             if (Common.FindCharsInStream(binReader, posiTag))
                             {
                                 int posSectionLength = binReader.ReadInt32();
@@ -99,7 +110,7 @@ namespace ModelNamer
                                 int numPoints = binReader.ReadInt32();
                                 for (int i = 0; i < numPoints; ++i)
                                 {
-                                    model.m_points.Add(Common.FromStreamFloatBE(binReader));
+                                    model.m_points.Add(Common.FromStreamVector3BE(binReader));
                                 }
 
                                 if (Common.FindCharsInStream(binReader, normTag))
@@ -114,7 +125,7 @@ namespace ModelNamer
 
                                     for (int i = 0; i < numNormals; ++i)
                                     {
-                                        model.m_normals.Add(Common.FromStreamFloatBE(binReader));
+                                        model.m_normals.Add(Common.FromStreamVector3BE(binReader));
                                     }
                                 }
                                 model.BuildBB();

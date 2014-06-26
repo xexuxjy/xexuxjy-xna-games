@@ -105,7 +105,7 @@ namespace ModelNamer
         }
 
 
-        public static Vector3 FromStreamFloat(BinaryReader reader)
+        public static Vector3 FromStreamVector3(BinaryReader reader)
         {
             Vector3 v = new Vector3();
             v.X = reader.ReadSingle();
@@ -114,7 +114,7 @@ namespace ModelNamer
             return v;
         }
 
-        public static Vector3 FromStreamFloatBE(BinaryReader reader)
+        public static Vector3 FromStreamVector3BE(BinaryReader reader)
         {
             Vector3 v = new Vector3();
             reader.Read(s_buffer, 0, s_buffer.Length);
