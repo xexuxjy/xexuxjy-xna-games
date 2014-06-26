@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using OpenTK;
 
 namespace ModelNamer
 {
@@ -14,16 +15,31 @@ namespace ModelNamer
             m_name = name;
         }
 
-        public String m_name;
-        public sVector3 m_center;
-        public List<sVector3> m_points = new List<sVector3>();
-        public List<sVector3> m_normals = new List<sVector3>();
-        public List<sVector2> m_uvs = new List<sVector2>();
+        public void BuildBB()
+        {
+            MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
+            MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
+
+            for (int i = 0; i < m_points.Count; ++i)
+            {
+                if (m_points[i].X < MinBB.X) MinBB.X = m_points[i].X;
+                if (m_points[i].Y < MinBB.Y) MinBB.Y = m_points[i].Y;
+                if (m_points[i].Z < MinBB.Z) MinBB.Z = m_points[i].Z;
+                if (m_points[i].X > MaxBB.X) MaxBB.X = m_points[i].X;
+                if (m_points[i].Y > MaxBB.Y) MaxBB.Y = m_points[i].Y;
+                if (m_points[i].Z > MaxBB.Z) MaxBB.Z = m_points[i].Z;
+
+            }
+
+        }
 
         public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
-
+        public String m_name;
+        public List<Vector3> m_points = new List<Vector3>();
+        public List<Vector3> m_normals = new List<Vector3>();
+        public Vector3 MinBB;
+        public Vector3 MaxBB;
     }
-
 
     public class GCModelReader
     {
@@ -49,7 +65,7 @@ namespace ModelNamer
 
 
 
-        static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag,vflaTag,ramTag,msarTag,nlvlTag,meshTag,elemTag };
+        static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, ramTag, msarTag, nlvlTag, meshTag, elemTag };
 
         public List<GCModel> m_models = new List<GCModel>();
 
@@ -59,10 +75,11 @@ namespace ModelNamer
         }
 
 
-        public void LoadModels(String sourceDirectory,String infoFile)
+        public void LoadModels(String sourceDirectory, String infoFile,int maxFiles = -1)
         {
             m_models.Clear();
             String[] files = Directory.GetFiles(sourceDirectory, "*");
+            int counter = 0;
 
             using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
             {
@@ -82,7 +99,7 @@ namespace ModelNamer
                                 int numPoints = binReader.ReadInt32();
                                 for (int i = 0; i < numPoints; ++i)
                                 {
-                                    model.m_points.Add(sVector3.FromStreamFloatBE(binReader));
+                                    model.m_points.Add(Common.FromStreamFloatBE(binReader));
                                 }
 
                                 if (Common.FindCharsInStream(binReader, normTag))
@@ -97,33 +114,23 @@ namespace ModelNamer
 
                                     for (int i = 0; i < numNormals; ++i)
                                     {
-                                        model.m_normals.Add(sVector3.FromStreamFloatBE(binReader));
+                                        model.m_normals.Add(Common.FromStreamFloatBE(binReader));
                                     }
                                 }
-                                if (Common.FindCharsInStream(binReader, uv0Tag))
-                                {
-                                    int uvSectionLength = binReader.ReadInt32();
-                                    int uk4 = binReader.ReadInt32();
-                                    int numUV = binReader.ReadInt32();
-                                    //if (numNormals != numPoints)
-                                    //{
-                                    //    int ibreak = 0;
-                                    //}
-
-                                    for (int i = 0; i < numUV; ++i)
-                                    {
-                                        model.m_uvs.Add(sVector2.FromStreamFloatBE(binReader));
-                                    }
-                                }
-
-
-
+                                model.BuildBB();
                             }
+
                         }
                     }
                     catch (Exception e)
                     {
                     }
+                    counter++;
+                    if (maxFiles > 0 && counter > maxFiles)
+                    {
+                        break;
+                    }
+
                 }
             }
         }
@@ -136,19 +143,20 @@ namespace ModelNamer
                 {
                     infoStream.WriteLine(String.Format("File : {0} : {1} : {2}", model.m_name, model.m_points.Count, model.m_normals.Count));
                     infoStream.WriteLine("Verts : ");
-                    foreach (sVector3 sv in model.m_points)
+                    foreach (Vector3 sv in model.m_points)
                     {
-                        sv.WriteInt(infoStream);
+                        Common.WriteInt(infoStream, sv);
                     }
                     infoStream.WriteLine("Normals : ");
-                    foreach (sVector3 sv in model.m_normals)
+                    foreach (Vector3 sv in model.m_normals)
                     {
-                        sv.WriteInt(infoStream);
+                        Common.WriteInt(infoStream, sv);
                     }
                     infoStream.WriteLine();
                     infoStream.WriteLine();
                 }
             }
+
         }
 
         public void DumpSectionLengths(String sourceDirectory, String infoFile)

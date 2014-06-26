@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using OpenTK;
 
 namespace ModelNamer
 {
     static class Common
     {
-        public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind,bool resetPositionIfNotFound = false)
+        public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = false)
         {
             bool found = false;
             byte b = (byte)' ';
@@ -47,9 +48,9 @@ namespace ModelNamer
 
         }
 
-        public static bool FuzzyEquals(float x,float y,float eps = float.Epsilon)
+        public static bool FuzzyEquals(float x, float y, float eps = float.Epsilon)
         {
-            return Math.Abs(x-y) < eps;
+            return Math.Abs(x - y) < eps;
         }
 
 
@@ -79,6 +80,63 @@ namespace ModelNamer
         {
             return (buf[i] << 24) | (buf[i + 1] << 16) | (buf[i + 2] << 8) | buf[i + 3];
         }
+
+        public static Vector3 FromStreamInt32(BinaryReader reader)
+        {
+            Vector3 v = new Vector3();
+            v.X = reader.ReadInt32();
+            v.Y = reader.ReadInt32();
+            v.Z = reader.ReadInt32();
+            return v;
+        }
+
+        static byte[] s_buffer = new byte[4];
+
+        public static Vector3 FromStreamInt32BE(BinaryReader reader)
+        {
+            Vector3 v = new Vector3();
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.X = Common.ToInt32BigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.Y = Common.ToInt32BigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.Z = Common.ToInt32BigEndian(s_buffer, 0);
+            return v;
+        }
+
+
+        public static Vector3 FromStreamFloat(BinaryReader reader)
+        {
+            Vector3 v = new Vector3();
+            v.X = reader.ReadSingle();
+            v.Y = reader.ReadSingle();
+            v.Z = reader.ReadSingle();
+            return v;
+        }
+
+        public static Vector3 FromStreamFloatBE(BinaryReader reader)
+        {
+            Vector3 v = new Vector3();
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.X = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.Z = Common.ReadSingleBigEndian(s_buffer, 0);
+            return v;
+        }
+
+
+        public static void WriteFloat(StreamWriter sw, Vector3 v)
+        {
+            sw.WriteLine(String.Format("{0:0.00000000} {1:0.00000000} {2:0.00000000}", v.X, v.Y, v.Z));
+        }
+
+        public static void WriteInt(StreamWriter sw, Vector3 v)
+        {
+            sw.WriteLine(String.Format("{0} {1} {2}", v.X, v.Y, v.Z));
+        }
+
 
 
     }
@@ -162,161 +220,6 @@ namespace ModelNamer
             return r2v2;
 
         }
-
     }
-
-
-    public struct sVector3
-    {
-        public float x;
-        public float y;
-        public float z;
-
-        public sVector3(float ax, float ay, float az)
-        {
-            x = ax;
-            y = ay;
-            z = az;
-        }
-
-
-        public static sVector3 FromStreamInt32(BinaryReader reader)
-        {
-            sVector3 v = new sVector3();
-            v.x = reader.ReadInt32();
-            v.y = reader.ReadInt32();
-            v.z = reader.ReadInt32();
-            return v;
-        }
-
-        static byte[] s_buffer = new byte[4];
-        
-        public static sVector3 FromStreamInt32BE(BinaryReader reader)
-        {
-            sVector3 v = new sVector3();
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.x = Common.ToInt32BigEndian(s_buffer, 0);
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.y = Common.ToInt32BigEndian(s_buffer, 0);
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.z = Common.ToInt32BigEndian(s_buffer, 0);
-            return v;
-        }
-
-       
-        public static sVector3 FromStreamFloat(BinaryReader reader)
-        {
-            sVector3 v = new sVector3();
-            v.x = reader.ReadSingle();
-            v.y = reader.ReadSingle();
-            v.z = reader.ReadSingle();
-            return v;
-        }
-
-        public static sVector3 FromStreamFloatBE(BinaryReader reader)
-        {
-            sVector3 v = new sVector3();
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.x = Common.ReadSingleBigEndian(s_buffer,0);
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.y = Common.ReadSingleBigEndian(s_buffer,0);
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.z = Common.ReadSingleBigEndian(s_buffer,0);
-            return v;
-        }
-
-
-        public void WriteFloat(StreamWriter sw)
-        {
-            sw.WriteLine(String.Format("{0:0.00000000} {1:0.00000000} {2:0.00000000}", x, y, z));
-        }
-
-        public void WriteInt(StreamWriter sw)
-        {
-            sw.WriteLine(String.Format("{0} {1} {2}", x, y, z));
-        }
-
-
-        public float Len2
-        {
-            get
-            {
-                return (x * x) + (y * y) + (z * z);
-            }
-        }
-    }
-
-    public struct sVector2
-    {
-        public float x;
-        public float y;
-
-        public sVector2(float ax, float ay)
-        {
-            x = ax;
-            y = ay;
-        }
-
-
-        public static sVector2 FromStreamInt32(BinaryReader reader)
-        {
-            sVector2 v = new sVector2();
-            v.x = reader.ReadInt32();
-            v.y = reader.ReadInt32();
-            return v;
-        }
-
-        static byte[] s_buffer = new byte[4];
-
-        public static sVector2 FromStreamInt32BE(BinaryReader reader)
-        {
-            sVector2 v = new sVector2();
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.x = Common.ToInt32BigEndian(s_buffer, 0);
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.y = Common.ToInt32BigEndian(s_buffer, 0);
-            return v;
-        }
-
-
-        public static sVector2 FromStreamFloat(BinaryReader reader)
-        {
-            sVector2 v = new sVector2();
-            v.x = reader.ReadSingle();
-            v.y = reader.ReadSingle();
-            return v;
-        }
-
-        public static sVector2 FromStreamFloatBE(BinaryReader reader)
-        {
-            sVector2 v = new sVector2();
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.x = Common.ReadSingleBigEndian(s_buffer, 0);
-            reader.Read(s_buffer, 0, s_buffer.Length);
-            v.y = Common.ReadSingleBigEndian(s_buffer, 0);
-            return v;
-        }
-
-
-        public void WriteFloat(StreamWriter sw)
-        {
-            sw.WriteLine(String.Format("{0:0.00000000} {1:0.00000000}", x, y));
-        }
-
-        public void WriteInt(StreamWriter sw)
-        {
-            sw.WriteLine(String.Format("{0} {1}", x, y));
-        }
-
-
-        public float Len2
-        {
-            get
-            {
-                return (x * x) + (y * y);
-            }
-        }
-    }
-
 
 }
