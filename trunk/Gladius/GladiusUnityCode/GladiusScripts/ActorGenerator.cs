@@ -27,24 +27,24 @@ namespace Gladius
         }
 
 
-        public static void LoadActors(String filename, List<BaseActor> results)
-        {
-            using (StreamReader sr = new StreamReader(filename))
-            {
-                String result = sr.ReadToEnd();
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(result);
-                XmlNodeList nodes = doc.SelectNodes("//Character");
-                foreach (XmlNode node in nodes)
-                {
-                    CharacterData characterData = new CharacterData();
-                    characterData.SetupCharacterData(node as XmlElement);
-                    BaseActor baseActor = new BaseActor();
-                    baseActor.SetupCharacterData(characterData);
-                    results.Add(baseActor);
-                }
-            }
-        }
+        //public static void LoadActors(String filename, List<BaseActor> results)
+        //{
+        //    using (StreamReader sr = new StreamReader(filename))
+        //    {
+        //        String result = sr.ReadToEnd();
+        //        XmlDocument doc = new XmlDocument();
+        //        doc.LoadXml(result);
+        //        XmlNodeList nodes = doc.SelectNodes("//Character");
+        //        foreach (XmlNode node in nodes)
+        //        {
+        //            CharacterData characterData = new CharacterData();
+        //            characterData.SetupCharacterData(node as XmlElement);
+        //            BaseActor baseActor = new BaseActor();
+        //            baseActor.SetupCharacterData(characterData);
+        //            results.Add(baseActor);
+        //        }
+        //    }
+        //}
 
 
         public static void InitXPLevel(String filename)
