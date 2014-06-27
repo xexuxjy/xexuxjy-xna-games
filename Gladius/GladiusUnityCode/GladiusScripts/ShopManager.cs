@@ -38,7 +38,7 @@ namespace Gladius
             String[] allLines = data.Split('\n');
 
             int counter = 0;
-            char[] splitTokens = new char[] { ':', ',','\t' };
+            char[] splitTokens = new char[] { ':', ',','\t'};
             Shop shop = new Shop();
             GladiusGlobals.CurrentShop = shop;
     
@@ -51,9 +51,11 @@ namespace Gladius
                 //}
                 String[] tokens = GladiusGlobals.SplitAndTidyString(line,splitTokens);
 
-                if(line.StartsWith("Name"))
+                if(line.StartsWith("NAME"))
                 {
-                    shop.Name = tokens[1];
+                    String descIdStr = tokens[3];
+                    int shopDescId = int.Parse(descIdStr);
+                    shop.Name = GladiusGlobals.LocalisationData[shopDescId];
                 }
                 else if (line.StartsWith("SHOPKEEPER"))
                 {
