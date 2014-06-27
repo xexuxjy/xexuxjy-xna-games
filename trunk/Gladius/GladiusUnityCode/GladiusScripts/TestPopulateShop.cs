@@ -19,6 +19,11 @@ namespace Gladius
 
             Shop shop = ShopManager.LoadOriginalShopFile("");
             GladiusGlobals.CurrentShop = shop;
+
+            GameObject shopNameLabel = GameObject.Find("ShopNameLabel");
+            dfLabel label = shopNameLabel.GetComponent<dfLabel>();
+            label.Text = shop.Name;
+
             GameObject panel = GameObject.Find("InventoryPanel");
             //GameObject panel = GameObject.Find("Listbox");
 

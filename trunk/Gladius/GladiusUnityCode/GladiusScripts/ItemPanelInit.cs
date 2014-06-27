@@ -83,6 +83,8 @@ namespace Gladius
             if (previous != null && current != null)
             {
                 detailsPanelLabel.Text = current.ItemName;
+                detailsPanelLabel.Text = string.Format("<h2 color=\"yellow\">{0}</h1><p>PWR: {1} CON:{2} INI: {3}</p><p><i>{4}</i></p>", current.ShopItem.Name, 10, 10, 10, current.ShopItem.Item.Description);
+            
             }
         }
 
