@@ -24,6 +24,7 @@ namespace Gladius
         public static ItemManager ItemManager = new ItemManager();
         public static CombatEngine CombatEngine = new CombatEngine();
         public static TurnManager TurnManager;
+        public static LocalisationData LocalisationData;
 
         public static CombatEngineUI CombatEngineUI;
 
@@ -264,6 +265,19 @@ namespace Gladius
         public const String EnemyTeam1 = "Enemy1";
         public const String EnemyTeam2 = "Enemy2";
         public const String EnemyTeam3 = "Enemy3";
+
+        static char[] trimChars = new char[] { '"', '\r',' ' };
+        public static String[] SplitAndTidyString(String input,char[] splitChars)
+        {
+            String[] lineTokens = input.Split(splitChars);
+            for (int i = 0; i < lineTokens.Length; ++i)
+            {
+                lineTokens[i] = lineTokens[i].Replace("\"", "").Trim(trimChars);
+            }
+            return lineTokens;
+        }
+
+
 
     }
 

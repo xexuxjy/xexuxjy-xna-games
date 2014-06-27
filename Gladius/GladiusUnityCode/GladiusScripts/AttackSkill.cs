@@ -459,7 +459,7 @@ namespace Gladius
     {
         public void LoadExtractedData(String path)
         {
-            TextAsset textAsset = (TextAsset)Resources.Load("ExtractedSkillData");
+            TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/SkillData");
             String data = textAsset.text;
             ParseExtractedData(data);
         }
@@ -471,6 +471,7 @@ namespace Gladius
         {
             AttackSkill currentSkill = null;
             String[] lines = data.Split('\n');
+            char[] splitTokens = new char[] { ',', ':' };
             for (int counter = 0; counter < lines.Length; counter++)
             {
                 String line = lines[counter];
@@ -479,11 +480,7 @@ namespace Gladius
                     continue;
                 }
 
-                String[] lineTokens = line.Split(new char[] { ',', ':' });
-                for (int i = 0; i < lineTokens.Length; ++i)
-                {
-                    lineTokens[i] = TidyString(lineTokens[i]);
-                }
+                String[] lineTokens = GladiusGlobals.SplitAndTidyString(line,splitTokens);
 
 
                 if (line.StartsWith("SKILLCREATE:"))
@@ -622,13 +619,6 @@ namespace Gladius
             }
             int ibreak = 0;
         }
-
-        char[] trimChars = new char[] { '"', '\r' };
-        public String TidyString(String input)
-        {
-            return input.Replace("\"","").Trim(trimChars);
-        }
-
 
         public void HandleSkillStatus(AttackSkill skill,String attrName,String[] lineTokens)
         {

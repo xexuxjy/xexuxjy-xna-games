@@ -44,7 +44,7 @@ namespace Gladius
 
         public void LoadExtractedData(String path)
         {
-            TextAsset textAsset = (TextAsset)Resources.Load("ExtractedItemData");
+            TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/ItemData");
             ParseExtractedData(textAsset.text);
         }
 
@@ -52,6 +52,7 @@ namespace Gladius
         {
             Item currentItem = null;
             String[] lines = data.Split(new String[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            char[] splitTokens = new char[] { ',', ':' };
             for (int counter = 0; counter < lines.Length; counter++)
             {
                 String line = lines[counter];
@@ -59,8 +60,8 @@ namespace Gladius
                 {
                     continue;
                 }
-                String[] lineTokens = line.Split(new char[] { ',', ':' });
 
+                String[] lineTokens = GladiusGlobals.SplitAndTidyString(line, splitTokens);
 
                 if (line.StartsWith("ITEMCREATE:"))
                 {
@@ -147,10 +148,24 @@ namespace Gladius
             get;set;
         }
 
+        int _descriptionId;
         public int DescriptionId
         {
-            get;set;
+            get{return _descriptionId;}
+            set
+            {
+                _descriptionId = value;
+                Description = GladiusGlobals.LocalisationData[DescriptionId];
+            }
+
         }
+
+        public String Description
+        {
+            get;
+            set;
+        }
+
 
         public int DisplayNameId
         {

@@ -33,13 +33,6 @@ namespace Gladius
         }
 
 
-        static char[] trimChars = new char[] { '"', '\r' };
-        public static String TidyString(String input)
-        {
-            return input.Replace("\"", "").Trim(trimChars);
-        }
-
-
         public static Shop ParseExtractedData(String data)
         {
             String[] allLines = data.Split('\n');
@@ -56,11 +49,7 @@ namespace Gladius
                 //{
                 //    continue;
                 //}
-                String[] tokens = line.Split(splitTokens);
-                for (int i = 0; i < tokens.Length;++i )
-                {
-                    tokens[i] = TidyString(tokens[i]);
-                }
+                String[] tokens = GladiusGlobals.SplitAndTidyString(line,splitTokens);
 
                 if(line.StartsWith("Name"))
                 {
@@ -140,6 +129,16 @@ namespace Gladius
         public ShopItem(String name)
         {
             Name = name;
+
+            if (GladiusGlobals.ItemManager.ContainsKey(name))
+            {
+                Item = GladiusGlobals.ItemManager[name];
+            }
+            else
+            {
+                Debug.LogWarning("Can't find : " + name);
+            }
+
         }
 
         public String Name
@@ -151,7 +150,7 @@ namespace Gladius
             set;
         }
 
-        public String Description
+        public Item Item
         {
             get;
             set;

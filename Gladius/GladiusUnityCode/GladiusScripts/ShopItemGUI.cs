@@ -19,8 +19,26 @@ namespace Gladius
 
         }
 
+        bool _selected;
+        public bool Selected
+        {
+            get
+            {
+                return _selected;
+            }
+            set
+            {
+                _selected = value;
+                var control = gameObject.GetComponent<dfControl>();
+                var lblName = control.Find<dfLabel>("ItemName");
+                lblName.Color = Selected?Color.blue:Color.white;
+            }
+        }
 
         public string ItemName
+        { get; set; }
+
+        public ShopItem ShopItem
         { get; set; }
 
         public void Refresh()
@@ -31,7 +49,7 @@ namespace Gladius
 
             if (container != null)
             {
-                control.Width = container.Width - container.ScrollPadding.horizontal;
+                control.Width = container.Width -container.ScrollPadding.horizontal;
             }
 
             //var slot = control.GetComponentInChildren<SpellSlot>();
@@ -44,9 +62,14 @@ namespace Gladius
             if (lblName == null) throw new Exception("Not found: lblName");
             if (lblStats == null) throw new Exception("Not found: lblStats");
 
-            ShopItem shopItem = GladiusGlobals.CurrentShop.GetItem(this.ItemName);
-            lblName.Text = shopItem.Name;
-            lblCost.Text = "" + shopItem.Cost;
+            ShopItem = GladiusGlobals.CurrentShop.GetItem(this.ItemName);
+            lblName.Text = ShopItem.Name;
+            lblCost.Text = "" + ShopItem.Cost;
+            if (ShopItem.Item != null)
+            {
+                lblStats.Text = ShopItem.Item.Description;
+            }
+
             //if (assignedSpell == null)
             //{
             //    slot.Spell = "";

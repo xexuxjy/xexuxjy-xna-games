@@ -10,9 +10,17 @@ namespace Gladius
         // Use this for initialization
         void Start()
         {
+            GladiusGlobals.LocalisationData = new LocalisationData();
+            GladiusGlobals.LocalisationData.LoadExtractedData("");
+            
+            GladiusGlobals.ItemManager = new ItemManager();
+            GladiusGlobals.ItemManager.LoadExtractedData("");
+
+
             Shop shop = ShopManager.LoadOriginalShopFile("");
             GladiusGlobals.CurrentShop = shop;
-            GameObject panel = GameObject.Find("ItemListPanel");
+            GameObject panel = GameObject.Find("InventoryPanel");
+            //GameObject panel = GameObject.Find("Listbox");
 
             if (panel != null)
             {
