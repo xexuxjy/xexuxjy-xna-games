@@ -29,18 +29,26 @@ namespace Gladius
 
         public void Load(String filename)
         {
-            TextAsset textAsset = (TextAsset)Resources.Load(filename);
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(textAsset.text);
+            //TextAsset textAsset = (TextAsset)Resources.Load(filename);
+            //XmlDocument doc = new XmlDocument();
+            //doc.LoadXml(textAsset.text);
 
-            XmlNodeList nodes = doc.SelectNodes("//Character");
-            foreach (XmlNode node in nodes)
-            {
-                CharacterData characterData = new CharacterData();
-                characterData.Load(node as XmlElement);
-                m_recruits.Add(characterData);
-            }
+            //XmlNodeList nodes = doc.SelectNodes("//Character");
+            //foreach (XmlNode node in nodes)
+            //{
+            //    CharacterData characterData = new CharacterData();
+            //    characterData.Load(node as XmlElement);
+            //    m_recruits.Add(characterData);
+            //}
         }
+
+        CharacterData m_currentCharacter;
+        public CharacterData CurrentCharacter
+        {
+            get { return m_currentCharacter; }
+            set { m_currentCharacter = value; }
+        }
+
 
         //public void Save(StreamWriter streamWriter)
         //{
@@ -167,7 +175,7 @@ namespace Gladius
                 }
                 else if (lineTokens[0] == "INVENTORY")
                 {
-                    m_schoolInventory.Add(lineTokens[1]);
+                    AddToInventory(lineTokens[1]);
                 }
 
             }
@@ -225,6 +233,16 @@ namespace Gladius
         }
 
 
+        public void AddToInventory(String item)
+        {
+            m_schoolInventory.Add(item);
+
+        }
+
+        public void RemoveFromInventory(String item)
+        {
+            m_schoolInventory.Remove(item);
+        }
 
 
         String schoolName;

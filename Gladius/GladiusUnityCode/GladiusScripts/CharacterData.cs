@@ -20,62 +20,41 @@ namespace Gladius
 
         public void InitValues()
         {
-            m_attributeDictionary[GameObjectAttributeType.Accuracy] = new BoundedAttribute(10);
-            m_attributeDictionary[GameObjectAttributeType.Power] = new BoundedAttribute(10);
-            m_attributeDictionary[GameObjectAttributeType.Defense] = new BoundedAttribute(10);
-            m_attributeDictionary[GameObjectAttributeType.Constitution] = new BoundedAttribute(10);
-            m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints] = new BoundedAttribute(10);
-            m_attributeDictionary[GameObjectAttributeType.Experience] = new BoundedAttribute(10);
-
-            // go through all the other attributes and add them if empty.
-            foreach (GameObjectAttributeType attr in EnumUtil.GetValues<GameObjectAttributeType>())
-            {
-                BoundedAttribute ba = null;
-                if (!m_attributeDictionary.TryGetValue(attr, out ba))
-                {
-                    m_attributeDictionary[attr] = new BoundedAttribute(0);
-                }
-            }
 
 
         }
 
-        public void Load(XmlElement xmlElement)
-        {
-            SetupCharacterData(xmlElement);
-        }
+        //public void Save(StreamWriter streamWriter)
+        //{
+        //    StringBuilder data = new StringBuilder();
+        //    data.AppendFormat("<Character Name=\"{0}\" Class=\"{1}\" Level=\"{2}\">", Name, ActorClass.ToString(), Level);
+        //    data.Append("<Attributes ");
+        //    foreach (GameObjectAttributeType attrType in m_attributeDictionary.Keys)
+        //    {
+        //        data.AppendFormat("{0}=\"{1}\" ", attrType, m_attributeDictionary[attrType].CurrentValue);
+        //    }
+        //    data.Append(" />");
 
-        public void Save(StreamWriter streamWriter)
-        {
-            StringBuilder data = new StringBuilder();
-            data.AppendFormat("<Character Name=\"{0}\" Class=\"{1}\" Level=\"{2}\">", Name, ActorClass.ToString(), Level);
-            data.Append("<Attributes ");
-            foreach (GameObjectAttributeType attrType in m_attributeDictionary.Keys)
-            {
-                data.AppendFormat("{0}=\"{1}\" ", attrType, m_attributeDictionary[attrType].CurrentValue);
-            }
-            data.Append(" />");
+        //    data.AppendFormat("<Equipment Head=\"{0}\" Arm1=\"{1}\" Arm2=\"{2}\" Body=\"{3}\" Special=\"{4}\" />\n",
+        //    m_items[(int)ItemLocation.Helmet], m_items[(int)ItemLocation.Shield], m_items[(int)ItemLocation.Weapon],
+        //    m_items[(int)ItemLocation.Armor], m_items[(int)ItemLocation.Accessory]);
 
-            data.AppendFormat("<Equipment Head=\"{0}\" Arm1=\"{1}\" Arm2=\"{2}\" Body=\"{3}\" Special=\"{4}\" />\n",
-            m_items[(int)ItemLocation.Helmet], m_items[(int)ItemLocation.Shield], m_items[(int)ItemLocation.Weapon],
-            m_items[(int)ItemLocation.Armor], m_items[(int)ItemLocation.Accessory]);
+        //    data.Append("</Character>");
+        //    streamWriter.WriteLine(data);
+        //}
 
-            data.Append("</Character>");
-            streamWriter.WriteLine(data);
-        }
-
-        public int XPToNextLevel
-        {
-            get
-            {
-                if (Level < GladiusGlobals.MaxLevel - 2)
-                {
-                    int nextlevel = ActorGenerator.ActorXPLevels[ActorClass][Level + 1];
-                    return nextlevel - m_attributeDictionary[GameObjectAttributeType.Experience].CurrentValue;
-                }
-                return -1;
-            }
-        }
+        //public int XPToNextLevel
+        //{
+        //    get
+        //    {
+        //        if (Level < GladiusGlobals.MaxLevel - 2)
+        //        {
+        //            int nextlevel = ActorGenerator.ActorXPLevels[ActorClass][Level + 1];
+        //            return nextlevel - m_attributeDictionary[GameObjectAttributeType.Experience].CurrentValue;
+        //        }
+        //        return -1;
+        //    }
+        //}
 
 
         public String Name
@@ -143,40 +122,26 @@ namespace Gladius
         public int MOVE
         { get; set; }
 
-        /*
-         *   <Character Name="" Accuracy ="" Defense= "" Power= "" Consitution= "" Experience="" Level ="">
-        <Skills>
 
-        </Skills>
-        <Equipment Head ="" Arm1="" Arm2="" Body="" Special=""/>
-        </Character>
-        */
-        public void SetupCharacterData(XmlElement element)
+        public void ReplaceItem(String itemKey)
         {
-            Name = element.Attributes["Name"].Value;
-            ThumbNailName = element.Attributes["ThumbnailName"].Value;
-
-            ActorClass = (ActorClass)Enum.Parse(typeof(ActorClass), element.Attributes["Class"].Value);
-            Level = int.Parse(element.Attributes["Level"].Value);
-            m_male = (element.Attributes["Sex"].Value == "M");
-
-            XmlElement attributes = (XmlElement)element.SelectSingleNode("Attributes");
-            foreach (XmlAttribute attr in attributes.Attributes)
+            Item item;
+            int location = -1;
+            if (GladiusGlobals.ItemManager.TryGetValue(itemKey, out item))
             {
-                try
-                {
-                    GameObjectAttributeType attrType = (GameObjectAttributeType)Enum.Parse(typeof(GameObjectAttributeType), attr.Name);
-                    int val = int.Parse(attr.Value);
-                    m_attributeDictionary[attrType] = new BoundedAttribute(val);
-                }
-                catch (System.Exception ex)
-                {
-
-                }
-
+                location = (int)item.Location;
             }
-
+            if(m_items[location] != null)
+            {
+                // return current item to the school
+                if (m_school != null)
+                {
+                    m_school.AddToInventory(m_items[location].Name);
+                }
+                AddItem(itemKey);
+            }
         }
+
 
         public void AddItem(String itemKey)
         {
@@ -269,13 +234,12 @@ namespace Gladius
             get;
             set;
         }
-        private bool m_male;
         private Item[] m_items = new Item[(int)ItemLocation.NumItems];
         private String[] m_itemNames = new String[(int)ItemLocation.NumItems];
         private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
         private String m_infoString;
         public List<String> m_skillList = new List<String>();
-
+        private GladiatorSchool m_school;
 
 
     }
