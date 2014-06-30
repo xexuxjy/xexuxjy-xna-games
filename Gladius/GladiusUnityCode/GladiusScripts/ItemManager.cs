@@ -42,13 +42,13 @@ namespace Gladius
         //}
 
 
-        public void LoadExtractedData(String path)
+        public void Load(String path)
         {
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/ItemData");
-            ParseExtractedData(textAsset.text);
+            Parse(textAsset.text);
         }
 
-        public void ParseExtractedData(String data)
+        public void Parse(String data)
         {
             Item currentItem = null;
             String[] lines = data.Split(new String[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -209,12 +209,12 @@ namespace Gladius
         
         public void BuildStat(String val, GameObjectAttributeType attrType)
         {
-            if (!String.IsNullOrEmpty(val))
-            {
-                int ival = int.Parse(val);
-                GameObjectAttributeModifier modifier = new GameObjectAttributeModifier(attrType, GameObjectAttributeModifierDurationType.InstantPermanent, GameObjectAttributeModifierType.Add, ival, 0);
-                m_modifiers.Add(modifier);
-            }
+            //if (!String.IsNullOrEmpty(val))
+            //{
+            //    int ival = int.Parse(val);
+            //    //GameObjectAttributeModifier modifier = new GameObjectAttributeModifier(attrType, GameObjectAttributeModifierDurationType.InstantPermanent, GameObjectAttributeModifierType.Add, ival, 0);
+            //    m_modifiers.Add(modifier);
+            //}
         }
 
         public static ItemLocation ToLocation(String val)
@@ -237,13 +237,13 @@ namespace Gladius
             return GameObjectAttributeType.NumTypes;
         }
 
-        public List<GameObjectAttributeModifier> Modifiers
-        {
-            get
-            {
-                return m_modifiers;
-            }
-        }
+        //public List<GameObjectAttributeModifier> Modifiers
+        //{
+        //    get
+        //    {
+        //        return m_modifiers;
+        //    }
+        //}
 
     //    private String m_itemName;
     //    private S
@@ -253,7 +253,7 @@ namespace Gladius
     //    private List<ActorClass> RequiredClasses = new List<ActorClass>();
     //    private List<ActorClass> ProhibitedClasses = new List<ActorClass>();
     //    private ItemLocation m_itemLocation;
-      private List<GameObjectAttributeModifier> m_modifiers = new List<GameObjectAttributeModifier>();
+      //private List<GameObjectAttributeModifier> m_modifiers = new List<GameObjectAttributeModifier>();
     }
 
 }

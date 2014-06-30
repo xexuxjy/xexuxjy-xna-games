@@ -457,17 +457,17 @@ namespace Gladius
 
     public class AttackSkillDictionary
     {
-        public void LoadExtractedData(String path)
+        public void Load(String path)
         {
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/SkillData");
             String data = textAsset.text;
-            ParseExtractedData(data);
+            Parse(data);
         }
 
         HashSet<String> skillTypeSet = new HashSet<String>();
         HashSet<String> skillTypeSet2 = new HashSet<String>();
 
-        public void ParseExtractedData(String data)
+        public void Parse(String data)
         {
             AttackSkill currentSkill = null;
             String[] lines = data.Split('\n');

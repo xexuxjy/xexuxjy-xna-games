@@ -11,13 +11,13 @@ namespace Gladius
         void Start()
         {
             GladiusGlobals.LocalisationData = new LocalisationData();
-            GladiusGlobals.LocalisationData.LoadExtractedData("");
+            GladiusGlobals.LocalisationData.Load("");
             
             GladiusGlobals.ItemManager = new ItemManager();
-            GladiusGlobals.ItemManager.LoadExtractedData("");
+            GladiusGlobals.ItemManager.Load("");
 
 
-            Shop shop = ShopManager.LoadOriginalShopFile("");
+            Shop shop = ShopManager.Load("");
             GladiusGlobals.CurrentShop = shop;
 
             GameObject shopNameLabel = GameObject.Find("ShopNameLabel");

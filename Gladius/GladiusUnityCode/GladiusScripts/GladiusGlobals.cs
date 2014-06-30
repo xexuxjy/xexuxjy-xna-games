@@ -34,6 +34,13 @@ namespace Gladius
         public static ShopManager ShopManager;
         public static Shop CurrentShop;
 
+        public static String DataRoot = "GladiusData/";
+        public static String SchoolsPath = DataRoot+"Schools/";
+        public static String EncountersPath = DataRoot + "Encounters/";
+        public static String LeaguesPath = DataRoot + "Leagues/";
+
+
+
         public static Crowd Crowd;
 
         public const int MaxLevel = 20;

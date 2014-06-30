@@ -27,7 +27,7 @@ public class GameOverWinController : MonoBehaviour
         GladiusGlobals.CurrentBattleData = BattleData.GenerateDummyBattleData();
         GladiusGlobals.GladiatorSchool = new GladiatorSchool();
         GladiusGlobals.AttackSkillDictionary = new AttackSkillDictionary();
-        GladiusGlobals.AttackSkillDictionary.LoadExtractedData(null);
+        GladiusGlobals.AttackSkillDictionary.Load(null);
 
         m_largeFont = Resources.Load<Font>("GladiusUI/Arena/TREBUC");
 

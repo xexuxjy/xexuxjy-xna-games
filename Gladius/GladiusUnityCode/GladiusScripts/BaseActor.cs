@@ -45,6 +45,27 @@ public class BaseActor : MonoBehaviour
         set;
     }
 
+
+         public int CON
+        { get{return m_characterData.CON;} set{m_characterData.CON=value;}}
+
+        public int PWR
+        { get{return m_characterData.PWR;} set{m_characterData.PWR=value;}}
+
+        public int ACC
+        { get{return m_characterData.ACC;} set{m_characterData.ACC=value;}}
+
+        public int DEF
+        { get{return m_characterData.DEF;} set{m_characterData.DEF=value;}}
+
+        public int INT
+        { get{return m_characterData.INT;} set{m_characterData.INT=value;}}
+
+        public int MOVE
+        { get{return m_characterData.MOVE;} set{m_characterData.MOVE=value;}}
+
+
+
     public BaseActor()
     {
         ModelHeight = 1f;
@@ -55,7 +76,7 @@ public class BaseActor : MonoBehaviour
         //Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
         //m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
 
-        SetupAttributes();
+        //SetupAttributes();
         //DrawOrder = Globals.CharacterDrawOrder;
     }
 
@@ -206,12 +227,12 @@ public class BaseActor : MonoBehaviour
 
     public void SetupCharacterData(CharacterData characterData)
     {
-        Name = characterData.Name;
+        m_characterData = characterData;
 
-        foreach (GameObjectAttributeType key in characterData.Attributes.Keys)
-        {
-            m_attributeDictionary[key] = new BoundedAttribute(characterData.Attributes[key].BaseValue);
-        }
+        //foreach (GameObjectAttributeType key in characterData.Attributes.Keys)
+        //{
+        //    m_attributeDictionary[key] = new BoundedAttribute(characterData.Attributes[key].BaseValue);
+        //}
 
         if (characterData.StartPosition.HasValue)
         {
@@ -304,19 +325,19 @@ public class BaseActor : MonoBehaviour
         set;
     }
 
-    public void SetupAttributes()
-    {
+    //public void SetupAttributes()
+    //{
 
-        m_attributeDictionary[GameObjectAttributeType.Health] = new BoundedAttribute(100);
-        m_attributeDictionary[GameObjectAttributeType.Accuracy] = new BoundedAttribute(10);
-        m_attributeDictionary[GameObjectAttributeType.Power] = new BoundedAttribute(10);
-        m_attributeDictionary[GameObjectAttributeType.Defense] = new BoundedAttribute(10);
-        m_attributeDictionary[GameObjectAttributeType.Constitution] = new BoundedAttribute(10);
+    //    m_attributeDictionary[GameObjectAttributeType.Health] = new BoundedAttribute(100);
+    //    m_attributeDictionary[GameObjectAttributeType.Accuracy] = new BoundedAttribute(10);
+    //    m_attributeDictionary[GameObjectAttributeType.Power] = new BoundedAttribute(10);
+    //    m_attributeDictionary[GameObjectAttributeType.Defense] = new BoundedAttribute(10);
+    //    m_attributeDictionary[GameObjectAttributeType.Constitution] = new BoundedAttribute(10);
 
-        m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints] = new BoundedAttribute(0, 5, 5);
-        m_attributeDictionary[GameObjectAttributeType.Affinity] = new BoundedAttribute(0, 0, 10);
+    //    m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints] = new BoundedAttribute(0, 5, 5);
+    //    m_attributeDictionary[GameObjectAttributeType.Affinity] = new BoundedAttribute(0, 0, 10);
 
-    }
+    //}
 
     void AnimationStarted(AnimationEnum anim)
     {
@@ -367,11 +388,10 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            return m_name;
+            return m_characterData.Name;
         }
         set
         {
-            m_name = value;
             m_guiContentName = new GUIContent(Name);
         }
     }
@@ -383,15 +403,15 @@ public class BaseActor : MonoBehaviour
         set;
     }
 
-    public int GetAttributeValue(GameObjectAttributeType attributeType)
-    {
-        return m_attributeDictionary[attributeType].CurrentValue;
-    }
+    //public int GetAttributeValue(GameObjectAttributeType attributeType)
+    //{
+    //    return m_attributeDictionary[attributeType].CurrentValue;
+    //}
 
-    public void SetAttributeValue(GameObjectAttributeType attributeType, int val)
-    {
-        m_attributeDictionary[attributeType].CurrentValue = val;
-    }
+    //public void SetAttributeValue(GameObjectAttributeType attributeType, int val)
+    //{
+    //    m_attributeDictionary[attributeType].CurrentValue = val;
+    //}
 
     public void PlayAnimation(AnimationEnum animEnum, bool loopClip = true)
     {
@@ -464,73 +484,80 @@ public class BaseActor : MonoBehaviour
 
     public int Health
     {
-        get
-        {
-            return m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue;
-        }
-        set
-        {
-            m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue = value;
-        }
+        get;
+        set;
+        //get
+        //{
+        //    return m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue;
+        //}
+        //set
+        //{
+        //    m_attributeDictionary[GameObjectAttributeType.Health].CurrentValue = value;
+        //}
     }
 
     public int MaxHealth
     {
-        get
-        {
-            return m_attributeDictionary[GameObjectAttributeType.Health].MaxValue;
-        }
+        get;
+        set;
+        //{
+        //    return m_attributeDictionary[GameObjectAttributeType.Health].MaxValue;
+        //}
     }
 
-    public int CharacterSkillPoints
-    {
-        get
-        {
-            return m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints].CurrentValue;
-        }
-        set
-        {
-            m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints].CurrentValue = value;
-        }
-    }
+    //public int CharacterSkillPoints
+    //{
+    //    get
+    //    {
+    //        return m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints].CurrentValue;
+    //    }
+    //    set
+    //    {
+    //        m_attributeDictionary[GameObjectAttributeType.CharacterSkillPoints].CurrentValue = value;
+    //    }
+    //}
 
     public int ArenaSkillPoints
     {
-        get
-        {
-            return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue;
-        }
-        set
-        {
-            m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue = value;
-        }
+        get;set;
+        //get
+        //{
+        //    return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue;
+        //}
+        //set
+        //{
+        //    m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue = value;
+        //}
     }
 
     public int MaxArenaSkillPoints
     {
-        get
-        {
-            return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].MaxValue;
-        }
+        get{return 5;        }
+        //get
+        //{
+        //    return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].MaxValue;
+        //}
     }
 
     public int Affinity
     {
-        get
-        {
-            return m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue;
-        }
-        set
-        {
-            m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue = value;
-        }
+        get;set;
+        //get
+        //{
+        //    return m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue;
+        //}
+        //set
+        //{
+        //    m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue = value;
+        //}
     }
 
     public int MaxAffinity
     {
         get
         {
-            return m_attributeDictionary[GameObjectAttributeType.Affinity].MaxValue;
+            //return m_attributeDictionary[GameObjectAttributeType.Affinity].MaxValue;
+            return 5;
         }
     }
 
@@ -1359,10 +1386,10 @@ public class BaseActor : MonoBehaviour
         return result;
     }
 
-    public Dictionary<GameObjectAttributeType, BoundedAttribute> AttributeDictionary
-    {
-        get { return m_attributeDictionary; }
-    }
+    //public Dictionary<GameObjectAttributeType, BoundedAttribute> AttributeDictionary
+    //{
+    //    get { return m_attributeDictionary; }
+    //}
 
     public int CurrentMovePoints
     {
@@ -1420,7 +1447,8 @@ public class BaseActor : MonoBehaviour
 
     public void BreakShield()
     {
-
+        m_characterData.AddItemByNameAndLoc(null, ItemLocation.Shield);
+        // update model
     }
 
     public void RestoreShield()
@@ -1430,7 +1458,8 @@ public class BaseActor : MonoBehaviour
 
     public void BreakHelmet()
     {
-
+        m_characterData.AddItemByNameAndLoc(null, ItemLocation.Helmet);
+        // update model
     }
 
     public void QueueCounterAttack(BaseActor attacker)
@@ -1470,6 +1499,8 @@ public class BaseActor : MonoBehaviour
     }
 
 
+    private CharacterData m_characterData;
+
     private Projectile m_projectile;
 
     private Dictionary<BaseActor, int> m_threatMap = new Dictionary<BaseActor, int>();
@@ -1482,8 +1513,8 @@ public class BaseActor : MonoBehaviour
     public List<AttackSkill> m_innateSkills = new List<AttackSkill>();
     public List<AttackSkill> m_activeSkills = new List<AttackSkill>();
 
-    private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
-    private List<GameObjectAttributeModifier> m_attributeModifiers = new List<GameObjectAttributeModifier>();
+    //private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
+    //private List<GameObjectAttributeModifier> m_attributeModifiers = new List<GameObjecAttributeModifier>();
     
     //private AnimatedModel m_animatedModel;
 

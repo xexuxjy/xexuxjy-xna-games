@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Xml;
 using System.Text;
+using System.IO;
 namespace Gladius
 {
     public class GladiatorSchool
@@ -27,39 +28,12 @@ namespace Gladius
             set;
         }
 
-        public void Load(String filename)
-        {
-            //TextAsset textAsset = (TextAsset)Resources.Load(filename);
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml(textAsset.text);
-
-            //XmlNodeList nodes = doc.SelectNodes("//Character");
-            //foreach (XmlNode node in nodes)
-            //{
-            //    CharacterData characterData = new CharacterData();
-            //    characterData.Load(node as XmlElement);
-            //    m_recruits.Add(characterData);
-            //}
-        }
-
         CharacterData m_currentCharacter;
         public CharacterData CurrentCharacter
         {
             get { return m_currentCharacter; }
             set { m_currentCharacter = value; }
         }
-
-
-        //public void Save(StreamWriter streamWriter)
-        //{
-        //    streamWriter.Write("<School>");
-        //    foreach (CharacterData character in m_recruits)
-        //    {
-        //        character.Save(streamWriter);
-        //    }
-        //    streamWriter.Write("</School>");
-
-        //}
 
         public int CurrentSize
         {
@@ -89,19 +63,21 @@ namespace Gladius
             get { return m_currentParty; }
         }
 
-        public void LoadExtractedData(String path)
+        public void Load(String name)
         {
-            TextAsset textAsset = (TextAsset)Resources.Load("UberSchool");
+            TextAsset textAsset = (TextAsset)Resources.Load(GladiusGlobals.SchoolsPath+name);
             String data = textAsset.text;
-            ParseExtractedData(data);
+            Parse(data);
         }
 
         public HashSet<String> classSet = new HashSet<String>();
 
-        public void ParseExtractedData(String data)
+        public void Parse(String data)
         {
             String[] lines = data.Split('\n');
             CharacterData currentCharacterData = null;
+            char[] tokens = new char[] { ',', ':' };
+         
             for (int counter = 0; counter < lines.Length; counter++)
             {
                 String line = lines[counter];
@@ -110,11 +86,8 @@ namespace Gladius
                     continue;
                 }
 
-                String[] lineTokens = line.Split(new char[] { ',', ':' });
-                for (int i = 0; i < lineTokens.Length; ++i)
-                {
-                    lineTokens[i] = TidyString(lineTokens[i]);
-                }
+
+                String[] lineTokens = GladiusGlobals.SplitAndTidyString(line,tokens);
 
                 if (lineTokens[0] == "NAME")
                 {
@@ -179,21 +152,6 @@ namespace Gladius
                 }
 
             }
-
-
-        }
-
-        char[] trimChars = new char[] { '"', '\r', '\t', ' ' };
-        public String TidyString(String input)
-        {
-            String temp = input.Replace("\"", "").Replace("\t", "").Trim(trimChars);
-            int commentIndex = temp.IndexOf("//");
-            if (commentIndex > 0)
-            {
-                temp = temp.Substring(0, commentIndex);
-            }
-            return temp;
-
         }
 
 
@@ -231,7 +189,6 @@ namespace Gladius
 
             return sb.ToString();
         }
-
 
         public void AddToInventory(String item)
         {

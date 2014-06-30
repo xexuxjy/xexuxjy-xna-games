@@ -18,7 +18,7 @@ public class SchoolChoice : MonoBehaviour
         TPackManager.load(atlasPath);
 
         m_gladiatorSchool = new GladiatorSchool();
-        m_gladiatorSchool.Load("CharacterData");
+        m_gladiatorSchool.Load("Orins-School");
         SetCharacterData();
         RegisterListeners();
         if (GladiusGlobals.ColourTextureHelper == null)

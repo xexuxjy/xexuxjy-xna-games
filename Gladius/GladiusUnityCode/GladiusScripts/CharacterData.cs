@@ -9,21 +9,14 @@ namespace Gladius
 
     public class CharacterData
     {
-
-        //<Character Name="Urlan">
-        //   <Attributes Accuracy ="40" Defense= "60" Power= "60" Consitution= "80" Experience="1000" Level ="1"/>
-        //   <Skills>
-
-        //   </Skills>
-        //   <Equipment Head ="" Arm1="" Arm2="" Body="" Special=""/>
-        // </Character>        
-
         public void InitValues()
         {
-
-
+            ACC = 10;
+            PWR = 10;
+            DEF = 10;
+            CON = 10;
+            XP = 10;
         }
-
         //public void Save(StreamWriter streamWriter)
         //{
         //    StringBuilder data = new StringBuilder();
@@ -122,6 +115,9 @@ namespace Gladius
         public int MOVE
         { get; set; }
 
+        public String TeamName
+        {get;set;}
+
 
         public void ReplaceItem(String itemKey)
         {
@@ -167,28 +163,10 @@ namespace Gladius
         {
         }
 
-        public Dictionary<GameObjectAttributeType, BoundedAttribute> Attributes
-        {
-            get
-            {
-                return m_attributeDictionary;
-            }
-        }
-
-        
         public int XP
         {
-            get 
-            {
-                return m_attributeDictionary[GameObjectAttributeType.Experience].CurrentValue;
-            }
-            set 
-            {
-                m_attributeDictionary[GameObjectAttributeType.Experience].CurrentValue = value;
-            }
-
-
-
+            get;
+            set;
         }
 
         public String GetInfoString()
@@ -218,10 +196,7 @@ namespace Gladius
 
         public void AddItemByNameAndLoc(String itemName,ItemLocation loc)
         {
-            if (!String.IsNullOrEmpty(itemName))
-            {
-                m_itemNames[(int)loc] = itemName;
-            }
+            m_itemNames[(int)loc] = itemName;
         }
 
         public String GetItemNameAtLoc(ItemLocation loc)
@@ -236,7 +211,6 @@ namespace Gladius
         }
         private Item[] m_items = new Item[(int)ItemLocation.NumItems];
         private String[] m_itemNames = new String[(int)ItemLocation.NumItems];
-        private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
         private String m_infoString;
         public List<String> m_skillList = new List<String>();
         private GladiatorSchool m_school;
