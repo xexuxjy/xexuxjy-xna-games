@@ -23,7 +23,7 @@ namespace Gladius.combat
 
             //DAMAGE  =  BASE POWER  x  ( ATTACK MULTIPLIER / 100 )  x  SITUATIONAL FACTORS
             float categoryMultiplier = GetCategoryDamageMultiplier(ActorGenerator.CategoryClass[attacker.ActorClass], ActorGenerator.CategoryClass[defender.ActorClass]);
-            float totalDamage = attacker.GetAttributeValue(GameObjectAttributeType.Power) * attackSkill.DamageMultiplier * categoryMultiplier;
+            float totalDamage = attacker.PWR * attackSkill.DamageMultiplier * categoryMultiplier;
             // lots of other stats to adjust here..
             return totalDamage;
 
@@ -39,8 +39,8 @@ namespace Gladius.combat
 
         http://www.gamefaqs.com/gamecube/561233-gladius/faqs/64758
             //DIFFERENCE = [ (ACC * 0.97) - DEF ]
-            float totalAccuracy = attacker.GetAttributeValue(GameObjectAttributeType.Accuracy) + accuracyBonus;
-            float diff1 = (totalAccuracy * 0.97f) - defender.GetAttributeValue(GameObjectAttributeType.Defense);
+            float totalAccuracy = attacker.ACC + accuracyBonus;
+            float diff1 = (totalAccuracy * 0.97f) - defender.DEF;
 
             //MISS CHANCE = 10 * 1.5 ^ [ DIFFERENCE * (-16 / 100) ]
             float missChance = 10f * ((float)Math.Pow(1.5f, (diff1 * (-16 / 100))));

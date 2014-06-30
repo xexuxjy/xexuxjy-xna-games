@@ -20,7 +20,7 @@ namespace Gladius
 
         }
 
-        public static Shop LoadOriginalShopFile(String filename)
+        public static Shop Load(String filename)
         {
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/Shops/ShopAkarAnGeneric");
             if (textAsset != null)

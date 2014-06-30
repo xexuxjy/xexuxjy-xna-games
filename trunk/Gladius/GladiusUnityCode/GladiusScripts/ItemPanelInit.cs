@@ -22,6 +22,7 @@ namespace Gladius
 
         }
 
+       
         public void Populate()
         {
             List<string> shopItems = GladiusGlobals.CurrentShop.GetItemList();

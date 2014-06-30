@@ -10,20 +10,21 @@ namespace Gladius
 {
     public static class ActorGenerator
     {
-        public static void SetActorStats(int level, ActorClass actorClass,BaseActor baseActor)
+        public static void SetActorStats(int level, ActorClass actorClass,CharacterData characterData)
         {
             // quick and dirty way of generating characters.
             int accuracy = 10 * level;
             int defense = 12 * level;
             int power = 8 * level;
             int cons = 10 * level;
+
+    
             //BaseActor baseActor = new BaseActor();
-            baseActor.AttributeDictionary[GameObjectAttributeType.Accuracy] = new BoundedAttribute(accuracy);
-            baseActor.AttributeDictionary[GameObjectAttributeType.Defense] = new BoundedAttribute(defense);
-            baseActor.AttributeDictionary[GameObjectAttributeType.Power] = new BoundedAttribute(power);
-            baseActor.AttributeDictionary[GameObjectAttributeType.Constitution] = new BoundedAttribute(cons);
-            baseActor.ActorClass = actorClass;
-            //return baseActor;
+            characterData.ACC = accuracy;
+            characterData.DEF = defense;
+            characterData.PWR = power;
+            characterData.CON = cons;
+            characterData.ActorClass = actorClass;
         }
 
 

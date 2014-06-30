@@ -9,7 +9,7 @@ namespace Gladius
 	public class LocalisationData : Dictionary<int,String>
 	{
 
-        public void LoadExtractedData(String path)
+        public void Load(String path)
         {
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/LocalisationData");
             String data = textAsset.text;
