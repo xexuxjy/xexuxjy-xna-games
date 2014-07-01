@@ -55,7 +55,7 @@ public class SchoolChoice : MonoBehaviour
     {
         m_allCharacters.Clear();
         m_selectedCharacters.Clear();
-        m_allCharacters.AddRange(m_gladiatorSchool.Gladiators);
+        m_allCharacters.AddRange(m_gladiatorSchool.Gladiators.Values);
         foreach (CharacterData character in m_allCharacters)
         {
             character.Selected = false;

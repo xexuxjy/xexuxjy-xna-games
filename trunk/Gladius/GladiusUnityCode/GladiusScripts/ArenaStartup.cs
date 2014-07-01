@@ -56,7 +56,31 @@ public class ArenaStartup : MonoBehaviour
 
 
         Encounter encounter = Encounter.Load(EncounterFile);
-        
+        foreach (EncounterSide side in encounter.Sides)
+        {
+            foreach (String name in side.ChosenGladiators)
+            {
+                CharacterData cd = side.School.Gladiators[name];
+                GameObject baseActorGameObject = (GameObject)Instantiate(baseActorPrefab);
+                baseActorGameObject.name = "BaseActor" + name;
+                BaseActor ba1 = baseActorGameObject.GetComponent<BaseActor>();
+                ba1.SetupCharacterData(cd);
+                ba1.Arena = GladiusGlobals.Arena;
+                if (cd.TeamName == "Player")
+                {
+                    SetActor1(ba1);
+                    ba1.PlayerControlled = true;
+                }
+                else
+                {
+                    SetActor2(ba1);
+                }
+                actors.Add(ba1);
+                ba1.SetupSkills(GladiusGlobals.AttackSkillDictionary);
+            }
+        }
+
+
         
         //int numActors = 4;
 
@@ -102,22 +126,22 @@ public class ArenaStartup : MonoBehaviour
 
         ////actors[0].CurrentPosition = new Point(2, 2);
 
-        //actors[0].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[0];
-        //actors[1].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[1];
+        actors[0].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[0];
+        actors[1].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[1];
 
-        //actors[2].ArenaPoint = GladiusGlobals.Arena.Team1PointList[0];
-        //actors[3].ArenaPoint = GladiusGlobals.Arena.Team1PointList[1];
+        actors[2].ArenaPoint = GladiusGlobals.Arena.Team1PointList[0];
+        actors[3].ArenaPoint = GladiusGlobals.Arena.Team1PointList[1];
 
         ////actors[0].CurrentPosition = new Point(10, 10);
         ////actors[1].CurrentPosition = new Point(11, 10);
         ////actors[2].CurrentPosition = new Point(13, 10);
         ////actors[3].CurrentPosition = new Point(13, 13);
 
-        //for (int i = 0; i < numActors; ++i)
-        //{
-        //    GladiusGlobals.Arena.MoveActor(actors[i], actors[i].ArenaPoint);
-        //    GladiusGlobals.TurnManager.QueueActor(actors[i]);
-
+        foreach (BaseActor actor in actors)
+        {
+            GladiusGlobals.Arena.MoveActor(actor, actor.ArenaPoint);
+            GladiusGlobals.TurnManager.QueueActor(actor);
+        }
         //}
 
     }

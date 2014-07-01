@@ -280,6 +280,11 @@ namespace Gladius
             for (int i = 0; i < lineTokens.Length; ++i)
             {
                 lineTokens[i] = lineTokens[i].Replace("\"", "").Trim(trimChars);
+                int commentIndex = lineTokens[i].IndexOf("//");
+                if (commentIndex >= 0)
+                {
+                    lineTokens[i] = lineTokens[i].Substring(0, commentIndex);
+                }
             }
             return lineTokens;
         }
