@@ -73,42 +73,75 @@ namespace Gladius
         }
 
         public static void InitCategories()
-        {
-            //CategoryClass[ActorClass.Amazon] = ActorCategory.Support;
-            //CategoryClass[ActorClass.Archer] = ActorCategory.Support;
-            //CategoryClass[ActorClass.Bandit] = ActorCategory.Light;
-            //CategoryClass[ActorClass.Barbarian] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Bear] = ActorCategory.Heavy;
-            //CategoryClass[ActorClass.Berserker] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Centurion] = ActorCategory.Heavy;
-            //CategoryClass[ActorClass.ChannelerImp] = ActorCategory.Arcane;
-            //CategoryClass[ActorClass.Cyclops] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Dervish] = ActorCategory.Light;
-            //CategoryClass[ActorClass.Eiji] = ActorCategory.Support;
-            //CategoryClass[ActorClass.Gungir] = ActorCategory.Support;
-            //CategoryClass[ActorClass.Gwazi] = ActorCategory.Light;
-            //CategoryClass[ActorClass.Legionnaire] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Ludo] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Minotaur] = ActorCategory.Heavy;
-            //CategoryClass[ActorClass.Mongrel] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.MongrelShaman] = ActorCategory.Arcane;
-            //CategoryClass[ActorClass.Murmillo] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Ogre] = ActorCategory.Heavy;
-            //CategoryClass[ActorClass.Peltast] = ActorCategory.Support;
-            //CategoryClass[ActorClass.PlainsCat] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Samnite] = ActorCategory.Heavy;
-            //CategoryClass[ActorClass.Satyr] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Scarab] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Scorpion] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Secutor] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Summoner] = ActorCategory.Arcane;
-            //CategoryClass[ActorClass.UndeadLegionnaire] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.UndeadSummoner] = ActorCategory.Support;
-            //CategoryClass[ActorClass.Urlan] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Ursula] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Valens] = ActorCategory.Medium;
-            //CategoryClass[ActorClass.Wolf] = ActorCategory.Light;
-            //CategoryClass[ActorClass.Yeti] = ActorCategory.Heavy;
+        {        
+
+            CategoryClass[ActorClass.Amazon] = ActorCategory.Support;
+            CategoryClass[ActorClass.Archer] = ActorCategory.Support;
+            CategoryClass[ActorClass.ArcherF] = ActorCategory.Support;
+            CategoryClass[ActorClass.BanditA] = ActorCategory.Light;
+            CategoryClass[ActorClass.BanditAF] = ActorCategory.Light;
+            CategoryClass[ActorClass.BanditB] = ActorCategory.Light;
+            CategoryClass[ActorClass.Barbarian] = ActorCategory.Medium;
+            CategoryClass[ActorClass.BarbarianF] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Bear] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.Berserker] = ActorCategory.Medium;
+            CategoryClass[ActorClass.BerserkerF] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Cat] = ActorCategory.Medium;
+            CategoryClass[ActorClass.CatGreater] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Centurion] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.CenturionF] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.ChannelerImp] = ActorCategory.Arcane;
+            CategoryClass[ActorClass.Cyclops] = ActorCategory.Medium;
+            CategoryClass[ActorClass.CyclopsGreater] = ActorCategory.Medium;
+            CategoryClass[ActorClass.DarkLegionnaire] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Dervish] = ActorCategory.Light;
+            CategoryClass[ActorClass.DervishF] = ActorCategory.Light;
+
+            CategoryClass[ActorClass.Eiji] = ActorCategory.Support;
+            CategoryClass[ActorClass.Galdr] = ActorCategory.Support;
+
+            CategoryClass[ActorClass.Gungnir] = ActorCategory.Support;
+            CategoryClass[ActorClass.GungnirF] = ActorCategory.Support;
+
+            CategoryClass[ActorClass.Gwazi] = ActorCategory.Light;
+            CategoryClass[ActorClass.Legionnaire] = ActorCategory.Medium;
+            CategoryClass[ActorClass.LegionnaireF] = ActorCategory.Medium;
+
+            CategoryClass[ActorClass.Ludo] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Minotaur] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.Mongrel] = ActorCategory.Medium;
+            CategoryClass[ActorClass.MongrelShaman] = ActorCategory.Arcane;
+            CategoryClass[ActorClass.Murmillo] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Ogre] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.Peltast] = ActorCategory.Support;
+            CategoryClass[ActorClass.PeltastF] = ActorCategory.Support;
+
+            CategoryClass[ActorClass.SamniteExp] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.SamniteExpF] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.SamniteImp] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.SamniteImpF] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.SamniteSte] = ActorCategory.Heavy;
+            CategoryClass[ActorClass.SamniteSteF] = ActorCategory.Heavy;
+
+            CategoryClass[ActorClass.Satyr] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Scarab] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Scorpion] = ActorCategory.Medium;
+            CategoryClass[ActorClass.SecutorImp] = ActorCategory.Medium;
+            CategoryClass[ActorClass.SecutorImpF] = ActorCategory.Medium;
+            CategoryClass[ActorClass.SecutorSte] = ActorCategory.Medium;
+            CategoryClass[ActorClass.SecutorSteF] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Summoner] = ActorCategory.Arcane;
+            CategoryClass[ActorClass.UndeadMeleeImpA] = ActorCategory.Medium;
+            CategoryClass[ActorClass.UndeadCasterA] = ActorCategory.Support;
+            CategoryClass[ActorClass.Urlan] = ActorCategory.Medium;
+            CategoryClass[ActorClass.UrsulaCostumeA] = ActorCategory.Medium;
+            CategoryClass[ActorClass.UrsulaCostumeB] = ActorCategory.Medium;
+            CategoryClass[ActorClass.ValensCostumeA] = ActorCategory.Medium;
+            CategoryClass[ActorClass.ValensCostumeB] = ActorCategory.Medium;
+
+            CategoryClass[ActorClass.Valens] = ActorCategory.Medium;
+            CategoryClass[ActorClass.Wolf] = ActorCategory.Light;
+            CategoryClass[ActorClass.Yeti] = ActorCategory.Heavy;
         }
 
 

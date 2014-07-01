@@ -203,19 +203,18 @@ namespace Gladius.combat
 
         public bool IsValidTarget(BaseActor attacker, BaseActor defender, AttackSkill skill)
         {
-            if (skill != null)
-            {
-
                 if (attacker != null && defender != null)
                 {
                     if (defender.Dead)
                     {
                         return false;
                     }
-
+                    if (skill == null)
+                    {
+                        return true;
+                    }
                     bool skillValid = skill.ValidForTarget(attacker, defender, new Point());
                     return skillValid;
-                }
             }
             return false;
         }
