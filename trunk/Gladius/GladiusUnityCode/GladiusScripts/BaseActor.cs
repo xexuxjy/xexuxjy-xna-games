@@ -87,6 +87,9 @@ public class BaseActor : MonoBehaviour
         m_turnManager = GladiusGlobals.TurnManager;
         m_turnManager.QueueActor(this);
         Arena = GladiusGlobals.Arena;
+
+        Health = MaxHealth = CON * 10;
+
         SetupSkills(GladiusGlobals.AttackSkillDictionary);
 
         SetAnimationData();
