@@ -61,7 +61,7 @@ public class BaseActor : MonoBehaviour
         public int INT
         { get{return m_characterData.INT;} set{m_characterData.INT=value;}}
 
-        public int MOVE
+        public float MOVE
         { get{return m_characterData.MOVE;} set{m_characterData.MOVE=value;}}
 
 
@@ -1179,10 +1179,18 @@ public class BaseActor : MonoBehaviour
     {
         // simple for now.
         m_knownAttacks.Clear();
-        foreach (AttackSkill attackSkill in skillDictionary.Data.Values)
+        foreach (string skillname in m_characterData.m_skillList)
         {
-            m_knownAttacks.Add(attackSkill);
+            if (skillDictionary.Data.ContainsKey(skillname))
+            {
+                m_knownAttacks.Add(skillDictionary.Data[skillname]);
+            }
+            else
+            {
+                Debug.LogWarning("Can't find key : " + skillname);
+            }
         }
+
     }
 
     public List<AttackSkill> AttackSkills

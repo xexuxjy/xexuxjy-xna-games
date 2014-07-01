@@ -112,7 +112,7 @@ namespace Gladius
         public int INT
         { get; set; }
 
-        public int MOVE
+        public float MOVE
         { get; set; }
 
         public String TeamName

@@ -13,12 +13,12 @@ namespace Gladius
 
         public void Hire(CharacterData gladiator)
         {
-            System.Diagnostics.Debug.Assert(!m_recruits.Contains(gladiator));
+            System.Diagnostics.Debug.Assert(!m_recruits.ContainsKey(gladiator.Name));
         }
 
         public void Fire(CharacterData gladiator)
         {
-            System.Diagnostics.Debug.Assert(m_recruits.Contains(gladiator));
+            System.Diagnostics.Debug.Assert(m_recruits.ContainsKey(gladiator.Name));
 
         }
 
@@ -53,7 +53,7 @@ namespace Gladius
             return -1;
         }
 
-        public List<CharacterData> Gladiators
+        public Dictionary<String,CharacterData> Gladiators
         {
             get { return m_recruits; }
         }
@@ -108,7 +108,7 @@ namespace Gladius
                     currentCharacterData.ActorClass = (ActorClass)Enum.Parse(typeof(ActorClass), lineTokens[2]);
                     classSet.Add(lineTokens[2]);
 
-                    m_recruits.Add(currentCharacterData);
+                    m_recruits[currentCharacterData.Name] = currentCharacterData;
 
                 }
                 else if (lineTokens[0] == "LEVEL")
@@ -131,7 +131,7 @@ namespace Gladius
                     currentCharacterData.ACC = int.Parse(lineTokens[3]);
                     currentCharacterData.DEF = int.Parse(lineTokens[4]);
                     currentCharacterData.INT = int.Parse(lineTokens[5]);
-                    currentCharacterData.MOVE = int.Parse(lineTokens[6]);
+                    currentCharacterData.MOVE = float.Parse(lineTokens[6]);
                 }
                 else if (lineTokens[0] == "ITEMSCOMP")
                 {
@@ -167,7 +167,7 @@ namespace Gladius
                 sb.AppendLine(String.Format("INVENTORY: \"{0}\"", item));
             }
 
-            foreach (CharacterData unit in m_recruits)
+            foreach (CharacterData unit in m_recruits.Values)
             {
                 sb.AppendLine(String.Format("CREATEUNIT: \"{0}\",\"{1}\"", unit.Name, unit.ActorClass));
                 sb.AppendLine(String.Format("LEVEL: {0}", unit.Level));
@@ -206,7 +206,7 @@ namespace Gladius
         String heroName;
         int gold;
         SchoolRank m_currentRank = SchoolRank.Bronze;
-        List<CharacterData> m_recruits = new List<CharacterData>();
+        Dictionary<String, CharacterData> m_recruits = new Dictionary<String, CharacterData>();
         List<CharacterData> m_currentParty = new List<CharacterData>();
         List<String> m_schoolInventory = new List<String>();
     }

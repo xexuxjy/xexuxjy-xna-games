@@ -369,7 +369,7 @@ public class Placement : MonoBehaviour
     public void SetCharacterData()
     {
         m_players.Clear();
-        m_players.AddRange(m_gladiatorSchool.Gladiators);
+        m_players.AddRange(m_gladiatorSchool.Gladiators.Values);
         SetCurrentCharacter(new Point());
     }
 

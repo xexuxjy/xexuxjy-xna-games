@@ -22,7 +22,7 @@ namespace Gladius
 
         }
 
-       
+
         public void Populate()
         {
             List<string> shopItems = GladiusGlobals.CurrentShop.GetItemList();
@@ -49,7 +49,7 @@ namespace Gladius
         // Update is called once per frame
         void Update()
         {
-            
+
             dfControl controlUnderMouse = dfInputManager.ControlUnderMouse;
             if (controlUnderMouse != null && controlUnderMouse != lastControl)
             {
@@ -57,7 +57,7 @@ namespace Gladius
 
                 GameObject go = controlUnderMouse.gameObject;
                 ShopItemGUI currentGuiItem = go.GetComponent<ShopItemGUI>();
-                
+
                 if (lastControl != null)
                 {
                     lastGuiItem = lastControl.gameObject.GetComponent<ShopItemGUI>();
@@ -84,7 +84,7 @@ namespace Gladius
             {
                 detailsPanelLabel.Text = current.ItemName;
                 detailsPanelLabel.Text = string.Format("<h2 color=\"yellow\">{0}</h1><p>PWR: {1} CON:{2} INI: {3}</p><p><i>{4}</i></p>", current.ShopItem.Name, 10, 10, 10, current.ShopItem.Item.Description);
-            
+
             }
         }
 
