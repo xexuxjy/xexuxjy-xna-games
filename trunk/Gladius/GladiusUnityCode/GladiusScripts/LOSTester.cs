@@ -14,8 +14,12 @@ namespace Gladius
             int initPoolSize = 20;
             for (int i = 0; i < initPoolSize; ++i)
             {
-                FreeBox(GetBox());
+                //FreeBox(GetBox());
+                FreeBox(BuildDefaultBox());
             }
+
+            GladiusGlobals.LOSTester = this;
+            
         }
 
         // Update is called once per frame
@@ -24,13 +28,13 @@ namespace Gladius
 
         }
 
-        public void SetStartAndEnd(Vector3 start, Vector3 end)
+        public void SetStartAndEnd(Point startp,Point endp)
         {
-            Point startp = new Point();//GladiusGlobals.Arena.Width
-            Point endp = new Point();//
-            //GladiusGlobals.Arena.GetLOSPoints(startp, endp, m_arenaPoints);
-            ResetBoxes();
-            BuildBoxes();
+            if (GladiusGlobals.Arena.FindPath(startp, endp, m_arenaPoints))
+            {
+                ResetBoxes();
+                BuildBoxes();
+            }
         }
 
         private void ResetBoxes()
@@ -49,7 +53,8 @@ namespace Gladius
             {
                 Vector3 worldPos = GladiusGlobals.Arena.ArenaToWorld(p);
                 VectorLine vl = GetBox();
-                vl.drawTransform.position = worldPos;
+                //vl.drawTransform.position = worldPos;
+                vl.vectorObject.transform.position = worldPos;
                 m_activeLines.Add(vl);
             }
         }

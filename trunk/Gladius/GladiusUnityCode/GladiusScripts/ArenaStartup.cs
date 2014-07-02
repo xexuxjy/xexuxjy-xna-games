@@ -9,8 +9,10 @@ public class ArenaStartup : MonoBehaviour
 {
 
     public GameObject baseActorPrefab;
-    public String ArenaDataName = "GladiusArena/ArenaData/Arena1Data";
-    
+    public String ArenaDataName = "GladiusData/ArenaData/Arena1Data";
+
+    public bool setupLos = false;
+
     //public String SchoolOneFile = "Orins-School";
     //public String SchoolTwoFile = "Legionaires-School";
 
@@ -81,69 +83,17 @@ public class ArenaStartup : MonoBehaviour
             }
         }
 
-
-        
-        //int numActors = 4;
-
-        //for (int i = 0; i < numActors; ++i)
-        //{
-        //    ActorClass actorClass = ActorClass.Barbarian;
-        //    if (i == 0)
-        //    {
-        //        actorClass = ActorClass.Urlan;
-        //    }
-        //    if (i == 1)
-        //    {
-        //        actorClass = ActorClass.Ursula;
-        //    }
-
-
-        //    GameObject baseActorGameObject = (GameObject)Instantiate(baseActorPrefab);
-        //    baseActorGameObject.name = "BaseActor"+i;
-        //    //BaseActor ba1 = ActorGenerator.GenerateActor(1, actorClass, this);
-        //    BaseActor ba1 = baseActorGameObject.GetComponent<BaseActor>();
-        //    CharacterData characterData = new CharacterData();
-        //    if (i < 2)
-        //    {
-        //        characterData.Name = i == 0 ? "Urlan" : "Ursula";
-        //        characterData.TeamName = GladiusGlobals.PlayerTeam;
-        //        ba1.SetupCharacterData(characterData);
-        //        SetActor1(ba1);
-        //        ba1.PlayerControlled = true;
-        //    }
-        //    else
-        //    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-        //        ba1.Name = "Monster" + i;
-        //        ba1.Team = "EnemyTeam";
-        //        ActorGenerator.SetActorStats(5, actorClass, characterData);
-        //        ba1.SetupCharacterData(characterData);
-        //        SetActor2(ba1);
-        //    }
-        //    ba1.Arena = GladiusGlobals.Arena;
-        //    //ba1.LoadContent();
-        //    actors.Add (ba1);
-        //    ba1.SetupSkills(GladiusGlobals.AttackSkillDictionary);
-        //}
-
-        ////actors[0].CurrentPosition = new Point(2, 2);
-
         actors[0].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[0];
         actors[1].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[1];
 
         actors[2].ArenaPoint = GladiusGlobals.Arena.Team1PointList[0];
         actors[3].ArenaPoint = GladiusGlobals.Arena.Team1PointList[1];
 
-        ////actors[0].CurrentPosition = new Point(10, 10);
-        ////actors[1].CurrentPosition = new Point(11, 10);
-        ////actors[2].CurrentPosition = new Point(13, 10);
-        ////actors[3].CurrentPosition = new Point(13, 13);
-
         foreach (BaseActor actor in actors)
         {
             GladiusGlobals.Arena.MoveActor(actor, actor.ArenaPoint);
             GladiusGlobals.TurnManager.QueueActor(actor);
         }
-        //}
 
     }
 
@@ -178,6 +128,11 @@ public class ArenaStartup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!setupLos)
+        {
+            setupLos = true;
+            GladiusGlobals.LOSTester.SetStartAndEnd(new Point(), new Point(0, 4));
+        }
         //GladiusGlobals.TurnManager.Update();
     }
 }
