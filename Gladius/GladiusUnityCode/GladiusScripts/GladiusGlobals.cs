@@ -26,6 +26,8 @@ namespace Gladius
         public static TurnManager TurnManager;
         public static LocalisationData LocalisationData;
 
+        public static LOSTester LOSTester;
+
         public static CombatEngineUI CombatEngineUI;
 
         public static GladiatorSchool GladiatorSchool;
@@ -38,6 +40,7 @@ namespace Gladius
         public static String SchoolsPath = DataRoot+"Schools/";
         public static String EncountersPath = DataRoot + "Encounters/";
         public static String LeaguesPath = DataRoot + "Leagues/";
+
 
 
 
