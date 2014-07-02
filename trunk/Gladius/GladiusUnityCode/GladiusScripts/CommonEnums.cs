@@ -138,6 +138,7 @@ namespace Gladius
     public enum DamageType
     {
         Physical,
+        Ranged,
         Air,
         Earth,
         Fire,

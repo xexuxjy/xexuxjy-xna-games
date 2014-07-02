@@ -185,7 +185,7 @@ using Gladius;
                 if (GladiusGlobals.TurnManager != null)
                 {
                     String markerName = "EnemyIndicator.png";
-                    if (GladiusGlobals.TurnManager.CurrentActor.Team == actor.Team)
+                    if (GladiusGlobals.TurnManager.CurrentActor.TeamName == actor.TeamName)
                     {
                         markerName = "FriendIndicator.png";
                     }

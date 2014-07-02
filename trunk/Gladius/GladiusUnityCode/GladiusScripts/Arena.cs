@@ -474,7 +474,7 @@ namespace Gladius.arena
                     BaseActor ba = null;
                     if (m_baseActorMap.TryGetValue(adjusted, out ba))
                     {
-                        if (ba.Team != source.Team)
+                        if (ba.TeamName != source.TeamName)
                         {
                             return ba;
                         }

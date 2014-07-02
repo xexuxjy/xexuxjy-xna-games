@@ -237,6 +237,8 @@ public class BaseActor : MonoBehaviour
         //    m_attributeDictionary[key] = new BoundedAttribute(characterData.Attributes[key].BaseValue);
         //}
 
+        m_guiContentName = new GUIContent(Name);
+
         if (characterData.StartPosition.HasValue)
         {
             ArenaPoint = characterData.StartPosition.Value;
@@ -392,10 +394,6 @@ public class BaseActor : MonoBehaviour
         get
         {
             return m_characterData.Name;
-        }
-        set
-        {
-            m_guiContentName = new GUIContent(Name);
         }
     }
 
@@ -570,10 +568,9 @@ public class BaseActor : MonoBehaviour
         set;
     }
 
-    public String Team
+    public String TeamName
     {
-        get;
-        set;
+        get { return m_characterData.TeamName; }
     }
 
     public bool HasShield
@@ -738,6 +735,7 @@ public class BaseActor : MonoBehaviour
 
     private void UpdateMovement()
     {
+        
         if (Turning)
         {
             TurnTimer += Time.deltaTime;
@@ -1101,6 +1099,11 @@ public class BaseActor : MonoBehaviour
         }
     }
 
+    public bool ImmuneToDamageType(DamageType damageType)
+    {
+        return false;
+    }
+
     public void ConfirmAttackSkill()
     {
         if (CurrentAttackSkill != null)
@@ -1417,19 +1420,19 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            if (Team == GladiusGlobals.PlayerTeam)
+            if (TeamName == GladiusGlobals.PlayerTeam)
             {
                 return Color.blue;
             }
-            else if (Team == GladiusGlobals.EnemyTeam1)
+            else if (TeamName == GladiusGlobals.EnemyTeam1)
             {
                 return Color.yellow;
             }
-            else if (Team == GladiusGlobals.EnemyTeam2)
+            else if (TeamName == GladiusGlobals.EnemyTeam2)
             {
                 return Color.magenta;
             }
-            else if (Team == GladiusGlobals.EnemyTeam3)
+            else if (TeamName == GladiusGlobals.EnemyTeam3)
             {
                 return Color.green;
             }
