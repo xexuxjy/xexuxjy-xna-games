@@ -354,7 +354,7 @@ namespace Gladius
                 }
                 if (SubType == "Combo")
                 {
-
+                    return 2;
                 }
        
                 //else if(Type == 
