@@ -222,7 +222,7 @@ namespace Gladius.arena
             foreach (BaseActor ba in m_allActors)
             {
                 // someone still alive.
-                if (ba.Team == GladiusGlobals.PlayerTeam && !ba.Dead)
+                if (ba.TeamName == GladiusGlobals.PlayerTeam && !ba.Dead)
                 {
                     return false;
                 }
@@ -235,7 +235,7 @@ namespace Gladius.arena
             foreach (BaseActor ba in m_allActors)
             {
                 // someone still alive.
-                if (ba.Team != GladiusGlobals.PlayerTeam && !ba.Dead)
+                if (ba.TeamName != GladiusGlobals.PlayerTeam && !ba.Dead)
                 {
                     return false;
                 }

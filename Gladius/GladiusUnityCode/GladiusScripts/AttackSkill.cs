@@ -223,7 +223,12 @@ namespace Gladius
         public String TargetCondition;
 
         public AnimationEnum Animation;
-        
+
+        public DamageType DamageType;
+
+        public float AttackBonus = 1.0f;
+        public float DefenseBonus = 1.0f;
+
 
         private List<String> m_targetConditions = new List<string>();
         private List<String> m_skilLAttributes = new List<string>();
@@ -256,7 +261,7 @@ namespace Gladius
             }
             if ("enemy_only".Equals(condition))
             {
-                return target.Team != user.Team;
+                return target.TeamName != user.TeamName;
             }
             if ("self_only".Equals(condition))
             {
@@ -264,11 +269,11 @@ namespace Gladius
             }
             if ("friend_only_not_self".Equals(condition))
             {
-                return user != target && user.Team == target.Team;
+                return user != target && user.TeamName == target.TeamName;
             }
             if ("friend_only_not_self".Equals(condition))
             {
-                return user != target && user.Team == target.Team;
+                return user != target && user.TeamName == target.TeamName;
             }
             if ("all_units_not_self".Equals(condition))
             {

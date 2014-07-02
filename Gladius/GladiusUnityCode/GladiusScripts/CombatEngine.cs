@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 using System;
@@ -27,7 +27,7 @@ namespace Gladius.combat
             // lots of other stats to adjust here..
             // base on facing
 			float positionMultiplier = 1.0f;
-			float angle = Vector3.Dot(attacker.Forward,defender.Forward);
+            float angle = Vector3.Dot(attacker.transform.forward, defender.transform.forward);
 			if(angle < 0)
 			{
 				positionMultiplier = 1.5f;
@@ -45,10 +45,10 @@ namespace Gladius.combat
 			}
 
 
-			float damageType multiplier = 1f;
+			float damageTypeMultiplier = 1f;
 			if(defender.ImmuneToDamageType(attackSkill.DamageType))
 			{
-				damageType.Multiplier = 0f;
+				damageTypeMultiplier = 0f;
 			}
 			
 			
@@ -304,10 +304,10 @@ namespace Gladius.combat
                     defender.QueueCounterAttack(attacker);
                     break;
                 case "Change Crowd Source":
-                    GladiusGlobals.Crowd.UpdateTeamScore(attacker.Team, (int)skill.SkillEffectModifier1);
+                    GladiusGlobals.Crowd.UpdateTeamScore(attacker.TeamName, (int)skill.SkillEffectModifier1);
                     break;
                 case "Change Crowd Target":
-                    GladiusGlobals.Crowd.UpdateTeamScore(defender.Team, (int)skill.SkillEffectModifier1);
+                    GladiusGlobals.Crowd.UpdateTeamScore(defender.TeamName, (int)skill.SkillEffectModifier1);
                     break;
                 case "Avoid":
                     result.resultType = AttackResultType.Avoided;
