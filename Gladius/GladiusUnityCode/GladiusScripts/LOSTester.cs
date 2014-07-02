@@ -7,6 +7,8 @@ namespace Gladius
 
     public class LOSTester : MonoBehaviour
     {
+        static Vector3 dims = new Vector3(1, 2, 1);
+        static Vector3 halfDims = dims / 2f;
 
         // Use this for initialization
         void Start()
@@ -30,11 +32,9 @@ namespace Gladius
 
         public void SetStartAndEnd(Point startp,Point endp)
         {
-            if (GladiusGlobals.Arena.FindPath(startp, endp, m_arenaPoints))
-            {
-                ResetBoxes();
-                BuildBoxes();
-            }
+            GladiusGlobals.Arena.BuildPath(startp, endp, m_arenaPoints, m_arenaPointsOccupied);
+            ResetBoxes();
+            BuildBoxes();
         }
 
         private void ResetBoxes()
@@ -49,12 +49,15 @@ namespace Gladius
 
         private void BuildBoxes()
         {
-            foreach (Point p in m_arenaPoints)
+            for(int i=0;i<m_arenaPoints.Count;++i)
             {
+                Point p = m_arenaPoints[i];
                 Vector3 worldPos = GladiusGlobals.Arena.ArenaToWorld(p);
                 VectorLine vl = GetBox();
                 //vl.drawTransform.position = worldPos;
+                worldPos.y += halfDims.y;
                 vl.vectorObject.transform.position = worldPos;
+                vl.SetColor(m_arenaPointsOccupied[i] ? Color.red : Color.white);
                 m_activeLines.Add(vl);
             }
         }
@@ -63,8 +66,6 @@ namespace Gladius
 
         public VectorLine BuildDefaultBox()
         {
-            Vector3 dims = new Vector3(1, 2, 1);
-            Vector3 halfDims = dims / 2f;
             Vector3[] corners = new Vector3[8];
             int count = 0;
             Vector3 position = Vector3.zero;
@@ -117,6 +118,8 @@ namespace Gladius
 
         private Stack<VectorLine> m_boxPool = new Stack<VectorLine>();
         private List<Point> m_arenaPoints = new List<Point>();
+        private List<bool> m_arenaPointsOccupied = new List<bool>();
+
         private List<VectorLine> m_activeLines = new List<VectorLine>();
 
 

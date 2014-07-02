@@ -163,7 +163,10 @@ public class PlayerChoiceBar : MonoBehaviour
 
         for (int i = 0; i < numSkillSlots; ++i)
         {
-            m_currentAttackSkillLine.Add(m_attackSkills[i][0]);
+            if (m_attackSkills[i].Count > 0)
+            {
+                m_currentAttackSkillLine.Add(m_attackSkills[i][0]);
+            }
         }
         m_actionCursor = new Point();
     }

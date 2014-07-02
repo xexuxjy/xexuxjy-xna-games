@@ -444,6 +444,56 @@ namespace Gladius.arena
         }
 
 
+        public void BuildPath(Point start,Point end, List<Point> points, List<bool> occupied)
+        {
+            points.Clear();
+            occupied.Clear();
+            int x0 = start.X;
+            int y0 = start.Y;
+            int x1 = end.X;
+            int y1 = end.Y;                
+
+            bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
+            if (steep)
+            {
+                Swap<int>(ref x0, ref y0);
+                Swap<int>(ref x1, ref y1);
+            }
+            if (x0 > x1)
+            {
+                Swap<int>(ref x0, ref x1);
+                Swap<int>(ref y0, ref y1);
+            }
+
+            var dX = (x1 - x0);
+            var dY = (y1 - y0);
+            var err = (dX / 2);
+            var ystep = (y0 < y1 ? 1 : -1);
+            var y = y0;
+
+            for (var x = x0; x <= x1; ++x)
+            {
+                Point p = new Point(x, y);
+                points.Add(p);
+                // it's blocked so no LOS....
+                occupied.Add(IsPointOccupied(p));
+                //if (!(steep ? plot(y, x) : plot(x, y)))
+                //    return;
+
+                err = err - dY;
+                if (err < 0)
+                {
+                    y += ystep;
+                    err += dX;
+                }
+
+            }
+
+
+        }
+
+
+
         // dumb version for now. doesn't check path
         public BaseActor FindNearestEnemy(BaseActor searcher)
         {
