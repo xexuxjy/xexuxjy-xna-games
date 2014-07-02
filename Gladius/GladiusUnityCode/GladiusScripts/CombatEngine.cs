@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 using System;
@@ -23,8 +23,40 @@ namespace Gladius.combat
 
             //DAMAGE  =  BASE POWER  x  ( ATTACK MULTIPLIER / 100 )  x  SITUATIONAL FACTORS
             float categoryMultiplier = GetCategoryDamageMultiplier(ActorGenerator.CategoryClass[attacker.ActorClass], ActorGenerator.CategoryClass[defender.ActorClass]);
-            float totalDamage = attacker.PWR * attackSkill.DamageMultiplier * categoryMultiplier;
+
             // lots of other stats to adjust here..
+            // base on facing
+			float positionMultiplier = 1.0f;
+			float angle = Vector3.Dot(attacker.Forward,defender.Forward);
+			if(angle < 0)
+			{
+				positionMultiplier = 1.5f;
+			}
+
+			float heightDiff = attacker.Position.y - defender.Position.y;
+			float heightMultiplier = 1.0f;
+			if(heightDiff > 0.25f)
+			{
+				heightMultiplier = 1.5f;
+			}
+			else if(heightDiff < -0.25f)
+			{
+				heightMultiplier = 0.75f;
+			}
+
+
+			float damageType multiplier = 1f;
+			if(defender.ImmuneToDamageType(attackSkill.DamageType))
+			{
+				damageType.Multiplier = 0f;
+			}
+			
+			
+			float attackSkillBonus = attackSkill.AttackBonus;
+			float defenseSkillBonus = attackSkill.DefenseBonus;
+			
+
+            float totalDamage = attacker.PWR * attackSkill.DamageMultiplier * categoryMultiplier * positionMultiplier * heightMultiplier * damageTypeMultiplier * attackSkillBonus * defenseSkillBonus;
             return totalDamage;
 
         }
@@ -37,7 +69,7 @@ namespace Gladius.combat
             float totalDamage = CalculateExpectedDamage(attacker, defender, attackSkill);
 
 
-        http://www.gamefaqs.com/gamecube/561233-gladius/faqs/64758
+        	http://www.gamefaqs.com/gamecube/561233-gladius/faqs/64758
             //DIFFERENCE = [ (ACC * 0.97) - DEF ]
             float totalAccuracy = attacker.ACC + accuracyBonus;
             float diff1 = (totalAccuracy * 0.97f) - defender.DEF;
