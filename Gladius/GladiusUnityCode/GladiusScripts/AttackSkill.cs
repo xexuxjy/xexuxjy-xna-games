@@ -10,185 +10,6 @@ using System.Xml;
 
 namespace Gladius
 {
-    //public class AttackSkill
-    //{
-    //    public int Id;
-    //    public String Name;
-    //    public int UseCost; // how many points needed to use
-    //    public int UseGain; // how many points you gain on using - normally only for affinity skills.
-    //    public int PurchaseCost;
-    //    public int SkillRow;
-
-    //    public AttackType AttackType;
-    //    public DamageType DamageType;
-    //    public DamageAffects DamageAffects;
-    //    public int BaseDamage;
-    //    public float DamageMultiplier;
-
-    //    public SkillIcon SkillIcon;
-
-    //    public AnimationEnum Animation = AnimationEnum.None;
-
-    //    public int MinRange;
-    //    public int MaxRange;
-    //    // how far we can move to do the attack.
-    //    public int MovementRange;
-
-    //    public int Radius;
-    //    public bool EightSquare;
-    //    // todo - lots of extra abilities on here.
-
-    //    public List<GameObjectAttributeModifier> StatModifiers = new List<GameObjectAttributeModifier>();
-
-
-    //    public bool HasMovementPath()
-    //    {
-    //        return MovementRange > 0;
-    //    }
-
-
-    //    public bool RangedAttack
-    //    {
-    //        get { return MinRange > 1; }
-    //    }
-
-    //    public AttackSkill()
-    //    {
-    //    }
-
-    //    public AttackSkill(String name, int row, int useCost, int purchaseCost, DamageType damageType, DamageAffects damageAffects, int baseDamage)
-    //    {
-    //        Name = name;
-    //        UseCost = useCost;
-    //        PurchaseCost = purchaseCost;
-    //        DamageType = damageType;
-    //        DamageAffects = damageAffects;
-    //        BaseDamage = baseDamage;
-    //        DamageMultiplier = 1.0f;
-    //        Radius = 0;
-    //    }
-
-    //    public AttackSkill(XmlElement node)
-    //    {
-    //        Id = int.Parse(node.Attributes["id"].Value);
-    //        Name = node.Attributes["name"].Value;
-    //        SkillRow = int.Parse(node.Attributes["skillRow"].Value);
-    //        UseCost = GetIntAttribute(node, "useCost", 1);
-    //        UseGain = GetIntAttribute(node, "useGain", 0);
-    //        PurchaseCost = int.Parse(node.Attributes["purchaseCost"].Value);
-    //        AttackType = GetAttackType(node);
-    //        DamageType = GetDamageType(node);
-    //        DamageAffects = GetDamageAffects(node);
-    //        SkillIcon = (SkillIcon)Enum.Parse(typeof(SkillIcon), node.Attributes["skillIcon"].Value);
-    //        BaseDamage = GetIntAttribute(node, "baseDamage", 0);
-    //        MinRange = GetIntAttribute(node, "minRange", 0);
-    //        MaxRange = GetIntAttribute(node, "maxRange", 0);
-    //        Radius = GetIntAttribute(node, "radius", 0);
-    //        MovementRange = GetIntAttribute(node, "movementRange", 0);
-
-
-    //        if (node.HasAttribute("animation:"))
-    //        {
-    //            Animation = (AnimationEnum)Enum.Parse(typeof(AnimationEnum), node.Attributes["animation"].Value);
-    //        }
-
-    //        DamageMultiplier = 1.0f;
-
-    //        if (node.HasChildNodes)
-    //        {
-    //            XmlNodeList modifiers = node.GetElementsByTagName("Modifier");
-    //            foreach (XmlNode modifier in modifiers)
-    //            {
-    //                String sval = modifier.Attributes["stat"].Value;
-    //                GameObjectAttributeType goat = (GameObjectAttributeType)Enum.Parse(typeof(GameObjectAttributeType), sval);
-    //                int val = int.Parse(modifier.Attributes["amount"].Value);
-    //                GameObjectAttributeModifier statModifier = new GameObjectAttributeModifier(goat, val);
-    //                StatModifiers.Add(statModifier);
-    //            }
-
-    //        }
-    //    }
-
-    //    public DamageType GetDamageType(XmlElement node)
-    //    {
-    //        if (node.HasAttribute("damageType:"))
-    //        {
-    //            return (DamageType)Enum.Parse(typeof(DamageType), node.Attributes["damageType"].Value);
-    //        }
-    //        return DamageType.Physical;
-    //    }
-
-    //    public DamageAffects GetDamageAffects(XmlElement node)
-    //    {
-    //        if (node.HasAttribute("damageAffects:"))
-    //        {
-    //            return (DamageAffects)Enum.Parse(typeof(DamageAffects), node.Attributes["damageAffects"].Value);
-    //        }
-    //        return DamageAffects.Default;
-    //    }
-
-    //    public AttackType GetAttackType(XmlElement node)
-    //    {
-    //        if (node.HasAttribute("attackType:"))
-    //        {
-    //            return (AttackType)Enum.Parse(typeof(AttackType), node.Attributes["attackType"].Value);
-    //        }
-    //        return AttackType.SingleOrtho;
-    //    }
-
-    //    private int GetIntAttribute(XmlElement node, string name, int defaultVal)
-    //    {
-    //        if (node.HasAttribute(name))
-    //        {
-    //            return int.Parse(node.Attributes[name].Value);
-    //        }
-    //        return defaultVal;
-    //    }
-
-    //    public bool HasModifiers()
-    //    {
-    //        return StatModifiers.Count > 0;
-    //    }
-
-    //    public bool NeedsGrid
-    //    {
-    //        get { return AttackType != AttackType.EndTurn; }
-    //    }
-
-    //    public bool InRange(int dist)
-    //    {
-    //        return (dist >= MinRange && dist <= (MovementRange + MaxRange));
-    //    }
-
-    //    public bool Available(BaseActor actor)
-    //    {
-    //        // need to make sure actor has enough skillpoints or affinity points to use this.
-    //        if (UseCost <= actor.ArenaSkillPoints)
-    //        {
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-
-    //    public bool RequiresLocationTarget
-    //    {
-    //        get
-    //        {
-    //            return true;
-    //        }
-    //    }
-
-    //    public bool RequiresActorTarget
-    //    {
-    //        get
-    //        {
-    //            return true;
-    //        }
-    //    }
-
-
-    //}
-
     public class AttackSkill
     {
         public String Name;
@@ -221,6 +42,7 @@ namespace Gladius
         public String Affinity;
         public int AffinityCost;
         public String TargetCondition;
+		public String PreRequisite;
 
         public AnimationEnum Animation;
 
@@ -231,7 +53,7 @@ namespace Gladius
 
 
         private List<String> m_targetConditions = new List<string>();
-        private List<String> m_skilLAttributes = new List<string>();
+        private List<String> m_skillAttributes = new List<string>();
 
         public SkillStatus m_skillStatus1;
         public SkillStatus m_skillStatus2;
@@ -243,7 +65,7 @@ namespace Gladius
         {
             foreach(String condition in m_targetConditions)
             {
-                bool valid = CheckIndividualSKill(condition,user,target,targetPos);
+                bool valid = CheckIndividualSkill(condition,user,target,targetPos);
                 if(!valid)
                 {
                     return false;
@@ -253,7 +75,7 @@ namespace Gladius
         }
 
 
-        private bool CheckIndividualSKill(String condition, BaseActor user, BaseActor target,Point targetPoint)
+        private bool CheckIndividualSkill(String condition, BaseActor user, BaseActor target,Point targetPoint)
         {
             if ("any_square".Equals(condition))
             {
@@ -308,7 +130,7 @@ namespace Gladius
 
         public void AddAttribute(String attribute)
         {
-            m_skilLAttributes.Add(attribute);
+            m_skillAttributes.Add(attribute);
         }
 
         public bool Available(BaseActor actor)
@@ -336,32 +158,48 @@ namespace Gladius
             get { return SkillIcon.Attack; }
         }
 
+	
+		public void Initialise()
+		{
+			SetupSkillRow();
+		}
+		
+		private void SetupSkillRow()
+		{
+			if (SubType == "Combo")
+			{
+				m_skillRow = 1;
+			}
+			if(HasAttribute("affinity"))
+			{
+				m_skillRow = 2;
+			}
+			if(SubType == "Support")
+			{
+				m_skillRow = 3;
+			}
+			if (Type == "Attack" && SubType == "Standard")
+			{
+				m_skillRow = 0;
+			}
+			return -1;
+		}
+		
 
-        //public bool HasMovementPath
-        //{
-        //    get { return true; }
-        //}
-
-        //private GUIContent[] m_skillGroupNames = new GUIContent[] { new GUIContent("Move"), new GUIContent("Attack"), new GUIContent("Combo"), new GUIContent("Special"), new GUIContent("Affinity") };
-
+		private int m_skillRow;
         public int SkillRow
         {
             get
             {
-                if (Type == "Attack" && SubType == "Standard")
-                {
-                    return 0;
-                }
-                if (SubType == "Combo")
-                {
-                    return 2;
-                }
-       
-                //else if(Type == 
-                return 1;
+            	return m_skillRow;
             }
             
         }
+
+		public String GetPreRequisite()
+		{
+			return PreRequisite;
+		}
 
         public int UseCost
         {
@@ -375,88 +213,102 @@ namespace Gladius
 
         public bool IsMoveToAttack
         {
-            get { return m_skilLAttributes.Contains("movetoattack"); }
+            get { return m_skillAttributes.Contains("movetoattack"); }
         }
 
         public bool IsMultiHit
         {
-            get { return m_skilLAttributes.Contains("multihit"); }
+            get { return m_skillAttributes.Contains("multihit"); }
         }
 
         public bool CantMiss
         {
-            get { return m_skilLAttributes.Contains("cantmiss"); }
+            get { return m_skillAttributes.Contains("cantmiss"); }
         }
 
         public bool FaceOnAttack
         {
-            get{return !m_skilLAttributes.Contains("dontface");}
+            get{return !m_skillAttributes.Contains("dontface");}
         }
 
         public bool IsAffinity
         {
-            get { return !m_skilLAttributes.Contains("affinity"); }
+            get { return !m_skillAttributes.Contains("affinity"); }
         }
 
         public bool IsBite
         {
-            get { return !m_skilLAttributes.Contains("bite"); }
+            get { return !m_skillAttributes.Contains("bite"); }
         }
 
         public bool IsCharge
         {
-            get { return !m_skilLAttributes.Contains("charge"); }
+            get { return !m_skillAttributes.Contains("charge"); }
         }
 
         public bool IsMelee
         {
-            get { return !m_skilLAttributes.Contains("melee"); }
+            get { return !m_skillAttributes.Contains("melee"); }
         }
 
         public bool IsOkWithNoTargets
         {
-            get { return !m_skilLAttributes.Contains("okwithnotargets"); }
+            get { return !m_skillAttributes.Contains("okwithnotargets"); }
         }
         
         public bool IsPiercing
         {
-            get { return !m_skilLAttributes.Contains("piercing"); }
+            get { return !m_skillAttributes.Contains("piercing"); }
         }
 
         public bool IsRanged
         {
-            get { return !m_skilLAttributes.Contains("ranged"); }
+            get { return !m_skillAttributes.Contains("ranged"); }
         }
         
         public bool IsShield
         {
-            get { return !m_skilLAttributes.Contains("shield"); }
+            get { return !m_skillAttributes.Contains("shield"); }
         }
 
         public bool IsSpearAnim
         {
-            get { return !m_skilLAttributes.Contains("spearanim"); }
+            get { return !m_skillAttributes.Contains("spearanim"); }
         }
 
         public bool IsSpell
         {
-            get { return !m_skilLAttributes.Contains("spell"); }
+            get { return !m_skillAttributes.Contains("spell"); }
         }
 
         public bool IsSuicide
         {
-            get { return !m_skilLAttributes.Contains("suicide"); }
+            get { return !m_skillAttributes.Contains("suicide"); }
         }
 
         public bool IsTeleport
         {
-            get { return !m_skilLAttributes.Contains("teleport"); }
+            get { return !m_skillAttributes.Contains("teleport"); }
         }
 
         public bool IsWeapon
         {
-            get { return !m_skilLAttributes.Contains("weapon"); }
+            get { return !m_skillAttributes.Contains("weapon"); }
         }
+
+		public bool IsImmuneTo(String immunType)
+		{
+			bool result = false;
+			if(m_skillStatus1 != null)
+			{
+				result = m_skillStatus1.ImmuneTo(immunType);
+			}
+			if(result == false && m_skillStatus2 != null)
+			{
+				result = m_skillStatus2.ImmuneTo(immunType);
+			}
+			return result;
+		}
 
     }
 
@@ -490,6 +342,10 @@ namespace Gladius
 
                 if (line.StartsWith("SKILLCREATE:"))
                 {
+                	if(currentSkill != null)
+                	{
+                		currentSkill.Initialise();
+                	}
                     currentSkill = new AttackSkill();
                     if (lineTokens.Length == 4)
                     {
@@ -565,6 +421,10 @@ namespace Gladius
                 else if (line.StartsWith("SKILLFXSWING:"))
                 {
 
+                }
+                else if (line.StartsWith("SKILLPREREQ:"))
+                {
+                	PreRequisite = lineTokens[1];
                 }
                 else if (line.StartsWith("SKILLEFFECTRANGE:"))
                 {
@@ -707,7 +567,6 @@ namespace Gladius
         }
         
         public Dictionary<String, AttackSkill> Data = new Dictionary<String, AttackSkill>();
-        //public Dictionary<String, AttackSkill2> Data2 = new Dictionary<String, AttackSkill2>();
     }
 
 
@@ -737,10 +596,41 @@ namespace Gladius
         public int statusChance;
         public String statusIntervalName;
         public int statusIntervalDuration;
+  
+    
+    	public bool CombatDefend;
+    
+    
+    	public bool IsImmunityStatus()
+    	{
+    		return "immunity status" == statusName;
+    	}
+    	
+    	public bool ImmuneTo(String immunType)
+    	{
+    		return IsImmunityStatus() && m_skillStatusCondition.Contains(immunType);
+    	}
+    	
+
+		public void Initialise()
+		{
+		
+		}
+
+
+
+
+
+    
     
     }
 
 
+	public class Resistance
+	{
+		String type;
+		float value;
+	}
 
 
 
