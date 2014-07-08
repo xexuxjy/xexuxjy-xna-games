@@ -8,47 +8,50 @@ using System;
 
 public class PlayerChoiceBar : MonoBehaviour
 {
-    public static Rect Rect = new Rect(20, 600, 0, 0);
-    public static Rect ShieldBarRect = new Rect(0,0,140,50);
-    public static Rect SwordBarRect = new Rect(ShieldBarRect.x + ShieldBarRect.width + 10, ShieldBarRect.y, ShieldBarRect.width, ShieldBarRect.height);
-    public static Rect SkillBarRect = new Rect(SwordBarRect.x + SwordBarRect.width + 100,SwordBarRect.y,215,50);
 
-    String atlasPath = "GladiusUI/Arena/ArenaUIAtlas";
+
 
     // Use this for initialization
     private void AddIconState(SkillIcon icon, SkillIconState state, String regionName)
     {
         m_iconStateRegionDictionary[new IconAndState(icon, state)] = regionName;
     }
+
     void Start()
     {
-        TPackManager.load(atlasPath);
 
-        AddIconState(SkillIcon.Move, SkillIconState.Available,"SkillMove.png");
-        AddIconState(SkillIcon.Move, SkillIconState.Selected, "SkillMoveSelected.png");
-        AddIconState(SkillIcon.Attack, SkillIconState.Available, "SkillAttack.png");
-        AddIconState(SkillIcon.Attack, SkillIconState.Selected, "SkillAttackSelected.png");
-        AddIconState(SkillIcon.Combo, SkillIconState.Available, "SkillCombo.png");
-        AddIconState(SkillIcon.Combo, SkillIconState.Selected, "SkillComboSelected.png");
-        AddIconState(SkillIcon.Combo, SkillIconState.Unavailable, "SkillComboUnavailable.png");
-        AddIconState(SkillIcon.Special, SkillIconState.Available, "SkillSpecial.png");
-        AddIconState(SkillIcon.Special, SkillIconState.Selected, "SkillSpecialSelected.png");
-        AddIconState(SkillIcon.Special, SkillIconState.Unavailable, "SkillSpecialUnavailable.png");
-        AddIconState(SkillIcon.Affinity, SkillIconState.Available, "SkillAffinity.png");
-        AddIconState(SkillIcon.Affinity, SkillIconState.Selected, "SkillAffinitySelected.png");
-        AddIconState(SkillIcon.Affinity, SkillIconState.Unavailable, "SkillAffinityUnavailable.png");
+        var control = gameObject.GetComponent<dfControl>();
+        m_textureAtlas = control.GetManager().DefaultAtlas;
+        m_healthSlider = control.Find<dfProgressBar>("HealthProgress");
+        m_affinitySlider = control.Find<dfProgressBar>("AffinityProgress");
+        m_skillSprites = new dfSprite[]{control.Find<dfSprite>("SkillSlot1"),control.Find<dfSprite>("SkillSlot2"),control.Find<dfSprite>("SkillSlot3"),control.Find<dfSprite>("SkillSlot4"),control.Find<dfSprite>("SkillSlot5")};
+        //TPackManager.load(atlasPath);
 
-        m_largeFont = Resources.Load<Font>("GladiusUI/Arena/TREBUC");
+        AddIconState(SkillIcon.Move, SkillIconState.Available, "SkillMove");
+        AddIconState(SkillIcon.Move, SkillIconState.Selected, "SkillMoveSelected");
+        AddIconState(SkillIcon.Attack, SkillIconState.Available, "SkillAttack");
+        AddIconState(SkillIcon.Attack, SkillIconState.Selected, "SkillAttackSelected");
+        AddIconState(SkillIcon.Combo, SkillIconState.Available, "SkillCombo");
+        AddIconState(SkillIcon.Combo, SkillIconState.Selected, "SkillComboSelected");
+        AddIconState(SkillIcon.Combo, SkillIconState.Unavailable, "SkillComboUnavailable");
+        AddIconState(SkillIcon.Special, SkillIconState.Available, "SkillSpecial");
+        AddIconState(SkillIcon.Special, SkillIconState.Selected, "SkillSpecialSelected");
+        AddIconState(SkillIcon.Special, SkillIconState.Unavailable, "SkillSpecialUnavailable");
+        AddIconState(SkillIcon.Affinity, SkillIconState.Available, "SkillAffinity");
+        AddIconState(SkillIcon.Affinity, SkillIconState.Selected, "SkillAffinitySelected");
+        AddIconState(SkillIcon.Affinity, SkillIconState.Unavailable, "SkillAffinityUnavailable");
 
-        m_largeTextStyle = new GUIStyle();
-        m_largeTextStyle.font = m_largeFont;
-        m_largeTextStyle.fontSize = 16;
-        m_largeTextStyle.fontStyle = FontStyle.Bold;
+        //m_largeFont = Resources.Load<Font>("GladiusUI/Arena/TREBUC");
+
+        //m_largeTextStyle = new GUIStyle();
+        //m_largeTextStyle.font = m_largeFont;
+        //m_largeTextStyle.fontSize = 16;
+        //m_largeTextStyle.fontStyle = FontStyle.Bold;
 
 
-        m_smallTextStyle = new GUIStyle();
-        m_smallTextStyle.font = m_largeFont;
-        m_smallTextStyle.fontSize = 10;
+        //m_smallTextStyle = new GUIStyle();
+        //m_smallTextStyle.font = m_largeFont;
+        //m_smallTextStyle.fontSize = 10;
 
         
         m_attackSkills = new List<List<AttackSkill>>();
@@ -68,63 +71,74 @@ public class PlayerChoiceBar : MonoBehaviour
         DrawElement();
     }
 
+
+    public void Update()
+    {
+        //m_healthSlider.Value = CurrentActor.Health;
+        if (CurrentActor != null)
+        {
+            m_healthSlider.Value = (m_healthSlider.Value + 1) % CurrentActor.MaxHealth;
+        }
+        
+    }
+
     public void DrawElement()
     {
-        try
-        {
-            if (CurrentActor != null)
-            {
-                //TextureRegion shieldRegion = m_atlas.GetRegion("ShieldSkillBar.png");
-                Rect barRect = GladiusGlobals.AddRect(Rect,ShieldBarRect);
-                //Debug.Log("GUI Draw");
+        //try
+        //{
+        //    if (CurrentActor != null)
+        //    {
+        //        //TextureRegion shieldRegion = m_atlas.GetRegion("ShieldSkillBar.png");
+        //        Rect barRect = GladiusGlobals.AddRect(Rect,ShieldBarRect);
+        //        //Debug.Log("GUI Draw");
                 
-                Vector2 textDims =  m_largeTextStyle.CalcSize(new GUIContent(CurrentActor.Name));
+        //        Vector2 textDims =  m_largeTextStyle.CalcSize(new GUIContent(CurrentActor.Name));
                 
-                Vector2 textPos = new Vector2(Rect.x + 5, Rect.y - textDims.y - 3);
+        //        Vector2 textPos = new Vector2(Rect.x + 5, Rect.y - textDims.y - 3);
 
-                //m_largeText.text = CurrentActor.Name;
-                //m_largeText.transform.position = new Vector3(textPos.x,textPos.y,0);
-                //m_largeText.transform.position = new Vector3(10, 10, 0);
+        //        //m_largeText.text = CurrentActor.Name;
+        //        //m_largeText.transform.position = new Vector3(textPos.x,textPos.y,0);
+        //        //m_largeText.transform.position = new Vector3(10, 10, 0);
 
-                GUI.Label(new Rect(textPos.x, textPos.y, textDims.x, textDims.y), CurrentActor.Name);
-
-
-                //DrawSkillBar1("ShieldSkillBar.png", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
-                DrawSkillBar1("ShieldBar.png", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
-
-                barRect = GladiusGlobals.AddRect(Rect,SwordBarRect);
-                //DrawSkillBar1("SwordSkillBar.png", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
-                DrawSkillBar1("AttackBar.png", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
-                barRect = GladiusGlobals.AddRect(Rect, SkillBarRect);
-
-                DrawSkillBar2(barRect, m_currentAttackSkillLine, null, null);
-            }
-
-            Rect debugInfoRect = new Rect(50, 50, 200, 500);
-            //GUI.Label(debugInfoRect, String.Format("MG : C[{0}] L[{1}] CF[{2}].",MovementGrid.CurrentPosition,MovementGrid.LastPosition,GladiusGlobals.CameraManager.transform.forward));
-
-            Vector3 startPoint = GladiusGlobals.MovementGrid.CurrentV3 + Vector3.up;
-            Ray ray = new Ray(startPoint, Vector3.down);
-            String meshInfo = null;
-            RaycastHit hitResult;
-            Physics.Raycast(ray, out hitResult);
-            if (hitResult.collider != null)
-            {
-                meshInfo = String.Format("Collided at point : " + hitResult.point);
-            }
-            else
-            {
-                meshInfo = "No Collision";
-            }
-            GUI.Label(debugInfoRect, meshInfo);
+        //        GUI.Label(new Rect(textPos.x, textPos.y, textDims.x, textDims.y), CurrentActor.Name);
 
 
+        //        //DrawSkillBar1("ShieldSkillBar.png", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
+        //        DrawSkillBar1("ShieldBar.png", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
 
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError(ex.Message);
-        }
+        //        barRect = GladiusGlobals.AddRect(Rect,SwordBarRect);
+        //        //DrawSkillBar1("SwordSkillBar.png", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
+        //        DrawSkillBar1("AttackBar.png", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
+        //        barRect = GladiusGlobals.AddRect(Rect, SkillBarRect);
+
+        //        DrawSkillBar2(barRect, m_currentAttackSkillLine, null, null);
+        //    }
+
+        //    Rect debugInfoRect = new Rect(50, 50, 200, 500);
+        //    //GUI.Label(debugInfoRect, String.Format("MG : C[{0}] L[{1}] CF[{2}].",MovementGrid.CurrentPosition,MovementGrid.LastPosition,GladiusGlobals.CameraManager.transform.forward));
+
+        //    Vector3 startPoint = GladiusGlobals.MovementGrid.CurrentV3 + Vector3.up;
+        //    Ray ray = new Ray(startPoint, Vector3.down);
+        //    String meshInfo = null;
+        //    RaycastHit hitResult;
+        //    Physics.Raycast(ray, out hitResult);
+        //    if (hitResult.collider != null)
+        //    {
+        //        meshInfo = String.Format("Collided at point : " + hitResult.point);
+        //    }
+        //    else
+        //    {
+        //        meshInfo = "No Collision";
+        //    }
+        //    GUI.Label(debugInfoRect, meshInfo);
+
+
+
+        //}
+        //catch (System.Exception ex)
+        //{
+        //    Debug.LogError(ex.Message);
+        //}
     }
 
     public void RegisterListeners()
@@ -158,7 +172,7 @@ public class PlayerChoiceBar : MonoBehaviour
 
         foreach (AttackSkill attackSkill in CurrentActor.AttackSkills)
         {
-        	if(attackSkill.SkillRow >= 0 && attackSkill.SkillRow < m_attackSkills.Length)
+        	if(attackSkill.SkillRow >= 0 && attackSkill.SkillRow < m_attackSkills.Count)
         	{
             	m_attackSkills[attackSkill.SkillRow].Add(attackSkill);
             }
@@ -172,6 +186,10 @@ public class PlayerChoiceBar : MonoBehaviour
             }
         }
         m_actionCursor = new Point();
+
+
+        m_healthSlider.MaxValue = CurrentActor.MaxHealth;
+        InitialiseSkillSlots();
     }
 
 
@@ -253,6 +271,15 @@ public class PlayerChoiceBar : MonoBehaviour
 
     private void UpdateSkillCursor(Point delta)
     {
+        // update previous
+        SkillIconState iconState = SkillIconState.Available;
+        AttackSkill skill = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
+        if (!skill.Available(CurrentActor))
+        {
+            iconState = SkillIconState.Unavailable;
+        }
+        UpdateSkillIcon(m_actionCursor.X,iconState);
+
         m_actionCursor = GladiusGlobals.Add(m_actionCursor, delta);
 
         m_actionCursor.X = (m_actionCursor.X + m_attackSkills.Count) % m_attackSkills.Count;
@@ -264,6 +291,16 @@ public class PlayerChoiceBar : MonoBehaviour
         m_actionCursor.Y = (m_actionCursor.Y + m_attackSkills[m_actionCursor.X].Count) % m_attackSkills[m_actionCursor.X].Count;
         m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
         CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
+
+        iconState = SkillIconState.Selected ;
+        if (!skill.Available(CurrentActor))
+        {
+            iconState = SkillIconState.Unavailable;
+        }
+
+
+
+        UpdateSkillIcon(m_actionCursor.X,iconState);
     }
 
 
@@ -290,134 +327,151 @@ public class PlayerChoiceBar : MonoBehaviour
 
 
 
-    private void DrawSkillBar1(String regionName, Rect rect, DamageType damageType, float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
-    {
-        int smallCircleDiameter = 16;
-        int smallircleYOffset = 0;
+    //private void DrawSkillBar1(String regionName, Rect rect, DamageType damageType, float bar1Value, float bar1MaxValue, float bar2Value, float bar2MaxValue)
+    //{
+    //    int smallCircleDiameter = 16;
+    //    int smallircleYOffset = 0;
 
-        Rect skillRect1Dims = new Rect(33, -7, 107, 16);
-        Rect skillRect2Dims = new Rect(33, 15, 107, 16);
+    //    Rect skillRect1Dims = new Rect(33, -7, 107, 16);
+    //    Rect skillRect2Dims = new Rect(33, 15, 107, 16);
 
 
-        Rect affinityRect = skillRect2Dims;
-        GladiusGlobals.OffsetRect(ref rect, ref affinityRect);
+    //    Rect affinityRect = skillRect2Dims;
+    //    GladiusGlobals.OffsetRect(ref rect, ref affinityRect);
 
-        affinityRect.x -= ((float)smallCircleDiameter * 1.0f);
-        affinityRect.y -= smallCircleDiameter / 2;
-        affinityRect.width = affinityRect.height = smallCircleDiameter;
+    //    affinityRect.x -= ((float)smallCircleDiameter * 1.0f);
+    //    affinityRect.y -= smallCircleDiameter / 2;
+    //    affinityRect.width = affinityRect.height = smallCircleDiameter;
 
-        Rect rect1 = new Rect(rect.x + skillRect1Dims.x, rect.y + skillRect1Dims.y + skillRect1Dims.height, skillRect1Dims.width, skillRect1Dims.height);
-        Rect rect2 = new Rect(rect.x + skillRect2Dims.x, rect.y + skillRect2Dims.y + skillRect2Dims.height, skillRect2Dims.width, skillRect2Dims.height);
+    //    Rect rect1 = new Rect(rect.x + skillRect1Dims.x, rect.y + skillRect1Dims.y + skillRect1Dims.height, skillRect1Dims.width, skillRect1Dims.height);
+    //    Rect rect2 = new Rect(rect.x + skillRect2Dims.x, rect.y + skillRect2Dims.y + skillRect2Dims.height, skillRect2Dims.width, skillRect2Dims.height);
 
-        TPackManager.draw(rect, atlasPath, regionName);
+    //    TPackManager.draw(rect, atlasPath, regionName);
         
-        DrawMiniBar(rect1, bar1Value, bar1MaxValue, Color.green, Color.black);
-        DrawMiniBar(rect2, bar2Value, bar2MaxValue, Color.yellow, Color.black);
+    //    DrawMiniBar(rect1, bar1Value, bar1MaxValue, Color.green, Color.black);
+    //    DrawMiniBar(rect2, bar2Value, bar2MaxValue, Color.yellow, Color.black);
 
-        //GUI.EndGroup();
-    }
+    //    //GUI.EndGroup();
+    //}
 
 
-    private void DrawMiniBar(Rect baseRectangle, float val, float maxVal, Color color1, Color color2)
-    {
+    //private void DrawMiniBar(Rect baseRectangle, float val, float maxVal, Color color1, Color color2)
+    //{
 
-        float fillPercentage = val / maxVal;
+    //    float fillPercentage = val / maxVal;
 
-        float height = baseRectangle.height;
-        float ypos = baseRectangle.y;
-        float start = baseRectangle.x;
+    //    float height = baseRectangle.height;
+    //    float ypos = baseRectangle.y;
+    //    float start = baseRectangle.x;
         
-        float width = (fillPercentage * baseRectangle.width);
-        Rect r1 = new Rect(start, ypos, width, height);
-        GUI.DrawTexture(r1, GladiusGlobals.ColourTextureHelper.GetColourTexture(color1));
-        start += width;
-        width = baseRectangle.width - width;
-        Rect r2 = new Rect(start, ypos, width, height);
-    }
+    //    float width = (fillPercentage * baseRectangle.width);
+    //    Rect r1 = new Rect(start, ypos, width, height);
+    //    GUI.DrawTexture(r1, GladiusGlobals.ColourTextureHelper.GetColourTexture(color1));
+    //    start += width;
+    //    width = baseRectangle.width - width;
+    //    Rect r2 = new Rect(start, ypos, width, height);
+    //}
 
-    private void DrawSkillBar2(Rect rect, List<AttackSkill> skills, StringBuilder bar1Text, StringBuilder bar2Text)
-    {
+    //private void DrawSkillBar2(Rect rect, List<AttackSkill> skills, StringBuilder bar1Text, StringBuilder bar2Text)
+    //{
     
-        int circleRadius = 29;
-        Rect skillRect1Dims = new Rect(161, 16, 115, 16);
-        Rect skillRect2Dims = new Rect(26, 32, 250, 16);
+    //    int circleRadius = 29;
+    //    Rect skillRect1Dims = new Rect(161, 16, 115, 16);
+    //    Rect skillRect2Dims = new Rect(26, 32, 250, 16);
 
-        int xpad = 2;
-        rect.x += xpad;
-        rect.y -= 1;
+    //    int xpad = 2;
+    //    rect.x += xpad;
+    //    rect.y -= 1;
 
-        for (int i = 0; i < skills.Count; ++i)
-        {
-            AttackSkill skill = skills[i];
-            Vector2 dims;
-            Vector2 uv;
+    //    for (int i = 0; i < skills.Count; ++i)
+    //    {
+    //        AttackSkill skill = skills[i];
+    //        Vector2 dims;
+    //        Vector2 uv;
 
-            SkillIconState iconState = (i == m_actionCursor.X) ? SkillIconState.Selected : SkillIconState.Available;
-            if (!skill.Available(CurrentActor))
-            {
-                iconState = SkillIconState.Unavailable;
-            }
-
+    //        SkillIconState iconState = (i == m_actionCursor.X) ? SkillIconState.Selected : SkillIconState.Available;
+    //        if (!skill.Available(CurrentActor))
+    //        {
+    //            iconState = SkillIconState.Unavailable;
+    //        }
             
-            
-            Rect dest = new Rect(rect.x + (i * (circleRadius + xpad)), rect.y + 2, circleRadius, circleRadius);
-            DrawSkillIcon(dest,skill.SkillIcon, iconState);
-            
+    //        DrawSkillIcon(i,skill.SkillIcon, iconState);
+    //    }
 
-            //GUI.DrawTextureWithTexCoords(dest, m_atlasTexture, src);
-
-        }
-
-        TPackManager.draw(rect, atlasPath, "SkillbarPart2.png");
+    //    TPackManager.draw(rect, atlasPath, "SkillbarPart2.png");
         
         
-        Vector2 pos = new Vector2(rect.x, rect.y);
-        pos += new Vector2(skillRect1Dims.x, skillRect1Dims.y);
+    //    Vector2 pos = new Vector2(rect.x, rect.y);
+    //    pos += new Vector2(skillRect1Dims.x, skillRect1Dims.y);
         
-        //GUIContent labelName = new GUIContent(skills[m_actionCursor.X].Name);
-        //GUI.Label(new Rect(pos.x, pos.y, 0, 0), labelName,m_smallTextStyle);
+    //    //GUIContent labelName = new GUIContent(skills[m_actionCursor.X].Name);
+    //    //GUI.Label(new Rect(pos.x, pos.y, 0, 0), labelName,m_smallTextStyle);
 
 
-        //Vector2 x = m_smallTextStyle.CalcSize(labelName);
+    //    //Vector2 x = m_smallTextStyle.CalcSize(labelName);
 
-        //pos += x;
+    //    //pos += x;
         
-        GUIContent skillSlot = m_skillGroupNames[(int)CurrentlySelectedSkill.SkillIcon];
-        GUI.Label(new Rect(pos.x, pos.y, 0, 0), skillSlot, m_smallTextStyle);
+    //    GUIContent skillSlot = m_skillGroupNames[(int)CurrentlySelectedSkill.SkillIcon];
+    //    GUI.Label(new Rect(pos.x, pos.y, 0, 0), skillSlot, m_smallTextStyle);
 
 
 
-        String skillCostImage = null;
-        if (CurrentlySelectedSkill.UseCost > 0 && CurrentlySelectedSkill.UseCost < 4)
-        {
-            Vector2 pos2 = new Vector2(rect.x+skillRect2Dims.x, rect.y+skillRect2Dims.y);
-            GUIContent labelName = new GUIContent(skills[m_actionCursor.X].Name);
-            GUI.Label(new Rect(pos2.x, pos2.y, 0, 0), labelName, m_smallTextStyle);
-            Vector2 textDims = m_smallTextStyle.CalcSize(labelName);
-            pos2.x += textDims.x+20;
+    //    String skillCostImage = null;
+    //    if (CurrentlySelectedSkill.UseCost > 0 && CurrentlySelectedSkill.UseCost < 4)
+    //    {
+    //        Vector2 pos2 = new Vector2(rect.x+skillRect2Dims.x, rect.y+skillRect2Dims.y);
+    //        GUIContent labelName = new GUIContent(skills[m_actionCursor.X].Name);
+    //        GUI.Label(new Rect(pos2.x, pos2.y, 0, 0), labelName, m_smallTextStyle);
+    //        Vector2 textDims = m_smallTextStyle.CalcSize(labelName);
+    //        pos2.x += textDims.x+20;
             
-            skillCostImage = m_skillCostImageNames[CurrentlySelectedSkill.UseCost - 1];
-            Rect sd = new Rect(pos2.x, pos2.y, 64, 16);
-            TPackManager.draw(sd, atlasPath, skillCostImage);
-        }
+    //        skillCostImage = m_skillCostImageNames[CurrentlySelectedSkill.UseCost - 1];
+    //        Rect sd = new Rect(pos2.x, pos2.y, 64, 16);
+    //        TPackManager.draw(sd, atlasPath, skillCostImage);
+    //    }
 
 
 
 
-    }
+    //}
 
     private GUIContent[] m_skillGroupNames = new GUIContent[] { new GUIContent("Move"), new GUIContent("Attack"), new GUIContent("Combo"), new GUIContent("Special"), new GUIContent("Affinity") };
 
     private String[] m_skillCostImageNames = new String[]{"SkillDiamonds1.png","SkillDiamonds2.png","SkillDiamonds3.png","SkillDiamonds4.png"};
 
-    public void DrawSkillIcon(Rect dest, SkillIcon icon, SkillIconState state)
+
+
+
+    public void UpdateSkillIcon(int slot, SkillIconState state)
     {
         try
         {
             String key;
+            SkillIcon icon = SkillIcon.Move;
+            switch (slot)
+            {
+                case 0:  
+                    icon = SkillIcon.Move;
+                    break;
+                case 1:
+                    icon = SkillIcon.Attack;
+                    break;
+                case 2:
+                    icon = SkillIcon.Combo;
+                    break;
+                case 3:
+                    icon = SkillIcon.Affinity;
+                    break;
+                case 4:
+                    icon = SkillIcon.Special;
+                    break;
+
+            }
+
             if (m_iconStateRegionDictionary.TryGetValue(new IconAndState(icon, state), out key))
             {
-                TPackManager.draw(dest, atlasPath, key);
+                m_skillSprites[slot].SpriteName = key;
             }
         }
         catch (System.Exception ex)
@@ -555,7 +609,22 @@ public class PlayerChoiceBar : MonoBehaviour
 
     }
 
+    private void InitialiseSkillSlots()
+    {
+        //for (int i = 0; i < m_currentAttackSkillLine.Count; ++i)
+        //{
+        //    SkillIconState state = m_currentAttackSkillLine[i].Available(CurrentActor) ? SkillIconState.Available : SkillIconState.Unavailable;
+        //    UpdateSkillIcon(i, state);
 
+        //}
+        for (int i = 0; i < 5; ++i)
+        {
+            UpdateSkillIcon(i, SkillIconState.Available);
+        }
+    
+
+
+    }
 
 
     private void HandleMovementGridAction(ActionButtonPressedArgs e)
@@ -650,6 +719,18 @@ public class PlayerChoiceBar : MonoBehaviour
         SkillIconState State;
     }
 
+    String atlasPath = "GladiusUI/Arena/ArenaUIAtlas";
+
+    dfProgressBar m_healthSlider;
+    dfProgressBar m_affinitySlider;
+    //dfSprite m_skill1;
+    //dfSprite m_skill2;
+    //dfSprite m_skill3;
+    //dfSprite m_skill4;
+    //dfSprite m_skill5;
+    //dfSprite m_sprite;
+    dfAtlas m_textureAtlas;
+    dfSprite[] m_skillSprites;
 
     private Dictionary<IconAndState, String> m_iconStateRegionDictionary = new Dictionary<IconAndState, String>();
 
@@ -660,20 +741,21 @@ public class PlayerChoiceBar : MonoBehaviour
 
 
 
+
     // this may need to be somewhere more common...
     //Dictionary<DamageType, Texture2D> m_damageTypeTextures = new Dictionary<DamageType, Texture2D>();
-    Dictionary<DamageType, Texture2D> m_damageTypeTextures = new Dictionary<DamageType, Texture2D>();
+    //Dictionary<DamageType, Texture2D> m_damageTypeTextures = new Dictionary<DamageType, Texture2D>();
 
-    GUIStyle m_largeTextStyle;
-    GUIStyle m_smallTextStyle;
-
-
-    GUIText m_largeText;
-    GUIText m_smallText;
+    //GUIStyle m_largeTextStyle;
+    //GUIStyle m_smallTextStyle;
 
 
-    Point m_topLeft = new Point(20, 700);
-    Font m_smallFont;
-    Font m_largeFont;
+    //GUIText m_largeText;
+    //GUIText m_smallText;
+
+
+    //Point m_topLeft = new Point(20, 700);
+    //Font m_smallFont;
+    //Font m_largeFont;
 }
 

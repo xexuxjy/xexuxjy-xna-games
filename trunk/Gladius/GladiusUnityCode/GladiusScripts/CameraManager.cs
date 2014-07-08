@@ -137,10 +137,37 @@ public class CameraManager : MonoBehaviour
             transform.position -= transform.up* movementSpeed;
         }
 
-        float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
-			
-		rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-		rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
+
+        
+        float lsh = Input.GetAxis("PadLeftStickH");
+        if (lsh != 0.0f)
+        {
+            transform.position += transform.right * movementSpeed * lsh;
+        }
+
+        float lsv = Input.GetAxis("PadLeftStickV");
+        if (lsv != 0.0f)
+        {
+            transform.position += transform.forward* movementSpeed * lsv;
+        }
+
+
+        float rsh = Input.GetAxis("PadRightStickH");
+
+        float rsv = Input.GetAxis("PadRightStickV");
+
+
+        float rotationX = transform.localEulerAngles.y + rsh * sensitivityX;
+        rotationY += rsv * sensitivityY;
+        rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+
+        transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+
+
+
+        //float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
+        //            rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+        //rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
 			
 		transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
 
