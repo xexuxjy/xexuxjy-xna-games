@@ -33,7 +33,7 @@ using Gladius;
             m_defaultGUIStyle.font = m_guiFont;
             m_defaultGUIStyle.fontSize = 16;
 
-            TPackManager.load(atlasPath);
+            //TPackManager.load(atlasPath);
 
             //m_defaultGUIStyle.fontStyle = FontStyle.Bold;
         }
@@ -43,7 +43,7 @@ using Gladius;
             //GUI.contentColor = Color.yellow;
             //GUI.Label(new Rect(20, 20, 100, 40), "Some Text",DefaultStyle);
 
-            DrawElement();
+            //DrawElement();
         }
 
         public void DrawFloatingText(Vector3 initialPosition, Color textColor, StringBuilder text, float age)

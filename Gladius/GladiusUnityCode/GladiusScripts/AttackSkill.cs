@@ -170,19 +170,22 @@ namespace Gladius
 			{
 				m_skillRow = 1;
 			}
-			if(HasAttribute("affinity"))
+            else if (m_skillAttributes.Contains("affinity"))
 			{
 				m_skillRow = 2;
 			}
-			if(SubType == "Support")
+			else if(SubType == "Support")
 			{
 				m_skillRow = 3;
 			}
-			if (Type == "Attack" && SubType == "Standard")
-			{
-				m_skillRow = 0;
-			}
-			return -1;
+            else if (Type == "Attack" && SubType == "Standard")
+            {
+                m_skillRow = 0;
+            }
+            else
+            {
+                m_skillRow = -1;
+            }
 		}
 		
 
@@ -424,7 +427,7 @@ namespace Gladius
                 }
                 else if (line.StartsWith("SKILLPREREQ:"))
                 {
-                	PreRequisite = lineTokens[1];
+                	currentSkill.PreRequisite = lineTokens[1];
                 }
                 else if (line.StartsWith("SKILLEFFECTRANGE:"))
                 {
@@ -608,7 +611,7 @@ namespace Gladius
     	
     	public bool ImmuneTo(String immunType)
     	{
-    		return IsImmunityStatus() && m_skillStatusCondition.Contains(immunType);
+    		return IsImmunityStatus() && skillStatusCondition.Contains(immunType);
     	}
     	
 

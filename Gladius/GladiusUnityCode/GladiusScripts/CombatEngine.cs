@@ -67,12 +67,12 @@ namespace Gladius.combat
 		public bool ImmuneToSkill(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
 		{
 			DamageType dt = attackSkill.DamageType;
-			List<AttackSkill> activeSkills = defender.ActiveSkills;	
+			List<AttackSkill> activeSkills = defender.m_activeSkills;	
 			
 			
 			
-			List<AttackSkill> passiveSkills = defender.PassiveSkills;	
-		
+			List<AttackSkill> passiveSkills = defender.m_innateSkills;
+            return false;
 		
 		}
 
