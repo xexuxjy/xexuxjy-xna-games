@@ -270,6 +270,22 @@ namespace Gladius
         SourceCone
     }
 
+	public enum StatusCondition
+	{
+		All,
+		Bleeding,
+		Blind,
+		Charmed,
+		Confused,
+		Doom,
+		Feared,
+		Frozen,
+		Petrified,
+		Root,
+		Stunned,
+	}
+
+
     public static class EnumUtil
     {
         public static IEnumerable<T> GetValues<T>()

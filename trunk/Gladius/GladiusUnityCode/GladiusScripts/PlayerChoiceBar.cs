@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Gladius.arena;
 using Gladius;
@@ -158,7 +158,10 @@ public class PlayerChoiceBar : MonoBehaviour
 
         foreach (AttackSkill attackSkill in CurrentActor.AttackSkills)
         {
-            m_attackSkills[attackSkill.SkillRow].Add(attackSkill);
+        	if(attackSkill.SkillRow >= 0 && attackSkill.SkillRow < m_attackSkills.Length)
+        	{
+            	m_attackSkills[attackSkill.SkillRow].Add(attackSkill);
+            }
         }
 
         for (int i = 0; i < numSkillSlots; ++i)

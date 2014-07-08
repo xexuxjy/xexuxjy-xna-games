@@ -46,7 +46,7 @@ namespace Gladius.combat
 
 
 			float damageTypeMultiplier = 1f;
-			if(defender.ImmuneToDamageType(attackSkill.DamageType))
+			if(ImmuneToSkill(attacker,defender,attackSkill))
 			{
 				damageTypeMultiplier = 0f;
 			}
@@ -60,6 +60,22 @@ namespace Gladius.combat
             return totalDamage;
 
         }
+
+		
+
+
+		public bool ImmuneToSkill(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+		{
+			DamageType dt = attackSkill.DamageType;
+			List<AttackSkill> activeSkills = defender.ActiveSkills;	
+			
+			
+			
+			List<AttackSkill> passiveSkills = defender.PassiveSkills;	
+		
+		
+		}
+
 
         public void ResolveAttack(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
         {
@@ -97,9 +113,6 @@ namespace Gladius.combat
             }
 
 
-
-
-
             //attackResult.resultType = AttackResultType.Blocked;
 
             if (attackResult.resultType == AttackResultType.Blocked)
@@ -109,11 +122,20 @@ namespace Gladius.combat
             else
             {
                 defender.TakeDamage(attackResult);
+                CheckAndApplyConditions(attacker,defender,attackSkill);
             }
 
             DrawCombatResult(attackSkill, attackResult, attacker, defender);
 
         }
+
+		public void CheckAndApplyConditions(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+		{
+			
+		
+		
+		}
+
 
         private void DrawCombatResult(AttackSkill attackSkill, AttackResult attackResult, BaseActor attacker, BaseActor defender)
         {
