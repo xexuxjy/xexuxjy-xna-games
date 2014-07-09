@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Gladius
 {
-	public class Crowd
+    public class Crowd : MonoBehaviour
 	{
 
         public void Update()
