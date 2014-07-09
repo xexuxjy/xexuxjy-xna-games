@@ -25,12 +25,17 @@ public class PlayerChoiceBar : MonoBehaviour
         m_healthSlider = control.Find<dfProgressBar>("HealthProgress");
         m_affinitySlider = control.Find<dfProgressBar>("AffinityProgress");
         m_skillSprites = new dfSprite[]{control.Find<dfSprite>("SkillSlot1"),control.Find<dfSprite>("SkillSlot2"),control.Find<dfSprite>("SkillSlot3"),control.Find<dfSprite>("SkillSlot4"),control.Find<dfSprite>("SkillSlot5")};
+        m_skillNameLabel = control.Find<dfLabel>("SkillNameLabel");
+        m_skillTypeLabel = control.Find<dfLabel>("SkillTypeLabel");
+        m_actorNameLabel = control.Find<dfLabel>("ActorNameLabel");
         //TPackManager.load(atlasPath);
 
         AddIconState(SkillIcon.Move, SkillIconState.Available, "SkillMove");
         AddIconState(SkillIcon.Move, SkillIconState.Selected, "SkillMoveSelected");
+        AddIconState(SkillIcon.Move, SkillIconState.Unavailable, "SkillMoveUnavailable");
         AddIconState(SkillIcon.Attack, SkillIconState.Available, "SkillAttack");
         AddIconState(SkillIcon.Attack, SkillIconState.Selected, "SkillAttackSelected");
+        AddIconState(SkillIcon.Attack, SkillIconState.Unavailable, "SkillAttackUnavailable");
         AddIconState(SkillIcon.Combo, SkillIconState.Available, "SkillCombo");
         AddIconState(SkillIcon.Combo, SkillIconState.Selected, "SkillComboSelected");
         AddIconState(SkillIcon.Combo, SkillIconState.Unavailable, "SkillComboUnavailable");
@@ -79,7 +84,13 @@ public class PlayerChoiceBar : MonoBehaviour
         {
             m_healthSlider.Value = (m_healthSlider.Value + 1) % CurrentActor.MaxHealth;
         }
-        
+
+        if (CurrentActor != null && CurrentlySelectedSkill != null)
+        {
+            m_skillNameLabel.Text = CurrentlySelectedSkill.Name;
+            m_skillTypeLabel.Text = m_skillGroupNames[m_actionCursor.X];
+        }
+
     }
 
     public void DrawElement()
@@ -88,7 +99,7 @@ public class PlayerChoiceBar : MonoBehaviour
         //{
         //    if (CurrentActor != null)
         //    {
-        //        //TextureRegion shieldRegion = m_atlas.GetRegion("ShieldSkillBar.png");
+        //        //TextureRegion shieldRegion = m_atlas.GetRegion("ShieldSkillBar");
         //        Rect barRect = GladiusGlobals.AddRect(Rect,ShieldBarRect);
         //        //Debug.Log("GUI Draw");
                 
@@ -103,12 +114,12 @@ public class PlayerChoiceBar : MonoBehaviour
         //        GUI.Label(new Rect(textPos.x, textPos.y, textDims.x, textDims.y), CurrentActor.Name);
 
 
-        //        //DrawSkillBar1("ShieldSkillBar.png", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
-        //        DrawSkillBar1("ShieldBar.png", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
+        //        //DrawSkillBar1("ShieldSkillBar", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
+        //        DrawSkillBar1("ShieldBar", barRect, CurrentActor.ArmourAffinityType, CurrentActor.Health, CurrentActor.MaxHealth, CurrentActor.Affinity, CurrentActor.MaxAffinity);
 
         //        barRect = GladiusGlobals.AddRect(Rect,SwordBarRect);
-        //        //DrawSkillBar1("SwordSkillBar.png", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
-        //        DrawSkillBar1("AttackBar.png", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
+        //        //DrawSkillBar1("SwordSkillBar", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
+        //        DrawSkillBar1("AttackBar", barRect, CurrentActor.WeaponAffinityType, CurrentActor.ArenaSkillPoints, CurrentActor.MaxArenaSkillPoints, 1, 1);
         //        barRect = GladiusGlobals.AddRect(Rect, SkillBarRect);
 
         //        DrawSkillBar2(barRect, m_currentAttackSkillLine, null, null);
@@ -180,16 +191,27 @@ public class PlayerChoiceBar : MonoBehaviour
 
         for (int i = 0; i < numSkillSlots; ++i)
         {
-            if (m_attackSkills[i].Count > 0)
+            if (m_attackSkills[i].Count == 0)
             {
-                m_currentAttackSkillLine.Add(m_attackSkills[i][0]);
+                m_attackSkills[i].Add(GladiusGlobals.AttackSkillDictionary.Data["None"]);
             }
+            m_currentAttackSkillLine.Add(m_attackSkills[i][0]);
         }
+
+
         m_actionCursor = new Point();
 
 
         m_healthSlider.MaxValue = CurrentActor.MaxHealth;
         InitialiseSkillSlots();
+
+        m_actorNameLabel.Text = CurrentActor.Name;
+        int useCost = CurrentlySelectedSkill.UseCost - 1;
+        if(useCost >= 0 && useCost < m_skillCostImageNames.Length)
+        {
+            m_skillCostSprite.SpriteName = m_skillCostImageNames[useCost];
+        }
+        
     }
 
 
@@ -272,17 +294,23 @@ public class PlayerChoiceBar : MonoBehaviour
     private void UpdateSkillCursor(Point delta)
     {
         // update previous
+        int currentX = m_actionCursor.X;
+
         SkillIconState iconState = SkillIconState.Available;
         AttackSkill skill = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
+        
         if (!skill.Available(CurrentActor))
         {
             iconState = SkillIconState.Unavailable;
         }
+        
         UpdateSkillIcon(m_actionCursor.X,iconState);
 
         m_actionCursor = GladiusGlobals.Add(m_actionCursor, delta);
 
         m_actionCursor.X = (m_actionCursor.X + m_attackSkills.Count) % m_attackSkills.Count;
+
+        int newX = m_actionCursor.X;
 
         if (delta.X != 0)
         {
@@ -292,13 +320,11 @@ public class PlayerChoiceBar : MonoBehaviour
         m_currentAttackSkillLine[m_actionCursor.X] = m_attackSkills[m_actionCursor.X][m_actionCursor.Y];
         CurrentActor.CurrentAttackSkill = CurrentlySelectedSkill;
 
-        iconState = SkillIconState.Selected ;
+        iconState = SkillIconState.Selected;
         if (!skill.Available(CurrentActor))
         {
-            iconState = SkillIconState.Unavailable;
+            //iconState = SkillIconState.Unavailable;
         }
-
-
 
         UpdateSkillIcon(m_actionCursor.X,iconState);
     }
@@ -398,7 +424,7 @@ public class PlayerChoiceBar : MonoBehaviour
     //        DrawSkillIcon(i,skill.SkillIcon, iconState);
     //    }
 
-    //    TPackManager.draw(rect, atlasPath, "SkillbarPart2.png");
+    //    TPackManager.draw(rect, atlasPath, "SkillbarPart2");
         
         
     //    Vector2 pos = new Vector2(rect.x, rect.y);
@@ -435,11 +461,6 @@ public class PlayerChoiceBar : MonoBehaviour
 
 
     //}
-
-    private GUIContent[] m_skillGroupNames = new GUIContent[] { new GUIContent("Move"), new GUIContent("Attack"), new GUIContent("Combo"), new GUIContent("Special"), new GUIContent("Affinity") };
-
-    private String[] m_skillCostImageNames = new String[]{"SkillDiamonds1.png","SkillDiamonds2.png","SkillDiamonds3.png","SkillDiamonds4.png"};
-
 
 
 
@@ -611,19 +632,10 @@ public class PlayerChoiceBar : MonoBehaviour
 
     private void InitialiseSkillSlots()
     {
-        //for (int i = 0; i < m_currentAttackSkillLine.Count; ++i)
-        //{
-        //    SkillIconState state = m_currentAttackSkillLine[i].Available(CurrentActor) ? SkillIconState.Available : SkillIconState.Unavailable;
-        //    UpdateSkillIcon(i, state);
-
-        //}
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < m_skillGroupNames.Length; ++i)
         {
-            UpdateSkillIcon(i, SkillIconState.Available);
+            UpdateSkillIcon(i, m_currentAttackSkillLine[i].Available(CurrentActor)?SkillIconState.Available:SkillIconState.Unavailable);
         }
-    
-
-
     }
 
 
@@ -731,7 +743,18 @@ public class PlayerChoiceBar : MonoBehaviour
     //dfSprite m_sprite;
     dfAtlas m_textureAtlas;
     dfSprite[] m_skillSprites;
+    dfSprite m_skillCostSprite;
 
+    dfLabel m_skillNameLabel;
+    dfLabel m_skillTypeLabel;
+    dfLabel m_actorNameLabel;
+
+    private String[] m_skillGroupNames = new String[] { "Move", "Attack", "Combo", "Special", "Affinity" };
+
+    private String[] m_skillCostImageNames = new String[] { "SkillDiamonds1", "SkillDiamonds2", "SkillDiamonds3", "SkillDiamonds4" };
+
+
+    
     private Dictionary<IconAndState, String> m_iconStateRegionDictionary = new Dictionary<IconAndState, String>();
 
     List<List<AttackSkill>> m_attackSkills;

@@ -135,6 +135,11 @@ namespace Gladius
 
         public bool Available(BaseActor actor)
         {
+            if (Name == "None")
+            {
+                return false;
+            }
+
             // need to make sure actor has enough skillpoints or affinity points to use this.
             if (UseCost <= actor.ArenaSkillPoints)
             {
@@ -162,6 +167,14 @@ namespace Gladius
 		public void Initialise()
 		{
 			SetupSkillRow();
+            if (m_skillStatus1 != null)
+            {
+                m_skillStatus1.Initialise();
+            }
+            if (m_skillStatus2 != null)
+            {
+                m_skillStatus2.Initialise();
+            }
 		}
 		
 		private void SetupSkillRow()
@@ -172,11 +185,11 @@ namespace Gladius
 			}
             else if (m_skillAttributes.Contains("affinity"))
 			{
-				m_skillRow = 2;
+				m_skillRow = 3;
 			}
 			else if(SubType == "Support")
 			{
-				m_skillRow = 3;
+				m_skillRow = 4;
 			}
             else if (Type == "Attack" && SubType == "Standard")
             {
@@ -206,7 +219,7 @@ namespace Gladius
 
         public int UseCost
         {
-            get{return 0;}
+            get { return (int)SkillCosts2/10; }
         }
 
         public float DamageMultiplier
@@ -322,6 +335,9 @@ namespace Gladius
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/SkillData");
             String data = textAsset.text;
             Parse(data);
+            AttackSkill noneSkill = new AttackSkill();
+            noneSkill.Name = "None";
+            Data[noneSkill.Name] = noneSkill;
         }
 
         HashSet<String> skillTypeSet = new HashSet<String>();
@@ -390,7 +406,7 @@ namespace Gladius
                 }
                 else if (line.StartsWith("SKILLATTRIBUTE:"))
                 {
-                    currentSkill.AddTargetCondition(lineTokens[1]);
+                    currentSkill.AddAttribute(lineTokens[1]);
                 }
                 else if (line.StartsWith("SKILLCOMBATMODS:"))
                 {
