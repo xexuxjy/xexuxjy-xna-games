@@ -22,8 +22,9 @@ public class PlayerChoiceBar : MonoBehaviour
 
         var control = gameObject.GetComponent<dfControl>();
         m_textureAtlas = control.GetManager().DefaultAtlas;
-        m_healthSlider = control.Find<dfProgressBar>("HealthProgress");
-        m_affinitySlider = control.Find<dfProgressBar>("AffinityProgress");
+        m_healthProgressBar = control.Find<dfProgressBar>("HealthProgress");
+        m_affinityProgressBar = control.Find<dfProgressBar>("AffinityProgress");
+        m_skillPointProgressBar = control.Find<dfProgressBar>("SkillPointProgress");
         m_skillSprites = new dfSprite[]{control.Find<dfSprite>("SkillSlot1"),control.Find<dfSprite>("SkillSlot2"),control.Find<dfSprite>("SkillSlot3"),control.Find<dfSprite>("SkillSlot4"),control.Find<dfSprite>("SkillSlot5")};
         m_skillNameLabel = control.Find<dfLabel>("SkillNameLabel");
         m_skillTypeLabel = control.Find<dfLabel>("SkillTypeLabel");
@@ -82,7 +83,7 @@ public class PlayerChoiceBar : MonoBehaviour
         //m_healthSlider.Value = CurrentActor.Health;
         if (CurrentActor != null)
         {
-            m_healthSlider.Value = (m_healthSlider.Value + 1) % CurrentActor.MaxHealth;
+            m_healthProgressBar.Value = (m_healthProgressBar.Value + 1) % CurrentActor.MaxHealth;
         }
 
         if (CurrentActor != null && CurrentlySelectedSkill != null)
@@ -202,15 +203,13 @@ public class PlayerChoiceBar : MonoBehaviour
         m_actionCursor = new Point();
 
 
-        m_healthSlider.MaxValue = CurrentActor.MaxHealth;
+        m_healthProgressBar.MaxValue = CurrentActor.MaxHealth;
         InitialiseSkillSlots();
 
         m_actorNameLabel.Text = CurrentActor.Name;
         int useCost = CurrentlySelectedSkill.UseCost - 1;
-        if(useCost >= 0 && useCost < m_skillCostImageNames.Length)
-        {
-            m_skillCostSprite.SpriteName = m_skillCostImageNames[useCost];
-        }
+
+        m_skillPointProgressBar.Value = useCost;
         
     }
 
@@ -733,8 +732,10 @@ public class PlayerChoiceBar : MonoBehaviour
 
     String atlasPath = "GladiusUI/Arena/ArenaUIAtlas";
 
-    dfProgressBar m_healthSlider;
-    dfProgressBar m_affinitySlider;
+    dfProgressBar m_healthProgressBar;
+    dfProgressBar m_affinityProgressBar;
+    dfProgressBar m_skillPointProgressBar;
+
     //dfSprite m_skill1;
     //dfSprite m_skill2;
     //dfSprite m_skill3;
@@ -751,7 +752,7 @@ public class PlayerChoiceBar : MonoBehaviour
 
     private String[] m_skillGroupNames = new String[] { "Move", "Attack", "Combo", "Special", "Affinity" };
 
-    private String[] m_skillCostImageNames = new String[] { "SkillDiamonds1", "SkillDiamonds2", "SkillDiamonds3", "SkillDiamonds4" };
+    //private String[] m_skillCostImageNames = new String[] { "SkillDiamonds1", "SkillDiamonds2", "SkillDiamonds3", "SkillDiamonds4" };
 
 
     
