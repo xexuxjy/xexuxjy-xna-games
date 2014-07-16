@@ -92,16 +92,44 @@ namespace ModelNamer
 
         }
 
+        public void Validate()
+        {
+            foreach (DisplayListHeader header in m_displayListHeaders)
+            {
+                if (header.primitiveFlags == 0x90)
+                {
+                    for (int i = 0; i < header.entries.Count; ++i)
+                    {
+                        if (header.entries[i].PosIndex >= m_points.Count)
+                        {
+                            Valid = false;
+                            break;
+                        }
+                        if (header.entries[i].NormIndex >= m_normals.Count)
+                        {
+                            Valid = false;
+                            break;
+                        }
+                        
+                    }
+                }
+            }
+
+
+        }
+
         public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
         public String m_name;
         public List<Vector3> m_points = new List<Vector3>();
         public List<Vector3> m_normals = new List<Vector3>();
         public List<Vector2> m_uvs = new List<Vector2>();
+        public List<String> m_textures = new List<String>();
 
         public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
         public Vector3 MinBB;
         public Vector3 MaxBB;
         public Vector3 Center;
+        public bool Valid =true;
     }
 
     public class GCModelReader
@@ -151,10 +179,46 @@ namespace ModelNamer
                     try
                     {
                         FileInfo sourceFile = new FileInfo(file);
+                        if (sourceFile.Name != "File 000489")
+                        {
+                            continue;
+                        }
+
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                         {
                             GCModel model = new GCModel(sourceFile.Name);
                             m_models.Add(model);
+                            if (Common.FindCharsInStream(binReader, txtrTag))
+                            {
+                                int dslsSectionLength = binReader.ReadInt32();
+                                int uk2a = binReader.ReadInt32();
+                                int numTextures = binReader.ReadInt32();
+                                int textureSlotSize = 0x98;
+
+                                for (int i = 0; i < numTextures; ++i)
+                                {
+                                    StringBuilder sb = new StringBuilder();
+                                    bool valid = true;
+                                    for (int j = 0; j < textureSlotSize; ++j)
+                                    {
+                                        char b = binReader.ReadChar();
+                                        if (valid && b != 0x00)
+                                        {
+                                            sb.Append(b);
+                                        }
+                                        else
+                                        {
+                                            valid = false;
+                                        }
+                                    }
+                                    model.m_textures.Add(sb.ToString());
+                                }
+                                if (model.m_textures.Count > 1)
+                                {
+                                    int ibreak = 0;
+                                }
+                            }
+
                             if (Common.FindCharsInStream(binReader, dslsTag))
                             {
                                 int dslsSectionLength = binReader.ReadInt32();
@@ -170,45 +234,58 @@ namespace ModelNamer
                                         model.m_displayListHeaders.Add(header);
                                     }
                                 }
+                            }
+                            if (Common.FindCharsInStream(binReader, cntrTag, true))
+                            {
+                                int unk1 = binReader.ReadInt32();
+                                int unk2 = binReader.ReadInt32();
+                                int unk3 = binReader.ReadInt32();
 
-                                if (Common.FindCharsInStream(binReader, cntrTag, true))
+                                model.Center = Common.FromStreamVector3BE(binReader);
+                                int ibreak = 0;
+                            }
+                            if (Common.FindCharsInStream(binReader, posiTag))
+                            {
+                                int posSectionLength = binReader.ReadInt32();
+                                int uk2 = binReader.ReadInt32();
+                                int numPoints = binReader.ReadInt32();
+                                for (int i = 0; i < numPoints; ++i)
                                 {
-                                    int unk1 = binReader.ReadInt32();
-                                    int unk2 = binReader.ReadInt32();
-                                    int unk3 = binReader.ReadInt32();
-
-                                    model.Center = Common.FromStreamVector3BE(binReader);
-                                    int ibreak = 0;
+                                    model.m_points.Add(Common.FromStreamVector3BE(binReader));
                                 }
-                                if (Common.FindCharsInStream(binReader, posiTag))
+                            }
+
+                            if (Common.FindCharsInStream(binReader, normTag))
+                            {
+                                int normSectionLength = binReader.ReadInt32();
+                                int uk4 = binReader.ReadInt32();
+                                int numNormals = binReader.ReadInt32();
+
+                                for (int i = 0; i < numNormals; ++i)
                                 {
-                                    int posSectionLength = binReader.ReadInt32();
-                                    int uk2 = binReader.ReadInt32();
-                                    int numPoints = binReader.ReadInt32();
-                                    for (int i = 0; i < numPoints; ++i)
-                                    {
-                                        model.m_points.Add(Common.FromStreamVector3BE(binReader));
-                                    }
+                                    model.m_normals.Add(Common.FromStreamVector3BE(binReader));
+                                }
 
-                                    if (Common.FindCharsInStream(binReader, normTag))
-                                    {
-                                        int normSectionLength = binReader.ReadInt32();
-                                        int uk4 = binReader.ReadInt32();
-                                        int numNormals = binReader.ReadInt32();
-                                        if (numNormals != numPoints)
-                                        {
-                                            int ibreak = 0;
-                                        }
 
-                                        for (int i = 0; i < numNormals; ++i)
-                                        {
-                                            model.m_normals.Add(Common.FromStreamVector3BE(binReader));
-                                        }
-                                    }
-                                    model.BuildBB();
+                            }
+
+                            if (Common.FindCharsInStream(binReader, uv0Tag))
+                            {
+                                int normSectionLength = binReader.ReadInt32();
+                                int uk4 = binReader.ReadInt32();
+                                int numUVs = binReader.ReadInt32();
+
+                                for (int i = 0; i < numUVs; ++i)
+                                {
+                                    model.m_uvs.Add(Common.FromStreamVector2BE(binReader));
                                 }
 
                             }
+
+                            model.BuildBB();
+                            model.Validate();
+
+
                         }
                     }
                     catch (Exception e)

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK;
+//using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Diagnostics;
 using OpenTK.Input;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 //using OpenTK.Platform;
 
 namespace ModelNamer
@@ -26,7 +29,7 @@ namespace ModelNamer
         private Vector3 up = Vector3.UnitY;
         private float pitch = 0.0f;
         private float facing = 0.0f;
-
+        public String textureBasePath = @"D:\gladius-extracted\test-extract\";
 
 
         public PointViewer()
@@ -34,8 +37,8 @@ namespace ModelNamer
         {
             this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
-            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
-            m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-models", @"C:\tmp\unpacking\gc-models\model-results", 100);
+            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
+            //m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-models", @"C:\tmp\unpacking\gc-models\model-results", 100);
 
             ChangeModelNext();
 
@@ -66,6 +69,8 @@ namespace ModelNamer
             System.Windows.Forms.Cursor.Position = new Point(Bounds.Left + Bounds.Width / 2, Bounds.Top + Bounds.Height / 2);
 
             Mouse.Move += new EventHandler<MouseMoveEventArgs>(OnMouseMove);
+
+            m_textPrinter = new OpenTK.Graphics.TextPrinter();
         }
 
         void OnMouseMove(object sender, MouseMoveEventArgs e)
@@ -215,8 +220,9 @@ namespace ModelNamer
 
             this.Title = "Name: " + model.m_name + "  Loc: " + string.Format("{0:F}.{1:F}.{2:f}", location.X, location.Y, location.Z);
 
+            GL.Enable(EnableCap.Texture2D);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
+            
             GL.PointSize(5f);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -236,20 +242,41 @@ namespace ModelNamer
 
 
             //GL.Begin(PrimitiveType.Points);
-            foreach (DisplayListHeader header in model.m_displayListHeaders)
+
+            m_textPrinter.Begin();
+            m_textPrinter.Print(m_debugLine, font, Color.White);
+            m_textPrinter.End();
+
+            if (model.Valid)
             {
-                if (header.primitiveFlags == 0x90)
+
+                foreach (DisplayListHeader header in model.m_displayListHeaders)
                 {
-                    GL.Begin(PrimitiveType.Triangles);
-                    GL.Color3(System.Drawing.Color.ForestGreen);
-                    for (int i = 0; i < header.entries.Count; ++i)
+                    if (header.primitiveFlags == 0x90)
                     {
-                        GL.Vertex3(model.m_points[header.entries[i].PosIndex]);
+                        int textureIndex = 1;
+                        if(m_textureDictionary.ContainsKey(model.m_textures[textureIndex]))
+                        {
+                            GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[model.m_textures[textureIndex]]);
+                        }
+                        else
+                        {
+                            GL.Color3(System.Drawing.Color.ForestGreen);
+                        }
+
+                        GL.Begin(PrimitiveType.Triangles);
+                        
+                        for (int i = 0; i < header.entries.Count; ++i)
+                        {
+                            GL.TexCoord2(model.m_uvs[header.entries[i].UVIndex]);
+                            GL.Vertex3(model.m_points[header.entries[i].PosIndex]);
+                            GL.Normal3(model.m_normals[header.entries[i].NormIndex]);
+                        }
+                        GL.End();
                     }
                 }
             }
 
-            
             //GL.Begin(PrimitiveType.Quads);
 
             //GL.Vertex3(1.0f, -1.0f, -1.0f);
@@ -263,7 +290,7 @@ namespace ModelNamer
             //    GL.Vertex3(m_points[i]);
             //}
 
-            GL.End();
+
             SwapBuffers();
         }
 
@@ -297,14 +324,30 @@ namespace ModelNamer
             Vector3 mid = new Vector3(m_modelReader.m_models[m_currentModel].MaxBB = m_modelReader.m_models[m_currentModel].MinBB) / 2f;
 
             location = m_modelReader.m_models[m_currentModel].Center;
-            
+
             location = mid - (Vector3.UnitX * 2f);
 
-            
+
 
             facing = 0;
             pitch = 0;
 
+            GCModel currentModel = m_modelReader.m_models[m_currentModel];
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Textures : ");
+            foreach (string textureName in currentModel.m_textures)
+            {
+                if (!m_textureDictionary.ContainsKey(textureName))
+                {
+                    int key;
+                    if (LoadTexture(textureName, out key))
+                    {
+                        m_textureDictionary[textureName] = key;
+                    }
+                }
+                sb.AppendLine(textureName);
+            }
+            m_debugLine = sb.ToString();
         }
 
         public void ChangeModelPrev()
@@ -320,9 +363,63 @@ namespace ModelNamer
             }
 
         }
+ 
+        public bool LoadTexture(string filename,out int textureHandle)
+        {
+            String textureFileName = textureBasePath + filename + ".png";
+
+            try
+            {
+                FileInfo fileInfo = new FileInfo(textureFileName);
+                if (fileInfo.Exists)
+                {
+                    Bitmap bmp = new Bitmap(textureFileName);
+
+                    int id = GL.GenTexture();
+                    GL.BindTexture(TextureTarget.Texture2D, id);
+
+                    BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
+                        OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
+
+                    bmp.UnlockBits(bmp_data);
+
+                    // We haven't uploaded mipmaps, so disable mipmapping (otherwise the texture will not appear).
+                    // On newer video cards, we can use GL.GenerateMipmaps() or GL.Ext.GenerateMipmaps() to create
+                    // mipmaps automatically. In that case, use TextureMinFilter.LinearMipmapLinear to enable them.
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+                    textureHandle = id;
+                    return true;
+                }
+            }
+            catch (FileNotFoundException fnfe)
+            {
+            }
+            textureHandle = -1;
+            return false;
+        }
+
 
         int m_currentModel = 0;
         GCModelReader m_modelReader;
+        OpenTK.Graphics.TextPrinter m_textPrinter;
+        String m_debugLine;
+
+        private readonly Font font = new Font("Verdana", 10);
+
+        public Dictionary<String, int> m_textureDictionary = new Dictionary<String, int>();
+
+
         List<Vector3> m_points = new List<Vector3>();
     }
+
+
+    
+
+
+
 }
+
