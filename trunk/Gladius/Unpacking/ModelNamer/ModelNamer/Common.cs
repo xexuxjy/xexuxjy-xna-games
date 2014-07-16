@@ -81,6 +81,19 @@ namespace ModelNamer
             return (buf[i] << 24) | (buf[i + 1] << 16) | (buf[i + 2] << 8) | buf[i + 3];
         }
 
+        public static short ToInt16BigEndian(BinaryReader reader)
+        {
+            byte b1 = reader.ReadByte();
+            byte b2 = reader.ReadByte();
+            return (short)(b1 << 8 | b2);
+        }
+
+        public static int ToInt16BigEndian(byte[] buf, int i)
+        {
+            return (short)(buf[i] << 8 | buf[i+1]);
+        }
+
+
         public static Vector3 FromStreamInt32(BinaryReader reader)
         {
             Vector3 v = new Vector3();
