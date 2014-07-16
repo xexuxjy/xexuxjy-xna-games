@@ -139,6 +139,17 @@ namespace ModelNamer
             return v;
         }
 
+        public static Vector2 FromStreamVector2BE(BinaryReader reader)
+        {
+            Vector2 v = new Vector2();
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.X = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
+            return v;
+        }
+
+
 
         public static void WriteFloat(StreamWriter sw, Vector3 v)
         {
