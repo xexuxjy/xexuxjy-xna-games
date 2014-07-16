@@ -255,11 +255,18 @@ namespace ModelNamer
                     if (header.primitiveFlags == 0x90)
                     {
                         int textureIndex = 1;
-                        if(m_textureDictionary.ContainsKey(model.m_textures[textureIndex]))
+                        bool foundTexture = false;
+                        for (int i = 0; i < model.m_textures.Count;++i)
                         {
-                            GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[model.m_textures[textureIndex]]);
+                            if (m_textureDictionary.ContainsKey(model.m_textures[i]))
+                            {
+                                GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[model.m_textures[i]]);
+                                GL.Color3(System.Drawing.Color.White);
+                                foundTexture = true;
+                                break;
+                            }
                         }
-                        else
+                        if(!foundTexture)
                         {
                             GL.Color3(System.Drawing.Color.ForestGreen);
                         }

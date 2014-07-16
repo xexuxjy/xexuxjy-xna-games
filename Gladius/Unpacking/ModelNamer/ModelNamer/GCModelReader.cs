@@ -181,7 +181,7 @@ namespace ModelNamer
                         FileInfo sourceFile = new FileInfo(file);
                         if (sourceFile.Name != "File 000489")
                         {
-                            continue;
+                            //continue;
                         }
 
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
