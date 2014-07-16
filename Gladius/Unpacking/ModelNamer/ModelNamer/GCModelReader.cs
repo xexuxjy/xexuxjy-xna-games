@@ -33,7 +33,7 @@ namespace ModelNamer
             header.primitiveFlags = reader.ReadByte();
             if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x98 || header.primitiveFlags == 0xA0 || header.primitiveFlags == 0x80)
             {
-                header.indexCount = reader.ReadInt16();
+                header.indexCount = Common.ToInt16BigEndian(reader);
                 success = true;
                 for (int i = 0; i < header.indexCount; ++i)
                 {
@@ -57,9 +57,9 @@ namespace ModelNamer
         public static DisplayListEntry FromStream(BinaryReader reader)
         {
             DisplayListEntry entry = new DisplayListEntry();
-            entry.PosIndex = reader.ReadInt16();
-            entry.NormIndex = reader.ReadInt16();
-            entry.UVIndex = reader.ReadInt16();
+            entry.PosIndex = Common.ToInt16BigEndian(reader);
+            entry.NormIndex = Common.ToInt16BigEndian(reader);
+            entry.UVIndex = Common.ToInt16BigEndian(reader);
 
             return entry;
         }
@@ -159,6 +159,7 @@ namespace ModelNamer
                             {
                                 int dslsSectionLength = binReader.ReadInt32();
                                 int uk2a = binReader.ReadInt32();
+                                int uk2b = binReader.ReadInt32();
 
 
                                 DisplayListHeader header = null;

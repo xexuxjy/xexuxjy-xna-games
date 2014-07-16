@@ -34,7 +34,9 @@ namespace ModelNamer
         {
             this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
-            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
+            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
+            m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-models", @"C:\tmp\unpacking\gc-models\model-results", 100);
+
             ChangeModelNext();
 
 
@@ -209,7 +211,9 @@ namespace ModelNamer
         {
             base.OnRenderFrame(e);
             //this.Title = VisibleParticleCount + " Points. FPS: " + string.Format("{0:F}", 1.0 / e.Time);
-            this.Title = "Name: " + m_modelReader.m_models[m_currentModel].m_name + "  Loc: " + string.Format("{0:F}.{1:F}.{2:f}", location.X, location.Y, location.Z);
+            GCModel model = m_modelReader.m_models[m_currentModel];
+
+            this.Title = "Name: " + model.m_name + "  Loc: " + string.Format("{0:F}.{1:F}.{2:f}", location.X, location.Y, location.Z);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -231,25 +235,33 @@ namespace ModelNamer
             //GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
 
 
-            GL.Begin(PrimitiveType.Points);
-            //GL.Begin(PrimitiveType.Lines);
+            //GL.Begin(PrimitiveType.Points);
+            foreach (DisplayListHeader header in model.m_displayListHeaders)
+            {
+                if (header.primitiveFlags == 0x90)
+                {
+                    GL.Begin(PrimitiveType.Triangles);
+                    GL.Color3(System.Drawing.Color.ForestGreen);
+                    for (int i = 0; i < header.entries.Count; ++i)
+                    {
+                        GL.Vertex3(model.m_points[header.entries[i].PosIndex]);
+                    }
+                }
+            }
 
-            //GL.Vertex3(0, 0, 0);
-            //GL.Vertex3(1, 1, 1);
-
+            
             //GL.Begin(PrimitiveType.Quads);
 
-            GL.Color3(System.Drawing.Color.ForestGreen);
             //GL.Vertex3(1.0f, -1.0f, -1.0f);
             //GL.Vertex3(1.0f, 1.0f, -1.0f);
             //GL.Vertex3(1.0f, 1.0f, 1.0f);
             //GL.Vertex3(1.0f, -1.0f, 1.0f);
 
 
-            for (int i = 0; i < m_points.Count; ++i)
-            {
-                GL.Vertex3(m_points[i]);
-            }
+            //for (int i = 0; i < m_points.Count; ++i)
+            //{
+            //    GL.Vertex3(m_points[i]);
+            //}
 
             GL.End();
             SwapBuffers();
