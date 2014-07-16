@@ -7,6 +7,65 @@ using OpenTK;
 
 namespace ModelNamer
 {
+    // Info taken from : http://smashboards.com/threads/melee-dat-format.292603/
+    // much appreciated.
+
+    //http://www.falloutsoftware.com/tutorials/gl/gl3.htm
+
+    //case 0xB8: // (GL_POINTS)
+    //case 0xA8: // (GL_LINES)
+    //case 0xB0: // (GL_LINE_STRIP)
+    //case 0x90: // (GL_TRIANGLES)
+    //case 0x98: // (GL_TRIANGLE_STRIP)
+    //case 0xA0: // (GL_TRIANGLE_FAN)
+    //case 0x80: // (GL_QUADS)
+    public class DisplayListHeader
+    {
+        public byte primitiveFlags;
+        public short indexCount;
+        public List<DisplayListEntry> entries = new List<DisplayListEntry>();
+
+        public static bool FromStream(BinaryReader reader, out DisplayListHeader header)
+        {
+            long currentPosition = reader.BaseStream.Position;
+            bool success = false;
+            header = new DisplayListHeader();
+            header.primitiveFlags = reader.ReadByte();
+            if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x98 || header.primitiveFlags == 0xA0 || header.primitiveFlags == 0x80)
+            {
+                header.indexCount = reader.ReadInt16();
+                success = true;
+                for (int i = 0; i < header.indexCount; ++i)
+                {
+                    header.entries.Add(DisplayListEntry.FromStream(reader));
+                }
+            }
+            else
+            {
+                reader.BaseStream.Position = currentPosition;
+            }
+            return success;
+        }
+    }
+
+    public struct DisplayListEntry
+    {
+        public short PosIndex;
+        public short NormIndex;
+        public short UVIndex;
+
+        public static DisplayListEntry FromStream(BinaryReader reader)
+        {
+            DisplayListEntry entry = new DisplayListEntry();
+            entry.PosIndex = reader.ReadInt16();
+            entry.NormIndex = reader.ReadInt16();
+            entry.UVIndex = reader.ReadInt16();
+
+            return entry;
+        }
+    }
+
+
 
     public class GCModel
     {
@@ -37,6 +96,9 @@ namespace ModelNamer
         public String m_name;
         public List<Vector3> m_points = new List<Vector3>();
         public List<Vector3> m_normals = new List<Vector3>();
+        public List<Vector2> m_uvs = new List<Vector2>();
+
+        public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
         public Vector3 MinBB;
         public Vector3 MaxBB;
         public Vector3 Center;
@@ -51,7 +113,7 @@ namespace ModelNamer
         static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
         static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
         //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
-        static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };
+        static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };  // DisplayList information
         static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };
         static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };
         static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
@@ -93,44 +155,59 @@ namespace ModelNamer
                         {
                             GCModel model = new GCModel(sourceFile.Name);
                             m_models.Add(model);
-
-                            if (Common.FindCharsInStream(binReader, cntrTag,true))
+                            if (Common.FindCharsInStream(binReader, dslsTag))
                             {
-                                int unk1 = binReader.ReadInt32();
-                                int unk2 = binReader.ReadInt32();
-                                int unk3 = binReader.ReadInt32();
+                                int dslsSectionLength = binReader.ReadInt32();
+                                int uk2a = binReader.ReadInt32();
 
-                                model.Center = Common.FromStreamVector3BE(binReader);
-                                int ibreak = 0;
-                            }
-                            if (Common.FindCharsInStream(binReader, posiTag))
-                            {
-                                int posSectionLength = binReader.ReadInt32();
-                                int uk2 = binReader.ReadInt32();
-                                int numPoints = binReader.ReadInt32();
-                                for (int i = 0; i < numPoints; ++i)
+
+                                DisplayListHeader header = null;
+                                while (DisplayListHeader.FromStream(binReader, out header))
                                 {
-                                    model.m_points.Add(Common.FromStreamVector3BE(binReader));
-                                }
-
-                                if (Common.FindCharsInStream(binReader, normTag))
-                                {
-                                    int normSectionLength = binReader.ReadInt32();
-                                    int uk4 = binReader.ReadInt32();
-                                    int numNormals = binReader.ReadInt32();
-                                    if (numNormals != numPoints)
+                                    if (header != null)
                                     {
-                                        int ibreak = 0;
-                                    }
-
-                                    for (int i = 0; i < numNormals; ++i)
-                                    {
-                                        model.m_normals.Add(Common.FromStreamVector3BE(binReader));
+                                        model.m_displayListHeaders.Add(header);
                                     }
                                 }
-                                model.BuildBB();
-                            }
 
+                                if (Common.FindCharsInStream(binReader, cntrTag, true))
+                                {
+                                    int unk1 = binReader.ReadInt32();
+                                    int unk2 = binReader.ReadInt32();
+                                    int unk3 = binReader.ReadInt32();
+
+                                    model.Center = Common.FromStreamVector3BE(binReader);
+                                    int ibreak = 0;
+                                }
+                                if (Common.FindCharsInStream(binReader, posiTag))
+                                {
+                                    int posSectionLength = binReader.ReadInt32();
+                                    int uk2 = binReader.ReadInt32();
+                                    int numPoints = binReader.ReadInt32();
+                                    for (int i = 0; i < numPoints; ++i)
+                                    {
+                                        model.m_points.Add(Common.FromStreamVector3BE(binReader));
+                                    }
+
+                                    if (Common.FindCharsInStream(binReader, normTag))
+                                    {
+                                        int normSectionLength = binReader.ReadInt32();
+                                        int uk4 = binReader.ReadInt32();
+                                        int numNormals = binReader.ReadInt32();
+                                        if (numNormals != numPoints)
+                                        {
+                                            int ibreak = 0;
+                                        }
+
+                                        for (int i = 0; i < numNormals; ++i)
+                                        {
+                                            model.m_normals.Add(Common.FromStreamVector3BE(binReader));
+                                        }
+                                    }
+                                    model.BuildBB();
+                                }
+
+                            }
                         }
                     }
                     catch (Exception e)
