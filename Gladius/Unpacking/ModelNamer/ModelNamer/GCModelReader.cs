@@ -33,6 +33,11 @@ namespace ModelNamer
             header.primitiveFlags = reader.ReadByte();
             if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x98 || header.primitiveFlags == 0xA0 || header.primitiveFlags == 0x80)
             {
+                if (header.primitiveFlags != 0x90 && header.primitiveFlags != 0x98)
+                {
+                    int ibreak = 0;
+                }
+
                 header.indexCount = Common.ToInt16BigEndian(reader);
                 success = true;
                 for (int i = 0; i < header.indexCount; ++i)
@@ -186,39 +191,19 @@ namespace ModelNamer
 
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                         {
-                            GCModel model = new GCModel(sourceFile.Name);
-                            m_models.Add(model);
-                            if (Common.FindCharsInStream(binReader, txtrTag))
+                            if (sourceFile.Name != "File 005496")
                             {
-                                int dslsSectionLength = binReader.ReadInt32();
-                                int uk2a = binReader.ReadInt32();
-                                int numTextures = binReader.ReadInt32();
-                                int textureSlotSize = 0x98;
+                                // 410, 1939
 
-                                for (int i = 0; i < numTextures; ++i)
-                                {
-                                    StringBuilder sb = new StringBuilder();
-                                    bool valid = true;
-                                    for (int j = 0; j < textureSlotSize; ++j)
-                                    {
-                                        char b = binReader.ReadChar();
-                                        if (valid && b != 0x00)
-                                        {
-                                            sb.Append(b);
-                                        }
-                                        else
-                                        {
-                                            valid = false;
-                                        }
-                                    }
-                                    model.m_textures.Add(sb.ToString());
-                                }
-                                if (model.m_textures.Count > 1)
-                                {
-                                    int ibreak = 0;
-                                }
+                                continue;
                             }
 
+
+                            GCModel model = new GCModel(sourceFile.Name);
+
+                            
+                            m_models.Add(model);
+                            Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
                             if (Common.FindCharsInStream(binReader, dslsTag))
                             {
                                 int dslsSectionLength = binReader.ReadInt32();

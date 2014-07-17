@@ -161,8 +161,35 @@ namespace ModelNamer
             sw.WriteLine(String.Format("{0} {1} {2}", v.X, v.Y, v.Z));
         }
 
+        public static void ReadTextureNames(BinaryReader binReader, char[] tagName,List<String> textureNames)
+        {
+            if (Common.FindCharsInStream(binReader, tagName))
+            {
+                int dslsSectionLength = binReader.ReadInt32();
+                int uk2a = binReader.ReadInt32();
+                int numTextures = binReader.ReadInt32();
+                int textureSlotSize = 0x98;
 
-
+                for (int i = 0; i < numTextures; ++i)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    bool valid = true;
+                    for (int j = 0; j < textureSlotSize; ++j)
+                    {
+                        char b = binReader.ReadChar();
+                        if (valid && b != 0x00)
+                        {
+                            sb.Append(b);
+                        }
+                        else
+                        {
+                            valid = false;
+                        }
+                    }
+                    textureNames.Add(sb.ToString());
+                }
+            }
+        }
     }
 
     public class R2V2
