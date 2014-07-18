@@ -6,11 +6,24 @@ using System.IO;
 
 namespace ModelNamer
 {
+    public class MTPair
+    {
+        public ModelTextures m_ps2;
+        public ModelTextures m_gc;
+        public MTPair(ModelTextures ps2, ModelTextures gc)
+        {
+            m_ps2 = ps2; m_gc = gc;
+        }
+    }
+
+
+
     public class PS2ToGCModelNamer
     {
         public List<ModelTextures> m_ps2List = new List<ModelTextures>();
         public List<ModelTextures> m_gcList = new List<ModelTextures>();
 
+        public List<MTPair> m_results = new List<MTPair>();
         static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
 
 
@@ -18,46 +31,100 @@ namespace ModelNamer
         {
             string ps2ModelPath = @"D:\gladius-extracted\ps2-decompressed\VERSModelFilesRenamed";
             string gcModelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models";
+            string gcModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
             string infoFile = @"D:\gladius-extracted-archive\gc-compressed\model-rename-info";
 
             ReadTexture(ps2ModelPath, infoFile, m_ps2List);
             ReadTexture(gcModelPath,infoFile,m_gcList);
 
+            
+
             using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
             {
-                infoStream.WriteLine("PS2 Files");
-                foreach (ModelTextures mt in m_ps2List)
+                if (true)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append(mt.modelName);
-                    sb.Append(" : ");
-                    foreach (string texturename in mt.m_textures)
-                    {
-                        sb.Append(texturename);
-                        sb.Append(" ");
-                    }
-                    infoStream.WriteLine(sb.ToString());
-                }
-                
-                infoStream.WriteLine();
-                infoStream.WriteLine();
-                infoStream.WriteLine();
 
-                infoStream.WriteLine("GC Files");
-                foreach (ModelTextures mt in m_gcList)
+                    foreach (ModelTextures ps2mt in m_ps2List)
+                    {
+                        foreach (ModelTextures gcmt in m_gcList)
+                        {
+                            if (ps2mt.m_textures.Count > 0 && gcmt.m_textures.Count > 0)
+                            {
+
+                                if (ps2mt.m_textures.SequenceEqual<String>(gcmt.m_textures))
+                                {
+                                    MTPair pair = new MTPair(ps2mt, gcmt);
+                                    m_results.Add(pair);
+                                    ps2mt.m_pairResults.Add(pair);
+                                }
+                            }
+                        }
+                    }
+
+
+                    foreach (ModelTextures ps2mt in m_ps2List)
+                    {
+                        if (ps2mt.m_pairResults.Count == 1)
+                        {
+                            FileInfo inFile = new FileInfo(gcModelPath+"\\"+ps2mt.m_pairResults[0].m_gc.modelName);
+                            FileInfo outFile = new FileInfo(gcModelOutputPath + "\\" + ps2mt.modelName);
+
+                            infoStream.WriteLine("Renaming "+inFile.FullName+" to "+outFile.FullName);
+                            File.Copy(inFile.FullName,outFile.FullName);
+
+                            //foreach (MTPair pair in ps2mt.m_pairResults)
+                            //{
+
+                            //    infoStream.WriteLine("PS2 : " + pair.m_ps2.modelName + "  GC : " + pair.m_gc.modelName);
+                            //    StringBuilder sb = new StringBuilder();
+                            //    foreach (string texturename in pair.m_ps2.m_textures)
+                            //    {
+                            //        sb.Append(texturename);
+                            //        sb.Append(" ");
+                            //    }
+                            //    infoStream.WriteLine(sb.ToString());
+                            //    infoStream.WriteLine();
+
+                            //}
+                        }
+                    }
+                }
+
+                if (false)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append(mt.modelName);
-                    sb.Append(" : ");
-                    foreach (string texturename in mt.m_textures)
+                    infoStream.WriteLine("PS2 Files");
+                    foreach (ModelTextures mt in m_ps2List)
                     {
-                        sb.Append(texturename);
-                        sb.Append(" ");
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append(mt.modelName);
+                        sb.Append(" : ");
+                        foreach (string texturename in mt.m_textures)
+                        {
+                            sb.Append(texturename);
+                            sb.Append(" ");
+                        }
+                        infoStream.WriteLine(sb.ToString());
                     }
-                    infoStream.WriteLine(sb.ToString());
+
+                    infoStream.WriteLine();
+                    infoStream.WriteLine();
+                    infoStream.WriteLine();
+
+                    infoStream.WriteLine("GC Files");
+                    foreach (ModelTextures mt in m_gcList)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append(mt.modelName);
+                        sb.Append(" : ");
+                        foreach (string texturename in mt.m_textures)
+                        {
+                            sb.Append(texturename);
+                            sb.Append(" ");
+                        }
+                        infoStream.WriteLine(sb.ToString());
+                    }
+
                 }
-
-
             }
         }
 
@@ -74,8 +141,9 @@ namespace ModelNamer
                     try
                     {
                         FileInfo sourceFile = new FileInfo(file);
-                        if (sourceFile.Name != "File 000489")
+                        if (sourceFile.Name != "wandering_soul_steppes.mdl")
                         {
+                            //int ibreak = 0;
                             //continue;
                         }
 
@@ -86,32 +154,7 @@ namespace ModelNamer
                             modelTextures.modelName = sourceFile.Name;
                             modelTextureList.Add(modelTextures);
 
-                            if (Common.FindCharsInStream(binReader, txtrTag))
-                            {
-                                int dslsSectionLength = binReader.ReadInt32();
-                                int uk2a = binReader.ReadInt32();
-                                int numTextures = binReader.ReadInt32();
-                                int textureSlotSize = 0x98;
-
-                                for (int i = 0; i < numTextures; ++i)
-                                {
-                                    StringBuilder sb = new StringBuilder();
-                                    bool valid = true;
-                                    for (int j = 0; j < textureSlotSize; ++j)
-                                    {
-                                        char b = binReader.ReadChar();
-                                        if (valid && b != 0x00)
-                                        {
-                                            sb.Append(b);
-                                        }
-                                        else
-                                        {
-                                            valid = false;
-                                        }
-                                    }
-                                    modelTextures.m_textures.Add(sb.ToString());
-                                }
-                            }
+                            Common.ReadTextureNames(binReader, txtrTag, modelTextures.m_textures);
                         }
                     }
                     catch (Exception e)
@@ -144,6 +187,8 @@ namespace ModelNamer
         public String modelName;
         public String newModelName;
         public List<String> m_textures = new List<String>();
+        public List<MTPair> m_pairResults = new List<MTPair>();
+
     }
 
 }

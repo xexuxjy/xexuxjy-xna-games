@@ -173,20 +173,17 @@ namespace ModelNamer
                 for (int i = 0; i < numTextures; ++i)
                 {
                     StringBuilder sb = new StringBuilder();
-                    bool valid = true;
-                    for (int j = 0; j < textureSlotSize; ++j)
+                    int count = 0;
+                    char b;
+                    while ((b = (char)binReader.ReadByte()) != 0x00)
                     {
-                        char b = binReader.ReadChar();
-                        if (valid && b != 0x00)
-                        {
-                            sb.Append(b);
-                        }
-                        else
-                        {
-                            valid = false;
-                        }
+                        count++;
+                        sb.Append(b);
                     }
+                    count++;
                     textureNames.Add(sb.ToString());
+                    binReader.BaseStream.Position += (textureSlotSize - count);
+
                 }
             }
         }

@@ -37,7 +37,8 @@ namespace ModelNamer
         {
             this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
-            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
+            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
+            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
             //m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-models", @"C:\tmp\unpacking\gc-models\model-results", 100);
 
             ChangeModelNext();
@@ -237,8 +238,8 @@ namespace ModelNamer
             //GL.MatrixMode(MatrixMode.Modelview);
             //GL.LoadMatrix(ref lookat);
 
-            //angle += rotation_speed * (float)e.Time;
-            //GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
+            angle += rotation_speed * (float)e.Time;
+            GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
 
 
             //GL.Begin(PrimitiveType.Points);
@@ -341,6 +342,7 @@ namespace ModelNamer
 
             GCModel currentModel = m_modelReader.m_models[m_currentModel];
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Model : " + currentModel.m_name);
             sb.AppendLine("Textures : ");
             foreach (string textureName in currentModel.m_textures)
             {
