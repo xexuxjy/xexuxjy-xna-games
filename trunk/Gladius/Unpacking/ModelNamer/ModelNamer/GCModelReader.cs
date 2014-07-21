@@ -66,6 +66,12 @@ namespace ModelNamer
             entry.NormIndex = Common.ToInt16BigEndian(reader);
             entry.UVIndex = Common.ToInt16BigEndian(reader);
 
+            if (entry.PosIndex < 0 || entry.NormIndex < 0 || entry.UVIndex < 0)
+            {
+                int ibreak = 0;
+            }
+
+
             return entry;
         }
     }
@@ -81,19 +87,25 @@ namespace ModelNamer
 
         public void BuildBB()
         {
-            MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
-            MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
+            Vector3 min = new Vector3(float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue);
+
+            //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
+            //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
 
             for (int i = 0; i < m_points.Count; ++i)
             {
-                if (m_points[i].X < MinBB.X) MinBB.X = m_points[i].X;
-                if (m_points[i].Y < MinBB.Y) MinBB.Y = m_points[i].Y;
-                if (m_points[i].Z < MinBB.Z) MinBB.Z = m_points[i].Z;
-                if (m_points[i].X > MaxBB.X) MaxBB.X = m_points[i].X;
-                if (m_points[i].Y > MaxBB.Y) MaxBB.Y = m_points[i].Y;
-                if (m_points[i].Z > MaxBB.Z) MaxBB.Z = m_points[i].Z;
+                if (m_points[i].X < min.X) min.X = m_points[i].X;
+                if (m_points[i].Y < min.Y) min.Y = m_points[i].Y;
+                if (m_points[i].Z < min.Z) min.Z = m_points[i].Z;
+                if (m_points[i].X > max.X) max.X = m_points[i].X;
+                if (m_points[i].Y > max.Y) max.Y = m_points[i].Y;
+                if (m_points[i].Z > max.Z) max.Z = m_points[i].Z;
 
             }
+
+            MinBB = min;
+            MaxBB = max;
 
         }
 
@@ -195,7 +207,7 @@ namespace ModelNamer
                             {
                                 // 410, 1939
 
-                                //continue;
+                                continue;
                             }
 
 
@@ -203,9 +215,12 @@ namespace ModelNamer
 
                             
                             m_models.Add(model);
+
+
                             Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
                             if (Common.FindCharsInStream(binReader, dslsTag))
                             {
+                                long dsllStartsAt = binReader.BaseStream.Position;
                                 int dslsSectionLength = binReader.ReadInt32();
                                 int uk2a = binReader.ReadInt32();
                                 int uk2b = binReader.ReadInt32();
@@ -219,6 +234,12 @@ namespace ModelNamer
                                         model.m_displayListHeaders.Add(header);
                                     }
                                 }
+
+                                long nowAt = binReader.BaseStream.Position;
+
+                                long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
+                                int ibreak = 0;
+
                             }
                             if (Common.FindCharsInStream(binReader, cntrTag, true))
                             {
@@ -321,7 +342,15 @@ namespace ModelNamer
                 {
                     try
                     {
+
                         FileInfo sourceFile = new FileInfo(file);
+
+                        if (sourceFile.Name != "File 005496")
+                        {
+                            continue;
+                        }
+
+
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                         {
                             GCModel model = new GCModel(sourceFile.Name);
@@ -340,6 +369,18 @@ namespace ModelNamer
                                     model.m_tagSizes[tag] = -1;
                                 }
                             }
+                            binReader.BaseStream.Position = 0;
+                            Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
+                            StringBuilder sb = new StringBuilder();
+                            sb.AppendLine("Textures : ");
+                            foreach (string textureName in model.m_textures)
+                            {
+                                sb.AppendLine(textureName);
+                            }
+                            infoStream.WriteLine(sb.ToString());
+
+
+
                         }
                     }
                     catch (Exception e)
@@ -358,9 +399,9 @@ namespace ModelNamer
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
             String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models\sectionInfo.txt";
             GCModelReader reader = new GCModelReader();
-            //reader.LoadModels(modelPath,infoFile);
+            reader.LoadModels(modelPath,infoFile);
             //reader.DumpPoints(infoFile);
-            reader.DumpSectionLengths(modelPath, sectionInfoFile);
+            //reader.DumpSectionLengths(modelPath, sectionInfoFile);
 
 
 

@@ -14,11 +14,21 @@ namespace ModelNamer
         static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
         static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' };
         static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
+        static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
+        static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
+        static char[] skelTag = new char[] { 'S', 'K', 'E', 'L' };
+
         static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };
         static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
+
+        // NAME and SKEL always exist together
+        // STYP can appear with them or without them, or not at all.
+
+
+
         //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
 
-        static char[][] allTags = { versTag, cprtTag, selsTag, txtrTag,xrndTag};
+        static char[][] allTags = { versTag, cprtTag, selsTag, txtrTag,stypTag,nameTag,skelTag,xrndTag};
 
 
         public void LoadModels(String sourceDirectory, String infoFile, int maxFiles = -1)
