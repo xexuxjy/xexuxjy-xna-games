@@ -38,8 +38,8 @@ namespace ModelNamer
             this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
             //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
-            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
-            //m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-models", @"C:\tmp\unpacking\gc-models\model-results", 100);
+            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
+            m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-probable-models\probable-models", @"C:\tmp\unpacking\gc-probable-models\model-results", 100);
 
             ChangeModelNext();
 
@@ -329,7 +329,7 @@ namespace ModelNamer
         public void ChangeModel()
         {
             m_points = m_modelReader.m_models[m_currentModel].m_points;
-            Vector3 mid = new Vector3(m_modelReader.m_models[m_currentModel].MaxBB = m_modelReader.m_models[m_currentModel].MinBB) / 2f;
+            Vector3 mid = new Vector3(m_modelReader.m_models[m_currentModel].MaxBB - m_modelReader.m_models[m_currentModel].MinBB) / 2f;
 
             location = m_modelReader.m_models[m_currentModel].Center;
 
@@ -343,6 +343,8 @@ namespace ModelNamer
             GCModel currentModel = m_modelReader.m_models[m_currentModel];
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
+            sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
+            sb.AppendLine(String.Format("DSL [{0}] V [{1}] N [{2}] T[{3}]", currentModel.m_points.Count, currentModel.m_normals.Count, currentModel.m_uvs.Count,currentModel.m_displayListHeaders[1].indexCount));
             sb.AppendLine("Textures : ");
             foreach (string textureName in currentModel.m_textures)
             {
