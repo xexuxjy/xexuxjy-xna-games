@@ -54,6 +54,7 @@ namespace ModelNamer
                                 if (ps2mt.m_textures.SequenceEqual<String>(gcmt.m_textures))
                                 {
                                     MTPair pair = new MTPair(ps2mt, gcmt);
+                                    gcmt.Found = true;
                                     m_results.Add(pair);
                                     ps2mt.m_pairResults.Add(pair);
                                 }
@@ -70,7 +71,7 @@ namespace ModelNamer
                             FileInfo outFile = new FileInfo(gcModelOutputPath + "\\" + ps2mt.modelName);
 
                             infoStream.WriteLine("Renaming "+inFile.FullName+" to "+outFile.FullName);
-                            File.Copy(inFile.FullName,outFile.FullName);
+                            File.Copy(inFile.FullName,outFile.FullName,true);
 
                             //foreach (MTPair pair in ps2mt.m_pairResults)
                             //{
@@ -89,6 +90,16 @@ namespace ModelNamer
                         }
                     }
                 }
+
+                infoStream.WriteLine("********************************* UNMATCHED GC FILES *********************************");
+                foreach (ModelTextures mt in m_gcList)
+                {
+                    if (!mt.Found)
+                    {
+                        infoStream.WriteLine(mt.modelName);
+                    }
+                }
+
 
                 if (false)
                 {
@@ -188,7 +199,7 @@ namespace ModelNamer
         public String newModelName;
         public List<String> m_textures = new List<String>();
         public List<MTPair> m_pairResults = new List<MTPair>();
-
+        public bool Found;
     }
 
 }

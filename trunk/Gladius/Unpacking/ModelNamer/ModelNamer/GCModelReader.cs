@@ -141,7 +141,8 @@ namespace ModelNamer
         public List<Vector3> m_normals = new List<Vector3>();
         public List<Vector2> m_uvs = new List<Vector2>();
         public List<String> m_textures = new List<String>();
-
+        public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
+        public List<Vector3> m_centers = new List<Vector3>();
         public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
         public Vector3 MinBB;
         public Vector3 MaxBB;
@@ -203,7 +204,7 @@ namespace ModelNamer
 
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                         {
-                            if (sourceFile.Name != "File 005496")
+                            if (sourceFile.Name != "templeExposed.mdl")
                             {
                                 // 410, 1939
 
@@ -250,6 +251,10 @@ namespace ModelNamer
                                 model.Center = Common.FromStreamVector3BE(binReader);
                                 int ibreak = 0;
                             }
+
+                            ReadDSLISection(binReader, model);
+
+
                             if (Common.FindCharsInStream(binReader, posiTag))
                             {
                                 int posSectionLength = binReader.ReadInt32();
@@ -347,7 +352,7 @@ namespace ModelNamer
 
                         if (sourceFile.Name != "File 005496")
                         {
-                            continue;
+                            //continue;
                         }
 
 
@@ -391,6 +396,24 @@ namespace ModelNamer
 
         }
 
+        public void ReadDSLISection(BinaryReader binReader,GCModel model)
+        {
+            if (Common.FindCharsInStream(binReader, dsliTag, true))
+            {
+                int blockSize = binReader.ReadInt32();
+                int numSections = (blockSize - 8) / 2;
+
+                for (int i = 0; i < numSections; ++i)
+                {
+                    DSLIInfo info = DSLIInfo.ReadStream(binReader);
+                    if (info.length > 0)
+                    {
+                        model.m_dsliInfos.Add(info);
+                    }
+                }
+            }
+        }
+
 
 
         static void Main(string[] args)
@@ -398,10 +421,13 @@ namespace ModelNamer
             String modelPath = @"C:\tmp\unpacking\gc-probable-models\probable-models";
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
             String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models\sectionInfo.txt";
+
+            modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
+            sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-sectionInfo.txt";
             GCModelReader reader = new GCModelReader();
-            reader.LoadModels(modelPath,infoFile);
+            //reader.LoadModels(modelPath,infoFile);
             //reader.DumpPoints(infoFile);
-            //reader.DumpSectionLengths(modelPath, sectionInfoFile);
+            reader.DumpSectionLengths(modelPath, sectionInfoFile);
 
 
 
@@ -409,5 +435,21 @@ namespace ModelNamer
 
 
     }
+        public class DSLIInfo
+        {
+            public int startPos;
+            public int length;
+
+            public static DSLIInfo ReadStream(BinaryReader reader)
+            {
+                DSLIInfo info = new DSLIInfo();
+
+                info.startPos= reader.ReadInt32();
+                info.length = reader.ReadInt32();
+                return info;
+            }
+
+        }
+
 
 }
