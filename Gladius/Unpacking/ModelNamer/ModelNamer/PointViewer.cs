@@ -50,6 +50,15 @@ namespace ModelNamer
                     this.ChangeModelPrev();
                 if (e.Key == Key.P)
                     this.ChangeModelNext();
+                if (e.Key == Key.K)
+                    this.ChangeTexturePrev();
+                if (e.Key == Key.L)
+                    this.ChangeTextureNext();
+                if (e.Key == Key.N)
+                    this.ChangeSubModelPrev();
+                if (e.Key == Key.M)
+                    this.ChangeSubModelNext();
+
             };
 
             Keyboard.KeyUp += delegate(object sender, KeyboardKeyEventArgs e)
@@ -77,6 +86,28 @@ namespace ModelNamer
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
             mouseDelta = new Vector2(e.XDelta, e.YDelta);
+        }
+
+
+        public void ChangeTextureNext()
+        {
+            if(m_currentModel.m_textures.Count > 1)
+            {
+                m_currentTextureIndex++;
+                m_currentTextureIndex %= m_currentModel.m_textures.Count;
+            }
+        }
+
+        public void ChangeTexturePrev()
+        {
+            if(m_currentModel.m_textures.Count > 1)
+            {
+                m_currentTextureIndex--;
+                if(m_currentTextureIndex < 0)
+                {
+                    m_currentTextureIndex += m_currentModel.m_textures.Count;
+                }
+            }
         }
 
 
@@ -217,9 +248,8 @@ namespace ModelNamer
         {
             base.OnRenderFrame(e);
             //this.Title = VisibleParticleCount + " Points. FPS: " + string.Format("{0:F}", 1.0 / e.Time);
-            GCModel model = m_modelReader.m_models[m_currentModel];
 
-            this.Title = "Name: " + model.m_name + "  Loc: " + string.Format("{0:F}.{1:F}.{2:f}", location.X, location.Y, location.Z);
+            this.Title = "Name: " + m_currentModel.m_name + "  Loc: " + string.Format("{0:F}.{1:F}.{2:f}", location.X, location.Y, location.Z);
 
             GL.Enable(EnableCap.Texture2D);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -245,43 +275,35 @@ namespace ModelNamer
             //GL.Begin(PrimitiveType.Points);
 
             m_textPrinter.Begin();
-            m_textPrinter.Print(m_debugLine, font, Color.White);
+
+            m_textPrinter.Print(BuildDebugString(), font, Color.White);
             m_textPrinter.End();
 
-            if (model.Valid)
+            foreach (DisplayListHeader header in m_currentModel.m_displayListHeaders)
             {
-
-                foreach (DisplayListHeader header in model.m_displayListHeaders)
+                if (header.primitiveFlags == 0x90 && header.Valid)
                 {
-                    if (header.primitiveFlags == 0x90)
+                    bool foundTexture = false;
+                    if (m_textureDictionary.ContainsKey(m_currentModel.m_textures[m_currentTextureIndex]))
                     {
-                        int textureIndex = 1;
-                        bool foundTexture = false;
-                        for (int i = 0; i < model.m_textures.Count;++i)
-                        {
-                            if (m_textureDictionary.ContainsKey(model.m_textures[i]))
-                            {
-                                GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[model.m_textures[i]]);
-                                GL.Color3(System.Drawing.Color.White);
-                                foundTexture = true;
-                                break;
-                            }
-                        }
-                        if(!foundTexture)
-                        {
-                            GL.Color3(System.Drawing.Color.ForestGreen);
-                        }
-
-                        GL.Begin(PrimitiveType.Triangles);
-                        
-                        for (int i = 0; i < header.entries.Count; ++i)
-                        {
-                            GL.TexCoord2(model.m_uvs[header.entries[i].UVIndex]);
-                            GL.Vertex3(model.m_points[header.entries[i].PosIndex]);
-                            GL.Normal3(model.m_normals[header.entries[i].NormIndex]);
-                        }
-                        GL.End();
+                        GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[m_currentModel.m_textures[m_currentTextureIndex]]);
+                        GL.Color3(System.Drawing.Color.White);
+                        foundTexture = true;
                     }
+                    if(!foundTexture)
+                    {
+                        GL.Color3(System.Drawing.Color.ForestGreen);
+                    }
+
+                    GL.Begin(PrimitiveType.Triangles);
+                        
+                    for (int i = 0; i < header.entries.Count; ++i)
+                    {
+                        GL.TexCoord2(m_currentModel.m_uvs[header.entries[i].UVIndex]);
+                        GL.Vertex3(m_currentModel.m_points[header.entries[i].PosIndex]);
+                        GL.Normal3(m_currentModel.m_normals[header.entries[i].NormIndex]);
+                    }
+                    GL.End();
                 }
             }
 
@@ -319,33 +341,102 @@ namespace ModelNamer
         {
             if (m_modelReader.m_models.Count > 0)
             {
-                m_currentModel++;
-                m_currentModel %= m_modelReader.m_models.Count;
+                m_currentModelIndex++;
+                m_currentModelIndex %= m_modelReader.m_models.Count;
                 ChangeModel();
 
             }
         }
 
+        public void ChangeModelPrev()
+        {
+            if (m_modelReader.m_models.Count > 0)
+            {
+                m_currentModelIndex--;
+                if (m_currentModelIndex < 0)
+                {
+                    m_currentModelIndex += m_modelReader.m_models.Count;
+                }
+                ChangeModel();
+            }
+
+        }
+
+
+        public void ChangeSubModelNext()
+        {
+            if (m_currentModel.m_displayListHeaders.Count > 1)
+            {
+                m_currentModelSubIndex++;
+                m_currentModelSubIndex %= m_currentModel.m_displayListHeaders.Count;
+            }
+        }
+
+        public void ChangeSubModelPrev()
+        {
+            if (m_currentModel.m_displayListHeaders.Count > 1)
+            {
+                m_currentModelSubIndex--;
+                if (m_currentModelSubIndex < 0)
+                {
+                    m_currentModelSubIndex += m_currentModel.m_displayListHeaders.Count;
+                }
+            }
+
+        }
+
+
+
+
+
         public void ChangeModel()
         {
-            m_points = m_modelReader.m_models[m_currentModel].m_points;
-            Vector3 mid = new Vector3(m_modelReader.m_models[m_currentModel].MaxBB - m_modelReader.m_models[m_currentModel].MinBB) / 2f;
+            m_currentModel = m_modelReader.m_models[m_currentModelIndex];
+            m_currentTextureIndex = 0;
+            m_currentModelSubIndex = 0;
 
-            location = m_modelReader.m_models[m_currentModel].Center;
+            GCModel currentModel = m_currentModel;
 
-            location = mid - (Vector3.UnitX * 2f);
+            Vector3 mid = new Vector3(m_currentModel.MaxBB - m_currentModel.MinBB) / 2f;
 
+            float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
 
+            location = m_currentModel.Center;
+
+            float val = longest * 3.5f;
+            if (val < 2f)
+            {
+                val = 2f;
+            }
+
+            location = m_currentModel.MinBB + mid;
+
+            location = location - (Vector3.UnitX * val);
 
             facing = 0;
             pitch = 0;
 
-            GCModel currentModel = m_modelReader.m_models[m_currentModel];
+            for (int i = 0; i < currentModel.m_textures.Count;++i)
+            {
+                if (m_textureDictionary.ContainsKey(currentModel.m_textures[i]))
+                {
+                    m_currentTextureIndex = i;
+                    break;
+                }
+            }
+
+            //m_debugLine = sb.ToString();
+        }
+
+        public String BuildDebugString()
+        {
+            GCModel currentModel = m_currentModel;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
-            sb.AppendLine(String.Format("DSL [{0}] V [{1}] N [{2}] T[{3}]", currentModel.m_points.Count, currentModel.m_normals.Count, currentModel.m_uvs.Count,currentModel.m_displayListHeaders[1].indexCount));
+            sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}]", m_currentModelSubIndex, currentModel.m_displayListHeaders.Count, currentModel.m_displayListHeaders[m_currentModelSubIndex].indexCount,currentModel.m_displayListHeaders[m_currentModelSubIndex].Valid));
             sb.AppendLine("Textures : ");
+            int counter = 0;
             foreach (string textureName in currentModel.m_textures)
             {
                 if (!m_textureDictionary.ContainsKey(textureName))
@@ -358,23 +449,13 @@ namespace ModelNamer
                 }
                 sb.AppendLine(textureName);
             }
-            m_debugLine = sb.ToString();
-        }
-
-        public void ChangeModelPrev()
-        {
-            if (m_modelReader.m_models.Count > 0)
-            {
-                m_currentModel--;
-                if (m_currentModel < 0)
-                {
-                    m_currentModel += m_modelReader.m_models.Count;
-                }
-                ChangeModel();
-            }
+            sb.AppendLine();
+            sb.AppendFormat("Loc [{0:0.00000000} {1:0.00000000} {2:0.00000000}]", location.X, location.Y, location.Z);
+            return sb.ToString();
 
         }
  
+
         public bool LoadTexture(string filename,out int textureHandle)
         {
             String textureFileName = textureBasePath + filename + ".png";
@@ -414,7 +495,11 @@ namespace ModelNamer
         }
 
 
-        int m_currentModel = 0;
+        int m_currentModelIndex = 0;
+        int m_currentTextureIndex = 0;
+        int m_currentModelSubIndex = 0;
+        GCModel m_currentModel;
+
         GCModelReader m_modelReader;
         OpenTK.Graphics.TextPrinter m_textPrinter;
         String m_debugLine;
