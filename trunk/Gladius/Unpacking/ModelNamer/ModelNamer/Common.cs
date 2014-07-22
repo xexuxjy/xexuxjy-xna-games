@@ -93,6 +93,13 @@ namespace ModelNamer
             return (short)(buf[i] << 8 | buf[i+1]);
         }
 
+        public static int ReadInt32BigEndian(BinaryReader reader)
+        {
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            return Common.ToInt32BigEndian(s_buffer, 0);
+        }
+
+
 
         public static Vector3 FromStreamInt32(BinaryReader reader)
         {

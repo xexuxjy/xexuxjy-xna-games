@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using OpenTK;
+using System.Diagnostics;
 
 namespace ModelNamer
 {
@@ -23,22 +24,24 @@ namespace ModelNamer
     {
         public byte primitiveFlags;
         public short indexCount;
+        public bool Valid = true;
         public List<DisplayListEntry> entries = new List<DisplayListEntry>();
 
-        public static bool FromStream(BinaryReader reader, out DisplayListHeader header)
+        public static bool FromStream(BinaryReader reader, out DisplayListHeader header,DSLIInfo dsliInfo)
         {
             long currentPosition = reader.BaseStream.Position;
             bool success = false;
+            byte header1 = reader.ReadByte();
+            Debug.Assert(header1 == 0x098);
+            short pad1 = reader.ReadInt16();
+
             header = new DisplayListHeader();
             header.primitiveFlags = reader.ReadByte();
-            if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x98 || header.primitiveFlags == 0xA0 || header.primitiveFlags == 0x80)
+            Debug.Assert(header.primitiveFlags== 0x090);
+            if (header.primitiveFlags == 0x90)
             {
-                if (header.primitiveFlags != 0x90 && header.primitiveFlags != 0x98)
-                {
-                    int ibreak = 0;
-                }
-
                 header.indexCount = Common.ToInt16BigEndian(reader);
+                
                 success = true;
                 for (int i = 0; i < header.indexCount; ++i)
                 {
@@ -115,18 +118,25 @@ namespace ModelNamer
             {
                 if (header.primitiveFlags == 0x90)
                 {
+
                     for (int i = 0; i < header.entries.Count; ++i)
                     {
-                        if (header.entries[i].PosIndex >= m_points.Count)
+                        if (header.entries[i].PosIndex < 0 || header.entries[i].PosIndex >= m_points.Count)
                         {
-                            Valid = false;
+                            header.Valid = false;
                             break;
                         }
-                        if (header.entries[i].NormIndex >= m_normals.Count)
+                        if (header.entries[i].NormIndex < 0 || header.entries[i].NormIndex >= m_normals.Count)
                         {
-                            Valid = false;
+                            header.Valid = false;
                             break;
                         }
+                        if (header.entries[i].UVIndex < 0 || header.entries[i].UVIndex >= m_uvs.Count)
+                        {
+                            header.Valid = false;
+                            break;
+                        }
+
                         
                     }
                 }
@@ -147,7 +157,7 @@ namespace ModelNamer
         public Vector3 MinBB;
         public Vector3 MaxBB;
         public Vector3 Center;
-        public bool Valid =true;
+        //public bool Valid =true;
     }
 
     public class GCModelReader
@@ -208,7 +218,7 @@ namespace ModelNamer
                             {
                                 // 410, 1939
 
-                                continue;
+                                //continue;
                             }
 
 
@@ -219,6 +229,12 @@ namespace ModelNamer
 
 
                             Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
+
+                            long currentPos = binReader.BaseStream.Position;
+                            ReadDSLISection(binReader, model);
+                            binReader.BaseStream.Position = currentPos;
+
+
                             if (Common.FindCharsInStream(binReader, dslsTag))
                             {
                                 long dsllStartsAt = binReader.BaseStream.Position;
@@ -226,16 +242,19 @@ namespace ModelNamer
                                 int uk2a = binReader.ReadInt32();
                                 int uk2b = binReader.ReadInt32();
 
+                                long startPos = binReader.BaseStream.Position;
 
                                 DisplayListHeader header = null;
-                                while (DisplayListHeader.FromStream(binReader, out header))
+                                for (int i = 0; i < model.m_dsliInfos.Count; ++i)
                                 {
+                                    binReader.BaseStream.Position = startPos + model.m_dsliInfos[i].startPos;
+                                    DisplayListHeader.FromStream(binReader, out header,model.m_dsliInfos[i]);
                                     if (header != null)
                                     {
                                         model.m_displayListHeaders.Add(header);
                                     }
+                                    
                                 }
-
                                 long nowAt = binReader.BaseStream.Position;
 
                                 long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
@@ -252,7 +271,6 @@ namespace ModelNamer
                                 int ibreak = 0;
                             }
 
-                            ReadDSLISection(binReader, model);
 
 
                             if (Common.FindCharsInStream(binReader, posiTag))
@@ -401,7 +419,9 @@ namespace ModelNamer
             if (Common.FindCharsInStream(binReader, dsliTag, true))
             {
                 int blockSize = binReader.ReadInt32();
-                int numSections = (blockSize - 8) / 2;
+                int pad1 = binReader.ReadInt32();
+                int pad2 = binReader.ReadInt32();
+                int numSections = (blockSize - 8-4-4) / 8;
 
                 for (int i = 0; i < numSections; ++i)
                 {
@@ -444,8 +464,8 @@ namespace ModelNamer
             {
                 DSLIInfo info = new DSLIInfo();
 
-                info.startPos= reader.ReadInt32();
-                info.length = reader.ReadInt32();
+                info.startPos = Common.ReadInt32BigEndian(reader);
+                info.length = Common.ReadInt32BigEndian(reader);
                 return info;
             }
 
