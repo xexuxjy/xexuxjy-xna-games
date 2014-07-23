@@ -58,21 +58,26 @@ namespace ModelNamer
 
     public struct DisplayListEntry
     {
-        public short PosIndex;
-        public short NormIndex;
-        public short UVIndex;
+        public ushort PosIndex;
+        public ushort NormIndex;
+        public ushort UVIndex;
+
+        public String ToString()
+        {
+            return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex;
+        }
 
         public static DisplayListEntry FromStream(BinaryReader reader)
         {
             DisplayListEntry entry = new DisplayListEntry();
-            entry.PosIndex = Common.ToInt16BigEndian(reader);
-            entry.NormIndex = Common.ToInt16BigEndian(reader);
-            entry.UVIndex = Common.ToInt16BigEndian(reader);
+            entry.PosIndex = Common.ToUInt16BigEndian(reader);
+            entry.NormIndex = Common.ToUInt16BigEndian(reader);
+            entry.UVIndex = Common.ToUInt16BigEndian(reader);
 
-            if (entry.PosIndex < 0 || entry.NormIndex < 0 || entry.UVIndex < 0)
-            {
-                int ibreak = 0;
-            }
+            //if (entry.PosIndex < 0 || entry.NormIndex < 0 || entry.UVIndex < 0)
+            //{
+            //    int ibreak = 0;
+            //}
 
 
             return entry;
@@ -153,10 +158,12 @@ namespace ModelNamer
         public List<String> m_textures = new List<String>();
         public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
         public List<Vector3> m_centers = new List<Vector3>();
+        public List<String> m_selsInfo = new List<string>();
         public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
         public Vector3 MinBB;
         public Vector3 MaxBB;
         public Vector3 Center;
+        public List<Matrix4> m_matrices = new List<Matrix4>();
         //public bool Valid =true;
     }
 
@@ -164,7 +171,7 @@ namespace ModelNamer
     {
         static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
         static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
-        static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' };
+        static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' }; // External link information? referes to textures, other models, entities and so on?
         static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
         static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
         static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
@@ -214,11 +221,11 @@ namespace ModelNamer
 
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                         {
-                            if (sourceFile.Name != "templeExposed.mdl")
+                            if (sourceFile.Name != "templeExposed.mdl" && sourceFile.Name != "arcane_fire_crown.mdl" && sourceFile.Name != "steppesPlains.mdl")
                             {
                                 // 410, 1939
 
-                                //continue;
+                                continue;
                             }
 
 
@@ -263,12 +270,14 @@ namespace ModelNamer
                             }
                             if (Common.FindCharsInStream(binReader, cntrTag, true))
                             {
-                                int unk1 = binReader.ReadInt32();
-                                int unk2 = binReader.ReadInt32();
-                                int unk3 = binReader.ReadInt32();
-
-                                model.Center = Common.FromStreamVector3BE(binReader);
-                                int ibreak = 0;
+                                //int blockSize = binReader.ReadInt32();
+                                //int unk2 = binReader.ReadInt32();
+                                //int unk3 = binReader.ReadInt32();
+                                //for (int i = 0; i < model.m_dsliInfos.Count; ++i)
+                                //{
+                                //    model.m_matrices.Add(Common.FromStreamMatrix4BE(binReader));
+                                //}
+                                //int ibreak = 0;
                             }
 
 
@@ -392,14 +401,27 @@ namespace ModelNamer
                                     model.m_tagSizes[tag] = -1;
                                 }
                             }
+
+                            infoStream.WriteLine("Num DSLS : " + (((model.m_tagSizes[dsliTag] - 16) / 8)-1));
+
                             binReader.BaseStream.Position = 0;
+
+                            Common.ReadSELSNames(binReader, selsTag, model.m_selsInfo);
+
+
                             Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
                             StringBuilder sb = new StringBuilder();
+                            sb.AppendLine("SELS : ");
+                            foreach (string selName in model.m_selsInfo)
+                            {
+                                sb.AppendLine("\t"+selName);
+                            }
                             sb.AppendLine("Textures : ");
                             foreach (string textureName in model.m_textures)
                             {
-                                sb.AppendLine(textureName);
+                                sb.AppendLine("\t" + textureName);
                             }
+
                             infoStream.WriteLine(sb.ToString());
 
 
@@ -438,12 +460,12 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String modelPath = @"C:\tmp\unpacking\gc-probable-models\probable-models";
+            String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
-            String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models\sectionInfo.txt";
+            String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
 
-            modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
-            sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-sectionInfo.txt";
+            //modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
+            //sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-sectionInfo.txt";
             GCModelReader reader = new GCModelReader();
             //reader.LoadModels(modelPath,infoFile);
             //reader.DumpPoints(infoFile);

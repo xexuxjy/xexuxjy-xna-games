@@ -88,6 +88,14 @@ namespace ModelNamer
             return (short)(b1 << 8 | b2);
         }
 
+        public static ushort ToUInt16BigEndian(BinaryReader reader)
+        {
+            byte b1 = reader.ReadByte();
+            byte b2 = reader.ReadByte();
+            return (ushort)(b1 << 8 | b2);
+        }
+
+
         public static int ToInt16BigEndian(byte[] buf, int i)
         {
             return (short)(buf[i] << 8 | buf[i+1]);
@@ -156,7 +164,44 @@ namespace ModelNamer
             return v;
         }
 
+        public static Matrix4 FromStreamMatrix4BE(BinaryReader reader)
+        {
+            
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m11 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m12 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m13 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m14 = Common.ReadSingleBigEndian(s_buffer, 0);
 
+            float m21 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m22 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m23 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m24 = Common.ReadSingleBigEndian(s_buffer, 0);
+
+            float m31 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m32 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m33 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m34 = Common.ReadSingleBigEndian(s_buffer, 0);
+
+            float m41 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m42 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m43 = Common.ReadSingleBigEndian(s_buffer, 0);
+            reader.Read(s_buffer, 0, s_buffer.Length);
+            float m44 = Common.ReadSingleBigEndian(s_buffer, 0);
+
+            return new Matrix4(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
+        }
 
         public static void WriteFloat(StreamWriter sw, Vector3 v)
         {
@@ -166,6 +211,38 @@ namespace ModelNamer
         public static void WriteInt(StreamWriter sw, Vector3 v)
         {
             sw.WriteLine(String.Format("{0} {1} {2}", v.X, v.Y, v.Z));
+        }
+
+        public static void ReadSELSNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
+        {
+            if (Common.FindCharsInStream(binReader, tagName))
+            {
+                int selsSectionLength = binReader.ReadInt32();
+
+                int pad = binReader.ReadInt32();
+                int pad2 = binReader.ReadInt32();
+
+                selsSectionLength -= 16;
+
+                StringBuilder sb = new StringBuilder();
+
+                char b;
+                int count = 0;
+                while (count < selsSectionLength)
+                {
+                    while ((b = (char)binReader.ReadByte()) != 0x00)
+                    {
+                        count++;
+                        sb.Append(b);
+                    }
+                    count++;
+                    if (sb.Length > 0)
+                    {
+                        selsNames.Add(sb.ToString());
+                    }
+                    sb.Clear();
+                }
+            }
         }
 
         public static void ReadTextureNames(BinaryReader binReader, char[] tagName,List<String> textureNames)
