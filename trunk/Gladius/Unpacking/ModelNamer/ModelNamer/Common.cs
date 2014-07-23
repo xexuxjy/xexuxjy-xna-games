@@ -9,7 +9,7 @@ namespace ModelNamer
 {
     static class Common
     {
-        public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = false)
+        public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
         {
             bool found = false;
             byte b = (byte)' ';
@@ -247,7 +247,7 @@ namespace ModelNamer
 
         public static void ReadTextureNames(BinaryReader binReader, char[] tagName,List<String> textureNames)
         {
-            if (Common.FindCharsInStream(binReader, tagName))
+            if (Common.FindCharsInStream(binReader, tagName,true))
             {
                 int dslsSectionLength = binReader.ReadInt32();
                 int uk2a = binReader.ReadInt32();

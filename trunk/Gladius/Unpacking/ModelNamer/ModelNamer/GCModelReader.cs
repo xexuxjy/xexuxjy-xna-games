@@ -27,7 +27,7 @@ namespace ModelNamer
         public bool Valid = true;
         public List<DisplayListEntry> entries = new List<DisplayListEntry>();
 
-        public static bool FromStream(BinaryReader reader, out DisplayListHeader header,DSLIInfo dsliInfo)
+        public static bool FromStream(BinaryReader reader, out DisplayListHeader header,DSLIInfo dsliInfo,bool includeTexture)
         {
             long currentPosition = reader.BaseStream.Position;
             bool success = false;
@@ -45,7 +45,7 @@ namespace ModelNamer
                 success = true;
                 for (int i = 0; i < header.indexCount; ++i)
                 {
-                    header.entries.Add(DisplayListEntry.FromStream(reader));
+                    header.entries.Add(DisplayListEntry.FromStream(reader,includeTexture));
                 }
             }
             else
@@ -59,26 +59,26 @@ namespace ModelNamer
     public struct DisplayListEntry
     {
         public ushort PosIndex;
+        public ushort TextureIndex;
         public ushort NormIndex;
         public ushort UVIndex;
 
         public String ToString()
         {
-            return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex;
+            return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex + " T:" + TextureIndex;
         }
 
-        public static DisplayListEntry FromStream(BinaryReader reader)
+        public static DisplayListEntry FromStream(BinaryReader reader,bool includeTexture)
         {
             DisplayListEntry entry = new DisplayListEntry();
             entry.PosIndex = Common.ToUInt16BigEndian(reader);
+
             entry.NormIndex = Common.ToUInt16BigEndian(reader);
+            if (includeTexture)
+            {
+                entry.TextureIndex = (ushort)reader.ReadByte();
+            }
             entry.UVIndex = Common.ToUInt16BigEndian(reader);
-
-            //if (entry.PosIndex < 0 || entry.NormIndex < 0 || entry.UVIndex < 0)
-            //{
-            //    int ibreak = 0;
-            //}
-
 
             return entry;
         }
@@ -221,11 +221,13 @@ namespace ModelNamer
 
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                         {
-                            if (sourceFile.Name != "templeExposed.mdl" && sourceFile.Name != "arcane_fire_crown.mdl" && sourceFile.Name != "steppesPlains.mdl")
+                            //if (sourceFile.Name != "templeExposed.mdl" && sourceFile.Name != "arcane_fire_crown.mdl" && sourceFile.Name != "steppesPlains.mdl")
+                            //if (sourceFile.Name != "templeExposed.mdl")
+                            if (sourceFile.Name != "File 002881")
                             {
                                 // 410, 1939
 
-                                continue;
+                                //continue;
                             }
 
 
@@ -242,32 +244,8 @@ namespace ModelNamer
                             binReader.BaseStream.Position = currentPos;
 
 
-                            if (Common.FindCharsInStream(binReader, dslsTag))
-                            {
-                                long dsllStartsAt = binReader.BaseStream.Position;
-                                int dslsSectionLength = binReader.ReadInt32();
-                                int uk2a = binReader.ReadInt32();
-                                int uk2b = binReader.ReadInt32();
+                            long beforeDSLS = binReader.BaseStream.Position;                            
 
-                                long startPos = binReader.BaseStream.Position;
-
-                                DisplayListHeader header = null;
-                                for (int i = 0; i < model.m_dsliInfos.Count; ++i)
-                                {
-                                    binReader.BaseStream.Position = startPos + model.m_dsliInfos[i].startPos;
-                                    DisplayListHeader.FromStream(binReader, out header,model.m_dsliInfos[i]);
-                                    if (header != null)
-                                    {
-                                        model.m_displayListHeaders.Add(header);
-                                    }
-                                    
-                                }
-                                long nowAt = binReader.BaseStream.Position;
-
-                                long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
-                                int ibreak = 0;
-
-                            }
                             if (Common.FindCharsInStream(binReader, cntrTag, true))
                             {
                                 //int blockSize = binReader.ReadInt32();
@@ -320,8 +298,25 @@ namespace ModelNamer
 
                             }
 
+                            binReader.BaseStream.Position = beforeDSLS;
+                            if (Common.FindCharsInStream(binReader, dslsTag))
+                            {
+                                long currentPosition = binReader.BaseStream.Position;
+                                ReadDSLS(binReader, model, false);
+                                model.Validate();
+                                if (!model.m_displayListHeaders[0].Valid)
+                                {
+                                    model.m_displayListHeaders.Clear();
+                                    binReader.BaseStream.Position = currentPosition;
+                                    ReadDSLS(binReader, model, true);
+                                }
+
+                            }
+
+
+
                             model.BuildBB();
-                            model.Validate();
+                            //model.Validate();
 
 
                         }
@@ -338,6 +333,30 @@ namespace ModelNamer
                 }
             }
         }
+
+        public void ReadDSLS(BinaryReader binReader,GCModel model,bool includeTexture)
+        {
+            long dsllStartsAt = binReader.BaseStream.Position;
+            int dslsSectionLength = binReader.ReadInt32();
+            int uk2a = binReader.ReadInt32();
+            int uk2b = binReader.ReadInt32();
+
+            long startPos = binReader.BaseStream.Position;
+
+            DisplayListHeader header = null;
+            for (int i = 0; i < model.m_dsliInfos.Count; ++i)
+            {
+                binReader.BaseStream.Position = startPos + model.m_dsliInfos[i].startPos;
+                DisplayListHeader.FromStream(binReader, out header, model.m_dsliInfos[i],includeTexture);
+                if (header != null)
+                {
+                    model.m_displayListHeaders.Add(header);
+                }
+
+            }
+
+        }
+
 
         public void DumpPoints(String infoFile)
         {

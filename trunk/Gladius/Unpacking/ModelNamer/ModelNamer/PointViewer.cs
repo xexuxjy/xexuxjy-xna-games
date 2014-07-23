@@ -19,7 +19,7 @@ namespace ModelNamer
         static int size = 5;
         Vector3 eyePos = new Vector3(size * 5, size * 5, 0);
         Vector3 eyeLookat = new Vector3(0, 0, 0);
-        const float rotation_speed = 180.0f;
+        const float rotation_speed = 60.0f;
         float angle;
 
         private Matrix4 cameraMatrix;
@@ -39,7 +39,8 @@ namespace ModelNamer
             m_modelReader = new GCModelReader();
             //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
             //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
-            m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", @"C:\tmp\unpacking\gc-probable-models\model-results", 100);
+            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\test1", @"D:\gladius-extracted-archive\gc-compressed\model-results");
+            //m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", @"C:\tmp\unpacking\gc-probable-models\model-results", 100);
 
             ChangeModelNext();
 
@@ -58,6 +59,12 @@ namespace ModelNamer
                     this.ChangeSubModelPrev();
                 if (e.Key == Key.M)
                     this.ChangeSubModelNext();
+                if (e.Key == Key.F)
+                    this.rotateX = !this.rotateX;
+                if (e.Key == Key.G)
+                    this.rotateY = !this.rotateY;
+                if (e.Key == Key.H)
+                    this.rotateZ = !this.rotateZ;
 
             };
 
@@ -158,7 +165,7 @@ namespace ModelNamer
             GL.Viewport(0, 0, Width, Height);
 
             GL.MatrixMode(MatrixMode.Projection);
-            Matrix4 p = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 0.1f, 50.0f);
+            Matrix4 p = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 0.1f, 300.0f);
             GL.LoadMatrix(ref p);
 
             //GL.MatrixMode(MatrixMode.Modelview);
@@ -269,7 +276,10 @@ namespace ModelNamer
             //GL.LoadMatrix(ref lookat);
 
             angle += rotation_speed * (float)e.Time;
-            GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
+            if (rotateX || rotateY || rotateZ)
+            {
+                GL.Rotate(angle, rotateX?1.0f:0.0f, rotateY?1.0f:0.0f, rotateZ?1.0f:0.0f);
+            }
 
 
             //GL.Begin(PrimitiveType.Points);
@@ -284,11 +294,16 @@ namespace ModelNamer
                 if (header.primitiveFlags == 0x90 && header.Valid)
                 {
                     bool foundTexture = false;
-                    if (m_textureDictionary.ContainsKey(m_currentModel.m_textures[m_currentTextureIndex]))
+                    int index = m_currentTextureIndex;
+                    //index = header.entries[0].TextureIndex;
+                    if (m_currentModel.m_textures.Count > 0)
                     {
-                        GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[m_currentModel.m_textures[m_currentTextureIndex]]);
-                        GL.Color3(System.Drawing.Color.White);
-                        foundTexture = true;
+                        if (m_textureDictionary.ContainsKey(m_currentModel.m_textures[index]))
+                        {
+                            GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[m_currentModel.m_textures[index]]);
+                            GL.Color3(System.Drawing.Color.White);
+                            foundTexture = true;
+                        }
                     }
                     if(!foundTexture)
                     {
@@ -494,6 +509,9 @@ namespace ModelNamer
             return false;
         }
 
+        bool rotateX = false;
+        bool rotateY = false;
+        bool rotateZ = false;
 
         int m_currentModelIndex = 0;
         int m_currentTextureIndex = 0;
