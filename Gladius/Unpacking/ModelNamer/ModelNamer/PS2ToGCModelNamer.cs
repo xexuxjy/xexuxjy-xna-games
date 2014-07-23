@@ -32,6 +32,8 @@ namespace ModelNamer
             string ps2ModelPath = @"D:\gladius-extracted\ps2-decompressed\VERSModelFilesRenamed";
             string gcModelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models";
             string gcModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
+            string gcLeftOverModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-leftover";
+
             string infoFile = @"D:\gladius-extracted-archive\gc-compressed\model-rename-info";
 
             ReadTexture(ps2ModelPath, infoFile, m_ps2List);
@@ -96,6 +98,11 @@ namespace ModelNamer
                 {
                     if (!mt.Found)
                     {
+                        FileInfo inFile = new FileInfo(gcModelPath + "\\" + mt.modelName);
+                        FileInfo outFile = new FileInfo(gcLeftOverModelOutputPath + "\\" + mt.modelName);
+
+                        File.Copy(inFile.FullName, outFile.FullName, true);
+
                         infoStream.WriteLine(mt.modelName);
                     }
                 }
