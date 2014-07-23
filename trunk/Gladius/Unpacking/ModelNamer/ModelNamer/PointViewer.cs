@@ -38,8 +38,8 @@ namespace ModelNamer
             this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
             //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
-            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
-            //m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-probable-models\probable-models", @"C:\tmp\unpacking\gc-probable-models\model-results", 100);
+            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
+            m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", @"C:\tmp\unpacking\gc-probable-models\model-results", 100);
 
             ChangeModelNext();
 
