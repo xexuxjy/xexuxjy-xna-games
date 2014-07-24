@@ -31,6 +31,9 @@ namespace ModelNamer
         private float facing = 0.0f;
         public String textureBasePath = @"D:\gladius-extracted\test-extract\";
 
+        public List<String> m_fileNames = new List<string>();
+        public Dictionary<String,GCModel> m_modelMap = new Dictionary<string,GCModel>();
+
 
         public PointViewer()
             : base(800, 600)
@@ -39,8 +42,16 @@ namespace ModelNamer
             m_modelReader = new GCModelReader();
             //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
             //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
-            m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\test1", @"D:\gladius-extracted-archive\gc-compressed\model-results");
+            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\test1", @"D:\gladius-extracted-archive\gc-compressed\model-results");
             //m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", @"C:\tmp\unpacking\gc-probable-models\model-results", 100);
+            
+            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\test1", "*"));
+
+            String[] filteredModels = new String[] { "templeExposed.mdl", "arcane_fire_crown.mdl", "steppesPlains.mdl" };
+
+
+
+            m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
 
             ChangeModelNext();
 
@@ -354,10 +365,10 @@ namespace ModelNamer
 
         public void ChangeModelNext()
         {
-            if (m_modelReader.m_models.Count > 0)
+            if (m_fileNames.Count > 0)
             {
                 m_currentModelIndex++;
-                m_currentModelIndex %= m_modelReader.m_models.Count;
+                m_currentModelIndex %= m_fileNames.Count;
                 ChangeModel();
 
             }
@@ -365,12 +376,12 @@ namespace ModelNamer
 
         public void ChangeModelPrev()
         {
-            if (m_modelReader.m_models.Count > 0)
+            if (m_fileNames.Count > 0)
             {
                 m_currentModelIndex--;
                 if (m_currentModelIndex < 0)
                 {
-                    m_currentModelIndex += m_modelReader.m_models.Count;
+                    m_currentModelIndex += m_fileNames.Count;
                 }
                 ChangeModel();
             }
@@ -406,7 +417,18 @@ namespace ModelNamer
 
         public void ChangeModel()
         {
-            m_currentModel = m_modelReader.m_models[m_currentModelIndex];
+            if(!m_modelMap.ContainsKey(m_fileNames[m_currentModelIndex]))
+            {
+                GCModel model = m_modelReader.LoadSingleModel(m_fileNames[m_currentModelIndex]);
+                if(model != null)
+                {
+                    m_modelMap[m_fileNames[m_currentModelIndex]] = model;
+                }
+            }
+
+            m_currentModel = m_modelMap[m_fileNames[m_currentModelIndex]];
+
+            //m_currentModel = m_modelReader.m_models[m_currentModelIndex];
             m_currentTextureIndex = 0;
             m_currentModelSubIndex = 0;
 
