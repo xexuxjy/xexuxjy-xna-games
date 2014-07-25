@@ -454,19 +454,41 @@ namespace ModelNamer
                     //byte pad2 = binReader.ReadByte();
                     //byte pad3 = binReader.ReadByte();
 
-                    for (int i = 0; i < numTextures; ++i)
+
+
+                    //for (int i = 0; i < numTextures; ++i)
+                    //
                     {
                         StringBuilder sb = new StringBuilder();
                         char b = (char)binReader.ReadByte();
-                        while (b != 0x00)
+                        char lastb = 'a';
+                        while (true)
                         {
                             if (b != 0x00)
                             {
                                 sb.Append(b);
                             }
+                            else
+                            {
+                                if(sb.Length > 0)
+                                {
+                                    textureNameList.Add(sb.ToString());
+                                    sb.Clear();
+                                }
+                            }
+                            if((numTextures != 0 && textureNameList.Count == numTextures))
+                            {
+                                break;
+                            }
+
+                            lastb = b;
                             b = (char)binReader.ReadByte();
+                            if (b == 0x00 && lastb == 0x00)
+                            {
+                                break;
+                            }
                         }
-                        textureNameList.Add(sb.ToString());
+                        
                     }
                 }
 
@@ -487,7 +509,7 @@ namespace ModelNamer
         }
 
 
-        public void LoadHeaderInfo(BinaryReader binReader, StreamWriter errorStream,String file)
+        public void LoadHeaderInfo(BinaryReader binReader, StreamWriter errorStream,String file,ImageInfo imageInfo, int counter)
         {
             int headerPadding = 0;
 
@@ -638,7 +660,7 @@ namespace ModelNamer
                 {
                     //if (file.Name != "File_000957")
                     //if (file.Name != "File_000391")
-                    if (file.Name != "File_000024")
+                    if (file.Name != "File_010463")
                     {
                         //continue;
                     }
@@ -660,7 +682,23 @@ namespace ModelNamer
                         {
                             image = new GladiusImage();
 
-                            image.Header.LoadHeaderInfo(binReader, errorStream, file.Name);
+                            //image.Header.LoadHeaderInfo(binReader, errorStream, file.Name,imageInfo,subImageCounter);
+                            image.Header.Width = imageInfo.m_segments[subImageCounter].width;
+                            image.Header.Height = imageInfo.m_segments[subImageCounter].height;
+                            image.Header.PixelFormat = imageInfo.m_segments[subImageCounter].bpp == 32 ? PixelFormat.Format32bppArgb : PixelFormat.Format8bppIndexed;
+
+                            binReader.BaseStream.Position += 024;
+                            headerPadding = 0;
+                            if(image.Header.PixelFormat == PixelFormat.Format8bppIndexed)
+                            {
+                                headerPadding = 0x78 - 20;                
+                            }
+                            else if(image.Header.PixelFormat == PixelFormat.Format32bppArgb)
+                            {
+                                headerPadding = 101;
+                            }
+
+                            binReader.BaseStream.Position += headerPadding;
 
                             bool saveImage = true;
                             String outputFileName = null;
@@ -1002,7 +1040,7 @@ namespace ModelNamer
                 {
                     HeaderSegment hs = new HeaderSegment();
                     imageInfo.m_segments.Add(hs);
-                    hs.unk1 = binReader.ReadInt32();
+                    hs.bpp = Common.ReadInt32BigEndian(binReader);
                     hs.unk2 = binReader.ReadInt32();
                     hs.width = binReader.ReadInt16();
                     hs.height = binReader.ReadInt16();
@@ -1048,7 +1086,7 @@ namespace ModelNamer
     public class HeaderSegment
     {
         public String textureName;
-        public int unk1;
+        public int bpp;
         public int unk2;
         public short width;
         public short height;
@@ -1063,7 +1101,7 @@ namespace ModelNamer
 
         public String ToString()
         {
-            return String.Format("[{0,64}] [{1}][{2}] W[{3,4}] H [{4,4}][{5,6}] C[{6,8}] O[{7,2}] C1[{8,6}]", textureName, unk1, unk2, width, height, unks1, containsDefinition, textureOrder, counter1);
+            return String.Format("[{0,64}] [{1}][{2}] W[{3,4}] H [{4,4}][{5,6}] C[{6,8}] O[{7,2}] C1[{8,6}]", textureName, bpp, unk2, width, height, unks1, containsDefinition, textureOrder, counter1);
         }
     }
 
