@@ -29,7 +29,7 @@ namespace ModelNamer
         private Vector3 up = Vector3.UnitY;
         private float pitch = 0.0f;
         private float facing = 0.0f;
-        public String textureBasePath = @"D:\gladius-extracted\test-extract\";
+        public String textureBasePath = @"c:\gladius-extracted\test-extract\";
 
         public List<String> m_fileNames = new List<string>();
         public Dictionary<String,GCModel> m_modelMap = new Dictionary<string,GCModel>();
@@ -51,7 +51,7 @@ namespace ModelNamer
 
 
 
-            m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
+            m_fileNames.AddRange(Directory.GetFiles(@"C:\gladius-extracted\gc-models\probable-models-renamed", "*"));
 
             ChangeModelNext();
 
