@@ -37,8 +37,8 @@ namespace ModelNamer
 
             header = new DisplayListHeader();
             header.primitiveFlags = reader.ReadByte();
-            Debug.Assert(header.primitiveFlags== 0x090);
-            if (header.primitiveFlags == 0x90)
+            //Debug.Assert(header.primitiveFlags== 0x090);
+            if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x00)
             {
                 header.indexCount = Common.ToInt16BigEndian(reader);
                 
@@ -149,6 +149,50 @@ namespace ModelNamer
 
 
         }
+
+        public void WriteOBJ(StreamWriter writer,StreamWriter materialWriter)
+        {
+            // write material?
+            String textureName = "";
+            materialWriter.WriteLine("newmtl Textured");
+            materialWriter.WriteLine("Ka 1.000 1.000 1.000");
+            materialWriter.WriteLine("Kd 1.000 1.000 1.000");
+            materialWriter.WriteLine("Ks 0.000 0.000 0.000");
+            materialWriter.WriteLine("d 1.0");
+            materialWriter.WriteLine("illum 2");
+            materialWriter.WriteLine("map_Ka "+textureName);
+            materialWriter.WriteLine("map_Kd "+textureName);
+
+
+            // and now points, uv's and normals.
+            foreach (Vector3 v in m_points)
+            {
+                writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+            }
+            foreach (Vector2 v in m_uvs)
+            {
+                writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, v.Y));
+            }
+            foreach (Vector3 v in m_points)
+            {
+                writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+            }
+
+            foreach(DisplayListHeader dlh in m_displayListHeaders)
+            {
+                int counter = 0;
+                for (int i = 0; i < dlh.entries.Count; )
+                {
+                    writer.WriteLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex, dlh.entries[i].UVIndex, dlh.entries[i].NormIndex,
+                        dlh.entries[i + 1].PosIndex, dlh.entries[i + 1].UVIndex, dlh.entries[i + 1].NormIndex,
+                        dlh.entries[i + 2].PosIndex, dlh.entries[i + 2].UVIndex, dlh.entries[i + 2].NormIndex));
+                    i += 3;
+                }
+            }
+
+
+        }
+
 
         public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
         public String m_name;
