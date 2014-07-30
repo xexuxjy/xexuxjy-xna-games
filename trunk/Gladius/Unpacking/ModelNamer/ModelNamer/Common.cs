@@ -213,7 +213,7 @@ namespace ModelNamer
             sw.WriteLine(String.Format("{0} {1} {2}", v.X, v.Y, v.Z));
         }
 
-        public static void ReadSELSNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
+        public static void ReadNullSeparatedNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
         {
             if (Common.FindCharsInStream(binReader, tagName))
             {
