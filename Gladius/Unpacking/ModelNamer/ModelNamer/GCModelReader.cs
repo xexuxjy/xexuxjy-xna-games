@@ -56,6 +56,52 @@ namespace ModelNamer
         }
     }
 
+
+    public class BoneNode
+    {
+        public String name;
+        public Vector3 offset;
+        public Vector3 unk1;
+        public byte pad1;
+        public byte pad2;
+        public byte flags1;
+        public byte alwaysBF;
+        public byte pad3;
+        public byte id;
+        public byte id2;
+        public byte parentId;
+
+
+        public BoneNode parent;
+        public List<BoneNode> children = new List<BoneNode>();
+
+        public static BoneNode FromStream(BinaryReader binReader)
+        {
+            BoneNode node = new BoneNode();
+            node.offset = Common.FromStreamVector3(binReader);
+            node.unk1 = Common.FromStreamVector3(binReader);
+            node.pad1 = binReader.ReadByte();
+            node.pad2 = binReader.ReadByte();
+            node.flags1 = binReader.ReadByte();
+            node.alwaysBF = binReader.ReadByte();
+            node.pad3 = binReader.ReadByte();
+            node.id = binReader.ReadByte();
+            node.id2 = binReader.ReadByte();
+            node.parentId = binReader.ReadByte();
+            return node;
+        }
+
+
+
+
+
+    }
+
+
+
+
+
+
     public struct DisplayListEntry
     {
         public ushort PosIndex;
@@ -200,6 +246,7 @@ namespace ModelNamer
         public List<Vector3> m_normals = new List<Vector3>();
         public List<Vector2> m_uvs = new List<Vector2>();
         public List<String> m_textures = new List<String>();
+        public List<String> m_names = new List<String>();
         public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
         public List<Vector3> m_centers = new List<Vector3>();
         public List<String> m_selsInfo = new List<string>();
@@ -208,6 +255,7 @@ namespace ModelNamer
         public Vector3 MaxBB;
         public Vector3 Center;
         public List<Matrix4> m_matrices = new List<Matrix4>();
+        public List<BoneNode> m_bones = new List<BoneNode>();
         //public bool Valid =true;
     }
 
@@ -232,10 +280,17 @@ namespace ModelNamer
         static char[] nlvlTag = new char[] { 'N', 'L', 'V', 'L' };
         static char[] meshTag = new char[] { 'M', 'E', 'S', 'H' };
         static char[] elemTag = new char[] { 'E', 'L', 'E', 'M' };
+        static char[] skelTag = new char[] { 'S', 'K', 'E', 'L' };
+        static char[] skinTag = new char[] { 'S', 'K', 'I', 'N' };
+        static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
+        static char[] vflgTag = new char[] { 'V', 'F', 'L', 'G' };
+        static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
 
 
-
-        static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, ramTag, msarTag, nlvlTag, meshTag, elemTag };
+        static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
+                                      dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, 
+                                      ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
+                                      vflgTag,stypTag,nameTag };
 
         public List<GCModel> m_models = new List<GCModel>();
 
@@ -244,7 +299,7 @@ namespace ModelNamer
             LoadModels(@"c:\tmp\unpacking\gc-models\", @"c:\tmp\unpacking\gc-models\results.txt");
         }
 
-        public GCModel LoadSingleModel(String modelPath)
+        public GCModel LoadSingleModel(String modelPath,bool readDisplayLists = true)
         {
             FileInfo sourceFile = new FileInfo(modelPath);
 
@@ -258,33 +313,39 @@ namespace ModelNamer
                 ReadDSLISection(binReader, model);
                 binReader.BaseStream.Position = currentPos;
 
-
-                if (Common.FindCharsInStream(binReader, dslsTag))
+                if (readDisplayLists)
                 {
-                    long dsllStartsAt = binReader.BaseStream.Position;
-                    int dslsSectionLength = binReader.ReadInt32();
-                    int uk2a = binReader.ReadInt32();
-                    int uk2b = binReader.ReadInt32();
-
-                    long startPos = binReader.BaseStream.Position;
-
-                    DisplayListHeader header = null;
-                    for (int i = 0; i < model.m_dsliInfos.Count; ++i)
+                    if (Common.FindCharsInStream(binReader, dslsTag))
                     {
-                        binReader.BaseStream.Position = startPos + model.m_dsliInfos[i].startPos;
-                        DisplayListHeader.FromStream(binReader, out header, model.m_dsliInfos[i]);
-                        if (header != null)
+                        long dsllStartsAt = binReader.BaseStream.Position;
+                        int dslsSectionLength = binReader.ReadInt32();
+                        int uk2a = binReader.ReadInt32();
+                        int uk2b = binReader.ReadInt32();
+
+                        long startPos = binReader.BaseStream.Position;
+
+                        DisplayListHeader header = null;
+                        for (int i = 0; i < model.m_dsliInfos.Count; ++i)
                         {
-                            model.m_displayListHeaders.Add(header);
+                            binReader.BaseStream.Position = startPos + model.m_dsliInfos[i].startPos;
+                            DisplayListHeader.FromStream(binReader, out header, model.m_dsliInfos[i]);
+                            if (header != null)
+                            {
+                                model.m_displayListHeaders.Add(header);
+                            }
+
                         }
+                        long nowAt = binReader.BaseStream.Position;
+
+                        long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
+                        int ibreak = 0;
 
                     }
-                    long nowAt = binReader.BaseStream.Position;
-
-                    long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
-                    int ibreak = 0;
-
                 }
+
+                ReadSKELSection(binReader,model);
+                
+
                 if (Common.FindCharsInStream(binReader, cntrTag, true))
                 {
                     //int blockSize = binReader.ReadInt32();
@@ -427,6 +488,8 @@ namespace ModelNamer
                             infoStream.WriteLine("File : " + model.m_name);
                             foreach (char[] tag in allTags)
                             {
+                                // reset for each so we don't worry about order
+                                binReader.BaseStream.Position = 0;
                                 if (Common.FindCharsInStream(binReader, tag, true))
                                 {
                                     int blockSize = binReader.ReadInt32();
@@ -439,11 +502,21 @@ namespace ModelNamer
                                 }
                             }
 
+                            //foreach(char[] tagName in model.m_tagSizes.Keys.Values)
+                            //{
+                            //    if(model.m_tagSizes[tagName] > 0)
+                            //    {
+                            //        infoStream.WriteLine("{ : " + (((model.m_tagSizes[dsliTag] - 16) / 8) - 1));
+                            //    }
+                            //}
+
                             infoStream.WriteLine("Num DSLS : " + (((model.m_tagSizes[dsliTag] - 16) / 8)-1));
 
                             binReader.BaseStream.Position = 0;
 
-                            Common.ReadSELSNames(binReader, selsTag, model.m_selsInfo);
+                            Common.ReadNullSeparatedNames(binReader, selsTag, model.m_selsInfo);
+                            Common.ReadNullSeparatedNames(binReader, nameTag, model.m_names);
+
 
 
                             Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
@@ -453,6 +526,13 @@ namespace ModelNamer
                             {
                                 sb.AppendLine("\t"+selName);
                             }
+
+                            sb.AppendLine("NAME : ");
+                            foreach (string name in model.m_names)
+                            {
+                                sb.AppendLine("\t" + name);
+                            }
+
                             sb.AppendLine("Textures : ");
                             foreach (string textureName in model.m_textures)
                             {
@@ -493,11 +573,53 @@ namespace ModelNamer
             }
         }
 
+        public void ReadSKELSection(BinaryReader binReader, GCModel model)
+        {
+            if (Common.FindCharsInStream(binReader, skelTag))
+            {
+                int blockSize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int pad2 = binReader.ReadInt32();
+                int numBones = (blockSize - 16) / 32;
+
+                for (int i = 0; i < numBones; ++i)
+                {
+                    BoneNode node = BoneNode.FromStream(binReader);
+                    model.m_bones.Add(node);
+                }
+            }
+            ConstructSkeleton(model);
+        }
+
+        public void ConstructSkeleton(GCModel model)
+        {
+            Dictionary<int, BoneNode> dictionary = new Dictionary<int, BoneNode>();
+            foreach (BoneNode node in model.m_bones)
+            {
+                dictionary[node.id] = node;
+            }
+
+            foreach (BoneNode node in model.m_bones)
+            {
+                if (node.id != node.parentId)
+                {
+                    BoneNode parent = dictionary[node.parentId];
+                    parent.children.Add(node);
+                    node.parent = parent;
+                }
+            }
+
+        }
+
+
+
+
 
 
         static void Main(string[] args)
         {
-            String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
+            //String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
+            String modelPath = @"C:\tmp\unpacking\test-models";
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
             String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
 

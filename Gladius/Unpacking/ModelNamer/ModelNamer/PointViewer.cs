@@ -34,6 +34,8 @@ namespace ModelNamer
         public List<String> m_fileNames = new List<string>();
         public Dictionary<String,GCModel> m_modelMap = new Dictionary<string,GCModel>();
 
+        public bool readDisplayLists = false;
+
 
         public PointViewer()
             : base(800, 600)
@@ -51,8 +53,9 @@ namespace ModelNamer
 
 
 
-            m_fileNames.AddRange(Directory.GetFiles(@"C:\gladius-extracted\gc-models\probable-models-renamed", "*"));
-
+            //m_fileNames.AddRange(Directory.GetFiles(@"C:\gladius-extracted\gc-models\probable-models-renamed", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
+            m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\test-models", "*"));
             ChangeModelNext();
 
 
@@ -150,6 +153,27 @@ namespace ModelNamer
                 m_points.Add(sv * size);
             }
         }
+
+        public void DrawSkeleton(GCModel model)
+        {
+
+            GL.Begin(PrimitiveType.Points);
+            foreach (BoneNode node in model.m_bones)
+            {
+                // build tranform from parent chain?
+                Vector3 offset = new Vector3();
+                BoneNode walker = node.parent;
+                while (walker != null)
+                {
+                    offset += walker.offset;
+                    walker = walker.parent;
+                }
+                GL.Vertex3(offset);
+            }
+
+            GL.End();
+        }
+
 
         protected override void OnLoad(EventArgs e)
         {
@@ -272,7 +296,7 @@ namespace ModelNamer
             GL.Enable(EnableCap.Texture2D);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             
-            GL.PointSize(5f);
+            GL.PointSize(10f);
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref cameraMatrix);
@@ -300,39 +324,51 @@ namespace ModelNamer
             m_textPrinter.Print(BuildDebugString(), font, Color.White);
             m_textPrinter.End();
 
-            foreach (DisplayListHeader header in m_currentModel.m_displayListHeaders)
+            if (readDisplayLists)
             {
-                if (header.primitiveFlags == 0x90 && header.Valid)
+                foreach (DisplayListHeader header in m_currentModel.m_displayListHeaders)
                 {
-                    bool foundTexture = false;
-                    int index = m_currentTextureIndex;
-                    //index = header.entries[0].TextureIndex;
-                    if (m_currentModel.m_textures.Count > 0)
+                    if (header.primitiveFlags == 0x90 && header.Valid)
                     {
-                        if (m_textureDictionary.ContainsKey(m_currentModel.m_textures[index]))
+                        bool foundTexture = false;
+                        int index = m_currentTextureIndex;
+                        //index = header.entries[0].TextureIndex;
+                        if (m_currentModel.m_textures.Count > 0)
                         {
-                            GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[m_currentModel.m_textures[index]]);
-                            GL.Color3(System.Drawing.Color.White);
-                            foundTexture = true;
+                            if (m_textureDictionary.ContainsKey(m_currentModel.m_textures[index]))
+                            {
+                                GL.BindTexture(TextureTarget.Texture2D, m_textureDictionary[m_currentModel.m_textures[index]]);
+                                GL.Color3(System.Drawing.Color.White);
+                                foundTexture = true;
+                            }
                         }
-                    }
-                    if(!foundTexture)
-                    {
-                        GL.Color3(System.Drawing.Color.ForestGreen);
-                    }
+                        if (!foundTexture)
+                        {
+                            GL.Color3(System.Drawing.Color.ForestGreen);
+                        }
 
-                    GL.Begin(PrimitiveType.Triangles);
-                        
-                    for (int i = 0; i < header.entries.Count; ++i)
-                    {
-                        GL.TexCoord2(m_currentModel.m_uvs[header.entries[i].UVIndex]);
-                        GL.Vertex3(m_currentModel.m_points[header.entries[i].PosIndex]);
-                        GL.Normal3(m_currentModel.m_normals[header.entries[i].NormIndex]);
+                        GL.Begin(PrimitiveType.Triangles);
+
+                        for (int i = 0; i < header.entries.Count; ++i)
+                        {
+                            GL.TexCoord2(m_currentModel.m_uvs[header.entries[i].UVIndex]);
+                            GL.Vertex3(m_currentModel.m_points[header.entries[i].PosIndex]);
+                            GL.Normal3(m_currentModel.m_normals[header.entries[i].NormIndex]);
+                        }
+                        GL.End();
                     }
-                    GL.End();
                 }
             }
-
+            else
+            {
+                DrawSkeleton(m_currentModel);
+                //GL.Begin(PrimitiveType.Points);
+                //for (int i = 0; i < m_currentModel.m_points.Count; ++i)
+                //{
+                //    GL.Vertex3(m_currentModel.m_points[i]);
+                //}
+                //GL.End();
+            }
             //GL.Begin(PrimitiveType.Quads);
 
             //GL.Vertex3(1.0f, -1.0f, -1.0f);
@@ -419,7 +455,7 @@ namespace ModelNamer
         {
             if(!m_modelMap.ContainsKey(m_fileNames[m_currentModelIndex]))
             {
-                GCModel model = m_modelReader.LoadSingleModel(m_fileNames[m_currentModelIndex]);
+                GCModel model = m_modelReader.LoadSingleModel(m_fileNames[m_currentModelIndex], readDisplayLists);
                 if(model != null)
                 {
                     m_modelMap[m_fileNames[m_currentModelIndex]] = model;
@@ -434,7 +470,12 @@ namespace ModelNamer
 
             GCModel currentModel = m_currentModel;
 
-            Vector3 mid = new Vector3(m_currentModel.MaxBB - m_currentModel.MinBB) / 2f;
+
+            Vector3 mid = new Vector3();
+            if (readDisplayLists)
+            {
+                mid = new Vector3(m_currentModel.MaxBB - m_currentModel.MinBB) / 2f;
+            }
 
             float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
 
@@ -471,7 +512,10 @@ namespace ModelNamer
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
-            sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}]", m_currentModelSubIndex, currentModel.m_displayListHeaders.Count, currentModel.m_displayListHeaders[m_currentModelSubIndex].indexCount,currentModel.m_displayListHeaders[m_currentModelSubIndex].Valid));
+            if (readDisplayLists)
+            {
+                sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}]", m_currentModelSubIndex, currentModel.m_displayListHeaders.Count, currentModel.m_displayListHeaders[m_currentModelSubIndex].indexCount, currentModel.m_displayListHeaders[m_currentModelSubIndex].Valid));
+            }
             sb.AppendLine("Textures : ");
             int counter = 0;
             foreach (string textureName in currentModel.m_textures)
