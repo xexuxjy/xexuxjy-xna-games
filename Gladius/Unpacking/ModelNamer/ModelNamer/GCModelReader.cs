@@ -32,7 +32,7 @@ namespace ModelNamer
             long currentPosition = reader.BaseStream.Position;
             bool success = false;
             byte header1 = reader.ReadByte();
-            Debug.Assert(header1 == 0x098);
+            //Debug.Assert(header1 == 0x098);
             short pad1 = reader.ReadInt16();
 
             header = new DisplayListHeader();
@@ -163,6 +163,102 @@ namespace ModelNamer
 
         }
 
+        public void ReadDSLISection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, GCModelReader.dsliTag, true))
+            {
+                int blockSize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int pad2 = binReader.ReadInt32();
+                int numSections = (blockSize - 8 - 4 - 4) / 8;
+
+                for (int i = 0; i < numSections; ++i)
+                {
+                    DSLIInfo info = DSLIInfo.ReadStream(binReader);
+                    if (info.length > 0)
+                    {
+                        m_dsliInfos.Add(info);
+                    }
+                }
+            }
+        }
+
+        public void ReadSKELSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, GCModelReader.skelTag))
+            {
+                int blockSize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int pad2 = binReader.ReadInt32();
+                int numBones = (blockSize - 16) / 32;
+
+                for (int i = 0; i < numBones; ++i)
+                {
+                    BoneNode node = BoneNode.FromStream(binReader);
+                    m_bones.Add(node);
+                }
+            }
+            ConstructSkeleton();
+        }
+
+        public void ReadDSLSSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, GCModelReader.dslsTag))
+            {
+                long dsllStartsAt = binReader.BaseStream.Position;
+                int dslsSectionLength = binReader.ReadInt32();
+                int uk2a = binReader.ReadInt32();
+                int uk2b = binReader.ReadInt32();
+
+                long startPos = binReader.BaseStream.Position;
+
+                DisplayListHeader header = null;
+                for (int i = 0; i < m_dsliInfos.Count; ++i)
+                {
+                    binReader.BaseStream.Position = startPos + m_dsliInfos[i].startPos;
+                    DisplayListHeader.FromStream(binReader, out header, m_dsliInfos[i]);
+                    if (header != null)
+                    {
+                        m_displayListHeaders.Add(header);
+                    }
+
+                }
+                long nowAt = binReader.BaseStream.Position;
+
+                long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
+                int ibreak = 0;
+            }
+
+
+        }
+
+
+        public void ConstructSkeleton()
+        {
+            Dictionary<int, BoneNode> dictionary = new Dictionary<int, BoneNode>();
+            foreach (BoneNode node in m_bones)
+            {
+                dictionary[node.id] = node;
+            }
+
+            foreach (BoneNode node in m_bones)
+            {
+                if (node.id != node.parentId)
+                {
+                    BoneNode parent = dictionary[node.parentId];
+                    parent.children.Add(node);
+                    node.parent = parent;
+                }
+            }
+
+        }
+
+        public void ConstructSkin(GCModel model)
+        {
+
+        }
+
+
         public void Validate()
         {
             foreach (DisplayListHeader header in m_displayListHeaders)
@@ -261,33 +357,33 @@ namespace ModelNamer
 
     public class GCModelReader
     {
-        static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
-        static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
-        static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' }; // External link information? referes to textures, other models, entities and so on? 
-        static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
-        static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
-        static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
+        public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
+        public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
+        public static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' }; // External link information? referes to textures, other models, entities and so on? 
+        public static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
+        public static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
+        public static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
         //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
-        static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };  // DisplayList information
-        static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };
-        static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };
-        static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
-        static char[] normTag = new char[] { 'N', 'O', 'R', 'M' };
-        static char[] uv0Tag = new char[] { 'U', 'V', '0', ' ' };
-        static char[] vflaTag = new char[] { 'V', 'F', 'L', 'A' };
-        static char[] ramTag = new char[] { 'R', 'A', 'M', ' ' };
-        static char[] msarTag = new char[] { 'M', 'S', 'A', 'R' };
-        static char[] nlvlTag = new char[] { 'N', 'L', 'V', 'L' };
-        static char[] meshTag = new char[] { 'M', 'E', 'S', 'H' };
-        static char[] elemTag = new char[] { 'E', 'L', 'E', 'M' };
-        static char[] skelTag = new char[] { 'S', 'K', 'E', 'L' };
-        static char[] skinTag = new char[] { 'S', 'K', 'I', 'N' };
-        static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
-        static char[] vflgTag = new char[] { 'V', 'F', 'L', 'G' };
-        static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
+        public static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };  // DisplayList information
+        public static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };
+        public static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };
+        public static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
+        public static char[] normTag = new char[] { 'N', 'O', 'R', 'M' };
+        public static char[] uv0Tag = new char[] { 'U', 'V', '0', ' ' };
+        public static char[] vflaTag = new char[] { 'V', 'F', 'L', 'A' };
+        public static char[] ramTag = new char[] { 'R', 'A', 'M', ' ' };
+        public static char[] msarTag = new char[] { 'M', 'S', 'A', 'R' };
+        public static char[] nlvlTag = new char[] { 'N', 'L', 'V', 'L' };
+        public static char[] meshTag = new char[] { 'M', 'E', 'S', 'H' };
+        public static char[] elemTag = new char[] { 'E', 'L', 'E', 'M' };
+        public static char[] skelTag = new char[] { 'S', 'K', 'E', 'L' };
+        public static char[] skinTag = new char[] { 'S', 'K', 'I', 'N' };
+        public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
+        public static char[] vflgTag = new char[] { 'V', 'F', 'L', 'G' };
+        public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
 
 
-        static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
+        public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
                                       dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, 
                                       ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
                                       vflgTag,stypTag,nameTag };
@@ -310,44 +406,21 @@ namespace ModelNamer
                 Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
 
                 long currentPos = binReader.BaseStream.Position;
-                ReadDSLISection(binReader, model);
+                model.ReadDSLISection(binReader);
                 binReader.BaseStream.Position = currentPos;
 
                 if (readDisplayLists)
                 {
-                    if (Common.FindCharsInStream(binReader, dslsTag))
-                    {
-                        long dsllStartsAt = binReader.BaseStream.Position;
-                        int dslsSectionLength = binReader.ReadInt32();
-                        int uk2a = binReader.ReadInt32();
-                        int uk2b = binReader.ReadInt32();
-
-                        long startPos = binReader.BaseStream.Position;
-
-                        DisplayListHeader header = null;
-                        for (int i = 0; i < model.m_dsliInfos.Count; ++i)
-                        {
-                            binReader.BaseStream.Position = startPos + model.m_dsliInfos[i].startPos;
-                            DisplayListHeader.FromStream(binReader, out header, model.m_dsliInfos[i]);
-                            if (header != null)
-                            {
-                                model.m_displayListHeaders.Add(header);
-                            }
-
-                        }
-                        long nowAt = binReader.BaseStream.Position;
-
-                        long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
-                        int ibreak = 0;
-
-                    }
+                    model.ReadDSLSSection(binReader);
                 }
 
-                ReadSKELSection(binReader,model);
+                model.ReadSKELSection(binReader);
                 
 
                 if (Common.FindCharsInStream(binReader, cntrTag, true))
                 {
+
+
                     //int blockSize = binReader.ReadInt32();
                     //int unk2 = binReader.ReadInt32();
                     //int unk3 = binReader.ReadInt32();
@@ -513,14 +586,25 @@ namespace ModelNamer
                             infoStream.WriteLine("Num DSLS : " + (((model.m_tagSizes[dsliTag] - 16) / 8)-1));
 
                             binReader.BaseStream.Position = 0;
+                            model.ReadDSLISection(binReader);
+
+                            binReader.BaseStream.Position = 0;
+                            model.ReadDSLSSection(binReader);
+
+                            binReader.BaseStream.Position = 0;
 
                             Common.ReadNullSeparatedNames(binReader, selsTag, model.m_selsInfo);
                             Common.ReadNullSeparatedNames(binReader, nameTag, model.m_names);
-
-
-
                             Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
+
                             StringBuilder sb = new StringBuilder();
+                            sb.AppendLine("DSLI : ");
+                            foreach (DSLIInfo dsliInfo in model.m_dsliInfos)
+                            {
+                                sb.AppendLine(String.Format("\t {0} {1}",dsliInfo.startPos,dsliInfo.length));
+                            }
+
+                            
                             sb.AppendLine("SELS : ");
                             foreach (string selName in model.m_selsInfo)
                             {
@@ -553,64 +637,6 @@ namespace ModelNamer
 
         }
 
-        public void ReadDSLISection(BinaryReader binReader,GCModel model)
-        {
-            if (Common.FindCharsInStream(binReader, dsliTag, true))
-            {
-                int blockSize = binReader.ReadInt32();
-                int pad1 = binReader.ReadInt32();
-                int pad2 = binReader.ReadInt32();
-                int numSections = (blockSize - 8-4-4) / 8;
-
-                for (int i = 0; i < numSections; ++i)
-                {
-                    DSLIInfo info = DSLIInfo.ReadStream(binReader);
-                    if (info.length > 0)
-                    {
-                        model.m_dsliInfos.Add(info);
-                    }
-                }
-            }
-        }
-
-        public void ReadSKELSection(BinaryReader binReader, GCModel model)
-        {
-            if (Common.FindCharsInStream(binReader, skelTag))
-            {
-                int blockSize = binReader.ReadInt32();
-                int pad1 = binReader.ReadInt32();
-                int pad2 = binReader.ReadInt32();
-                int numBones = (blockSize - 16) / 32;
-
-                for (int i = 0; i < numBones; ++i)
-                {
-                    BoneNode node = BoneNode.FromStream(binReader);
-                    model.m_bones.Add(node);
-                }
-            }
-            ConstructSkeleton(model);
-        }
-
-        public void ConstructSkeleton(GCModel model)
-        {
-            Dictionary<int, BoneNode> dictionary = new Dictionary<int, BoneNode>();
-            foreach (BoneNode node in model.m_bones)
-            {
-                dictionary[node.id] = node;
-            }
-
-            foreach (BoneNode node in model.m_bones)
-            {
-                if (node.id != node.parentId)
-                {
-                    BoneNode parent = dictionary[node.parentId];
-                    parent.children.Add(node);
-                    node.parent = parent;
-                }
-            }
-
-        }
-
 
 
 
@@ -619,7 +645,7 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             //String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
-            String modelPath = @"C:\tmp\unpacking\test-models";
+            String modelPath = @"C:\tmp\unpacking\probable-skinned-models";
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
             String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
 
