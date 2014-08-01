@@ -40,7 +40,7 @@ namespace Gladius
         public static String SchoolsPath = DataRoot+"Schools/";
         public static String EncountersPath = DataRoot + "Encounters/";
         public static String LeaguesPath = DataRoot + "Leagues/";
-
+        public static String ModelsRoot = "GladiusModels/FBXOutput/";
 
 
 
@@ -66,6 +66,19 @@ namespace Gladius
         public static Rect RectangleToRect(Rectangle r)
         {
             return new Rect(r.X, r.Y, r.Width, r.Height);
+        }
+
+        public static Transform FindChild(string name, Transform t)
+        {
+            if (t.name == name)
+                return t;
+            foreach (Transform child in t)
+            {
+                Transform ct = FindChild(name, child);
+                if (ct != null)
+                    return ct;
+            }
+            return null;
         }
 
         //public static bool NextToTarget(BaseActor from, BaseActor to)

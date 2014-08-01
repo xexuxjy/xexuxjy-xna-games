@@ -69,6 +69,9 @@ public class BaseActor : MonoBehaviour
     public BaseActor()
     {
         ModelHeight = 1f;
+        m_characterData = new CharacterData();
+        m_characterData.Name = "Test";
+
         //m_animatedModel = new AnimatedModel(ModelHeight);
 
         //m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
@@ -96,15 +99,6 @@ public class BaseActor : MonoBehaviour
         
         PlayAnimation(AnimationEnum.Idle);
 
-        //PlayAnimation(AnimationEnum.BowShot);
-
-        //Debug.Log ("Bounds " + gameObject.renderer.bounds);
-        //Component[] components = gameObject.GetComponentsInChildren<Component>();
-        //foreach (Component comp in components)
-        //{
-        //    Debug.Log("Comp : " + comp.GetType());
-        //}
-
 
     }
 
@@ -112,8 +106,6 @@ public class BaseActor : MonoBehaviour
 
     public void SetAnimationData()
     {
-        // all clips for animation.
-        //			m_world = new Transform ();
         m_clipNameDictionary[AnimationEnum.Idle] = "idle-2";
         m_clipNameDictionary[AnimationEnum.Walk] = "walk";
         m_clipNameDictionary[AnimationEnum.Attack1] = "w_attack-1";
@@ -203,19 +195,6 @@ public class BaseActor : MonoBehaviour
                 break;
             }
         }
-        int ibreak = 0;
-        //foreach (Transform bt in meshBones)
-        //{
-        //    if ("Bip01 L Hand".Equals(bt.name))
-        //    {
-        //        m_projectileHandTransform = bt;
-        //        break;
-        //    }
-        //}
-
-
-
-
     }
 
     private void CheckMesh(SkinnedMeshRenderer m, String matchingName, String variableName)
@@ -594,6 +573,28 @@ public class BaseActor : MonoBehaviour
             PlayAnimation(AnimationEnum.Stagger, false);
         }
     }
+
+    public void LoadAndAttachModel(String boneName, String modelName)
+    {
+        Transform boneTransform = GladiusGlobals.FindChild(boneName,gameObject.transform);
+        if (boneTransform != null)
+        {
+            GameObject load = Instantiate(Resources.Load(GladiusGlobals.ModelsRoot + modelName)) as GameObject;
+            if (load != null)
+            {   
+                load.transform.parent = boneTransform;
+                load.transform.localPosition = Vector3.zero;
+                load.transform.localRotation = Quaternion.Euler(new Vector3(90, 90, 0));
+                load.transform.localScale = new Vector3(100f,100f,100f);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Can't find boneName : " + boneName);
+        }
+    }
+
+
 
     private void UpdateThreatList(BaseActor actor)
     {
@@ -1537,6 +1538,11 @@ public class BaseActor : MonoBehaviour
     private int m_currentMovePoints;
     private int m_totalMovePoints = 10;
     private System.Random m_rng = new System.Random();
+
+
+    public Transform m_leftHandTransforms;
+    public Transform m_rightHandTransforms;
+
 
     private Transform m_projectileHandTransform;
     private Point m_knockBackArenaPoint = new Point();
