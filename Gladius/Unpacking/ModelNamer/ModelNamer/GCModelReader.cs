@@ -90,17 +90,7 @@ namespace ModelNamer
             node.parentId = binReader.ReadByte();
             return node;
         }
-
-
-
-
-
     }
-
-
-
-
-
 
     public struct DisplayListEntry
     {
@@ -130,8 +120,6 @@ namespace ModelNamer
         }
     }
 
-
-
     public class GCModel
     {
         public GCModel(String name)
@@ -141,26 +129,85 @@ namespace ModelNamer
 
         public void BuildBB()
         {
-            Vector3 min = new Vector3(float.MaxValue);
-            Vector3 max = new Vector3(float.MinValue);
-
-            //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
-            //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
-
-            for (int i = 0; i < m_points.Count; ++i)
+            if (!m_builtBB)
             {
-                if (m_points[i].X < min.X) min.X = m_points[i].X;
-                if (m_points[i].Y < min.Y) min.Y = m_points[i].Y;
-                if (m_points[i].Z < min.Z) min.Z = m_points[i].Z;
-                if (m_points[i].X > max.X) max.X = m_points[i].X;
-                if (m_points[i].Y > max.Y) max.Y = m_points[i].Y;
-                if (m_points[i].Z > max.Z) max.Z = m_points[i].Z;
+                Vector3 min = new Vector3(float.MaxValue);
+                Vector3 max = new Vector3(float.MinValue);
 
+                //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
+                //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
+
+                for (int i = 0; i < m_points.Count; ++i)
+                {
+                    if (m_points[i].X < min.X) min.X = m_points[i].X;
+                    if (m_points[i].Y < min.Y) min.Y = m_points[i].Y;
+                    if (m_points[i].Z < min.Z) min.Z = m_points[i].Z;
+                    if (m_points[i].X > max.X) max.X = m_points[i].X;
+                    if (m_points[i].Y > max.Y) max.Y = m_points[i].Y;
+                    if (m_points[i].Z > max.Z) max.Z = m_points[i].Z;
+
+                }
+
+                MinBB = min;
+                MaxBB = max;
+                m_builtBB = true;
+            }
+        }
+
+        public void ConstructSkeleton()
+        {
+            Dictionary<int, BoneNode> dictionary = new Dictionary<int, BoneNode>();
+            foreach (BoneNode node in m_bones)
+            {
+                dictionary[node.id] = node;
             }
 
-            MinBB = min;
-            MaxBB = max;
+            foreach (BoneNode node in m_bones)
+            {
+                if (node.id != node.parentId)
+                {
+                    BoneNode parent = dictionary[node.parentId];
+                    parent.children.Add(node);
+                    node.parent = parent;
+                }
+            }
 
+
+            if (!m_builtBB)
+            {
+                Vector3 min = new Vector3(float.MaxValue);
+                Vector3 max = new Vector3(float.MinValue);
+
+
+                foreach (BoneNode node in m_bones)
+                {
+                    // build tranform from parent chain?
+                    Vector3 offset = new Vector3();
+                    BoneNode walker = node.parent;
+                    while (walker != null)
+                    {
+                        offset += walker.offset;
+                        walker = walker.parent;
+                    }
+                    if (offset.X < min.X) min.X = offset.X;
+                    if (offset.Y < min.Y) min.Y = offset.Y;
+                    if (offset.Z < min.Z) min.Z = offset.Z;
+                    if (offset.X > max.X) max.X = offset.X;
+                    if (offset.Y > max.Y) max.Y = offset.Y;
+                    if (offset.Z > max.Z) max.Z = offset.Z;
+
+                }
+
+
+
+                //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
+                //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
+
+
+                MinBB = min;
+                MaxBB = max;
+                m_builtBB = true;
+            }
         }
 
         public void ReadDSLISection(BinaryReader binReader)
@@ -233,25 +280,6 @@ namespace ModelNamer
         }
 
 
-        public void ConstructSkeleton()
-        {
-            Dictionary<int, BoneNode> dictionary = new Dictionary<int, BoneNode>();
-            foreach (BoneNode node in m_bones)
-            {
-                dictionary[node.id] = node;
-            }
-
-            foreach (BoneNode node in m_bones)
-            {
-                if (node.id != node.parentId)
-                {
-                    BoneNode parent = dictionary[node.parentId];
-                    parent.children.Add(node);
-                    node.parent = parent;
-                }
-            }
-
-        }
 
         public void ConstructSkin(GCModel model)
         {
@@ -295,17 +323,20 @@ namespace ModelNamer
         public void WriteOBJ(StreamWriter writer,StreamWriter materialWriter)
         {
             // write material?
-            String textureName = "";
-            materialWriter.WriteLine("newmtl Textured");
-            materialWriter.WriteLine("Ka 1.000 1.000 1.000");
-            materialWriter.WriteLine("Kd 1.000 1.000 1.000");
-            materialWriter.WriteLine("Ks 0.000 0.000 0.000");
-            materialWriter.WriteLine("d 1.0");
-            materialWriter.WriteLine("illum 2");
-            materialWriter.WriteLine("map_Ka "+textureName);
-            materialWriter.WriteLine("map_Kd "+textureName);
+            foreach (String name in m_textures)
+            {
+                String textureName = name + ".png";
+                materialWriter.WriteLine("newmtl " + textureName);
+                materialWriter.WriteLine("Ka 1.000 1.000 1.000");
+                materialWriter.WriteLine("Kd 1.000 1.000 1.000");
+                materialWriter.WriteLine("Ks 0.000 0.000 0.000");
+                materialWriter.WriteLine("d 1.0");
+                materialWriter.WriteLine("illum 2");
+                materialWriter.WriteLine("map_Ka ../Textures/" + textureName);
+                materialWriter.WriteLine("map_Kd ../Textures/" + textureName);
+            }
 
-
+            writer.WriteLine("mtllib " + m_name + ".mtl");
             // and now points, uv's and normals.
             foreach (Vector3 v in m_points)
             {
@@ -313,21 +344,24 @@ namespace ModelNamer
             }
             foreach (Vector2 v in m_uvs)
             {
-                writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, v.Y));
+                writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, 1.0f-v.Y));
             }
             foreach (Vector3 v in m_points)
             {
                 writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
             }
 
+            writer.WriteLine("usemtl " + m_textures[m_textures.Count-1]+".png");
+
             foreach(DisplayListHeader dlh in m_displayListHeaders)
             {
                 int counter = 0;
+                int offset = 1;
                 for (int i = 0; i < dlh.entries.Count; )
                 {
-                    writer.WriteLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex, dlh.entries[i].UVIndex, dlh.entries[i].NormIndex,
-                        dlh.entries[i + 1].PosIndex, dlh.entries[i + 1].UVIndex, dlh.entries[i + 1].NormIndex,
-                        dlh.entries[i + 2].PosIndex, dlh.entries[i + 2].UVIndex, dlh.entries[i + 2].NormIndex));
+                    writer.WriteLine(String.Format("f {0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex+offset, dlh.entries[i].UVIndex+offset, dlh.entries[i].NormIndex+offset,
+                        dlh.entries[i + 1].PosIndex+offset, dlh.entries[i + 1].UVIndex+offset, dlh.entries[i + 1].NormIndex+offset,
+                        dlh.entries[i + 2].PosIndex + offset, dlh.entries[i + 2].UVIndex + offset, dlh.entries[i + 2].NormIndex + offset));
                     i += 3;
                 }
             }
@@ -352,6 +386,7 @@ namespace ModelNamer
         public Vector3 Center;
         public List<Matrix4> m_matrices = new List<Matrix4>();
         public List<BoneNode> m_bones = new List<BoneNode>();
+        private bool m_builtBB = false;
         //public bool Valid =true;
     }
 
@@ -470,8 +505,10 @@ namespace ModelNamer
                     }
 
                 }
-
-                model.BuildBB();
+                if (readDisplayLists)
+                {
+                    model.BuildBB();
+                }
                 model.Validate();
                 return model;
             }
@@ -640,6 +677,14 @@ namespace ModelNamer
 
 
 
+        //        for (int i = 0; i < numBones; ++i)
+        //        {
+        //            BoneNode node = BoneNode.FromStream(binReader);
+        //            model.m_bones.Add(node);
+        //        }
+        //    }
+        //    model.ConstructSkeleton();
+        //}
 
 
         static void Main(string[] args)
@@ -647,14 +692,28 @@ namespace ModelNamer
             //String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
             String modelPath = @"C:\tmp\unpacking\probable-skinned-models";
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
-            String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
+            //String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
+            String objOutputPath = @"d:\gladius-extracted-archive\gc-compressed\obj-models\";
 
-            //modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
+            modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
+            infoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-info.txt";
             //sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-sectionInfo.txt";
             GCModelReader reader = new GCModelReader();
+            reader.LoadModels(modelPath, infoFile);
+            foreach (GCModel model in reader.m_models)
+            {
+                using(StreamWriter objSw = new StreamWriter(objOutputPath+model.m_name+".obj"))
+                {
+                    using(StreamWriter matSw = new StreamWriter(objOutputPath+model.m_name+".mtl"))
+                    {
+                        model.WriteOBJ(objSw,matSw);
+                    }
+                }
+                
+            }
             //reader.LoadModels(modelPath,infoFile);
             //reader.DumpPoints(infoFile);
-            reader.DumpSectionLengths(modelPath, sectionInfoFile);
+            //reader.DumpSectionLengths(modelPath, sectionInfoFile);
 
 
 
