@@ -12,6 +12,8 @@ namespace Gladius
 {
     public class AttackSkill
     {
+        public const int m_defaultMoveToAttackRange = 5;
+
         public String Name;
         public String Type;
         public String SubType;
@@ -150,6 +152,10 @@ namespace Gladius
 
         public bool InRange(int val)
         {
+            if (IsMoveToAttack && val < m_defaultMoveToAttackRange)
+            {
+                return true;
+            }
             return val <= m_skillEffect.Range;
         }
 

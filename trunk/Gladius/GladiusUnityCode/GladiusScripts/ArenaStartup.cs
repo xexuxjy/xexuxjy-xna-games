@@ -131,7 +131,7 @@ public class ArenaStartup : MonoBehaviour
         if (!setupLos)
         {
             setupLos = true;
-            GladiusGlobals.LOSTester.SetStartAndEnd(new Point(10,0), new Point(10, 14));
+            //GladiusGlobals.LOSTester.SetStartAndEnd(new Point(10,0), new Point(10, 14));
         }
         //GladiusGlobals.TurnManager.Update();
     }
