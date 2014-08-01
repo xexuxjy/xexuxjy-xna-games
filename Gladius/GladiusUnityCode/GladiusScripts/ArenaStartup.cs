@@ -9,6 +9,8 @@ public class ArenaStartup : MonoBehaviour
 {
 
     public GameObject baseActorPrefab;
+    public GameObject attachableItemPrefab;
+
     public String ArenaDataName = "GladiusData/ArenaData/Arena1Data";
 
     public bool setupLos = false;
@@ -110,6 +112,11 @@ public class ArenaStartup : MonoBehaviour
         actor.ShoesModelName = "w_shoes_01";
         actor.HelmetModelName = "w_helmet_01";
         actor.SetMeshData();
+        actor.LoadAndAttachModel("RightHandAttach", "swordH_crescentmoon");
+        actor.LoadAndAttachModel("LeftHandAttach", "shieldH_spiked_round");
+        actor.LoadAndAttachModel("Bip01 Head", "helm_gallic");
+
+
     }
 
     public void SetActor2(BaseActor actor)

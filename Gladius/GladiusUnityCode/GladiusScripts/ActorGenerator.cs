@@ -156,7 +156,7 @@ namespace Gladius
         }
 
 
-        public CharacterData GenerateRandomCharacterUNITDB(String[] tokens)
+        public static CharacterData GenerateRandomCharacterUNITDB(String[] tokens)
         {
             int counter =0;
             String name = tokens[counter++];
@@ -259,7 +259,7 @@ namespace Gladius
         }
 
 
-        public void BuildClassesForMask(HashSet<String> classes)
+        public static void BuildClassesForMask(HashSet<String> classes)
         {
 
             // 0 = mongel? nah
