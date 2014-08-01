@@ -31,6 +31,9 @@ namespace Gladius
         NumTypes
     }
 
+
+
+
     public enum GameObjectAttributeModifierDurationType
     {
         InstantPermanent,
@@ -284,6 +287,46 @@ namespace Gladius
 		Root,
 		Stunned,
 	}
+    
+    [Flags]
+    public enum ClassAttributeFlags
+    {
+        Light = 1,
+        Medium = 2,
+        Heavy = 4,
+        Arcane = 8,
+        Support = 16,
+        Beast = 32,
+        Male = 64,
+        Female = 128,
+        Nordargh = 256,
+        Imperia = 512,
+        Human = 4096
+    }
+
+
+    // 0 = mongel? nah
+    // 1 = light
+    // 2 = legionnaire
+    // 4 - centurion?  or heavy?
+    // 8 = arcane
+    // 16 = support required
+    // 24 = prohibited arcane + support
+    // 32 = beast
+    // 56 = prohibited beast, required arcane + support
+    // 64 = male
+    // 128 = female
+    // heavy = 56 (32+16+8)
+    // 256 = Nordargh only?
+    // 512 = Imperia only
+    // 1024 = Southern Expanse?
+    // 2048 = Windward Steppes
+    // 1056 = 1024 + 32 required beast?
+    // 3633 = 2048 + 1024 + imperia + beast + support + light?   == barbarian?  
+    // 4096 = human
+    // 4160 = human male        4096+64
+    // 4224 = human female      4096+128
+
 
 
     public static class EnumUtil

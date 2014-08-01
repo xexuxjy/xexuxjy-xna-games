@@ -7,7 +7,7 @@ using System;
 public class UserControl : MonoBehaviour
 {
 
-    public const String ActionButton1Name = "Action 1";
+    public const String ActionButton1Name = "Action1";
 
     public void Start()
     {

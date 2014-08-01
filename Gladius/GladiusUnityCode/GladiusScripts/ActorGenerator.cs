@@ -156,6 +156,133 @@ namespace Gladius
         }
 
 
+        public CharacterData GenerateRandomCharacterUNITDB(String[] tokens)
+        {
+            int counter =0;
+            String name = tokens[counter++];
+            int val1 = int.Parse(tokens[counter++]);
+            String startSlot = tokens[counter++];
+            
+            int minLevel = int.Parse(tokens[counter++]);
+            int maxLevel  = int.Parse(tokens[counter++]);
+            int val4 = int.Parse(tokens[counter++]);
+
+            int level = -1; // base of player level?
+
+            if (minLevel > 0 && maxLevel > 0)
+            {
+                
+                level = GladiusGlobals.Random.Next(minLevel, maxLevel);
+            }
+
+
+            // seems to be a required mask
+            // 0 = mongel? nah
+            // 1 = light
+            // 2 = legionnaire
+            // 4 - centurion?  or heavy?
+            // 8 = arcane
+            // 16 = support required
+            // 24 = prohibited arcane + support
+            // 32 = beast
+            // 56 = prohibited beast, required arcane + support
+            // 64 = male
+            // 128 = female
+            // heavy = 56 (32+16+8)
+            // 256 = Nordargh only?
+            // 512 = Imperia only
+            // 4096 = human
+            // 4160 = human male        4096+64
+            // 4224 = human female      4096+128
+
+            int mask1 = int.Parse(tokens[counter++]);
+
+            // affinity requirement
+            // 5,2,1,4  ?? 
+            // 1  = earth
+            // 2 = water
+            // 3 = light
+            // 4 = air
+            // 5 = fire
+            // 6 = dark
+
+
+            DamageType damageType = DamageType.Physical;
+            int affinityRequirement = int.Parse(tokens[counter++]);
+            if (affinityRequirement != -1)
+            {
+                switch (affinityRequirement)
+                {
+                    case 1:
+                        damageType = DamageType.Earth;
+                        break;
+                    case 2:
+                        damageType = DamageType.Water;
+                        break;
+                    case 3:
+                        damageType = DamageType.Air;
+                        break;
+                    case 4:
+                        damageType = DamageType.Fire;
+                        break;
+                    default:
+                        damageType = DamageType.Physical;
+                        break;
+                }
+            }
+
+
+            String class1 = tokens[counter++];
+            String class2 = tokens[counter++];
+            String class3 = tokens[counter++];
+            String class4 = tokens[counter++];
+            int val7 = int.Parse(tokens[counter++]);
+            int requiredProhbited = int.Parse(tokens[counter++]);
+
+            HashSet<String> allowedClasses = new HashSet<string>();
+            allowedClasses.Add(class1);
+            allowedClasses.Add(class2);
+            allowedClasses.Add(class3);
+            allowedClasses.Add(class4);
+
+
+
+            int val9 = int.Parse(tokens[counter++]);
+            int val10 = int.Parse(tokens[counter++]);
+            int val11 = int.Parse(tokens[counter++]);
+            int val12 = int.Parse(tokens[counter++]);
+
+
+
+
+            return null;
+        }
+
+
+        public void BuildClassesForMask(HashSet<String> classes)
+        {
+
+            // 0 = mongel? nah
+            // 1 = light
+            // 2 = medium
+            // 4 = heavy
+            // 8 = arcane
+            // 16 = support 
+            // 24 = prohibited arcane + support
+            // 32 = beast
+            // 56 = prohibited beast, required arcane + support
+            // 64 = male
+            // 128 = female
+            // heavy = 56 (32+16+8)
+            // 256 = Nordargh only?
+            // 512 = Imperia only
+            // 4096 = human
+            // 4160 = human male        4096+64
+            // 4224 = human female      4096+128
+
+
+        }
+
 
 
         public static Dictionary<ActorClass, ActorCategory> CategoryClass = new Dictionary<ActorClass, ActorCategory>();
