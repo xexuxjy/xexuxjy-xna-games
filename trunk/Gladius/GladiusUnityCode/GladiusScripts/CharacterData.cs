@@ -49,6 +49,9 @@ namespace Gladius
         //    }
         //}
 
+        public ActorClassData ActorClassData
+        { get; set; }
+
 
         public String Name
         {
