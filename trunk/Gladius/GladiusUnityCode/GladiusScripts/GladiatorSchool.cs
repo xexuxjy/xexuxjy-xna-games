@@ -130,8 +130,8 @@ namespace Gladius
                     currentCharacterData.PWR = int.Parse(lineTokens[2]);
                     currentCharacterData.ACC = int.Parse(lineTokens[3]);
                     currentCharacterData.DEF = int.Parse(lineTokens[4]);
-                    currentCharacterData.INT = int.Parse(lineTokens[5]);
-                    currentCharacterData.MOVE = float.Parse(lineTokens[6]);
+                    currentCharacterData.INI = int.Parse(lineTokens[5]);
+                    currentCharacterData.MOV = float.Parse(lineTokens[6]);
                 }
                 else if (lineTokens[0] == "ITEMSCOMP")
                 {
@@ -174,7 +174,7 @@ namespace Gladius
                 sb.AppendLine(String.Format("EXPERIENCE: {0}", unit.Experience));
                 sb.AppendLine(String.Format("JOBPOINTS: {0}", unit.JobPoints));
                 sb.AppendLine("	//            	CON, PWR, ACC, DEF, INT, MOVE");
-                sb.AppendLine(String.Format("CORESTATSCOMP2: {0},{1},{2},{3},{4},{5}", unit.CON, unit.PWR, unit.ACC, unit.DEF, unit.INT, unit.MOVE));
+                sb.AppendLine(String.Format("CORESTATSCOMP2: {0},{1},{2},{3},{4},{5}", unit.CON, unit.PWR, unit.ACC, unit.DEF, unit.INI, unit.MOV));
                 sb.AppendLine("//	weapon,	armor,	shield,	helmet,	accessory");
                 sb.AppendLine(String.Format("ITEMSCOMP: \"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\"", unit.GetItemNameAtLoc(ItemLocation.Weapon), unit.GetItemNameAtLoc(ItemLocation.Armor), unit.GetItemNameAtLoc(ItemLocation.Shield), unit.GetItemNameAtLoc(ItemLocation.Helmet), unit.GetItemNameAtLoc(ItemLocation.Accessory)));
 

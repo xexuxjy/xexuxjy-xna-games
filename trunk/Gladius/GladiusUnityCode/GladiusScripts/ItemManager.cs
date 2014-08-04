@@ -92,6 +92,7 @@ namespace Gladius
                 else if (line.StartsWith(".ITEMMESH:"))
                 {
                     currentItem.MeshName = lineTokens[1];
+                    currentItem.ShortMeshName = currentItem.MeshName.Substring(currentItem.MeshName.LastIndexOf('\\'));
                 }
                 else if (line.StartsWith(".ITEMMATERIAL:"))
                 {
@@ -197,6 +198,13 @@ namespace Gladius
         {
             get;set;
         }
+
+        public String ShortMeshName
+        {
+            get;
+            set;
+        }
+
 
         public String MaterialName
         {

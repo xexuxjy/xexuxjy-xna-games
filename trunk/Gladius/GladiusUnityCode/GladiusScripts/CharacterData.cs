@@ -109,10 +109,10 @@ namespace Gladius
         public int DEF
         { get; set; }
 
-        public int INT
+        public int INI
         { get; set; }
 
-        public float MOVE
+        public float MOV
         { get; set; }
 
         public String TeamName
