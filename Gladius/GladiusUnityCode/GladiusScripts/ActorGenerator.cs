@@ -10,7 +10,13 @@ namespace Gladius
 {
     public static class ActorGenerator
     {
-        public static void SetActorStats(int level, ActorClass actorClass,CharacterData characterData)
+        public static void Initialise()
+        {
+            InitCategories();
+            LoadALLMODCoreStats();
+        }
+
+        public static void SetActorStats(int level, ActorClass actorClass, CharacterData characterData)
         {
             // quick and dirty way of generating characters.
             int accuracy = 10 * level;
@@ -28,120 +34,76 @@ namespace Gladius
         }
 
 
-        //public static void LoadActors(String filename, List<BaseActor> results)
-        //{
-        //    using (StreamReader sr = new StreamReader(filename))
-        //    {
-        //        String result = sr.ReadToEnd();
-        //        XmlDocument doc = new XmlDocument();
-        //        doc.LoadXml(result);
-        //        XmlNodeList nodes = doc.SelectNodes("//Character");
-        //        foreach (XmlNode node in nodes)
-        //        {
-        //            CharacterData characterData = new CharacterData();
-        //            characterData.SetupCharacterData(node as XmlElement);
-        //            BaseActor baseActor = new BaseActor();
-        //            baseActor.SetupCharacterData(characterData);
-        //            results.Add(baseActor);
-        //        }
-        //    }
-        //}
-
-
-        public static void InitXPLevel(String filename)
-        {
-            using (StreamReader sr = new StreamReader(filename))
-            {
-                String result = sr.ReadToEnd();
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(result);
-                XmlNodeList nodes = doc.SelectNodes("//Class");
-                foreach (XmlNode node in nodes)
-                {
-                    XmlElement element = node as XmlElement;
-                    ActorClass actorClass = (ActorClass)Enum.Parse(typeof(ActorClass), element.Attributes["name"].Value);
-                    String value = element.Attributes["value"].Value;
-                    String[] values = value.Split(',');
-                    int[] xpSteps = new int[GladiusGlobals.MaxLevel];
-                    for (int i = 0; i < values.Length; ++i)
-                    {
-                        xpSteps[i] = int.Parse(values[i]);
-                    }
-                    ActorXPLevels[actorClass] = xpSteps;
-                }
-            }
-        }
-
         public static void InitCategories()
-        {        
+        {
 
-            CategoryClass[ActorClass.Amazon] = ActorCategory.Support;
-            CategoryClass[ActorClass.Archer] = ActorCategory.Support;
-            CategoryClass[ActorClass.ArcherF] = ActorCategory.Support;
-            CategoryClass[ActorClass.BanditA] = ActorCategory.Light;
-            CategoryClass[ActorClass.BanditAF] = ActorCategory.Light;
-            CategoryClass[ActorClass.BanditB] = ActorCategory.Light;
-            CategoryClass[ActorClass.Barbarian] = ActorCategory.Medium;
-            CategoryClass[ActorClass.BarbarianF] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Bear] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.Berserker] = ActorCategory.Medium;
-            CategoryClass[ActorClass.BerserkerF] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Cat] = ActorCategory.Medium;
-            CategoryClass[ActorClass.CatGreater] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Centurion] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.CenturionF] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.ChannelerImp] = ActorCategory.Arcane;
-            CategoryClass[ActorClass.Cyclops] = ActorCategory.Medium;
-            CategoryClass[ActorClass.CyclopsGreater] = ActorCategory.Medium;
-            CategoryClass[ActorClass.DarkLegionnaire] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Dervish] = ActorCategory.Light;
-            CategoryClass[ActorClass.DervishF] = ActorCategory.Light;
+            ClassDataMap[ActorClass.Amazon] = new ActorClassData("Amazon", (ActorClassAttributes.Female | ActorClassAttributes.Human | ActorClassAttributes.Support));
+            ClassDataMap[ActorClass.Archer] = new ActorClassData("Archer", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Support));
+            ClassDataMap[ActorClass.ArcherF] = new ActorClassData("Archer", (ActorClassAttributes.Female | ActorClassAttributes.Human | ActorClassAttributes.Support));
+            ClassDataMap[ActorClass.BanditA] = new ActorClassData("Bandit", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Nordargh));
+            ClassDataMap[ActorClass.BanditAF] = new ActorClassData("Bandit", (ActorClassAttributes.Female | ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Nordargh));
+            ClassDataMap[ActorClass.BanditB] = new ActorClassData("Bandit", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.Barbarian] = new ActorClassData("Barbarian", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh));
+            ClassDataMap[ActorClass.BarbarianF] = new ActorClassData("Barbarian", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh));
+            ClassDataMap[ActorClass.Bear] = new ActorClassData("Bear", (ActorClassAttributes.Beast | ActorClassAttributes.Heavy | ActorClassAttributes.Nordargh));
+            ClassDataMap[ActorClass.Berserker] = new ActorClassData("Berserker", (ActorClassAttributes.Male| ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Nordargh));
+            ClassDataMap[ActorClass.BerserkerF] = new ActorClassData("Berserker", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Nordargh));
+            ClassDataMap[ActorClass.Cat] = new ActorClassData("Cat", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium));
+            ClassDataMap[ActorClass.CatGreater] = new ActorClassData("Cat", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium ));
+            ClassDataMap[ActorClass.Centurion] = new ActorClassData("Centurion", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.CenturionF] = new ActorClassData("Centurion", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.ChannelerImp] = new ActorClassData("Channeler", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Arcane| ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.Cyclops] = new ActorClassData("Cyclops", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium ));
+            ClassDataMap[ActorClass.CyclopsGreater] = new ActorClassData("Cyclops", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium));
+            ClassDataMap[ActorClass.DarkLegionnaire] = new ActorClassData("DarkLegionnaire", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.Dervish] = new ActorClassData("Dervish", (ActorClassAttributes.Male | ActorClassAttributes.Light | ActorClassAttributes.Expanse));
+            ClassDataMap[ActorClass.DervishF] = new ActorClassData("Dervish", (ActorClassAttributes.Female | ActorClassAttributes.Light | ActorClassAttributes.Expanse));
 
-            CategoryClass[ActorClass.Eiji] = ActorCategory.Support;
-            CategoryClass[ActorClass.Galdr] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Eiji] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Galdr] = ActorCategory.Support;
 
-            CategoryClass[ActorClass.Gungnir] = ActorCategory.Support;
-            CategoryClass[ActorClass.GungnirF] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Gungnir] = ActorCategory.Support;
+            ClassDataMap[ActorClass.GungnirF] = ActorCategory.Support;
 
-            CategoryClass[ActorClass.Gwazi] = ActorCategory.Light;
-            CategoryClass[ActorClass.Legionnaire] = ActorCategory.Medium;
-            CategoryClass[ActorClass.LegionnaireF] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Gwazi] = ActorCategory.Light;
+            ClassDataMap[ActorClass.Legionnaire] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.LegionnaireF] = ActorCategory.Medium;
 
-            CategoryClass[ActorClass.Ludo] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Minotaur] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.Mongrel] = ActorCategory.Medium;
-            CategoryClass[ActorClass.MongrelShaman] = ActorCategory.Arcane;
-            CategoryClass[ActorClass.Murmillo] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Ogre] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.Peltast] = ActorCategory.Support;
-            CategoryClass[ActorClass.PeltastF] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Ludo] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Minotaur] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.Mongrel] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.MongrelShaman] = ActorCategory.Arcane;
+            ClassDataMap[ActorClass.Murmillo] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Ogre] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.Peltast] = ActorCategory.Support;
+            ClassDataMap[ActorClass.PeltastF] = ActorCategory.Support;
 
-            CategoryClass[ActorClass.SamniteExp] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.SamniteExpF] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.SamniteImp] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.SamniteImpF] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.SamniteSte] = ActorCategory.Heavy;
-            CategoryClass[ActorClass.SamniteSteF] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.SamniteExp] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.SamniteExpF] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.SamniteImp] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.SamniteImpF] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.SamniteSte] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.SamniteSteF] = ActorCategory.Heavy;
 
-            CategoryClass[ActorClass.Satyr] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Scarab] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Scorpion] = ActorCategory.Medium;
-            CategoryClass[ActorClass.SecutorImp] = ActorCategory.Medium;
-            CategoryClass[ActorClass.SecutorImpF] = ActorCategory.Medium;
-            CategoryClass[ActorClass.SecutorSte] = ActorCategory.Medium;
-            CategoryClass[ActorClass.SecutorSteF] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Summoner] = ActorCategory.Arcane;
-            CategoryClass[ActorClass.UndeadMeleeImpA] = ActorCategory.Medium;
-            CategoryClass[ActorClass.UndeadCasterA] = ActorCategory.Support;
-            CategoryClass[ActorClass.Urlan] = ActorCategory.Medium;
-            CategoryClass[ActorClass.UrsulaCostumeA] = ActorCategory.Medium;
-            CategoryClass[ActorClass.UrsulaCostumeB] = ActorCategory.Medium;
-            CategoryClass[ActorClass.ValensCostumeA] = ActorCategory.Medium;
-            CategoryClass[ActorClass.ValensCostumeB] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Satyr] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Scarab] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Scorpion] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.SecutorImp] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.SecutorImpF] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.SecutorSte] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.SecutorSteF] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Summoner] = ActorCategory.Arcane;
+            ClassDataMap[ActorClass.UndeadMeleeImpA] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.UndeadCasterA] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Urlan] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.UrsulaCostumeA] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.UrsulaCostumeB] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.ValensCostumeA] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.ValensCostumeB] = ActorCategory.Medium;
 
-            CategoryClass[ActorClass.Valens] = ActorCategory.Medium;
-            CategoryClass[ActorClass.Wolf] = ActorCategory.Light;
-            CategoryClass[ActorClass.Yeti] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.Valens] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Wolf] = ActorCategory.Light;
+            ClassDataMap[ActorClass.Yeti] = ActorCategory.Heavy;
         }
 
 
@@ -393,42 +355,99 @@ namespace Gladius
 
         }
 
-            public static ModCOREStat StatForClassLevel(string className,int level)
-            {
-                ModCOREStat stats = null;
-                Dictionary<String,List<ModCOREStat>> row;
+        public static ModCOREStat StatForClassLevel(string className,int level)
+        {
+            ModCOREStat stats = null;
+            Dictionary<String,List<ModCOREStat>> row;
 
-                if(ClassVariantStatData.TryGetValue(className,out row))
+            if(ClassVariantStatData.TryGetValue(className,out row))
+            {
+                // find the first variant that contains the level?
+                foreach(String key in row.Keys)
                 {
-                    // find the first variant that contains the level?
-                    foreach(String key in row.Keys)
+                    List<ModCOREStat> statRow = row[key];
+                    if(statRow.Count >= level)
                     {
-                        List<ModCOREStat> statRow = row[key];
-                        if(statRow.Count >= level)
-                        {
-                            stats = statRow[level];
-                            break;
-                        }
+                        stats = statRow[level];
+                        break;
                     }
                 }
-
-                return stats;
             }
 
-
-
-
+            return stats;
+        }
 
 
         public static Dictionary<String, Dictionary<String, List<ModCOREStat>>> ClassVariantStatData = new Dictionary<String, Dictionary<String, List<ModCOREStat>>>();
 
-        public static Dictionary<ActorClass, ActorCategory> CategoryClass = new Dictionary<ActorClass, ActorCategory>();
+        public static Dictionary<ActorClass, ActorClassData> ClassDataMap = new Dictionary<ActorClass, ActorClassData>();
+
+
         public static Dictionary<ActorClass, int[]> ActorXPLevels = new Dictionary<ActorClass, int[]>();
-        public static ActorClass[] Heavy = new ActorClass[] { };
+        public static ActorClass[] Heavy = new ActorClass[] {};
         public static ActorClass[] Medium = new ActorClass[] { };
         public static ActorClass[] Heavies = new ActorClass[] { };
 
     }
+
+    public class ActorClassData
+    {
+        String m_name;
+        ActorClassAttributes m_mask;
+
+        public ActorClassData(String name, ActorClassAttributes mask)
+        {
+            m_name = name;
+            m_mask = mask;
+        }
+
+        // 0 = mongel? nah
+        // 1 = light
+        // 2 = medium
+        // 4 = heavy
+        // 8 = arcane
+        // 16 = support 
+        // 24 = prohibited arcane + support
+        // 32 = beast
+        // 56 = prohibited beast, required arcane + support
+        // 64 = male
+        // 128 = female
+        // heavy = 56 (32+16+8)
+        // 256 = Nordargh only?
+        // 512 = Imperia only
+        // 4096 = human
+        // 4160 = human male        4096+64
+        // 4224 = human female      4096+128
+
+        bool IsMale { get { return (m_mask & ActorClassAttributes.Male) > 0; } }
+        bool IsFemale { get { return (m_mask & ActorClassAttributes.Female) > 0; } }
+        bool IsLight { get { return (m_mask & ActorClassAttributes.Light) > 0; } }
+        bool IsMedium { get { return (m_mask & ActorClassAttributes.Medium) > 0; } }
+        bool IsHeavy { get { return (m_mask & ActorClassAttributes.Heavy) > 0; } }
+        bool IsArcane { get { return (m_mask & ActorClassAttributes.Arcane) > 0; } }
+        bool IsSupport { get { return (m_mask & ActorClassAttributes.Support) > 0; } }
+        bool IsBeast { get { return (m_mask & ActorClassAttributes.Beast) > 0; } }
+        bool IsNordargh { get { return (m_mask & ActorClassAttributes.Nordargh) > 0; } }
+        bool IsImperia { get { return (m_mask & ActorClassAttributes.Imperia) > 0; } }
+    }
+    [Flags]
+    public enum ActorClassAttributes
+    {
+        Light = 1 << 0,
+        Medium = 1 << 1,
+        Heavy = 1 << 2,
+        Arcane = 1 << 3,
+        Support = 1 << 4,
+        Beast = 1 << 5,
+        Male = 1 << 6,
+        Female = 1 << 7,
+        Nordargh = 1 << 8,
+        Imperia = 1 << 9,
+        Steppes = 1 << 10,
+        Expanse = 1 << 11,
+        Human = 1 << 12
+    }
+
 
     public class ModCOREStat
     {
