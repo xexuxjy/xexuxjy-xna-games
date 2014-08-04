@@ -59,10 +59,10 @@ public class BaseActor : MonoBehaviour
         { get{return m_characterData.DEF;} set{m_characterData.DEF=value;}}
 
         public int INT
-        { get{return m_characterData.INT;} set{m_characterData.INT=value;}}
+        { get{return m_characterData.INI;} set{m_characterData.INI=value;}}
 
         public float MOVE
-        { get{return m_characterData.MOVE;} set{m_characterData.MOVE=value;}}
+        { get{return m_characterData.MOV;} set{m_characterData.MOV=value;}}
 
 
 

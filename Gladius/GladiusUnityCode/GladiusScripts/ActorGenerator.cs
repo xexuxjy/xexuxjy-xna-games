@@ -158,6 +158,7 @@ namespace Gladius
 
         public static CharacterData GenerateRandomCharacterUNITDB(String[] tokens)
         {
+            CharacterData characterData = new CharacterData();
             int counter =0;
             String name = tokens[counter++];
             int val1 = int.Parse(tokens[counter++]);
@@ -169,11 +170,21 @@ namespace Gladius
 
             int level = -1; // base of player level?
 
+
+
             if (minLevel > 0 && maxLevel > 0)
             {
                 
                 level = GladiusGlobals.Random.Next(minLevel, maxLevel);
             }
+
+
+            characterData.Level = level;
+            characterData.Name = name;
+
+
+            //characterData
+
 
 
             // seems to be a required mask
@@ -252,10 +263,20 @@ namespace Gladius
             int val11 = int.Parse(tokens[counter++]);
             int val12 = int.Parse(tokens[counter++]);
 
+            String className = characterData.ActorClass.ToString();
+            ModCOREStat statData = StatForClassLevel(className, level);
+            if (statData != null)
+            {
+                characterData.CON = statData.CON;
+                characterData.PWR = statData.PWR;
+                characterData.ACC= statData.ACC;
+                characterData.DEF= statData.DEF;
+                characterData.INI= statData.INI;
+                characterData.MOV= statData.MOV;
+            }
 
 
-
-            return null;
+            return characterData;
         }
 
 
@@ -283,7 +304,123 @@ namespace Gladius
 
         }
 
+        public static void LoadALLMODCoreStats()
+        {
+            
+            TextAsset[] allFiles = Resources.LoadAll<TextAsset>("Resources/ExtractedData/ModCoreStatFiles");
+            foreach(TextAsset file in allFiles)
+            {
+                String[] lines = file.text.Split('\n');
+                LoadMODCOREStats(lines);
+            }
+        }
 
+
+        public static void LoadMODCOREStats(String[] fileData)
+        {
+            if (fileData.Length > 0)
+            {
+                String className = "unk";
+                if (fileData[0].StartsWith("// STATSET"))
+                {
+                    className = fileData[0].Substring(fileData[0].LastIndexOf(":") + 1);
+                    className = className.Trim();
+
+                    if (!ClassVariantStatData.ContainsKey(className))
+                    {
+                        ClassVariantStatData[className] = new Dictionary<String, List<ModCOREStat>>();
+                    }
+
+
+                    List<String> shortList = new List<String>();
+                    char[] splitTokens = new char[] { ' ', ',' };
+                    for (int i = 1; i < fileData.Length; ++i)
+                    {
+                        if (fileData[i].StartsWith("MODCORESTATSCOMP:"))
+                        {
+                            String[] tokens = fileData[i].Split(splitTokens);
+                            shortList.Clear();
+                            foreach (String token in tokens)
+                            {
+                                if (!String.IsNullOrEmpty(token))
+                                {
+                                    shortList.Add(token);
+                                }
+                            }
+                            int counter = 0;
+
+                            String pad = shortList[counter++];
+                            String variant = shortList[counter++];
+                            String level = shortList[counter++];
+                            String con = shortList[counter++];
+                            String pow = shortList[counter++];
+                            String acc = shortList[counter++];
+                            String def = shortList[counter++];
+                            String ini = shortList[counter++];
+                            String mov = shortList[counter++];
+
+                            ModCOREStat modCOREStat = new ModCOREStat();
+                            modCOREStat.className = className;
+                            modCOREStat.variantName = variant;
+                            modCOREStat.level = int.Parse(level);
+                            modCOREStat.CON = int.Parse(con);
+                            modCOREStat.PWR = int.Parse(pow);
+                            modCOREStat.ACC = int.Parse(acc);
+                            modCOREStat.DEF = int.Parse(def);
+                            modCOREStat.INI = int.Parse(ini);
+                            modCOREStat.MOV = float.Parse(mov);
+
+                            List<ModCOREStat> statList;
+                            if (!ClassVariantStatData[className].ContainsKey(variant))
+                            {
+                                ClassVariantStatData[className][variant] = new List<ModCOREStat>();
+                            }
+
+                            statList = ClassVariantStatData[className][variant];
+
+                            statList.Add(modCOREStat);
+
+
+                            int ibreak = 0;
+                        }
+                    }
+
+
+                }
+            }
+
+
+
+        }
+
+            public static ModCOREStat StatForClassLevel(string className,int level)
+            {
+                ModCOREStat stats = null;
+                Dictionary<String,List<ModCOREStat>> row;
+
+                if(ClassVariantStatData.TryGetValue(className,out row))
+                {
+                    // find the first variant that contains the level?
+                    foreach(String key in row.Keys)
+                    {
+                        List<ModCOREStat> statRow = row[key];
+                        if(statRow.Count >= level)
+                        {
+                            stats = statRow[level];
+                            break;
+                        }
+                    }
+                }
+
+                return stats;
+            }
+
+
+
+
+
+
+        public static Dictionary<String, Dictionary<String, List<ModCOREStat>>> ClassVariantStatData = new Dictionary<String, Dictionary<String, List<ModCOREStat>>>();
 
         public static Dictionary<ActorClass, ActorCategory> CategoryClass = new Dictionary<ActorClass, ActorCategory>();
         public static Dictionary<ActorClass, int[]> ActorXPLevels = new Dictionary<ActorClass, int[]>();
@@ -292,4 +429,20 @@ namespace Gladius
         public static ActorClass[] Heavies = new ActorClass[] { };
 
     }
+
+    public class ModCOREStat
+    {
+        public String className;
+        public String variantName;
+        public int level;
+        public int CON;
+        public int PWR;
+        public int ACC;
+        public int DEF;
+        public int INI;
+        public float MOV;
+
+    }
+
+
 }
