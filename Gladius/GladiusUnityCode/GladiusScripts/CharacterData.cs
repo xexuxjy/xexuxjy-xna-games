@@ -17,41 +17,6 @@ namespace Gladius
             CON = 10;
             XP = 10;
         }
-        //public void Save(StreamWriter streamWriter)
-        //{
-        //    StringBuilder data = new StringBuilder();
-        //    data.AppendFormat("<Character Name=\"{0}\" Class=\"{1}\" Level=\"{2}\">", Name, ActorClass.ToString(), Level);
-        //    data.Append("<Attributes ");
-        //    foreach (GameObjectAttributeType attrType in m_attributeDictionary.Keys)
-        //    {
-        //        data.AppendFormat("{0}=\"{1}\" ", attrType, m_attributeDictionary[attrType].CurrentValue);
-        //    }
-        //    data.Append(" />");
-
-        //    data.AppendFormat("<Equipment Head=\"{0}\" Arm1=\"{1}\" Arm2=\"{2}\" Body=\"{3}\" Special=\"{4}\" />\n",
-        //    m_items[(int)ItemLocation.Helmet], m_items[(int)ItemLocation.Shield], m_items[(int)ItemLocation.Weapon],
-        //    m_items[(int)ItemLocation.Armor], m_items[(int)ItemLocation.Accessory]);
-
-        //    data.Append("</Character>");
-        //    streamWriter.WriteLine(data);
-        //}
-
-        //public int XPToNextLevel
-        //{
-        //    get
-        //    {
-        //        if (Level < GladiusGlobals.MaxLevel - 2)
-        //        {
-        //            int nextlevel = ActorGenerator.ActorXPLevels[ActorClass][Level + 1];
-        //            return nextlevel - m_attributeDictionary[GameObjectAttributeType.Experience].CurrentValue;
-        //        }
-        //        return -1;
-        //    }
-        //}
-
-        public ActorClassData ActorClassData
-        { get; set; }
-
 
         public String Name
         {
@@ -89,6 +54,13 @@ namespace Gladius
             get;
             set;
         }
+
+        public ActorClassData ActorClassData
+        {
+            get;
+            set;
+        }
+
 
         public Point? StartPosition
         { get; set; }

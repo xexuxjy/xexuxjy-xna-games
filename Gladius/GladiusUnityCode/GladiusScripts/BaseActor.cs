@@ -1513,6 +1513,10 @@ public class BaseActor : MonoBehaviour
 
     }
 
+    public ActorClassData ActorClassData
+    {
+        get { return m_characterData.ActorClassData; }
+    }
 
     private CharacterData m_characterData;
 
