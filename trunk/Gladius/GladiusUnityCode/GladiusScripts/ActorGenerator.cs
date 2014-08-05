@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using UnityEngine;  
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -52,58 +52,57 @@ namespace Gladius
             ClassDataMap[ActorClass.CatGreater] = new ActorClassData("Cat", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium ));
             ClassDataMap[ActorClass.Centurion] = new ActorClassData("Centurion", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Imperia));
             ClassDataMap[ActorClass.CenturionF] = new ActorClassData("Centurion", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Imperia));
-            ClassDataMap[ActorClass.ChannelerImp] = new ActorClassData("Channeler", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Arcane| ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.ChannelerImp] = new ActorClassData("Channeler", (ActorClassAttributes.Female | ActorClassAttributes.Human | ActorClassAttributes.Arcane| ActorClassAttributes.Imperia));
             ClassDataMap[ActorClass.Cyclops] = new ActorClassData("Cyclops", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium ));
             ClassDataMap[ActorClass.CyclopsGreater] = new ActorClassData("Cyclops", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium));
             ClassDataMap[ActorClass.DarkLegionnaire] = new ActorClassData("DarkLegionnaire", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia));
-            ClassDataMap[ActorClass.Dervish] = new ActorClassData("Dervish", (ActorClassAttributes.Male | ActorClassAttributes.Light | ActorClassAttributes.Expanse));
-            ClassDataMap[ActorClass.DervishF] = new ActorClassData("Dervish", (ActorClassAttributes.Female | ActorClassAttributes.Light | ActorClassAttributes.Expanse));
+            ClassDataMap[ActorClass.Dervish] = new ActorClassData("Dervish", (ActorClassAttributes.Male | ActorClassAttributes.Light | ActorClassAttributes.Expanse | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.DervishF] = new ActorClassData("Dervish", (ActorClassAttributes.Female | ActorClassAttributes.Light | ActorClassAttributes.Expanse | ActorClassAttributes.Human));
 
-            ClassDataMap[ActorClass.Eiji] = ActorCategory.Support;
-            ClassDataMap[ActorClass.Galdr] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Eiji] = new ActorClassData("Eiji", (ActorClassAttributes.Female | ActorClassAttributes.Support | ActorClassAttributes.Steppes | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.Galdr] = new ActorClassData("Galdr", (ActorClassAttributes.Female | ActorClassAttributes.Arcane | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
 
-            ClassDataMap[ActorClass.Gungnir] = ActorCategory.Support;
-            ClassDataMap[ActorClass.GungnirF] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Gungnir] = new ActorClassData("Gungir", (ActorClassAttributes.Male | ActorClassAttributes.Support | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.GungnirF] = new ActorClassData("Gungir", (ActorClassAttributes.Female | ActorClassAttributes.Support | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
 
-            ClassDataMap[ActorClass.Gwazi] = ActorCategory.Light;
-            ClassDataMap[ActorClass.Legionnaire] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.LegionnaireF] = ActorCategory.Medium;
+            ClassDataMap[ActorClass.Gwazi] = new ActorClassData("Gwazi", (ActorClassAttributes.Male | ActorClassAttributes.Light | ActorClassAttributes.Expanse | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.Legionnaire] = new ActorClassData("Legionnarie", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.LegionnaireF] = new ActorClassData("Legionnarie", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
 
-            ClassDataMap[ActorClass.Ludo] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.Minotaur] = ActorCategory.Heavy;
-            ClassDataMap[ActorClass.Mongrel] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.MongrelShaman] = ActorCategory.Arcane;
-            ClassDataMap[ActorClass.Murmillo] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.Ogre] = ActorCategory.Heavy;
-            ClassDataMap[ActorClass.Peltast] = ActorCategory.Support;
-            ClassDataMap[ActorClass.PeltastF] = ActorCategory.Support;
+            ClassDataMap[ActorClass.Ludo] = new ActorClassData("Ludo", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.Minotaur] = new ActorClassData("Minotaur", (ActorClassAttributes.Beast | ActorClassAttributes.Heavy));
+            ClassDataMap[ActorClass.Mongrel] = new ActorClassData("Mongrel", (ActorClassAttributes.Male | ActorClassAttributes.Light | ActorClassAttributes.Nordargh | ActorClassAttributes.Beast));
+            ClassDataMap[ActorClass.MongrelShaman] = new ActorClassData("MongrelShaman", (ActorClassAttributes.Male | ActorClassAttributes.Arcane| ActorClassAttributes.Nordargh | ActorClassAttributes.Beast));
+            ClassDataMap[ActorClass.Murmillo] = new ActorClassData("Murmillo", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.Ogre] = new ActorClassData("Ogre", (ActorClassAttributes.Beast | ActorClassAttributes.Heavy));
+            ClassDataMap[ActorClass.Peltast] = new ActorClassData("Peltast", (ActorClassAttributes.Male | ActorClassAttributes.Support| ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.PeltastF] = new ActorClassData("Peltast", (ActorClassAttributes.Female | ActorClassAttributes.Support | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
 
-            ClassDataMap[ActorClass.SamniteExp] = ActorCategory.Heavy;
-            ClassDataMap[ActorClass.SamniteExpF] = ActorCategory.Heavy;
-            ClassDataMap[ActorClass.SamniteImp] = ActorCategory.Heavy;
-            ClassDataMap[ActorClass.SamniteImpF] = ActorCategory.Heavy;
-            ClassDataMap[ActorClass.SamniteSte] = ActorCategory.Heavy;
-            ClassDataMap[ActorClass.SamniteSteF] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.SamniteExp] = new ActorClassData("Samnite", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Expanse));
+            ClassDataMap[ActorClass.SamniteExpF] = new ActorClassData("Samnite", (ActorClassAttributes.Female | ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Expanse));
+            ClassDataMap[ActorClass.SamniteImp] = new ActorClassData("Samnite", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.SamniteImpF] = new ActorClassData("Samnite", (ActorClassAttributes.Female | ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.SamniteSte] = new ActorClassData("Samnite", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Steppes));
+            ClassDataMap[ActorClass.SamniteSteF] = new ActorClassData("Samnite", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Heavy | ActorClassAttributes.Steppes));
 
-            ClassDataMap[ActorClass.Satyr] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.Scarab] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.Scorpion] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.SecutorImp] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.SecutorImpF] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.SecutorSte] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.SecutorSteF] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.Summoner] = ActorCategory.Arcane;
-            ClassDataMap[ActorClass.UndeadMeleeImpA] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.UndeadCasterA] = ActorCategory.Support;
-            ClassDataMap[ActorClass.Urlan] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.UrsulaCostumeA] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.UrsulaCostumeB] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.ValensCostumeA] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.ValensCostumeB] = ActorCategory.Medium;
-
-            ClassDataMap[ActorClass.Valens] = ActorCategory.Medium;
-            ClassDataMap[ActorClass.Wolf] = ActorCategory.Light;
-            ClassDataMap[ActorClass.Yeti] = ActorCategory.Heavy;
+            ClassDataMap[ActorClass.Satyr] = new ActorClassData("Satyr", (ActorClassAttributes.Male| ActorClassAttributes.Beast | ActorClassAttributes.Arcane ));
+            ClassDataMap[ActorClass.Scarab] = new ActorClassData("Scarab", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Medium));
+            ClassDataMap[ActorClass.Scorpion] = new ActorClassData("Scorption", (ActorClassAttributes.Male| ActorClassAttributes.Beast | ActorClassAttributes.Medium ));
+            ClassDataMap[ActorClass.SecutorImp] = new ActorClassData("Secutor", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.SecutorImpF] = new ActorClassData("Secutor", (ActorClassAttributes.Female| ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.SecutorSte] = new ActorClassData("Secutor", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Steppes));
+            ClassDataMap[ActorClass.SecutorSteF] = new ActorClassData("Secutor", (ActorClassAttributes.Female | ActorClassAttributes.Human | ActorClassAttributes.Light | ActorClassAttributes.Steppes));
+            ClassDataMap[ActorClass.Summoner] = new ActorClassData("Summoner", (ActorClassAttributes.Male | ActorClassAttributes.Human | ActorClassAttributes.Arcane));
+            ClassDataMap[ActorClass.UndeadMeleeImpA] = new ActorClassData("UndeadLegionnaire", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia));
+            ClassDataMap[ActorClass.UndeadCasterA] = new ActorClassData("UndeadSummoner", (ActorClassAttributes.Male | ActorClassAttributes.Arcane));
+            ClassDataMap[ActorClass.Urlan] = new ActorClassData("Urlan", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh| ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.UrsulaCostumeA] = new ActorClassData("Ursula", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.UrsulaCostumeB] = new ActorClassData("Ursula", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.ValensCostumeA] = new ActorClassData("Valens", (ActorClassAttributes.Male| ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.ValensCostumeB] = new ActorClassData("Valens", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.Valens] = new ActorClassData("Valens", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.Wolf] = new ActorClassData("Wolf", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Light));
+            ClassDataMap[ActorClass.Yeti] = new ActorClassData("Yeti", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Heavy| ActorClassAttributes.Nordargh));
         }
 
 
@@ -419,16 +418,16 @@ namespace Gladius
         // 4160 = human male        4096+64
         // 4224 = human female      4096+128
 
-        bool IsMale { get { return (m_mask & ActorClassAttributes.Male) > 0; } }
-        bool IsFemale { get { return (m_mask & ActorClassAttributes.Female) > 0; } }
-        bool IsLight { get { return (m_mask & ActorClassAttributes.Light) > 0; } }
-        bool IsMedium { get { return (m_mask & ActorClassAttributes.Medium) > 0; } }
-        bool IsHeavy { get { return (m_mask & ActorClassAttributes.Heavy) > 0; } }
-        bool IsArcane { get { return (m_mask & ActorClassAttributes.Arcane) > 0; } }
-        bool IsSupport { get { return (m_mask & ActorClassAttributes.Support) > 0; } }
-        bool IsBeast { get { return (m_mask & ActorClassAttributes.Beast) > 0; } }
-        bool IsNordargh { get { return (m_mask & ActorClassAttributes.Nordargh) > 0; } }
-        bool IsImperia { get { return (m_mask & ActorClassAttributes.Imperia) > 0; } }
+        public bool IsMale { get { return (m_mask & ActorClassAttributes.Male) > 0; } }
+        public bool IsFemale { get { return (m_mask & ActorClassAttributes.Female) > 0; } }
+        public bool IsLight { get { return (m_mask & ActorClassAttributes.Light) > 0; } }
+        public bool IsMedium { get { return (m_mask & ActorClassAttributes.Medium) > 0; } }
+        public bool IsHeavy { get { return (m_mask & ActorClassAttributes.Heavy) > 0; } }
+        public bool IsArcane { get { return (m_mask & ActorClassAttributes.Arcane) > 0; } }
+        public bool IsSupport { get { return (m_mask & ActorClassAttributes.Support) > 0; } }
+        public bool IsBeast { get { return (m_mask & ActorClassAttributes.Beast) > 0; } }
+        public bool IsNordargh { get { return (m_mask & ActorClassAttributes.Nordargh) > 0; } }
+        public bool IsImperia { get { return (m_mask & ActorClassAttributes.Imperia) > 0; } }
     }
     [Flags]
     public enum ActorClassAttributes

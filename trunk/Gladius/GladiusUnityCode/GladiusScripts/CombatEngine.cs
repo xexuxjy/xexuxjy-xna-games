@@ -22,7 +22,7 @@ namespace Gladius.combat
             //float totalDamage = attackSkill.BaseDamage;
 
             //DAMAGE  =  BASE POWER  x  ( ATTACK MULTIPLIER / 100 )  x  SITUATIONAL FACTORS
-            float categoryMultiplier = GetCategoryDamageMultiplier(ActorGenerator.CategoryClass[attacker.ActorClass], ActorGenerator.CategoryClass[defender.ActorClass]);
+            float categoryMultiplier = GetCategoryDamageMultiplier(attacker.ActorClassData, defender.ActorClassData);
 
             // lots of other stats to adjust here..
             // base on facing
@@ -81,7 +81,7 @@ namespace Gladius.combat
         {
             AttackResult attackResult = new AttackResult();
 
-            float accuracyBonus = GetCategoryAccuracyBonus(ActorGenerator.CategoryClass[attacker.ActorClass], ActorGenerator.CategoryClass[defender.ActorClass]);
+            float accuracyBonus = GetCategoryAccuracyBonus(attacker.ActorClassData, defender.ActorClassData);
             float totalDamage = CalculateExpectedDamage(attacker, defender, attackSkill);
 
 
@@ -173,32 +173,32 @@ namespace Gladius.combat
         }
 
 
-        private float GetCategoryDamageMultiplier(ActorCategory attacker, ActorCategory defender)
+        private float GetCategoryDamageMultiplier(ActorClassData attacker, ActorClassData defender)
         {
             float categoryMultiplier = 1f;
             if (attacker != defender)
             {
-                if (attacker == ActorCategory.Heavy && defender == ActorCategory.Medium)
+                if (attacker.IsHeavy && defender.IsMedium)
                 {
                     categoryMultiplier = 1.5f;
                 }
-                else if (attacker == ActorCategory.Heavy && defender == ActorCategory.Light)
+                else if (attacker.IsHeavy && defender.IsLight)
                 {
                     categoryMultiplier = 0.5f;
                 }
-                else if (attacker == ActorCategory.Medium && defender == ActorCategory.Light)
+                else if (attacker.IsMedium && defender.IsLight)
                 {
                     categoryMultiplier = 1.5f;
                 }
-                else if (attacker == ActorCategory.Medium && defender == ActorCategory.Heavy)
+                else if (attacker.IsMedium&& defender.IsHeavy)
                 {
                     categoryMultiplier = 0.5f;
                 }
-                else if (attacker == ActorCategory.Light && defender == ActorCategory.Heavy)
+                else if (attacker.IsLight && defender.IsHeavy)
                 {
                     categoryMultiplier = 1.5f;
                 }
-                else if (attacker == ActorCategory.Light && defender == ActorCategory.Medium)
+                else if (attacker.IsLight&& defender.IsMedium)
                 {
                     categoryMultiplier = 0.5f;
                 }
@@ -207,14 +207,14 @@ namespace Gladius.combat
         }
 
 
-        private float GetCategoryAccuracyBonus(ActorCategory attacker, ActorCategory defender)
+        private float GetCategoryAccuracyBonus(ActorClassData attacker, ActorClassData defender)
         {
             float bonus = 0f;
-            if (attacker == ActorCategory.Heavy && defender == ActorCategory.Light)
+            if (attacker.IsHeavy && defender.IsLight)
             {
                 bonus = -20f;
             }
-            else if (attacker == ActorCategory.Light && defender == ActorCategory.Heavy)
+            else if (attacker.IsLight && defender.IsHeavy)
             {
                 bonus = 38f;
             }
@@ -229,24 +229,19 @@ namespace Gladius.combat
 
         public int GetClassAdvantage(BaseActor attacker, BaseActor defender)
         {
-            ActorCategory aCat = ActorGenerator.CategoryClass[attacker.ActorClass];
-            ActorCategory dCat = ActorGenerator.CategoryClass[defender.ActorClass];
 
-            if (aCat == ActorCategory.Heavy && dCat == ActorCategory.Light)
+            if (attacker.ActorClassData.IsHeavy && defender.ActorClassData.IsLight)
             {
                 return -1;
             }
-            if (aCat == ActorCategory.Heavy && dCat == ActorCategory.Medium)
+            if (attacker.ActorClassData.IsHeavy && defender.ActorClassData.IsMedium)
             {
                 return 1;
             }
-            if (aCat == ActorCategory.Light && dCat == ActorCategory.Medium)
+            if (attacker.ActorClassData.IsLight&& defender.ActorClassData.IsMedium)
             {
                 return -1;
             }
-
-
-
             return 0;
         }
 
