@@ -34,7 +34,7 @@ namespace ModelNamer
         public List<String> m_fileNames = new List<string>();
         public Dictionary<String,GCModel> m_modelMap = new Dictionary<string,GCModel>();
 
-        public bool readDisplayLists = false;
+        public bool readDisplayLists = true;
 
 
         public PointViewer()
@@ -55,7 +55,11 @@ namespace ModelNamer
 
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\gladius-extracted\gc-models\probable-models-renamed", "*"));
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
-            m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\test-models", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\test-models", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models", "*"));
+
+
+            m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\barbarian2.mdl");
             ChangeModelNext();
 
 
@@ -472,7 +476,7 @@ namespace ModelNamer
 
 
             Vector3 mid = new Vector3();
-            if (readDisplayLists)
+            //if (readDisplayLists)
             {
                 mid = new Vector3(m_currentModel.MaxBB - m_currentModel.MinBB) / 2f;
             }
@@ -511,6 +515,9 @@ namespace ModelNamer
             GCModel currentModel = m_currentModel;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
+            sb.AppendLine("Bones : " + currentModel.m_bones.Count);
+            sb.AppendLine("MaxVertex : " + currentModel.m_maxVertex);
+
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
             if (readDisplayLists)
             {

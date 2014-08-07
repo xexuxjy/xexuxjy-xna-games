@@ -26,13 +26,15 @@ namespace ModelNamer
         public short indexCount;
         public bool Valid = true;
         public List<DisplayListEntry> entries = new List<DisplayListEntry>();
+        public int maxVertex;
+
 
         public static bool FromStream(BinaryReader reader, out DisplayListHeader header,DSLIInfo dsliInfo)
         {
             long currentPosition = reader.BaseStream.Position;
             bool success = false;
             byte header1 = reader.ReadByte();
-            //Debug.Assert(header1 == 0x098);
+            Debug.Assert(header1 == 0x98);
             short pad1 = reader.ReadInt16();
 
             header = new DisplayListHeader();
@@ -45,7 +47,8 @@ namespace ModelNamer
                 success = true;
                 for (int i = 0; i < header.indexCount; ++i)
                 {
-                    header.entries.Add(DisplayListEntry.FromStream(reader));
+                    DisplayListEntry e = DisplayListEntry.FromStream(reader);
+                    header.entries.Add(e);
                 }
             }
             else
@@ -222,6 +225,12 @@ namespace ModelNamer
                 for (int i = 0; i < numSections; ++i)
                 {
                     DSLIInfo info = DSLIInfo.ReadStream(binReader);
+                    if (m_skinned)
+                    {
+                        //info.length /= 2;
+                        info.startPos *= 2;
+                    }
+
                     if (info.length > 0)
                     {
                         m_dsliInfos.Add(info);
@@ -296,20 +305,24 @@ namespace ModelNamer
 
                     for (int i = 0; i < header.entries.Count; ++i)
                     {
+                        if (header.entries[i].PosIndex > m_maxVertex)
+                        {
+                            m_maxVertex = header.entries[i].PosIndex;
+                        }
                         if (header.entries[i].PosIndex < 0 || header.entries[i].PosIndex >= m_points.Count)
                         {
                             header.Valid = false;
-                            break;
+                            //break;
                         }
                         if (header.entries[i].NormIndex < 0 || header.entries[i].NormIndex >= m_normals.Count)
                         {
                             header.Valid = false;
-                            break;
+                            //break;
                         }
                         if (header.entries[i].UVIndex < 0 || header.entries[i].UVIndex >= m_uvs.Count)
                         {
                             header.Valid = false;
-                            break;
+                            //break;
                         }
 
                         
@@ -387,6 +400,9 @@ namespace ModelNamer
         public List<Matrix4> m_matrices = new List<Matrix4>();
         public List<BoneNode> m_bones = new List<BoneNode>();
         private bool m_builtBB = false;
+        public bool m_skinned = true;
+        public int m_maxVertex;
+
         //public bool Valid =true;
     }
 
