@@ -24,11 +24,11 @@ namespace ModelNamer
         private System.Collections.Generic.List<System.Collections.Generic.List<byte>> rows = new System.Collections.Generic.List<System.Collections.Generic.List<byte>>();
         private System.Collections.Generic.List<byte> row = new System.Collections.Generic.List<byte>();
 
-            String targetDirectory = @"c:/gladius-extracted/test-extract/";
+            String targetDirectory = @"d:/gladius-extracted/test-extract/";
             //String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
-            String filepath = @"c:\gladius-extracted\ps2-decompressed\PTTP\";
-            String errorFile = @"c:\gladius-extracted\ps2-decompressed-errors";
-            String infoFile = @"c:\gladius-extracted\ps2-texturelist";
+            String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
+            String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
+            String infoFile = @"d:\gladius-extracted\ps2-texturelist";
 
 
 
@@ -608,10 +608,10 @@ namespace ModelNamer
     public class ImageExtractor
     {
 
-        String targetDirectory = @"c:/gladius-extracted/test-extract/";
+        String targetDirectory = @"d:/gladius-extracted/test-extract/";
         //String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
-        String filepath = @"c:\gladius-extracted\ps2-decompressed\PTTP\";
-        String errorFile = @"c:\gladius-extracted\ps2-decompressed-errors";
+        String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
+        String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
 
         public static char[] PTTPHeader = new char[] { 'P', 'T', 'T', 'P' };
         public static char[] NAMEHeader = new char[] { 'N', 'A', 'M', 'E' };

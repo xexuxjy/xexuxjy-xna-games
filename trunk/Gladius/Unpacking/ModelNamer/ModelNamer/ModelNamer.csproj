@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PS2ToGCModelNamer.cs" />
     <Compile Include="R2V2Analyzer.cs" />
+    <Compile Include="TestModCoreStat.cs" />
     <Compile Include="TokRenamer.cs" />
     <Compile Include="XboxModelReader.cs" />
   </ItemGroup>
