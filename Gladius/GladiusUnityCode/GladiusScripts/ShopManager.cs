@@ -95,13 +95,15 @@ namespace Gladius
             
             if (!shopItems.TryGetValue(itemName,out shopItem))
             {
+
+
                 itemList.Add(itemName);
                 shopItem = new ShopItem(data[1]);
-                shopItems[shopItem.Name] = shopItem;
-                itemCount[shopItem.Name] = 1;
+                shopItems[shopItem.LongName] = shopItem;
+                itemCount[shopItem.LongName] = 1;
             }
             //update count
-            itemCount[shopItem.Name]++;
+            itemCount[shopItem.LongName]++;
         }
 
         public ShopItem GetItem(String name)
@@ -130,7 +132,11 @@ namespace Gladius
     {
         public ShopItem(String name)
         {
-            Name = name;
+            LongName = name;
+
+            AdjustNameAndDamageType(name);
+
+            //Name = name;
 
             if (GladiusGlobals.ItemManager.ContainsKey(name))
             {
@@ -141,6 +147,33 @@ namespace Gladius
                 Debug.LogWarning("Can't find : " + name);
             }
 
+        }
+        public void AdjustNameAndDamageType(String name)
+        {
+            ReplaceKey(name, "Air ", DamageType.Air);
+            ReplaceKey(name, "Earth ", DamageType.Earth);
+            ReplaceKey(name, "Fire ", DamageType.Fire);
+            ReplaceKey(name, "Water ", DamageType.Water);
+            ReplaceKey(name, "Dark ", DamageType.Dark);
+            ReplaceKey(name, "Light ", DamageType.Light);
+        }
+
+        public bool ReplaceKey(String name, String key, DamageType damageType)
+        {
+            if (name.StartsWith(key))
+            {
+                name = name.Remove(0, key.Length);
+                Name = name;
+                DamageType = damageType;
+                return true;
+            }
+            return false;
+        }
+
+        public String LongName
+        {
+            get;
+            set;
         }
 
         public String Name
@@ -159,6 +192,12 @@ namespace Gladius
         }
 
         public bool Selected
+        {
+            get;
+            set;
+        }
+
+        public DamageType DamageType
         {
             get;
             set;

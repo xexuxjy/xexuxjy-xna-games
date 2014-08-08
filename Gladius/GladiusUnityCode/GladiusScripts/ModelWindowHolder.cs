@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Gladius;
 
@@ -33,7 +33,7 @@ public class ModelWindowHolder : MonoBehaviour
 
                 m_gameObjectInstance = Instantiate(m_gameObjectPrefab) as GameObject;
                 
-                int uiLayerId = LayerMask.NameToLayer("UI");
+                int uiLayerId = LayerMask.NameToLayer("GUI");
                 GladiusGlobals.MoveToLayer(m_gameObjectPrefab.transform, uiLayerId);
                 
 
