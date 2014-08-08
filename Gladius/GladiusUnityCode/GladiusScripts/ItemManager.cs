@@ -94,7 +94,7 @@ namespace Gladius
                     currentItem.MeshName = lineTokens[1];
                     if (currentItem.MeshName.Contains("\\"))
                     {
-                        currentItem.ShortMeshName = currentItem.MeshName.Substring(currentItem.MeshName.LastIndexOf('\\'));
+                        currentItem.ShortMeshName = currentItem.MeshName.Substring(currentItem.MeshName.LastIndexOf('\\')+1);
                     }
                     else
                     {

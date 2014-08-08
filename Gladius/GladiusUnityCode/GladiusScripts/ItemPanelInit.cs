@@ -9,16 +9,23 @@ namespace Gladius
 
         public GameObject itemSlotPrefab;
         dfControl lastControl;
+        private ShopItem lastShopItem;
+
 
         dfRichTextLabel detailsPanelLabel;
         dfControl imagePanel;
 
+        GameObject modelImagePanel;
+
+
 
         // Use this for initialization
-        void Start()
+        void Awake()
         {
             GameObject panel = GameObject.Find("DetailsRTLabel");
             detailsPanelLabel = panel.GetComponent<dfRichTextLabel>();
+
+            modelImagePanel = GameObject.Find("ModelImagePanel");
 
         }
 
@@ -40,17 +47,17 @@ namespace Gladius
                     shopItems.Add(new ShopItem(itemName));
                 }
 
-                container.Virtualize<ShopItem>(shopItems,itemPanel);
+                container.Virtualize<ShopItem>(shopItems, itemPanel);
 
 
-                    //GameObject shopItemGameObject = (GameObject)Instantiate(itemSlotPrefab);
-                    //shopItemGameObject.name = itemName;
-                    //ShopItemGUI shopItemGUI = shopItemGameObject.GetComponent<ShopItemGUI>();
-                    //shopItemGUI.ItemName = itemName;
+                //GameObject shopItemGameObject = (GameObject)Instantiate(itemSlotPrefab);
+                //shopItemGameObject.name = itemName;
+                //ShopItemGUI shopItemGUI = shopItemGameObject.GetComponent<ShopItemGUI>();
+                //shopItemGUI.ItemName = itemName;
 
-                    //dfControl panel = shopItemGameObject.GetComponent<dfControl>();
-                    //container.AddControl(panel);
-                    //shopItemGUI.Refresh();
+                //dfControl panel = shopItemGameObject.GetComponent<dfControl>();
+                //container.AddControl(panel);
+                //shopItemGUI.Refresh();
             }
 
         }
@@ -60,41 +67,49 @@ namespace Gladius
         void Update()
         {
 
-            dfControl controlUnderMouse = dfInputManager.ControlUnderMouse;
-            if (controlUnderMouse != null && controlUnderMouse != lastControl)
+            // test
+            if(Input.GetMouseButton(0))
             {
-                ShopItemGUI lastGuiItem = null;
-
-                GameObject go = controlUnderMouse.gameObject;
-                ShopItemGUI currentGuiItem = go.GetComponent<ShopItemGUI>();
-
-                if (lastControl != null)
+                dfControl controlUnderMouse = dfInputManager.ControlUnderMouse;
+                if(controlUnderMouse != null)
                 {
-                    lastGuiItem = lastControl.gameObject.GetComponent<ShopItemGUI>();
-                }
+                    GameObject go = controlUnderMouse.gameObject;
+                    ShopItem currentShopItem= go.GetComponent<ShopItemGUI>().ShopItem;
 
-                if (lastGuiItem != null)
-                {
-                    lastGuiItem.Selected = false;
-                }
-                if (currentGuiItem != null)
-                {
-                    currentGuiItem.Selected = true;
-                }
 
-                ItemSelectionChanged(lastGuiItem, currentGuiItem);
+                    ItemSelectionChanged(lastShopItem, currentShopItem);
 
-                lastControl = controlUnderMouse;
+                    lastControl = controlUnderMouse;
+                    
+                }
             }
         }
 
-        public void ItemSelectionChanged(ShopItemGUI previous, ShopItemGUI current)
+        public void ItemSelectionChanged(ShopItem previous, ShopItem current)
         {
-            if (previous != null && current != null)
+            if (previous != null)
             {
-                detailsPanelLabel.Text = current.ShopItem.Item.Name;
-                detailsPanelLabel.Text = string.Format("<h2 color=\"yellow\">{0}</h1><p>PWR: {1} CON:{2} INI: {3}</p><p><i>{4}</i></p>", current.ShopItem.Name, 10, 10, 10, current.ShopItem.Item.Description);
+                previous.Selected = false;
+            }
 
+
+            if (current != null)
+            {
+                current.Selected = true;
+                detailsPanelLabel.Text = current.Item.Name;
+                detailsPanelLabel.Text = string.Format("<h2 color=\"yellow\">{0}</h1><p>PWR: {1} CON:{2} INI: {3}</p><p><i>{4}</i></p>", current.Name, 10, 10, 10, current.Item.Description);
+
+                GameObject goPrefab = (GameObject)(Resources.Load(GladiusGlobals.ModelsRoot + current.Item.ShortMeshName));
+                if (goPrefab != null)
+                {
+                    modelImagePanel.GetComponent<ModelWindowHolder>().AttachedModelPrefabToWindow(goPrefab);
+                }
+                else
+                {
+                    Debug.LogWarning("Can't find : " + current.Item.ShortMeshName);
+                }
+
+                previous = current;
             }
         }
 
