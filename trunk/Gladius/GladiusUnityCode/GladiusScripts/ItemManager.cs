@@ -92,7 +92,14 @@ namespace Gladius
                 else if (line.StartsWith(".ITEMMESH:"))
                 {
                     currentItem.MeshName = lineTokens[1];
-                    currentItem.ShortMeshName = currentItem.MeshName.Substring(currentItem.MeshName.LastIndexOf('\\'));
+                    if (currentItem.MeshName.Contains("\\"))
+                    {
+                        currentItem.ShortMeshName = currentItem.MeshName.Substring(currentItem.MeshName.LastIndexOf('\\'));
+                    }
+                    else
+                    {
+                        int ibreak1 = 0;
+                    }
                 }
                 else if (line.StartsWith(".ITEMMATERIAL:"))
                 {

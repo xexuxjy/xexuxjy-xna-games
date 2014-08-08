@@ -25,22 +25,32 @@ namespace Gladius
 
         public void Populate()
         {
-            List<string> shopItems = GladiusGlobals.CurrentShop.GetItemList();
+            List<string> shopItemNames = GladiusGlobals.CurrentShop.GetItemList();
+            List<ShopItem> shopItems = new List<ShopItem>();
+
             dfScrollPanel container = gameObject.GetComponent<dfScrollPanel>();
+
+            dfPanel itemPanel = itemSlotPrefab.GetComponent<dfPanel>();
 
             if (container != null)
             {
-                foreach (string itemName in shopItems)
+                //container.
+                foreach (string itemName in shopItemNames)
                 {
-                    GameObject shopItemGameObject = (GameObject)Instantiate(itemSlotPrefab);
-                    shopItemGameObject.name = itemName;
-                    ShopItemGUI shopItemGUI = shopItemGameObject.GetComponent<ShopItemGUI>();
-                    shopItemGUI.ItemName = itemName;
-
-                    dfControl panel = shopItemGameObject.GetComponent<dfControl>();
-                    container.AddControl(panel);
-                    shopItemGUI.Refresh();
+                    shopItems.Add(new ShopItem(itemName));
                 }
+
+                container.Virtualize<ShopItem>(shopItems,itemPanel);
+
+
+                    //GameObject shopItemGameObject = (GameObject)Instantiate(itemSlotPrefab);
+                    //shopItemGameObject.name = itemName;
+                    //ShopItemGUI shopItemGUI = shopItemGameObject.GetComponent<ShopItemGUI>();
+                    //shopItemGUI.ItemName = itemName;
+
+                    //dfControl panel = shopItemGameObject.GetComponent<dfControl>();
+                    //container.AddControl(panel);
+                    //shopItemGUI.Refresh();
             }
 
         }
@@ -82,7 +92,7 @@ namespace Gladius
         {
             if (previous != null && current != null)
             {
-                detailsPanelLabel.Text = current.ItemName;
+                detailsPanelLabel.Text = current.ShopItem.Item.Name;
                 detailsPanelLabel.Text = string.Format("<h2 color=\"yellow\">{0}</h1><p>PWR: {1} CON:{2} INI: {3}</p><p><i>{4}</i></p>", current.ShopItem.Name, 10, 10, 10, current.ShopItem.Item.Description);
 
             }
@@ -91,7 +101,7 @@ namespace Gladius
 
         public void PurchaseItem(ShopItemGUI itemGui)
         {
-            GladiusGlobals.GladiatorSchool.CurrentCharacter.ReplaceItem(itemGui.ItemName);
+            GladiusGlobals.GladiatorSchool.CurrentCharacter.ReplaceItem(itemGui.ShopItem.Item.Name);
         }
 
     }

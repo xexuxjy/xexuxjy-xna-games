@@ -4,13 +4,28 @@ using System;
 
 namespace Gladius
 {
-    public class ShopItemGUI : MonoBehaviour
+    public class ShopItemGUI : MonoBehaviour, IDFVirtualScrollingTile
     {
+        private dfPanel m_panel;
+        private dfLabel m_labelName;
+        private dfLabel m_labelCost;
+        private dfRichTextLabel m_labelStats;
+
+        private int m_index;
 
         // Use this for initialization
-        void Start()
+        void Awake()
         {
+            m_panel = GetComponent<dfPanel>();
+            //var slot = control.GetComponentInChildren<SpellSlot>();
+            m_labelName = m_panel.Find<dfLabel>("ItemName");
+            m_labelCost = m_panel.Find<dfLabel>("ItemCost");
+            m_labelStats = m_panel.Find<dfRichTextLabel>("ItemStats");
 
+
+            if (m_labelName == null) throw new Exception("Not found: lblName");
+            if (m_labelCost == null) throw new Exception("Not found: lblCosts");
+            if (m_labelStats == null) throw new Exception("Not found: lblStats");
         }
 
         // Update is called once per frame
@@ -29,14 +44,9 @@ namespace Gladius
             set
             {
                 _selected = value;
-                var control = gameObject.GetComponent<dfControl>();
-                var lblName = control.Find<dfLabel>("ItemName");
-                lblName.Color = Selected?Color.blue:Color.white;
+                m_labelName.Color = Selected?Color.blue:Color.white;
             }
         }
-
-        public string ItemName
-        { get; set; }
 
         public ShopItem ShopItem
         { get; set; }
@@ -52,47 +62,47 @@ namespace Gladius
                 control.Width = container.Width -container.ScrollPadding.horizontal;
             }
 
-            //var slot = control.GetComponentInChildren<SpellSlot>();
-            var lblName = control.Find<dfLabel>("ItemName");
-            var lblCost = control.Find<dfLabel>("ItemCost");
-            var lblStats = control.Find<dfRichTextLabel>("ItemStats");
-
-
-            if (lblCost == null) throw new Exception("Not found: lblCosts");
-            if (lblName == null) throw new Exception("Not found: lblName");
-            if (lblStats == null) throw new Exception("Not found: lblStats");
-
-            ShopItem = GladiusGlobals.CurrentShop.GetItem(this.ItemName);
-            lblName.Text = ShopItem.Name;
-            lblCost.Text = "" + ShopItem.Cost;
+            m_labelName.Text = ShopItem.Name;
+            m_labelCost.Text = "" + ShopItem.Cost;
             if (ShopItem.Item != null)
             {
-                lblStats.Text = ShopItem.Item.Description;
+                m_labelStats.Text = ShopItem.Item.Description;
             }
 
-            //if (assignedSpell == null)
-            //{
-            //    slot.Spell = "";
-            //    lblCosts.Text = "";
-            //    lblName.Text = "";
-            //    lblDescription.Text = "";
-            //    return;
-            //}
-            //else
-            //{
-            //    slot.Spell = this.spellName;
-            //    lblName.Text = assignedSpell.Name;
-            //    lblCosts.Text = string.Format("{0}/{1}/{2}", assignedSpell.Cost, assignedSpell.Recharge, assignedSpell.Delay);
-            //    lblDescription.Text = assignedSpell.Description;
-            //}
-
             // Resize this control to match the size of the contents
-            var statsHeight = lblStats.RelativePosition.y + lblStats.Size.y;
-            var costHeight = lblCost.RelativePosition.y + lblCost.Size.y;
+            var statsHeight = m_labelStats.RelativePosition.y + m_labelStats.Size.y;
+            var costHeight = m_labelCost.RelativePosition.y + m_labelCost.Size.y;
             control.Height = Mathf.Max(statsHeight, costHeight) + 5;
 
         }
 
 
+
+        #region IDFVirtualScrollingTile Members
+
+        public int VirtualScrollItemIndex
+        {
+            get
+            {
+                return m_index;
+            }
+            set
+            {
+                m_index = value;
+            }
+        }
+
+        public void OnScrollPanelItemVirtualize(object backingListItem)
+        {
+            ShopItem = backingListItem as ShopItem;
+            Refresh();
+        }
+
+        public dfPanel GetDfPanel()
+        {
+            return m_panel;
+        }
+
+        #endregion
     }
 }
