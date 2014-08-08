@@ -74,11 +74,12 @@ namespace Gladius
                 if(controlUnderMouse != null)
                 {
                     GameObject go = controlUnderMouse.gameObject;
-                    ShopItem currentShopItem= go.GetComponent<ShopItemGUI>().ShopItem;
-
-
-                    ItemSelectionChanged(lastShopItem, currentShopItem);
-
+                    ShopItemGUI shopItemGUI = go.GetComponent<ShopItemGUI>();
+                    if (shopItemGUI != null)
+                    {
+                        ShopItem currentShopItem = shopItemGUI.ShopItem;
+                        ItemSelectionChanged(lastShopItem, currentShopItem);
+                    }
                     lastControl = controlUnderMouse;
                     
                 }
