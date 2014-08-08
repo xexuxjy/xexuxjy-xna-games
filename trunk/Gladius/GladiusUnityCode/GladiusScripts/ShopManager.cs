@@ -158,6 +158,12 @@ namespace Gladius
             set;
         }
 
+        public bool Selected
+        {
+            get;
+            set;
+        }
+
     }
 
 

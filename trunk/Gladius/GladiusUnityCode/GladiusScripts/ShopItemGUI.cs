@@ -34,20 +34,6 @@ namespace Gladius
 
         }
 
-        bool _selected;
-        public bool Selected
-        {
-            get
-            {
-                return _selected;
-            }
-            set
-            {
-                _selected = value;
-                m_labelName.Color = Selected?Color.blue:Color.white;
-            }
-        }
-
         public ShopItem ShopItem
         { get; set; }
 
@@ -68,6 +54,8 @@ namespace Gladius
             {
                 m_labelStats.Text = ShopItem.Item.Description;
             }
+
+            m_labelName.Color = ShopItem.Selected ? Color.blue : Color.white;
 
             // Resize this control to match the size of the contents
             var statsHeight = m_labelStats.RelativePosition.y + m_labelStats.Size.y;
