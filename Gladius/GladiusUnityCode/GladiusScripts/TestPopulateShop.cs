@@ -25,6 +25,9 @@ namespace Gladius
             label.Text = shop.Name;
 
             GameObject panel = GameObject.Find("InventoryPanel");
+
+            //panel.Vi
+
             //GameObject panel = GameObject.Find("Listbox");
 
             if (panel != null)

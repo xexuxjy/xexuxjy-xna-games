@@ -129,7 +129,7 @@ namespace Gladius
             int maxLevel  = int.Parse(tokens[counter++]);
             int val4 = int.Parse(tokens[counter++]);
 
-            int level = -1; // base of player level?
+            int level = -1; // base of player level?u
 
 
 
@@ -246,7 +246,7 @@ namespace Gladius
 
             // 0 = mongel? nah
             // 1 = light
-            // 2 = medium
+            // 2 = mediumu
             // 4 = heavy
             // 8 = arcane
             // 16 = support 
