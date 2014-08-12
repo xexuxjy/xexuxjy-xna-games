@@ -154,6 +154,12 @@ namespace Gladius.arena
             //Debug.Log("StartTurn");
             if (CurrentActor != null)
             {
+                // tell all the actors that this actor is starting their turn to allow for status updates..
+                foreach (BaseActor actor in m_allActors)
+                {
+                    actor.ActorTurnStarted(CurrentActor);
+                }
+
                 CurrentActor.StartTurn();
 				GladiusGlobals.CameraManager.TargetObject = CurrentActor.gameObject;
                 if (CurrentActor.PlayerControlled)

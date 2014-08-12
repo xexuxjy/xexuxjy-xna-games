@@ -273,20 +273,22 @@ namespace Gladius
         SourceCone
     }
 
-	public enum StatusCondition
+    public static class StatusConditions
+    {
+        public static string[] Conditions = 
 	{
-		All,
-		Bleeding,
-		Blind,
-		Charmed,
-		Confused,
-		Doom,
-		Feared,
-		Frozen,
-		Petrified,
-		Root,
-		Stunned,
-	}
+        "statuscond_bleeding",
+        "statuscond_blind",
+        "statuscond_charmed",
+        "statuscond_confused",
+        "statuscond_doom",
+        "statuscond_feared",
+        "statuscond_frozen",
+        "statuscond_petrified",
+        "statuscond_root",
+        "statuscond_stunned"
+	};
+    }
     
     [Flags]
     public enum ClassAttributeFlags
