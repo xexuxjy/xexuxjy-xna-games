@@ -1077,6 +1077,13 @@ public class BaseActor : MonoBehaviour
     private bool TurnStarted
     { get; set; }
 
+    public void ActorTurnStarted(BaseActor baseActor)
+    {
+
+    }
+
+
+
     public void StartTurn()
     {
         UnitActive = true;
@@ -1099,6 +1106,46 @@ public class BaseActor : MonoBehaviour
             Think();
         }
     }
+
+    // we'll only get here after immunity checks and the like so don't re-check
+    public void CauseStatus(String statusName,SkillStatus skillStatus)
+    {
+
+
+
+
+
+    }
+
+    public bool ImmuneToStatus(String name)
+    {
+        // check all active and passive skills.
+        foreach (AttackSkill skill in m_activeSkills)
+        {
+            if (skill.IsImmuneTo(name))
+            {
+                return true;
+            }
+        }
+        foreach (AttackSkill skill in m_innateSkills)
+        {
+            if (skill.IsImmuneTo(name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void UpdateOngoingSkillStatuses(BaseActor source)
+    {
+        foreach (OngoingSkillStatus status in m_ongoingStatuses)
+        {
+            status.UpdateForSource(source);
+        }
+    }
+
+
 
     public bool ImmuneToDamageType(DamageType damageType)
     {
@@ -1532,10 +1579,8 @@ public class BaseActor : MonoBehaviour
     public List<AttackSkill> m_innateSkills = new List<AttackSkill>();
     public List<AttackSkill> m_activeSkills = new List<AttackSkill>();
 
-    //private Dictionary<GameObjectAttributeType, BoundedAttribute> m_attributeDictionary = new Dictionary<GameObjectAttributeType, BoundedAttribute>();
-    //private List<GameObjectAttributeModifier> m_attributeModifiers = new List<GameObjecAttributeModifier>();
-    
-    //private AnimatedModel m_animatedModel;
+    public List<OngoingSkillStatus> m_ongoingStatuses = new List<OngoingSkillStatus>();
+
 
     private float m_movementSpeed = 2f;
     private float m_turnSpeed = 1f;
@@ -1572,4 +1617,65 @@ public class BaseActor : MonoBehaviour
 		};
     private TurnManager m_turnManager;
 
+}
+
+
+
+public class OngoingSkillStatus
+{
+    private int m_duration = 0;
+    private SkillStatus m_status;
+    private BaseActor m_source;
+    private BaseActor m_target;
+
+    public OngoingSkillStatus(SkillStatus status,BaseActor target)
+    {
+        if (m_status.statusDurationType == "Permanent")
+        {
+            m_duration = -1;
+        }
+        else if(m_status.statusDurationType == "Turns Source")
+        {
+
+        }
+        else if (m_status.statusDurationType == "Turns Target")
+        {
+
+        }
+        else if (m_status.statusDurationType == "Until Negated")
+        {
+
+        }
+        else if (m_status.statusDurationType == "Lapse on Failed Condition")
+        {
+
+        }
+        else if (m_status.statusDurationType == "Lapse with order")
+        {
+
+        }
+        else if (m_status.statusDurationType == "Stack Absolute")
+        {
+
+        }
+        else if (m_status.statusDurationType == "Stack Source Mult")
+        {
+
+        }
+        else if (m_status.statusDurationType == "Stack Target Mult")
+        {
+
+        }
+
+
+    }
+
+    public void UpdateForSource(BaseActor actor)
+    {
+    }
+
+    public bool Expired()
+    {
+        return false;
+    }
 }

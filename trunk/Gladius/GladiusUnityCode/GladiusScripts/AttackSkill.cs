@@ -34,12 +34,6 @@ namespace Gladius
         public String MeterName;
         public String AnimName;
         public String FXName;
-        public String SkillEffectName;
-        public float SkillEffectModifier1;
-        public float SkillEffectModifier2;
-        public int SkillEffectRange;
-        public String SkillEffectRangeName;
-        public String SkillEffectCondition;
 
         public String Affinity;
         public int AffinityCost;
@@ -74,6 +68,25 @@ namespace Gladius
                 }
             }
             return true;
+        }
+
+        public bool CausesStatus(String condition,out SkillStatus skillStatus)
+        {
+            if ("Status Only" == m_skillEffect.Name)
+            {
+                if (m_skillStatus1 != null && m_skillStatus1.skillStatusCondition.Contains(condition))
+                {
+                    skillStatus = m_skillStatus1;
+                    return GladiusGlobals.Random100() < m_skillStatus1.statusVal1;
+                }
+                if (m_skillStatus2 != null && m_skillStatus2.skillStatusCondition.Contains(condition))
+                {
+                    skillStatus = m_skillStatus2;
+                    return GladiusGlobals.Random100() < m_skillStatus2.statusVal1;
+                }
+            }
+            skillStatus = null;
+            return false;
         }
 
 
@@ -458,13 +471,13 @@ namespace Gladius
                 }
                 else if (line.StartsWith("SKILLEFFECT:"))
                 {
-                    currentSkill.SkillEffectName = lineTokens[1];
-                    currentSkill.SkillEffectModifier1 = float.Parse(lineTokens[2]);
-                    currentSkill.SkillEffectModifier2 = float.Parse(lineTokens[3]);
+                    currentSkill.m_skillEffect.Name = lineTokens[1];
+                    currentSkill.m_skillEffect.Modifier1 = float.Parse(lineTokens[2]);
+                    currentSkill.m_skillEffect.Modifier2 = float.Parse(lineTokens[3]);
                 }
                 else if (line.StartsWith("SKILLEFFECTCONDITION:"))
                 {
-                    currentSkill.SkillEffectCondition = lineTokens[1];
+                    currentSkill.m_skillEffect.SkillEffectCondition = lineTokens[1];
                 }
                 else if (line.Contains("SKILLSTATUS"))
                 {
@@ -597,10 +610,12 @@ namespace Gladius
 
     public class SkillEffect
     {
-        public String EffectType;
-        public float Value1;
-        public float Value2;
+        public String Name;
+        public float Modifier1;
+        public float Modifier2;
         public int Range;
+        public String SkillEffectRangeName;
+        public String SkillEffectCondition;
         public SkillEffectRangeType EffectRangeType;
     }
 
@@ -621,21 +636,85 @@ namespace Gladius
         public int statusChance;
         public String statusIntervalName;
         public int statusIntervalDuration;
-  
+
+
+        public float AccuracyBonus
+        {
+            get
+            {
+                float val = 0.0f;
+                if (statusName == "change accuracy")
+                {
+                    val = statusVal2;
+                }
+                return val;
+            }
+        }
+
+        public float DefenseBonus
+        {
+            get
+            {
+                float val = 0.0f;
+                if (statusName == "change defense")
+                {
+                    val = statusVal2;
+                }
+                return val;
+            }
+        }
+
+        //public float AccuracyBonus
+        //{
+        //    get
+        //    {
+        //        float val = 0.0f;
+        //        if (statusName == "change initiative percent")
+        //        {
+        //            val = statusVal2;
+        //        }
+        //        else if (statusName == "change initiative")
+        //        {
+        //            val = statusVal2;
+        //        }
+
+        //        return val;
+        //    }
+        //}
+
+        public float MoveRateBonus
+        {
+            get
+            {
+                float val = 0.0f;
+                if (statusName == "change moverate percent")
+                {
+                    val = statusVal2;
+                }
+                else if (statusName == "change moverate")
+                {
+                    val = statusVal2;
+                }
+
+                return val;
+            }
+        }
+        
     
     	public bool CombatDefend;
     
     
-    	public bool IsImmunityStatus()
-    	{
-    		return "immunity status" == statusName;
-    	}
+        //public bool IsImmunityStatus()
+        //{
+        //    return "immunity status" == statusName;
+        //}
     	
-    	public bool ImmuneTo(String immunType)
+    	public bool ImmuneTo(String condition)
     	{
-    		return IsImmunityStatus() && skillStatusCondition.Contains(immunType);
+    		return "immunity status" == statusName && skillStatusCondition.Contains(condition);
     	}
-    	
+
+
 
 		public void Initialise()
 		{

@@ -131,9 +131,17 @@ namespace Gladius.combat
 
 		public void CheckAndApplyConditions(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
 		{
-			
-		
-		
+            for (int i = 0; i < StatusConditions.Conditions.Length; ++i)
+            {
+                SkillStatus skillStatus;
+                if (attackSkill.CausesStatus(StatusConditions.Conditions[i],out skillStatus))
+                {
+                    if (!defender.ImmuneToStatus(StatusConditions.Conditions[i]))
+                    {
+                        defender.CauseStatus(StatusConditions.Conditions[i],skillStatus);
+                    }
+                }
+            }
 		}
 
 
@@ -291,22 +299,22 @@ namespace Gladius.combat
 
         public void ApplySkill(AttackSkill skill, BaseActor attacker, BaseActor defender, AttackResult result)
         {
-            switch (skill.SkillEffectName)
+            switch (skill.m_skillEffect.Name)
             {
                 case "Shield Break":
-                    if (GladiusGlobals.Random100() < skill.SkillEffectModifier1)
+                    if (GladiusGlobals.Random100() < skill.m_skillEffect.Modifier1)
                     {
                         defender.BreakShield();
                     }
                     break;
                 case "Shield Restore":
-                    if (GladiusGlobals.Random100() < skill.SkillEffectModifier1)
+                    if (GladiusGlobals.Random100() < skill.m_skillEffect.Modifier1)
                     {
                         defender.RestoreShield();
                     }
                     break;
                 case "Helmet Break":
-                    if (GladiusGlobals.Random100() < skill.SkillEffectModifier1)
+                    if (GladiusGlobals.Random100() < skill.m_skillEffect.Modifier1)
                     {
                         defender.BreakHelmet();
                     }
@@ -321,10 +329,10 @@ namespace Gladius.combat
                     defender.QueueCounterAttack(attacker);
                     break;
                 case "Change Crowd Source":
-                    GladiusGlobals.Crowd.UpdateTeamScore(attacker.TeamName, (int)skill.SkillEffectModifier1);
+                    GladiusGlobals.Crowd.UpdateTeamScore(attacker.TeamName, (int)skill.m_skillEffect.Modifier1);
                     break;
                 case "Change Crowd Target":
-                    GladiusGlobals.Crowd.UpdateTeamScore(defender.TeamName, (int)skill.SkillEffectModifier1);
+                    GladiusGlobals.Crowd.UpdateTeamScore(defender.TeamName, (int)skill.m_skillEffect.Modifier1);
                     break;
                 case "Avoid":
                     result.resultType = AttackResultType.Avoided;
