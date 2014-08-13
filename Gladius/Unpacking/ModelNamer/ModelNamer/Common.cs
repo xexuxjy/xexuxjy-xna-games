@@ -245,6 +245,30 @@ namespace ModelNamer
             }
         }
 
+        public static void ReadNullSeparatedNames(BinaryReader binReader, long position, int numAnims,List<String> selsNames)
+        {
+            binReader.BaseStream.Position = position;
+            StringBuilder sb = new StringBuilder();
+            char b;
+            int count = 0;
+            while (selsNames.Count < numAnims)
+            {
+                while ((b = (char)binReader.ReadByte()) != 0x00)
+                {
+                    count++;
+                    sb.Append(b);
+                }
+                count++;
+                if (sb.Length > 0)
+                {
+                    selsNames.Add(sb.ToString());
+                }
+                sb.Clear();
+            }
+        }
+
+
+
         public static void ReadTextureNames(BinaryReader binReader, char[] tagName,List<String> textureNames)
         {
             if (Common.FindCharsInStream(binReader, tagName,true))

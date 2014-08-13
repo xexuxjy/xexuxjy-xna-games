@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ModelNamer.PointViewer</StartupObject>
+    <StartupObject>ModelNamer.AnimationReader</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationReader.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="CutsceneRenamer.cs" />
     <Compile Include="FindSmallest.cs" />
@@ -70,7 +71,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PS2ToGCModelNamer.cs" />
     <Compile Include="R2V2Analyzer.cs" />
-    <Compile Include="TestModCoreStat.cs" />
     <Compile Include="TokRenamer.cs" />
     <Compile Include="XboxModelReader.cs" />
   </ItemGroup>
