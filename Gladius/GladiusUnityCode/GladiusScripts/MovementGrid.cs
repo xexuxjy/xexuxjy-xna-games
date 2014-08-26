@@ -281,54 +281,56 @@ public class MovementGrid : MonoBehaviour
 
     private void RebuildForActor()
     {
-        ResetGrid();
-        DrawIfValid(CurrentActor.ArenaPoint, CurrentActor, GridSquareType.Select);
-
-        //if (GladiusGlobals.TurnManager.CurrentControlState == ControlState.UsingGrid)
+        if (CurrentActor != null)
         {
+            ResetGrid();
+            DrawIfValid(CurrentActor.ArenaPoint, CurrentActor, GridSquareType.Select);
 
-            if (CurrentActor.CurrentAttackSkill != null)
+            //if (GladiusGlobals.TurnManager.CurrentControlState == ControlState.UsingGrid)
             {
-                if (CurrentActor.CurrentAttackSkill.IsMoveToAttack)
-                {
-                    DrawMovementPath(CurrentActor, CurrentActor.WayPointList);
-                }
 
-                for (int i = 0; i < GridSize; ++i)
+                if (CurrentActor.CurrentAttackSkill != null)
                 {
-                    for (int j = 0; j < GridSize; ++j)
+                    if (CurrentActor.CurrentAttackSkill.IsMoveToAttack)
                     {
-                        if (m_skillActiveSquares[i, j])
+                        DrawMovementPath(CurrentActor, CurrentActor.WayPointList);
+                    }
+
+                    for (int i = 0; i < GridSize; ++i)
+                    {
+                        for (int j = 0; j < GridSize; ++j)
                         {
-                            m_arenaSquares[i, j] = CursorForSquare(new Point(i, j), CurrentActor);
+                            if (m_skillActiveSquares[i, j])
+                            {
+                                m_arenaSquares[i, j] = CursorForSquare(new Point(i, j), CurrentActor);
+                            }
                         }
+                    }
+
+
+                    // draw the cursor for attackskill (different to move path);
+                    //DrawAttackSkillCursor(CurrentCursorPoint, CurrentActor);
+
+                    // if the current position is on a valid target(which wouldn't be in the movement list
+                    // then draw a target/select icon.
+                    if (CursorOnTarget(CurrentActor))
+                    {
+                        DrawIfValid(CurrentCursorPoint, CurrentActor, GridSquareType.TargetSelect);
                     }
                 }
 
-
-                // draw the cursor for attackskill (different to move path);
-                //DrawAttackSkillCursor(CurrentCursorPoint, CurrentActor);
-
-                // if the current position is on a valid target(which wouldn't be in the movement list
-                // then draw a target/select icon.
-                if (CursorOnTarget(CurrentActor))
-                {
-                    DrawIfValid(CurrentCursorPoint, CurrentActor, GridSquareType.TargetSelect);
-                }
+                // draw target markers under all players of different team.
+                //foreach (BaseActor actor in GladiusGlobals.TurnManager.AllActors)
+                //{
+                //    if (actor.Team != CurrentActor.Team)
+                //    {
+                //        DrawIfValid(actor.CurrentPosition, actor, GridSquareType.Target);
+                //    }
+                //}
             }
 
-            // draw target markers under all players of different team.
-            //foreach (BaseActor actor in GladiusGlobals.TurnManager.AllActors)
-            //{
-            //    if (actor.Team != CurrentActor.Team)
-            //    {
-            //        DrawIfValid(actor.CurrentPosition, actor, GridSquareType.Target);
-            //    }
-            //}
+            RebuildMeshUV();
         }
-
-        RebuildMeshUV();
-
     }
 
     public void Update()

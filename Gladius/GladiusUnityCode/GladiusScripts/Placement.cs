@@ -22,7 +22,7 @@ public class Placement : MonoBehaviour
         m_gladiatorSchool = new GladiatorSchool();
         m_gladiatorSchool.Load("CharacterData");
 
-        m_arena = ArenaLoader.BuildArena("GladiusData/ArenaData/Arena1");
+        //m_arena = ArenaLoader.BuildArena("GladiusData/ArenaData/Arena1");
         m_availablePositions.AddRange(m_arena.PlayerPointList);
 
         SetCharacterData();

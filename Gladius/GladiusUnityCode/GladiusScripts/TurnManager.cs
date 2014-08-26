@@ -113,12 +113,14 @@ namespace Gladius.arena
             //}
 
 
-
-
-            if (CurrentActor == null || CurrentActor.TurnComplete)
+            if (GladiusGlobals.ArenaComponentsInitialised)
             {
-                EndTurn();
-                StartTurn();
+
+                if (CurrentActor == null || CurrentActor.TurnComplete)
+                {
+                    EndTurn();
+                    StartTurn();
+                }
             }
         }
 

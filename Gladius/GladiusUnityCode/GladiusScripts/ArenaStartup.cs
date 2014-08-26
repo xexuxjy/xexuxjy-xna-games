@@ -9,7 +9,7 @@ public class ArenaStartup : MonoBehaviour
 {
 
     public GameObject baseActorPrefab;
-    public GameObject attachableItemPrefab;
+    public GameObject arenaPrefab;
 
     public String ArenaDataName = "GladiusData/ArenaData/Arena1Data";
 
@@ -38,21 +38,22 @@ public class ArenaStartup : MonoBehaviour
             GladiusGlobals.AttackSkillDictionary.Load(null);
         }
 
+        
 
         GladiusGlobals.ItemManager.Load(null);
 
         ActorGenerator.InitCategories();
 
-        //if (GladiusGlobals.TurnManager == null)
-        //{
-        //    GladiusGlobals.TurnManager = new TurnManager();
-        //}
+        if (GladiusGlobals.TurnManager == null)
+        {
+            GladiusGlobals.TurnManager = new TurnManager();
+        }
 
         if (GladiusGlobals.Arena == null)
         {
             //int dims =32;
             //GladiusGlobals.Arena = new Arena(dims, dims);
-            GladiusGlobals.Arena = ArenaLoader.BuildArena(ArenaDataName);
+            GladiusGlobals.Arena = ArenaLoader.BuildArena(ArenaDataName,this);
 
         }
 

@@ -25,6 +25,7 @@ namespace Gladius
         public static CombatEngine CombatEngine = new CombatEngine();
         public static TurnManager TurnManager;
         public static LocalisationData LocalisationData;
+        public static Arena Arena;
 
         public static LOSTester LOSTester;
 
@@ -42,6 +43,14 @@ namespace Gladius
         public static String LeaguesPath = DataRoot + "Leagues/";
         public static String ModelsRoot = "GladiusModels/FBXOutput/";
 
+
+        public static bool ArenaComponentsInitialised
+        {
+            get
+            {
+                return MovementGrid != null && UserControl != null && CameraManager != null && CombatEngine != null && Arena != null;
+            }
+        }
 
 
         public static Crowd Crowd;
@@ -61,7 +70,6 @@ namespace Gladius
 
 
 
-        public static Arena Arena;
 
         public static Rect RectangleToRect(Rectangle r)
         {
