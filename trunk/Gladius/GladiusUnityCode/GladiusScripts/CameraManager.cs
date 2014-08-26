@@ -14,8 +14,8 @@ public class CameraManager : MonoBehaviour
     public Vector2 maxXAndZ;		// The maximum x and y coordinates the camera can have.
     public Vector2 minXAndZ;		// The minimum x and y coordinates the camera can have.
 
-    public float sensitivityX = 15F;
-    public float sensitivityY = 15F;
+    public float sensitivityX = 5F;
+    public float sensitivityY = 5F;
 
     public float minimumX = -360F;
     public float maximumX = 360F;
@@ -128,11 +128,17 @@ public class CameraManager : MonoBehaviour
         {
             transform.position -= transform.forward* movementSpeed;
         }
-        if (Input.GetButton("DebugUp"))
+
+
+        float downMovement = Input.GetAxis("PadTriggerLeft");
+        float upMovement = Input.GetAxis("PadTriggerRight");
+
+        
+        if (Input.GetButton("DebugUp") || upMovement > 0f)
         {
             transform.position += transform.up* movementSpeed;
         }
-        if (Input.GetButton("DebugDown"))
+        if (Input.GetButton("DebugDown") || downMovement > 0f)
         {
             transform.position -= transform.up* movementSpeed;
         }
@@ -156,6 +162,8 @@ public class CameraManager : MonoBehaviour
 
         float rsv = Input.GetAxis("PadRightStickV");
 
+
+        
 
         float rotationX = transform.localEulerAngles.y + rsh * sensitivityX;
         rotationY += rsv * sensitivityY;

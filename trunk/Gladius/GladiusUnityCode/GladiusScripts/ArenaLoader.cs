@@ -22,11 +22,11 @@ namespace Gladius.arena
 
 
 
-        public static Arena BuildArena(String arenaDataName)
+        public static Arena BuildArena(String arenaDataName,ArenaStartup arenaStartup)
         {
 
-
-            Arena arena = new Arena();
+            Arena arena = arenaStartup.gameObject.AddComponent<Arena>();
+            //Arena arena = new Arena();
             List<String> lines = new List<String>();
 
             TextAsset textAsset = (TextAsset)Resources.Load(arenaDataName);
