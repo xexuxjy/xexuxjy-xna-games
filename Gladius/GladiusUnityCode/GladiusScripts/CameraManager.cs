@@ -33,7 +33,7 @@ public class CameraManager : MonoBehaviour
     public void Start()
     {
         GladiusGlobals.CameraManager = this;
-        CurrentCameraMode = CameraMode.Manual;
+        CurrentCameraMode = CameraMode.Normal;
         //Camera c = FindGameObjectWithTag("Main Camera") as Camera;
         Camera c = (Camera)GameObject.FindObjectOfType(typeof(Camera));
         GladiusGlobals.Camera = c;
@@ -84,11 +84,11 @@ public class CameraManager : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Input.GetButtonDown("CameraNormal"))
+        if (Input.GetButtonDown("CameraNormal") || Input.GetButtonDown("PadLeftStickPress"))
         {
             CurrentCameraMode = CameraMode.Normal;
         }
-        if(Input.GetButtonDown("CameraManual"))
+        if (Input.GetButtonDown("CameraManual") || Input.GetButtonDown("PadRightStickPress"))
         {
             CurrentCameraMode = CameraMode.Manual;
         }
@@ -287,7 +287,7 @@ public class CameraManager : MonoBehaviour
             // Always look at the target
             transform.LookAt(midPoint);
         }
-        else if (GladiusGlobals.TurnManager.CurrentActor.ArenaPoint != GladiusGlobals.MovementGrid.CurrentCursorPoint)
+        else if (GladiusGlobals.TurnManager.CurrentActor != null && GladiusGlobals.TurnManager.CurrentActor.ArenaPoint != GladiusGlobals.MovementGrid.CurrentCursorPoint)
         {
             // focus on the grid cursor, and ideally a line between that and a nearby target.
             Vector3 cursorV3 = GladiusGlobals.MovementGrid.CurrentV3;
@@ -300,7 +300,7 @@ public class CameraManager : MonoBehaviour
                 Vector3 temp = targetV3 - cursorV3;
                 if(temp.sqrMagnitude > float.Epsilon)
                 {
-                    desiredForward = temp.normalized;
+                    //desiredForward = temp.normalized;
                 }
             }
 
@@ -416,11 +416,5 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public enum CameraMode
-    {
-        Normal,
-        Manual,
-        Overland
-    }
 
 }

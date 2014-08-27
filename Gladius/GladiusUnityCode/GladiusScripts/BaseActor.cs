@@ -1090,10 +1090,8 @@ public class BaseActor : MonoBehaviour
         UnitActive = true;
         TurnComplete = false;
         TurnStarted = true;
-        if (GladiusGlobals.MovementGrid != null)
-        {
-            GladiusGlobals.MovementGrid.RebuildMesh = true;
-        }
+        
+        GladiusGlobals.MovementGrid.RebuildMesh = true;
         m_currentMovePoints = m_totalMovePoints;
 
         //int numModifiers = m_attributeModifiers.Count;

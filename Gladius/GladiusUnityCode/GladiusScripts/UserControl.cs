@@ -8,9 +8,16 @@ public class UserControl : MonoBehaviour
 {
 
     public const String ActionButton1Name = "Action1";
+    public float GridMoveDelay = 0.2f;
+    public float ActionMoveDelta = 0.2f;
+
+    private float CurrentMoveDelay = 0;
+    private bool HaveMovedGrid = false;
+    private bool HaveMovedDpad= false;
 
     public void Start()
     {
+        GladiusGlobals.UserControl = this;
         m_actionButtonDictionary["Move1Left"] = ActionButton.Move1Left;
         m_actionButtonDictionary["Move1Right"] = ActionButton.Move1Right;
         m_actionButtonDictionary["Move1Up"] = ActionButton.Move1Up;
@@ -28,67 +35,19 @@ public class UserControl : MonoBehaviour
 
     }
 
-    //public bool Move1LeftPressed()
-    //{
-    //    return Input.GetButtonUp("Move1Left");
-    //}
+    public void PeformActionOnAxis(String axisName, ActionButton negAction, ActionButton posAction, ref bool flag)
+    {
+        if (flag == false)
+        {
+            float axisVal = Input.GetAxis(axisName);
+            if (Math.Abs(axisVal) > ActionMoveDelta)
+            {
+                EventManager.PerformAction(this, axisVal < 0 ? negAction : posAction);
+                flag = true;
+            }
+        }
+    }
 
-    //public bool Move1RightPressed()
-    //{
-    //    return Input.GetButtonUp("Move1Right");
-
-    //}
-
-    //public bool Move1UpPressed()
-    //{
-    //    return Input.GetButtonUp("Move1Up");
-
-    //}
-
-    //public bool Move1DownPressed()
-    //{
-    //    return Input.GetButtonUp("Move1Down");
-    //}
-
-    //public bool Move1LeftHeld()
-    //{
-    //    return Input.GetButton("Move1Left");
-    //}
-    //public bool Move1RightHeld()
-    //{
-    //    return Input.GetButton("Move1Right");
-    //}
-    //public bool Move1UpHeld()
-    //{
-    //    return Input.GetButton("Move1Up");
-    //}
-    //public bool Move1DownHeld()
-    //{
-    //    return Input.GetButton("Move1Down");
-    //}
-
-
-    //public bool Action1Pressed()
-    //{
-    //    return Input.GetButtonDown("Action1");
-    //}
-
-    //public bool Action2Pressed()
-    //{
-    //    return Input.GetButtonDown("Action2");
-
-    //}
-
-    //public bool Action3Pressed()
-    //{
-    //    return Input.GetButtonDown("Action3");
-
-    //}
-
-    //public bool Action4Pressed()
-    //{
-    //    return Input.GetButtonDown("Action4");
-    //}
 
     public void Update()
     {
@@ -100,38 +59,43 @@ public class UserControl : MonoBehaviour
             }
         }
 
-        //if (Action1Pressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.ActionButton1);
-        //}
-        //if (Action2Pressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.ActionButton2);
-        //}
-        //if (Action3Pressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.ActionButton3);
-        //}
-        //if (Action4Pressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.ActionButton4);
-        //}
-        //if (Move1LeftPressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.Move1Left);
-        //}
-        //if (Move1RightPressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.Move1Right);
-        //}
-        //if (Move1UpPressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.Move1Up);
-        //}
-        //if (Move1DownPressed())
-        //{
-        //    EventManager.PerformAction(this, ActionButton.Move1Down);
-        //}
+
+        PeformActionOnAxis("PadDpadH", ActionButton.Move2Left, ActionButton.Move2Right, ref HaveMovedDpad);
+        PeformActionOnAxis("PadDpadV", ActionButton.Move2Down, ActionButton.Move2Up, ref HaveMovedDpad);
+        if (HaveMovedDpad)
+        {
+            CurrentMoveDelay += Time.deltaTime;
+            if (CurrentMoveDelay > GridMoveDelay)
+            {
+                HaveMovedDpad = false;
+                CurrentMoveDelay = 0f;
+            }
+        }
+        
+
+        if (GladiusGlobals.CameraManager != null)
+        {
+            if (GladiusGlobals.CameraManager.CurrentCameraMode == CameraMode.Normal)
+            {
+                PeformActionOnAxis("PadLeftStickH", ActionButton.Move1Left, ActionButton.Move1Right,ref HaveMovedGrid);
+                PeformActionOnAxis("PadLeftStickV", ActionButton.Move1Down, ActionButton.Move1Up,ref HaveMovedGrid);
+
+                if(HaveMovedGrid)
+                {
+                    CurrentMoveDelay += Time.deltaTime;
+                    if(CurrentMoveDelay > GridMoveDelay)
+                    {
+                        HaveMovedGrid = false;
+                        CurrentMoveDelay = 0f;
+                    }
+
+                }
+            }
+
+
+        }
+
+
     }
 
     public Dictionary<String, ActionButton> m_actionButtonDictionary = new Dictionary<String,ActionButton>();

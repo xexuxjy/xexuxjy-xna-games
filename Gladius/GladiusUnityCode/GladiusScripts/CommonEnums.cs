@@ -257,6 +257,14 @@ namespace Gladius
         Gold
     }
 
+
+    public enum CameraMode
+    {
+        Normal,
+        Manual,
+        Overland
+    }
+
     public enum SkillEffectRangeType
     {
         Self,
