@@ -21,16 +21,26 @@ public class PlayerChoiceBar : MonoBehaviour
     {
 
         var control = gameObject.GetComponent<dfControl>();
-        m_textureAtlas = control.GetManager().DefaultAtlas;
-        m_healthProgressBar = control.Find<dfProgressBar>("HealthProgress");
-        m_affinityProgressBar = control.Find<dfProgressBar>("AffinityProgress");
-        m_skillPointProgressBar = control.Find<dfProgressBar>("SkillPointProgress");
-        m_skillSprites = new dfSprite[]{control.Find<dfSprite>("SkillSlot1"),control.Find<dfSprite>("SkillSlot2"),control.Find<dfSprite>("SkillSlot3"),control.Find<dfSprite>("SkillSlot4"),control.Find<dfSprite>("SkillSlot5")};
-        m_skillNameLabel = control.Find<dfLabel>("SkillNameLabel");
-        m_skillTypeLabel = control.Find<dfLabel>("SkillTypeLabel");
-        m_actorNameLabel = control.Find<dfLabel>("ActorNameLabel");
 
-        m_debugLabel = control.Find<dfRichTextLabel>("DebugTextRTLabel");
+
+        m_textureAtlas = control.GetManager().DefaultAtlas;
+        m_healthProgressBar = GladiusGlobals.FindChild("HealthProgress",control.transform).GetComponent<dfProgressBar>();
+        m_affinityProgressBar = GladiusGlobals.FindChild("AffinityProgress", control.transform).GetComponent<dfProgressBar>();
+        m_skillPointProgressBar = GladiusGlobals.FindChild("SkillPointProgress", control.transform).GetComponent<dfProgressBar>();
+
+
+        m_skillSprites = new dfSprite[]{GladiusGlobals.FindChild("SkillSlot1", control.transform).GetComponent<dfSprite>(),
+        GladiusGlobals.FindChild("SkillSlot2", control.transform).GetComponent<dfSprite>(),
+        GladiusGlobals.FindChild("SkillSlot3", control.transform).GetComponent<dfSprite>(),
+        GladiusGlobals.FindChild("SkillSlot4", control.transform).GetComponent<dfSprite>(),
+        GladiusGlobals.FindChild("SkillSlot5", control.transform).GetComponent<dfSprite>()};
+
+
+        m_skillNameLabel = GladiusGlobals.FindChild("SkillNameLabel", control.transform).GetComponent<dfLabel>();
+        m_skillTypeLabel = GladiusGlobals.FindChild("SkillTypeLabel", control.transform).GetComponent<dfLabel>();
+        m_actorNameLabel = GladiusGlobals.FindChild("ActorNameLabel", control.transform).GetComponent<dfLabel>();
+
+        m_debugLabel = GladiusGlobals.FindChild("DebugTextRTLabel", control.transform).GetComponent<dfRichTextLabel>(); 
 
         //TPackManager.load(atlasPath);
 
@@ -97,7 +107,7 @@ public class PlayerChoiceBar : MonoBehaviour
                     sb.Append("Invalid Target");
                 }
             }
-            m_debugLabel.Text = sb.ToString();
+                m_debugLabel.Text = sb.ToString();
         }
 
 
