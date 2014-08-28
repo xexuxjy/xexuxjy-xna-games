@@ -650,8 +650,10 @@ public class MovementGrid : MonoBehaviour
 
 
         // need to double up as each square can have it's own uv.
-        m_moveAtlasTexture = Resources.Load<Texture2D>("GladiusArena/grid-atlas");
-        m_moveAtlas = new TextureAtlas("GladiusArena/grid-atlas-key");
+        m_moveAtlasTexture = Resources.Load<Texture2D>("GladiusUI/Arena/ArenaUIAtlas");
+        m_moveAtlas = new TextureAtlas();
+        m_moveAtlas.BuildJSON("GladiusUI/Arena/ArenaUIAtlas_data",m_moveAtlasTexture);
+
         TextureRegion textureRegion = m_moveAtlas.GetRegion(CTCross);
         float meshScalar = 1f;
         int vcount = 0;
