@@ -1146,7 +1146,20 @@ public class BaseActor : MonoBehaviour
         }
     }
 
+    public void CancelSkillStatus(string statusName)
+    {
+        // go through all active skills.
+        // if they're not permanent then remove the affected status..
+        foreach (OngoingSkillStatus oss in m_ongoingStatuses)
+        {
+            if (!oss.Permanent)
+            {
+            }
 
+        }
+
+
+    }
 
     public bool ImmuneToDamageType(DamageType damageType)
     {
@@ -1405,15 +1418,6 @@ public class BaseActor : MonoBehaviour
         m_threatMap[actor] = val;
     }
 
-    //public void AttachModelToLeftHand(Model model)
-    //{
-    //    m_leftHandModel = model;
-    //}
-
-    //public void AttachModelToRightHand(Model model)
-    //{
-    //    m_rightHandModel = model;
-    //}
 
     public bool Dead
     {
@@ -1625,15 +1629,17 @@ public class BaseActor : MonoBehaviour
 public class OngoingSkillStatus
 {
     private int m_duration = 0;
+    private bool m_permanent;
     private SkillStatus m_status;
     private BaseActor m_source;
     private BaseActor m_target;
+    public String m_name;
 
     public OngoingSkillStatus(SkillStatus status,BaseActor target)
     {
         if (m_status.statusDurationType == "Permanent")
         {
-            m_duration = -1;
+            Permanent = true;
         }
         else if(m_status.statusDurationType == "Turns Source")
         {
@@ -1671,12 +1677,29 @@ public class OngoingSkillStatus
 
     }
 
+    public bool Permanent
+    { get; set; }
+
     public void UpdateForSource(BaseActor actor)
     {
+        if(m_status.statusDurationType == "Turns Source" && actor == m_source)
+        {
+            m_duration = -1;
+        }
+        else if (m_status.statusDurationType == "Turns Target" && actor == m_target)
+        {
+            m_duration = -1;
+
+        }
+    }
+
+    public void Clear()
+    {
+
     }
 
     public bool Expired()
     {
-        return false;
+        return !m_permanent || m_duration > 0;
     }
 }

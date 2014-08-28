@@ -15,7 +15,7 @@ namespace Gladius
         dfRichTextLabel detailsPanelLabel;
         dfControl imagePanel;
 
-        GameObject modelImagePanel;
+        GameObject modelImageSprite;
 
 
 
@@ -25,7 +25,7 @@ namespace Gladius
             GameObject panel = GameObject.Find("DetailsRTLabel");
             detailsPanelLabel = panel.GetComponent<dfRichTextLabel>();
 
-            modelImagePanel = GameObject.Find("ModelImagePanel");
+            modelImageSprite = GameObject.Find("ModelImageSprite");
 
         }
 
@@ -103,7 +103,7 @@ namespace Gladius
                 GameObject goPrefab = (GameObject)(Resources.Load(GladiusGlobals.ModelsRoot + current.Item.ShortMeshName));
                 if (goPrefab != null)
                 {
-                    modelImagePanel.GetComponent<ModelWindowHolder>().AttachedModelPrefabToWindow(goPrefab);
+                    modelImageSprite.GetComponent<ModelWindowHolder>().AttachedModelPrefabToWindow(goPrefab);
                 }
                 else
                 {
