@@ -557,6 +557,9 @@ public class MovementGrid : MonoBehaviour
         {
             LastPosition = CurrentCursorPoint;
             m_currentPosition = value;
+
+            GameObject.Find("CameraTarget").transform.position = CurrentV3;
+
         }
     }
 

@@ -262,6 +262,7 @@ namespace Gladius
     {
         Normal,
         Manual,
+        Combat,
         Overland
     }
 
