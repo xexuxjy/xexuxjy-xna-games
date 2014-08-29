@@ -73,6 +73,25 @@ namespace ModelNamer
             }
         }
 
+        public static void DumpAllSectionData(String path, String outputPath)
+        {
+            String[] files = Directory.GetFiles(path, "*");
+
+            foreach (String file in files)
+            {
+                try
+                {
+                    FileInfo sourceFile = new FileInfo(file);
+                    AnimationReader animationReader = new AnimationReader();
+                    animationReader.DumpSectionData(sourceFile, outputPath);
+                }
+                catch { }
+                break;
+            }
+        }
+
+
+
         public void DumpSectionLengths(String filename,StreamWriter infoStream)
         {
 
@@ -107,10 +126,69 @@ namespace ModelNamer
                 infoStream.WriteLine("Anim : " + animData.animationName);
                 foreach (char[] tag in animData.m_tagSizes.Keys)
                 {
-                    infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), animData.m_tagSizes[tag]));
+                    infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), animData.m_tagSizes[tag].length));
                 }
             }
         }
+
+        public void DumpSectionData(FileInfo fileInfo, String outputPath)
+        {
+
+            using (BinaryReader binReader = new BinaryReader(new FileStream(fileInfo.FullName, FileMode.Open)))
+            {
+                Common.FindCharsInStream(binReader, pak1Tag);
+                int numAnimations = binReader.ReadInt32();
+                int animNameStart = binReader.ReadInt32();
+                binReader.BaseStream.Position = animNameStart;
+                Common.ReadNullSeparatedNames(binReader, animNameStart, numAnimations, animNames);
+                if (numAnimations > 100)
+                {
+                    //infoStream.WriteLine(filename + " has too many anmims : " + numAnimations);
+                }
+                else
+                {
+
+                    for (int i = 0; i < numAnimations; ++i)
+                    {
+                        AnimationData animationData = new AnimationData();
+                        animationData.animationName = animNames[i];
+                        animations.Add(animationData);
+                        animationData.BuildTagInfo(binReader);
+                    }
+                }
+            }
+
+
+            //infoStream.WriteLine("Filename : " + filename);
+
+            String fileOutputDir = outputPath+"/"+fileInfo.Name;
+            Directory.CreateDirectory(fileOutputDir);
+            //using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
+            
+
+            foreach (AnimationData animData in animations)
+            {
+
+                foreach (char[] tag in animData.m_tagSizes.Keys)
+                {
+                    try
+                    {
+                        TagSizeAndData tsad = animData.m_tagSizes[tag];
+                        if (tsad.length > 0)
+                        {
+                            String tagOutputFilename = fileOutputDir + "/" + (animData.animationName) + "-" + new String(tag);
+                            using (System.IO.BinaryWriter outStream = new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create))) 
+                            {
+                                outStream.Write(tsad.data);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    { }
+                }
+            }
+        }
+
 
 
         public List<string> animNames = new List<string>();
@@ -131,9 +209,32 @@ namespace ModelNamer
             //    animationReader.Read(binReader);
             //}
             //int ibreak = 0;
-            AnimationReader.DumpAllSectionLengths("c:/tmp/unpacking/PAK1/PAK1", "c:/tmp/unpacking/PAK1/header-results.txt");
+            //AnimationReader.DumpAllSectionLengths("c:/tmp/unpacking/PAK1/PAK1", "c:/tmp/unpacking/PAK1/header-results.txt");
+
+            AnimationReader.DumpAllSectionData("c:/tmp/unpacking/PAK1/PAK1", "c:/tmp/unpacking/PAK1/SplitOutput");
         }
 
+    }
+
+    public class TagSizeAndData
+    {
+        public static TagSizeAndData Create(BinaryReader reader)
+        {
+            int length = reader.ReadInt32();
+            TagSizeAndData t = new TagSizeAndData(length);
+            reader.BaseStream.Position -= 8;
+            t.data = reader.ReadBytes(t.length);
+            return t;
+
+        }
+
+        public TagSizeAndData(int len)
+        {
+            length = len;
+        }
+
+        public int length;
+        public byte[] data;
     }
 
 
@@ -143,7 +244,7 @@ namespace ModelNamer
         List<string> boneList = new List<string>();
         List<float> timeStepList = new List<float>();
         List<int> boolList = new List<int>();
-        public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
+        public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
 
         public static bool FromStream(BinaryReader reader, out AnimationData animationData)
         {
@@ -234,13 +335,29 @@ namespace ModelNamer
                 
                 if (Common.FindCharsInStream(binReader, tag, true))
                 {
-                    int blockSize = binReader.ReadInt32();
-                    m_tagSizes[tag] = blockSize;
-                    //infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), blockSize));
+                    TagSizeAndData tsad = TagSizeAndData.Create(binReader);
+                    
+                    m_tagSizes[tag] = tsad;
+                    //if(tag == AnimationReader.bktmTag)
+                    //{
+                    //    int pad = binReader.ReadInt32();
+                    //    int numTime = binReader.ReadInt32();
+                    //    // numt values seems to correspond so (4*numt) +16 = bktmLength
+                    //    m_tagSizes[new char[]{'n','u','m','t'}] = numTime;
+                    //}
+                    //if (tag == AnimationReader.dcrtTag)
+                    //{
+                    //    int pad = binReader.ReadInt32();
+                    //    int numBones= binReader.ReadInt32();
+                    //    m_tagSizes[new char[] { 'b', 'o', 'n', 'e' }] = numBones;
+                    //}
+
+
+                    //infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), tsad.length));
                 }
                 else
                 {
-                    m_tagSizes[tag] = -1;
+                    m_tagSizes[tag] = new TagSizeAndData(-1);
                 }
             }
 
