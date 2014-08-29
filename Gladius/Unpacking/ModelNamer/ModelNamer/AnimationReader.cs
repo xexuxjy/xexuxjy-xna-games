@@ -86,7 +86,7 @@ namespace ModelNamer
                     animationReader.DumpSectionData(sourceFile, outputPath);
                 }
                 catch { }
-                break;
+             //   break;
             }
         }
 
@@ -161,30 +161,50 @@ namespace ModelNamer
 
             //infoStream.WriteLine("Filename : " + filename);
 
-            String fileOutputDir = outputPath+"/"+fileInfo.Name;
-            Directory.CreateDirectory(fileOutputDir);
-            //using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
-            
-
-            foreach (AnimationData animData in animations)
+            if (animations.Count > 0)
             {
-
-                foreach (char[] tag in animData.m_tagSizes.Keys)
+                String animationTargetName = animations[0].animationName.Substring(0, animations[0].animationName.IndexOf("_"));
+                if (String.IsNullOrEmpty(animationTargetName))
                 {
-                    try
+                    animationTargetName = fileInfo.Name;
+                }
+
+
+                String fileOutputDir = outputPath + "/" + animationTargetName;
+                Directory.CreateDirectory(fileOutputDir);
+                //using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
+
+
+                foreach (AnimationData animData in animations)
+                {
+
+                    foreach (char[] tag in animData.m_tagSizes.Keys)
                     {
-                        TagSizeAndData tsad = animData.m_tagSizes[tag];
-                        if (tsad.length > 0)
+                        try
                         {
-                            String tagOutputFilename = fileOutputDir + "/" + (animData.animationName) + "-" + new String(tag);
-                            using (System.IO.BinaryWriter outStream = new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create))) 
+                            TagSizeAndData tsad = animData.m_tagSizes[tag];
+                            if (tsad.length > 0)
                             {
-                                outStream.Write(tsad.data);
+                                String shortAnimName = animData.animationName.Substring(animData.animationName.IndexOf("_") + 1);
+
+                                
+                                String tagOutputDirname = fileOutputDir + "/" +  new String(tag);
+                                try
+                                {
+                                    Directory.CreateDirectory(tagOutputDirname);
+                                }
+                                catch (Exception e) { }
+
+                                String tagOutputFilename = tagOutputDirname + "/" + (shortAnimName);
+                                using (System.IO.BinaryWriter outStream = new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create)))
+                                {
+                                    outStream.Write(tsad.data);
+                                }
                             }
                         }
+                        catch (Exception e)
+                        { }
                     }
-                    catch (Exception e)
-                    { }
                 }
             }
         }
