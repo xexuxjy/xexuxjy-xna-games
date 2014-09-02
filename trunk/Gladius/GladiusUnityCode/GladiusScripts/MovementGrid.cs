@@ -337,7 +337,7 @@ public class MovementGrid : MonoBehaviour
     {
         if (CurrentActor != null)
         {
-            renderer.material.SetColor("Main Color", CurrentActor.TeamColour);
+            //renderer.material.SetColor("Main Color", CurrentActor.TeamColour);
         }
 
         if (RebuildMesh)
@@ -665,7 +665,7 @@ public class MovementGrid : MonoBehaviour
         // minor offset so characters are centered.
         topLeft += new Vector3(-0.5f, 0, -0.5f);
 
-        Rect bounds = textureRegion.BoundsUV3;
+        Rect bounds = textureRegion.BoundsUV;
 
         for (int y = 0; y < size; ++y)
         {
@@ -711,7 +711,7 @@ public class MovementGrid : MonoBehaviour
         m_meshFilter = (MeshFilter)transform.GetComponent(typeof(MeshFilter));
         m_meshFilter.mesh = m_mesh;
         //renderer.material = new Material(Shader.Find("Transparent/Diffuse"));
-        renderer.material = new Material(Shader.Find("Gladius/UITeamColours"));
+        //renderer.material = new Material(Shader.Find("Gladius/UITeamColours"));
 
         m_meshFilter.renderer.material.mainTexture = m_moveAtlasTexture;
     }
@@ -744,7 +744,7 @@ public class MovementGrid : MonoBehaviour
         GridSquareType squareType = m_arenaSquares[x, y];
         String regionKey = m_dictionary[squareType];
         TextureRegion tr = m_moveAtlas.GetRegion(regionKey);
-        uv = tr.BoundsUV4;
+        uv = tr.BoundsUV;
     }
 
     private Vector2[] m_uvCopy;

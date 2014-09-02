@@ -10,6 +10,12 @@ using Gladius;
 public class BaseActor : MonoBehaviour
 {
 
+    public float MovementSpeed = 2f;
+    public float TurnTime = 0.5f;
+    public String m_name;
+
+
+
     public string HeadModelName
     {
         get;set;
@@ -728,7 +734,7 @@ public class BaseActor : MonoBehaviour
         }
         else
         {
-            Position += diff * (float)Time.deltaTime * m_movementSpeed;
+            Position += diff * (float)Time.deltaTime * MovementSpeed;
         }
      
     }
@@ -740,10 +746,10 @@ public class BaseActor : MonoBehaviour
         if (Turning)
         {
             TurnTimer += Time.deltaTime;
-            Rotation = Quaternion.Slerp(Rotation, TargetRotation, (TurnTimer / m_turnSpeed));
+            Rotation = Quaternion.Slerp(Rotation, TargetRotation, (TurnTimer / TurnTime));
             // close enough now to stop?
             //if (QuaternionHelper.FuzzyEquals(Rotation, TargetRotation))
-            if (TurnTimer >= m_turnSpeed)
+            if (TurnTimer >= TurnTime)
             {
                 Rotation = TargetRotation;
                 Turning = false;
@@ -791,7 +797,7 @@ public class BaseActor : MonoBehaviour
                                 Quaternion newHeading = Quaternion.LookRotation(nextDiff);
                                 if (newHeading != currentHeading)
                                 {
-                                    FaceDirection(newHeading, m_turnSpeed);
+                                    FaceDirection(newHeading, TurnTime);
                                 }
                             }
                         }
@@ -810,7 +816,7 @@ public class BaseActor : MonoBehaviour
                     {
                         diff.Normalize();
                         {
-                            Position += diff * (float)Time.deltaTime * m_movementSpeed;
+                            Position += diff * (float)Time.deltaTime * MovementSpeed;
                         }
                     }
                 }
@@ -1587,12 +1593,8 @@ public class BaseActor : MonoBehaviour
     public List<OngoingSkillStatus> m_ongoingStatuses = new List<OngoingSkillStatus>();
 
 
-    private float m_movementSpeed = 2f;
-    private float m_turnSpeed = 1f;
     private int m_currentMovePoints;
     private int m_totalMovePoints = 10;
-    private System.Random m_rng = new System.Random();
-
 
     public Transform m_leftHandTransforms;
     public Transform m_rightHandTransforms;
@@ -1605,11 +1607,6 @@ public class BaseActor : MonoBehaviour
     private bool m_knockedDown;
     private int m_knockDownTurns = 0;
 
-
-    //private Model m_leftHandModel;
-    //private Model m_rightHandModel;
-    //private String m_debugName;
-    private String m_name;
     private AnimationEnum m_currentAnimEnum = AnimationEnum.None;
     private Dictionary<AnimationEnum, String> m_clipNameDictionary = new Dictionary<AnimationEnum, string>();
     public const int MinLevel = 1;

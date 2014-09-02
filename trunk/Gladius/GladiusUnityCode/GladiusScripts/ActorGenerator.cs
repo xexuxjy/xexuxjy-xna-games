@@ -16,22 +16,22 @@ namespace Gladius
             LoadALLMODCoreStats();
         }
 
-        public static void SetActorStats(int level, ActorClass actorClass, CharacterData characterData)
-        {
-            // quick and dirty way of generating characters.
-            int accuracy = 10 * level;
-            int defense = 12 * level;
-            int power = 8 * level;
-            int cons = 10 * level;
+        //public static void SetActorStats(int level, ActorClass actorClass, CharacterData characterData)
+        //{
+        //    // quick and dirty way of generating characters.
+        //    int accuracy = 10 * level;
+        //    int defense = 12 * level;
+        //    int power = 8 * level;
+        //    int cons = 10 * level;
 
     
-            //BaseActor baseActor = new BaseActor();
-            characterData.ACC = accuracy;
-            characterData.DEF = defense;
-            characterData.PWR = power;
-            characterData.CON = cons;
-            characterData.ActorClass = actorClass;
-        }
+        //    //BaseActor baseActor = new BaseActor();
+        //    characterData.ACC = accuracy;
+        //    characterData.DEF = defense;
+        //    characterData.PWR = power;
+        //    characterData.CON = cons;
+        //    characterData.ActorClass = actorClass;
+        //}
 
 
         public static void InitCategories()
@@ -96,10 +96,11 @@ namespace Gladius
             ClassDataMap[ActorClass.UndeadMeleeImpA] = new ActorClassData("UndeadLegionnaire", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia));
             ClassDataMap[ActorClass.UndeadCasterA] = new ActorClassData("UndeadSummoner", (ActorClassAttributes.Male | ActorClassAttributes.Arcane));
             ClassDataMap[ActorClass.Urlan] = new ActorClassData("Urlan", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh| ActorClassAttributes.Human));
-            ClassDataMap[ActorClass.UrsulaCostumeA] = new ActorClassData("Ursula", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
-            ClassDataMap[ActorClass.UrsulaCostumeB] = new ActorClassData("Ursula", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
-            ClassDataMap[ActorClass.ValensCostumeA] = new ActorClassData("Valens", (ActorClassAttributes.Male| ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
-            ClassDataMap[ActorClass.ValensCostumeB] = new ActorClassData("Valens", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            //ClassDataMap[ActorClass.UrsulaCostumeA] = new ActorClassData("Ursula", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
+            //ClassDataMap[ActorClass.UrsulaCostumeB] = new ActorClassData("Ursula", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
+            ClassDataMap[ActorClass.Ursula] = new ActorClassData("Ursula", (ActorClassAttributes.Female | ActorClassAttributes.Medium | ActorClassAttributes.Nordargh | ActorClassAttributes.Human));
+            //ClassDataMap[ActorClass.ValensCostumeA] = new ActorClassData("Valens", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
+            //ClassDataMap[ActorClass.ValensCostumeB] = new ActorClassData("Valens", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
             ClassDataMap[ActorClass.Valens] = new ActorClassData("Valens", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia | ActorClassAttributes.Human));
             ClassDataMap[ActorClass.Wolf] = new ActorClassData("Wolf", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Light));
             ClassDataMap[ActorClass.Yeti] = new ActorClassData("Yeti", (ActorClassAttributes.Male | ActorClassAttributes.Beast | ActorClassAttributes.Heavy| ActorClassAttributes.Nordargh));
@@ -143,7 +144,7 @@ namespace Gladius
             characterData.Level = level;
             characterData.Name = name;
 
-
+     
             //characterData
 
 
@@ -224,7 +225,7 @@ namespace Gladius
             int val11 = int.Parse(tokens[counter++]);
             int val12 = int.Parse(tokens[counter++]);
 
-            String className = characterData.ActorClass.ToString();
+            String className = characterData.ActorClassData.Name;
             ModCOREStat statData = StatForClassLevel(className, level);
             if (statData != null)
             {
@@ -391,12 +392,12 @@ namespace Gladius
 
     public class ActorClassData
     {
-        String m_name;
+        public String Name;
         ActorClassAttributes m_mask;
 
         public ActorClassData(String name, ActorClassAttributes mask)
         {
-            m_name = name;
+            Name = name;
             m_mask = mask;
         }
 
