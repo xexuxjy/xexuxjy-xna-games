@@ -49,16 +49,21 @@ namespace Gladius
             set;
         }
 
+        private ActorClass m_actorClass;
         public ActorClass ActorClass
         {
-            get;
-            set;
+            get { return m_actorClass; }
+            set
+            {
+                m_actorClass = value;
+                m_actorClassData = ActorGenerator.ClassDataMap[m_actorClass];
+            }
         }
 
+        private ActorClassData m_actorClassData;
         public ActorClassData ActorClassData
         {
-            get;
-            set;
+            get{return m_actorClassData;}
         }
 
 

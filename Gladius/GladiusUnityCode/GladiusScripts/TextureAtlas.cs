@@ -50,21 +50,22 @@ public class TextureAtlas
             //}
 
 
-            textureRegion.Bounds = new Rect(x, y, w, h);
-            textureRegion.BoundsUV = new Rect(((float)x) / width, ((float)y) / height, ((float)x + w) / width, ((float)y + h) / height);
-            textureRegion.BoundsUV2 = new Rect(((float)x) / width, ((float)y) / height, ((float)w) / width, ((float)h) / height);
-            textureRegion.BoundsUV3 = new Rect(textureRegion.BoundsUV2.x, 1f - textureRegion.BoundsUV2.y, textureRegion.BoundsUV2.width, textureRegion.BoundsUV2.height);
-            Rect r = textureRegion.BoundsUV;
-            r.y = 1f - r.y;
-            r.height = 1f - r.height;
-            textureRegion.BoundsUV4 = r;
+            //textureRegion.Bounds = new Rect(x, y, w, h);
+            //textureRegion.BoundsUV = new Rect(((float)x) / width, ((float)y) / height, ((float)x + w) / width, ((float)y + h) / height);
+            //textureRegion.BoundsUV2 = new Rect(((float)x) / width, ((float)y) / height, ((float)w) / width, ((float)h) / height);
+            //textureRegion.BoundsUV3 = new Rect(textureRegion.BoundsUV2.x, 1f - textureRegion.BoundsUV2.y, textureRegion.BoundsUV2.width, textureRegion.BoundsUV2.height);
+
+            //Rect r = textureRegion.BoundsUV;
+            //r.y = 1f - r.y;
+            //r.height = 1f - r.height;
+            //textureRegion.BoundsUV4 = r;
 
 
-            textureRegion.Rotated = sprite.HasAttribute("r") && sprite.Attributes["r"].Value.Equals("y");
+            //textureRegion.Rotated = sprite.HasAttribute("r") && sprite.Attributes["r"].Value.Equals("y");
 
-            textureRegion.OriginTopLeft = new Vector2(-oX, -oY);
-            textureRegion.OriginCenter = new Vector2(((oW / 2.0f) - (oX)), ((oH / 2.0f) - (oY)));
-            textureRegion.OriginBottomRight = new Vector2((oW - (oX)), (oH - (oY)));
+            //textureRegion.OriginTopLeft = new Vector2(-oX, -oY);
+            //textureRegion.OriginCenter = new Vector2(((oW / 2.0f) - (oX)), ((oH / 2.0f) - (oY)));
+            //textureRegion.OriginBottomRight = new Vector2((oW - (oX)), (oH - (oY)));
 
             String key = sprite.Attributes["n"].Value;
             Regions[key] = textureRegion;
@@ -74,7 +75,7 @@ public class TextureAtlas
         }
     }
 
-    public void BuildJSON(String resourceName,Texture2D texture)
+    public void BuildJSON(String resourceName, Texture2D texture)
     {
         TextAsset textAsset = Resources.Load<TextAsset>(resourceName);
         var uvx = 1f / texture.width;
@@ -109,8 +110,10 @@ public class TextureAtlas
             };
 
             TextureRegion textureRegion = new TextureRegion();
-            textureRegion.BoundsUV3 = frameRect;
-            textureRegion.BoundsUV4 = frameRect;
+            textureRegion.BoundsUV = frameRect;
+            //textureRegion.BoundsUV4.y = 1f - textureRegion.BoundsUV4.y;
+            //textureRegion.BoundsUV4.width = 1f - textureRegion.BoundsUV4.width;
+
             Regions[key] = textureRegion;
         }
 
@@ -136,6 +139,7 @@ public class TextureAtlas
         return null;
     }
 
+
     private static Rect extractUVRect(DICT data, Texture2D atlas)
     {
 
@@ -145,10 +149,10 @@ public class TextureAtlas
         var w = (float)(double)data["w"];
         var h = (float)(double)data["h"];
         var x = (float)(double)data["x"];
-        var y = (float)(double)data["y"] + h;
+        var y = (float)(double)data["y"];
 
-        return new Rect(x * uvx, 1f - y * uvy, w * uvx, h * uvy);
-
+        Rect r =  new Rect(x * uvx, 1f - ((y) * uvy), (x+w) * uvx, 1f-((y+h) * uvy));
+        return r;
     }
 
     #region Nested classes
@@ -596,15 +600,15 @@ public class TextureAtlas
 
 public class TextureRegion
 {
-    public Rect Bounds { get; set; }
-    public Rect BoundsUV { get; set; }
-    public Rect BoundsUV2 { get; set; }
-    public Rect BoundsUV3 { get; set; }
-    public Rect BoundsUV4 { get; set; }
-    public Vector2 OriginTopLeft { get; set; }
-    public Vector2 OriginCenter { get; set; }
-    public Vector2 OriginBottomRight { get; set; }
-    public bool Rotated { get; set; }
+    //public Rect Bounds;
+    //public Rect BoundsUV;
+    //public Rect BoundsUV2;
+    //public Rect BoundsUV3;
+    public Rect BoundsUV;
+    //public Vector2 OriginTopLeft;
+    //public Vector2 OriginCenter;
+    //public Vector2 OriginBottomRight;
+    //public bool Rotated;
 }
 
 

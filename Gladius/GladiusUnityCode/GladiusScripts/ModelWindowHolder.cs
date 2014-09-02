@@ -16,13 +16,13 @@ public class ModelWindowHolder : MonoBehaviour
     public void Awake()
     {
         m_modelCamera = GameObject.Find("ModelCamera");
-        m_modelCamera.GetComponent<SnapshotCamera>().ScreenReadyEvent += new SnapshotCamera.ScreenReadyEventDelegate(ModelWindowHolder_ScreenReadyEvent);
+        //m_modelCamera.GetComponent<SnapshotCamera>().ScreenReadyEvent += new SnapshotCamera.ScreenReadyEventDelegate(ModelWindowHolder_ScreenReadyEvent);
         m_parentSprite = GetComponent<dfTextureSprite>();
     }
 
     void ModelWindowHolder_ScreenReadyEvent()
     {
-        m_parentSprite.Texture = m_modelCamera.GetComponent<SnapshotCamera>().screenshot;
+        //m_parentSprite.Texture = m_modelCamera.GetComponent<SnapshotCamera>().screenshot;
         //gtexture.texture = m_modelCamera.GetComponent<SnapshotCamera>().screenshot;
         //m_parentPanel. = gtexture;
     }
@@ -58,7 +58,7 @@ public class ModelWindowHolder : MonoBehaviour
                 m_gameObjectInstance.transform.localRotation = Quaternion.Euler(new Vector3(90, 90, 0));
                 // base this off the bb of the object, then scale it to the dims of the window
                 m_gameObjectInstance.transform.localScale = new Vector3(50f, 50f, 50f);
-                m_modelCamera.GetComponent<SnapshotCamera>().RequestSnapshot();
+                //m_modelCamera.GetComponent<SnapshotCamera>().RequestSnapshot();
             }
         }
     }

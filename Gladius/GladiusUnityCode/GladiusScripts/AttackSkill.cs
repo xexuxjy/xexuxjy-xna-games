@@ -26,6 +26,7 @@ namespace Gladius
         public int JobPointCost;
         public int CombatMod1;
         public float CombatMod2;
+        public int MoveToAttackModifier;
         public int SkillRange;
         public String SkillRangeName;
         public int SkillExcludeRange;
@@ -163,18 +164,34 @@ namespace Gladius
             return false;
         }
 
+        public int SkillMoveRange
+        {
+            get
+            {
+                int val = m_defaultMoveToAttackRange;
+                if (IsMoveToAttack)
+                {
+                    if (MoveToAttackModifier < 0)
+                    {
+                        val = 0;
+                    }
+                    else
+                    {
+                        val *= (1 + MoveToAttackModifier);
+                    }
+                }
+                return val;
+            }
+        }
+
         public bool InRange(int val)
         {
-            if (IsMoveToAttack && val < m_defaultMoveToAttackRange)
-            {
-                return true;
-            }
-            return val <= m_skillEffect.Range;
+            return val < TotalSkillRange;
         }
 
         public int TotalSkillRange
         {
-            get { return IsMoveToAttack ? m_skillEffect.Range : 1; }
+            get { return (SkillMoveRange + SkillRange); }
         }
 
         public SkillIcon SkillIcon
@@ -447,7 +464,10 @@ namespace Gladius
                 {
                     currentSkill.AffinityCost = int.Parse(lineTokens[1]);
                 }
-                
+                else if (line.StartsWith("SKILLMOVETOATTACKMOD:"))
+                {
+                    currentSkill.MoveToAttackModifier= int.Parse(lineTokens[1]);
+                }
                 else if (line.StartsWith("SKILLMETER:"))
                 {
                     currentSkill.MeterName = lineTokens[1];
@@ -462,7 +482,7 @@ namespace Gladius
                 }
                 else if (line.StartsWith("SKILLPREREQ:"))
                 {
-                	currentSkill.PreRequisite = lineTokens[1];
+                    currentSkill.PreRequisite = lineTokens[1];
                 }
                 else if (line.StartsWith("SKILLEFFECTRANGE:"))
                 {
