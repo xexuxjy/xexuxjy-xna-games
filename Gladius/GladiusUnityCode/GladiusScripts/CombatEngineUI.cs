@@ -18,6 +18,8 @@ using Gladius;
         public float Multiplier = 3;
         public float TextFloatSpeed = 3f;
 
+        public GameObject CombatTextPrefab;
+
         String atlasPath = "GladiusUI/Arena/ArenaUIAtlas";
 
 
@@ -25,36 +27,15 @@ using Gladius;
         public void Start()
         {
             GladiusGlobals.CombatEngineUI = this;
-            m_defaultGUIStyle = new GUIStyle();
-            
-            m_guiFont = Resources.Load<Font>("GladiusUI/Arena/TREBUC");
-            //m_guiFont = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 
-            m_defaultGUIStyle.font = m_guiFont;
-            m_defaultGUIStyle.fontSize = 16;
-
-            //TPackManager.load(atlasPath);
-
-            //m_defaultGUIStyle.fontStyle = FontStyle.Bold;
-        }
-
-        public void OnGUI()
-        {
-            //GUI.contentColor = Color.yellow;
-            //GUI.Label(new Rect(20, 20, 100, 40), "Some Text",DefaultStyle);
-
-            //DrawElement();
         }
 
         public void DrawFloatingText(Vector3 initialPosition, Color textColor, StringBuilder text, float age)
         {
             if (DrawCombatText)
             {
-
                 FloatingText ft = GetFloatingText();
                 ft.Initialise(initialPosition, text, textColor, age);
-                ft.LabelDims = m_defaultGUIStyle.CalcSize(ft.GUIContent);
-
                 m_activeFloatingText.Add(ft);
             }
         }
@@ -65,7 +46,6 @@ using Gladius;
             {
                 FloatingText ft = GetFloatingText();
                 ft.Initialise(initialPosition, text, textColor, age);
-                ft.LabelDims = m_defaultGUIStyle.CalcSize(ft.GUIContent);
                 m_activeFloatingText.Add(ft);
             }
         }
@@ -84,38 +64,6 @@ using Gladius;
 
             int removed = m_activeFloatingText.RemoveAll(t => t.Complete);
 
-        }
-
-        public void DrawElement()
-        {
-            //Vector2 viewPortAdjust = new Vector2(graphicsDevice.Viewport.X,graphicsDevice.Viewport.Y);
-
-            foreach (FloatingText ft in m_activeFloatingText)
-            {
-                Vector3 result = WorldToScreenAdjusted(ft.WorldPosition);
-                // don't draw things behind?
-                if (result.z < 0)
-                {
-                    continue;
-                }
-                
-                Vector2 pos = new Vector2(result.x, result.y);
-
-                pos.x -= (ft.LabelDims.x / 2f);
-                int oldFontSize = DefaultStyle.fontSize;
-
-
-                float t2 = 1f -  (Mathf.Clamp(result.z - NearBound,NearBound,FarBound) / FarBound - NearBound);
-
-                float scale = t2;
-                float fontScale = (((float)DefaultStyle.fontSize) * scale * Multiplier);
-                DefaultStyle.fontSize = (int)fontScale;
-                DefaultStyle.normal.textColor = ft.TextColor;
-                
-                GUI.Label(new Rect(pos.x,pos.y,0,0),ft.GUIContent,DefaultStyle);
-                DefaultStyle.fontSize = oldFontSize;
-
-            }
 
             if (DrawHealthBars)
             {
@@ -128,7 +76,9 @@ using Gladius;
                 }
             }
 
+
         }
+
 
         private FloatingText GetFloatingText()
         {
@@ -136,19 +86,19 @@ using Gladius;
             {
                 m_floatingTextPool.Push(new FloatingText(this));
             }
-            return m_floatingTextPool.Pop();
+            FloatingText ft = m_floatingTextPool.Pop();
+            ft.SetActive(true);
+            return ft;
         }
 
         private void FreeFloatingText(FloatingText ft)
         {
+            ft.SetActive(false);
             m_floatingTextPool.Push(ft);
         }
 
         public void LoadContent()
         {
-            //base.LoadContent(manager, device);
-            //m_spriteFont = manager.Load<SpriteFont>("UI/fonts/ShopFont");
-
             EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
@@ -161,110 +111,35 @@ using Gladius;
 
         public void DrawNameHealthIndicators(BaseActor actor)
         {
-            Vector3 worldPoint = actor.Position;
-            worldPoint.y += (actor.ModelHeight*1.2f);
-            Vector3 result = WorldToScreenAdjusted(worldPoint);
-            if (result.z >= 0)
+            // *** Update this to use daikon followobject3d class along with helpers.
+
+            GameObject uiPanel = actor.m_healthBar;
+
+            dfLabel rtl = GladiusGlobals.FindChild("Name", uiPanel.transform).GetComponent<dfLabel>();
+            rtl.Text = actor.Name;
+
+            dfProgressBar dfp = GladiusGlobals.FindChild("ProgressBar", uiPanel.transform).GetComponent<dfProgressBar>();
+            if (actor.MaxHealth != 0)
             {
-                // measure the text so it's centered - can only do at this point?
-                GUIContent playerName = actor.GUIContentName;
-                Vector2 textDims = m_defaultGUIStyle.CalcSize(playerName);
+                float healthVal = (actor.Health / actor.MaxHealth);
 
-                textDims.x = 100;
-
-                Vector2 pos = new Vector2(result.x, result.y);
-                pos.x -= (textDims.x / 2f);
-
-                DrawShadowedText(actor.Name, pos);
-
-                //pos.y += textDims.y + 2;
-                int barHeight = 16;
-                DrawHealthBar(actor.Health, actor.MaxHealth, Color.green, Color.red, pos, (int)textDims.x, barHeight);
-
-                // Draw an enemy indicator based on current player.
-                if (GladiusGlobals.TurnManager != null)
-                {
-                    String markerName = "EnemyIndicator.png";
-                    if (GladiusGlobals.TurnManager.CurrentActor.TeamName == actor.TeamName)
-                    {
-                        markerName = "FriendIndicator.png";
-                    }
-                    int xdims = 32;
-                    Rect rect = new Rect(result.x, result.y, xdims, 32);
-                    rect.x -= xdims / 2;
-                    rect.y -= barHeight*2;
-                    TPackManager.draw(rect, atlasPath, markerName);
-        
-
-                }
-
+                dfp.Value = healthVal;
+                dfp.ProgressColor = dfp.Value < 0.2 ? Color.red : Color.green;
             }
+            // Draw an enemy indicator based on current player.
+            if (GladiusGlobals.TurnManager != null)
+            {
+                dfSprite indicator = GladiusGlobals.FindChild("Indicator", uiPanel.transform).GetComponent<dfSprite>();
+                String markerName = "EnemyIndicator";
+                if (GladiusGlobals.TurnManager.CurrentActor.TeamName == actor.TeamName)
+                {
+                    markerName = "FriendIndicator";
+                }
+                indicator.SpriteName = markerName;
+            }
+
+            //}
         }
-
-        private void DrawHealthBar(float value, float maxValue, Color colour1, Color colour2,Vector2 topLeft,int width,int height)
-        {
-            Color borderColour = Color.black;
-            int inset = 2;
-
-            Rect rect = new Rect((int)topLeft.x, (int)topLeft.y, width, height);
-            Rect insetRect = GladiusGlobals.InsetRectangle(rect, inset);
-
-            GUI.DrawTexture(rect,GladiusGlobals.ColourTextureHelper.GetColourTexture(borderColour));
-            float scale = maxValue > 0 ? (value / maxValue) : 1;
-            
-            // draw bad health below 30%
-            Color drawColour = scale > 0.3f? colour1:colour2;
-            insetRect.width = (int)((float)insetRect.width*scale);
-            GUI.DrawTexture(insetRect, GladiusGlobals.ColourTextureHelper.GetColourTexture(drawColour));
-        }
-
-        public void DrawShadowedText(String text, Point pos)
-        {
-            Vector2 vpos = new Vector2(pos.X, pos.Y);
-            DrawShadowedText(text, vpos, Color.white);
-        }
-
-        public void DrawShadowedText(String text, Vector2 pos)
-        {
-            DrawShadowedText(text, pos, Color.white);
-        }
-
-        public void DrawShadowedText(String text, Point pos, Color textColor)
-        {
-            Vector2 vpos = new Vector2(pos.X, pos.Y);
-            DrawShadowedText(text, vpos, textColor);
-        }
-
-        public static void DrawShadowedText(String text, Vector2 pos, Color textColor)
-        {
-            // Shadow text.
-            //sb.DrawString(font, text, pos, Color.Black);
-            //sb.DrawString(font, text, pos + new Vector2(1), textColor);
-        }
-
-        public void DrawShadowedText(GUIContent text, Vector2 pos, Color textColor)
-        {
-            // Shadow text.
-            //sb.DrawString(font, text, pos, Color.Black);
-            //sb.DrawString(font, text, pos + new Vector2(1), textColor);
-
-            //GUI.contentColor = ft.TextColor;
-            //GUI.color = ft.TextColor;
-            //GUI.backgroundColor = Color.green;
-            DefaultStyle.normal.textColor = textColor;
-            GUI.Label(new Rect(pos.x, pos.y, 0, 0), text, DefaultStyle);
-
-        
-        }
-
-
-        //public static void DrawCenteredText(String text, Vector2 centerPos, Color textColor)
-        //{
-        //    Vector2 textDims = font.MeasureString(text);
-        //    Vector2 offsetCenter = centerPos - (textDims / 2f);
-        //    sb.DrawString(font, text, offsetCenter, textColor);
-        //}
-
 
 
         void EventManager_BaseActorChanged(object sender, BaseActorChangedArgs e)
@@ -272,41 +147,37 @@ using Gladius;
             //CurrentActor = e.New;
         }
 
-        public GUIStyle DefaultStyle
-        {
-            get { return m_defaultGUIStyle; }
-            set { m_defaultGUIStyle = value; }
-        }
 
-
-        private Font m_guiFont;
-        private GUIStyle m_defaultGUIStyle;       
         private List<FloatingText> m_activeFloatingText = new List<FloatingText>();
         private Stack<FloatingText> m_floatingTextPool = new Stack<FloatingText>();
-        //private SpriteFont m_spriteFont;
     }
 
     public class FloatingText : IComparable
     {
         private CombatEngineUI m_combatEngineUI;
+        private GameObject m_labelGameObject;
+        private dfRichTextLabel m_label;
+        private dfFollowObject m_follow;
+
+        private GameObject m_dummyObject = new GameObject();
+
         private FloatingText() { }
         public FloatingText(CombatEngineUI combatEngineUI)
         {
             m_combatEngineUI = combatEngineUI;
-            GUIContent = new GUIContent();
+
+            GameObject playerUIRoot = GameObject.Find("PlayerUIRoot");
+            GameObject prefab = (GameObject)GameObject.Find("CombatTextPrefab");
+            m_labelGameObject = (GameObject)GameObject.Instantiate(prefab);
+            m_labelGameObject.transform.parent = playerUIRoot.transform;
+            m_label = m_labelGameObject.GetComponent<dfRichTextLabel>();
+            m_follow = m_labelGameObject.GetComponent<dfFollowObject>();
+            m_follow.attach = m_dummyObject;
+            m_follow.enabled = false;
+            m_follow.enabled = true;
 
         }
         
-        public GUIContent GUIContent
-        {
-            get;
-            set;
-        }
-
-        public Vector3 WorldPosition
-        {
-            get;set;
-        }
 
         public Vector3 CameraPosition
         {
@@ -332,29 +203,29 @@ using Gladius;
             get { return (Age > MaxAge); }
         }
 
-        public Vector2 LabelDims
+        public void SetActive(bool value)
         {
-            get;
-            set;
+            m_labelGameObject.SetActive(value);
         }
-
 
         public void Initialise(Vector3 worldPosition, StringBuilder textToCopy, Color color,float maxAge)
         {
             Age = 0f;
-            WorldPosition = worldPosition;
+            m_dummyObject.transform.position = worldPosition;
             TextColor = color;
             MaxAge = maxAge;
-            GUIContent.text = textToCopy.ToString();
+            m_label.Text = textToCopy.ToString();
+            //Content.Remove(0, Content.Length);
+            //Content.Append(textToCopy);
         }
 
         public void Initialise(Vector3 worldPosition, String textToCopy, Color color, float maxAge)
         {
             Age = 0f;
-            WorldPosition = worldPosition;
+            m_dummyObject.transform.position = worldPosition;
             TextColor = color;
             MaxAge = maxAge;
-            GUIContent.text = textToCopy.ToString();
+            m_label.Text = textToCopy;
         }
 
 
@@ -365,8 +236,8 @@ using Gladius;
             Age += elapsed;
 
             Vector3 delta = new Vector3(0,update,0);
-            WorldPosition += delta;
-            CameraPosition = CombatEngineUI.WorldToScreenAdjusted(WorldPosition);
+            m_dummyObject.transform.position += delta;
+            //CameraPosition = CombatEngineUI.WorldToScreenAdjusted(WorldPosition);
             // to do? fade text as it reaches end
         }
 

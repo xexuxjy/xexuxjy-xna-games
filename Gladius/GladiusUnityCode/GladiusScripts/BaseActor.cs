@@ -14,7 +14,7 @@ public class BaseActor : MonoBehaviour
     public float TurnTime = 0.5f;
     public String m_name;
 
-
+    public GameObject m_healthBar;
 
     public string HeadModelName
     {
@@ -92,7 +92,29 @@ public class BaseActor : MonoBehaviour
     void Start()
     {
         gameObject.SetActive(true);
+
+        GameObject playerUIRoot = GameObject.Find("PlayerUIRoot");
+
+        GameObject healthBarPrefab = GameObject.Find("UIHealthBarPanelPrefab");
+
+        m_healthBar = (GameObject)GameObject.Instantiate(healthBarPrefab);
+
+        // parent it to the gui
+        m_healthBar.transform.parent = playerUIRoot.transform;
+
+        //m_healthBar.GetComponent<dfFollowObject3D>().attachedTo = gameObject.transform;
+
+        dfFollowObject follow = m_healthBar.GetComponent<dfFollowObject>();
+        follow.attach = gameObject;
+        // toggle enabled so the attachment changes are picked up .
+        follow.enabled = false;
+        follow.enabled = true;
         
+
+
+
+        //m_healthBar.GetComponent<dfFollowObject>().RebuildAttach();
+
         m_turnManager = GladiusGlobals.TurnManager;
         m_turnManager.QueueActor(this);
         Arena = GladiusGlobals.Arena;
