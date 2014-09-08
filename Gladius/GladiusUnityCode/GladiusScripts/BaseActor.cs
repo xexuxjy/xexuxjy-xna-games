@@ -125,7 +125,7 @@ public class BaseActor : MonoBehaviour
 
         SetAnimationData();
         
-        PlayAnimation(AnimationEnum.Idle);
+        QueueAnimation(AnimationEnum.Idle);
 
 
     }
@@ -136,26 +136,35 @@ public class BaseActor : MonoBehaviour
     {
         m_clipNameDictionary[AnimationEnum.Idle] = "idle-2";
         m_clipNameDictionary[AnimationEnum.Walk] = "walk";
-        m_clipNameDictionary[AnimationEnum.Attack1] = "w_attack-1";
-        m_clipNameDictionary[AnimationEnum.Attack2] = "w_attack-2";
-        m_clipNameDictionary[AnimationEnum.Attack3] = "w_attack-3";
+        m_clipNameDictionary[AnimationEnum.Attack1] = IsTwoHanded ? "w_2h_attack-1":"w_attack-1";
+        m_clipNameDictionary[AnimationEnum.Attack2] = IsTwoHanded ? "w_2h_attack-2" : "w_attack-2";
+        m_clipNameDictionary[AnimationEnum.Attack3] = IsTwoHanded ? "w_2h_attack-3" : "w_attack-3";
 
         m_clipNameDictionary[AnimationEnum.BowShot] = "w_bow_action";
         m_clipNameDictionary[AnimationEnum.Stagger] = "hit-2";
         m_clipNameDictionary[AnimationEnum.Die] = "death-1";
-        m_clipNameDictionary[AnimationEnum.Block] = "w_2h_block_pose";
+
+        m_clipNameDictionary[AnimationEnum.BlockStart] = IsTwoHanded ? "w_2h_block_start" : "w_bow_block_start";
+        m_clipNameDictionary[AnimationEnum.BlockPose] = IsTwoHanded ? "w_2h_block_pose" : "w_bow_block_pose";
+        m_clipNameDictionary[AnimationEnum.BlockStart] = IsTwoHanded ? "w_2h_block_end" : "w_bow_block_end";
+
+        m_clipNameDictionary[AnimationEnum.KnockDown] = "w_death-2";
+        m_clipNameDictionary[AnimationEnum.GetUp] = "w_get-up";
+            
+
+
         m_clipNameDictionary[AnimationEnum.Cast] = "w_cast_spell-1";
 
-        UnityEngine.Object[] clips = Resources.LoadAll("warriors", typeof(AnimationClip));
-        foreach (var o in clips)
-        {
-            AnimationClip c = o as AnimationClip;
-            //animation.AddClip(c, c.name.Contains("@") ? c.name.Substring(c.name.LastIndexOf("@") + 1) : c.name);
-            if (c.name == "idle-2" || c.name == "walk")
-            {
-                c.wrapMode = WrapMode.Loop;
-            }
-        }
+        //UnityEngine.Object[] clips = Resources.LoadAll("warriors", typeof(AnimationClip));
+        //foreach (var o in clips)
+        //{
+        //    AnimationClip c = o as AnimationClip;
+            
+        //    if (c.name == "idle-2" || c.name == "walk")
+        //    {
+        //        c.wrapMode = WrapMode.Loop;
+        //    }
+        //}
 
         if (!setEvents)
         {
@@ -374,7 +383,6 @@ public class BaseActor : MonoBehaviour
             case (AnimationEnum.Attack2):
             case (AnimationEnum.Attack3):
                 {
-                    //Attacking = false;
                     StopAttack();
                     break;
                 }
@@ -384,7 +392,6 @@ public class BaseActor : MonoBehaviour
                     break;
                 }
             default:
-                //PlayAnimation(AnimationEnum.Idle);
                 break;
         }
         m_currentAnimEnum = AnimationEnum.None;
@@ -393,7 +400,9 @@ public class BaseActor : MonoBehaviour
     public void Block(BaseActor actor)
     {
         SnapToFace(actor);
-        PlayAnimation(AnimationEnum.Block);
+        QueueAnimation(AnimationEnum.BlockStart);
+        QueueAnimation(AnimationEnum.BlockPose);
+        QueueAnimation(AnimationEnum.BlockEnd);
     }
 
     public String Name
@@ -421,7 +430,7 @@ public class BaseActor : MonoBehaviour
     //    m_attributeDictionary[attributeType].CurrentValue = val;
     //}
 
-    public void PlayAnimation(AnimationEnum animEnum, bool loopClip = true)
+    public void PlayAnimation(AnimationEnum animEnum)
     {
         if (animEnum != m_currentAnimEnum)
         {
@@ -446,9 +455,19 @@ public class BaseActor : MonoBehaviour
         }
     }
 
+    private List<AnimationEnum> m_animationQueue = new List<AnimationEnum>();
+    public void QueueAnimation(AnimationEnum animEnum)
+    {
+        if (m_animationQueue.Count == 0 || m_animationQueue[m_animationQueue.Count - 1] != animEnum)
+        {
+            m_animationQueue.Add(animEnum);
+        }
+    }
+
+
     public void LoadContent()
     {
-        PlayAnimation(AnimationEnum.Idle);
+        QueueAnimation(AnimationEnum.Idle);
     }
 
     Point m_arenaPoint;
@@ -586,6 +605,10 @@ public class BaseActor : MonoBehaviour
         set;
     }
 
+    public bool IsTwoHanded
+    { get; set; }
+
+
     public ActorClass ActorClass
     {
         get;
@@ -594,11 +617,19 @@ public class BaseActor : MonoBehaviour
 
     public void TakeDamage(AttackResult attackResult)
     {
-        if (attackResult.resultType != AttackResultType.Miss)
+        if (attackResult.resultType == AttackResultType.Blocked)
+        {
+            Block(attackResult.damageCauser);
+        }
+        else if (attackResult.resultType == AttackResultType.Miss)
+        {
+            StartMiss(attackResult.damageCauser);
+        }
+        else if (attackResult.resultType != AttackResultType.Miss)
         {
             Health -= attackResult.damageDone;
             UpdateThreatList(attackResult.damageCauser);
-            PlayAnimation(AnimationEnum.Stagger, false);
+            QueueAnimation(AnimationEnum.Stagger);
         }
     }
 
@@ -672,14 +703,26 @@ public class BaseActor : MonoBehaviour
 
     public void CheckAnimationEnd()
     {
-        if (m_currentAnimEnum != AnimationEnum.None)
+        // if the current anim loops, and we have others queued , or anim has finished then jump to next
+        
+        if ((animation.clip != null && animation.clip.wrapMode == WrapMode.Loop && m_animationQueue.Count > 0) || animation.isPlaying == false)
         {
-            if (animation.isPlaying == false)
-            {
-                AnimationStopped(m_currentAnimEnum);
-            }
+            AnimationStopped(m_currentAnimEnum);
         }
 
+        if (m_currentAnimEnum == AnimationEnum.None)
+        {
+            if (m_animationQueue.Count > 0)
+            {
+                AnimationEnum nextAnim = m_animationQueue[0];
+                m_animationQueue.RemoveAt(0);
+                PlayAnimation(nextAnim);
+            }
+            else
+            {
+                m_currentAnimEnum = AnimationEnum.None;
+            }
+        }
     }
 
     public bool CheckTurnComplete()
@@ -782,7 +825,7 @@ public class BaseActor : MonoBehaviour
             if (FollowingWayPoints)
             {
                 // this is called every update and animation system doesn't reset if it's current anim
-                PlayAnimation(AnimationEnum.Walk);
+                QueueAnimation(AnimationEnum.Walk);
                 ChooseWalkSkill();
                 // mvoe towards the next point.
                 if (WayPointList.Count > 0)
@@ -924,7 +967,7 @@ public class BaseActor : MonoBehaviour
         //ChooseAttackSkill();
         GladiusGlobals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", Name, m_currentTarget != null ? m_currentTarget.Name : "NoActorTarget", CurrentAttackSkill.Name));
         AnimationEnum attackAnim = CurrentAttackSkill.Animation != AnimationEnum.None ? CurrentAttackSkill.Animation : AnimationEnum.Attack1;
-        PlayAnimation(attackAnim, loopClip: false);
+        QueueAnimation(attackAnim);
         //GladiusGlobals.CombatEngineUI.DrawFloatingText(CameraFocusPoint, Color.white, CurrentAttackSkill.Name, 2f);
         Attacking = true;
     }
@@ -973,7 +1016,7 @@ public class BaseActor : MonoBehaviour
     {
         Dead = true;
         GladiusGlobals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death started.", Name));
-        PlayAnimation(AnimationEnum.Die, loopClip: false);
+        QueueAnimation(AnimationEnum.Die);
         TurnManager.RemoveActor(this);
     }
 
@@ -996,20 +1039,12 @@ public class BaseActor : MonoBehaviour
         }
     }
 
-    public void StartBlock(BaseActor attacker)
+
+    public void StartMiss(BaseActor attacker)
     {
         SnapToFace(attacker);
-        PlayAnimation(AnimationEnum.Block, loopClip: false);
+        QueueAnimation(AnimationEnum.Miss);
     }
-
-    public void EndBlock()
-    {
-
-
-    }
-
-
-
 
     //public virtual void StartAction(ActionTypes actionType)
     //{
@@ -1239,7 +1274,7 @@ public class BaseActor : MonoBehaviour
         UnitActive = false;
         if (!Dead)
         {
-            PlayAnimation(AnimationEnum.Idle);
+            QueueAnimation(AnimationEnum.Idle);
             TurnManager.QueueActor(this);
         }
         else

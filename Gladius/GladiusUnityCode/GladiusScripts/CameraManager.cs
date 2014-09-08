@@ -60,17 +60,13 @@ public class CameraManager : MonoBehaviour
 
 
 
-    public void SetCombatModeActive(bool active ,BaseActor actor1, BaseActor actor2)
-    {
-        m_combatModeActive = active;
-        m_actor1 = actor1;
-        m_actor2 = actor2;
-    }
+    //public void SetCombatModeActive(bool active ,BaseActor actor1, BaseActor actor2)
+    //{
+    //    m_combatModeActive = active;
+    //    m_actor1 = actor1;
+    //    m_actor2 = actor2;
+    //}
 
-
-    private bool m_combatModeActive;
-    private BaseActor m_actor1;
-    private BaseActor m_actor2;
 
     public GameObject TargetObject
     {
@@ -78,23 +74,6 @@ public class CameraManager : MonoBehaviour
         set;
     }
 
-    private Vector3 _targetPos;
-    public Vector3 TargetPosition
-    {
-        get
-        {
-            if (TargetObject != null)
-            {
-                return TargetObject.transform.position;
-            }
-            return _targetPos;
-        }
-
-        set
-        {
-            _targetPos = value;
-        }
-    }
 
     private CameraMode m_cameraMode;
     public CameraMode CurrentCameraMode

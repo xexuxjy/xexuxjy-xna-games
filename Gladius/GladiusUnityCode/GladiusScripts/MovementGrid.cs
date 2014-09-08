@@ -521,11 +521,7 @@ public class MovementGrid : MonoBehaviour
         for (int i = 0; i < numPoints; ++i)
         {
             GridSquareType squareType = GridSquareType.None;
-            //if (!CurrentActor.CurrentAttackSkill.InRange(i))
-            //{
-            //    squareType = GridSquareType.Blocked;
-            //}
-            bool disabled = i > skillRange;
+            bool disabled = !CurrentActor.CurrentAttackSkill.InRange(i);
             prev = curr;
             curr = points[i];
             if (i < (numPoints - 1))
@@ -535,7 +531,7 @@ public class MovementGrid : MonoBehaviour
             }
             else
             {
-                DrawIfValid(prev, curr, next, actor, disabled, true, false);
+                DrawIfValid(prev, curr, next, actor, true, false,disabled);
             }
         }
     }
