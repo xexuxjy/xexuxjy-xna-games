@@ -207,11 +207,16 @@ namespace Gladius
         Attack3,
         BowShot,
         Miss,
-        Block,
+        BlockStart,
+        BlockPose,
+        BlockEnd,
         Stagger,
         Die,
         Cast,
-        Cheer
+        Cheer,
+        KnockDown,
+        GetUp,
+        Jump
     }
 
     public enum SquareType

@@ -102,9 +102,11 @@ namespace Gladius.combat
 
 
 
-            if (m_combatRandom.NextDouble() > hitChance)
+            //if (m_combatRandom.NextDouble() > hitChance)
+            if(true)
             {
-                attackResult.resultType = defender.HasShield ? AttackResultType.Blocked : AttackResultType.Miss;
+                //attackResult.resultType = defender.HasShield ? AttackResultType.Blocked : AttackResultType.Miss;
+                attackResult.resultType = AttackResultType.Blocked;
             }
             else
             {
@@ -115,30 +117,26 @@ namespace Gladius.combat
 
             //attackResult.resultType = AttackResultType.Blocked;
 
-            if (attackResult.resultType == AttackResultType.Blocked)
-            {
-                defender.StartBlock(attacker);
-            }
-            else
-            {
-                defender.TakeDamage(attackResult);
-                CheckAndApplyConditions(attacker,defender,attackSkill);
-            }
+            defender.TakeDamage(attackResult);
+            CheckAndApplyConditions(attacker,defender,attackSkill,attackResult);
 
             DrawCombatResult(attackSkill, attackResult, attacker, defender);
 
         }
 
-		public void CheckAndApplyConditions(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+		public void CheckAndApplyConditions(BaseActor attacker, BaseActor defender, AttackSkill attackSkill,AttackResult attackResult)
 		{
-            for (int i = 0; i < StatusConditions.Conditions.Length; ++i)
+            if (attackResult.resultType == AttackResultType.Hit || attackResult.resultType == AttackResultType.Critical)
             {
-                SkillStatus skillStatus;
-                if (attackSkill.CausesStatus(StatusConditions.Conditions[i],out skillStatus))
+                for (int i = 0; i < StatusConditions.Conditions.Length; ++i)
                 {
-                    if (!defender.ImmuneToStatus(StatusConditions.Conditions[i]))
+                    SkillStatus skillStatus;
+                    if (attackSkill.CausesStatus(StatusConditions.Conditions[i], out skillStatus))
                     {
-                        defender.CauseStatus(StatusConditions.Conditions[i],skillStatus);
+                        if (!defender.ImmuneToStatus(StatusConditions.Conditions[i]))
+                        {
+                            defender.CauseStatus(StatusConditions.Conditions[i], skillStatus);
+                        }
                     }
                 }
             }
