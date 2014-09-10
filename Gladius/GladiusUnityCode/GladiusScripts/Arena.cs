@@ -41,6 +41,11 @@ namespace Gladius.arena
 
         public bool IsPointOccupied(Point p)
         {
+            if (!InLevel(p))
+            {
+                return true;
+            }
+
             BaseActor ba = null;
             if (m_baseActorMap.TryGetValue(p, out ba))
             {
@@ -666,7 +671,8 @@ namespace Gladius.arena
         {
             get { return searchMethod; }
         }
-        private SearchMethod searchMethod = SearchMethod.BestFirst;
+        //private SearchMethod searchMethod = SearchMethod.BestFirst;
+        private SearchMethod searchMethod = SearchMethod.BreadthFirst;
 
         // Seconds per search step
         public float TimeStep
@@ -988,6 +994,7 @@ namespace Gladius.arena
             Reset();
             startPoint = start;
             endPoint = end;
+
             openList.Add(new SearchNode(start, StepDistance(start, end), 0));
             IsSearching = true;
             while (IsSearching)
@@ -1024,7 +1031,11 @@ namespace Gladius.arena
             foreach (Point p in GladiusGlobals.CardinalPoints)
             {
                 Point adjusted = Point.Add(center, p);
-                if (m_levelMap.InLevel(adjusted) && !m_levelMap.IsPointOccupied(adjusted))
+
+                // if the square is empty, or it's occupied but it's the end point...
+                bool validOccupied = !m_levelMap.IsPointOccupied(adjusted) || adjusted == endPoint;
+
+                if (m_levelMap.InLevel(adjusted) && validOccupied)
                 {
                     // check for height differnces.
                     if (Math.Abs(m_levelMap.GetHeightAtLocation(adjusted) - currentHeight) <= allowableHeightDifference)
@@ -1033,31 +1044,6 @@ namespace Gladius.arena
                     }
                 }
             }
-
-            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
-            //{
-            //    results.Add(new Point(x, y));
-            //}
-
-            //y = (int)center.Y - 1;
-            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
-            //{
-            //    results.Add(new Point(x, y));
-            //}
-
-            //y = (int)center.Y;
-            //x = (int)center.X + 1;
-
-            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
-            //{
-            //    results.Add(new Point(x, y));
-            //}
-            //x = (int)center.X - 1;
-
-            //if (m_levelMap.InLevel(x, y) && m_levelMap.GetSquareTypeAtLocation(x, y) == SquareType.Empty)
-            //{
-            //    results.Add(new Point(x, y));
-            //}
         }
 
 

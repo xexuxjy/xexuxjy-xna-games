@@ -265,6 +265,7 @@ namespace Gladius
 
     public enum CameraMode
     {
+        None,
         Normal,
         Manual,
         Combat,

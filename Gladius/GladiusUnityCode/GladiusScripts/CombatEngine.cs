@@ -80,6 +80,7 @@ namespace Gladius.combat
         public void ResolveAttack(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
         {
             AttackResult attackResult = new AttackResult();
+            attackResult.damageCauser = attacker;
 
             float accuracyBonus = GetCategoryAccuracyBonus(attacker.ActorClassData, defender.ActorClassData);
             float totalDamage = CalculateExpectedDamage(attacker, defender, attackSkill);

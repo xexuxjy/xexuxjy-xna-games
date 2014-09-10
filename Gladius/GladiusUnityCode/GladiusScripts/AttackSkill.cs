@@ -60,15 +60,21 @@ namespace Gladius
 
         public bool ValidForTarget(BaseActor user,BaseActor target,Point targetPos)
         {
-            foreach(String condition in m_targetConditions)
+            // if there are any special rules...
+            if (m_targetConditions.Count > 0)
             {
-                bool valid = CheckIndividualSkill(condition,user,target,targetPos);
-                if(!valid)
+                bool valid = false;
+                foreach (String condition in m_targetConditions)
                 {
-                    return false;
+                    valid |= CheckIndividualSkill(condition, user, target, targetPos);
                 }
+                return valid;
             }
-            return true;
+            else
+            {
+                // standard rules
+                return (user.TeamName != target.TeamName);
+            }
         }
 
         public bool CausesStatus(String condition,out SkillStatus skillStatus)
@@ -217,7 +223,7 @@ namespace Gladius
 		{
 			if (SubType == "Combo")
 			{
-				m_skillRow = 1;
+				m_skillRow = 2;
 			}
             else if (m_skillAttributes.Contains("affinity"))
 			{
@@ -285,67 +291,67 @@ namespace Gladius
 
         public bool IsAffinity
         {
-            get { return !m_skillAttributes.Contains("affinity"); }
+            get { return m_skillAttributes.Contains("affinity"); }
         }
 
         public bool IsBite
         {
-            get { return !m_skillAttributes.Contains("bite"); }
+            get { return m_skillAttributes.Contains("bite"); }
         }
 
         public bool IsCharge
         {
-            get { return !m_skillAttributes.Contains("charge"); }
+            get { return m_skillAttributes.Contains("charge"); }
         }
 
         public bool IsMelee
         {
-            get { return !m_skillAttributes.Contains("melee"); }
+            get { return m_skillAttributes.Contains("melee"); }
         }
 
         public bool IsOkWithNoTargets
         {
-            get { return !m_skillAttributes.Contains("okwithnotargets"); }
+            get { return m_skillAttributes.Contains("okwithnotargets"); }
         }
         
         public bool IsPiercing
         {
-            get { return !m_skillAttributes.Contains("piercing"); }
+            get { return m_skillAttributes.Contains("piercing"); }
         }
 
         public bool IsRanged
         {
-            get { return !m_skillAttributes.Contains("ranged"); }
+            get { return m_skillAttributes.Contains("ranged"); }
         }
         
         public bool IsShield
         {
-            get { return !m_skillAttributes.Contains("shield"); }
+            get { return m_skillAttributes.Contains("shield"); }
         }
 
         public bool IsSpearAnim
         {
-            get { return !m_skillAttributes.Contains("spearanim"); }
+            get { return m_skillAttributes.Contains("spearanim"); }
         }
 
         public bool IsSpell
         {
-            get { return !m_skillAttributes.Contains("spell"); }
+            get { return m_skillAttributes.Contains("spell"); }
         }
 
         public bool IsSuicide
         {
-            get { return !m_skillAttributes.Contains("suicide"); }
+            get { return m_skillAttributes.Contains("suicide"); }
         }
 
         public bool IsTeleport
         {
-            get { return !m_skillAttributes.Contains("teleport"); }
+            get { return m_skillAttributes.Contains("teleport"); }
         }
 
         public bool IsWeapon
         {
-            get { return !m_skillAttributes.Contains("weapon"); }
+            get { return m_skillAttributes.Contains("weapon"); }
         }
 
 		public bool IsImmuneTo(String immunType)
@@ -387,6 +393,8 @@ namespace Gladius
             for (int counter = 0; counter < lines.Length; counter++)
             {
                 String line = lines[counter];
+                line = line.Trim();
+
                 if (!line.StartsWith("SKILL"))
                 {
                     continue;

@@ -80,7 +80,7 @@ namespace Gladius
          
             for (int counter = 0; counter < lines.Length; counter++)
             {
-                String line = lines[counter];
+                String line = lines[counter].Trim();
                 if (line.StartsWith("//"))
                 {
                     continue;
