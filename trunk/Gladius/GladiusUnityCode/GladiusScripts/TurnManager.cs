@@ -163,7 +163,11 @@ namespace Gladius.arena
                 }
 
                 CurrentActor.StartTurn();
-				GladiusGlobals.CameraManager.TargetObject = CurrentActor.gameObject;
+
+                GladiusGlobals.CameraManager.ReparentTarget(CurrentActor.gameObject);
+                GladiusGlobals.CameraManager.CurrentCameraMode = CameraMode.Normal;
+
+				//GladiusGlobals.CameraManager.TargetObject = CurrentActor.gameObject;
                 if (CurrentActor.PlayerControlled)
                 {
                     //ArenaScreen.SetPlayerChoiceBarVisible(true);

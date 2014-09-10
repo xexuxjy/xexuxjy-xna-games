@@ -18,7 +18,8 @@ public class BaseActor : MonoBehaviour
 
     public string HeadModelName
     {
-        get;set;
+        get;
+        set;
     }
 
     public string ShoulderModelName
@@ -38,7 +39,7 @@ public class BaseActor : MonoBehaviour
         get;
         set;
     }
-    
+
     public string ShoesModelName
     {
         get;
@@ -52,23 +53,23 @@ public class BaseActor : MonoBehaviour
     }
 
 
-         public int CON
-        { get{return m_characterData.CON;} set{m_characterData.CON=value;}}
+    public int CON
+    { get { return m_characterData.CON; } set { m_characterData.CON = value; } }
 
-        public int PWR
-        { get{return m_characterData.PWR;} set{m_characterData.PWR=value;}}
+    public int PWR
+    { get { return m_characterData.PWR; } set { m_characterData.PWR = value; } }
 
-        public int ACC
-        { get{return m_characterData.ACC;} set{m_characterData.ACC=value;}}
+    public int ACC
+    { get { return m_characterData.ACC; } set { m_characterData.ACC = value; } }
 
-        public int DEF
-        { get{return m_characterData.DEF;} set{m_characterData.DEF=value;}}
+    public int DEF
+    { get { return m_characterData.DEF; } set { m_characterData.DEF = value; } }
 
-        public int INT
-        { get{return m_characterData.INI;} set{m_characterData.INI=value;}}
+    public int INT
+    { get { return m_characterData.INI; } set { m_characterData.INI = value; } }
 
-        public float MOVE
-        { get{return m_characterData.MOV;} set{m_characterData.MOV=value;}}
+    public float MOVE
+    { get { return m_characterData.MOV; } set { m_characterData.MOV = value; } }
 
 
 
@@ -109,7 +110,7 @@ public class BaseActor : MonoBehaviour
         // toggle enabled so the attachment changes are picked up .
         follow.enabled = false;
         follow.enabled = true;
-        
+
 
 
 
@@ -124,7 +125,7 @@ public class BaseActor : MonoBehaviour
         SetupSkills(GladiusGlobals.AttackSkillDictionary);
 
         SetAnimationData();
-        
+
         QueueAnimation(AnimationEnum.Idle);
 
 
@@ -136,7 +137,7 @@ public class BaseActor : MonoBehaviour
     {
         m_clipNameDictionary[AnimationEnum.Idle] = "idle-2";
         m_clipNameDictionary[AnimationEnum.Walk] = "walk";
-        m_clipNameDictionary[AnimationEnum.Attack1] = IsTwoHanded ? "w_2h_attack-1":"w_attack-1";
+        m_clipNameDictionary[AnimationEnum.Attack1] = IsTwoHanded ? "w_2h_attack-1" : "w_attack-1";
         m_clipNameDictionary[AnimationEnum.Attack2] = IsTwoHanded ? "w_2h_attack-2" : "w_attack-2";
         m_clipNameDictionary[AnimationEnum.Attack3] = IsTwoHanded ? "w_2h_attack-3" : "w_attack-3";
 
@@ -150,7 +151,7 @@ public class BaseActor : MonoBehaviour
 
         m_clipNameDictionary[AnimationEnum.KnockDown] = "w_death-2";
         m_clipNameDictionary[AnimationEnum.GetUp] = "w_get-up";
-            
+
 
 
         m_clipNameDictionary[AnimationEnum.Cast] = "w_cast_spell-1";
@@ -159,7 +160,7 @@ public class BaseActor : MonoBehaviour
         //foreach (var o in clips)
         //{
         //    AnimationClip c = o as AnimationClip;
-            
+
         //    if (c.name == "idle-2" || c.name == "walk")
         //    {
         //        c.wrapMode = WrapMode.Loop;
@@ -200,7 +201,7 @@ public class BaseActor : MonoBehaviour
         SkinnedMeshRenderer[] childMeshes = GetComponentsInChildren<SkinnedMeshRenderer>();
 
         Component[] allComps = GetComponents<Component>();
-        
+
 
 
         foreach (SkinnedMeshRenderer m in childMeshes)
@@ -261,7 +262,7 @@ public class BaseActor : MonoBehaviour
         }
     }
 
-    
+
 
 
     public DamageType WeaponAffinityType
@@ -297,28 +298,28 @@ public class BaseActor : MonoBehaviour
 
     private void BowFirePoint(String name)
     {
-         //only do this at the animation hitpoint.
-            Projectile projectile = GetProjectile();
+        //only do this at the animation hitpoint.
+        Projectile projectile = GetProjectile();
 
-            //find hand position
-            //Matrix handPos;
+        //find hand position
+        //Matrix handPos;
 
-            //if (m_animatedModel.FindAbsoluteMatrixForBone("Bip01 L Hand", out handPos))
-            //{
-            //    Vector3 scaledModelVal = handPos.Translation;
-            //    scaledModelVal = Vector3.Transform(scaledModelVal, World);
-            //    Matrix4x4
-            //    projectile.Position = scaledModelVal;
-            //}
-            if (m_projectileHandTransform != null)
-            {
-                Debug.Log("Projectile start pos : " + m_projectileHandTransform.position);
-                projectile.Position = m_projectileHandTransform.position;
-            }
-            projectile.Target = m_currentTarget;
-            projectile.AttackSKill = CurrentAttackSkill;
-            projectile.gameObject.SetActive(true);
-            Debug.Log("BowFirePoint");
+        //if (m_animatedModel.FindAbsoluteMatrixForBone("Bip01 L Hand", out handPos))
+        //{
+        //    Vector3 scaledModelVal = handPos.Translation;
+        //    scaledModelVal = Vector3.Transform(scaledModelVal, World);
+        //    Matrix4x4
+        //    projectile.Position = scaledModelVal;
+        //}
+        if (m_projectileHandTransform != null)
+        {
+            Debug.Log("Projectile start pos : " + m_projectileHandTransform.position);
+            projectile.Position = m_projectileHandTransform.position;
+        }
+        projectile.Target = m_currentTarget;
+        projectile.AttackSKill = CurrentAttackSkill;
+        projectile.gameObject.SetActive(true);
+        Debug.Log("BowFirePoint");
     }
 
     public Projectile GetProjectile()
@@ -546,37 +547,23 @@ public class BaseActor : MonoBehaviour
 
     public int ArenaSkillPoints
     {
-        get;set;
-        //get
-        //{
-        //    return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue;
-        //}
-        //set
-        //{
-        //    m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].CurrentValue = value;
-        //}
+        get;
+        set;
     }
 
     public int MaxArenaSkillPoints
     {
-        get{return 5;        }
-        //get
-        //{
-        //    return m_attributeDictionary[GameObjectAttributeType.ArenaSkillPoints].MaxValue;
-        //}
+        get { return 5; }
     }
 
+    private int _affinity = 2;
     public int Affinity
     {
-        get;set;
-        //get
-        //{
-        //    return m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue;
-        //}
-        //set
-        //{
-        //    m_attributeDictionary[GameObjectAttributeType.Affinity].CurrentValue = value;
-        //}
+        get
+        {
+            return _affinity;
+        }
+        set { _affinity = Math.Max(0, Math.Min(value, MaxAffinity)); }
     }
 
     public int MaxAffinity
@@ -635,16 +622,16 @@ public class BaseActor : MonoBehaviour
 
     public void LoadAndAttachModel(String boneName, String modelName)
     {
-        Transform boneTransform = GladiusGlobals.FindChild(boneName,gameObject.transform);
+        Transform boneTransform = GladiusGlobals.FindChild(boneName, gameObject.transform);
         if (boneTransform != null)
         {
             GameObject load = Instantiate(Resources.Load(GladiusGlobals.ModelsRoot + modelName)) as GameObject;
             if (load != null)
-            {   
+            {
                 load.transform.parent = boneTransform;
                 load.transform.localPosition = Vector3.zero;
                 load.transform.localRotation = Quaternion.Euler(new Vector3(90, 90, 0));
-                load.transform.localScale = new Vector3(100f,100f,100f);
+                load.transform.localScale = new Vector3(100f, 100f, 100f);
             }
         }
         else
@@ -704,7 +691,7 @@ public class BaseActor : MonoBehaviour
     public void CheckAnimationEnd()
     {
         // if the current anim loops, and we have others queued , or anim has finished then jump to next
-        
+
         if ((animation.clip != null && animation.clip.wrapMode == WrapMode.Loop && m_animationQueue.Count > 0) || animation.isPlaying == false)
         {
             AnimationStopped(m_currentAnimEnum);
@@ -720,7 +707,8 @@ public class BaseActor : MonoBehaviour
             }
             else
             {
-                m_currentAnimEnum = AnimationEnum.None;
+                //m_currentAnimEnum = AnimationEnum.None;
+                QueueAnimation(AnimationEnum.Idle); // or dead?
             }
         }
     }
@@ -753,7 +741,7 @@ public class BaseActor : MonoBehaviour
 
     public void Think()
     {
-       // Debug.Log("Think");
+        // Debug.Log("Think");
         if (!PlayerControlled)
         {
 
@@ -801,13 +789,13 @@ public class BaseActor : MonoBehaviour
         {
             Position += diff * (float)Time.deltaTime * MovementSpeed;
         }
-     
+
     }
 
 
     private void UpdateMovement()
     {
-        
+
         if (Turning)
         {
             TurnTimer += Time.deltaTime;
@@ -833,57 +821,63 @@ public class BaseActor : MonoBehaviour
                     Vector3 target = Arena.ArenaToWorld(WayPointList[0]);
                     Vector3 diff = target - Position;
                     float closeEnough = 0.01f;
-                    if (diff.sqrMagnitude < closeEnough)
+                    // check that nothings blocked us since this was set.
+                    if (Arena.CanMoveActor(this, WayPointList[0]))
                     {
-                        // check that nothings blocked us since this was set.
-                        if (Arena.CanMoveActor(this, WayPointList[0]))
+                        if (diff.sqrMagnitude < closeEnough)
                         {
-                            Arena.MoveActor(this, WayPointList[0]);
-                            //Debug.Log ("MoveActor ["+gameObject.name+"] "+WayPointList[0]);
-                            diff.Normalize();
-
-                            Quaternion currentHeading = Quaternion.LookRotation(diff);
-                            ArenaPoint = WayPointList[0];
-
-                            WayPointList.RemoveAt(0);
-
-                            // rebuild this now we've reached a point.
-                            GladiusGlobals.MovementGrid.RebuildMesh = true;
-
-                            // we've moved one step so reduce our movement.
-                            m_currentMovePoints--;
-
-                            // check and see if we need to turn
-                            if (WayPointList.Count > 0)
+                            // check that nothings blocked us since this was set.
+                            if (Arena.CanMoveActor(this, WayPointList[0]))
                             {
-                                Vector3 nextTarget = Arena.ArenaToWorld(WayPointList[0]);
-                                Vector3 nextDiff = nextTarget - Position;
-                                nextDiff.Normalize();
-                                Quaternion newHeading = Quaternion.LookRotation(nextDiff);
-                                if (newHeading != currentHeading)
+                                Arena.MoveActor(this, WayPointList[0]);
+                                //Debug.Log ("MoveActor ["+gameObject.name+"] "+WayPointList[0]);
+                                diff.Normalize();
+
+                                Quaternion currentHeading = Quaternion.LookRotation(diff);
+                                ArenaPoint = WayPointList[0];
+
+                                WayPointList.RemoveAt(0);
+
+                                // rebuild this now we've reached a point.
+                                GladiusGlobals.MovementGrid.RebuildMesh = true;
+
+                                // we've moved one step so reduce our movement.
+                                m_currentMovePoints--;
+
+                                // check and see if we need to turn
+                                if (WayPointList.Count > 0)
                                 {
-                                    FaceDirection(newHeading, TurnTime);
+                                    Vector3 nextTarget = Arena.ArenaToWorld(WayPointList[0]);
+                                    Vector3 nextDiff = nextTarget - Position;
+                                    nextDiff.Normalize();
+                                    Quaternion newHeading = Quaternion.LookRotation(nextDiff);
+                                    if (newHeading != currentHeading)
+                                    {
+                                        FaceDirection(newHeading, TurnTime);
+                                    }
                                 }
                             }
                         }
                         else
                         {
-                            // we've been blocked from where we were hoping for.
-                            // clear state and force a rethink.
-                            // pop our character 'back' to last square.
-                            ArenaPoint = ArenaPoint;
-                            WayPointList.Clear();
-                            FollowingWayPoints = false;
+                            diff.Normalize();
+                            {
+                                Position += diff * (float)Time.deltaTime * MovementSpeed;
+                            }
                         }
+
 
                     }
                     else
                     {
-                        diff.Normalize();
-                        {
-                            Position += diff * (float)Time.deltaTime * MovementSpeed;
-                        }
+                        // we've been blocked from where we were hoping for.
+                        // clear state and force a rethink.
+                        // pop our character 'back' to last square.
+                        ArenaPoint = ArenaPoint;
+                        WayPointList.Clear();
+                        FollowingWayPoints = false;
                     }
+
                 }
                 else
                 {
@@ -896,11 +890,14 @@ public class BaseActor : MonoBehaviour
 
     public void SnapToFace(BaseActor actor)
     {
-        Vector3 nextDiff = actor.Position - Position;
-        nextDiff.y = 0;
-        nextDiff.Normalize();
-        OriginalRotation = Rotation;
-        Rotation = Quaternion.LookRotation(nextDiff);
+        if (actor != null)
+        {
+            Vector3 nextDiff = actor.Position - Position;
+            nextDiff.y = 0;
+            nextDiff.Normalize();
+            OriginalRotation = Rotation;
+            Rotation = Quaternion.LookRotation(nextDiff);
+        }
     }
 
     public void FaceDirection(Quaternion newDirection, float turnSpeed)
@@ -968,7 +965,6 @@ public class BaseActor : MonoBehaviour
         GladiusGlobals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", Name, m_currentTarget != null ? m_currentTarget.Name : "NoActorTarget", CurrentAttackSkill.Name));
         AnimationEnum attackAnim = CurrentAttackSkill.Animation != AnimationEnum.None ? CurrentAttackSkill.Animation : AnimationEnum.Attack1;
         QueueAnimation(attackAnim);
-        //GladiusGlobals.CombatEngineUI.DrawFloatingText(CameraFocusPoint, Color.white, CurrentAttackSkill.Name, 2f);
         Attacking = true;
     }
 
@@ -1153,17 +1149,11 @@ public class BaseActor : MonoBehaviour
         UnitActive = true;
         TurnComplete = false;
         TurnStarted = true;
-        
+
         GladiusGlobals.MovementGrid.RebuildMesh = true;
         m_currentMovePoints = m_totalMovePoints;
 
-        //int numModifiers = m_attributeModifiers.Count;
-        //for (int i = numModifiers; i >= 0; --i)
-        //{
-        //    m_attributeModifiers[i].Update();
-        //}
-
-        //m_attributeModifiers.RemoveAll(g => g.Complete);
+        ArenaSkillPoints++;
 
         if (!PlayerControlled)
         {
@@ -1172,7 +1162,7 @@ public class BaseActor : MonoBehaviour
     }
 
     // we'll only get here after immunity checks and the like so don't re-check
-    public void CauseStatus(String statusName,SkillStatus skillStatus)
+    public void CauseStatus(String statusName, SkillStatus skillStatus)
     {
 
 
@@ -1245,6 +1235,9 @@ public class BaseActor : MonoBehaviour
             {
                 ConfirmMove();
             }
+
+            GladiusGlobals.CameraManager.ReparentTarget(gameObject);
+
             StartAttackSkill();
         }
     }
@@ -1334,7 +1327,7 @@ public class BaseActor : MonoBehaviour
 
     public void ApplyModifiers(AttackSkill skill)
     {
-            //need to change the implementation of this so its based on turns not elapsed time
+        //need to change the implementation of this so its based on turns not elapsed time
         //foreach (GameObjectAttributeModifier modifier in skill.StatModifiers)
         //{
         //    GameObjectAttributeModifier modifierCopy = modifier.Copy();
@@ -1509,7 +1502,7 @@ public class BaseActor : MonoBehaviour
                 //{
                 //    result = skill;
                 //}
-                
+
 
             }
         }
@@ -1640,10 +1633,10 @@ public class BaseActor : MonoBehaviour
     private Dictionary<BaseActor, int> m_threatMap = new Dictionary<BaseActor, int>();
     private BaseActor m_currentTarget = null;
     private List<Point> m_wayPointList = new List<Point>();
-    
+
     private List<AttackSkill> m_knownAttacks = new List<AttackSkill>();
     private List<AttackSkill> m_availableAttacks = new List<AttackSkill>();
-    
+
     public List<AttackSkill> m_innateSkills = new List<AttackSkill>();
     public List<AttackSkill> m_activeSkills = new List<AttackSkill>();
 
@@ -1689,13 +1682,13 @@ public class OngoingSkillStatus
     private BaseActor m_target;
     public String m_name;
 
-    public OngoingSkillStatus(SkillStatus status,BaseActor target)
+    public OngoingSkillStatus(SkillStatus status, BaseActor target)
     {
         if (m_status.statusDurationType == "Permanent")
         {
             Permanent = true;
         }
-        else if(m_status.statusDurationType == "Turns Source")
+        else if (m_status.statusDurationType == "Turns Source")
         {
 
         }
@@ -1736,7 +1729,7 @@ public class OngoingSkillStatus
 
     public void UpdateForSource(BaseActor actor)
     {
-        if(m_status.statusDurationType == "Turns Source" && actor == m_source)
+        if (m_status.statusDurationType == "Turns Source" && actor == m_source)
         {
             m_duration = -1;
         }

@@ -23,7 +23,7 @@ public class CameraManager : MonoBehaviour
     public void Start()
     {
         GladiusGlobals.CameraManager = this;
-        CurrentCameraMode = CameraMode.Normal;
+        CurrentCameraMode = CameraMode.None;
         
         Camera c = (Camera)GameObject.FindObjectOfType(typeof(Camera));
         GladiusGlobals.Camera = c;
@@ -32,6 +32,14 @@ public class CameraManager : MonoBehaviour
 
     }
 
+    public void ReparentTarget(GameObject newParent)
+    {
+        CameraTarget.transform.parent = newParent.transform;
+        CameraTarget.transform.localRotation = Quaternion.identity;
+        CameraTarget.transform.localPosition = Vector3.zero;
+        CameraTarget.transform.localScale = Vector3.one;
+
+    }
 
     public void FixedUpdate()
     {
@@ -60,21 +68,6 @@ public class CameraManager : MonoBehaviour
 
 
 
-    //public void SetCombatModeActive(bool active ,BaseActor actor1, BaseActor actor2)
-    //{
-    //    m_combatModeActive = active;
-    //    m_actor1 = actor1;
-    //    m_actor2 = actor2;
-    //}
-
-
-    public GameObject TargetObject
-    {
-        get;
-        set;
-    }
-
-
     private CameraMode m_cameraMode;
     public CameraMode CurrentCameraMode
     {
@@ -84,19 +77,23 @@ public class CameraManager : MonoBehaviour
         }
         set
         {
-            m_cameraMode = value;
-            switch (value)
+            if (value != m_cameraMode)
             {
-                case (CameraMode.Normal):
-                    NormalModeSettings.Apply();
-                    break;
-                case (CameraMode.Manual):
-                    ManualModeSettings.Apply();
-                    break;
-                case (CameraMode.Combat):
-                    CombatModeSettings.Apply();
-                    break;
+                switch (value)
+                {
+                    case (CameraMode.Normal):
+                        NormalModeSettings.Apply();
+                        break;
+                    case (CameraMode.Manual):
+                        ManualModeSettings.Apply();
+                        break;
+                    case (CameraMode.Combat):
+                        CombatModeSettings.Apply();
+                        break;
+                }
+
             }
+            m_cameraMode = value;
 
         }
     }

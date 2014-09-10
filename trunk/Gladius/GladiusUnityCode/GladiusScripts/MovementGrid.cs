@@ -53,6 +53,7 @@ public class MovementGrid : MonoBehaviour
         Vector3 pos = gameObject.transform.position;
         pos.y += 0.2f;
         gameObject.transform.position = pos;
+        m_cursorObject = new GameObject();
     }
 
     private void BuildDictionary()
@@ -509,9 +510,23 @@ public class MovementGrid : MonoBehaviour
         return GridSquareType.None;
     }
 
+    private List<Point> m_pointsCopy = new List<Point>();
     public void DrawMovementPath(BaseActor actor, List<Point> points)
     {
-        int numPoints = points.Count;
+        m_pointsCopy.Clear();
+        m_pointsCopy.AddRange(points);
+
+        // if the last point we're moving to is next to our target , then we should probably move to the target as well?
+        // still think the logic is wrong.
+        if (actor.Target != null && m_pointsCopy.Count > 0)
+        {
+            if (GladiusGlobals.PathDistance(actor.Target.ArenaPoint, m_pointsCopy[m_pointsCopy.Count - 1]) == 1)
+            {
+                //m_pointsCopy.Add(actor.Target.ArenaPoint);
+            }
+        }
+
+        int numPoints = m_pointsCopy.Count;
         Point prev = new Point();
         Point curr = new Point();
         Point next = new Point();
@@ -523,10 +538,10 @@ public class MovementGrid : MonoBehaviour
             GridSquareType squareType = GridSquareType.None;
             bool disabled = !CurrentActor.CurrentAttackSkill.InRange(i);
             prev = curr;
-            curr = points[i];
+            curr = m_pointsCopy[i];
             if (i < (numPoints - 1))
             {
-                next = points[i + 1];
+                next = m_pointsCopy[i + 1];
                 DrawIfValid(prev, curr, next, actor, (i > 0), true, disabled, squareType);
             }
             else
@@ -554,7 +569,13 @@ public class MovementGrid : MonoBehaviour
             LastPosition = CurrentCursorPoint;
             m_currentPosition = value;
 
-            GameObject.Find("CameraTarget").transform.position = CurrentV3;
+            m_cursorObject.transform.position = CurrentV3;
+
+            if (!Arena.InLevel(m_currentPosition))
+            {
+                int ibreak = 0;
+            }
+            GladiusGlobals.CameraManager.ReparentTarget(m_cursorObject);
 
         }
     }
@@ -753,6 +774,8 @@ public class MovementGrid : MonoBehaviour
     public Vector3 m_cursorMovement = Vector3.zero;
     public int CurrentCursorSize = 5;
     public const float m_hover = 0.01f;
+
+    public GameObject m_cursorObject;
 
     public Point m_currentPosition;
 

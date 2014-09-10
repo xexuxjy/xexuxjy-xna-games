@@ -25,7 +25,8 @@ public class PlayerChoiceBar : MonoBehaviour
 
         m_textureAtlas = control.GetManager().DefaultAtlas;
         m_healthProgressBar = GladiusGlobals.FindChild("HealthProgress",control.transform).GetComponent<dfProgressBar>();
-        m_affinityProgressBar = GladiusGlobals.FindChild("AffinityProgress", control.transform).GetComponent<dfProgressBar>();
+        m_affinityProgressBar = GladiusGlobals.FindChild("AffinityPointProgress", control.transform).GetComponent<dfProgressBar>();
+        m_affinityArmourProgressBar = GladiusGlobals.FindChild("AffinityArmourProgress", control.transform).GetComponent<dfProgressBar>();
         m_skillPointProgressBar = GladiusGlobals.FindChild("SkillPointProgress", control.transform).GetComponent<dfProgressBar>();
 
 
@@ -73,16 +74,18 @@ public class PlayerChoiceBar : MonoBehaviour
 
     public void Update()
     {
-        m_healthProgressBar.Value = CurrentActor.Health;
-        //if (CurrentActor != null)
-        //{
-        //    m_healthProgressBar.Value = (m_healthProgressBar.Value + 1) % CurrentActor.MaxHealth;
-        //}
 
         if (CurrentActor != null && CurrentlySelectedSkill != null)
         {
+            m_healthProgressBar.MaxValue = CurrentActor.MaxHealth;
+            m_healthProgressBar.Value = CurrentActor.Health;
             m_skillNameLabel.Text = CurrentlySelectedSkill.Name;
             m_skillTypeLabel.Text = m_skillGroupNames[m_actionCursor.X];
+            m_skillPointProgressBar.Value = CurrentActor.ArenaSkillPoints;
+
+            m_affinityProgressBar.MaxValue = CurrentActor.MaxAffinity;
+            m_affinityProgressBar.Value = CurrentActor.Affinity;
+            m_affinityProgressBar.ProgressSprite = SpriteForDamageType(CurrentActor.WeaponAffinityType);
         }
 
 
@@ -513,14 +516,16 @@ public class PlayerChoiceBar : MonoBehaviour
                     }
                     else
                     {
-                        if (!CurrentActor.CurrentAttackSkill.IsOkWithNoTargets)
-                        {
-                            // some indication here that we can't confirm the action at this point.
-                        }
-                        else
-                        {
-                            ConfirmAction();
-                        }
+                        // this should be just a move...?
+                        ConfirmAction();
+                        //if (!CurrentActor.CurrentAttackSkill.IsOkWithNoTargets)
+                        //{
+                        //    // some indication here that we can't confirm the action at this point.
+                        //}
+                        //else
+                        //{
+                        //    ConfirmAction();
+                        //}
                     }
                 }
                 break;
@@ -539,7 +544,6 @@ public class PlayerChoiceBar : MonoBehaviour
                     Point p = ApplyMoveToGrid(e.ActionButton);
                     if (Arena.InLevel(p))
                     {
-                        Point lastPoint = MovementGrid.CurrentCursorPoint;
                         MovementGrid.CurrentCursorPoint = p;
                         SquareType st = Arena.GetSquareTypeAtLocation(MovementGrid.CurrentCursorPoint);
                         BaseActor target = Arena.GetActorAtPosition(MovementGrid.CurrentCursorPoint);
@@ -547,18 +551,45 @@ public class PlayerChoiceBar : MonoBehaviour
                         CurrentActor.WayPointList.Clear();
 
                         Point adjustedPoint = MovementGrid.CurrentCursorPoint;
-                        if (target != null && target != CurrentActor)
-                        {
-                            adjustedPoint = lastPoint;
-                        }
+                        //if (Arena.IsPointOccupied(adjustedPoint))
+                        //{
+                        //    // instead find the nearest un-occupied square
+                        //    adjustedPoint = Arena.PointNearestLocation(CurrentActor.ArenaPoint, adjustedPoint);
+
+                        //}
+
 
                         Arena.FindPath(CurrentActor.ArenaPoint, adjustedPoint, CurrentActor.WayPointList);
+
+
+
                     }
                     break;
                 }
         }
         MovementGrid.RebuildMesh = true;
     }
+
+    public String SpriteForDamageType(DamageType type)
+    {
+        switch (type)
+        {
+            case (DamageType.Air):
+                return "AirBar";
+            case (DamageType.Dark):
+                return "DarkBar";
+            case (DamageType.Earth):
+                return "EarthBar";
+            case (DamageType.Fire):
+                return "FireBar";
+            case (DamageType.Light):
+                return "LightBar";
+            case (DamageType.Water):
+                return "WaterBar";
+        }
+        return null;
+    }
+
 
     public bool InputAllowed
     {
@@ -583,6 +614,7 @@ public class PlayerChoiceBar : MonoBehaviour
 
     dfProgressBar m_healthProgressBar;
     dfProgressBar m_affinityProgressBar;
+    dfProgressBar m_affinityArmourProgressBar;
     dfProgressBar m_skillPointProgressBar;
 
     dfAtlas m_textureAtlas;
