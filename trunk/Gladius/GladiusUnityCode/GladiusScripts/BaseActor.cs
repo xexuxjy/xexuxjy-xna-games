@@ -65,8 +65,31 @@ public class BaseActor : MonoBehaviour
     public int DEF
     { get { return m_characterData.DEF; } set { m_characterData.DEF = value; } }
 
-    public int INT
-    { get { return m_characterData.INI; } set { m_characterData.INI = value; } }
+    public int INI
+    { 
+        get 
+        {
+            return m_characterData.INI + INIAddition;
+        } 
+        set 
+        { 
+            m_characterData.INI = value; 
+        } 
+    }
+
+
+    public int INIAddition
+    {
+        get
+        {
+            if (GladiusGlobals.Crowd.GetValueForTeam(TeamName) > 75)
+            {
+                return 20;
+            }
+            return 0;
+        }
+    }
+
 
     public float MOVE
     { get { return m_characterData.MOV; } set { m_characterData.MOV = value; } }
@@ -79,15 +102,6 @@ public class BaseActor : MonoBehaviour
         m_characterData = new CharacterData();
         m_characterData.Name = "Test";
 
-        //m_animatedModel = new AnimatedModel(ModelHeight);
-
-        //m_animatedModel.OnAnimationStarted += new AnimatedModel.AnimationStarted(m_animatedModel_OnAnimationStarted);
-        //m_animatedModel.OnAnimationStopped += new AnimatedModel.AnimationStopped(m_animatedModel_OnAnimationStopped);
-        //Rotation = QuaternionHelper.LookRotation(Vector3.Forward);
-        //m_animatedModel.ModelRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI);
-
-        //SetupAttributes();
-        //DrawOrder = Globals.CharacterDrawOrder;
     }
 
     void Start()
@@ -117,7 +131,7 @@ public class BaseActor : MonoBehaviour
         //m_healthBar.GetComponent<dfFollowObject>().RebuildAttach();
 
         m_turnManager = GladiusGlobals.TurnManager;
-        m_turnManager.QueueActor(this);
+        m_turnManager.AddActor(this);
         Arena = GladiusGlobals.Arena;
 
         Health = MaxHealth = CON * 10;
@@ -249,12 +263,22 @@ public class BaseActor : MonoBehaviour
     {
         m_characterData = characterData;
 
-        //foreach (GameObjectAttributeType key in characterData.Attributes.Keys)
-        //{
-        //    m_attributeDictionary[key] = new BoundedAttribute(characterData.Attributes[key].BaseValue);
-        //}
 
-        m_guiContentName = new GUIContent(Name);
+        Item item = characterData.GetItemAtLocation(ItemLocation.Weapon);
+        if(item != null)
+        {
+            LoadAndAttachModel("RightHandAttach", item.ShortMeshName);
+        }
+        item = characterData.GetItemAtLocation(ItemLocation.Shield);
+        if(item != null)
+        {
+            LoadAndAttachModel("LeftHandAttach", item.ShortMeshName);
+        }
+        item = characterData.GetItemAtLocation(ItemLocation.Helmet);
+        if(item != null)
+        {
+            LoadAndAttachModel("Bip01 Head", item.ShortMeshName);
+        }
 
         if (characterData.StartPosition.HasValue)
         {
@@ -269,7 +293,8 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            return DamageType.Water;
+            Item item = m_characterData.GetItemAtLocation(ItemLocation.Weapon);
+            return item != null ? item.DamageType : DamageType.None;
         }
     }
 
@@ -277,16 +302,8 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            return DamageType.Water;
-        }
-    }
-
-    GUIContent m_guiContentName;
-    public GUIContent GUIContentName
-    {
-        get
-        {
-            return m_guiContentName;
+            Item item = m_characterData.GetItemAtLocation(ItemLocation.Armor);
+            return item != null ? item.DamageType : DamageType.None;
         }
     }
 
@@ -563,8 +580,20 @@ public class BaseActor : MonoBehaviour
         {
             return _affinity;
         }
-        set { _affinity = Math.Max(0, Math.Min(value, MaxAffinity)); }
+        private set { _affinity = Math.Max(0, Math.Min(value, MaxAffinity)); }
     }
+
+
+    public void AddAffinity(int val)
+    {
+        float newVal = val * AffinityPointMultiplier;
+        Affinity += val;
+    }
+
+
+    //public float AffinityMultiplier
+    //{
+
 
     public int MaxAffinity
     {
@@ -812,12 +841,14 @@ public class BaseActor : MonoBehaviour
         {
             if (FollowingWayPoints)
             {
-                // this is called every update and animation system doesn't reset if it's current anim
-                QueueAnimation(AnimationEnum.Walk);
-                ChooseWalkSkill();
                 // mvoe towards the next point.
                 if (WayPointList.Count > 0)
                 {
+                    // this is called every update and animation system doesn't reset if it's current anim
+                    // check and see if next point is a ledge/box etc and jump if so.
+                    QueueAnimation(AnimationEnum.Walk);
+                    //ChooseWalkSkill();
+
                     Vector3 target = Arena.ArenaToWorld(WayPointList[0]);
                     Vector3 diff = target - Position;
                     float closeEnough = 0.01f;
@@ -943,21 +974,21 @@ public class BaseActor : MonoBehaviour
     //    }
     //}
 
-    private void ChooseWalkSkill()
-    {
-        //CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Strike");
-        if (CurrentAttackSkill == null)
-        {
-            foreach (AttackSkill skill in m_knownAttacks)
-            {
-                if (skill.Name == "Strike")
-                {
-                    CurrentAttackSkill = skill;
-                    break;
-                }
-            }
-        }
-    }
+    //private void ChooseWalkSkill()
+    //{
+    //    //CurrentAttackSkill = m_knownAttacks.FirstOrDefault(a => a.Name == "Strike");
+    //    if (CurrentAttackSkill == null)
+    //    {
+    //        foreach (AttackSkill skill in m_knownAttacks)
+    //        {
+    //            if (skill.Name == "Strike")
+    //            {
+    //                CurrentAttackSkill = skill;
+    //                break;
+    //            }
+    //        }
+    //    }
+    //}
 
     public void StartAttack()
     {
@@ -1013,7 +1044,7 @@ public class BaseActor : MonoBehaviour
         Dead = true;
         GladiusGlobals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Death started.", Name));
         QueueAnimation(AnimationEnum.Die);
-        TurnManager.RemoveActor(this);
+        //TurnManager.RemoveActor(this);
     }
 
     public void StopDeath()
@@ -1141,6 +1172,21 @@ public class BaseActor : MonoBehaviour
 
     }
 
+    public bool MovedThisRound
+    {
+        get;
+        set;
+    }
+
+    public void RoundStarted()
+    {
+        MovedThisRound = false;   
+    }
+
+    public void RoundEnded()
+    {
+
+    }
 
 
     public void StartTurn()
@@ -1149,6 +1195,7 @@ public class BaseActor : MonoBehaviour
         UnitActive = true;
         TurnComplete = false;
         TurnStarted = true;
+        MovedThisRound = true;
 
         GladiusGlobals.MovementGrid.RebuildMesh = true;
         m_currentMovePoints = m_totalMovePoints;
@@ -1268,7 +1315,6 @@ public class BaseActor : MonoBehaviour
         if (!Dead)
         {
             QueueAnimation(AnimationEnum.Idle);
-            TurnManager.QueueActor(this);
         }
         else
         {
@@ -1520,9 +1566,36 @@ public class BaseActor : MonoBehaviour
 
     }
 
+    public float MovePointMultiplier
+    {
+        get
+        {
+            if (GladiusGlobals.Crowd.GetValueForTeam(TeamName) > 25)
+            {
+                return 1.3f;
+            }
+            return 1.0f;
+        }
+
+    }
+
+    public float AffinityPointMultiplier
+    {
+        get
+        {
+            if (GladiusGlobals.Crowd.GetValueForTeam(TeamName) > 50)
+            {
+                return 1.5f;
+            }
+            return 1.0f;
+        }
+    }
+
+
+
     public int TotalMovePoints
     {
-        get { return m_totalMovePoints; }
+        get { return (int)(m_totalMovePoints * MovePointMultiplier); }
     }
 
     public Color TeamColour

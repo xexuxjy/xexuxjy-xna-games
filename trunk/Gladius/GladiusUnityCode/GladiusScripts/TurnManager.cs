@@ -57,6 +57,18 @@ namespace Gladius.arena
         //}
 
 
+        public bool AllActorsHadTurn()
+        {
+            foreach (BaseActor ba in m_allActors)
+            {
+                if (!ba.MovedThisRound)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
         public void Update()
         {
@@ -67,6 +79,12 @@ namespace Gladius.arena
             else if (AllOpponentsDead())
             {
                 Application.LoadLevel("GameOverWin");
+            }
+
+            if (AllActorsHadTurn())
+            {
+                EndRound();
+                StartRound();
             }
 
 
@@ -124,30 +142,32 @@ namespace Gladius.arena
             }
         }
 
-        public void EndTurn()
+        public void StartRound()
         {
-            //Debug.Log("EndTurn");
-
-            //ArenaScreen.MovementGrid.CurrentActor = CurrentActor;
-            if (CurrentActor != null && CurrentActor.TurnComplete)
+            m_turnOrders.Clear();
+            foreach (BaseActor actor in m_allActors)
             {
-                CurrentActor.EndTurn();
-                if (CurrentActor.PlayerControlled)
+                if(!actor.Dead)
                 {
-                    //ArenaScreen.SetPlayerChoiceBarVisible(false);
+                    actor.RoundStarted();
+                    m_turnOrders.Add(actor);
                 }
             }
+            // sort so that highest ini goes first.
+            m_turnOrders.Sort((ba1, ba2) => ba1.INI.CompareTo( ba2.INI));
+            TurnCount++;
 
-            if (m_turns.Count > 0)
-            {
-                System.Diagnostics.Debug.Assert(m_turns.Count > 0);
-                //Debug.Log("TurnCount : " + m_turns.Count);
-
-                EventManager.ChangeActor(this, CurrentActor, m_turns[0]);
-                CurrentActor = m_turns[0];
-                m_turns.RemoveAt(0);
-            }
         }
+
+        public void EndRound()
+        {
+            foreach (BaseActor actor in m_allActors)
+            {
+                actor.RoundEnded();
+            }
+
+        }
+
 
         public void StartTurn()
         {
@@ -176,25 +196,43 @@ namespace Gladius.arena
             }
         }
 
+        public void EndTurn()
+        {
+            //Debug.Log("EndTurn");
 
-        public void QueueActor(BaseActor actor)
+            //ArenaScreen.MovementGrid.CurrentActor = CurrentActor;
+            if (CurrentActor != null && CurrentActor.TurnComplete)
+            {
+                CurrentActor.EndTurn();
+                if (CurrentActor.PlayerControlled)
+                {
+                    //ArenaScreen.SetPlayerChoiceBarVisible(false);
+                }
+            }
+
+            if (m_turnOrders.Count > 0)
+            {
+                System.Diagnostics.Debug.Assert(m_turnOrders.Count > 0);
+                //Debug.Log("TurnCount : " + m_turns.Count);
+
+                EventManager.ChangeActor(this, CurrentActor,m_turnOrders[0]);
+                CurrentActor = m_turnOrders[0];
+                m_turnOrders.RemoveAt(0);
+            }
+        }
+
+        public void AddActor(BaseActor actor)
         {
             //Debug.Log("QueueActor : " + actor.name);
             // to do  - figure out time of last turn, and use initiative values etc
             // to possibly insert this ahead of others.
             actor.TurnManager = this;
-            m_turns.Add(actor);
+
             if (!m_allActors.Contains(actor))
             {
                 m_allActors.Add(actor);
             }
         }
-
-        public void RemoveActor(BaseActor actor)
-        {
-            m_turns.RemoveAll(v => v == actor);
-        }
-
 
         BaseActor m_currentActor;
         public BaseActor CurrentActor
@@ -260,31 +298,10 @@ namespace Gladius.arena
             get { return m_allActors; }
         }
 
+        public int TurnCount
+        { get; set; }
 
-        //public ControlState CurrentControlState
-        //{
-        //    get
-        //    {
-        //        return m_controlState;
-        //    }
-        //    set
-        //    {
-        //        m_controlState = value;
-        //        if (CurrentControlState == ControlState.UsingGrid)
-        //        {
-        //            if (CurrentActor.CurrentAttackSkill.AttackType == AttackType.EndTurn)
-        //            {
-        //                CurrentActor.ConfirmAttackSkill();
-        //            }
-        //        }
-
-        //    }
-        //}
-
-
-        ControlState m_controlState = ControlState.None;
-
-        List<BaseActor> m_turns = new List<BaseActor>();
+        List<BaseActor> m_turnOrders = new List<BaseActor>();
         List<BaseActor> m_allActors = new List<BaseActor>();
     }
 
