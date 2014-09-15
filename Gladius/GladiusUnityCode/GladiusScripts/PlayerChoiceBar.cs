@@ -83,9 +83,21 @@ public class PlayerChoiceBar : MonoBehaviour
             m_skillTypeLabel.Text = m_skillGroupNames[m_actionCursor.X];
             m_skillPointProgressBar.Value = CurrentActor.ArenaSkillPoints;
 
-            m_affinityProgressBar.MaxValue = CurrentActor.MaxAffinity;
-            m_affinityProgressBar.Value = CurrentActor.Affinity;
-            m_affinityProgressBar.ProgressSprite = SpriteForDamageType(CurrentActor.WeaponAffinityType);
+            String spriteName = SpriteForDamageType(CurrentActor.WeaponAffinityType);
+            if (spriteName != null)
+            {
+                m_affinityArmourProgressBar.enabled = true;
+                m_affinityProgressBar.MaxValue = CurrentActor.MaxAffinity;
+                m_affinityProgressBar.Value = CurrentActor.Affinity;
+                m_affinityProgressBar.ProgressSprite = spriteName;
+            }
+            else
+            {
+                m_affinityArmourProgressBar.enabled = false;
+            }
+
+
+
         }
 
 

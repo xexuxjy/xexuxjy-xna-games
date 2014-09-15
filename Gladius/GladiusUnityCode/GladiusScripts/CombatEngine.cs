@@ -61,8 +61,10 @@ namespace Gladius.combat
 
         }
 
-		
 
+        public void ApplyCrowdBonus(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+        {
+        }
 
 		public bool ImmuneToSkill(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
 		{

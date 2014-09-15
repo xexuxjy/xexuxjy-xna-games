@@ -95,7 +95,7 @@ public class ArenaStartup : MonoBehaviour
         foreach (BaseActor actor in actors)
         {
             GladiusGlobals.Arena.MoveActor(actor, actor.ArenaPoint);
-            GladiusGlobals.TurnManager.QueueActor(actor);
+            GladiusGlobals.TurnManager.AddActor(actor);
         }
 
     }
@@ -113,9 +113,9 @@ public class ArenaStartup : MonoBehaviour
         actor.ShoesModelName = "w_shoes_01";
         actor.HelmetModelName = "w_helmet_01";
         actor.SetMeshData();
-        actor.LoadAndAttachModel("RightHandAttach", "swordH_crescentmoon");
-        actor.LoadAndAttachModel("LeftHandAttach", "shieldH_spiked_round");
-        actor.LoadAndAttachModel("Bip01 Head", "helm_gallic");
+        //actor.LoadAndAttachModel("RightHandAttach", "swordH_crescentmoon");
+        //actor.LoadAndAttachModel("LeftHandAttach", "shieldH_spiked_round");
+        //actor.LoadAndAttachModel("Bip01 Head", "helm_gallic");
 
 
     }

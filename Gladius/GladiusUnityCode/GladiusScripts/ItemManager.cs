@@ -218,6 +218,13 @@ namespace Gladius
             get;set;
         }
 
+        public DamageType DamageType
+        {
+            get;
+            set;
+        }
+
+
         public ItemLocation Location
         { get; set; }
 

@@ -140,6 +140,7 @@ namespace Gladius
 
     public enum DamageType
     {
+        None,
         Physical,
         Ranged,
         Air,
