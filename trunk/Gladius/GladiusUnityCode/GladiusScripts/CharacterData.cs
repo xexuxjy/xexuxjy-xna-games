@@ -73,6 +73,16 @@ namespace Gladius
 
         public Item GetItemAtLocation(ItemLocation location)
         {
+            String itemName = m_itemNames[(int)location];
+            if (m_items[(int)location] == null && itemName != null)
+            {
+                Item item = null;
+                if (GladiusGlobals.ItemManager.TryGetValue(itemName, out item))
+                {
+                    m_items[(int)location] = item;
+                }
+            }
+
             return m_items[(int)location];
         }
 

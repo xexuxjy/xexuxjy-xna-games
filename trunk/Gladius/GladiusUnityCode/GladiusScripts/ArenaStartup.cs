@@ -98,6 +98,7 @@ public class ArenaStartup : MonoBehaviour
             GladiusGlobals.TurnManager.AddActor(actor);
         }
 
+        GladiusGlobals.TurnManager.StartRound();
     }
 
     void Awake()
