@@ -145,6 +145,7 @@ namespace Gladius.arena
         public void StartRound()
         {
             m_turnOrders.Clear();
+            GladiusGlobals.Crowd.RoundStarted();
             foreach (BaseActor actor in m_allActors)
             {
                 if(!actor.Dead)
@@ -227,11 +228,8 @@ namespace Gladius.arena
             // to do  - figure out time of last turn, and use initiative values etc
             // to possibly insert this ahead of others.
             actor.TurnManager = this;
-
-            if (!m_allActors.Contains(actor))
-            {
-                m_allActors.Add(actor);
-            }
+            m_allActors.Add(actor);
+            m_teams.Add(actor.TeamName);
         }
 
         BaseActor m_currentActor;
@@ -293,16 +291,23 @@ namespace Gladius.arena
             return true;
         }
 
-        public List<BaseActor> AllActors
+        public HashSet<BaseActor> AllActors
         {
             get { return m_allActors; }
         }
+
+        public HashSet<string> AllTeams
+        {
+            get { return m_teams; }
+        }
+
 
         public int TurnCount
         { get; set; }
 
         List<BaseActor> m_turnOrders = new List<BaseActor>();
-        List<BaseActor> m_allActors = new List<BaseActor>();
+        HashSet<BaseActor> m_allActors = new HashSet<BaseActor>();
+        HashSet<string> m_teams = new HashSet<string>();
     }
 
 }

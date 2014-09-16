@@ -8,18 +8,14 @@ namespace Gladius
 {
     public class Crowd : MonoBehaviour
 	{
-        dfProgressBar m_team1Bar;
-        dfProgressBar m_team2Bar;
-        dfProgressBar m_team3Bar;
-        dfProgressBar m_team4Bar;
-
+        List<dfProgressBar> m_teamBarList = new List<dfProgressBar>();
 
         public void Update()
         {
-            UpdateBar(GladiusGlobals.PlayerTeam);
-            UpdateBar(GladiusGlobals.EnemyTeam1);
-            UpdateBar(GladiusGlobals.EnemyTeam2);
-            UpdateBar(GladiusGlobals.EnemyTeam3);
+            foreach (string teamName in GladiusGlobals.TurnManager.AllTeams)
+            {
+                UpdateBar(teamName);
+            }
         }
 
         public int GetValueForTeam(String teamName)
@@ -38,17 +34,17 @@ namespace Gladius
 
         public void Start()
         {
-            m_team1Bar = GameObject.Find("CrowdBar1").GetComponent<dfProgressBar>();
-            m_team2Bar = GameObject.Find("CrowdBar2").GetComponent<dfProgressBar>();
-            m_team3Bar = GameObject.Find("CrowdBar3").GetComponent<dfProgressBar>();
-            m_team4Bar = GameObject.Find("CrowdBar4").GetComponent<dfProgressBar>();
+            //m_team1Bar = GameObject.Find("CrowdBar1").GetComponent<dfProgressBar>();
+            //m_team2Bar = GameObject.Find("CrowdBar2").GetComponent<dfProgressBar>();
+            //m_team3Bar = GameObject.Find("CrowdBar3").GetComponent<dfProgressBar>();
+            //m_team4Bar = GameObject.Find("CrowdBar4").GetComponent<dfProgressBar>();
 
-            m_teamBars[GladiusGlobals.PlayerTeam] = m_team1Bar;
-            m_teamBars[GladiusGlobals.EnemyTeam1] = m_team2Bar;
-            m_teamBars[GladiusGlobals.EnemyTeam2] = m_team3Bar;
-            m_teamBars[GladiusGlobals.EnemyTeam3] = m_team4Bar;
+            //m_teamBars[GladiusGlobals.PlayerTeam] = m_team1Bar;
+            //m_teamBars[GladiusGlobals.EnemyTeam1] = m_team2Bar;
+            //m_teamBars[GladiusGlobals.EnemyTeam2] = m_team3Bar;
+            //m_teamBars[GladiusGlobals.EnemyTeam3] = m_team4Bar;
 
-
+            GladiusGlobals.Crowd = this;
         }
 
 
@@ -57,28 +53,50 @@ namespace Gladius
             m_crowdRankings[team] += value;
         }
 
-        public void TurnStarted(String teamName)
+        public void RoundStarted()
         {
-            int teamVal = m_crowdRankings[teamName];
-            if (teamVal >= 10 && teamVal < 20)
+            int teamCounter = 0;
+            foreach (string teamName in GladiusGlobals.TurnManager.AllTeams)
             {
-                teamVal -= 5;
-            }
-            else if (teamVal >= 20 && teamVal < 30)
-            {
-                teamVal -= 10;
-            }
-            else if (teamVal >= 60 && teamVal < 100)
-            {
-                teamVal -= 15;
-            }
-            else if (teamVal >= 100)
-            {
-                teamVal -= 20;
-            }
+                if (!m_crowdRankings.ContainsKey(teamName))
+                {
+                    m_crowdRankings[teamName] = 0;
+                    if(teamCounter >= m_teamBarList.Count)
+                    {
+                        GameObject go = GameObject.Find("CrowdBar"+(teamCounter+1));
+                        if(go != null)
+                        {
+                            dfProgressBar bar = go.GetComponent<dfProgressBar>();
+                            m_teamBarList.Add(bar);
+                            m_teamBars[teamName] = bar;
+                        }
+                    }
 
-            teamVal = Math.Min(0, Math.Max(teamVal, 100));
-            m_crowdRankings[teamName] = teamVal;
+
+                }
+
+                int teamVal = m_crowdRankings[teamName];
+                if (teamVal >= 10 && teamVal < 20)
+                {
+                    teamVal -= 5;
+                }
+                else if (teamVal >= 20 && teamVal < 30)
+                {
+                    teamVal -= 10;
+                }
+                else if (teamVal >= 60 && teamVal < 100)
+                {
+                    teamVal -= 15;
+                }
+                else if (teamVal >= 100)
+                {
+                    teamVal -= 20;
+                }
+
+                teamVal = Math.Min(0, Math.Max(teamVal, 100));
+                m_crowdRankings[teamName] = teamVal;
+                teamCounter++;
+            }
         }
 
 
