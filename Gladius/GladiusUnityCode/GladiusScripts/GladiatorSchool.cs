@@ -201,6 +201,33 @@ namespace Gladius
             m_schoolInventory.Remove(item);
         }
 
+        public Color SchoolColour
+        {
+            get
+            {
+                if (TeamName == GladiusGlobals.PlayerTeam)
+                {
+                    return Color.blue;
+                }
+                else if (TeamName == GladiusGlobals.EnemyTeam1)
+                {
+                    return Color.yellow;
+                }
+                else if (TeamName == GladiusGlobals.EnemyTeam2)
+                {
+                    return Color.magenta;
+                }
+                else if (TeamName == GladiusGlobals.EnemyTeam3)
+                {
+                    return Color.green;
+                }
+                return Color.black;
+            }
+
+        }
+
+        public String TeamName;
+
 
         String schoolName;
         String heroName;

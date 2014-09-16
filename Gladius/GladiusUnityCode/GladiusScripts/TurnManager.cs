@@ -229,7 +229,7 @@ namespace Gladius.arena
             // to possibly insert this ahead of others.
             actor.TurnManager = this;
             m_allActors.Add(actor);
-            m_teams.Add(actor.TeamName);
+            m_schools.Add(actor.School);
         }
 
         BaseActor m_currentActor;
@@ -296,9 +296,9 @@ namespace Gladius.arena
             get { return m_allActors; }
         }
 
-        public HashSet<string> AllTeams
+        public HashSet<GladiatorSchool> AllSchools
         {
-            get { return m_teams; }
+            get { return m_schools; }
         }
 
 
@@ -307,7 +307,7 @@ namespace Gladius.arena
 
         List<BaseActor> m_turnOrders = new List<BaseActor>();
         HashSet<BaseActor> m_allActors = new HashSet<BaseActor>();
-        HashSet<string> m_teams = new HashSet<string>();
+        HashSet<GladiatorSchool> m_schools = new HashSet<GladiatorSchool>();
     }
 
 }

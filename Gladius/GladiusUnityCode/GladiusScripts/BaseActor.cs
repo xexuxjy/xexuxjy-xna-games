@@ -82,7 +82,7 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            if (GladiusGlobals.Crowd.GetValueForTeam(TeamName) > 75)
+            if (GladiusGlobals.Crowd.GetValueForSchool(m_characterData.School) > 75)
             {
                 return 20;
             }
@@ -788,6 +788,9 @@ public class BaseActor : MonoBehaviour
                 else
                 {
                     // pick random spot on arena and pathfind for now.
+
+                    // todo - be a bit cleverer and try and flank enemy, or aim for highground.
+
                     Point result;
                     BaseActor target = Arena.FindNearestEnemy(this);
                     if (target != null)
@@ -1570,7 +1573,7 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            if (GladiusGlobals.Crowd.GetValueForTeam(TeamName) > 25)
+            if (GladiusGlobals.Crowd.GetValueForSchool(m_characterData.School) > 25)
             {
                 return 1.3f;
             }
@@ -1579,11 +1582,16 @@ public class BaseActor : MonoBehaviour
 
     }
 
+    public GladiatorSchool School
+    {
+        get { return m_characterData.School; }
+    }
+
     public float AffinityPointMultiplier
     {
         get
         {
-            if (GladiusGlobals.Crowd.GetValueForTeam(TeamName) > 50)
+            if (GladiusGlobals.Crowd.GetValueForSchool(m_characterData.School) > 50)
             {
                 return 1.5f;
             }
@@ -1598,30 +1606,6 @@ public class BaseActor : MonoBehaviour
         get { return (int)(m_totalMovePoints * MovePointMultiplier); }
     }
 
-    public Color TeamColour
-    {
-        get
-        {
-            if (TeamName == GladiusGlobals.PlayerTeam)
-            {
-                return Color.blue;
-            }
-            else if (TeamName == GladiusGlobals.EnemyTeam1)
-            {
-                return Color.yellow;
-            }
-            else if (TeamName == GladiusGlobals.EnemyTeam2)
-            {
-                return Color.magenta;
-            }
-            else if (TeamName == GladiusGlobals.EnemyTeam3)
-            {
-                return Color.green;
-            }
-            return Color.black;
-        }
-
-    }
 
     public void FaceCardinal()
     {
@@ -1674,6 +1658,7 @@ public class BaseActor : MonoBehaviour
     {
         m_knockedDown = false;
         // queue getup anim
+        QueueAnimation(AnimationEnum.GetUp);
     }
 
     public void Knockback(BaseActor attacker)
