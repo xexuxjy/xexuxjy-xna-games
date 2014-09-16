@@ -108,6 +108,9 @@ namespace Gladius
         public String TeamName
         {get;set;}
 
+        public GladiatorSchool School
+        { get; set; }
+
 
         public void ReplaceItem(String itemKey)
         {
@@ -120,9 +123,9 @@ namespace Gladius
             if(m_items[location] != null)
             {
                 // return current item to the school
-                if (m_school != null)
+                if (School != null)
                 {
-                    m_school.AddToInventory(m_items[location].Name);
+                    School.AddToInventory(m_items[location].Name);
                 }
                 AddItem(itemKey);
             }
@@ -206,8 +209,5 @@ namespace Gladius
         private String[] m_itemNames = new String[(int)ItemLocation.NumItems];
         private String m_infoString;
         public List<String> m_skillList = new List<String>();
-        private GladiatorSchool m_school;
-
-
     }
 }

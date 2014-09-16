@@ -330,10 +330,10 @@ namespace Gladius.combat
                     defender.QueueCounterAttack(attacker);
                     break;
                 case "Change Crowd Source":
-                    GladiusGlobals.Crowd.UpdateTeamScore(attacker.TeamName, (int)skill.m_skillEffect.Modifier1);
+                    GladiusGlobals.Crowd.UpdateSchoolScore(attacker.School, (int)skill.m_skillEffect.Modifier1);
                     break;
                 case "Change Crowd Target":
-                    GladiusGlobals.Crowd.UpdateTeamScore(defender.TeamName, (int)skill.m_skillEffect.Modifier1);
+                    GladiusGlobals.Crowd.UpdateSchoolScore(defender.School, (int)skill.m_skillEffect.Modifier1);
                     break;
                 case "Avoid":
                     result.resultType = AttackResultType.Avoided;
