@@ -18,7 +18,7 @@ namespace Gladius
         public String Type;
         public String SubType;
         public String UseClass;
-        public String DisplayNameId;
+        public int DisplayNameId;
         public String DescriptionId;
         public int SkillLevel;
         public float SkillCosts1;
@@ -31,6 +31,9 @@ namespace Gladius
         public String SkillRangeName;
         public int SkillExcludeRange;
         public String SkillExcludeRangeName;
+
+        public String SubSkillName;
+        public AttackSkill SubSkill;
 
         public String MeterName;
         public String AnimName;
@@ -221,7 +224,7 @@ namespace Gladius
 		
 		private void SetupSkillRow()
 		{
-			if (SubType == "Combo")
+			if (SubSkill != null)
 			{
 				m_skillRow = 2;
 			}
@@ -377,6 +380,8 @@ namespace Gladius
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/SkillData");
             String data = textAsset.text;
             Parse(data);
+            AssignSubSkills();
+
             AttackSkill noneSkill = new AttackSkill();
             noneSkill.Name = "None";
             Data[noneSkill.Name] = noneSkill;
@@ -384,6 +389,25 @@ namespace Gladius
 
         HashSet<String> skillTypeSet = new HashSet<String>();
         HashSet<String> skillTypeSet2 = new HashSet<String>();
+
+        // move/strike
+        // attack
+        // combo
+        // special
+        // affinty
+
+
+        private void AssignSubSkills()
+        {
+            foreach(AttackSkill attackSkill in Data.Values)
+            {
+                if (attackSkill.SubSkillName != null)
+                {
+                    attackSkill.SubSkill = Data[attackSkill.SubSkillName];
+                }
+            }
+        }
+
 
         public void Parse(String data)
         {
@@ -429,7 +453,7 @@ namespace Gladius
                 }
                 else if (line.StartsWith("SKILLDISPLAYNAMEID:"))
                 {
-                    currentSkill.DisplayNameId = lineTokens[1];
+                    currentSkill.DisplayNameId = int.Parse(lineTokens[1]);
                 }
                 else if (line.StartsWith("SKILLDESCRIPTIONID:"))
                 {
@@ -457,6 +481,11 @@ namespace Gladius
                     currentSkill.CombatMod1 = int.Parse(lineTokens[1]);
                     currentSkill.CombatMod2 = float.Parse(lineTokens[2]);
                 }
+                else if (line.StartsWith("SKILLSUBSKILL:"))
+                {
+                    currentSkill.SubSkillName= lineTokens[1];
+                }
+
                 else if (line.StartsWith("SKILLRANGE:"))
                 {
                     currentSkill.SkillRange = int.Parse(lineTokens[1]);
