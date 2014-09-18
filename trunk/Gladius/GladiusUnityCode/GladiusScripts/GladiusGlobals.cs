@@ -305,7 +305,7 @@ namespace Gladius
         public const String EnemyTeam2 = "Enemy2";
         public const String EnemyTeam3 = "Enemy3";
 
-        static char[] trimChars = new char[] { '"', '\r',' ' };
+        static char[] trimChars = new char[] { '"', '\r',' ','\t' };
         public static String[] SplitAndTidyString(String input,char[] splitChars)
         {
             String[] lineTokens = input.Split(splitChars);
