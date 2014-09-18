@@ -67,6 +67,7 @@ public class ArenaStartup : MonoBehaviour
             {
                 CharacterData cd = side.School.Gladiators[name];
                 cd.TeamName = side.TeamName;
+                cd.School = side.School;
                 GameObject baseActorGameObject = (GameObject)Instantiate(baseActorPrefab);
                 baseActorGameObject.name = "BaseActor" + name;
                 BaseActor ba1 = baseActorGameObject.GetComponent<BaseActor>();
