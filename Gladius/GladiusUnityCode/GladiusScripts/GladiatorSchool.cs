@@ -75,6 +75,7 @@ namespace Gladius
         public void Parse(String data)
         {
             String[] lines = data.Split('\n');
+
             CharacterData currentCharacterData = null;
             char[] tokens = new char[] { ',', ':' };
          

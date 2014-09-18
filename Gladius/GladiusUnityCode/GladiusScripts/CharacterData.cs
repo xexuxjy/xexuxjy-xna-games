@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Gladius
 {
@@ -56,6 +57,11 @@ namespace Gladius
             set
             {
                 m_actorClass = value;
+                if (!ActorGenerator.ClassDataMap.ContainsKey(m_actorClass))
+                {
+                    Debug.LogWarning("Can't find key : " + value.ToString());
+                }
+
                 m_actorClassData = ActorGenerator.ClassDataMap[m_actorClass];
             }
         }
