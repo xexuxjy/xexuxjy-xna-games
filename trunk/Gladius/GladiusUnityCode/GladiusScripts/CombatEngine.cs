@@ -105,8 +105,7 @@ namespace Gladius.combat
 
 
 
-            //if (m_combatRandom.NextDouble() > hitChance)
-            if(true)
+            if (m_combatRandom.NextDouble() > hitChance)
             {
                 //attackResult.resultType = defender.HasShield ? AttackResultType.Blocked : AttackResultType.Miss;
                 attackResult.resultType = AttackResultType.Blocked;
