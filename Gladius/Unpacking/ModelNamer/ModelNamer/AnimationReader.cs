@@ -12,23 +12,21 @@ namespace ModelNamer
     {
 
         public static char[] pak1Tag = new char[] { 'P', 'A', 'K', '1' };
-        public static char[] hedrTag = new char[] { 'H', 'E', 'D', 'R' };
-        public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
-        public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
-        public static char[] blnmTag = new char[] { 'B', 'L', 'N', 'M' };
-        public static char[] maskTag = new char[] { 'M', 'A', 'S', 'K' };
-        public static char[] bltkTag = new char[] { 'B', 'L', 'T', 'K' };
-        public static char[] bktmTag = new char[] { 'B', 'K', 'T', 'M' };
-        public static char[] boolTag = new char[] { 'B', 'O', 'O', 'L' };
-        public static char[] dcrtTag = new char[] { 'D', 'C', 'R', 'T' };
+        public static char[] hedrTag = new char[] { 'H', 'E', 'D', 'R' };   // start of anim
+        public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };   // version label
+        public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };   // copyright label.
+        public static char[] blnmTag = new char[] { 'B', 'L', 'N', 'M' }; // Animation Event Names. Same values are used for every animation in a given model. Similar(same) event names across similar models
+        public static char[] maskTag = new char[] { 'M', 'A', 'S', 'K' };   // different number of values to other blocks. single byte. 0xc0,0x80,0x40 0x01,0x02,0x0,. non zero value in nearly all cases.
+        public static char[] bltkTag = new char[] { 'B', 'L', 'T', 'K' };   // minimal data - all 28 bytes, mainly header info, with single changing value at 0x14
+        public static char[] bktmTag = new char[] { 'B', 'K', 'T', 'M' };   // Timestamp events. 33ms gaps.
+        public static char[] boolTag = new char[] { 'B', 'O', 'O', 'L' };   // num entries match timestamp events. mainly zero. likely to indicate updates on a particular step (not animation events though as there are too many non-zero values for that to make sense)
+        public static char[] dcrtTag = new char[] { 'D', 'C', 'R', 'T' }; // blocks are at 8 bytes (75 * 8 = 600) , not really much info in them.
         public static char[] dcrdTag = new char[] { 'D', 'C', 'R', 'D' };
-        public static char[] dcptTag = new char[] { 'D', 'C', 'P', 'T' };
-        public static char[] dcpdTag = new char[] { 'D', 'C', 'P', 'D' };
+        public static char[] dcptTag = new char[] { 'D', 'C', 'P', 'T' };// 8 byte blocks. 3 bytes , then a common char (0x80,0xba) then 1 byte, and 3 zero bytes?
+        public static char[] dcpdTag = new char[] { 'D', 'C', 'P', 'D' }; // largest blocks by far..
+        public static char[] endTag = new char[] { 'E', 'N', 'D' }; // end of anim
 
-        public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
-
-        public static char[] bonesTag = new char[] { 'N', 'A', 'M', 'E' };
-
+        public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' }; // names of the various bones, null separated.
 
         public static char[][] allTags = { pak1Tag, hedrTag, versTag, cprtTag, blnmTag, maskTag, bltkTag, bktmTag, boolTag, dcrtTag, dcrdTag,dcptTag, dcpdTag, nameTag };
 //        public static char[][] subTags = { versTag, cprtTag, hedrTag, nameTag ,blnmTag, maskTag, bltkTag, bktmTag, boolTag, dcrtTag, dcrdTag, dcptTag, dcpdTag };
@@ -236,28 +234,6 @@ namespace ModelNamer
 
     }
 
-    public class TagSizeAndData
-    {
-        public static TagSizeAndData Create(BinaryReader reader)
-        {
-            int length = reader.ReadInt32();
-            TagSizeAndData t = new TagSizeAndData(length);
-            reader.BaseStream.Position -= 8;
-            t.data = reader.ReadBytes(t.length);
-            return t;
-
-        }
-
-        public TagSizeAndData(int len)
-        {
-            length = len;
-        }
-
-        public int length;
-        public byte[] data;
-    }
-
-
     public class AnimationData
     {
         public String animationName;
@@ -348,11 +324,12 @@ namespace ModelNamer
 
         public void BuildTagInfo(BinaryReader binReader)
         {
-
-            foreach (char[] tag in AnimationReader.subTags)
+            long savedPosition = binReader.BaseStream.Position;
+            foreach (char[] tag in AnimationReader.allTags)
             {
                 // reset for each so we don't worry about order
-                
+                //binReader.BaseStream.Position = 0;
+                binReader.BaseStream.Position = savedPosition;
                 if (Common.FindCharsInStream(binReader, tag, true))
                 {
                     TagSizeAndData tsad = TagSizeAndData.Create(binReader);
@@ -380,7 +357,7 @@ namespace ModelNamer
                     m_tagSizes[tag] = new TagSizeAndData(-1);
                 }
             }
-
+            Common.FindCharsInStream(binReader, AnimationReader.endTag, true);
         }
     }
 }
