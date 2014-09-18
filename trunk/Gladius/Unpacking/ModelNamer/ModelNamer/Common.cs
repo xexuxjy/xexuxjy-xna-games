@@ -378,4 +378,26 @@ namespace ModelNamer
         }
     }
 
+    public class TagSizeAndData
+    {
+        public static TagSizeAndData Create(BinaryReader reader)
+        {
+            int length = reader.ReadInt32();
+            TagSizeAndData t = new TagSizeAndData(length);
+            reader.BaseStream.Position -= 8;
+            t.data = reader.ReadBytes(t.length);
+            return t;
+
+        }
+
+        public TagSizeAndData(int len)
+        {
+            length = len;
+        }
+
+        public int length;
+        public byte[] data;
+    }
+
+
 }

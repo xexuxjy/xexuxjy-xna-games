@@ -383,7 +383,7 @@ namespace ModelNamer
         }
 
 
-        public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
+        public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
         public String m_name;
         public List<Vector3> m_points = new List<Vector3>();
         public List<Vector3> m_normals = new List<Vector3>();
@@ -411,13 +411,13 @@ namespace ModelNamer
         public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
         public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
         public static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' }; // External link information? referes to textures, other models, entities and so on? 
-        public static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
+        public static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' }; // 'a number' of big endian floats. doesn't seem aligned to vec2,3 or mtx though
         public static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
         public static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
         //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
         public static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };  // DisplayList information
         public static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };
-        public static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };
+        public static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };   // seems to contain the number of display lists and then bytes at 01 to say used?
         public static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
         public static char[] normTag = new char[] { 'N', 'O', 'R', 'M' };
         public static char[] uv0Tag = new char[] { 'U', 'V', '0', ' ' };
@@ -454,78 +454,81 @@ namespace ModelNamer
             {
                 GCModel model = new GCModel(sourceFile.Name);
 
+                LoadModelTags(model, binReader);
+                binReader.BaseStream.Position = 0;
+
                 Common.ReadTextureNames(binReader, txtrTag, model.m_textures);
 
                 long currentPos = binReader.BaseStream.Position;
-                model.ReadDSLISection(binReader);
-                binReader.BaseStream.Position = currentPos;
+                //model.ReadDSLISection(binReader);
+                //binReader.BaseStream.Position = currentPos;
 
-                if (readDisplayLists)
-                {
-                    model.ReadDSLSSection(binReader);
-                }
+                //if (readDisplayLists)
+                //{
+                //    model.ReadDSLSSection(binReader);
+                //}
 
-                model.ReadSKELSection(binReader);
+                //model.ReadSKELSection(binReader);
                 
 
-                if (Common.FindCharsInStream(binReader, cntrTag, true))
-                {
+                //if (Common.FindCharsInStream(binReader, cntrTag, true))
+                //{
 
 
-                    //int blockSize = binReader.ReadInt32();
-                    //int unk2 = binReader.ReadInt32();
-                    //int unk3 = binReader.ReadInt32();
-                    //for (int i = 0; i < model.m_dsliInfos.Count; ++i)
-                    //{
-                    //    model.m_matrices.Add(Common.FromStreamMatrix4BE(binReader));
-                    //}
-                    //int ibreak = 0;
-                }
+                //    //int blockSize = binReader.ReadInt32();
+                //    //int unk2 = binReader.ReadInt32();
+                //    //int unk3 = binReader.ReadInt32();
+                //    //for (int i = 0; i < model.m_dsliInfos.Count; ++i)
+                //    //{
+                //    //    model.m_matrices.Add(Common.FromStreamMatrix4BE(binReader));
+                //    //}
+                //    //int ibreak = 0;
+                //}
 
 
 
-                if (Common.FindCharsInStream(binReader, posiTag))
-                {
-                    int posSectionLength = binReader.ReadInt32();
-                    int uk2 = binReader.ReadInt32();
-                    int numPoints = binReader.ReadInt32();
-                    for (int i = 0; i < numPoints; ++i)
-                    {
-                        model.m_points.Add(Common.FromStreamVector3BE(binReader));
-                    }
-                }
+                //if (Common.FindCharsInStream(binReader, posiTag))
+                //{
+                //    int posSectionLength = binReader.ReadInt32();
+                //    int uk2 = binReader.ReadInt32();
+                //    int numPoints = binReader.ReadInt32();
+                //    for (int i = 0; i < numPoints; ++i)
+                //    {
+                //        model.m_points.Add(Common.FromStreamVector3BE(binReader));
+                //    }
+                //}
 
-                if (Common.FindCharsInStream(binReader, normTag))
-                {
-                    int normSectionLength = binReader.ReadInt32();
-                    int uk4 = binReader.ReadInt32();
-                    int numNormals = binReader.ReadInt32();
+                //if (Common.FindCharsInStream(binReader, normTag))
+                //{
+                //    int normSectionLength = binReader.ReadInt32();
+                //    int uk4 = binReader.ReadInt32();
+                //    int numNormals = binReader.ReadInt32();
 
-                    for (int i = 0; i < numNormals; ++i)
-                    {
-                        model.m_normals.Add(Common.FromStreamVector3BE(binReader));
-                    }
+                //    for (int i = 0; i < numNormals; ++i)
+                //    {
+                //        model.m_normals.Add(Common.FromStreamVector3BE(binReader));
+                //    }
 
 
-                }
+                //}
 
-                if (Common.FindCharsInStream(binReader, uv0Tag))
-                {
-                    int normSectionLength = binReader.ReadInt32();
-                    int uk4 = binReader.ReadInt32();
-                    int numUVs = binReader.ReadInt32();
+                //if (Common.FindCharsInStream(binReader, uv0Tag))
+                //{
+                //    int normSectionLength = binReader.ReadInt32();
+                //    int uk4 = binReader.ReadInt32();
+                //    int numUVs = binReader.ReadInt32();
 
-                    for (int i = 0; i < numUVs; ++i)
-                    {
-                        model.m_uvs.Add(Common.FromStreamVector2BE(binReader));
-                    }
+                //    for (int i = 0; i < numUVs; ++i)
+                //    {
+                //        model.m_uvs.Add(Common.FromStreamVector2BE(binReader));
+                //    }
 
-                }
-                if (readDisplayLists)
-                {
-                    model.BuildBB();
-                }
-                model.Validate();
+                //}
+                //if (readDisplayLists)
+                //{
+                //    model.BuildBB();
+                //}
+                //model.Validate();
                 return model;
             }
 
@@ -612,21 +615,7 @@ namespace ModelNamer
                             GCModel model = new GCModel(sourceFile.Name);
                             m_models.Add(model);
                             infoStream.WriteLine("File : " + model.m_name);
-                            foreach (char[] tag in allTags)
-                            {
-                                // reset for each so we don't worry about order
-                                binReader.BaseStream.Position = 0;
-                                if (Common.FindCharsInStream(binReader, tag, true))
-                                {
-                                    int blockSize = binReader.ReadInt32();
-                                    model.m_tagSizes[tag] = blockSize;
-                                    infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), blockSize));
-                                }
-                                else
-                                {
-                                    model.m_tagSizes[tag] = -1;
-                                }
-                            }
+                            LoadModelTags(model,binReader);
 
                             //foreach(char[] tagName in model.m_tagSizes.Keys.Values)
                             //{
@@ -635,8 +624,6 @@ namespace ModelNamer
                             //        infoStream.WriteLine("{ : " + (((model.m_tagSizes[dsliTag] - 16) / 8) - 1));
                             //    }
                             //}
-
-                            infoStream.WriteLine("Num DSLS : " + (((model.m_tagSizes[dsliTag] - 16) / 8)-1));
 
                             binReader.BaseStream.Position = 0;
                             model.ReadDSLISection(binReader);
@@ -690,6 +677,55 @@ namespace ModelNamer
 
         }
 
+        public void LoadModelTags(GCModel model, BinaryReader binReader)
+        {
+            foreach (char[] tag in allTags)
+            {
+                // reset for each so we don't worry about order
+                binReader.BaseStream.Position = 0;
+                if (Common.FindCharsInStream(binReader, tag, true))
+                {
+                    TagSizeAndData tsad = TagSizeAndData.Create(binReader);
+
+                    model.m_tagSizes[tag] = tsad;
+                }
+                else
+                {
+                    model.m_tagSizes[tag] = new TagSizeAndData(-1);
+                }
+            }
+        }
+
+
+        public void DumpSections(GCModel model,String fileOutputDir)
+        {
+            foreach (char[] tag in model.m_tagSizes.Keys)
+            {
+                try
+                {
+                    TagSizeAndData tsad = model.m_tagSizes[tag];
+                    if (tsad.length > 0)
+                    {
+
+                        String tagOutputDirname = fileOutputDir + "/" + model.m_name + "/";
+                        try
+                        {
+                            Directory.CreateDirectory(tagOutputDirname);
+                        }
+                        catch (Exception e) { }
+
+                        String tagOutputFilename = tagOutputDirname + "/" + new String(tag);
+                        using (System.IO.BinaryWriter outStream = new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create)))
+                        {
+                            outStream.Write(tsad.data);
+                        }
+                    }
+                }
+                catch (Exception e)
+                { }
+            }
+        }
+
 
 
 
@@ -705,26 +741,30 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            //String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
-            String modelPath = @"C:\tmp\unpacking\probable-skinned-models";
+            String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
+            //String modelPath = @"C:\tmp\unpacking\probable-skinned-models";
+            
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
             //String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
             String objOutputPath = @"d:\gladius-extracted-archive\gc-compressed\obj-models\";
+            //String tagOutputPath = @"C:\tmp\unpacking\probable-skinned-models\tag-output\";
+            String tagOutputPath = @"C:\tmp\unpacking\gc-probable-models-renamed\tag-ouput";
 
-            modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
-            infoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-info.txt";
+            //modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
+            //infoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-info.txt";
             //sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-sectionInfo.txt";
             GCModelReader reader = new GCModelReader();
             reader.LoadModels(modelPath, infoFile);
             foreach (GCModel model in reader.m_models)
             {
-                using(StreamWriter objSw = new StreamWriter(objOutputPath+model.m_name+".obj"))
-                {
-                    using(StreamWriter matSw = new StreamWriter(objOutputPath+model.m_name+".mtl"))
-                    {
-                        model.WriteOBJ(objSw,matSw);
-                    }
-                }
+                reader.DumpSections(model, tagOutputPath);
+                //using(StreamWriter objSw = new StreamWriter(objOutputPath+model.m_name+".obj"))
+                //{
+                //    using(StreamWriter matSw = new StreamWriter(objOutputPath+model.m_name+".mtl"))
+                //    {
+                //        model.WriteOBJ(objSw,matSw);
+                //    }
+                //}
                 
             }
             //reader.LoadModels(modelPath,infoFile);
