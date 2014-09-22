@@ -142,6 +142,19 @@ namespace ModelNamer
             return v;
         }
 
+        public static Quaternion FromStreamQuaternion(BinaryReader reader)
+        {
+            Quaternion q = new Quaternion();
+            q.X = reader.ReadSingle();
+            q.Y = reader.ReadSingle();
+            q.Z = reader.ReadSingle();
+            q.W = reader.ReadSingle();
+            return q;
+        }
+
+
+
+
         public static Vector3 FromStreamVector3BE(BinaryReader reader)
         {
             Vector3 v = new Vector3();

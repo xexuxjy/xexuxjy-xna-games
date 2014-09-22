@@ -64,12 +64,8 @@ namespace ModelNamer
     {
         public String name;
         public Vector3 offset;
-        public Vector3 unk1;
+        public Quaternion rotation;
         public byte pad1;
-        public byte pad2;
-        public byte flags1;
-        public byte alwaysBF;
-        public byte pad3;
         public byte id;
         public byte id2;
         public byte parentId;
@@ -82,12 +78,10 @@ namespace ModelNamer
         {
             BoneNode node = new BoneNode();
             node.offset = Common.FromStreamVector3(binReader);
-            node.unk1 = Common.FromStreamVector3(binReader);
+            node.rotation = Common.FromStreamQuaternion(binReader);
+            Debug.Assert(Common.FuzzyEquals(node.rotation.Length, 1.0f,0.0001f));
+
             node.pad1 = binReader.ReadByte();
-            node.pad2 = binReader.ReadByte();
-            node.flags1 = binReader.ReadByte();
-            node.alwaysBF = binReader.ReadByte();
-            node.pad3 = binReader.ReadByte();
             node.id = binReader.ReadByte();
             node.id2 = binReader.ReadByte();
             node.parentId = binReader.ReadByte();
@@ -432,12 +426,13 @@ namespace ModelNamer
         public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
         public static char[] vflgTag = new char[] { 'V', 'F', 'L', 'G' };
         public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
+        public static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };   // xbox tag...
 
 
         public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
                                       dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, 
                                       ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
-                                      vflgTag,stypTag,nameTag };
+                                      vflgTag,stypTag,nameTag,xrndTag };
 
         public List<GCModel> m_models = new List<GCModel>();
 
@@ -468,7 +463,7 @@ namespace ModelNamer
                 //    model.ReadDSLSSection(binReader);
                 //}
 
-                //model.ReadSKELSection(binReader);
+                model.ReadSKELSection(binReader);
                 
 
                 //if (Common.FindCharsInStream(binReader, cntrTag, true))
@@ -741,20 +736,22 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
-            //String modelPath = @"C:\tmp\unpacking\probable-skinned-models";
+            //String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
+            //String modelPath = @"C:\tmp\unpacking\xbox-ModelFiles\VERSModelFiles\doegfiles";
+            String modelPath = @"C:\tmp\unpacking\probable-skinned-models";
             
             String infoFile = @"c:\tmp\unpacking\gc-models\results.txt";
             //String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
             String objOutputPath = @"d:\gladius-extracted-archive\gc-compressed\obj-models\";
             //String tagOutputPath = @"C:\tmp\unpacking\probable-skinned-models\tag-output\";
             String tagOutputPath = @"C:\tmp\unpacking\gc-probable-models-renamed\tag-ouput";
+            //String tagOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\tag-output";
 
             //modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
             //infoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-info.txt";
             //sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-sectionInfo.txt";
             GCModelReader reader = new GCModelReader();
-            reader.LoadModels(modelPath, infoFile);
+            reader.LoadModels(modelPath, infoFile,400);
             foreach (GCModel model in reader.m_models)
             {
                 reader.DumpSections(model, tagOutputPath);
