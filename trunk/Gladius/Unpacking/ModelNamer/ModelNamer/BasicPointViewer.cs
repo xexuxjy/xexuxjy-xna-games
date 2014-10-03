@@ -367,8 +367,8 @@ namespace ModelNamer
             //}
 
             GCModelReader reader = new GCModelReader();
-            //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
-            GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\File 021091");
+            GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
+            //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\File 021091");
             model.BuildBB();
             using (BasicPointViewer example = new BasicPointViewer())
             {

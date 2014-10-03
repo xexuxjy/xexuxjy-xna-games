@@ -269,7 +269,9 @@ namespace ModelNamer
                     node.parent = parent;
                 }
             }
-            if (m_bones.Count > 0)
+         
+            
+            if (m_bones.Count > 0 && false)
             {
 
                 m_rootBone = m_bones[0];
@@ -354,6 +356,7 @@ namespace ModelNamer
         {
             if (Common.FindCharsInStream(binReader, Common.skelTag))
             {
+                m_hasSkeleton = true;
                 int blockSize = binReader.ReadInt32();
                 int pad1 = binReader.ReadInt32();
                 int pad2 = binReader.ReadInt32();
@@ -365,8 +368,9 @@ namespace ModelNamer
                     node.name = m_names[i];
                     m_bones.Add(node);
                 }
+                ConstructSkeleton();
             }
-            ConstructSkeleton();
+            
         }
 
         public void ReadDSLSSection(BinaryReader binReader)
@@ -406,6 +410,7 @@ namespace ModelNamer
         {
             if (Common.FindCharsInStream(binReader, Common.skinTag))
             {
+                m_skinned = true;
                 int blocksize = binReader.ReadInt32();
                 int pad1 = binReader.ReadInt32();
                 int numElements = binReader.ReadInt32();
@@ -422,11 +427,11 @@ namespace ModelNamer
                         foreach (SkinElement se in sb.elements)
                         {
                             m_points.Add(se.pos);
+                            m_normals.Add(se.normal);
                         }
                     }
                 }
             }
-
         }
 
 
@@ -561,7 +566,8 @@ namespace ModelNamer
         public List<Matrix4> m_matrices = new List<Matrix4>();
         public List<BoneNode> m_bones = new List<BoneNode>();
         private bool m_builtBB = false;
-        public bool m_skinned = true;
+        public bool m_skinned = false;
+        public bool m_hasSkeleton = false;
         public int m_maxVertex;
         public int m_maxNormal;
         public int m_maxUv;
@@ -588,34 +594,28 @@ namespace ModelNamer
             {
                 GCModel model = new GCModel(sourceFile.Name);
 
-                model.LoadModelTags(binReader);
+                //model.LoadModelTags(binReader);
                 binReader.BaseStream.Position = 0;
 
-
                 Common.ReadTextureNames(binReader, Common.txtrTag, model.m_textures);
-
-                long currentPos = binReader.BaseStream.Position;
-                model.ReadDSLISection(binReader);
-                binReader.BaseStream.Position = currentPos;
-
-                if (readDisplayLists)
-                {
-                    model.ReadDSLSSection(binReader);
-                }
-
+                
+                // Look for skeleton and skin if they exist. need to load names first.
+                binReader.BaseStream.Position = 0;
                 Common.ReadNullSeparatedNames(binReader, Common.nameTag, model.m_names);
-
+                binReader.BaseStream.Position = 0;
                 model.ReadSKELSection(binReader);
-
                 binReader.BaseStream.Position = 0;
                 model.ReadSkinSection(binReader);
                 binReader.BaseStream.Position = 0;
 
+                model.ReadDSLISection(binReader);
+                binReader.BaseStream.Position = 0;
+                model.ReadDSLSSection(binReader);
+
+                binReader.BaseStream.Position = 0;
 
                 if (Common.FindCharsInStream(binReader, Common.cntrTag, true))
                 {
-
-
                     //int blockSize = binReader.ReadInt32();
                     //int unk2 = binReader.ReadInt32();
                     //int unk3 = binReader.ReadInt32();
@@ -625,34 +625,37 @@ namespace ModelNamer
                     //}
                     //int ibreak = 0;
                 }
-
-
-
-                if (Common.FindCharsInStream(binReader, Common.posiTag))
+                // not skinned so look for fixed version.l
+                if (model.m_skinned == false)
                 {
-                    int posSectionLength = binReader.ReadInt32();
-
-                    int uk2 = binReader.ReadInt32();
-                    int numPoints = binReader.ReadInt32();
-                    for (int i = 0; i < numPoints; ++i)
+                    if (Common.FindCharsInStream(binReader, Common.posiTag))
                     {
-                        model.m_points.Add(Common.FromStreamVector3BE(binReader));
+                        int posSectionLength = binReader.ReadInt32();
+
+                        int uk2 = binReader.ReadInt32();
+                        int numPoints = binReader.ReadInt32();
+                        for (int i = 0; i < numPoints; ++i)
+                        {
+                            model.m_points.Add(Common.FromStreamVector3BE(binReader));
+                        }
+                    }
+
+                    if (Common.FindCharsInStream(binReader, Common.normTag))
+                    {
+                        int normSectionLength = binReader.ReadInt32();
+                        int uk4 = binReader.ReadInt32();
+                        int numNormals = binReader.ReadInt32();
+
+                        for (int i = 0; i < numNormals; ++i)
+                        {
+                            model.m_normals.Add(Common.FromStreamVector3BE(binReader));
+                        }
+
+
                     }
                 }
 
-                if (Common.FindCharsInStream(binReader, Common.normTag))
-                {
-                    int normSectionLength = binReader.ReadInt32();
-                    int uk4 = binReader.ReadInt32();
-                    int numNormals = binReader.ReadInt32();
-
-                    for (int i = 0; i < numNormals; ++i)
-                    {
-                        model.m_normals.Add(Common.FromStreamVector3BE(binReader));
-                    }
-
-
-                }
+                binReader.BaseStream.Position = 0;
 
                 if (Common.FindCharsInStream(binReader, Common.uv0Tag))
                 {
@@ -663,7 +666,15 @@ namespace ModelNamer
                     // normal model has uv's as 8 bytes (2 floats) per block.
                     // skinned model has ub's as 4 bytes (2???) per block...
 
-                    if ((normSectionLength - 16) / 8 == numUVs)
+                    if ((normSectionLength - 16) / 4 > numUVs)
+                    {
+                        for (int i = 0; i < numUVs; ++i)
+                        {
+                            model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
+                        }
+
+                    }
+                    else
                     {
 
                         for (int i = 0; i < numUVs; ++i)
@@ -671,20 +682,28 @@ namespace ModelNamer
                             model.m_uvs.Add(Common.FromStreamVector2BE(binReader));
                         }
                     }
-                    else if ((normSectionLength - 16) / 4 == numUVs)
-                    {
 
-                        for (int i = 0; i < numUVs; ++i)
-                        {
-                            model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
-                        }
-                    }
+
+
+                    //if ((normSectionLength - 16) / 8 == numUVs)
+                    //{
+
+                    //    for (int i = 0; i < numUVs; ++i)
+                    //    {
+                    //        model.m_uvs.Add(Common.FromStreamVector2BE(binReader));
+                    //    }
+                    //}
+                    //else if ((normSectionLength - 16) / 4 == numUVs)
+                    //{
+
+                    //    for (int i = 0; i < numUVs; ++i)
+                    //    {
+                    //        model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
+                    //    }
+                    //}
 
                 }
-                if (readDisplayLists)
-                {
-                    model.BuildBB();
-                }
+                model.BuildBB();
                 model.Validate();
                 return model;
             }
@@ -928,13 +947,13 @@ namespace ModelNamer
             block.numElements = Common.ReadInt32BigEndian(reader);
             block.numBones = Common.ReadInt32BigEndian(reader);
             block.headerBlock = reader.ReadBytes(headerBlockSize);
-            //for (int i = 0; i < block.numElements; ++i)
-            //{
-            //    block.elements.Add(SkinElement.ReadElement(reader));
-            //}
+            for (int i = 0; i < block.numElements; ++i)
+            {
+                block.elements.Add(SkinElement.ReadElement(reader));
+            }
 
             //block.remainderBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize) - (block.numElements*SkinElement.Size));
-            block.remainderBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize));
+            //block.remainderBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize));
 
             reader.BaseStream.Position = currentPos;
             block.fullBlock = reader.ReadBytes(block.blockSize);
@@ -968,15 +987,23 @@ namespace ModelNamer
     {
         public const int Size = 9;
         public Vector3 pos = new Vector3();
+        public Vector3 normal = new Vector3();
         public byte[] rem;
 
         public static SkinElement ReadElement(BinaryReader reader)
         {
             SkinElement element = new SkinElement();
-            element.pos.X = Common.ToFloatInt16BigEndian(reader);
-            element.pos.Y = Common.ToFloatInt16BigEndian(reader);
-            element.pos.Z = Common.ToFloatInt16BigEndian(reader);
-            element.rem = reader.ReadBytes(3);
+            element.pos.X = Common.FromStream2ByteToFloat(reader);
+            element.pos.Y = Common.FromStream2ByteToFloat(reader);
+            element.pos.Z = Common.FromStream2ByteToFloat(reader);
+
+            // note sure of this remainder - possibly a 3 byte normal?
+            //element.rem = reader.ReadBytes(3);
+            element.normal.X = Common.ByteToFloat(reader.ReadByte());
+            element.normal.Y = Common.ByteToFloat(reader.ReadByte());
+            element.normal.Z = Common.ByteToFloat(reader.ReadByte());
+
+            element.normal.Normalize();
             return element;
         }
 
