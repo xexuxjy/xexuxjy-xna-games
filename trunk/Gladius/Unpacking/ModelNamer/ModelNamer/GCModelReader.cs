@@ -709,7 +709,25 @@ namespace ModelNamer
                     {
                         for (int i = 0; i < numUVs; ++i)
                         {
-                            model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
+                            //model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
+                            //model.m_uvs.Add(new Vector2(Common.FromStream2ByteToFloat(binReader), Common.FromStream2ByteToFloat(binReader)));
+
+                            ushort ua = Common.ToUInt16BigEndian(binReader);
+                            ushort ub = Common.ToUInt16BigEndian(binReader);
+
+                            float a = (float)ua / 4096;
+                            float b = (float)ub / 4096;
+
+                            //float a = Common.FromStream2ByteToFloatR(binReader);
+                            //float b = Common.FromStream2ByteToFloatR(binReader);
+
+
+                            //float a = (((float)binReader.ReadByte()) / 255.0f);
+                            //binReader.ReadByte();
+                            //float b = (((float)binReader.ReadByte()) / 255.0f);
+                            //binReader.ReadByte();
+                            model.m_uvs.Add(new Vector2(a,b));
+                            
                         }
                     }
                     else

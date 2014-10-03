@@ -245,6 +245,27 @@ namespace ModelNamer
         }
 
 
+        public static float FromStream2ByteToFloatU(BinaryReader reader)
+        {
+            //float v = ToFloatUInt16(reader);
+
+            float v = ToFloatUInt16(reader);
+            return v;
+            //float fixedpart = (float)(reader.ReadByte());
+            //float floatpart = (((float)reader.ReadByte()) / 255.0f);
+
+            //return fixedpart + floatpart;
+        }
+
+
+        public static float FromStream2ByteToFloatR(BinaryReader reader)
+        {
+            float floatpart = (((float)reader.ReadByte()) / 255.0f);
+            float fixedpart = ByteToFloat(reader.ReadByte());
+
+            return fixedpart + floatpart;
+        }
+
         public static float FromStream2ByteToFloat(BinaryReader reader)
         {
             float fixedpart = ByteToFloat(reader.ReadByte());
