@@ -396,7 +396,7 @@ namespace ModelNamer
 
 
 
-        public static void ReadTextureNames(BinaryReader binReader, char[] tagName,List<String> textureNames)
+        public static void ReadTextureNames(BinaryReader binReader, char[] tagName,List<String> textureNames,bool stripExtension = false)
         {
             if (Common.FindCharsInStream(binReader, tagName,true))
             {
@@ -416,7 +416,13 @@ namespace ModelNamer
                         sb.Append(b);
                     }
                     count++;
-                    textureNames.Add(sb.ToString());
+
+                    String textureName = sb.ToString();
+                    if (stripExtension)
+                    {
+                        textureName = textureName.Substring(0, textureName.IndexOf('.'));
+                    }
+                    textureNames.Add(textureName);
                     binReader.BaseStream.Position += (textureSlotSize - count);
 
                 }
