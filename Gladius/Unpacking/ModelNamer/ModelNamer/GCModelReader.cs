@@ -26,6 +26,9 @@ namespace ModelNamer
         public short indexCount;
         public bool Valid = true;
         public List<DisplayListEntry> entries = new List<DisplayListEntry>();
+        public Vector3 MinBB = new Vector3();
+        public Vector3 MaxBB = new Vector3();
+
         //public int maxVertex;
         //public int maxNormal;
         //public int maxUV;
@@ -222,6 +225,46 @@ namespace ModelNamer
             }
         }
 
+        public void BuildBB(List<Vector3> points, DisplayListHeader header)
+        {
+            Vector3 min = new Vector3(float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue);
+
+            foreach(DisplayListEntry entry in header.entries)
+            {
+                if (points[entry.PosIndex].X < min.X) min.X = points[entry.PosIndex].X;
+                if (points[entry.PosIndex].Y < min.Y) min.Y = points[entry.PosIndex].Y;
+                if (points[entry.PosIndex].Z < min.Z) min.Z = points[entry.PosIndex].Z;
+                if (points[entry.PosIndex].X > max.X) max.X = points[entry.PosIndex].X;
+                if (points[entry.PosIndex].Y > max.Y) max.Y = points[entry.PosIndex].Y;
+                if (points[entry.PosIndex].Z > max.Z) max.Z = points[entry.PosIndex].Z;
+            }
+            header.MinBB = min;
+            header.MaxBB = max;
+        }
+
+        public static void BuildBB(List<Vector3> points, out Vector3 omin, out Vector3 omax)
+        {
+            Vector3 min = new Vector3(float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue);
+
+            //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
+            //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
+
+            for (int i = 0; i < points.Count; ++i)
+            {
+                if (points[i].X < min.X) min.X = points[i].X;
+                if (points[i].Y < min.Y) min.Y = points[i].Y;
+                if (points[i].Z < min.Z) min.Z = points[i].Z;
+                if (points[i].X > max.X) max.X = points[i].X;
+                if (points[i].Y > max.Y) max.Y = points[i].Y;
+                if (points[i].Z > max.Z) max.Z = points[i].Z;
+
+            }
+            omin = min;
+            omax = max;
+
+        }
 
 
 
@@ -229,25 +272,21 @@ namespace ModelNamer
         {
             if (!m_builtBB)
             {
+                // build bb for main model, and also for each sub-mesh
                 Vector3 min = new Vector3(float.MaxValue);
                 Vector3 max = new Vector3(float.MinValue);
 
-                //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
-                //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
-
-                for (int i = 0; i < m_points.Count; ++i)
-                {
-                    if (m_points[i].X < min.X) min.X = m_points[i].X;
-                    if (m_points[i].Y < min.Y) min.Y = m_points[i].Y;
-                    if (m_points[i].Z < min.Z) min.Z = m_points[i].Z;
-                    if (m_points[i].X > max.X) max.X = m_points[i].X;
-                    if (m_points[i].Y > max.Y) max.Y = m_points[i].Y;
-                    if (m_points[i].Z > max.Z) max.Z = m_points[i].Z;
-
-                }
+                BuildBB(m_points,out min,out max);
 
                 MinBB = min;
                 MaxBB = max;
+
+
+                foreach(DisplayListHeader header in m_displayListHeaders)
+                {
+                    BuildBB(m_points,header);
+                }
+
                 m_builtBB = true;
             }
         }
@@ -666,22 +705,37 @@ namespace ModelNamer
                     // normal model has uv's as 8 bytes (2 floats) per block.
                     // skinned model has ub's as 4 bytes (2???) per block...
 
-                    if ((normSectionLength - 16) / 4 > numUVs)
+                    if (model.m_skinned)
                     {
                         for (int i = 0; i < numUVs; ++i)
                         {
                             model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
                         }
-
                     }
                     else
                     {
-
                         for (int i = 0; i < numUVs; ++i)
                         {
                             model.m_uvs.Add(Common.FromStreamVector2BE(binReader));
                         }
                     }
+
+                    //if ((normSectionLength - 16) / 8 > numUVs)
+                    //{
+                    //    for (int i = 0; i < numUVs; ++i)
+                    //    {
+                    //        model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
+                    //    }
+
+                    //}
+                    //else
+                    //{
+
+                    //    for (int i = 0; i < numUVs; ++i)
+                    //    {
+                    //        model.m_uvs.Add(Common.FromStreamVector2BE(binReader));
+                    //    }
+                    //}
 
 
 

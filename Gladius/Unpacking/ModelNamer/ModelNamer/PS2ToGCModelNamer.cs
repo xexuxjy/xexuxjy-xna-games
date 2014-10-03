@@ -30,9 +30,9 @@ namespace ModelNamer
         public void DoComparison()
         {
             string ps2ModelPath = @"D:\gladius-extracted\ps2-decompressed\VERSModelFilesRenamed";
-            string gcModelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models";
-            string gcModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed";
-            string gcLeftOverModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-models-leftover";
+            string gcModelPath = @"D:\gladius-extracted-archive\gc-compressed\AllModels";
+            string gcModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed";
+            string gcLeftOverModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsLeftover";
 
             string infoFile = @"D:\gladius-extracted-archive\gc-compressed\model-rename-info";
 
@@ -73,8 +73,8 @@ namespace ModelNamer
                             FileInfo outFile = new FileInfo(gcModelOutputPath + "\\" + ps2mt.modelName);
 
                             infoStream.WriteLine("Renaming "+inFile.FullName+" to "+outFile.FullName);
-                            File.Copy(inFile.FullName,outFile.FullName,true);
-
+                            //File.Copy(inFile.FullName,outFile.FullName,true);
+                            File.Move(inFile.FullName, outFile.FullName);
                             //foreach (MTPair pair in ps2mt.m_pairResults)
                             //{
 
@@ -101,9 +101,20 @@ namespace ModelNamer
                         FileInfo inFile = new FileInfo(gcModelPath + "\\" + mt.modelName);
                         FileInfo outFile = new FileInfo(gcLeftOverModelOutputPath + "\\" + mt.modelName);
 
-                        File.Copy(inFile.FullName, outFile.FullName, true);
+                        //File.Copy(inFile.FullName, outFile.FullName, true);
+                        //File.Move(inFile.FullName, outFile.FullName);
 
-                        infoStream.WriteLine(mt.modelName);
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append(mt.modelName);
+                        sb.Append(" : ");
+                        foreach (string texturename in mt.m_textures)
+                        {
+                            sb.Append(texturename);
+                            sb.Append(" ");
+                        }
+                        infoStream.WriteLine(sb.ToString());
+
+                        //infoStream.WriteLine(mt.modelName);
                     }
                 }
 
@@ -159,11 +170,6 @@ namespace ModelNamer
                     try
                     {
                         FileInfo sourceFile = new FileInfo(file);
-                        if (sourceFile.Name != "wandering_soul_steppes.mdl")
-                        {
-                            //int ibreak = 0;
-                            //continue;
-                        }
 
                         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                         {
