@@ -29,7 +29,7 @@ namespace ModelNamer
         private Vector3 up = Vector3.UnitY;
         private float pitch = 0.0f;
         private float facing = 0.0f;
-        public String textureBasePath = @"c:\gladius-extracted\test-extract\";
+        public String textureBasePath = @"d:\gladius-extracted\test-extract\";
 
         public List<String> m_fileNames = new List<string>();
         public Dictionary<String,GCModel> m_modelMap = new Dictionary<string,GCModel>();
@@ -56,10 +56,10 @@ namespace ModelNamer
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\gladius-extracted\gc-models\probable-models-renamed", "*"));
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\test-models", "*"));
-            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models", "*"));
+            m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\test-models", "*"));
 
-
-            m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\barbarian2.mdl");
+            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\barbarian2.mdl");
+            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\bear.mdl");
             ChangeModelNext();
 
 
@@ -158,21 +158,29 @@ namespace ModelNamer
             }
         }
 
+        void CalcBindFinalMatrix(BoneNode bone, Matrix4 parentMatrix)
+        {
+            bone.combinedMatrix = bone.localMatrix * parentMatrix;
+	        //bone.finalMatrix = bone.offsetMatrix * bone.combinedMatrix;
+            bone.finalMatrix = bone.combinedMatrix;
+
+	        foreach(BoneNode child in bone.children)
+	        {
+		        CalcBindFinalMatrix(child, bone.combinedMatrix);
+	        }
+        }
+
         public void DrawSkeleton(GCModel model)
         {
 
             GL.Begin(PrimitiveType.Points);
+
+            BoneNode start = model.m_rootBone;
+            CalcBindFinalMatrix(start, Matrix4.Identity);
+
             foreach (BoneNode node in model.m_bones)
             {
-                // build tranform from parent chain?
-                Vector3 offset = new Vector3();
-                BoneNode walker = node.parent;
-                while (walker != null)
-                {
-                    offset += walker.offset;
-                    walker = walker.parent;
-                }
-                GL.Vertex3(offset);
+                GL.Vertex3(node.finalMatrix.ExtractTranslation());
             }
 
             GL.End();
@@ -328,6 +336,7 @@ namespace ModelNamer
             m_textPrinter.Print(BuildDebugString(), font, Color.White);
             m_textPrinter.End();
 
+            readDisplayLists = true;
             if (readDisplayLists)
             {
                 foreach (DisplayListHeader header in m_currentModel.m_displayListHeaders)
@@ -407,10 +416,11 @@ namespace ModelNamer
         {
             if (m_fileNames.Count > 0)
             {
-                m_currentModelIndex++;
-                m_currentModelIndex %= m_fileNames.Count;
-                ChangeModel();
-
+                do 
+                {
+                    m_currentModelIndex++;
+                    m_currentModelIndex %= m_fileNames.Count;
+                } while (ChangeModel() == false);
             }
         }
 
@@ -418,12 +428,14 @@ namespace ModelNamer
         {
             if (m_fileNames.Count > 0)
             {
-                m_currentModelIndex--;
-                if (m_currentModelIndex < 0)
+                do
                 {
-                    m_currentModelIndex += m_fileNames.Count;
-                }
-                ChangeModel();
+                    m_currentModelIndex--;
+                    if (m_currentModelIndex < 0)
+                    {
+                        m_currentModelIndex += m_fileNames.Count;
+                    }
+                } while (ChangeModel() == false);
             }
 
         }
@@ -455,58 +467,75 @@ namespace ModelNamer
 
 
 
-        public void ChangeModel()
+        public bool ChangeModel()
         {
-            if(!m_modelMap.ContainsKey(m_fileNames[m_currentModelIndex]))
+            bool valid;
+            GCModel model = null;
+            if (!m_modelMap.ContainsKey(m_fileNames[m_currentModelIndex]))
             {
-                GCModel model = m_modelReader.LoadSingleModel(m_fileNames[m_currentModelIndex], readDisplayLists);
+                try
+                {
+                    model = m_modelReader.LoadSingleModel(m_fileNames[m_currentModelIndex], readDisplayLists);
+                }
+                catch (System.Exception ex)
+                {
+                	
+                }
                 if(model != null)
                 {
                     m_modelMap[m_fileNames[m_currentModelIndex]] = model;
                 }
             }
-
-            m_currentModel = m_modelMap[m_fileNames[m_currentModelIndex]];
-
-            //m_currentModel = m_modelReader.m_models[m_currentModelIndex];
-            m_currentTextureIndex = 0;
-            m_currentModelSubIndex = 0;
-
-            GCModel currentModel = m_currentModel;
-
-
-            Vector3 mid = new Vector3();
-            //if (readDisplayLists)
+            else
             {
-                mid = new Vector3(m_currentModel.MaxBB - m_currentModel.MinBB) / 2f;
+                model = m_modelMap[m_fileNames[m_currentModelIndex]];
             }
 
-            float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
-
-            location = m_currentModel.Center;
-
-            float val = longest * 3.5f;
-            if (val < 2f)
+            if (model != null && model.Valid)
             {
-                val = 2f;
-            }
 
-            location = m_currentModel.MinBB + mid;
 
-            location = location - (Vector3.UnitX * val);
 
-            facing = 0;
-            pitch = 0;
+                //m_currentModel = m_modelReader.m_models[m_currentModelIndex];
+                m_currentTextureIndex = 0;
+                m_currentModelSubIndex = 0;
 
-            for (int i = 0; i < currentModel.m_textures.Count;++i)
-            {
-                if (m_textureDictionary.ContainsKey(currentModel.m_textures[i]))
+                GCModel currentModel = m_currentModel;
+
+
+                Vector3 mid = new Vector3();
+                //if (readDisplayLists)
                 {
-                    m_currentTextureIndex = i;
-                    break;
+                    mid = new Vector3(m_currentModel.MaxBB - m_currentModel.MinBB) / 2f;
+                }
+
+                float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
+
+                location = m_currentModel.Center;
+
+                float val = longest * 3.5f;
+                if (val < 2f)
+                {
+                    val = 2f;
+                }
+
+                location = m_currentModel.MinBB + mid;
+
+                location = location - (Vector3.UnitX * val);
+
+                facing = 0;
+                pitch = 0;
+
+                for (int i = 0; i < currentModel.m_textures.Count; ++i)
+                {
+                    if (m_textureDictionary.ContainsKey(currentModel.m_textures[i]))
+                    {
+                        m_currentTextureIndex = i;
+                        break;
+                    }
                 }
             }
-
+            return model != null ? model.Valid : false;
             //m_debugLine = sb.ToString();
         }
 

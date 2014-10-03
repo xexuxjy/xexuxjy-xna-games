@@ -9,6 +9,39 @@ namespace ModelNamer
 {
     static class Common
     {
+        public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
+        public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
+        public static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' }; // External link information? referes to textures, other models, entities and so on? 
+        public static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
+        public static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
+        public static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
+        //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
+        public static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };   // DisplayList information - int16 pairs of position,normal,uv0 - possible that some uv's also used for weights?
+        public static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };   // display list -offsets and lengths
+        public static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };   // seems to contain the number of display lists and then bytes at 01 to say used?
+        public static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
+        public static char[] normTag = new char[] { 'N', 'O', 'R', 'M' };
+        public static char[] uv0Tag = new char[] { 'U', 'V', '0', ' ' };    // for non-skinned models, this seems to be 2 bigendian float32's
+        public static char[] vflaTag = new char[] { 'V', 'F', 'L', 'A' };
+        public static char[] ramTag = new char[] { 'R', 'A', 'M', ' ' };
+        public static char[] msarTag = new char[] { 'M', 'S', 'A', 'R' };
+        public static char[] nlvlTag = new char[] { 'N', 'L', 'V', 'L' };
+        public static char[] meshTag = new char[] { 'M', 'E', 'S', 'H' };   // how many mesh segments exist. each block is 24 bytes
+        public static char[] elemTag = new char[] { 'E', 'L', 'E', 'M' };   // how many elements , matches mesh segments, each block is 8 bytes,
+        public static char[] skelTag = new char[] { 'S', 'K', 'E', 'L' };
+        public static char[] skinTag = new char[] { 'S', 'K', 'I', 'N' };
+        public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
+        public static char[] vflgTag = new char[] { 'V', 'F', 'L', 'G' };
+        public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
+
+
+        public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
+                                      dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, 
+                                      ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
+                                      vflgTag,stypTag,nameTag };
+
+
+
         public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
         {
             bool found = false;
@@ -95,7 +128,55 @@ namespace ModelNamer
             return (ushort)(b1 << 8 | b2);
         }
 
+        public static float  ToFloatUInt16BigEndian(BinaryReader reader)
+        {
+            byte b1 = reader.ReadByte();
+            byte b2 = reader.ReadByte();
+            ushort val = (ushort)(b1 << 8 | b2);
+            float result = (val / (float)(UInt16.MaxValue));
+            return result;
+        }
 
+        public static float ToFloatUInt16(BinaryReader reader)
+        {
+            ushort val = reader.ReadUInt16();
+            float result = (val / (float)(UInt16.MaxValue));
+            return result;
+        }
+
+        public static float ToFloatInt16(BinaryReader reader)
+        {
+            short val = reader.ReadInt16();
+            float result = (val / (float)(Int16.MaxValue));
+            return result;
+        }
+
+        public static float ToFloatInt16BigEndian(BinaryReader reader)
+        {
+            byte b1 = reader.ReadByte();
+            byte b2 = reader.ReadByte();
+            short val = (short)(b1 << 8 | b2);
+
+            float result = (val / (float)(Int16.MaxValue));
+            return result;
+        }
+
+        public static string ByteArrayToString(byte[] ba,int spaceCount = 0)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            int counter = 0;
+            foreach (byte b in ba)
+            {
+                hex.AppendFormat("{0:X2}", b);
+                counter++;
+                if (spaceCount > 0 && counter % spaceCount == 0)
+                {
+                    hex.Append(" ");
+                }
+            }
+            return hex.ToString();
+        }
+        
         public static int ToInt16BigEndian(byte[] buf, int i)
         {
             return (short)(buf[i] << 8 | buf[i+1]);
