@@ -56,7 +56,9 @@ namespace ModelNamer
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\gladius-extracted\gc-models\probable-models-renamed", "*"));
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\test-models", "*"));
-            m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\test-models", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\test-models", "*"));
+            m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
+            //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
 
             //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\barbarian2.mdl");
             //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\bear.mdl");
@@ -416,11 +418,19 @@ namespace ModelNamer
         {
             if (m_fileNames.Count > 0)
             {
-                do 
+                int attempts = 0;
+                while (attempts < m_fileNames.Count)
                 {
+                    attempts++;
+
                     m_currentModelIndex++;
                     m_currentModelIndex %= m_fileNames.Count;
-                } while (ChangeModel() == false);
+                    if(ChangeModel())
+                    {
+                        m_currentModel = m_modelMap[m_fileNames[m_currentModelIndex]];
+                        break;
+                    }
+                } 
             }
         }
 
@@ -428,14 +438,24 @@ namespace ModelNamer
         {
             if (m_fileNames.Count > 0)
             {
-                do
+                int attempts = 0;
+                while (attempts < m_fileNames.Count)
                 {
+                    attempts++;
+
                     m_currentModelIndex--;
                     if (m_currentModelIndex < 0)
                     {
                         m_currentModelIndex += m_fileNames.Count;
                     }
-                } while (ChangeModel() == false);
+                    if (ChangeModel())
+                    {
+                        m_currentModel = m_modelMap[m_fileNames[m_currentModelIndex]];
+                        break;
+                    }
+                } 
+
+
             }
 
         }
@@ -500,18 +520,18 @@ namespace ModelNamer
                 m_currentTextureIndex = 0;
                 m_currentModelSubIndex = 0;
 
-                GCModel currentModel = m_currentModel;
+                //GCModel currentModel = m_currentModel;
 
 
                 Vector3 mid = new Vector3();
                 //if (readDisplayLists)
                 {
-                    mid = new Vector3(m_currentModel.MaxBB - m_currentModel.MinBB) / 2f;
+                    mid = new Vector3(model.MaxBB - model.MinBB) / 2f;
                 }
 
                 float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
 
-                location = m_currentModel.Center;
+                location = model.Center;
 
                 float val = longest * 3.5f;
                 if (val < 2f)
@@ -519,16 +539,16 @@ namespace ModelNamer
                     val = 2f;
                 }
 
-                location = m_currentModel.MinBB + mid;
+                location = model.MinBB + mid;
 
                 location = location - (Vector3.UnitX * val);
 
                 facing = 0;
                 pitch = 0;
 
-                for (int i = 0; i < currentModel.m_textures.Count; ++i)
+                for (int i = 0; i < model.m_textures.Count; ++i)
                 {
-                    if (m_textureDictionary.ContainsKey(currentModel.m_textures[i]))
+                    if (m_textureDictionary.ContainsKey(model.m_textures[i]))
                     {
                         m_currentTextureIndex = i;
                         break;

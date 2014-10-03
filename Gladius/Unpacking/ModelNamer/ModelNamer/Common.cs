@@ -233,6 +233,39 @@ namespace ModelNamer
             return q;
         }
 
+        
+        public static float ByteToFloat(byte b)
+        {
+            int val = (int)b;
+            if(val > 127)
+            {
+                val = -256 + val;
+            }
+            return ((float)val);
+        }
+
+
+        public static float FromStream2ByteToFloat(BinaryReader reader)
+        {
+            float fixedpart = ByteToFloat(reader.ReadByte());
+            float floatpart = (((float)reader.ReadByte())/255.0f);
+
+            return fixedpart+floatpart;
+
+            //short s = reader.ReadInt16();
+            //fixed / 65536.0
+            //return ((float)s / 65536.0f);
+            //byte b1 = reader.ReadByte();
+            //byte b2 = reader.ReadByte();
+
+            //int val = (int)b;
+            //if (val > 127)
+            //{
+            //    val = -256 + val;
+            //}
+            //return ((float)val);
+        }
+
 
 
 
@@ -472,6 +505,8 @@ namespace ModelNamer
         }
     }
 
+    
+
     public class TagSizeAndData
     {
         public static TagSizeAndData Create(BinaryReader reader)
@@ -492,6 +527,7 @@ namespace ModelNamer
         public int length;
         public byte[] data;
     }
+
 
 
 }
