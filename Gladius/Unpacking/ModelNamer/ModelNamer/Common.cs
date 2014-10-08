@@ -163,20 +163,44 @@ namespace ModelNamer
 
         public static string ByteArrayToString(byte[] ba,int spaceCount = 0)
         {
-            StringBuilder hex = new StringBuilder(ba.Length * 2);
-            int counter = 0;
-            foreach (byte b in ba)
+            if (ba != null)
             {
-                hex.AppendFormat("{0:X2}", b);
-                counter++;
-                if (spaceCount > 0 && counter % spaceCount == 0)
+                StringBuilder hex = new StringBuilder(ba.Length * 2);
+                int counter = 0;
+                foreach (byte b in ba)
                 {
-                    hex.Append(" ");
+                    hex.AppendFormat("{0:X2}", b);
+                    counter++;
+                    if (spaceCount > 0 && counter % spaceCount == 0)
+                    {
+                        hex.Append(" ");
+                    }
                 }
+                return hex.ToString();
             }
-            return hex.ToString();
+            return "";
         }
-        
+
+        public static string ByteArrayToStringSub(byte[] ba, int start,int length)
+        {
+            int total = start+length;
+            if (ba != null && (total < ba.Length))
+            {
+                StringBuilder hex = new StringBuilder(length * 2);
+                int counter = 0;
+                
+                for(int i=start;i<total;++i)
+                {
+                    hex.AppendFormat("{0:X2}", ba[i]);
+                }
+                return hex.ToString();
+            }
+            return "";
+        }
+
+
+
+
         public static int ToInt16BigEndian(byte[] buf, int i)
         {
             return (short)(buf[i] << 8 | buf[i+1]);
@@ -360,6 +384,7 @@ namespace ModelNamer
         {
             sw.WriteLine(String.Format("{0} {1} {2}", v.X, v.Y, v.Z));
         }
+
 
         public static void ReadNullSeparatedNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
         {
