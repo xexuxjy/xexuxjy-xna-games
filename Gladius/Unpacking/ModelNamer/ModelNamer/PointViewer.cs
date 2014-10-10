@@ -44,29 +44,8 @@ namespace ModelNamer
         {
             this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
-            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models", @"D:\gladius-extracted-archive\gc-compressed\model-results", 100);
-            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed", @"D:\gladius-extracted-archive\gc-compressed\model-results");
-            //m_modelReader.LoadModels(@"D:\gladius-extracted-archive\gc-compressed\test1", @"D:\gladius-extracted-archive\gc-compressed\model-results");
-            //m_modelReader.LoadModels(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", @"C:\tmp\unpacking\gc-probable-models\model-results", 100);
-            
-            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\test1", "*"));
-
-            String[] filteredModels = new String[] { "templeExposed.mdl", "arcane_fire_crown.mdl", "steppesPlains.mdl" };
-
-
-
-            //m_fileNames.AddRange(Directory.GetFiles(@"C:\gladius-extracted\gc-models\probable-models-renamed", "*"));
-            //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
-            //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\test-models", "*"));
-            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*bow*"));
-            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*cyclopsisland_skydome*"));
-            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\bow_coral.mdl");
-            //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
-
-            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\altahrunruins.mdl");
-
-            m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\minotaur.mdl");
-            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\bear.mdl");
+            m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
+            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arcane_earth_crown.mdl");
             ChangeModelNext();
 
 
@@ -92,22 +71,6 @@ namespace ModelNamer
                     this.rotateZ = !this.rotateZ;
                 if (e.Key == Key.Z)
                     this.displayAll = !this.displayAll;
-                if (e.Key == Key.T)
-                {
-                    if (m_currentModel != null)
-                    {
-                        this.dslEntryLimit+=3;
-                        dslEntryLimit = Math.Min(dslEntryLimit, m_currentModel.m_displayListHeaders[m_currentModelSubIndex].entries.Count - 1);
-                    }
-                }
-                if (e.Key == Key.Y)
-                {
-                    if (m_currentModel != null)
-                    {
-                        this.dslEntryLimit-=3;
-                        dslEntryLimit = Math.Max(dslEntryLimit, 0);
-                    }
-                }
 
 
             };
@@ -359,15 +322,6 @@ namespace ModelNamer
                 GL.MatrixMode(MatrixMode.Modelview);
                 GL.LoadMatrix(ref cameraMatrix);
 
-
-                //Matrix4 lookat = Matrix4.LookAt(eyePos,eyeLookat,Vector3.UnitY);
-                //GL.MatrixMode(MatrixMode.Modelview);
-                //GL.LoadMatrix(ref lookat);
-                //Matrix4 lookat = Matrix4.LookAt(0, 5, 5, 0, 0, 0, 0, 1, 0);
-                //Matrix4 lookat = Matrix4.LookAt(eyePos, eyeLookat, Vector3.UnitY);
-                //GL.MatrixMode(MatrixMode.Modelview);
-                //GL.LoadMatrix(ref lookat);
-
                 angle += rotation_speed * (float)e.Time;
                 if (rotateX || rotateY || rotateZ)
                 {
@@ -389,85 +343,61 @@ namespace ModelNamer
                     int counter = -1;
                     foreach (DisplayListHeader header in m_currentModel.m_displayListHeaders)
                     {
-                        if (header.maxVertex < CurrentPointList.Count)
+                        counter++;
+                        if (displayAll == false && counter != m_currentModelSubIndex)
                         {
-                            counter++;
-                            if (displayAll == false && counter != m_currentModelSubIndex)
+                            continue;
+                        }
+
+                        if (m_currentModel.m_skinned)
+                        {
+                            if (header.meshId != 4)
+                            {
+                                //continue;
+                            }
+
+                            if (header.lodlevel != 0x01)
                             {
                                 continue;
                             }
+                        }
 
-                            if (displayAll)
+                        
+                        ShaderData sd = m_currentModel.m_shaderData[header.meshId];
+
+                        SetTexture(sd.textureId1);
+
+                        GL.Begin(PrimitiveType.Triangles);
+
+                        int entryCount = header.entries.Count;
+
+                        for (int i = 0; i < entryCount; ++i)
+                        {
+                            if (header.adjustedSizeInt > 5)
                             {
-                                m_currentModelSubIndex = counter;
+                                GL.TexCoord2(m_currentModel.m_uvs[header.entries[i].UVIndex]);
                             }
 
-                            if (header.primitiveFlags == 0x90 && header.Valid)
+                            if (m_currentModel.m_skinned)
                             {
-                                bool foundTexture = false;
-                                int index = m_currentTextureIndex;
-                                SetTexture(index);
-
-                                GL.Begin(PrimitiveType.Triangles);
-
-                                int entryCount = displayAll ? header.entries.Count : Math.Max(0,Math.Min(dslEntryLimit,header.entries.Count));
-
-                                for (int i = 0; i < entryCount; ++i)
+                                GL.Vertex3(header.skinBlock.m_points[header.entries[i].PosIndex]);
+                                if (header.adjustedSizeInt > 6)
                                 {
-                                    if (header.adjustedSizeInt == 7)
-                                    {
-                                        SetTexture((int)header.entries[i].oddByte);
-                                    }
-                                    if (header.adjustedSizeInt > 5)
-                                    {
-                                        GL.TexCoord2(m_currentModel.m_uvs[header.entries[i].UVIndex]);
-                                    }
-                                    if (m_currentModel.m_skinned)
-                                    {
-                                        GL.Vertex3(header.skinBlock.m_points[header.entries[i].PosIndex]);
-                                    }
-
-
-                                    //if (header.entries[i].PosIndex < CurrentPointList.Count)
-                                    //{
-                                    //    GL.Vertex3(CurrentPointList[header.entries[i].PosIndex]);
-                                    //}
-                                    //else
-                                    //{
-                                    //    // this is bad?
-                                    //}
-                                    if (false)
-                                    {
-                                        GL.Normal3(m_currentModel.m_normals[header.entries[i].NormIndex]);
-                                    }
+                                    GL.Normal3(header.skinBlock.m_normals[header.entries[i].NormIndex]);
                                 }
-                                GL.End();
+                            }
+                            else
+                            {
+                                GL.Vertex3(m_currentModel.m_points[header.entries[i].PosIndex]);
+                                if (header.adjustedSizeInt > 6)
+                                {
+                                    GL.Normal3(m_currentModel.m_normals[header.entries[i].NormIndex]);
+                                }
                             }
                         }
+                        GL.End();
                     }
                 }
-                else
-                {
-                    DrawSkeleton(m_currentModel);
-                    //GL.Begin(PrimitiveType.Points);
-                    //for (int i = 0; i < m_currentModel.m_points.Count; ++i)
-                    //{
-                    //    GL.Vertex3(m_currentModel.m_points[i]);
-                    //}
-                    //GL.End();
-                }
-                //GL.Begin(PrimitiveType.Quads);
-
-                //GL.Vertex3(1.0f, -1.0f, -1.0f);
-                //GL.Vertex3(1.0f, 1.0f, -1.0f);
-                //GL.Vertex3(1.0f, 1.0f, 1.0f);
-                //GL.Vertex3(1.0f, -1.0f, 1.0f);
-
-
-                //for (int i = 0; i < m_points.Count; ++i)
-                //{
-                //    GL.Vertex3(m_points[i]);
-                //}
             }
             else
             {
