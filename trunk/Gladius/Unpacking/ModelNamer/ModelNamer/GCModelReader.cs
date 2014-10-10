@@ -9,6 +9,8 @@ using System.Diagnostics;
 namespace ModelNamer
 {
 
+
+
     public class GCModel
     {
         public GCModel(String name)
@@ -37,6 +39,7 @@ namespace ModelNamer
 
         public void DumpSections(String fileOutputDir)
         {
+            fileOutputDir += "-tag-output";
             foreach (char[] tag in m_tagSizes.Keys)
             {
                 try
@@ -66,6 +69,7 @@ namespace ModelNamer
 
         public void DumpDisplayBlocks(String fileOutputDir)
         {
+            fileOutputDir += "-disp-output";
             int counter = 0;
             String tagOutputDirname = fileOutputDir + "/" + m_name + "/";
             try
@@ -137,7 +141,6 @@ namespace ModelNamer
                         int ibreak =0;
                     }
 
-                    //outStream.WriteLine(Common.ByteArrayToString(headerBlock.blockData));
                 }
                 counter++;
             }
@@ -147,6 +150,7 @@ namespace ModelNamer
 
         public void DumpSkinBlocks(String fileOutputDir)
         {
+            fileOutputDir += "-skin-output";
             int counter = 0;
             String tagOutputDirname = fileOutputDir + "/" + m_name + "/";
             try
@@ -220,9 +224,6 @@ namespace ModelNamer
             Vector3 min = new Vector3(float.MaxValue);
             Vector3 max = new Vector3(float.MinValue);
 
-            //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
-            //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
-
             for (int i = 0; i < points.Count; ++i)
             {
                 if (points[i].X < min.X) min.X = points[i].X;
@@ -255,7 +256,14 @@ namespace ModelNamer
                     {
                         if (m_skinned)
                         {
-                            header.skinBlock = m_skinBlocks[count];
+                            if(count< m_skinBlocks.Count)
+                            {
+                                header.skinBlock = m_skinBlocks[count];
+                            }
+                            else
+                            {
+                                int ibreak = 0;
+                            }
                         }
                         try
                         {
@@ -331,12 +339,6 @@ namespace ModelNamer
 
                     }
 
-
-
-                    //Mi nBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
-                    //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
-
-
                     MinBB = min;
                     MaxBB = max;
                     m_builtBB = true;
@@ -381,15 +383,55 @@ namespace ModelNamer
                     if (info.length > 0)
                     {
                         m_dsliInfos.Add(info);
+
+                        DisplayListHeader header = new DisplayListHeader();
+                        header.dsliInfo = info;
+                        m_displayListHeaders.Add(header);
                     }
-
-                    DisplayListHeader header = new DisplayListHeader();
-                    header.dsliInfo = info;
-                    m_displayListHeaders.Add(header);
-
                 }
             }
         }
+        
+        public void ReadMESHSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.meshTag))
+            {
+                int pad1 = binReader.ReadInt32();
+                int pad2 = binReader.ReadInt32();
+                int numSections = binReader.ReadInt32();
+                Debug.Assert(numSections == m_displayListHeaders.Count());
+                for (int i = 0; i < numSections; ++i)
+                {
+                    DisplayListHeader header = m_displayListHeaders[i];
+                    header.meshUnk1 = binReader.ReadInt32();
+                    header.meshUnk2 = binReader.ReadInt32();
+                    header.meshId = binReader.ReadInt32();
+                    header.meshUnk3 = binReader.ReadInt32();
+                    header.meshUnk4 = binReader.ReadInt32();
+                    header.lodlevel = binReader.ReadInt32();
+                }
+            }
+        }
+
+
+        public void ReadSHDRSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.shdrTag))
+            {
+                int blockSize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int numElements = binReader.ReadInt32();
+                for (int i = 0; i < numElements; ++i)
+                {
+                    m_shaderData.Add(ShaderData.FromStream(binReader));
+
+                }
+
+            }
+
+        }
+
+
 
         public void ReadSKELSection(BinaryReader binReader)
         {
@@ -463,6 +505,9 @@ namespace ModelNamer
 
 
         // it looks as though there are lodded models in some of the lists
+        //fixme - determine lodding flag
+        //    determing texture flag
+        //look in SkinBlock header info.
         public void ReadSkinSection(BinaryReader binReader)
         {
             if (Common.FindCharsInStream(binReader, Common.skinTag))
@@ -474,31 +519,7 @@ namespace ModelNamer
                 for (int i = 0; i < numElements; ++i)
                 {
                     m_skinBlocks.Add(SkinBlock.ReadBlock(binReader));
-
-                    if (!(i == 0))
-                    {
-                        m_skinBlocks[i].addPoints = false;
-                    }
                 }
-
-
-
-                //bool addToPoints = true;
-                //if (addToPoints)
-                //{
-                //    foreach (SkinBlock sb in m_skinBlocks)
-                //    {
-                //        if (sb.addPoints)
-                //        {
-                //            foreach (SkinElement se in sb.elements)
-                //            {
-                //                m_points.Add(se.pos);
-                //                m_normals.Add(se.normal);
-                //            }
-                //        }
-                //    }
-                //}
-                int ibreak = 0;
             }
         }
 
@@ -628,6 +649,7 @@ namespace ModelNamer
         public List<String> m_selsInfo = new List<string>();
         public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
         public List<SkinBlock> m_skinBlocks = new List<SkinBlock>();
+        public List<ShaderData> m_shaderData = new List<ShaderData>();
         public Vector3 MinBB;
         public Vector3 MaxBB;
         public Vector3 Center;
@@ -681,13 +703,15 @@ namespace ModelNamer
                 binReader.BaseStream.Position = 0;
                 model.ReadSkinSection(binReader);
                 binReader.BaseStream.Position = 0;
-
+                model.ReadSHDRSection(binReader);
+                binReader.BaseStream.Position = 0;
                 model.ReadDSLISection(binReader);
                 binReader.BaseStream.Position = 0;
                 model.ReadDSLCSection(binReader);
                 binReader.BaseStream.Position = 0;
                 model.ReadDSLSSection(binReader);
-
+                binReader.BaseStream.Position = 0;
+                model.ReadMESHSection(binReader);
 
                 binReader.BaseStream.Position = 0;
 
@@ -979,7 +1003,7 @@ namespace ModelNamer
 
             modelPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed";
             //String outputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-dsli-output";
-            String outputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-skin-output";
+            String outputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed";
             infoFile = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-tag-output-results.txt";
             //using (StreamWriter objSw = new StreamWriter(@"d:\tmp\skin-data.txt"))
             //{
@@ -996,12 +1020,12 @@ namespace ModelNamer
 
 
             //reader.LoadModels(modelPath, infoFile,5);
-            reader.m_models.Add(reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\minotaur.mdl"));
+            reader.m_models.Add(reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arcane_earth_crown.mdl"));
             foreach (GCModel model in reader.m_models)
             {
                 model.DumpSkinBlocks(outputPath);
-                //model.DumpSections(outputPath);
-                //model.DumpDisplayBlocks(outputPath);
+                model.DumpSections(outputPath);
+                model.DumpDisplayBlocks(outputPath);
 
             }
         }
@@ -1018,10 +1042,10 @@ namespace ModelNamer
         public byte[] headerBlock;
         public byte[] remainderBlock;
         public List<SkinElement> elements = new List<SkinElement>();
-        public bool addPoints = true;
         public List<Vector3> m_points = new List<Vector3>();
         public List<Vector3> m_normals = new List<Vector3>();
-        public List<Vector2> m_uvs = new List<Vector2>();
+        public int lodLevel;
+
 
         public static SkinBlock ReadBlock(BinaryReader reader)
         {
@@ -1156,6 +1180,13 @@ namespace ModelNamer
         public int maxUV;
         public SkinBlock skinBlock;
 
+        // these come from the mesh tag element...
+        public int meshId;
+        public int lodlevel;
+        public int meshUnk1;
+        public int meshUnk2;
+        public int meshUnk3;
+        public int meshUnk4;
 
 
         public static bool FromStream(DisplayListHeader header, BinaryReader reader, DSLIInfo dsliInfo)
@@ -1225,10 +1256,9 @@ namespace ModelNamer
                     success = true;
                     for (int i = 0; i < header.indexCount; ++i)
                     {
-                        //DisplayListEntry e = DisplayListEntry.FromStream(reader,header.averageSizeInt);
                         DisplayListEntry e = DisplayListEntry.FromStream(reader, header.adjustedSizeInt);
                         header.entries.Add(e);
-                        header.maxVertex = Math.Max(header.maxVertex, e.PosIndex);
+                                                header.maxVertex = Math.Max(header.maxVertex, e.PosIndex);
                         header.maxNormal = Math.Max(header.maxNormal, e.NormIndex);
                         header.maxUV = Math.Max(header.maxUV, e.UVIndex);
                     }
@@ -1279,6 +1309,59 @@ namespace ModelNamer
             return node;
         }
     }
+
+    public class ShaderData
+    {
+        public String shaderName;
+        public String textureName;
+        public int emptyTag1;
+        public int unk1;
+        public int unk2;
+        public int unk3;
+        public byte textureId1;
+        public byte textureId2;
+        public byte[] unkba1;
+        public int unk4;
+        public int unk5;
+        public int unk6;
+        public int unk7;
+
+
+
+        public static ShaderData FromStream(BinaryReader binReader)
+        {
+            ShaderData shader = new ShaderData();
+            shader.emptyTag1 = binReader.ReadInt32();
+
+            byte[] name = binReader.ReadBytes(124);
+            StringBuilder sb = new StringBuilder();
+            char b;
+            for(int i=0;i<name.Length;++i)
+            {
+                b = (char)name[i];
+                if (b == 0x00)
+                {
+                    break;
+                }
+                sb.Append(b);
+            }
+            shader.shaderName = sb.ToString();
+
+            shader.unk1 = binReader.ReadInt32();
+            shader.unk2 = binReader.ReadInt32();
+            shader.unk3 = binReader.ReadInt32();
+            shader.textureId1 = binReader.ReadByte();
+            shader.textureId2 = binReader.ReadByte();
+            shader.unkba1 = binReader.ReadBytes(6);
+            shader.unk4 = binReader.ReadInt32();
+            shader.unk5 = binReader.ReadInt32();
+            shader.unk6 = binReader.ReadInt32();
+            shader.unk7 = binReader.ReadInt32();
+            return shader;
+        }
+
+    }
+
 
     public struct DisplayListEntry
     {
