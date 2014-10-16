@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenTK;
+using Microsoft.Xna.Framework;
 using System.IO;
 
 namespace ModelNamer

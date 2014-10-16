@@ -6,12 +6,13 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D6610849-5D22-4CA1-A429-0D189D2464DA}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ModelNamer</RootNamespace>
     <AssemblyName>ModelNamer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -23,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -37,15 +39,8 @@
     <StartupObject>ModelNamer.PointViewer</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK.Compatibility, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.GLControl.dll</HintPath>
-    </Reference>
+    <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -66,6 +61,7 @@
     <Compile Include="ImageExtractor.cs" />
     <Compile Include="ImmediateCube.cs" />
     <Compile Include="NormalisedByteTester.cs" />
+    <Compile Include="PAK1Splitter.cs" />
     <Compile Include="PointViewer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +69,9 @@
     <Compile Include="R2V2Analyzer.cs" />
     <Compile Include="TokRenamer.cs" />
     <Compile Include="XboxModelReader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

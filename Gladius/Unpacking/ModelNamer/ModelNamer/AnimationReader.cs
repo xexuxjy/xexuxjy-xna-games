@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -220,16 +219,19 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            //String filename = "c:/tmp/unpacking/PAK1/PAK1/File 004853";
-            //AnimationReader animationReader = new AnimationReader();
-            //using (BinaryReader binReader = new BinaryReader(new FileStream(filename, FileMode.Open)))
-            //{
-            //    animationReader.Read(binReader);
-            //}
+            String filename = @"D:\gladius-extracted-archive\gc-compressed\Animations\File 022821";
+            AnimationReader animationReader = new AnimationReader();
+            using (BinaryReader binReader = new BinaryReader(new FileStream(filename, FileMode.Open)))
+            {
+                animationReader.Read(binReader);
+            }
             //int ibreak = 0;
             //AnimationReader.DumpAllSectionLengths("c:/tmp/unpacking/PAK1/PAK1", "c:/tmp/unpacking/PAK1/header-results.txt");
 
-            AnimationReader.DumpAllSectionData("c:/tmp/unpacking/PAK1/PAK1", "c:/tmp/unpacking/PAK1/SplitOutput");
+            //AnimationReader.DumpAllSectionData(@"D:\gladius-extracted-archive\gc-compressed\Animations", @"D:\gladius-extracted-archive\gc-compressed\Animations-output");
+
+
+            //new AnimationReader().DumpSectionData(new FileInfo(@"D:\gladius-extracted-archive\gc-compressed\Animations\File 022821"), @"D:\gladius-extracted-archive\gc-compressed\Animations-output");
         }
 
     }
@@ -244,6 +246,8 @@ namespace ModelNamer
 
         public static bool FromStream(BinaryReader reader, out AnimationData animationData)
         {
+            long startStreamPos = reader.BaseStream.Position;
+
             animationData = new AnimationData();
             Debug.Assert(Common.FindCharsInStream(reader, AnimationReader.versTag));
             Debug.Assert(Common.FindCharsInStream(reader, AnimationReader.cprtTag));
@@ -251,6 +255,7 @@ namespace ModelNamer
 
             Common.ReadNullSeparatedNames(reader, AnimationReader.nameTag, animationData.boneList);
 
+       
             // bktm section
             if (Common.FindCharsInStream(reader, AnimationReader.bktmTag))
             {
@@ -278,24 +283,6 @@ namespace ModelNamer
 
             }
 
-            if (Common.FindCharsInStream(reader, AnimationReader.dcrtTag))
-            {
-                int sectionLength = reader.ReadInt32();
-                int pad1 = reader.ReadInt32();
-                int numBones = reader.ReadInt32();
-                // each entry here is 8? bytes
-
-
-            }
-
-            if (Common.FindCharsInStream(reader, AnimationReader.dcrdTag))
-            {
-                int sectionLength = reader.ReadInt32();
-                int pad1 = reader.ReadInt32();
-                int numBones = reader.ReadInt32();
-                // each entry here is 16 bytes
-            }
-
             // These 2 seem optional, but always exist together.
 
             if (Common.FindCharsInStream(reader, AnimationReader.dcptTag))
@@ -312,11 +299,38 @@ namespace ModelNamer
                 int pad1 = reader.ReadInt32();
                 int numBones = reader.ReadInt32();
                 // each entry here is 16 bytes
-                
+
 
             }
 
 
+            if (Common.FindCharsInStream(reader, AnimationReader.dcrtTag))
+            {
+                int sectionLength = reader.ReadInt32();
+                int pad1 = reader.ReadInt32();
+                int numBones = reader.ReadInt32();
+                int i = 0;
+                // each entry here is 8? bytes
+           }
+
+            if (Common.FindCharsInStream(reader, AnimationReader.dcrdTag))
+            {
+                int sectionLength = reader.ReadInt32();
+                int pad1 = reader.ReadInt32();
+                int unk1 = reader.ReadInt32();
+
+                // each entry here is 16 bytes
+                int numfloats = 20;
+                List<float> fl = new List<float>();
+                for(int i=0;i<numfloats;++i)
+                {
+                    fl.Add(Common.FromStream2ByteToFloat(reader));
+                }
+                int ibreak = 0;
+            }
+
+
+            Common.FindCharsInStream(reader, AnimationReader.endTag);
 
 
             return true;
