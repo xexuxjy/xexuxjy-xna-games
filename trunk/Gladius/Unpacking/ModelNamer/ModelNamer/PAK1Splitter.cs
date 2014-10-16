@@ -8,10 +8,8 @@ namespace ModelNamer
 {
     public class PAK1Splitter
     {
-        public void Read(String inputFile, String outputPath)
+        public void Read(FileInfo inputFileInfo, String outputPath)
         {
-            FileInfo inputFileInfo = new FileInfo(inputFile);
-
             using (BinaryReader binReader = new BinaryReader(new FileStream(inputFileInfo.FullName, FileMode.Open)))
             {
 
@@ -67,7 +65,16 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            new PAK1Splitter().Read(@"C:\gladius-extracted\ps2-decompressed\scratch\File_023577", @"C:\gladius-extracted\ps2-decompressed\scratch");
+            String sourceDirectory = @"D:\gladius-extracted\ps2-decompressed\PAK1Animations";
+            String[] files = Directory.GetFiles(sourceDirectory, "*");
+            int counter = 0;
+
+            foreach (String file in files)
+            {
+                FileInfo sourceFile = new FileInfo(file);
+
+                new PAK1Splitter().Read(sourceFile, @"D:\gladius-extracted\ps2-decompressed\PAK1Animations-Unpacked");
+            }
         }
     }
 

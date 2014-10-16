@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using OpenTK;
+using Microsoft.Xna.Framework;
 
 namespace ModelNamer
 {
@@ -33,6 +33,7 @@ namespace ModelNamer
         public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
         public static char[] vflgTag = new char[] { 'V', 'F', 'L', 'G' };
         public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
+        public static char[] pak1Tag = new char[] { 'P', 'A', 'K', '1' };
 
 
         public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
@@ -336,7 +337,7 @@ namespace ModelNamer
             return v;
         }
 
-        public static Matrix4 FromStreamMatrix4BE(BinaryReader reader)
+        public static Matrix FromStreamMatrixBE(BinaryReader reader)
         {
             
             reader.Read(s_buffer, 0, s_buffer.Length);
@@ -372,7 +373,7 @@ namespace ModelNamer
             reader.Read(s_buffer, 0, s_buffer.Length);
             float m44 = Common.ReadSingleBigEndian(s_buffer, 0);
 
-            return new Matrix4(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
+            return new Matrix(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
         }
 
         public static void WriteFloat(StreamWriter sw, Vector3 v)
@@ -555,6 +556,8 @@ namespace ModelNamer
             return r2v2;
 
         }
+
+
     }
 
     
