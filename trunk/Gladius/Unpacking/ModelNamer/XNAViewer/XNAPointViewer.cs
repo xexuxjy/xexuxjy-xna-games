@@ -67,7 +67,7 @@ namespace XNAViewer
 
                 //this.VSync = VSyncMode.Off;
                 m_modelReader = new GCModelReader();
-                m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
+                m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
                 //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
                 //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\yeti.mdl");
                 //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\bear.mdl");
@@ -711,9 +711,11 @@ namespace XNAViewer
                 m_vertexBuffer.SetData(vertexData);
 
                 int[] indices = new int[m_header.entries.Count];
-                for (int i = 0; i < indices.Length; ++i)
+                for (int i = 0; i < indices.Length; i+=3)
                 {
-                    indices[i] = i;
+                    indices[i+0] = (i+0);
+                    indices[i + 1] = (i + 2);
+                    indices[i + 2] = (i + 1);
                 }
                 m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count(), BufferUsage.None);
                 m_indexBuffer.SetData(indices);
