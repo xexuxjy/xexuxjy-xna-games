@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
@@ -89,7 +90,7 @@ namespace ModelNamer
                     outStream.WriteLine(String.Format("DSLC[{0:X2}]", headerBlock.dslcEntry));
 
                     outStream.WriteLine(String.Format("DSLI[{0}][{1}][{2:0.0}][{3}]", headerBlock.dsliInfo.startPos, headerBlock.dsliInfo.length, headerBlock.averageSize, headerBlock.adjustedSizeInt));
-                    outStream.WriteLine(String.Format("P[{0}]N[{1}]U[{2}] MP[{3}]MN[{4}]MU[{5}]", headerBlock.maxVertex, headerBlock.maxNormal, headerBlock.maxUV, m_points.Count, m_normals.Count, m_uvs.Count));
+                    outStream.WriteLine(String.Format("P[{0}]N[{1}]U[{2}] MP[{3}]MN[{4}]MU[{5}]", headerBlock.maxVertex, headerBlock.maxNormal, headerBlock.maxUV, headerBlock.Points.Count, headerBlock.Normals.Count, m_uvs.Count));
 
                     int headerSize = 6;
                     outStream.WriteLine(Common.ByteArrayToStringSub(headerBlock.blockData, 0, headerSize));
@@ -559,12 +560,12 @@ namespace ModelNamer
                             m_maxUv = header.entries[i].UVIndex;
                         }
 
-                        if (header.entries[i].PosIndex < 0 || header.entries[i].PosIndex >= m_points.Count)
+                        if (header.entries[i].PosIndex < 0 || header.entries[i].PosIndex >= header.Points.Count)
                         {
                             header.Valid = false;
                             //break;
                         }
-                        if (header.entries[i].NormIndex < 0 || header.entries[i].NormIndex >= m_normals.Count)
+                        if (header.entries[i].NormIndex < 0 || header.entries[i].NormIndex >= header.Normals.Count)
                         {
                             header.Valid = false;
                             //break;
@@ -585,49 +586,49 @@ namespace ModelNamer
 
         public void WriteOBJ(StreamWriter writer, StreamWriter materialWriter)
         {
-            // write material?
-            foreach (String name in m_textures)
-            {
-                String textureName = name + ".png";
-                materialWriter.WriteLine("newmtl " + textureName);
-                materialWriter.WriteLine("Ka 1.000 1.000 1.000");
-                materialWriter.WriteLine("Kd 1.000 1.000 1.000");
-                materialWriter.WriteLine("Ks 0.000 0.000 0.000");
-                materialWriter.WriteLine("d 1.0");
-                materialWriter.WriteLine("illum 2");
-                materialWriter.WriteLine("map_Ka ../Textures/" + textureName);
-                materialWriter.WriteLine("map_Kd ../Textures/" + textureName);
-            }
+            //// write material?
+            //foreach (String name in m_textures)
+            //{
+            //    String textureName = name + ".png";
+            //    materialWriter.WriteLine("newmtl " + textureName);
+            //    materialWriter.WriteLine("Ka 1.000 1.000 1.000");
+            //    materialWriter.WriteLine("Kd 1.000 1.000 1.000");
+            //    materialWriter.WriteLine("Ks 0.000 0.000 0.000");
+            //    materialWriter.WriteLine("d 1.0");
+            //    materialWriter.WriteLine("illum 2");
+            //    materialWriter.WriteLine("map_Ka ../Textures/" + textureName);
+            //    materialWriter.WriteLine("map_Kd ../Textures/" + textureName);
+            //}
 
-            writer.WriteLine("mtllib " + m_name + ".mtl");
-            // and now points, uv's and normals.
-            foreach (Vector3 v in m_points)
-            {
-                writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-            }
-            foreach (Vector2 v in m_uvs)
-            {
-                writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, 1.0f - v.Y));
-            }
-            foreach (Vector3 v in m_points)
-            {
-                writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-            }
+            //writer.WriteLine("mtllib " + m_name + ".mtl");
+            //// and now points, uv's and normals.
+            //foreach (Vector3 v in m_points)
+            //{
+            //    writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+            //}
+            //foreach (Vector2 v in m_uvs)
+            //{
+            //    writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, 1.0f - v.Y));
+            //}
+            //foreach (Vector3 v in m_points)
+            //{
+            //    writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+            //}
 
-            writer.WriteLine("usemtl " + m_textures[m_textures.Count - 1] + ".png");
+            //writer.WriteLine("usemtl " + m_textures[m_textures.Count - 1] + ".png");
 
-            foreach (DisplayListHeader dlh in m_displayListHeaders)
-            {
-                int counter = 0;
-                int offset = 1;
-                for (int i = 0; i < dlh.entries.Count; )
-                {
-                    writer.WriteLine(String.Format("f {0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex + offset, dlh.entries[i].UVIndex + offset, dlh.entries[i].NormIndex + offset,
-                        dlh.entries[i + 1].PosIndex + offset, dlh.entries[i + 1].UVIndex + offset, dlh.entries[i + 1].NormIndex + offset,
-                        dlh.entries[i + 2].PosIndex + offset, dlh.entries[i + 2].UVIndex + offset, dlh.entries[i + 2].NormIndex + offset));
-                    i += 3;
-                }
-            }
+            //foreach (DisplayListHeader dlh in m_displayListHeaders)
+            //{
+            //    int counter = 0;
+            //    int offset = 1;
+            //    for (int i = 0; i < dlh.entries.Count; )
+            //    {
+            //        writer.WriteLine(String.Format("f {0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex + offset, dlh.entries[i].UVIndex + offset, dlh.entries[i].NormIndex + offset,
+            //            dlh.entries[i + 1].PosIndex + offset, dlh.entries[i + 1].UVIndex + offset, dlh.entries[i + 1].NormIndex + offset,
+            //            dlh.entries[i + 2].PosIndex + offset, dlh.entries[i + 2].UVIndex + offset, dlh.entries[i + 2].NormIndex + offset));
+            //        i += 3;
+            //    }
+            //}
         }
 
         public bool Valid
@@ -651,8 +652,8 @@ namespace ModelNamer
 
         public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
         public String m_name;
-        public List<Vector3> m_points = new List<Vector3>();
-        public List<Vector3> m_normals = new List<Vector3>();
+        //public List<Vector3> m_points = new List<Vector3>();
+        //public List<Vector3> m_normals = new List<Vector3>();
         public List<Vector2> m_uvs = new List<Vector2>();
         public List<String> m_textures = new List<String>();
         public List<String> m_names = new List<String>();
@@ -863,25 +864,25 @@ namespace ModelNamer
 
         public void DumpPoints(String infoFile)
         {
-            using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
-            {
-                foreach (GCModel model in m_models)
-                {
-                    infoStream.WriteLine(String.Format("File : {0} : {1} : {2}", model.m_name, model.m_points.Count, model.m_normals.Count));
-                    infoStream.WriteLine("Verts : ");
-                    foreach (Vector3 sv in model.m_points)
-                    {
-                        Common.WriteInt(infoStream, sv);
-                    }
-                    infoStream.WriteLine("Normals : ");
-                    foreach (Vector3 sv in model.m_normals)
-                    {
-                        Common.WriteInt(infoStream, sv);
-                    }
-                    infoStream.WriteLine();
-                    infoStream.WriteLine();
-                }
-            }
+            //using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
+            //{
+            //    foreach (GCModel model in m_models)
+            //    {
+            //        infoStream.WriteLine(String.Format("File : {0} : {1} : {2}", model.m_name, model.m_points.Count, model.m_normals.Count));
+            //        infoStream.WriteLine("Verts : ");
+            //        foreach (Vector3 sv in model.m_points)
+            //        {
+            //            Common.WriteInt(infoStream, sv);
+            //        }
+            //        infoStream.WriteLine("Normals : ");
+            //        foreach (Vector3 sv in model.m_normals)
+            //        {
+            //            Common.WriteInt(infoStream, sv);
+            //        }
+            //        infoStream.WriteLine();
+            //        infoStream.WriteLine();
+            //    }
+            //}
 
         }
 
