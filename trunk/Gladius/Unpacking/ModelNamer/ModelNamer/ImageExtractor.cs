@@ -24,11 +24,11 @@ namespace ModelNamer
         private System.Collections.Generic.List<System.Collections.Generic.List<byte>> rows = new System.Collections.Generic.List<System.Collections.Generic.List<byte>>();
         private System.Collections.Generic.List<byte> row = new System.Collections.Generic.List<byte>();
 
-            String targetDirectory = @"d:/gladius-extracted/test-extract/";
-            //String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
-            String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
-            String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
-            String infoFile = @"d:\gladius-extracted\ps2-texturelist";
+        //String targetDirectory = @"d:/gladius-extracted/test-extract/";
+        ////String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
+        //String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
+        //String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
+        //String infoFile = @"d:\gladius-extracted\ps2-texturelist";
 
 
 
@@ -608,10 +608,10 @@ namespace ModelNamer
     public class ImageExtractor
     {
 
-        String targetDirectory = @"d:/gladius-extracted/test-extract/";
-        //String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
-        String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
-        String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
+        //String targetDirectory = @"d:/gladius-extracted/test-extract/";
+        ////String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
+        //String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
+        //String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
 
         public static char[] PTTPHeader = new char[] { 'P', 'T', 'T', 'P' };
         public static char[] NAMEHeader = new char[] { 'N', 'A', 'M', 'E' };
@@ -627,7 +627,15 @@ namespace ModelNamer
 
         //String filepath = @"C:\gladius-extracted\ps2-decompressed\PTTP\";
         //String errorFile = @"C:\gladius-extracted\ps2-decompressed-errors";
-        public void ExtractImages()
+
+        public void ExtractImages(string sourceDirectory,string targetDirectory)
+        {
+            List<string> fileNames = new List<string>();
+            fileNames.AddRange(Directory.GetFiles(sourceDirectory, "*"));
+            ExtractImages(fileNames,targetDirectory);
+        }
+
+        public void ExtractImages(List<string> fileNames, string targetDirectory)
         {
             GladiusImage targaImage = new GladiusImage();
 
@@ -646,25 +654,16 @@ namespace ModelNamer
                 }
             }
 
-            string[] filePaths = Directory.GetFiles(filepath);
 
-
-
-
-            DirectoryInfo d = new DirectoryInfo(filepath);
-            FileInfo[] files = d.GetFiles(); //Getting Text files
-            using (StreamWriter errorStream = new StreamWriter(new FileStream(errorFile, FileMode.OpenOrCreate)))
+            //DirectoryInfo d = new DirectoryInfo(filepath);
+            //FileInfo[] files = d.GetFiles(); //Getting Text files
+            using (StreamWriter errorStream = new StreamWriter(new FileStream(targetDirectory+"\\errors.txt", FileMode.OpenOrCreate)))
             {
                 GladiusImage image = null;
-                foreach (FileInfo file in files)
+                foreach (string fileName in fileNames)
                 {
-                    //if (file.Name != "File_000957")
-                    //if (file.Name != "File_000391")
-                    if (file.Name != "File_010463")
-                    {
-                        //continue;
-                    }
-                    using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
+                    FileInfo file = new FileInfo(fileName);
+                    using (FileStream fs = new FileStream(file.FullName, FileMode.Open))
                     using (BinaryReader binReader = new BinaryReader(fs))
                     {
                         int headerPadding = 0;
@@ -676,8 +675,18 @@ namespace ModelNamer
                         ImageInfo imageInfo = new ImageInfo();
                         imageInfo.m_name = file.Name;
                         List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
-                        DumpHeaderSection(binReader, imageInfo);
+                        if (file.Name.EndsWith("r2t"))
+                        {
+                            HeaderSegment headerSegment = new HeaderSegment();
+                            headerSegment.containsDefinition = 1;
+                            headerSegment.width = 128;
+                            headerSegment.height = 128;
+                            headerSegment.bpp = 8;
+                            imageInfo.m_segments.Add(headerSegment);
+                        }
 
+                        //DumpHeaderSection(binReader, imageInfo);
+                        binReader.BaseStream.Position = 0;
                         while (GladiusHeader.ReadToNextTMapBlock(binReader, ref subImageCounter,imageInfo))
                         {
                             image = new GladiusImage();
@@ -814,7 +823,7 @@ namespace ModelNamer
 
         }
 
-        public void ListImageData()
+        public void ListImageData(string sourceDirectory,string targetDirectory)
         {
             //String filepath = @"C:\gladius-extracted\ps2-decompressed\PTTP\";
             //String errorFile = @"C:\gladius-extracted\ps2-decompressed-errors";
@@ -834,20 +843,20 @@ namespace ModelNamer
                 }
             }
 
-            string[] filePaths = Directory.GetFiles(filepath);
+            string[] filePaths = Directory.GetFiles(sourceDirectory);
 
 
-            String infoFile2 = "c:/gladius-extracted/test-extract/image-texture-header.txt";
+            //String infoFile2 = "c:/gladius-extracted/test-extract/image-texture-header.txt";
 
 
-            DirectoryInfo d = new DirectoryInfo(filepath);
+            DirectoryInfo d = new DirectoryInfo(sourceDirectory);
             FileInfo[] files = d.GetFiles(); //Getting Text files
-            using (StreamWriter errorStream = new StreamWriter(new FileStream(infoFile2, FileMode.OpenOrCreate)))
+            using (StreamWriter errorStream = new StreamWriter(new FileStream(sourceDirectory+@"\errors.txt", FileMode.OpenOrCreate)))
             {
                 GladiusImage image = null;
                 foreach (FileInfo file in files)
                 {
-                    using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
+                    using (FileStream fs = new FileStream(file.FullName, FileMode.Open))
                     using (BinaryReader binReader = new BinaryReader(fs))
                     {
                         int headerPadding = 0;
@@ -861,10 +870,6 @@ namespace ModelNamer
                         List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
 
                         errorStream.WriteLine(file.Name);
-                        if (textureNameList.Count == 1 && textureNameList[0] == "skygold_R.tga")
-                        {
-                            errorStream.WriteLine("SingleSkyGold!");
-                        }
 
 
                         foreach (String textureName in textureNameList)
@@ -872,7 +877,7 @@ namespace ModelNamer
                             errorStream.WriteLine(textureName);
                         }
 
-                        DumpHeaderSection(binReader, imageInfo);
+                        //DumpHeaderSection(binReader, imageInfo);
                         //foreach (HeaderSegment hs in imageInfo.m_segments)
                         //{
                         //    errorStream.WriteLine(String.Format("[{0}][{1}][{2}][{3}][{4}][{5}][{6}]", hs.unk1, hs.unk2, hs.width, hs.height, hs.unk3, hs.containsDefinition, hs.unk5));
@@ -940,136 +945,136 @@ namespace ModelNamer
 
         }
 
-        public void DumpSectionLengths()
-        {
-            String infoFile2 = "c:/gladius-extracted/test-extract/image-section-lengths.txt";
+        //public void DumpSectionLengths()
+        //{
+        //    String infoFile2 = "c:/gladius-extracted/test-extract/image-section-lengths.txt";
 
-            string[] filePaths = Directory.GetFiles(filepath);
-            List<ImageInfo> imageInfoList = new List<ImageInfo>();
-            DirectoryInfo d = new DirectoryInfo(filepath);
-            FileInfo[] files = d.GetFiles(); //Getting Text files
-            using (StreamWriter infoStream = new StreamWriter(new FileStream(infoFile2, FileMode.OpenOrCreate)))
-            {
-                GladiusImage image = null;
-                foreach (FileInfo file in files)
-                {
+        //    string[] filePaths = Directory.GetFiles(filepath);
+        //    List<ImageInfo> imageInfoList = new List<ImageInfo>();
+        //    DirectoryInfo d = new DirectoryInfo(filepath);
+        //    FileInfo[] files = d.GetFiles(); //Getting Text files
+        //    using (StreamWriter infoStream = new StreamWriter(new FileStream(infoFile2, FileMode.OpenOrCreate)))
+        //    {
+        //        GladiusImage image = null;
+        //        foreach (FileInfo file in files)
+        //        {
 
-                    using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
-                    using (BinaryReader binReader = new BinaryReader(fs))
-                    {
-                        ImageInfo imageInfo = new ImageInfo();
-                        imageInfoList.Add(imageInfo);
-                        infoStream.WriteLine("File : " + imageInfo.m_name);
-                        foreach (char[] tag in allTags)
-                        {
-                            if (Common.FindCharsInStream(binReader, tag, true))
-                            {
-                                int blockSize = binReader.ReadInt32();
-                                imageInfo.m_tagSizes[tag] = blockSize;
-                                infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), blockSize));
-                            }
-                            else
-                            {
-                                imageInfo.m_tagSizes[tag] = -1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //            using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
+        //            using (BinaryReader binReader = new BinaryReader(fs))
+        //            {
+        //                ImageInfo imageInfo = new ImageInfo();
+        //                imageInfoList.Add(imageInfo);
+        //                infoStream.WriteLine("File : " + imageInfo.m_name);
+        //                foreach (char[] tag in allTags)
+        //                {
+        //                    if (Common.FindCharsInStream(binReader, tag, true))
+        //                    {
+        //                        int blockSize = binReader.ReadInt32();
+        //                        imageInfo.m_tagSizes[tag] = blockSize;
+        //                        infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), blockSize));
+        //                    }
+        //                    else
+        //                    {
+        //                        imageInfo.m_tagSizes[tag] = -1;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
 
-        public void DumpHeaderInfo()
-        {
-            String infoFile2 = "c:/gladius-extracted/image-header-info.txt";
+        //public void DumpHeaderInfo()
+        //{
+        //    String infoFile2 = "c:/gladius-extracted/image-header-info.txt";
 
-            string[] filePaths = Directory.GetFiles(filepath);
-            List<ImageInfo> imageInfoList = new List<ImageInfo>();
-            DirectoryInfo d = new DirectoryInfo(filepath);
-            FileInfo[] files = d.GetFiles(); //Getting Text files
-            using (StreamWriter infoStream = new StreamWriter(new FileStream(infoFile2, FileMode.OpenOrCreate)))
-            {
-                GladiusImage image = null;
-                foreach (FileInfo file in files)
-                {
-                    if (file.Name != "File_000391")
-                    {
-                        continue;
-                    }
-                    using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
-                    using (BinaryReader binReader = new BinaryReader(fs))
-                    {
-                        try
-                        {
-                            ImageInfo imageInfo = new ImageInfo();
-                            imageInfo.m_name = file.Name;
-                            imageInfoList.Add(imageInfo);
-                            List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
-                            DumpHeaderSection(binReader, imageInfo);
-                            infoStream.WriteLine("File : " + imageInfo.m_name);
-                            int counter = 0;
-                            foreach (HeaderSegment hs in imageInfo.m_segments)
-                            {
-                                hs.textureName = textureNameList[counter++];
-                                infoStream.WriteLine(hs.ToString());                       
-                            }
-                            infoStream.WriteLine();
-                        }
-                        catch (System.Exception ex)
-                        {
+        //    string[] filePaths = Directory.GetFiles(filepath);
+        //    List<ImageInfo> imageInfoList = new List<ImageInfo>();
+        //    DirectoryInfo d = new DirectoryInfo(filepath);
+        //    FileInfo[] files = d.GetFiles(); //Getting Text files
+        //    using (StreamWriter infoStream = new StreamWriter(new FileStream(infoFile2, FileMode.OpenOrCreate)))
+        //    {
+        //        GladiusImage image = null;
+        //        foreach (FileInfo file in files)
+        //        {
+        //            if (file.Name != "File_000391")
+        //            {
+        //                continue;
+        //            }
+        //            using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
+        //            using (BinaryReader binReader = new BinaryReader(fs))
+        //            {
+        //                try
+        //                {
+        //                    ImageInfo imageInfo = new ImageInfo();
+        //                    imageInfo.m_name = file.Name;
+        //                    imageInfoList.Add(imageInfo);
+        //                    List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
+        //                    DumpHeaderSection(binReader, imageInfo);
+        //                    infoStream.WriteLine("File : " + imageInfo.m_name);
+        //                    int counter = 0;
+        //                    foreach (HeaderSegment hs in imageInfo.m_segments)
+        //                    {
+        //                        hs.textureName = textureNameList[counter++];
+        //                        infoStream.WriteLine(hs.ToString());                       
+        //                    }
+        //                    infoStream.WriteLine();
+        //                }
+        //                catch (System.Exception ex)
+        //                {
                         	
-                        }
+        //                }
 
-                    }
-                }
-            }
-        }
-
-
+        //            }
+        //        }
+        //    }
+        //}
 
 
-        public void DumpHeaderSection(BinaryReader binReader, ImageInfo imageInfo)
-        {
-            if (Common.FindCharsInStream(binReader, PFHDHeader, true))
-            {
-                int sectionSide = binReader.ReadInt32();
-                int pad1 = binReader.ReadInt32();
-                int numTextures = binReader.ReadInt32();
 
-                for (int u = 0; u < numTextures; ++u)
-                {
-                    HeaderSegment hs = new HeaderSegment();
-                    imageInfo.m_segments.Add(hs);
-                    hs.bpp = Common.ReadInt32BigEndian(binReader);
-                    hs.unk2 = binReader.ReadInt32();
-                    hs.width = binReader.ReadInt16();
-                    hs.height = binReader.ReadInt16();
-                    hs.unks1 = binReader.ReadInt16();
-                    hs.unks2 = binReader.ReadInt16();
-                    hs.containsDefinition = binReader.ReadInt16();
-                    hs.textureOrder = binReader.ReadInt16();
-                    hs.counter1 = binReader.ReadInt16();
-                    hs.alwaysZero1 = binReader.ReadInt16();
-                    hs.alwaysZero2 = binReader.ReadInt32();
-                    hs.alwaysZero3 = binReader.ReadInt32();
 
-                    //if (hs.alwaysZero != 0 || hs.alwaysZero1 != 0 || hs.alwaysZero2 != 0 || hs.alwaysZero3 != 0)
-                    if (hs.unks2 != 0 && hs.unks2 != 1)
-                    {
-                        int ibreak = 0;
-                    }
+        //public void DumpHeaderSection(BinaryReader binReader, ImageInfo imageInfo)
+        //{
+        //    if (Common.FindCharsInStream(binReader, PFHDHeader, true))
+        //    {
+        //        int sectionSide = binReader.ReadInt32();
+        //        int pad1 = binReader.ReadInt32();
+        //        int numTextures = binReader.ReadInt32();
 
-                    if (hs.alwaysZero1 != 0 || hs.alwaysZero2 != 0 || hs.alwaysZero3 != 0)
-                    {
-                        int ibreak = 0;
-                    }
+        //        for (int u = 0; u < numTextures; ++u)
+        //        {
+        //            HeaderSegment hs = new HeaderSegment();
+        //            imageInfo.m_segments.Add(hs);
+        //            hs.bpp = Common.ReadInt32BigEndian(binReader);
+        //            hs.unk2 = binReader.ReadInt32();
+        //            hs.width = binReader.ReadInt16();
+        //            hs.height = binReader.ReadInt16();
+        //            hs.unks1 = binReader.ReadInt16();
+        //            hs.unks2 = binReader.ReadInt16();
+        //            hs.containsDefinition = binReader.ReadInt16();
+        //            hs.textureOrder = binReader.ReadInt16();
+        //            hs.counter1 = binReader.ReadInt16();
+        //            hs.alwaysZero1 = binReader.ReadInt16();
+        //            hs.alwaysZero2 = binReader.ReadInt32();
+        //            hs.alwaysZero3 = binReader.ReadInt32();
 
-                }
+        //            //if (hs.alwaysZero != 0 || hs.alwaysZero1 != 0 || hs.alwaysZero2 != 0 || hs.alwaysZero3 != 0)
+        //            if (hs.unks2 != 0 && hs.unks2 != 1)
+        //            {
+        //                int ibreak = 0;
+        //            }
 
-            }
+        //            if (hs.alwaysZero1 != 0 || hs.alwaysZero2 != 0 || hs.alwaysZero3 != 0)
+        //            {
+        //                int ibreak = 0;
+        //            }
+
+        //        }
+
+        //    }
              
             
-        }
+        //}
 
 
         static int Main(string[] args)
@@ -1078,7 +1083,10 @@ namespace ModelNamer
             //new ImageExtractor().ListImageData();
             //new ImageExtractor().DumpSectionLengths();
             //new ImageExtractor().DumpHeaderInfo();
-            new ImageExtractor().ExtractImages();
+            List<string> fileNames = new List<string>();
+            fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extract-all-systems\ps2\pak", "*.r2t"));
+            String outputDirectory = @"D:\gladius-extract-all-systems\ps2\textures\";
+            new ImageExtractor().ExtractImages(fileNames,outputDirectory);
             return 0;
         }
     }
