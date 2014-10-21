@@ -8,61 +8,73 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 namespace ModelNamer
 {
-    public class PAK1Splitter
+    public static class PAK1Splitter
     {
-        public void Read(FileInfo inputFileInfo, String outputPath)
+        public static void Read(FileInfo inputFileInfo, String outputPath)
         {
             using (BinaryReader binReader = new BinaryReader(new FileStream(inputFileInfo.FullName, FileMode.Open)))
             {
+                Read(binReader, outputPath);
+            }
+        }
 
+        public static void Read(BinaryReader binReader, String outputPath)
+        {
+            Common.FindCharsInStream(binReader, Common.pak1Tag);
+            int numFiles = binReader.ReadInt32();
+            List<HeaderBlock> headers = new List<HeaderBlock>();
 
-                Common.FindCharsInStream(binReader, Common.pak1Tag);
-                int numFiles = binReader.ReadInt32();
-                List<HeaderBlock> headers = new List<HeaderBlock>();
+            for (int i = 0; i < numFiles; ++i)
+            {
+                headers.Add(HeaderBlock.FromBinaryStream(binReader));
+            }
 
-                for (int i = 0; i < numFiles; ++i)
+            for (int i = 0; i < numFiles; ++i)
+            {
+                binReader.BaseStream.Position = headers[i].filenamePosition;
+                StringBuilder sb = new StringBuilder();
+                char b;
+                int count = 0;
+                while ((b = (char)binReader.ReadByte()) != 0x00)
                 {
-                    headers.Add(HeaderBlock.FromBinaryStream(binReader));
+                    count++;
+                    sb.Append(b);
                 }
+                headers[i].filename = sb.ToString();
+            }
 
-                for (int i = 0; i < numFiles; ++i)
+            for (int i = 0; i < numFiles; ++i)
+            {
+                binReader.BaseStream.Position = headers[i].fileDataPosition;
+                
+                long lengthToRead = (i < numFiles - 1) ? (headers[i + 1].fileDataPosition - headers[i].fileDataPosition) : (binReader.BaseStream.Length - headers[i].fileDataPosition);
+                if (lengthToRead > 0)
                 {
-                    binReader.BaseStream.Position = headers[i].filenamePosition;
-                    StringBuilder sb = new StringBuilder();
-                    char b;
-                    int count = 0;
-                    while ((b = (char)binReader.ReadByte()) != 0x00)
-                    {
-                        count++;
-                        sb.Append(b);
-                    }
-                    headers[i].filename = sb.ToString();
-                }
-
-                for (int i = 0; i < numFiles; ++i)
-                {
-                    binReader.BaseStream.Position = headers[i].fileDataPosition;
-                    long lengthToRead = (i < numFiles - 1) ? (headers[i + 1].fileDataPosition - headers[i].fileDataPosition) : (binReader.BaseStream.Length - headers[i].fileDataPosition);
                     headers[i].filedata = binReader.ReadBytes((int)lengthToRead);
                 }
+            }
 
-                foreach (HeaderBlock header in headers)
+            foreach (HeaderBlock header in headers)
+            {
+                if (header.filedata != null && header.filedata.Length > 0)
                 {
-                    String tagOutputDirname = outputPath + "\\"+inputFileInfo.Name+".out";
+                    //String tagOutputDirname = outputPath + "\\" + inputFileInfo.Name + ".out";
                     try
                     {
-                        Directory.CreateDirectory(tagOutputDirname);
+                        Directory.CreateDirectory(outputPath);
                     }
                     catch (Exception e) { }
 
-                    String tagOutputFilename = tagOutputDirname + "\\" + (header.filename);
+                    String tagOutputFilename = outputPath + "\\" + (header.filename);
                     using (System.IO.BinaryWriter outStream = new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create)))
                     {
                         outStream.Write(header.filedata);
                     }
                 }
-
             }
+
+
+
         }
 
         static void Main(string[] args)
@@ -123,7 +135,7 @@ namespace ModelNamer
                 {
                     outStream.Write(largeArray,0,currentIndex);
                 }
-                new PAK1Splitter().Read(new FileInfo(outFile), @"C:\tmp\bec-extract\Unpacked");
+                PAK1Splitter.Read(new FileInfo(outFile), @"C:\tmp\bec-extract\Unpacked");
             }
 
 

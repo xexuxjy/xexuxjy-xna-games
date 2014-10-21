@@ -36,11 +36,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ModelNamer.PAK1Splitter</StartupObject>
+    <StartupObject>ModelNamer.ExtractBec</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\..\..\tmp\SharpZipLib_0860_Bin\net-20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL" />
@@ -58,6 +58,7 @@
     <Compile Include="AnimationReader.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="CutsceneRenamer.cs" />
+    <Compile Include="ExtractBec.cs" />
     <Compile Include="FindSmallest.cs" />
     <Compile Include="GCModelReader.cs" />
     <Compile Include="GridFileReader.cs" />

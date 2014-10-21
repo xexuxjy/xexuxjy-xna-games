@@ -706,17 +706,17 @@ void main(void)
             sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, currentModel.m_displayListHeaders.Count, currentModel.m_displayListHeaders[m_currentModelSubIndex].indexCount, currentModel.m_displayListHeaders[m_currentModelSubIndex].Valid));
             sb.AppendLine("Textures : ");
             int counter = 0;
-            foreach (string textureName in currentModel.m_textures)
+            foreach (TextureData textureData in currentModel.m_textures)
             {
-                if (!m_textureDictionary.ContainsKey(textureName))
+                if (!m_textureDictionary.ContainsKey(textureData.textureName))
                 {
                     int key;
-                    if (LoadTexture(textureName, out key))
+                    if (LoadTexture(textureData.textureName, out key))
                     {
-                        m_textureDictionary[textureName] = key;
+                        m_textureDictionary[textureData.textureName] = key;
                     }
                 }
-                sb.AppendLine(textureName);
+                sb.AppendLine(textureData.textureName);
             }
             sb.AppendLine();
             sb.AppendFormat("Loc [{0:0.00000000} {1:0.00000000} {2:0.00000000}]", location.X, location.Y, location.Z);
