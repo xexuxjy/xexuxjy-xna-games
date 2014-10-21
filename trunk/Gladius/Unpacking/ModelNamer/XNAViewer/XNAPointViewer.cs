@@ -28,8 +28,8 @@ namespace XNAViewer
         private Vector3 up = Vector3.UnitY;
         private float pitch = 0.0f;
         private float facing = 0.0f;
-        //public String textureBasePath = @"C:\tmp\unpacking\textures\";
-        public String textureBasePath = @"C:\temp\textures\";
+        public String textureBasePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
+        //public String textureBasePath = @"C:\temp\textures\";
         public Texture2D m_missingTexture;
         public List<String> m_fileNames = new List<string>();
         public Dictionary<String, WrappedModel> m_modelMap = new Dictionary<string, WrappedModel>();
@@ -70,8 +70,8 @@ namespace XNAViewer
 
             //this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
-            m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
-            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
+            m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
             //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\yeti.mdl");
             //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\bear.mdl");
             ChangeModelNext();
@@ -427,7 +427,7 @@ namespace XNAViewer
 
                     m_currentModelIndex--;
                     if (m_currentModelIndex < 0)
-                    {
+                            {
                         m_currentModelIndex += m_fileNames.Count;
                     }
                     if (ChangeModel())
@@ -567,17 +567,17 @@ namespace XNAViewer
             sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, currentModel.m_displayListHeaders.Count, currentModel.m_displayListHeaders[m_currentModelSubIndex].indexCount, currentModel.m_displayListHeaders[m_currentModelSubIndex].Valid));
             sb.AppendLine("Textures : ");
             int counter = 0;
-            foreach (string textureName in currentModel.m_textures)
+            foreach (TextureData textureData in currentModel.m_textures)
             {
-                if (!m_textureDictionary.ContainsKey(textureName))
+                if (!m_textureDictionary.ContainsKey(textureData.textureName))
                 {
                     Texture2D texture;
-                    if (LoadTexture(textureName, out texture))
+                    if (LoadTexture(textureData.textureName, out texture))
                     {
-                        m_textureDictionary[textureName] = texture;
+                        m_textureDictionary[textureData.textureName] = texture;
                     }
                 }
-                sb.AppendLine(textureName);
+                sb.AppendLine(textureData.textureName);
             }
             sb.AppendLine();
             sb.AppendFormat("Loc [{0:0.00000000} {1:0.00000000} {2:0.00000000}]", location.X, location.Y, location.Z);
@@ -632,7 +632,7 @@ namespace XNAViewer
         {
             if (m_currentModel.m_model.m_textures.Count > 0 && index < m_currentModel.m_model.m_textures.Count)
             {
-                String textureName = m_currentModel.m_model.m_textures[index];
+                String textureName = m_currentModel.m_model.m_textures[index].textureName;
                 Texture2D texture;
                 if (!m_textureDictionary.ContainsKey(textureName))
                 {
@@ -679,10 +679,13 @@ namespace XNAViewer
         public WrappedModel(GCModel model, GraphicsDevice graphicsDevice, Effect effect)
         {
             m_model = model;
+            int counter = 0;
             foreach (DisplayListHeader header in model.m_displayListHeaders)
             {
+
                 WrappedDisplayListHeader wrappedHeader = new WrappedDisplayListHeader(header, graphicsDevice, effect);
                 m_wrappedHeaderList.Add(wrappedHeader);
+                counter++;
             }
         }
 
@@ -766,8 +769,8 @@ namespace XNAViewer
             foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
-                m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
+                m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
+                //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
             }
         }
 

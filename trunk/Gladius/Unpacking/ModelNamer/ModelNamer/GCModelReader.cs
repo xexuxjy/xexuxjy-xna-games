@@ -499,10 +499,6 @@ namespace ModelNamer
 
                 for (int i = 0; i < m_dsliInfos.Count; ++i)
                 {
-                    if (i == 8)
-                    {
-                        int ibreak = 0;
-                    }
                     binReader.BaseStream.Position = startPos + m_dsliInfos[i].startPos;
                     DisplayListHeader.FromStream(m_displayListHeaders[i], binReader, m_dsliInfos[i]);
 
@@ -531,9 +527,28 @@ namespace ModelNamer
                 int numElements = binReader.ReadInt32();
                 for (int i = 0; i < numElements; ++i)
                 {
-                    m_skinBlocks.Add(SkinBlock.ReadBlock(binReader));
+                    SkinBlock skinBlock = SkinBlock.ReadBlock(binReader);
+                    m_displayListHeaders[i].skinBlock = skinBlock;
+                    m_skinBlocks.Add(skinBlock);
                 }
             }
+        }
+
+        public void ReadTextureSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.txtrTag))
+            {
+                int blocksize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int numElements = binReader.ReadInt32();
+                for (int i = 0; i < numElements; ++i)
+                {
+                    TextureData textureData = TextureData.FromStream(binReader);
+
+                    m_textures.Add(textureData);
+                }
+            }
+
         }
 
 
@@ -655,7 +670,7 @@ namespace ModelNamer
         //public List<Vector3> m_points = new List<Vector3>();
         //public List<Vector3> m_normals = new List<Vector3>();
         public List<Vector2> m_uvs = new List<Vector2>();
-        public List<String> m_textures = new List<String>();
+        public List<TextureData> m_textures = new List<TextureData>();
         public List<String> m_names = new List<String>();
         public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
         public List<Vector3> m_centers = new List<Vector3>();
@@ -707,15 +722,20 @@ namespace ModelNamer
                 model.LoadModelTags(binReader);
                 binReader.BaseStream.Position = 0;
 
-                Common.ReadTextureNames(binReader, Common.txtrTag, model.m_textures);
+                //Common.ReadTextureNames(binReader, Common.txtrTag, model.m_textures);
+
+                // check here as we need skinned info on building display lists.
+                if (Common.FindCharsInStream(binReader, Common.skinTag))
+                {
+                    model.m_skinned = true;
+                }
+
 
                 // Look for skeleton and skin if they exist. need to load names first.
                 binReader.BaseStream.Position = 0;
                 Common.ReadNullSeparatedNames(binReader, Common.nameTag, model.m_names);
                 binReader.BaseStream.Position = 0;
                 model.ReadSKELSection(binReader);
-                binReader.BaseStream.Position = 0;
-                model.ReadSkinSection(binReader);
                 binReader.BaseStream.Position = 0;
                 model.ReadSHDRSection(binReader);
                 binReader.BaseStream.Position = 0;
@@ -726,8 +746,13 @@ namespace ModelNamer
                 model.ReadDSLSSection(binReader);
                 binReader.BaseStream.Position = 0;
                 model.ReadMESHSection(binReader);
-
                 binReader.BaseStream.Position = 0;
+                model.ReadSkinSection(binReader);
+                binReader.BaseStream.Position = 0;
+                model.ReadTextureSection(binReader);
+                binReader.BaseStream.Position = 0;
+
+
 
                 if (Common.FindCharsInStream(binReader, Common.cntrTag, true))
                 {
@@ -925,7 +950,7 @@ namespace ModelNamer
 
                             Common.ReadNullSeparatedNames(binReader, Common.selsTag, model.m_selsInfo);
                             Common.ReadNullSeparatedNames(binReader, Common.nameTag, model.m_names);
-                            Common.ReadTextureNames(binReader, Common.txtrTag, model.m_textures);
+                            //Common.ReadTextureNames(binReader, Common.txtrTag, model.m_textures);
 
                             StringBuilder sb = new StringBuilder();
                             sb.AppendLine("DSLI : ");
@@ -948,9 +973,9 @@ namespace ModelNamer
                             }
 
                             sb.AppendLine("Textures : ");
-                            foreach (string textureName in model.m_textures)
+                            foreach (TextureData textureData in model.m_textures)
                             {
-                                sb.AppendLine("\t" + textureName);
+                                sb.AppendLine("\t" + textureData.textureName);
                             }
 
                             infoStream.WriteLine(sb.ToString());
@@ -1236,6 +1261,12 @@ namespace ModelNamer
                 short pad1 = reader.ReadInt16();
                 header.primitiveFlags = reader.ReadByte();
                 header.indexCount = Common.ToInt16BigEndian(reader);
+                if (header.indexCount == 0)
+                {
+                    int ibreak = 0;
+                }
+
+
                 header.averageSize = header.indexCount != 0 ? (((float)header.blockData.Length - headerSize) / (float)header.indexCount) : 0.0f;
                 header.averageSizeInt = (int)header.averageSize;
 
@@ -1287,6 +1318,10 @@ namespace ModelNamer
                 if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x00)
                 {
                     header.indexCount = Common.ToInt16BigEndian(reader);
+                    if (header.indexCount == 0)
+                    {
+                        int ibreak = 0;
+                    }
 
                     success = true;
                     for (int i = 0; i < header.indexCount; ++i)
@@ -1460,6 +1495,52 @@ namespace ModelNamer
 
             return entry;
         }
+    }
+
+
+    public class TextureData
+    {
+        public string textureName;
+        public int minusOne;
+        public int unknown;
+        public int width;
+        public int height;
+        public int three;
+        public int zero;
+
+
+        public static TextureData FromStream(BinaryReader binReader)
+        {
+            TextureData textureData = new TextureData();
+            StringBuilder sb = new StringBuilder();
+            int count = 0;
+            char b;
+            int textureNameLength = 0x80;
+            for(int i=0;i<textureNameLength;++i)
+            {
+                b = (char)binReader.ReadByte();
+                if(b != 0x00)
+                {
+                    sb.Append(b);
+                }
+            }
+
+            String textureName = sb.ToString();
+            textureData.textureName = textureName;
+            textureData.minusOne = binReader.ReadInt32();
+            textureData.unknown = binReader.ReadInt32();
+            textureData.width = binReader.ReadInt32();
+            textureData.height = binReader.ReadInt32();
+            textureData.three = binReader.ReadInt32();
+            textureData.zero = binReader.ReadInt32();
+
+            Debug.Assert(textureData.three == 3);
+            Debug.Assert(textureData.zero == 0);
+
+            return textureData;
+        }
+
+
     }
 
 }
