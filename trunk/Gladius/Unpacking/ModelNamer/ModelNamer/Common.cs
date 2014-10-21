@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace ModelNamer
 {
@@ -582,7 +583,5 @@ namespace ModelNamer
         public int length;
         public byte[] data;
     }
-
-
 
 }
