@@ -67,13 +67,37 @@ http://forum.xentax.com/viewtopic.php?f=10&t=1678
             }
         }
 
+        public static void ExtractBecDataOld(String inputFile, String outputDirectory)
+        {
+            List<BecFile> becFiles = new List<BecFile>();
+            using (BinaryReader binReader = new BinaryReader(new FileStream(inputFile, FileMode.Open)))
+            {
+                byte[] header = binReader.ReadBytes(4);
+                //byte[] version = binReader.ReadBytes(2);
+                //short paddingMultuple = binReader.ReadInt16();
+                int numFiles = binReader.ReadInt32();
+                //int skip = binReader.ReadInt32();
+                for (int i = 0; i < numFiles; ++i)
+                {
+                    becFiles.Add(BecFile.FromStreamOld(binReader));
+                }
+                List<BecFile> sortedList = becFiles.OrderBy(o => o.offSet).ToList();
+                for (int i = 0; i < sortedList.Count(); ++i)
+                {
+                    String outputFile = outputDirectory + "\\File" + i;
+                    sortedList[i].SaveDataToFile(binReader, outputDirectory, outputFile);
+                }
+                int ibreak = 0;
+            }
+        }
 
 
         static void Main()
         {
             //ExtractBecData(@"D:\xbox-games\gladius\gladius.bec", @"D:\xbox-games\gladius\bec-extract");
             //ExtractBecData(@"E:\LucasArts Gladius [GLSE64]\root\gladius.bec", @"D:\gladius-extract-all-systems\gcn");
-            ExtractBecData(@"C:\tmp\ps2\gladius_ps2_NTSC\DATA.BEC", @"D:\gladius-extract-all-systems\ps2");
+            //ExtractBecData(@"C:\tmp\ps2\gladius_ps2_NTSC\DATA.BEC", @"D:\gladius-extract-all-systems\ps2");
+            ExtractBecDataOld(@"E:\Downloads\LucasArts_Xbox_Experience\LucasArts Xbox Experience\Demos\GladiusDemo\gladius.bec", @"D:\gladius-extract-all-systems\xbox-demo");
         }
     }
 
@@ -92,6 +116,23 @@ http://forum.xentax.com/viewtopic.php?f=10&t=1678
             becFile.offSet = reader.ReadInt32();
             becFile.unknown = reader.ReadInt32();
             becFile.length = reader.ReadInt32();
+            return becFile;
+        }
+
+
+        public static BecFile FromStreamOld(BinaryReader reader)
+        {
+            BecFile becFile = new BecFile();
+            becFile.unknown = reader.ReadInt32();
+            becFile.offSet = reader.ReadInt32();
+            becFile.hashCode = reader.ReadInt32();
+            becFile.length = reader.ReadInt32();
+
+            if (becFile.length <= 0 || becFile.offSet <= 0)
+            {
+                int ibreak = 0;
+            }
+
             return becFile;
         }
 
