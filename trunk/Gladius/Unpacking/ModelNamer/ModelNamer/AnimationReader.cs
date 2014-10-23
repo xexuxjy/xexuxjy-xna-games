@@ -14,11 +14,11 @@ namespace ModelNamer
         public static char[] hedrTag = new char[] { 'H', 'E', 'D', 'R' };   // start of anim
         public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };   // version label
         public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };   // copyright label.
-        public static char[] blnmTag = new char[] { 'B', 'L', 'N', 'M' }; // Animation Event Names. Same values are used for every animation in a given model. Similar(same) event names across similar models
+        public static char[] blnmTag = new char[] { 'B', 'L', 'N', 'M' }; // Animation Event Names. Same values are used for every animation in a given model. Similar(same) event names across similar models. null separated. no other info
         public static char[] maskTag = new char[] { 'M', 'A', 'S', 'K' };   // different number of values to other blocks. single byte. 0xc0,0x80,0x40 0x01,0x02,0x0,. non zero value in nearly all cases.
-        public static char[] bltkTag = new char[] { 'B', 'L', 'T', 'K' };   // minimal data - all 28 bytes, mainly header info, with single changing value at 0x14
-        public static char[] bktmTag = new char[] { 'B', 'K', 'T', 'M' };   // Timestamp events. 33ms gaps.
-        public static char[] boolTag = new char[] { 'B', 'O', 'O', 'L' };   // num entries match timestamp events. mainly zero. likely to indicate updates on a particular step (not animation events though as there are too many non-zero values for that to make sense)
+        public static char[] bltkTag = new char[] { 'B', 'L', 'T', 'K' };   // minimal data - all 28 bytes, mainly header info, with 1 (2) bytes changing value at 0x14
+        public static char[] bktmTag = new char[] { 'B', 'K', 'T', 'M' };   // Timestamp events. 33ms gaps. number of events matches BKTM
+        public static char[] boolTag = new char[] { 'B', 'O', 'O', 'L' };   // num entries match timestamp events. each entry is 4 bytes. mainly zero. some anims have zero in all values.
         public static char[] dcrtTag = new char[] { 'D', 'C', 'R', 'T' }; // blocks are at 8 bytes (75 * 8 = 600) , not really much info in them.
         public static char[] dcrdTag = new char[] { 'D', 'C', 'R', 'D' };
         public static char[] dcptTag = new char[] { 'D', 'C', 'P', 'T' };// 8 byte blocks. 3 bytes , then a common char (0x80,0xba) then 1 byte, and 3 zero bytes?
