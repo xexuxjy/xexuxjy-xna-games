@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -20,6 +21,7 @@ namespace ModelNamer
 
         static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };
         static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
+        static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
 
         // NAME and SKEL always exist together
         // STYP can appear with them or without them, or not at all.
@@ -28,7 +30,7 @@ namespace ModelNamer
 
         //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
 
-        static char[][] allTags = { versTag, cprtTag, selsTag, txtrTag,stypTag,nameTag,skelTag,xrndTag};
+        static char[][] allTags = { versTag, cprtTag, selsTag, txtrTag, stypTag, nameTag, skelTag, xrndTag };
 
 
         public void LoadModels(String sourceDirectory, String infoFile, int maxFiles = -1)
@@ -50,7 +52,7 @@ namespace ModelNamer
                             {
                                 // 410, 1939
 
-                                continue;
+                                //continue;
                             }
 
 
@@ -60,12 +62,83 @@ namespace ModelNamer
                             m_models.Add(model);
                             if (Common.FindCharsInStream(binReader, versTag))
                             {
-                                int dslsSectionLength = binReader.ReadInt32();
+                                int sectionLength = binReader.ReadInt32();
                                 int uk2a = binReader.ReadInt32();
-                                int uk2b = binReader.ReadInt32();
-
+                                int numEntries = binReader.ReadInt32();
+                            }
+                            if (Common.FindCharsInStream(binReader, selsTag))
+                            {
+                                int sectionLength = binReader.ReadInt32();
+                                int uk2a = binReader.ReadInt32();
+                                int numEntries = binReader.ReadInt32();
+                            }
+                            if (Common.FindCharsInStream(binReader, txtrTag))
+                            {
 
                             }
+                            binReader.BaseStream.Position = 0;
+
+                            if (Common.FindCharsInStream(binReader, xrndTag))
+                            {
+                                int sectionLength = binReader.ReadInt32();
+                                int uk2a = binReader.ReadInt32();
+                                int numEntries = binReader.ReadInt32();
+                                int uk2b = binReader.ReadInt32();
+                                int uk2c = binReader.ReadInt32();
+                                //int uk2d = binReader.ReadInt32();
+                                byte[] doegStart = binReader.ReadBytes(4);
+                                if(doegStart[0] == 'd' && doegStart[3] == 'g')
+                                {
+                                    Debug.Assert(doegStart[0] == 'd' && doegStart[3] == 'g');
+                                    int doegLength = binReader.ReadInt32();
+                                    byte[] stuff = binReader.ReadBytes(doegLength - 8);
+                                    byte[] doegEnd = binReader.ReadBytes(4);
+                                    Debug.Assert(doegEnd[0] == 'd' && doegEnd[3] == 'g');
+                                    binReader.BaseStream.Position += 0xB4;
+                                    int numVertices = binReader.ReadInt32();
+                                    int numIndices = binReader.ReadInt32();
+
+                                    // block of 0x214 to next section?
+                                    //binReader.BaseStream.Position += 0x214;
+                                    List<String> textureNames = new List<string>();
+                                    Common.ReadNullSeparatedNames(binReader, textureNames);
+                                    long currentPosition = binReader.BaseStream.Position;
+                                    Debug.Assert(Common.FindCharsInStream(binReader, endTag));
+                                    long endPosition = binReader.BaseStream.Position;
+
+                                    long remainder = endPosition - 4 - currentPosition;
+                                    long sum = (numIndices*2) + (numVertices*(4*3));
+                                    long diff = remainder - sum;
+
+                                    infoStream.WriteLine(String.Format("[{0}]  I[{1}] V[{2}] R[{3}] S[{4}] D[{5}]",
+                                        sourceFile.FullName, numIndices,
+                                        numVertices, remainder,sum, diff));
+
+                                    // then follows an int16 index buffer? not sure how many entries.
+                                    //List<ushort> indices = new List<ushort>();
+
+                                    //for (int i = 0; i < numIndices; ++i)
+                                    //{
+                                    //    indices.Add(binReader.ReadUInt16());
+                                    //}
+
+                                    //List<Vector3> vertices = new List<Vector3>();
+
+                                    //for (int i = 0; i < numVertices; ++i)
+                                    //{
+                                    //    Vector3 v = Common.FromStreamVector3BE(binReader);
+                                    //    vertices.Add(v);
+                                    //}
+                                }
+                            else
+                                {
+                                    infoStream.WriteLine("Doeg not at expected - multi file? : " + sourceFile.FullName);
+                                }
+
+                            }
+
+
+
                         }
                     }
                     catch (Exception e)
@@ -80,6 +153,24 @@ namespace ModelNamer
                 }
             }
         }
+
+        public void ReadTextureSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.txtrTag))
+            {
+                int blocksize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int numElements = binReader.ReadInt32();
+                for (int i = 0; i < numElements; ++i)
+                {
+                    TextureData textureData = TextureData.FromStream(binReader);
+
+                    //m_textures.Add(textureData);
+                }
+            }
+
+        }
+
 
         public void DumpSectionLengths(String sourceDirectory, String infoFile)
         {
@@ -146,11 +237,11 @@ namespace ModelNamer
         {
             String modelPath = @"C:\tmp\unpacking\xbox-ModelFiles\VERSModelFiles\doegfiles";
             String infoFile = @"c:\tmp\unpacking\xbox-ModelFiles\model-reader-results.txt";
-            String sectionInfoFile = @"C:\tmp\unpacking\xbox-ModelFiles\model-reader-sectionInfo.txt";
+            String sectionInfoFile = @"C:\tmp\unpacking\xbox-ModelFiles\index-normal-data.txt";
             XboxModelReader reader = new XboxModelReader();
-            //reader.LoadModels(modelPath,infoFile);
+            reader.LoadModels(modelPath, infoFile);
             //reader.DumpPoints(infoFile);
-            reader.DumpSectionLengths(modelPath, sectionInfoFile);
+            //reader.DumpSectionLengths(modelPath, sectionInfoFile);
 
 
 
@@ -177,6 +268,8 @@ namespace ModelNamer
         public List<Vector2> m_uvs = new List<Vector2>();
 
         public List<String> m_textures = new List<string>();
+
+
 
         // doeg tag always 7C (124) , encloes start and end doeg values , 2 per file , has FFFF following
 

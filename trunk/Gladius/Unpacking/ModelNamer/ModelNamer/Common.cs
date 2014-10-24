@@ -420,6 +420,30 @@ namespace ModelNamer
             }
         }
 
+        public static void ReadNullSeparatedNames(BinaryReader binReader, List<String> selsNames)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            byte b;
+            byte lb = 0xFF;
+            int count = 0;
+            while ((b = binReader.ReadByte()) != 0x00 && lb != 0x00)
+            {
+                if (b != 0x00)
+                {
+                    sb.Append((char) b);
+                }
+                else if (sb.Length > 0)
+                {
+                    selsNames.Add(sb.ToString());
+                    sb.Clear();
+                }
+                lb = b;
+            }
+        }
+
+
+
         public static void ReadNullSeparatedNames(BinaryReader binReader, long position, int numAnims,List<String> selsNames)
         {
             binReader.BaseStream.Position = position;
