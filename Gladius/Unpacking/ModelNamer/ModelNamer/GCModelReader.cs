@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.IO;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
@@ -90,7 +91,7 @@ namespace ModelNamer
                     outStream.WriteLine(String.Format("DSLC[{0:X2}]", headerBlock.dslcEntry));
 
                     outStream.WriteLine(String.Format("DSLI[{0}][{1}][{2:0.0}][{3}]", headerBlock.dsliInfo.startPos, headerBlock.dsliInfo.length, headerBlock.averageSize, headerBlock.adjustedSizeInt));
-                    outStream.WriteLine(String.Format("P[{0}]N[{1}]U[{2}] MP[{3}]MN[{4}]MU[{5}]", headerBlock.maxVertex, headerBlock.maxNormal, headerBlock.maxUV, headerBlock.Points.Count, headerBlock.Normals.Count, m_uvs.Count));
+                    outStream.WriteLine(String.Format("P[{0}]N[{1}]U[{2}] MP[{3}]MN[{4}]MU[{5}]I[{6}", headerBlock.maxVertex, headerBlock.maxNormal, headerBlock.maxUV, headerBlock.Points.Count, headerBlock.Normals.Count, m_uvs.Count,headerBlock.entries.Count()/3));
 
                     int headerSize = 6;
                     outStream.WriteLine(Common.ByteArrayToStringSub(headerBlock.blockData, 0, headerSize));
@@ -925,67 +926,40 @@ namespace ModelNamer
 
                         FileInfo sourceFile = new FileInfo(file);
 
-                        if (sourceFile.Name != "File 005496")
+
+                        GCModel model = LoadSingleModel(file);
+                        StringBuilder sb = new StringBuilder();
+                        infoStream.WriteLine("File : " + model.m_name);
+                        foreach (DisplayListHeader headerBlock in model.m_displayListHeaders)
                         {
-                            //continue;
+                            sb.AppendLine(String.Format("P[{0}]N[{1}]U[{2}] MP[{3}]MN[{4}]MU[{5}]I[{6}]",
+                                headerBlock.maxVertex, headerBlock.maxNormal, headerBlock.maxUV,
+                                headerBlock.Points.Count, headerBlock.Normals.Count, model.m_uvs.Count,headerBlock.entries.Count()/3));
                         }
 
-
-                        using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
+                        sb.AppendLine("SELS : ");
+                        foreach (string selName in model.m_selsInfo)
                         {
-                            GCModel model = new GCModel(sourceFile.Name);
-                            m_models.Add(model);
-                            infoStream.WriteLine("File : " + model.m_name);
-
-
-                            model.LoadModelTags(binReader);
-
-                            binReader.BaseStream.Position = 0;
-                            model.ReadDSLISection(binReader);
-
-                            binReader.BaseStream.Position = 0;
-                            model.ReadDSLSSection(binReader);
-
-                            binReader.BaseStream.Position = 0;
-
-                            Common.ReadNullSeparatedNames(binReader, Common.selsTag, model.m_selsInfo);
-                            Common.ReadNullSeparatedNames(binReader, Common.nameTag, model.m_names);
-                            //Common.ReadTextureNames(binReader, Common.txtrTag, model.m_textures);
-
-                            StringBuilder sb = new StringBuilder();
-                            sb.AppendLine("DSLI : ");
-                            foreach (DSLIInfo dsliInfo in model.m_dsliInfos)
-                            {
-                                sb.AppendLine(String.Format("\t {0} {1}", dsliInfo.startPos, dsliInfo.length));
-                            }
-
-
-                            sb.AppendLine("SELS : ");
-                            foreach (string selName in model.m_selsInfo)
-                            {
-                                sb.AppendLine("\t" + selName);
-                            }
-
-                            sb.AppendLine("NAME : ");
-                            foreach (string name in model.m_names)
-                            {
-                                sb.AppendLine("\t" + name);
-                            }
-
-                            sb.AppendLine("Textures : ");
-                            foreach (TextureData textureData in model.m_textures)
-                            {
-                                sb.AppendLine("\t" + textureData.textureName);
-                            }
-
-                            infoStream.WriteLine(sb.ToString());
-
-
-
+                            sb.AppendLine("\t" + selName);
                         }
+
+                        sb.AppendLine("NAME : ");
+                        foreach (string name in model.m_names)
+                        {
+                            sb.AppendLine("\t" + name);
+                        }
+
+                        sb.AppendLine("Textures : ");
+                        foreach (TextureData textureData in model.m_textures)
+                        {
+                            sb.AppendLine("\t" + textureData.textureName);
+                        }
+
+                        infoStream.WriteLine(sb.ToString());
                     }
                     catch (Exception e)
                     {
+                        
                     }
                 }
             }
@@ -1014,12 +988,12 @@ namespace ModelNamer
             String objOutputPath = @"D:\gladius-extracted-archive\gc-compressed\test-models\obj-models\";
             //String tagOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\tag-output";
 
-            modelPath = @"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models";
+            modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
             infoFile = @"D:\gladius-extracted-archive\gc-compressed\test-models\probable-models-renamed-info.txt";
 
             String tagOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\tag-output";
 
-            //sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\probable-models-renamed-sectionInfo.txt";
+            string sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed\sectionInfo.txt";
 
             GCModelReader reader = new GCModelReader();
             //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
@@ -1040,7 +1014,7 @@ namespace ModelNamer
             //}
             //reader.LoadModels(modelPath,infoFile);
             //reader.DumpPoints(infoFile);
-            //reader.DumpSectionLengths(modelPath, sectionInfoFile);
+            reader.DumpSectionLengths(modelPath, sectionInfoFile);
 
             modelPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed";
             //String outputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-dsli-output";
@@ -1060,15 +1034,16 @@ namespace ModelNamer
             //}
 
 
-            reader.LoadModels(modelPath, infoFile);
-            //reader.m_models.Add(reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\bear.mdl"));
-            foreach (GCModel model in reader.m_models)
-            {
-                model.DumpSkinBlocks(outputPath);
-                model.DumpSections(outputPath);
-                model.DumpDisplayBlocks(outputPath);
+            //reader.LoadModels(modelPath, infoFile);
+            ////reader.m_models.Add(reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\bear.mdl"));
+            //foreach (GCModel model in reader.m_models)
+            //{
+            //    model.DumpSections(tagOutputPath);
+            //    //model.DumpSkinBlocks(outputPath);
+            //    //model.DumpSections(outputPath);
+            //    //model.DumpDisplayBlocks(outputPath);
 
-            }
+            //}
         }
 
 
@@ -1534,8 +1509,8 @@ namespace ModelNamer
             textureData.three = binReader.ReadInt32();
             textureData.zero = binReader.ReadInt32();
 
-            Debug.Assert(textureData.three == 3);
-            Debug.Assert(textureData.zero == 0);
+            //Debug.Assert(textureData.three == 3);
+            //Debug.Assert(textureData.zero == 0);
 
             return textureData;
         }

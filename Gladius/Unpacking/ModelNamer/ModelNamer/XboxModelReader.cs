@@ -94,25 +94,27 @@ namespace ModelNamer
                                     byte[] stuff = binReader.ReadBytes(doegLength - 8);
                                     byte[] doegEnd = binReader.ReadBytes(4);
                                     Debug.Assert(doegEnd[0] == 'd' && doegEnd[3] == 'g');
-                                    binReader.BaseStream.Position += 0xB4;
-                                    int numVertices = binReader.ReadInt32();
-                                    int numIndices = binReader.ReadInt32();
+                                    binReader.BaseStream.Position += 0xB0;
+                                    //int numVertices = binReader.ReadInt32();
+                                    short numIndices = binReader.ReadInt16();
 
                                     // block of 0x214 to next section?
                                     //binReader.BaseStream.Position += 0x214;
-                                    List<String> textureNames = new List<string>();
-                                    Common.ReadNullSeparatedNames(binReader, textureNames);
-                                    long currentPosition = binReader.BaseStream.Position;
-                                    Debug.Assert(Common.FindCharsInStream(binReader, endTag));
-                                    long endPosition = binReader.BaseStream.Position;
+                                    //List<String> textureNames = new List<string>();
+                                    //Common.ReadNullSeparatedNames(binReader, textureNames);
+                                    //long currentPosition = binReader.BaseStream.Position;
+                                    //Debug.Assert(Common.FindCharsInStream(binReader, endTag));
+                                    //long endPosition = binReader.BaseStream.Position;
 
-                                    long remainder = endPosition - 4 - currentPosition;
-                                    long sum = (numIndices*2) + (numVertices*(4*3));
-                                    long diff = remainder - sum;
+                                    //long remainder = endPosition - 4 - currentPosition;
+                                    //long sum = (numIndices*2) + (numVertices*(4*3));
+                                    //long diff = remainder - sum;
 
-                                    infoStream.WriteLine(String.Format("[{0}]  I[{1}] V[{2}] R[{3}] S[{4}] D[{5}]",
-                                        sourceFile.FullName, numIndices,
-                                        numVertices, remainder,sum, diff));
+                                    //infoStream.WriteLine(String.Format("[{0}]  I[{1}] V[{2}] R[{3}] S[{4}] D[{5}]",
+                                    //    sourceFile.FullName, numIndices,
+                                    //    numVertices, remainder,sum, diff));
+
+                                    infoStream.WriteLine(String.Format("[{0}]  I[{1}]",sourceFile.FullName, numIndices));
 
                                     // then follows an int16 index buffer? not sure how many entries.
                                     //List<ushort> indices = new List<ushort>();
@@ -235,7 +237,7 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String modelPath = @"C:\tmp\unpacking\xbox-ModelFiles\VERSModelFiles\doegfiles";
+            String modelPath = @"C:\tmp\unpacking\xbox-ModelFiles\RenamedModelFiles";
             String infoFile = @"c:\tmp\unpacking\xbox-ModelFiles\model-reader-results.txt";
             String sectionInfoFile = @"C:\tmp\unpacking\xbox-ModelFiles\index-normal-data.txt";
             XboxModelReader reader = new XboxModelReader();

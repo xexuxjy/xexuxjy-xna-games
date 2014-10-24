@@ -29,12 +29,12 @@ namespace ModelNamer
 
         public void DoComparison()
         {
-            string ps2ModelPath = @"D:\gladius-extracted\ps2-decompressed\VERSModelFilesRenamed";
-            string gcModelPath = @"D:\gladius-extracted-archive\gc-compressed\AllModels";
-            string gcModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed";
-            string gcLeftOverModelOutputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsLeftover";
+            string ps2ModelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
+            string gcModelPath = @"C:\tmp\unpacking\xbox-ModelFiles\VERSModelFiles\doegfiles";
+            string gcModelOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\RenamedModelFiles";
+            string gcLeftOverModelOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\leftover-models";
 
-            string infoFile = @"D:\gladius-extracted-archive\gc-compressed\model-rename-info";
+            string infoFile = @"C:\tmp\unpacking\xbox-ModelFiles\Rename-info.txt";
 
             ReadTexture(ps2ModelPath, infoFile, m_ps2List);
             ReadTexture(gcModelPath,infoFile,m_gcList);
@@ -73,8 +73,8 @@ namespace ModelNamer
                             FileInfo outFile = new FileInfo(gcModelOutputPath + "\\" + ps2mt.modelName);
 
                             infoStream.WriteLine("Renaming "+inFile.FullName+" to "+outFile.FullName);
-                            //File.Copy(inFile.FullName,outFile.FullName,true);
-                            File.Move(inFile.FullName, outFile.FullName);
+                            File.Copy(inFile.FullName,outFile.FullName,true);
+                            //File.Move(inFile.FullName, outFile.FullName);
                             //foreach (MTPair pair in ps2mt.m_pairResults)
                             //{
 
