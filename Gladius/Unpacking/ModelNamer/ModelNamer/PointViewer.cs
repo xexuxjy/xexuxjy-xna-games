@@ -473,12 +473,12 @@ void main(void)
 
                 if (m_currentModel.m_model.m_skinned)
                 {
-                    if (header.m_header.meshId != 4)
+                    if (header.m_header.MeshId != 4)
                     {
                         //continue;
                     }
 
-                    if (header.m_header.lodlevel != 0x01)
+                    if (header.m_header.LodLevel != 0x01)
                     {
                         continue;
                     }
@@ -486,7 +486,7 @@ void main(void)
 
 
 
-                ShaderData sd = m_currentModel.m_model.m_shaderData[header.m_header.meshId];
+                ShaderData sd = m_currentModel.m_model.m_shaderData[header.m_header.MeshId];
 
                 //SetTexture(sd.textureId1,TextureUnit.Texture0,"MyTexture0");
 
@@ -586,10 +586,10 @@ void main(void)
         {
             if (!displayAll)
             {
-                if (m_currentModel.m_model.m_displayListHeaders.Count > 1)
+                if (m_currentModel.m_model.m_modelMeshes.Count > 1)
                 {
                     m_currentModelSubIndex++;
-                    m_currentModelSubIndex %= m_currentModel.m_model.m_displayListHeaders.Count;
+                    m_currentModelSubIndex %= m_currentModel.m_model.m_modelMeshes.Count;
                     ChangeSubModel();
                 }
             }
@@ -599,12 +599,12 @@ void main(void)
         {
             if (!displayAll)
             {
-                if (m_currentModel.m_model.m_displayListHeaders.Count > 1)
+                if (m_currentModel.m_model.m_modelMeshes.Count > 1)
                 {
                     m_currentModelSubIndex--;
                     if (m_currentModelSubIndex < 0)
                     {
-                        m_currentModelSubIndex += m_currentModel.m_model.m_displayListHeaders.Count;
+                        m_currentModelSubIndex += m_currentModel.m_model.m_modelMeshes.Count;
                         ChangeSubModel();
                     }
                 }
@@ -614,7 +614,7 @@ void main(void)
 
         public void ChangeSubModel()
         {
-            DisplayListHeader header = m_currentModel.m_model.m_displayListHeaders[m_currentModelSubIndex];
+            ModelSubMesh header = m_currentModel.m_model.m_modelMeshes[m_currentModelSubIndex];
             Lookat(header.MinBB, header.MaxBB);
         }
 
@@ -623,7 +623,7 @@ void main(void)
         public bool ChangeModel()
         {
             bool valid;
-            GCModel model = null;
+            BaseModel model = null;
             WrappedModel wrappedModel = null;
             if (!m_modelMap.ContainsKey(m_fileNames[m_currentModelIndex]))
             {
@@ -696,14 +696,18 @@ void main(void)
 
         public String BuildDebugString()
         {
-            GCModel currentModel = m_currentModel.m_model;
+            BaseModel currentModel = m_currentModel.m_model;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
             sb.AppendLine("Bones : " + currentModel.m_bones.Count);
             sb.AppendLine("MaxVertex : " + currentModel.m_maxVertex);
-
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
-            sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, currentModel.m_displayListHeaders.Count, currentModel.m_displayListHeaders[m_currentModelSubIndex].indexCount, currentModel.m_displayListHeaders[m_currentModelSubIndex].Valid));
+
+            if (currentModel is GCModel)
+            {
+                GCModel gcModel = currentModel as GCModel;
+                sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, gcModel.m_modelMeshes.Count, gcModel.m_modelMeshes[m_currentModelSubIndex].NumIndices, gcModel.m_modelMeshes[m_currentModelSubIndex].Valid));
+            }
             sb.AppendLine("Textures : ");
             int counter = 0;
             foreach (TextureData textureData in currentModel.m_textures)
@@ -843,13 +847,13 @@ void main(void)
 
     public class WrappedModel : IDisposable
     {
-        public GCModel m_model;
+        public BaseModel m_model;
         public List<WrappedDisplayListHeader> m_wrappedHeaderList = new List<WrappedDisplayListHeader>();
 
-        public WrappedModel(GCModel model)
+        public WrappedModel(BaseModel model)
         {
             m_model = model;
-            foreach (DisplayListHeader header in model.m_displayListHeaders)
+            foreach (ModelSubMesh header in model.m_modelMeshes)
             {
                 WrappedDisplayListHeader wrappedHeader = new WrappedDisplayListHeader(header);
                 m_wrappedHeaderList.Add(wrappedHeader);
@@ -868,7 +872,7 @@ void main(void)
 
     public class WrappedDisplayListHeader : IDisposable
     {
-        public DisplayListHeader m_header;
+        public ModelSubMesh m_header;
         //public int m_vbPosHandle;
         //public int m_vbNorHandle;
         //public int m_vbUVHandle;
@@ -876,7 +880,7 @@ void main(void)
         //public int m_vaoHandle;
 
 
-        public WrappedDisplayListHeader(DisplayListHeader header)
+        public WrappedDisplayListHeader(ModelSubMesh header)
         {
             m_header = header;
 

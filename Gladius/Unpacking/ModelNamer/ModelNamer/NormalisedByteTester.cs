@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Microsoft.Xna.Framework;
 
 namespace ModelNamer
 {
@@ -10,8 +11,8 @@ namespace ModelNamer
     {
         public void RunTest()
         {
-            String sourceFile = @"D:\gladius-extracted-archive\gc-compressed\test-models\tag-ouput\Bow.mdl\UV0 ";
-            String infoFile = @"D:\gladius-extracted-archive\gc-compressed\test-models\tag-ouput\Bow.mdl\info.txt";
+            String sourceFile = @"D:\gladius-extracted-archive\gc-compressed\Animations-output\barbarian\DCPD\reactloss.pan";
+            String infoFile = @"D:\gladius-extracted-archive\gc-compressed\byte-tester.txt";
 
             using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
             {
@@ -19,24 +20,29 @@ namespace ModelNamer
                 {
                     try
                     {
-                        binReader.BaseStream.Position = 0x10;
+                        binReader.BaseStream.Position = 0x0C;
+                        int numElements = binReader.ReadInt32();
+                        if (numElements % 6 != 0)
+                        {
+                            int ibreak = 0;
+                        }
                         ushort[] holder = new ushort[2];
                         float[] fholder = new float[2];
                         //int stride = 9 - 3;
                         int stride = 0;
-                        while (true)
+                        for(int i=0;i<numElements;++i)
                         {
-                            for (int i = 0; i < holder.Length; ++i)
-                            {
-                                fholder[i] = Common.ToFloatUInt16(binReader);
-                                //holder[i] = Common.ToInt16BigEndian(binReader);
-                                //holder[i] = binReader.ReadUInt16();
-                                //fholder[i] = (holder[i] / (127.5f)) + 1.0f;
-                                //fholder[i] = (holder[i] / (float)(UInt16.MaxValue));
-                            }
+                            //Vector3 v = new Vector3();
+                            //v = Common.FromStreamVector3BE(binReader);
+                            //v.X = Common.FromStream2ByteToFloatR(binReader);
+                            //v.Y = Common.FromStream2ByteToFloatR(binReader);
+                            //v.Z = Common.FromStream2ByteToFloatR(binReader);
 
-                            infoStream.WriteLine(String.Format("[{0},{1}]]",fholder[0],fholder[1]));
-                            binReader.BaseStream.Position += stride;
+                            //v.X = Common.ByteToFloat(binReader.ReadByte());
+                            //v.Y = Common.ByteToFloat(binReader.ReadByte());
+                            //v.Z = Common.ByteToFloat(binReader.ReadByte());
+                            //Common.WriteFloat(infoStream, v);
+
                         }
                     }
                     catch (System.Exception ex)
