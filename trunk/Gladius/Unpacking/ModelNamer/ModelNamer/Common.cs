@@ -36,12 +36,17 @@ namespace ModelNamer
         public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
         public static char[] pak1Tag = new char[] { 'P', 'A', 'K', '1' };
 
+        public static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };
+        public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
+        public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
+
 
         public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
                                       dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, 
                                       ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
                                       vflgTag,stypTag,nameTag };
 
+        public static char[][] xboxTags = { versTag, cprtTag, selsTag, txtrTag, xrndTag};
 
 
         public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
@@ -585,6 +590,281 @@ namespace ModelNamer
 
     }
 
+    public class BoneNode
+    {
+        public String name;
+        public Vector3 offset;
+        public Quaternion rotation;
+        public byte pad1;
+        public byte id;
+        public byte id2;
+        public byte parentId;
+
+        public Matrix rotationMatrix;
+        public Matrix combinedMatrix;
+        public Matrix finalMatrix;
+        public Matrix localMatrix;
+
+        public BoneNode parent;
+        public List<BoneNode> children = new List<BoneNode>();
+
+        public static BoneNode FromStream(BinaryReader binReader)
+        {
+            BoneNode node = new BoneNode();
+            node.offset = Common.FromStreamVector3(binReader);
+            node.rotation = Common.FromStreamQuaternion(binReader);
+            Debug.Assert(Common.FuzzyEquals(node.rotation.Length(), 1.0f, 0.0001f));
+
+            node.pad1 = binReader.ReadByte();
+            node.id = binReader.ReadByte();
+            node.id2 = binReader.ReadByte();
+            node.parentId = binReader.ReadByte();
+
+            node.rotationMatrix = Matrix.CreateFromQuaternion(node.rotation);
+            node.localMatrix = Matrix.CreateTranslation(node.offset) * node.rotationMatrix;
+
+            return node;
+        }
+    }
+
+    public class BaseModel
+    {
+        public BaseModel(string name)
+        {
+            m_name = name;
+        }
+
+        public virtual void LoadData(BinaryReader binReader){}
+        public virtual void BuildBB(){}
+        public virtual void Validate(){}
+
+        public void LoadModelTags(BinaryReader binReader,char[][] tagList)
+        {
+            foreach (char[] tag in tagList)
+            {
+                // reset for each so we don't worry about order
+                binReader.BaseStream.Position = 0;
+                if (Common.FindCharsInStream(binReader, tag, true))
+                {
+                    TagSizeAndData tsad = TagSizeAndData.Create(binReader);
+
+                    m_tagSizes[tag] = tsad;
+                }
+                else
+                {
+                    m_tagSizes[tag] = new TagSizeAndData(-1);
+                }
+            }
+        }
+
+        public void ReadTextureSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.txtrTag))
+            {
+                int blocksize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int numElements = binReader.ReadInt32();
+                for (int i = 0; i < numElements; ++i)
+                {
+                    TextureData textureData = TextureData.FromStream(binReader);
+
+                    m_textures.Add(textureData);
+                }
+            }
+
+        }
+
+
+        public void DumpSections(String fileOutputDir)
+        {
+            fileOutputDir += "-tag-output";
+            foreach (char[] tag in m_tagSizes.Keys)
+            {
+                try
+                {
+                    TagSizeAndData tsad = m_tagSizes[tag];
+                    if (tsad.length > 0)
+                    {
+
+                        String tagOutputDirname = fileOutputDir + "/" + m_name + "/";
+                        try
+                        {
+                            Directory.CreateDirectory(tagOutputDirname);
+                        }
+                        catch (Exception e) { }
+
+                        String tagOutputFilename = tagOutputDirname + "/" + new String(tag);
+                        using (System.IO.BinaryWriter outStream = new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create)))
+                        {
+                            outStream.Write(tsad.data);
+                        }
+                    }
+                }
+                catch (Exception e)
+                { }
+            }
+        }
+
+
+
+
+        public void ConstructSkeleton()
+        {
+            Dictionary<int, BoneNode> dictionary = new Dictionary<int, BoneNode>();
+            foreach (BoneNode node in m_bones)
+            {
+                dictionary[node.id] = node;
+            }
+
+            foreach (BoneNode node in m_bones)
+            {
+                if (node.id != node.parentId)
+                {
+                    BoneNode parent = dictionary[node.parentId];
+                    parent.children.Add(node);
+                    node.parent = parent;
+                }
+            }
+
+
+            if (m_bones.Count > 0)
+            {
+
+                m_rootBone = m_bones[0];
+                CalcBindFinalMatrix(m_rootBone, Matrix.Identity);
+
+                if (!m_builtSkelBB)
+                {
+                    Vector3 min = new Vector3(float.MaxValue);
+                    Vector3 max = new Vector3(float.MinValue);
+
+
+                    foreach (BoneNode node in m_bones)
+                    {
+                        // build tranform from parent chain?
+                        Vector3 offset = node.finalMatrix.Translation;
+
+                        if (offset.X < min.X) min.X = offset.X;
+                        if (offset.Y < min.Y) min.Y = offset.Y;
+                        if (offset.Z < min.Z) min.Z = offset.Z;
+                        if (offset.X > max.X) max.X = offset.X;
+                        if (offset.Y > max.Y) max.Y = offset.Y;
+                        if (offset.Z > max.Z) max.Z = offset.Z;
+
+                    }
+
+                    MinBB = min;
+                    MaxBB = max;
+                    m_builtSkelBB = true;
+                }
+
+
+            }
+
+        }
+
+        void CalcBindFinalMatrix(BoneNode bone, Matrix parentMatrix)
+        {
+            bone.combinedMatrix = bone.localMatrix * parentMatrix;
+            //bone.finalMatrix = bone.offsetMatrix * bone.combinedMatrix;
+            bone.finalMatrix = bone.combinedMatrix;
+
+            foreach (BoneNode child in bone.children)
+            {
+                CalcBindFinalMatrix(child, bone.combinedMatrix);
+            }
+        }
+
+        public bool Valid
+        {
+            get { return true; }
+        }
+
+        
+        public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
+        public List<ModelSubMesh> m_modelMeshes = new List<ModelSubMesh>();
+        public String m_name;
+        public List<TextureData> m_textures = new List<TextureData>();
+        public List<String> m_names = new List<String>();
+        public List<Vector3> m_centers = new List<Vector3>();
+        public List<String> m_selsInfo = new List<string>();
+        public List<ShaderData> m_shaderData = new List<ShaderData>();
+        public List<Vector2> UVs = new List<Vector2>();
+
+
+        public Vector3 MinBB;
+        public Vector3 MaxBB;
+        public Vector3 Center;
+        public List<Matrix> m_matrices = new List<Matrix>();
+        public List<BoneNode> m_bones = new List<BoneNode>();
+        public BoneNode m_rootBone;
+        public bool m_builtBB = false;
+        public bool m_builtSkelBB = false;
+        public bool m_skinned = false;
+        public bool m_hasSkeleton = false;
+        public int m_maxVertex;
+        public int m_maxNormal;
+        public int m_maxUv;
+    }
+
+
+    public abstract class ModelSubMesh
+    {
+        public Vector3 MinBB;
+        public Vector3 MaxBB;
+        public abstract int NumIndices
+        { get; }
+        public abstract int NumVertices
+        { get; }
+
+        public int LodLevel
+        { get; set; }
+
+        public int MeshId
+        {
+            get;
+            set;
+        }
+        public int MaxNormal
+        {
+            get;
+            set;
+        }
+
+        public int MaxVertex
+        {
+            get;
+            set;
+        }
+
+        public int MaxUV
+        {
+            get;
+            set;
+        }
+
+        public bool Valid
+        {
+            get { return true; }
+        }
+
+        public List<Vector3> Vertices = new List<Vector3>();
+        public List<Vector3> Normals = new List<Vector3>();
+        public List<Vector2> UVs = new List<Vector2>();
+    }
+
+    public class BaseModelReader
+    {
+
+        public virtual BaseModel LoadSingleModel(String modelPath, bool readDisplayLists = true)
+        {
+            return null;
+        }
+
+
+
+    }
+
     
 
     public class TagSizeAndData
@@ -607,5 +887,60 @@ namespace ModelNamer
         public int length;
         public byte[] data;
     }
+
+
+    public class ShaderData
+    {
+        public String shaderName;
+        public String textureName;
+        public int emptyTag1;
+        public int unk1;
+        public int unk2;
+        public int unk3;
+        public byte textureId1;
+        public byte textureId2;
+        public byte[] unkba1;
+        public int unk4;
+        public int unk5;
+        public int unk6;
+        public int unk7;
+
+
+
+        public static ShaderData FromStream(BinaryReader binReader)
+        {
+            ShaderData shader = new ShaderData();
+            shader.emptyTag1 = binReader.ReadInt32();
+
+            byte[] name = binReader.ReadBytes(124);
+            StringBuilder sb = new StringBuilder();
+            char b;
+            for (int i = 0; i < name.Length; ++i)
+            {
+                b = (char)name[i];
+                if (b == 0x00)
+                {
+                    break;
+                }
+                sb.Append(b);
+            }
+            shader.shaderName = sb.ToString();
+
+            shader.unk1 = binReader.ReadInt32();
+            shader.unk2 = binReader.ReadInt32();
+            shader.unk3 = binReader.ReadInt32();
+            shader.textureId1 = binReader.ReadByte();
+            shader.textureId2 = binReader.ReadByte();
+            shader.unkba1 = binReader.ReadBytes(6);
+            shader.unk4 = binReader.ReadInt32();
+            shader.unk5 = binReader.ReadInt32();
+            shader.unk6 = binReader.ReadInt32();
+            shader.unk7 = binReader.ReadInt32();
+            return shader;
+        }
+
+    }
+
+
 
 }

@@ -29,12 +29,12 @@ namespace ModelNamer
 
         public void DoComparison()
         {
-            string ps2ModelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
-            string gcModelPath = @"C:\tmp\unpacking\xbox-ModelFiles\VERSModelFiles\doegfiles";
-            string gcModelOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\RenamedModelFiles";
+            string ps2ModelPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed - Copy";
+            string gcModelPath = @"D:\gladius-extracted-archive\xbox-decompressed\ModelFiles";
+            string gcModelOutputPath = @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed";
             string gcLeftOverModelOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\leftover-models";
 
-            string infoFile = @"C:\tmp\unpacking\xbox-ModelFiles\Rename-info.txt";
+            string infoFile = @"D:\gladius-extracted-archive\xbox-decompressed\Rename-info.txt";
 
             ReadTexture(ps2ModelPath, infoFile, m_ps2List);
             ReadTexture(gcModelPath,infoFile,m_gcList);
