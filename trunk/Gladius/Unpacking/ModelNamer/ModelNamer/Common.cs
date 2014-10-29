@@ -38,7 +38,8 @@ namespace ModelNamer
 
         public static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };
         public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
-        public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
+        //public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
+        public static char[] endTag = new char[] { (char)0x3F,'E', 'N', 'D'};
 
 
         public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
@@ -744,13 +745,8 @@ namespace ModelNamer
                         // build tranform from parent chain?
                         Vector3 offset = node.finalMatrix.Translation;
 
-                        if (offset.X < min.X) min.X = offset.X;
-                        if (offset.Y < min.Y) min.Y = offset.Y;
-                        if (offset.Z < min.Z) min.Z = offset.Z;
-                        if (offset.X > max.X) max.X = offset.X;
-                        if (offset.Y > max.Y) max.Y = offset.Y;
-                        if (offset.Z > max.Z) max.Z = offset.Z;
-
+                        min = Vector3.Min(min, offset);
+                        max = Vector3.Max(max, offset);
                     }
 
                     MinBB = min;
@@ -848,9 +844,31 @@ namespace ModelNamer
             get { return true; }
         }
 
-        public List<Vector3> Vertices = new List<Vector3>();
-        public List<Vector3> Normals = new List<Vector3>();
-        public List<Vector2> UVs = new List<Vector2>();
+        public abstract List<Vector3> Vertices
+        {
+            get;
+        }
+
+        public abstract List<Vector3> Normals
+        {
+            get;
+        }
+
+        public abstract List<Vector2> UVs
+        {
+            get;
+        }
+
+        public abstract List<ushort> Indices
+        {
+            get;
+        }
+
+
+        //public List<Vector3> Vertices = new List<Vector3>();
+        //public List<Vector3> Normals = new List<Vector3>();
+        //public List<Vector2> UVs = new List<Vector2>();
+        //public List<ushort> Indices = new List<ushort>();
     }
 
     public class BaseModelReader

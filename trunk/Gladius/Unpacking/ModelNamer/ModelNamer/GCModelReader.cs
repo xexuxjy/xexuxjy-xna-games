@@ -292,12 +292,8 @@ namespace ModelNamer
                 count++;
                 if (entry.PosIndex < points.Count)
                 {
-                    if (points[entry.PosIndex].X < min.X) min.X = points[entry.PosIndex].X;
-                    if (points[entry.PosIndex].Y < min.Y) min.Y = points[entry.PosIndex].Y;
-                    if (points[entry.PosIndex].Z < min.Z) min.Z = points[entry.PosIndex].Z;
-                    if (points[entry.PosIndex].X > max.X) max.X = points[entry.PosIndex].X;
-                    if (points[entry.PosIndex].Y > max.Y) max.Y = points[entry.PosIndex].Y;
-                    if (points[entry.PosIndex].Z > max.Z) max.Z = points[entry.PosIndex].Z;
+                    min = Vector3.Min(min, points[entry.PosIndex]);
+                    max = Vector3.Max(max, points[entry.PosIndex]);
                 }
                 else
                 {
@@ -645,6 +641,8 @@ namespace ModelNamer
             }
         }
 
+        public List<Vector3> m_pos = new List<Vector3>();
+        public List<Vector3> m_normal = new List<Vector3>();
         public List<Vector2> m_uvs = new List<Vector2>();
         public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
         //public List<DisplayListHeader> m_modelMeshes = new List<DisplayListHeader>();
@@ -1022,19 +1020,28 @@ namespace ModelNamer
 
         public GCModel m_model;
 
-        public List<Vector3> Vertices
+        public override List<Vector3> Vertices
         {
-            get { return skinBlock != null ? skinBlock.m_points : base.Vertices; }
+            get { return skinBlock != null ? skinBlock.m_points : m_model.m_pos; }
         }
 
-        public List<Vector3> Normals
+        public override List<Vector3> Normals
         {
-            get { return skinBlock != null ? skinBlock.m_normals : base.Normals; }
+            get { return skinBlock != null ? skinBlock.m_normals : m_model.m_normal; }
         }
 
-        public List<Vector2> UVs
+        public override List<Vector2> UVs
         {
             get { return m_model != null ? m_model.m_uvs : null; }
+        }
+
+        public override List<ushort> Indices
+        {
+            get 
+            {
+                int ibreak = 0;
+                return null;
+            }
         }
 
         public override int NumIndices
