@@ -20,8 +20,10 @@ namespace XNAViewer
         Vector3 eyeLookat = new Vector3(0, 0, 0);
         const float rotation_speed = 1.0f;
         float angle;
-
+        SpriteFont viewerFont;
+        SpriteBatch spriteBatch;
         private Matrix cameraMatrix;
+        private Matrix rotationMatrix;
         private float[] mouseSpeed = new float[2];
         private Vector2 mouseDelta;
         private Vector3 location;
@@ -43,6 +45,7 @@ namespace XNAViewer
         Matrix modelviewMatrix;
 
         BasicEffect m_basicEffect;
+        Effect m_metalEffect;
 
         public XNAPointViewer()
         {
@@ -65,15 +68,31 @@ namespace XNAViewer
             //rs.CullMode = CullMode.None;
             //GraphicsDevice.RasterizerState = rs;
 
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            viewerFont = Content.Load <SpriteFont> ("ViewerFont");
+
 
             m_missingTexture = GetTexture(Color.Pink);
 
+
             //this.VSync = VSyncMode.Off;
-            m_modelReader = new GCModelReader();
+            //m_modelReader = new GCModelReader();
+            m_modelReader = new XboxModelReader();
+            string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
+
+            
+            //m_modelReader = new XboxModelReader();
             //m_fileNames.AddRange(Directory.GetFiles(@"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed", "*"));
-            m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
             //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\yeti.mdl");
-            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\bear.mdl");
+            //m_xbModelReader = new XboxModelReader();
+            //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\alpha_box.mdl");
+            //m_fileNames.Add(@"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\alpha_box.mdl");
+
+
+
+            m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
             ChangeModelNext();
 
 
@@ -122,6 +141,10 @@ namespace XNAViewer
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1.0f, 300.0f);
 
             m_basicEffect.Projection = projectionMatrix;
+
+
+            //m_metalEffect = Content.Load<Effect>("Effect1");
+            m_metalEffect = Content.Load<Effect>("metal");
 
         }
 
@@ -297,7 +320,7 @@ namespace XNAViewer
 
                 angle += rotation_speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                Matrix rotationMatrix = Matrix.Identity;
+                rotationMatrix = Matrix.Identity;
                 if (rotateX)
                 {
                     rotationMatrix *= Matrix.CreateRotationX(angle);
@@ -320,15 +343,18 @@ namespace XNAViewer
 
                 //m_textPrinter.Print(BuildDebugString(), font, Color.White);
                 //m_textPrinter.End();
+
+                spriteBatch.Begin();
+
+                spriteBatch.DrawString(viewerFont, BuildDebugString(), Vector2.Zero, Color.White);
+
+                spriteBatch.End();
+
                 bool drawSkeleton = false;
-
-                m_basicEffect.World = rotationMatrix;
-                m_basicEffect.View = modelviewMatrix;
-
 
                 if (drawSkeleton)
                 {
-                    DrawSkeleton();
+                 //   DrawSkeleon();
                 }
                 else
                 {
@@ -359,12 +385,12 @@ namespace XNAViewer
 
                 if (m_currentModel.m_model.m_skinned)
                 {
-                    if (header.m_header.meshId != 4)
+                    if (header.m_modelSubMesh.MeshId != 4)
                     {
                         //continue;
                     }
 
-                    if (header.m_header.lodlevel != 0x01)
+                    if (header.m_modelSubMesh.LodLevel != 0x01)
                     {
                         continue;
                     }
@@ -372,9 +398,10 @@ namespace XNAViewer
 
 
 
-                ShaderData sd = m_currentModel.m_model.m_shaderData[header.m_header.meshId];
+                ShaderData sd = m_currentModel.m_model.m_shaderData[header.m_modelSubMesh.MeshId];
 
-                SetTexture(sd.textureId1);
+
+                //SetTexture(sd.textureId1);
 
                 //header.Render();
 
@@ -382,16 +409,50 @@ namespace XNAViewer
                 GraphicsDevice.Indices = header.m_indexBuffer;
                 //m_basicEffect.Texture = m_missingTexture;
 
-                foreach (EffectPass pass in m_basicEffect.CurrentTechnique.Passes)
+                Effect effect;
+                SetShaderData(sd, out effect);
+
+                if (effect != null)
                 {
-                    pass.Apply();
-                    //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
-                    //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
-                    GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_header.entries.Count, 0, header.m_header.entries.Count / 3);
+                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
+                        //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
+                        GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices / 3);
+                    }
                 }
 
 
 
+            }
+        }
+
+        public void SetShaderData(ShaderData sd, out Effect effect)
+        {
+            Texture2D tex1 = SetTexture(sd.textureId1);
+            Texture2D tex2 = SetTexture(sd.textureId2);
+
+
+            if (sd.shaderName == "metal")
+            {
+                m_metalEffect.Parameters["Texture1"].SetValue(tex1);
+                m_metalEffect.Parameters["Texture2"].SetValue(tex2);
+                m_metalEffect.Parameters["World"].SetValue(rotationMatrix);
+                m_metalEffect.Parameters["View"].SetValue(modelviewMatrix);
+                m_metalEffect.Parameters["Projection"].SetValue(projectionMatrix);
+                
+                //ApplyLightToEffect(m_metalEffect);
+                effect = m_metalEffect;
+            }
+            else
+            {
+                m_basicEffect.Texture = tex1;
+                m_basicEffect.World = rotationMatrix;
+                m_basicEffect.View = modelviewMatrix;
+
+
+                effect = m_basicEffect;
             }
         }
 
@@ -447,10 +508,10 @@ namespace XNAViewer
         {
             if (!displayAll)
             {
-                if (m_currentModel.m_model.m_displayListHeaders.Count > 1)
+                if (m_currentModel.m_model.m_modelMeshes.Count > 1)
                 {
                     m_currentModelSubIndex++;
-                    m_currentModelSubIndex %= m_currentModel.m_model.m_displayListHeaders.Count;
+                    m_currentModelSubIndex %= m_currentModel.m_model.m_modelMeshes.Count;
                     ChangeSubModel();
                 }
             }
@@ -460,12 +521,12 @@ namespace XNAViewer
         {
             if (!displayAll)
             {
-                if (m_currentModel.m_model.m_displayListHeaders.Count > 1)
+                if (m_currentModel.m_model.m_modelMeshes.Count > 1)
                 {
                     m_currentModelSubIndex--;
                     if (m_currentModelSubIndex < 0)
                     {
-                        m_currentModelSubIndex += m_currentModel.m_model.m_displayListHeaders.Count;
+                        m_currentModelSubIndex += m_currentModel.m_model.m_modelMeshes.Count;
                         ChangeSubModel();
                     }
                 }
@@ -475,7 +536,7 @@ namespace XNAViewer
 
         public void ChangeSubModel()
         {
-            DisplayListHeader header = m_currentModel.m_model.m_displayListHeaders[m_currentModelSubIndex];
+            ModelSubMesh header = m_currentModel.m_model.m_modelMeshes[m_currentModelSubIndex];
             Lookat(header.MinBB, header.MaxBB);
         }
 
@@ -484,7 +545,7 @@ namespace XNAViewer
         public bool ChangeModel()
         {
             bool valid;
-            GCModel model = null;
+            BaseModel model = null;
             WrappedModel wrappedModel = null;
             if (!m_modelMap.ContainsKey(m_fileNames[m_currentModelIndex]))
             {
@@ -557,26 +618,27 @@ namespace XNAViewer
 
         public String BuildDebugString()
         {
-            GCModel currentModel = m_currentModel.m_model;
+            BaseModel currentModel = m_currentModel.m_model;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
             sb.AppendLine("Bones : " + currentModel.m_bones.Count);
             sb.AppendLine("MaxVertex : " + currentModel.m_maxVertex);
 
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
-            sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, currentModel.m_displayListHeaders.Count, currentModel.m_displayListHeaders[m_currentModelSubIndex].indexCount, currentModel.m_displayListHeaders[m_currentModelSubIndex].Valid));
+            sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, currentModel.m_modelMeshes.Count, currentModel.m_modelMeshes[m_currentModelSubIndex].NumIndices, currentModel.m_modelMeshes[m_currentModelSubIndex].Valid));
+
             sb.AppendLine("Textures : ");
             int counter = 0;
             foreach (TextureData textureData in currentModel.m_textures)
             {
-                if (!m_textureDictionary.ContainsKey(textureData.textureName))
-                {
-                    Texture2D texture;
-                    if (LoadTexture(textureData.textureName, out texture))
-                    {
-                        m_textureDictionary[textureData.textureName] = texture;
-                    }
-                }
+                //if (!m_textureDictionary.ContainsKey(textureData.textureName))
+                //{
+                //    Texture2D texture;
+                //    if (LoadTexture(textureData.textureName, out texture))
+                //    {
+                //        m_textureDictionary[textureData.textureName] = texture;
+                //    }
+                //}
                 sb.AppendLine(textureData.textureName);
             }
             sb.AppendLine();
@@ -628,12 +690,12 @@ namespace XNAViewer
         }
 
 
-        public void SetTexture(int index)
+        public Texture2D SetTexture(int index)
         {
+            Texture2D texture = null;
             if (m_currentModel.m_model.m_textures.Count > 0 && index < m_currentModel.m_model.m_textures.Count)
             {
                 String textureName = m_currentModel.m_model.m_textures[index].textureName;
-                Texture2D texture;
                 if (!m_textureDictionary.ContainsKey(textureName))
                 {
                     LoadTexture(textureName, out texture);
@@ -642,10 +704,43 @@ namespace XNAViewer
 
                 texture = m_textureDictionary[textureName];
 
-                m_basicEffect.Texture = texture;
+                
             }
+            return texture;
+        }
+
+        public void ApplyLightToEffect(Effect effect)
+        {
+            Vector3 ambientLightColor = new Vector3(1f);
+            float ambientLightIntensity = 0.1f;
+            Vector3 directionalLightColor = new Vector3(1f);
+            float directionalLightIntensity = 1f;
+
+            Vector3 specularLightColor = new Vector3(1f);
+            float specularLightIntensity = 1f;
+
+            //effect.Parameters["AmbientLightColor"].SetValue(ambientLightColor);
+            //effect.Parameters["AmbientLightIntensity"].SetValue(ambientLightIntensity);
+
+            //effect.Parameters["DirectionalLightColor"].SetValue(directionalLightColor);
+            //effect.Parameters["DirectionalLightIntensity"].SetValue(directionalLightIntensity);
+
+            //effect.Parameters["SpecularLightColor"].SetValue(specularLightColor);
+            //effect.Parameters["SpecularLightIntensity"].SetValue(specularLightIntensity);
+
+            //effect.Parameters["LightPosition"].SetValue(location);
+            //effect.Parameters["LightDirection"].SetValue(Globals.Player.Forward);
+            Vector3 lightDir = new Vector3(0, 1, -1);
+            lightDir.Normalize();
+            //effect.Parameters["LightDirection"].SetValue(lightDir);
+            //effect.Parameters["LightPosition"].SetValue(new Vector3(0, 40, 0));
+            //Vector3 lightDirection = new Vector3(10, -10, 0);
+            //lightDirection.Normalize();
+
+            //effect.Parameters["LightDirection"].SetValue(lightDirection);
 
         }
+
 
 
         bool rotateX = false;
@@ -658,7 +753,9 @@ namespace XNAViewer
         int m_currentModelSubIndex = 0;
         WrappedModel m_currentModel;
 
-        GCModelReader m_modelReader;
+        
+        BaseModelReader m_modelReader;
+
         //OpenTK.Graphics.TextPrinter m_textPrinter;
         String m_debugLine;
 
@@ -671,113 +768,127 @@ namespace XNAViewer
     }
 
 
-    public class WrappedModel : IDisposable
+    public class WrappedModel
     {
-        public GCModel m_model;
+        public BaseModel m_model;
         public List<WrappedDisplayListHeader> m_wrappedHeaderList = new List<WrappedDisplayListHeader>();
 
-        public WrappedModel(GCModel model, GraphicsDevice graphicsDevice, Effect effect)
+        public WrappedModel(BaseModel model, GraphicsDevice graphicsDevice, Effect effect)
         {
             m_model = model;
             int counter = 0;
-            foreach (DisplayListHeader header in model.m_displayListHeaders)
+            foreach (ModelSubMesh modelMesh in model.m_modelMeshes)
             {
-
-                WrappedDisplayListHeader wrappedHeader = new WrappedDisplayListHeader(header, graphicsDevice, effect);
+                WrappedDisplayListHeader wrappedHeader = new WrappedDisplayListHeader(modelMesh, graphicsDevice, effect);
                 m_wrappedHeaderList.Add(wrappedHeader);
                 counter++;
             }
         }
 
-        public void Dispose()
+        public void Draw()
         {
-            foreach (WrappedDisplayListHeader header in m_wrappedHeaderList)
-            {
-                header.Dispose();
-            }
+
         }
+
     }
 
 
-    public class WrappedDisplayListHeader : IDisposable
+    public class WrappedDisplayListHeader 
     {
-        public DisplayListHeader m_header;
+        public ModelSubMesh m_modelSubMesh;
         public VertexBuffer m_vertexBuffer;
         public IndexBuffer m_indexBuffer;
         public GraphicsDevice m_graphicsDevice;
         public Effect m_effect;
 
-        public WrappedDisplayListHeader(DisplayListHeader header, GraphicsDevice graphicsDevice, Effect effect)
+        //public WrappedDisplayListHeader(XboxModel model, GraphicsDevice graphicsDevice, Effect effect)
+        //{
+        //    VertexPositionNormalTexture[] vertexData = model.m_points.ToArray();
+        //    m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
+        //    m_vertexBuffer.SetData(vertexData);
+
+        //    ushort[] indices = model.m_indices.ToArray();
+        //    m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indices.Count(), BufferUsage.None);
+        //    m_indexBuffer.SetData(indices);
+
+        //}
+
+        public WrappedDisplayListHeader(ModelSubMesh modelSubMesh, GraphicsDevice graphicsDevice, Effect effect)
         {
-            m_header = header;
+            m_modelSubMesh = modelSubMesh;
             m_graphicsDevice = graphicsDevice;
             m_effect = effect;
 
-            VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[header.entries.Count];
-            for (int i = 0; i < header.entries.Count; ++i)
+            if (modelSubMesh is DisplayListHeader)
             {
-                vertexData[i].Position = m_header.Points[m_header.entries[i].PosIndex];
-                Vector3 v = Vector3.Up;
-                if (m_header.entries[i].NormIndex < m_header.Normals.Count)
+                DisplayListHeader displayListHeader = modelSubMesh as DisplayListHeader;
+
+                VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[displayListHeader.entries.Count];
+                for (int i = 0; i < displayListHeader.entries.Count; ++i)
                 {
-                    v = m_header.Normals[m_header.entries[i].NormIndex];
+                    vertexData[i].Position = displayListHeader.Vertices[displayListHeader.entries[i].PosIndex];
+                    Vector3 v = Vector3.Up;
+                    if (displayListHeader.entries[i].NormIndex < displayListHeader.Normals.Count)
+                    {
+                        v = displayListHeader.Normals[displayListHeader.entries[i].NormIndex];
+                    }
+                    vertexData[i].Normal = v;
+                    vertexData[i].TextureCoordinate = displayListHeader.UVs[displayListHeader.entries[i].UVIndex];
                 }
-                vertexData[i].Normal = v;
-                vertexData[i].TextureCoordinate = m_header.UVs[m_header.entries[i].UVIndex];
+
+                m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
+                m_vertexBuffer.SetData(vertexData);
+
+
+                ushort[] indexData = new ushort[displayListHeader.entries.Count];
+                for (int i = 0; i < indexData.Length; i += 3)
+                {
+                    indexData[i + 0] = (ushort)(i + 0);
+                    indexData[i + 1] = (ushort)(i + 2);
+                    indexData[i + 2] = (ushort)(i + 1);
+                }
+                m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indexData.Count(), BufferUsage.None);
+                m_indexBuffer.SetData(indexData);
             }
-
-            m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
-            m_vertexBuffer.SetData(vertexData);
-
-            int[] indices = new int[m_header.entries.Count];
-            for (int i = 0; i < indices.Length; i += 3)
+            else if (modelSubMesh is XBoxSubMesh)
             {
-                indices[i + 0] = (i + 0);
-                indices[i + 1] = (i + 2);
-                indices[i + 2] = (i + 1);
+                XBoxSubMesh doegSection = modelSubMesh as XBoxSubMesh;
+                VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[modelSubMesh.Vertices.Count];
+                for (int i = 0; i < vertexData.Length; ++i)
+                {
+                    vertexData[i].Position = modelSubMesh.Vertices[i];
+                    vertexData[i].TextureCoordinate= modelSubMesh.UVs[i];
+                    vertexData[i].Normal= modelSubMesh.Normals[i];
+                }
+                m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
+                m_vertexBuffer.SetData(vertexData);
+
+
+                ushort[] indexData = new ushort[modelSubMesh.Indices.Count];
+                for (int i = 0; i < indexData.Length; i += 3)
+                {
+                    //indexData[i + 0] = modelSubMesh.Indices[(i + 0)];
+                    //indexData[i + 1] = modelSubMesh.Indices[(i + 1)];
+                    //indexData[i + 2] = modelSubMesh.Indices[(i + 2)];
+                }
+
+                int adjustedIndexLength = (indexData.Length / 3) * 3;
+
+                for (int i = 0; i < adjustedIndexLength; i += 3)
+                {
+                    indexData[i + 0] = (ushort)(i + 0);
+                    indexData[i + 1] = (ushort)(i + 2);
+                    indexData[i + 2] = (ushort)(i + 1);
+                }
+
+
+
+                m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.None);
+                m_indexBuffer.SetData(indexData);
+
             }
-            m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count(), BufferUsage.None);
-            m_indexBuffer.SetData(indices);
+      }
 
-            //VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[4];
-            //vertexData[0].Position = new Vector3(-1, -1, 0);
-            //vertexData[1].Position = new Vector3(1, -1, 0);
-            //vertexData[2].Position = new Vector3(-1, 1, 0);
-            //vertexData[3].Position = new Vector3(1, 1, 0);
-            //for (int i = 0; i < vertexData.Length; ++i)
-            //{
-            //    vertexData[i].Normal = Vector3.Up;
-            //}
-            //m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
-            //m_vertexBuffer.SetData(vertexData);
-            //short[] ib = new short[] { 0, 1, 2, 2, 3, 0 };
-            //m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, ib.Length, BufferUsage.None);
-            //m_indexBuffer.SetData(ib);
-
-
-
-
-
-
-        }
-
-
-        public void Render()
-        {
-            m_graphicsDevice.SetVertexBuffer(m_vertexBuffer);
-            m_graphicsDevice.Indices = m_indexBuffer;
-            foreach (EffectPass pass in m_effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
-                //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
-            }
-        }
-
-        public void Dispose()
-        {
-            //GL.DeleteBuffers(m_vbos.Length, ref m_vbos);
-        }
 
     }
 }

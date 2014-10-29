@@ -35,7 +35,7 @@ namespace ModelNamer
                             }
 
 
-                            XboxModel model = LoadSingleModel(sourceFile.Name);
+                            XboxModel model = LoadSingleModel(sourceFile.Name) as XboxModel;
                             m_models.Add(model);
 
 
@@ -56,11 +56,11 @@ namespace ModelNamer
             }
         }
 
-        public XboxModel LoadSingleModel(String modelPath, bool readDisplayLists = true)
+        public override BaseModel LoadSingleModel(String modelPath, bool readDisplayLists = true)
         {
             XboxModel model = null;
             FileInfo sourceFile = new FileInfo(modelPath);
-            
+
             using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
             {
                 model = new XboxModel(sourceFile.Name);
@@ -68,7 +68,7 @@ namespace ModelNamer
                 model.LoadData(binReader);
 
             }
-            return model; 
+            return model;
         }
 
 
@@ -96,9 +96,10 @@ namespace ModelNamer
     public class XboxModel : BaseModel
     {
 
-        public XboxModel(String name) : base(name)
+        public XboxModel(String name)
+            : base(name)
         {
-            
+
         }
 
         public override void LoadData(BinaryReader binReader)
@@ -114,7 +115,7 @@ namespace ModelNamer
             binReader.BaseStream.Position = 0;
             Common.ReadNullSeparatedNames(binReader, Common.nameTag, m_names);
             binReader.BaseStream.Position = 0;
-            ReadSKELSection(binReader);
+            ReadTextureSection(binReader);
             binReader.BaseStream.Position = 0;
             ReadXRNDSection(binReader);
         }
@@ -129,6 +130,7 @@ namespace ModelNamer
             binReader.BaseStream.Position = 0;
 
 
+
             if (Common.FindCharsInStream(binReader, Common.xrndTag))
             {
                 int sectionLength = binReader.ReadInt32();
@@ -140,15 +142,30 @@ namespace ModelNamer
                 byte[] doegStart = binReader.ReadBytes(4);
                 if (doegStart[0] == 'd' && doegStart[3] == 'g')
                 {
+
                     Debug.Assert(doegStart[0] == 'd' && doegStart[3] == 'g');
                     int doegLength = binReader.ReadInt32();
-                    byte[] stuff = binReader.ReadBytes(doegLength - 8);
+                    Debug.Assert(doegLength == 0x7c);
+                    int unk1a = binReader.ReadInt32();
+                    int unk1b = binReader.ReadInt32();
+                    int unk1c = binReader.ReadInt32();
+
+                    int unk1d = binReader.ReadInt32();
+                    m_numMeshes = binReader.ReadInt32();
+                    int unk1e = binReader.ReadInt32();
+                    int numMeshCopy = binReader.ReadInt32();
+                    Debug.Assert(m_numMeshes == numMeshCopy);
+
+                    binReader.BaseStream.Position += 22 * 4;
+
                     byte[] doegEnd = binReader.ReadBytes(4);
                     Debug.Assert(doegEnd[0] == 'd' && doegEnd[3] == 'g');
-                    binReader.BaseStream.Position += 0xB0;
-                    int numVertices = binReader.ReadInt16();
-                    short numIndices = binReader.ReadInt16();
-                    //binReader.BaseStream.Position += numIndices * 2 * 3;
+                    binReader.BaseStream.Position += 0xB4;
+                    int numIndices = binReader.ReadInt32();
+                    int skip1 = binReader.ReadInt32();
+                    int skip2 = binReader.ReadInt32();
+                    int numVertices = binReader.ReadInt32();
+                    binReader.BaseStream.Position += 0x17c;
 
 
 
@@ -174,26 +191,61 @@ namespace ModelNamer
 
                     // then follows an int16 index buffer? not sure how many entries.
 
+                    XBoxSubMesh subMesh = new XBoxSubMesh();
+                    m_modelMeshes.Add(subMesh);
+
+                    // end doeg tag.
+                    //Common.FindCharsInStream(binReader, Common.doegTag);
+                    //// jump forward?
+                    //binReader.BaseStream.Position += 0xb4;
+
+
+                    ////binReader.BaseStream.Position = 0x510;
+                    ////numIndices = 33;
+                    //numIndices = (short)binReader.ReadInt32();
+
 
                     for (int i = 0; i < numIndices; ++i)
                     {
-                        m_indices.Add(binReader.ReadUInt16());
+                        subMesh.Indices.Add((ushort)Common.ToInt16BigEndian(binReader));
                     }
 
+                    //ushort indexCountMaybe = (ushort)Common.ToInt16BigEndian(binReader);
+
+                    //numVertices = 24;//8;
                     List<Vector3> vertices = new List<Vector3>();
 
                     for (int i = 0; i < numVertices; ++i)
                     {
                         Vector3 p = Common.FromStreamVector3BE(binReader);
+                        subMesh.Vertices.Add(p);
+                        float unk = binReader.ReadSingle();
                         Vector2 u = Common.FromStreamVector2BE(binReader);
+                        subMesh.UVs.Add(u);
                         VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
                         vpnt.Position = p;
                         vpnt.TextureCoordinate = u;
-                        float unk = binReader.ReadSingle();
-                        vpnt.Normal = Vector3.Up;
 
-                        m_points.Add(vpnt);
+                        vpnt.Normal = Vector3.Up;
+                        subMesh.Normals.Add(vpnt.Normal);
+
+                        //Vertices.Add(vpnt);
                     }
+
+                    byte[] endBlock = binReader.ReadBytes(4);
+                    char[] endBlockChar = new char[endBlock.Length];
+                    for (int i = 0; i < endBlock.Length; ++i)
+                    {
+                        endBlockChar[i] = (char)endBlock[i];
+                    }
+                    subMesh.BuildBB();
+                    BuildBB();
+
+                    ShaderData shaderData = new ShaderData();
+                    shaderData.shaderName = "test";
+                    shaderData.textureId1 = 0;
+                    shaderData.textureId2 = 0;
+                    m_shaderData.Add(shaderData);
                 }
                 else
                 {
@@ -202,6 +254,17 @@ namespace ModelNamer
 
             }
 
+        }
+
+        public override void BuildBB()
+        {
+            MinBB = new Vector3(float.MaxValue);
+            MaxBB = new Vector3(float.MinValue);
+            foreach (ModelSubMesh subMesh in m_modelMeshes)
+            {
+                MinBB = Vector3.Min(MinBB, subMesh.MinBB);
+                MaxBB = Vector3.Max(MaxBB, subMesh.MaxBB);
+            }
         }
 
         public void ReadSKELSection(BinaryReader binReader)
@@ -225,60 +288,6 @@ namespace ModelNamer
 
         }
 
-        public void ConstructSkeleton()
-        {
-            Dictionary<int, BoneNode> dictionary = new Dictionary<int, BoneNode>();
-            foreach (BoneNode node in m_bones)
-            {
-                dictionary[node.id] = node;
-            }
-
-            foreach (BoneNode node in m_bones)
-            {
-                if (node.id != node.parentId)
-                {
-                    BoneNode parent = dictionary[node.parentId];
-                    parent.children.Add(node);
-                    node.parent = parent;
-                }
-            }
-
-
-            if (m_bones.Count > 0)
-            {
-
-                m_rootBone = m_bones[0];
-                CalcBindFinalMatrix(m_rootBone, Matrix.Identity);
-
-                if (!m_builtSkelBB)
-                {
-                    Vector3 min = new Vector3(float.MaxValue);
-                    Vector3 max = new Vector3(float.MinValue);
-
-
-                    foreach (BoneNode node in m_bones)
-                    {
-                        // build tranform from parent chain?
-                        Vector3 offset = node.finalMatrix.Translation;
-
-                        if (offset.X < min.X) min.X = offset.X;
-                        if (offset.Y < min.Y) min.Y = offset.Y;
-                        if (offset.Z < min.Z) min.Z = offset.Z;
-                        if (offset.X > max.X) max.X = offset.X;
-                        if (offset.Y > max.Y) max.Y = offset.Y;
-                        if (offset.Z > max.Z) max.Z = offset.Z;
-
-                    }
-
-                    MinBB = min;
-                    MaxBB = max;
-                    m_builtSkelBB = true;
-                }
-
-
-            }
-
-        }
 
         void CalcBindFinalMatrix(BoneNode bone, Matrix parentMatrix)
         {
@@ -292,42 +301,61 @@ namespace ModelNamer
             }
         }
 
-        public String m_name;
-        public Vector3 m_center;
-        public List<VertexPositionNormalTexture> m_points = new List<VertexPositionNormalTexture>();
-        public List<ushort> m_indices = new List<ushort>();
-        //public List<Vector3> m_normals = new List<Vector3>();
-        //public List<Vector2> m_uvs = new List<Vector2>();
-        public List<String> m_selsInfo = new List<string>();
-        public List<TextureData> m_textures = new List<TextureData>();
-        public List<ShaderData> m_shaderData = new List<ShaderData>();
-        public List<BoneNode> m_bones = new List<BoneNode>();
-        public List<String> m_names = new List<String>();
-        public Vector3 MinBB;
-        public Vector3 MaxBB;
+        //public List<VertexPositionNormalTexture> m_points = new List<VertexPositionNormalTexture>();
 
-        private bool m_builtBB = false;
-        private bool m_builtSkelBB = false;
-        public bool m_skinned = false;
-        public bool m_hasSkeleton = false;
-        public int m_maxVertex;
-        public int m_maxNormal;
-        public int m_maxUv;
-
-        public BoneNode m_rootBone;
-
-
-
-        // doeg tag always 7C (124) , encloes start and end doeg values , 2 per file , has FFFF following
-
-        public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
+        private int m_numMeshes = 0;
 
     }
 
-    
 
-    public class DoegSection
+
+    public class XBoxSubMesh : ModelSubMesh
     {
+        public override int NumIndices
+        {
+            get { return Indices.Count; }
+        }
+
+        public override int NumVertices
+        {
+            get { return Vertices.Count; }
+        }
+
+        public override List<Vector3> Vertices
+        {
+            get { return m_vertices; }
+        }
+
+        public override List<Vector3> Normals
+        {
+            get { return m_normals; }
+        }
+
+        public override List<Vector2> UVs
+        {
+            get { return m_uvs; }
+        }
+
+        public override List<ushort> Indices
+        {
+            get { return m_indices; }
+        }
+
+
+        public void BuildBB()
+        {
+            MinBB = new Vector3(float.MaxValue);
+            MaxBB = new Vector3(float.MinValue);
+            foreach (Vector3 v in Vertices)
+            {
+                MinBB = Vector3.Min(MinBB, v);
+                MaxBB = Vector3.Max(MaxBB, v);
+            }
+        }
+        private List<Vector3> m_vertices = new List<Vector3>();
+        private List<Vector3> m_normals = new List<Vector3>();
+        private List<Vector2> m_uvs = new List<Vector2>();
+        private List<ushort> m_indices = new List<ushort>();
 
     }
 
