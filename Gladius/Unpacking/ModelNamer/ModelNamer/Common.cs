@@ -255,6 +255,15 @@ namespace ModelNamer
             return v;
         }
 
+        public static Vector2 FromStreamVector2(BinaryReader reader)
+        {
+            Vector2 v = new Vector2();
+            v.X = reader.ReadSingle();
+            v.Y = reader.ReadSingle();
+            return v;
+        }
+
+        
         public static Quaternion FromStreamQuaternion(BinaryReader reader)
         {
             Quaternion q = new Quaternion();
@@ -798,7 +807,10 @@ namespace ModelNamer
         public bool m_builtSkelBB = false;
         public bool m_skinned = false;
         public bool m_hasSkeleton = false;
-        public int m_maxVertex;
+        //public int m_maxVertex;
+        public int MaxVertex
+        { get; set; }
+
         public int m_maxNormal;
         public int m_maxUv;
     }

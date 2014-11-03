@@ -77,8 +77,8 @@ namespace XNAViewer
 
 
             //this.VSync = VSyncMode.Off;
-            //m_modelReader = new GCModelReader();
-            m_modelReader = new XboxModelReader();
+            m_modelReader = new GCModelReader();
+            //m_modelReader = new XboxModelReader();
             string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
 
             
@@ -90,9 +90,14 @@ namespace XNAViewer
             //m_fileNames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\alpha_box.mdl");
             //m_fileNames.Add(@"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\alpha_box.mdl");
 
+            //NB Bounding volumes for xbox models and GC models appear to be the same.
+            //Handy debug test.
 
+            //todo - write something to compare bb's of each to text file for general testing.
 
-            m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
+            //m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
+            m_fileNames.Add(baseModelPath + "animalskull_uv.mdl");
+            //m_fileNames.Add(baseModelPath + "alpha_box.mdl");
             ChangeModelNext();
 
 
@@ -622,7 +627,7 @@ namespace XNAViewer
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
             sb.AppendLine("Bones : " + currentModel.m_bones.Count);
-            sb.AppendLine("MaxVertex : " + currentModel.m_maxVertex);
+            sb.AppendLine("MaxVertex : " + currentModel.MaxVertex);
 
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
             sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, currentModel.m_modelMeshes.Count, currentModel.m_modelMeshes[m_currentModelSubIndex].NumIndices, currentModel.m_modelMeshes[m_currentModelSubIndex].Valid));

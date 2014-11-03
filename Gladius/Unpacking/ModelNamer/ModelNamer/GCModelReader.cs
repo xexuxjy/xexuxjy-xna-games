@@ -495,7 +495,7 @@ namespace ModelNamer
                 {
                     binReader.BaseStream.Position = startPos + m_dsliInfos[i].startPos;
                     DisplayListHeader.FromStream(m_modelMeshes[i] as DisplayListHeader, binReader, m_dsliInfos[i]);
-
+                    MaxVertex = Math.Max(MaxVertex, m_modelMeshes[i].MaxVertex);
                 }
                 long nowAt = binReader.BaseStream.Position;
 
@@ -537,9 +537,9 @@ namespace ModelNamer
 
                     for (int i = 0; i < header.entries.Count; ++i)
                     {
-                        if (header.entries[i].PosIndex > m_maxVertex)
+                        if (header.entries[i].PosIndex > MaxVertex)
                         {
-                            m_maxVertex = header.entries[i].PosIndex;
+                            MaxVertex = header.entries[i].PosIndex;
                         }
                         if (header.entries[i].NormIndex > m_maxNormal)
                         {
