@@ -700,7 +700,7 @@ void main(void)
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Model : " + currentModel.m_name);
             sb.AppendLine("Bones : " + currentModel.m_bones.Count);
-            sb.AppendLine("MaxVertex : " + currentModel.m_maxVertex);
+            sb.AppendLine("MaxVertex : " + currentModel.MaxVertex);
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
 
             if (currentModel is GCModel)

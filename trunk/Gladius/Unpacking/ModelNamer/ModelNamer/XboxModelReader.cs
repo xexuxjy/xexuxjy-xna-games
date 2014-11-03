@@ -25,23 +25,16 @@ namespace ModelNamer
                     try
                     {
                         FileInfo sourceFile = new FileInfo(file);
-                        using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
+                        if (sourceFile.Name != "File 005496")
                         {
-                            if (sourceFile.Name != "File 005496")
-                            {
-                                // 410, 1939
+                            // 410, 1939
 
-                                //continue;
-                            }
-
-
-                            XboxModel model = LoadSingleModel(sourceFile.Name) as XboxModel;
-                            m_models.Add(model);
-
-
-
-
+                            //continue;
                         }
+
+                        XboxModel model = LoadSingleModel(sourceFile.FullName) as XboxModel;
+                        m_models.Add(model);
+
                     }
                     catch (Exception e)
                     {
@@ -147,98 +140,162 @@ namespace ModelNamer
                     int doegLength = binReader.ReadInt32();
                     Debug.Assert(doegLength == 0x7c);
                     int unk1a = binReader.ReadInt32();
+                    Debug.Assert(unk1a == 0x01);
                     int unk1b = binReader.ReadInt32();
                     int unk1c = binReader.ReadInt32();
 
                     int unk1d = binReader.ReadInt32();
+                    Debug.Assert(unk1d == 0x01);
+
                     m_numMeshes = binReader.ReadInt32();
                     int unk1e = binReader.ReadInt32();
                     int numMeshCopy = binReader.ReadInt32();
                     Debug.Assert(m_numMeshes == numMeshCopy);
+                    int unk1f = binReader.ReadInt32();
+                    int unk1g = binReader.ReadInt32();
+                    int unk1h = binReader.ReadInt32();
+                    Debug.Assert(unk1h == 0x00);
+                    int unk1i = binReader.ReadInt32();
+                    Debug.Assert(unk1i == 0x70);
+                    int unk1j = binReader.ReadInt32();
+                    int unk1k = binReader.ReadInt32();
+                    int unk1l = binReader.ReadInt32();
+                    int unk1m = binReader.ReadInt32();
+                    
+                    // if this is not -1 then it's some information on skinning/anims?
+                    int unk1n = binReader.ReadInt32();
 
-                    binReader.BaseStream.Position += 22 * 4;
+
+                    int unk1o = binReader.ReadInt32();
+                    int unk1p = binReader.ReadInt32();
+                    int unk1q = binReader.ReadInt32();
+
+                    int minus1a = binReader.ReadInt32();
+                    int minus1b = binReader.ReadInt32();
+                    int minus1c = binReader.ReadInt32();
+                    int minus1d = binReader.ReadInt32();
+
+                    Debug.Assert(minus1a == -1 && minus1b == -1 && minus1c == -1 && minus1d == -1);
+
+                    int unk1r = binReader.ReadInt32();
+                    int unk1s = binReader.ReadInt32();
+                    int unk1t = binReader.ReadInt32();
+                    int unk1u = binReader.ReadInt32();
+                    //binReader.BaseStream.Position += 22 * 4;
+                    int minus1e = binReader.ReadInt32();
+
+                    Debug.Assert(minus1a == -1 && minus1b == -1 && minus1c == -1 && minus1d == -1 && minus1e == -1);
+
+                    // this is the number of bytes from here to the beginning of the texture names if you include the end doeg section (4)
+                    
+                    int doegToTextureSize = binReader.ReadInt32();
 
                     byte[] doegEnd = binReader.ReadBytes(4);
                     Debug.Assert(doegEnd[0] == 'd' && doegEnd[3] == 'g');
-                    binReader.BaseStream.Position += 0xB4;
-                    int numIndices = binReader.ReadInt32();
-                    int skip1 = binReader.ReadInt32();
-                    int skip2 = binReader.ReadInt32();
-                    int numVertices = binReader.ReadInt32();
-                    binReader.BaseStream.Position += 0x17c;
 
-
-
-                    // block of 0x214 to next section?
-                    //binReader.BaseStream.Position += 0x214;
-                    //List<String> textureNames = new List<string>();
-                    //Common.ReadNullSeparatedNames(binReader, textureNames);
-
-
-                    //long currentPosition = binReader.BaseStream.Position;
-                    //Debug.Assert(Common.FindCharsInStream(binReader, endTag));
-                    //long endPosition = binReader.BaseStream.Position;
-
-                    //long remainder = endPosition - 4 - currentPosition;
-                    //long sum = (numIndices*2) + (numVertices*(4*3));
-                    //long diff = remainder - sum;
-
-                    //infoStream.WriteLine(String.Format("[{0}]  I[{1}] V[{2}] R[{3}] S[{4}] D[{5}]",
-                    //    sourceFile.FullName, numIndices,
-                    //    numVertices, remainder,sum, diff));
-
-                    //infoStream.WriteLine(String.Format("[{0}]  I[{1}]", sourceFile.FullName, numIndices));
-
-                    // then follows an int16 index buffer? not sure how many entries.
-
-                    XBoxSubMesh subMesh = new XBoxSubMesh();
-                    m_modelMeshes.Add(subMesh);
-
-                    // end doeg tag.
-                    //Common.FindCharsInStream(binReader, Common.doegTag);
-                    //// jump forward?
-                    //binReader.BaseStream.Position += 0xb4;
-
-
-                    ////binReader.BaseStream.Position = 0x510;
-                    ////numIndices = 33;
-                    //numIndices = (short)binReader.ReadInt32();
-
-
-                    for (int i = 0; i < numIndices; ++i)
+                    if(m_numMeshes == 1)
                     {
-                        subMesh.Indices.Add((ushort)Common.ToInt16BigEndian(binReader));
+                        Debug.Assert(unk1f == 2 || unk1f == 1);
+                        Debug.Assert(unk1g == 1);
+                        Debug.Assert(unk1j == 0x74);
+                        Debug.Assert(unk1k == 0xAC);
+                        Debug.Assert(unk1l == 0xC0);
+                        Debug.Assert(unk1n == -1);
+                        Debug.Assert(unk1o == 0xE0);
+                        Debug.Assert(unk1p == 0xE4);
+                        Debug.Assert(unk1q == 0xF0);
+
+                        binReader.BaseStream.Position += 180;
+
+
+                        // block of 0x214 to next section?
+                        //binReader.BaseStream.Position += 0x214;
+                        //List<String> textureNames = new List<string>();
+                        //Common.ReadNullSeparatedNames(binReader, textureNames);
+
+
+                        //long currentPosition = binReader.BaseStream.Position;
+                        //Debug.Assert(Common.FindCharsInStream(binReader, endTag));
+                        //long endPosition = binReader.BaseStream.Position;
+
+                        //long remainder = endPosition - 4 - currentPosition;
+                        //long sum = (numIndices*2) + (numVertices*(4*3));
+                        //long diff = remainder - sum;
+
+                        //infoStream.WriteLine(String.Format("[{0}]  I[{1}] V[{2}] R[{3}] S[{4}] D[{5}]",
+                        //    sourceFile.FullName, numIndices,
+                        //    numVertices, remainder,sum, diff));
+
+                        //infoStream.WriteLine(String.Format("[{0}]  I[{1}]", sourceFile.FullName, numIndices));
+
+                        // then follows an int16 index buffer? not sure how many entries.
+
+                        XBoxSubMesh subMesh = new XBoxSubMesh();
+                        m_modelMeshes.Add(subMesh);
+
+                        // end doeg tag.
+                        //Common.FindCharsInStream(binReader, Common.doegTag);
+                        //// jump forward?
+                        //binReader.BaseStream.Position += 0xb4;
+
+
+                        ////binReader.BaseStream.Position = 0x510;
+                        ////numIndices = 33;
+                        //numIndices = (short)binReader.ReadInt32();
+
+                        //binReader.BaseStream.Position = 0x536; // animal skull
+                        for (int i = 0; i < numIndices; ++i)
+                        {
+                            subMesh.Indices.Add((ushort)Common.ToInt16BigEndian(binReader));
+                        }
+
+                        //ushort indexCountMaybe = (ushort)Common.ToInt16BigEndian(binReader);
+
+                        //numVertices = 24;//8;
+                        //binReader.BaseStream.Position = 0xdb7; // queens anklet
+                        binReader.BaseStream.Position = 0x9AB; // animal skull
+                        //binReader.BaseStream.Position += 6;
+
+                        List<Vector3> vertices = new List<Vector3>();
+                        //numVertices -= 1;
+                        for (int i = 0; i < numVertices; ++i)
+                        {
+                            try
+                            {
+                                Vector3 p = Common.FromStreamVector3(binReader);
+                                subMesh.Vertices.Add(p);
+                                float unk = binReader.ReadSingle();
+                                Vector2 u = Common.FromStreamVector2(binReader);
+                                subMesh.UVs.Add(u);
+                                VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
+                                vpnt.Position = p;
+                                vpnt.TextureCoordinate = u;
+
+                                vpnt.Normal = Vector3.Up;
+                                subMesh.Normals.Add(vpnt.Normal);
+
+                            }
+                            catch (System.Exception ex)
+                            {
+                                int ibreak = 0;
+                            }
+                            //Vertices.Add(vpnt);
+                        }
+
+                        byte[] endBlock = binReader.ReadBytes(4);
+                        char[] endBlockChar = new char[endBlock.Length];
+                        for (int i = 0; i < endBlock.Length; ++i)
+                        {
+                            endBlockChar[i] = (char)endBlock[i];
+                        }
+                        if (endBlockChar[0] != 'E' && endBlockChar[2] != 'D')
+                        {
+                            Debug.Assert(false);
+                        }
+
+                        subMesh.BuildBB();
+
                     }
-
-                    //ushort indexCountMaybe = (ushort)Common.ToInt16BigEndian(binReader);
-
-                    //numVertices = 24;//8;
-                    List<Vector3> vertices = new List<Vector3>();
-
-                    for (int i = 0; i < numVertices; ++i)
-                    {
-                        Vector3 p = Common.FromStreamVector3BE(binReader);
-                        subMesh.Vertices.Add(p);
-                        float unk = binReader.ReadSingle();
-                        Vector2 u = Common.FromStreamVector2BE(binReader);
-                        subMesh.UVs.Add(u);
-                        VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
-                        vpnt.Position = p;
-                        vpnt.TextureCoordinate = u;
-
-                        vpnt.Normal = Vector3.Up;
-                        subMesh.Normals.Add(vpnt.Normal);
-
-                        //Vertices.Add(vpnt);
-                    }
-
-                    byte[] endBlock = binReader.ReadBytes(4);
-                    char[] endBlockChar = new char[endBlock.Length];
-                    for (int i = 0; i < endBlock.Length; ++i)
-                    {
-                        endBlockChar[i] = (char)endBlock[i];
-                    }
-                    subMesh.BuildBB();
                     BuildBB();
 
                     ShaderData shaderData = new ShaderData();
