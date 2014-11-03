@@ -72,7 +72,8 @@ namespace ModelNamer
             String infoFile = @"D:\gladius-extracted-archive\xbox-decompressed\ModelInfo.txt";
             //String sectionInfoFile = @"C:\tmp\unpacking\xbox-ModelFiles\index-normal-data.txt";
             XboxModelReader reader = new XboxModelReader();
-            reader.LoadModels(modelPath, infoFile);
+            //reader.LoadModels(modelPath, infoFile);
+            reader.LoadSingleModel(@"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\alpha_box.mdl");
             //reader.DumpPoints(infoFile);
             //reader.DumpSectionLengths(modelPath, sectionInfoFile);
 
@@ -151,7 +152,7 @@ namespace ModelNamer
                     int unk1e = binReader.ReadInt32();
                     int numMeshCopy = binReader.ReadInt32();
                     Debug.Assert(m_numMeshes == numMeshCopy);
-                    int unk1f = binReader.ReadInt32();
+                    int numTextures = binReader.ReadInt32();
                     int unk1g = binReader.ReadInt32();
                     int unk1h = binReader.ReadInt32();
                     Debug.Assert(unk1h == 0x00);
@@ -195,7 +196,7 @@ namespace ModelNamer
 
                     if(m_numMeshes == 1)
                     {
-                        Debug.Assert(unk1f == 2 || unk1f == 1);
+                        //Debug.Assert(unk1f == 2 || unk1f == 1);
                         Debug.Assert(unk1g == 1);
                         Debug.Assert(unk1j == 0x74);
                         Debug.Assert(unk1k == 0xAC);
@@ -241,46 +242,50 @@ namespace ModelNamer
 
                         ////binReader.BaseStream.Position = 0x510;
                         ////numIndices = 33;
-                        //numIndices = (short)binReader.ReadInt32();
+                        int numIndices = binReader.ReadInt32();
+                        int skip1 = binReader.ReadInt32();
+                        int skip2 = binReader.ReadInt32();
+                        int numVertices = binReader.ReadInt32();
 
                         //binReader.BaseStream.Position = 0x536; // animal skull
                         for (int i = 0; i < numIndices; ++i)
                         {
-                            subMesh.Indices.Add((ushort)Common.ToInt16BigEndian(binReader));
+                            //subMesh.Indices.Add((ushort)Common.ToInt16BigEndian(binReader));
+                            subMesh.Indices.Add((ushort)binReader.ReadInt16());
                         }
 
                         //ushort indexCountMaybe = (ushort)Common.ToInt16BigEndian(binReader);
 
                         //numVertices = 24;//8;
                         //binReader.BaseStream.Position = 0xdb7; // queens anklet
-                        binReader.BaseStream.Position = 0x9AB; // animal skull
+                        //binReader.BaseStream.Position = 0x9AB; // animal skull
                         //binReader.BaseStream.Position += 6;
 
                         List<Vector3> vertices = new List<Vector3>();
                         //numVertices -= 1;
-                        for (int i = 0; i < numVertices; ++i)
-                        {
-                            try
-                            {
-                                Vector3 p = Common.FromStreamVector3(binReader);
-                                subMesh.Vertices.Add(p);
-                                float unk = binReader.ReadSingle();
-                                Vector2 u = Common.FromStreamVector2(binReader);
-                                subMesh.UVs.Add(u);
-                                VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
-                                vpnt.Position = p;
-                                vpnt.TextureCoordinate = u;
+                        //for (int i = 0; i < numVertices; ++i)
+                        //{
+                        //    try
+                        //    {
+                        //        Vector3 p = Common.FromStreamVector3(binReader);
+                        //        subMesh.Vertices.Add(p);
+                        //        float unk = binReader.ReadSingle();
+                        //        Vector2 u = Common.FromStreamVector2(binReader);
+                        //        subMesh.UVs.Add(u);
+                        //        VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
+                        //        vpnt.Position = p;
+                        //        vpnt.TextureCoordinate = u;
 
-                                vpnt.Normal = Vector3.Up;
-                                subMesh.Normals.Add(vpnt.Normal);
+                        //        vpnt.Normal = Vector3.Up;
+                        //        subMesh.Normals.Add(vpnt.Normal);
 
-                            }
-                            catch (System.Exception ex)
-                            {
-                                int ibreak = 0;
-                            }
+                        //    }
+                        //    catch (System.Exception ex)
+                        //    {
+                        //        int ibreak = 0;
+                        //    }
                             //Vertices.Add(vpnt);
-                        }
+                        
 
                         byte[] endBlock = binReader.ReadBytes(4);
                         char[] endBlockChar = new char[endBlock.Length];
