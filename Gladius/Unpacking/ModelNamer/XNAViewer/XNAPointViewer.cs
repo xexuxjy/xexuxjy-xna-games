@@ -77,8 +77,8 @@ namespace XNAViewer
 
 
             //this.VSync = VSyncMode.Off;
-            m_modelReader = new GCModelReader();
-            //m_modelReader = new XboxModelReader();
+            //m_modelReader = new GCModelReader();
+            m_modelReader = new XboxModelReader();
             string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
 
             
@@ -95,8 +95,8 @@ namespace XNAViewer
 
             //todo - write something to compare bb's of each to text file for general testing.
 
-            //m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
-            m_fileNames.Add(baseModelPath + "animalskull_uv.mdl");
+            m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
+            //m_fileNames.Add(baseModelPath + "animalskull_uv.mdl");
             //m_fileNames.Add(baseModelPath + "alpha_box.mdl");
             ChangeModelNext();
 
@@ -424,7 +424,18 @@ namespace XNAViewer
                         pass.Apply();
                         //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
                         //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
-                        GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices / 3);
+                        //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices / 3);
+                        //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices-2);
+                        if (header.m_modelSubMesh is DisplayListHeader)
+                        {
+                            GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices / 3);
+                        }
+                        if (header.m_modelSubMesh is XBoxSubMesh)
+                        {
+                            GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices-2);
+                        }
+
+                        
                     }
                 }
 
@@ -435,14 +446,15 @@ namespace XNAViewer
 
         public void SetShaderData(ShaderData sd, out Effect effect)
         {
-            Texture2D tex1 = SetTexture(sd.textureId1);
-            Texture2D tex2 = SetTexture(sd.textureId2);
+            //Texture2D tex1 = SetTexture(sd.textureId1);
+            Texture2D tex1 = SetTexture(1);
+            //Texture2D tex2 = SetTexture(sd.textureId2);
 
 
             if (sd.shaderName == "metal")
             {
                 m_metalEffect.Parameters["Texture1"].SetValue(tex1);
-                m_metalEffect.Parameters["Texture2"].SetValue(tex2);
+                //m_metalEffect.Parameters["Texture2"].SetValue(tex2);
                 m_metalEffect.Parameters["World"].SetValue(rotationMatrix);
                 m_metalEffect.Parameters["View"].SetValue(modelviewMatrix);
                 m_metalEffect.Parameters["Projection"].SetValue(projectionMatrix);
@@ -868,23 +880,26 @@ namespace XNAViewer
                 m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
                 m_vertexBuffer.SetData(vertexData);
 
+                ushort[] indexData = modelSubMesh.Indices.ToArray();
 
-                ushort[] indexData = new ushort[modelSubMesh.Indices.Count];
-                for (int i = 0; i < indexData.Length; i += 3)
-                {
-                    //indexData[i + 0] = modelSubMesh.Indices[(i + 0)];
-                    //indexData[i + 1] = modelSubMesh.Indices[(i + 1)];
-                    //indexData[i + 2] = modelSubMesh.Indices[(i + 2)];
-                }
+                //ushort[] indexData = new ushort[modelSubMesh.Indices.Count];
+                //int adjustedIndexLength = (indexData.Length / 3) * 3;
 
-                int adjustedIndexLength = (indexData.Length / 3) * 3;
+                //for (int i = 0; i < adjustedIndexLength; i += 3)
+                //{
+                //    indexData[i + 0] = modelSubMesh.Indices[(i + 0)];
+                //    indexData[i + 1] = modelSubMesh.Indices[(i + 1)];
+                //    indexData[i + 2] = modelSubMesh.Indices[(i + 2)];
+                //}
 
-                for (int i = 0; i < adjustedIndexLength; i += 3)
-                {
-                    indexData[i + 0] = (ushort)(i + 0);
-                    indexData[i + 1] = (ushort)(i + 2);
-                    indexData[i + 2] = (ushort)(i + 1);
-                }
+                //int adjustedIndexLength = (indexData.Length / 3) * 3;
+
+                //for (int i = 0; i < adjustedIndexLength; i += 3)
+                //{
+                //    indexData[i + 0] = (ushort)(i + 0);
+                //    indexData[i + 1] = (ushort)(i + 2);
+                //    indexData[i + 2] = (ushort)(i + 1);
+                //}
 
 
 

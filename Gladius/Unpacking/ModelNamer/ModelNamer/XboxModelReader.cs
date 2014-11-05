@@ -206,7 +206,9 @@ namespace ModelNamer
                         Debug.Assert(unk1p == 0xE4);
                         Debug.Assert(unk1q == 0xF0);
 
-                        binReader.BaseStream.Position += 180;
+                        int numIndexOffset = 180;
+
+                        binReader.BaseStream.Position += numIndexOffset;
 
 
                         // block of 0x214 to next section?
@@ -247,6 +249,29 @@ namespace ModelNamer
                         int skip2 = binReader.ReadInt32();
                         int numVertices = binReader.ReadInt32();
 
+
+                        // jump forward and read textures.
+                        binReader.BaseStream.Position += (doegToTextureSize - numIndexOffset - 4);
+
+                        StringBuilder sb = new StringBuilder();
+                        List<string> textureNames = new List<string>();
+                        char b;
+                        int count = 0;
+                        while (count < numTextures)
+                        {
+                            while ((b = (char)binReader.ReadByte()) != 0x00)
+                            {
+                                sb.Append(b);
+                            }
+                            if (sb.Length > 0)
+                            {
+                                textureNames.Add(sb.ToString());
+                                count++;
+                            }
+                            sb.Clear();
+                        }
+
+
                         //binReader.BaseStream.Position = 0x536; // animal skull
                         for (int i = 0; i < numIndices; ++i)
                         {
@@ -261,31 +286,37 @@ namespace ModelNamer
                         //binReader.BaseStream.Position = 0x9AB; // animal skull
                         //binReader.BaseStream.Position += 6;
 
+                        int padding = (numIndices * 2) % 4;
+
+                        binReader.BaseStream.Position += padding;
+
                         List<Vector3> vertices = new List<Vector3>();
                         //numVertices -= 1;
-                        //for (int i = 0; i < numVertices; ++i)
-                        //{
-                        //    try
-                        //    {
-                        //        Vector3 p = Common.FromStreamVector3(binReader);
-                        //        subMesh.Vertices.Add(p);
-                        //        float unk = binReader.ReadSingle();
-                        //        Vector2 u = Common.FromStreamVector2(binReader);
-                        //        subMesh.UVs.Add(u);
-                        //        VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
-                        //        vpnt.Position = p;
-                        //        vpnt.TextureCoordinate = u;
+                        for (int i = 0; i < numVertices; ++i)
+                        {
+                            try
+                            {
+                                Vector3 p = Common.FromStreamVector3(binReader);
+                                subMesh.Vertices.Add(p);
+                                //float unk = binReader.ReadSingle();
+                                byte[] norms = binReader.ReadBytes(4);
+                                // convert to normal??
+                                Vector2 u = Common.FromStreamVector2(binReader);
+                                subMesh.UVs.Add(u);
+                                VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
+                                vpnt.Position = p;
+                                vpnt.TextureCoordinate = u;
 
-                        //        vpnt.Normal = Vector3.Up;
-                        //        subMesh.Normals.Add(vpnt.Normal);
+                                vpnt.Normal = Vector3.Up;
+                                subMesh.Normals.Add(vpnt.Normal);
 
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        int ibreak = 0;
-                        //    }
+                            }
+                            catch (System.Exception ex)
+                            {
+                                int ibreak = 0;
+                            }
                             //Vertices.Add(vpnt);
-                        
+                        }       
 
                         byte[] endBlock = binReader.ReadBytes(4);
                         char[] endBlockChar = new char[endBlock.Length];
@@ -305,7 +336,7 @@ namespace ModelNamer
 
                     ShaderData shaderData = new ShaderData();
                     shaderData.shaderName = "test";
-                    shaderData.textureId1 = 0;
+                    shaderData.textureId1 = 1;
                     shaderData.textureId2 = 0;
                     m_shaderData.Add(shaderData);
                 }
