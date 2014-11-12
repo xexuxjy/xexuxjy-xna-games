@@ -38,6 +38,13 @@ namespace XNAViewer
 
         public GraphicsDeviceManager m_graphicsDeviceManager;
 
+        public Model m_unitSphere;
+        public Model m_unitCone;
+        public Model m_unitCylinder;
+        public Model m_unitCube;
+
+
+
         InputState inputState;
 
 
@@ -72,14 +79,20 @@ namespace XNAViewer
 
             viewerFont = Content.Load <SpriteFont> ("ViewerFont");
 
+            m_unitCone = Content.Load<Model>("UnitCone");
+            m_unitSphere = Content.Load<Model>("UnitSphere");
+            m_unitCube = Content.Load<Model>("UnitCube");
+            m_unitCylinder = Content.Load<Model>("UnitCylinder");
+
 
             m_missingTexture = GetTexture(Color.Pink);
 
 
             //this.VSync = VSyncMode.Off;
-            //m_modelReader = new GCModelReader();
-            m_modelReader = new XboxModelReader();
+            m_modelReader = new GCModelReader();
+            //m_modelReader = new XboxModelReader();
             string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
+            //string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\UnidentifiedModels\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
 
             
             //m_modelReader = new XboxModelReader();
@@ -95,9 +108,19 @@ namespace XNAViewer
 
             //todo - write something to compare bb's of each to text file for general testing.
 
-            m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
+            //m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
+            //m_fileNames.Add(baseModelPath + @"characters\prop_practicepost1.mdl");
+            //m_fileNames.Add(baseModelPath + @"characters\prop_practicepost2.mdl");
+            //m_fileNames.Add(baseModelPath + @"characters\amazon.mdl");
+            m_fileNames.Add(baseModelPath + @"weapons\bow_bow.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\bow_coral.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\bow_hunters.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\bow_flaming.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\bowCS_ramshead.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\bowCS_snipers.mdl");
             //m_fileNames.Add(baseModelPath + "animalskull_uv.mdl");
             //m_fileNames.Add(baseModelPath + "alpha_box.mdl");
+            //m_fileNames.AddRange(Directory.GetFiles(baseModelPath, "*"));
             ChangeModelNext();
 
 
@@ -294,18 +317,44 @@ namespace XNAViewer
 
         public void DrawSkeleton()
         {
-            //GCModel model = m_currentModel;
-            //GL.Begin(PrimitiveType.Points);
+            
+            BoneNode start = m_currentModel.m_model.m_rootBone;
+            CalcBindFinalMatrix(start, Matrix.Identity);
 
-            //BoneNode start = model.m_rootBone;
-            //CalcBindFinalMatrix(start, Matrix.Identity);
+            
+            Vector3 mid = new Vector3();
+            //if (readDisplayLists)
+            {
+                mid = (m_currentModel.m_model.MaxBB - m_currentModel.m_model.MinBB) / 2f;
+            }
 
-            //foreach (BoneNode node in model.m_bones)
-            //{
-            //    GL.Vertex3(node.finalMatrix.ExtractTranslation());
-            //}
+            float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
 
-            //GL.End();
+
+            float scale = longest * 0.05f;
+
+            Matrix scaleMatrix = Matrix.CreateScale(scale);
+
+            foreach (BoneNode node in m_currentModel.m_model.m_bones)
+            {
+                foreach (ModelMesh mesh in m_unitSphere.Meshes)
+                {
+                    foreach (BasicEffect effect in mesh.Effects)
+                    {
+                        effect.EnableDefaultLighting();
+
+                        effect.View = modelviewMatrix;
+                        effect.Projection = projectionMatrix;
+                        effect.World = node.finalMatrix * scaleMatrix;
+                        
+
+                    }
+                    mesh.Draw();
+                }
+
+            }
+
+
         }
 
 
@@ -355,15 +404,13 @@ namespace XNAViewer
 
                 spriteBatch.End();
 
-                bool drawSkeleton = false;
+                DrawModel();
 
-                if (drawSkeleton)
+                bool drawSkeleton = true;
+
+                if (m_currentModel.m_model.m_skinned && drawSkeleton)
                 {
-                 //   DrawSkeleon();
-                }
-                else
-                {
-                    DrawModel();
+                    DrawSkeleton();
                 }
             }
             else
@@ -385,19 +432,19 @@ namespace XNAViewer
                 counter++;
                 if (displayAll == false && counter != m_currentModelSubIndex)
                 {
-                    continue;
+                    // continue;
                 }
 
                 if (m_currentModel.m_model.m_skinned)
                 {
-                    if (header.m_modelSubMesh.MeshId != 4)
+                    if (header.m_modelSubMesh.MeshId != 6)
                     {
                         //continue;
                     }
 
                     if (header.m_modelSubMesh.LodLevel != 0x01)
                     {
-                        continue;
+                        //continue;
                     }
                 }
 
@@ -446,8 +493,8 @@ namespace XNAViewer
 
         public void SetShaderData(ShaderData sd, out Effect effect)
         {
-            //Texture2D tex1 = SetTexture(sd.textureId1);
-            Texture2D tex1 = SetTexture(1);
+            Texture2D tex1 = SetTexture(sd.textureId1);
+            //Texture2D tex1 = SetTexture(1);
             //Texture2D tex2 = SetTexture(sd.textureId2);
 
 
