@@ -450,6 +450,65 @@ namespace ModelNamer
         private List<Vector2> m_uvs = new List<Vector2>();
         private List<ushort> m_indices = new List<ushort>();
 
+
+        public void ReadSkinnedSubMesh(BinaryReader binReader)
+        {
+            // block size 56 bytes.
+            int spacer = binReader.ReadInt32();
+            Debug.Assert(spacer == -1);
+            int skip1 = binReader.ReadInt32();
+            Debug.Assert(skip1 == 0);
+            int skip2 = binReader.ReadInt32();
+            Debug.Assert(skip2 == 0);
+            int counter1 = binReader.ReadInt32();
+            int skip3 = binReader.ReadInt32();
+            int skip4 = binReader.ReadInt32();
+            int skip5 = binReader.ReadInt32();
+            int skip6 = binReader.ReadInt32();
+            int zero1 = binReader.ReadInt32();
+            int zero2 = binReader.ReadInt32();
+            Debug.Assert(zero1 == 0 && zero2 == 0);
+
+
+
+
+
+
+
+
+
+        }
+
+        public void ReadSkinnedSubMesh2(BinaryReader binReader)
+        {
+            // block size 56 bytes.
+            int spacer = binReader.ReadInt32();
+            Debug.Assert(spacer == -1);
+            int skip1 = binReader.ReadInt32();
+            Debug.Assert(skip1 == 0);
+            int skip2 = binReader.ReadInt32();
+            Debug.Assert(skip2 == 0);
+            int counter1 = binReader.ReadInt32();
+            int skip3 = binReader.ReadInt32();
+            int skip4 = binReader.ReadInt32();
+            int skip5 = binReader.ReadInt32();
+            int skip6 = binReader.ReadInt32();
+            int zero1 = binReader.ReadInt32();
+            int zero2 = binReader.ReadInt32();
+            Debug.Assert(zero1 == 0 && zero2 == 0);
+
+
+
+
+
+
+
+
+
+        }
+    
+    
+    
     }
 
 

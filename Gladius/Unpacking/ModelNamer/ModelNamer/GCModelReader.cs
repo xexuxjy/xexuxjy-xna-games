@@ -497,6 +497,11 @@ namespace ModelNamer
                     DisplayListHeader.FromStream(m_modelMeshes[i] as DisplayListHeader, binReader, m_dsliInfos[i]);
                     MaxVertex = Math.Max(MaxVertex, m_modelMeshes[i].MaxVertex);
                 }
+
+     /*
+      * 19248  0x4b30
+        37068  0x90cc
+      */
                 long nowAt = binReader.BaseStream.Position;
 
                 long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
@@ -877,7 +882,7 @@ namespace ModelNamer
         public int numBones;
         public byte[] fullBlock;
         public byte[] headerBlock;
-        public byte[] remainderBlock;
+        public byte[] weightBlock;
         public List<SkinElement> elements = new List<SkinElement>();
         public List<Vector3> m_points = new List<Vector3>();
         public List<Vector3> m_normals = new List<Vector3>();
@@ -902,7 +907,7 @@ namespace ModelNamer
 
             }
 
-            block.remainderBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize) - (block.numElements * SkinElement.Size));
+            block.weightBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize) - (block.numElements * SkinElement.Size));
             //block.remainderBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize));
 
             reader.BaseStream.Position = currentPos;
@@ -930,13 +935,13 @@ namespace ModelNamer
                     {
                         sb.AppendLine();
                     }
-                    sb.AppendFormat("{0:X2}", remainderBlock[i]);
+                    sb.AppendFormat("{0:X2}", weightBlock[i]);
                 }
             }
             sb.AppendLine();
-            for (int i = (numElements * elementSize); i < remainderBlock.Length; ++i)
+            for (int i = (numElements * elementSize); i < weightBlock.Length; ++i)
             {
-                sb.AppendFormat("{0:X2}", remainderBlock[i]);
+                sb.AppendFormat("{0:X2}", weightBlock[i]);
             }
             return sb.ToString();
         }
@@ -959,10 +964,11 @@ namespace ModelNamer
 
             // note sure of this remainder - possibly a 3 byte normal?
             //element.rem = reader.ReadBytes(3);
-            element.normal.X = Common.ByteToFloat(reader.ReadByte());
-            element.normal.Y = Common.ByteToFloat(reader.ReadByte());
-            element.normal.Z = Common.ByteToFloat(reader.ReadByte());
-
+            byte[] extra = reader.ReadBytes(3);
+            element.normal.X = Common.ByteToFloat(extra[0]);
+            element.normal.Y = Common.ByteToFloat(extra[1]);
+            element.normal.Z = Common.ByteToFloat(extra[2]);
+            element.rem = extra;
             element.normal.Normalize();
             return element;
         }
@@ -970,8 +976,19 @@ namespace ModelNamer
     }
 
 
+    // 0x0c , 0x0a, 0xc3 , 3 bones.
+
     public class DSLIInfo
     {
+
+
+
+
+
+
+
+
+
         public int startPos;
         public int length;
 
