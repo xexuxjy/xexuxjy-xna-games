@@ -560,22 +560,34 @@ public class PlayerChoiceBar : MonoBehaviour
                         MovementGrid.CurrentCursorPoint = p;
                         SquareType st = Arena.GetSquareTypeAtLocation(MovementGrid.CurrentCursorPoint);
                         BaseActor target = Arena.GetActorAtPosition(MovementGrid.CurrentCursorPoint);
-                        //int pathLength = 
-                        CurrentActor.WayPointList.Clear();
-
                         Point adjustedPoint = MovementGrid.CurrentCursorPoint;
-                        //if (Arena.IsPointOccupied(adjustedPoint))
-                        //{
-                        //    // instead find the nearest un-occupied square
-                        //    adjustedPoint = Arena.PointNearestLocation(CurrentActor.ArenaPoint, adjustedPoint);
+			
+                        //CurrentActor.WayPointList.Clear();
 
-                        //}
-
-
-                        Arena.FindPath(CurrentActor.ArenaPoint, adjustedPoint, CurrentActor.WayPointList);
-
-
-
+						// instead of always finding a path, let the user 'paint' one so they can control flanking , rear attacks etc.
+                        //Arena.FindPath(CurrentActor.ArenaPoint, adjustedPoint, CurrentActor.WayPointList);
+                        
+                        CurrentActor.BackupWaypoints();
+                        
+                        int pointIndex = CurrentActor.WayPointList.IndexOf(p);
+                        if(pointIndex == -1)
+                        {
+                        	if(Arena.IsNextTo(CurrentActor.WayPointList.Last,p))
+                        	{
+                        		CurrentActor.WayPointList.Add(p);
+                        	}
+                        	
+                        }
+                        else
+                        {
+							CurrentActor.WayPointList.Resize = pointIndex;
+                        }
+                        
+                        // check path validity.
+                        if(!Arena.CheckValidPath(CurrentActor.WayPointList))
+                        {
+                        	CurrentActor.RestoreWaypoints();
+						}
                     }
                     break;
                 }

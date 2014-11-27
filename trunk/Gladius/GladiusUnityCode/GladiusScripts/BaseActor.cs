@@ -1105,6 +1105,12 @@ public class BaseActor : MonoBehaviour
 
     }
 
+    private List<Point> OldWayPointList
+    {
+        get { return m_oldWayPointList; }
+
+    }
+
     // 
     public void ConfirmMove()
     {
@@ -1691,7 +1697,8 @@ public class BaseActor : MonoBehaviour
     private Dictionary<BaseActor, int> m_threatMap = new Dictionary<BaseActor, int>();
     private BaseActor m_currentTarget = null;
     private List<Point> m_wayPointList = new List<Point>();
-
+	private List<Point> m_oldWayPointList = new List<Point>();
+	
     private List<AttackSkill> m_knownAttacks = new List<AttackSkill>();
     private List<AttackSkill> m_availableAttacks = new List<AttackSkill>();
 
@@ -1778,9 +1785,20 @@ public class OngoingSkillStatus
         {
 
         }
-
-
     }
+    
+    
+    public void BackupWaypoints()
+    {
+    	OldWayPointList.Clear();
+    	OldWayPointList.AddRange(WaypointList);
+	}
+    	
+   public void RestoreWaypoints()
+   {
+		WayPointList.Clear();
+   		WayPointList.AddRange(OldWayPointList);
+   }
 
     public bool Permanent
     { get; set; }
