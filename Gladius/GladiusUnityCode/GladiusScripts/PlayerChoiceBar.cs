@@ -572,7 +572,8 @@ public class PlayerChoiceBar : MonoBehaviour
                         int pointIndex = CurrentActor.WayPointList.IndexOf(p);
                         if(pointIndex == -1)
                         {
-                        	if(Arena.IsNextTo(CurrentActor.WayPointList.Last,p))
+                            if(CurrentActor.WayPointList.Count == 0 || 
+                                Arena.IsNextTo(CurrentActor.WayPointList[CurrentActor.WayPointList.Count-1],p))
                         	{
                         		CurrentActor.WayPointList.Add(p);
                         	}
@@ -580,7 +581,8 @@ public class PlayerChoiceBar : MonoBehaviour
                         }
                         else
                         {
-							CurrentActor.WayPointList.Resize = pointIndex;
+                            // remove all up to the last
+							CurrentActor.WayPointList.RemoveRange(pointIndex, CurrentActor.WayPointList.Count-pointIndex);
                         }
                         
                         // check path validity.

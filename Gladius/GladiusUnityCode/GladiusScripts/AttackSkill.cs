@@ -403,7 +403,10 @@ namespace Gladius
             {
                 if (attackSkill.SubSkillName != null)
                 {
-                    attackSkill.SubSkill = Data[attackSkill.SubSkillName];
+                    if (Data.ContainsKey(attackSkill.SubSkillName))
+                    {
+                        attackSkill.SubSkill = Data[attackSkill.SubSkillName];
+                    }
                 }
             }
         }

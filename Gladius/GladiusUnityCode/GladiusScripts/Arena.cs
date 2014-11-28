@@ -39,6 +39,23 @@ namespace Gladius.arena
         }
 
 
+        public bool CheckValidPath(List<Point> points)
+        {
+            foreach (Point p in points)
+            {
+                if (IsPointOccupied(p))
+                {
+                    return false;
+                }
+                if (!InLevel(p))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
         public bool IsPointOccupied(Point p)
         {
             if (!InLevel(p))
@@ -566,6 +583,15 @@ namespace Gladius.arena
             }
             return closestPoint;
         }
+
+        public bool IsNextTo(Point p1, Point p2)
+        {
+            int xdiff = Math.Abs(p1.X - p2.X);
+            int ydiff = Math.Abs(p1.Y - p2.Y);
+            return (xdiff == 1 && ydiff == 0) || (xdiff == 0 && ydiff ==1);
+
+        }
+
 
         public void SetupScenery()
         {
