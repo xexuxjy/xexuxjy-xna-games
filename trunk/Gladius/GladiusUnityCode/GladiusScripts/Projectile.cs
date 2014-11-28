@@ -5,6 +5,20 @@ using Gladius;
 public class Projectile : MonoBehaviour
 {
     public float Speed = 3f;
+    GameObject m_modelObject;
+
+    public void Start()
+    {
+        m_modelObject = Instantiate(Resources.Load(GladiusGlobals.ModelsRoot + "bow_arrow")) as GameObject;
+        if (m_modelObject != null)
+        {
+            m_modelObject.transform.parent = transform;
+            m_modelObject.transform.localPosition = Vector3.zero;
+            m_modelObject.transform.localRotation = Quaternion.Euler(new Vector3(90, 90, 0));
+            m_modelObject.transform.localScale = new Vector3(100f, 100f, 100f);
+        }
+    }
+
 
     public void Update()
     {
@@ -29,21 +43,6 @@ public class Projectile : MonoBehaviour
 
         gameObject.transform.position = Position;
     }
-
-    //public override void Draw(GameTime gameTime, ICamera camera)
-    //{
-    //    m_modelData.Draw(camera,World);
-    //}
-
-    //public override void LoadContent()
-    //{
-    //    base.LoadContent();
-    //    ModelName = "Models/Shapes/UnitCylinder";
-    //    m_modelData = new ModelData(ContentManager.Load<Model>(ModelName), new Vector3(0.05f,0.5f,0.05f),0f, ContentManager.GetColourTexture(Color.Magenta));
-    //    m_modelData.ModelRotation = Matrix.CreateFromYawPitchRoll(0, MathHelper.PiOver2, 0);
-    //    DrawOrder = Globals.CharacterDrawOrder;
-    //}
-
 
     private BaseActor m_target;
     private Vector3 m_velocity;
@@ -76,18 +75,11 @@ public class Projectile : MonoBehaviour
         set;
     }
 
-
     public BaseActor Owner
     {
         get;
         set;
     }
-
-    //public Vector3 Velocity
-    //{
-    //    get;
-    //    set;
-    //}
 
     public Vector3 Position
     {
@@ -101,4 +93,6 @@ public class Projectile : MonoBehaviour
         }
     }
 }
-//}
+
+
+

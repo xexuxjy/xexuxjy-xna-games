@@ -267,17 +267,17 @@ public class BaseActor : MonoBehaviour
         Item item = characterData.GetItemAtLocation(ItemLocation.Weapon);
         if(item != null)
         {
-            LoadAndAttachModel("RightHandAttach", item.ShortMeshName);
+            LoadAndAttachModel("RightHandAttach", item.ModelMeshName);
         }
         item = characterData.GetItemAtLocation(ItemLocation.Shield);
         if(item != null)
         {
-            LoadAndAttachModel("LeftHandAttach", item.ShortMeshName);
+            LoadAndAttachModel("LeftHandAttach", item.ModelMeshName);
         }
         item = characterData.GetItemAtLocation(ItemLocation.Helmet);
         if(item != null)
         {
-            LoadAndAttachModel("Bip01 Head", item.ShortMeshName);
+            LoadAndAttachModel("Bip01 Head", item.ModelMeshName);
         }
 
         if (characterData.StartPosition.HasValue)
@@ -660,7 +660,16 @@ public class BaseActor : MonoBehaviour
                 load.transform.parent = boneTransform;
                 load.transform.localPosition = Vector3.zero;
                 load.transform.localRotation = Quaternion.Euler(new Vector3(90, 90, 0));
-                load.transform.localScale = new Vector3(100f, 100f, 100f);
+                if(modelName.Contains("bow"))
+                {
+                    load.transform.localScale = new Vector3(10f, 10f, 10f);
+                }
+                else
+                {
+                    load.transform.localScale = new Vector3(100f, 100f, 100f);
+                }
+                
+                //load.transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
         else
@@ -1685,6 +1694,19 @@ public class BaseActor : MonoBehaviour
 
     }
 
+    public void BackupWaypoints()
+    {
+        OldWayPointList.Clear();
+        OldWayPointList.AddRange(WayPointList);
+    }
+
+    public void RestoreWaypoints()
+    {
+        WayPointList.Clear();
+        WayPointList.AddRange(OldWayPointList);
+    }
+
+
     public ActorClassData ActorClassData
     {
         get { return m_characterData.ActorClassData; }
@@ -1713,6 +1735,8 @@ public class BaseActor : MonoBehaviour
 
     public Transform m_leftHandTransforms;
     public Transform m_rightHandTransforms;
+
+    public GameObject m_projectileGameObject;
 
 
     private Transform m_projectileHandTransform;
@@ -1788,17 +1812,6 @@ public class OngoingSkillStatus
     }
     
     
-    public void BackupWaypoints()
-    {
-    	OldWayPointList.Clear();
-    	OldWayPointList.AddRange(WaypointList);
-	}
-    	
-   public void RestoreWaypoints()
-   {
-		WayPointList.Clear();
-   		WayPointList.AddRange(OldWayPointList);
-   }
 
     public bool Permanent
     { get; set; }
