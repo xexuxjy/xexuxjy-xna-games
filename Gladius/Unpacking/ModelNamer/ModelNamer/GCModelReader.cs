@@ -10,9 +10,6 @@ using System.Diagnostics;
 
 namespace ModelNamer
 {
-
-
-
     public class GCModel : BaseModel
     {
         public GCModel(String name) : base(name)
@@ -21,9 +18,9 @@ namespace ModelNamer
         }
 
 
-        public void LoadData(BinaryReader binReader)
+        public void LoadData(BinaryReader binReader,long startPosition=0)
         {
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
 
             //Common.ReadTextureNames(binReader, Common.txtrTag, model.m_textures);
 
@@ -35,35 +32,31 @@ namespace ModelNamer
 
 
             // Look for skeleton and skin if they exist. need to load names first.
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
             Common.ReadNullSeparatedNames(binReader, Common.nameTag, m_names);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
             ReadSKELSection(binReader);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
+            ReadJLODSection(binReader);
+            binReader.BaseStream.Position = startPosition;
             ReadSHDRSection(binReader);
-            binReader.BaseStream.Position = 0;
-            ReadDSLISection(binReader);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
             ReadDSLCSection(binReader);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
+            ReadDSLISection(binReader);
+            binReader.BaseStream.Position = startPosition;
             ReadDSLSSection(binReader);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
             ReadMESHSection(binReader);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
             ReadSkinSection(binReader);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
             ReadTextureSection(binReader);
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
 
             if (Common.FindCharsInStream(binReader, Common.cntrTag, true))
             {
-                //int blockSize = binReader.ReadInt32();
-                //int unk2 = binReader.ReadInt32();
-                //int unk3 = binReader.ReadInt32();
-                //for (int i = 0; i < model.m_dsliInfos.Count; ++i)
-                //{
-                //    model.m_matrices.Add(Common.FromStreamMatrixBE(binReader));
-                //}
+                // setting this to all null seemed to make no difference...
                 //int ibreak = 0;
             }
             // not skinned so look for fixed version.l
@@ -98,7 +91,7 @@ namespace ModelNamer
                 }
             }
 
-            binReader.BaseStream.Position = 0;
+            binReader.BaseStream.Position = startPosition;
 
             if (Common.FindCharsInStream(binReader, Common.uv0Tag))
             {
@@ -275,6 +268,15 @@ namespace ModelNamer
                     }
                     allOutStream.Write(Common.ByteArrayToString(skinBlock.headerBlock, 2));
                     allOutStream.Write('\n');
+
+                    using (System.IO.StreamWriter sw = new StreamWriter(File.Open(tagOutputDirname + "/" + "pos-bone" + counter, FileMode.Create)))
+                    {
+                        foreach(SkinElement skinElement in skinBlock.elements)
+                        {
+                            Common.WriteFloat(sw, skinElement.pos);
+                            sw.WriteLine(String.Format("[{0}][{1}][{2}]", skinElement.rem[0], skinElement.rem[1], skinElement.rem[2]));
+                        }
+                    }
                     counter++;
                 }
             }
@@ -374,10 +376,12 @@ namespace ModelNamer
                 int blockSize = binReader.ReadInt32();
                 int pad1 = binReader.ReadInt32();
                 int pad2 = binReader.ReadInt32();
-                int numSections = (blockSize - 8 - 4 - 4) / 8;
+                int numSections2 = (blockSize - 8 - 4 - 4) / 8;
+                int numSections = m_modelMeshes.Count;
 
                 for (int i = 0; i < numSections; ++i)
                 {
+                    DisplayListHeader header = m_modelMeshes[i] as DisplayListHeader;
                     DSLIInfo info = DSLIInfo.ReadStream(binReader);
                     if (m_skinned)
                     {
@@ -388,12 +392,7 @@ namespace ModelNamer
                     if (info.length > 0)
                     {
                         m_dsliInfos.Add(info);
-
-                        DisplayListHeader header = new DisplayListHeader();
-                        header.m_model = this;
                         header.dsliInfo = info;
-
-                        m_modelMeshes.Add(header);
                     }
                 }
             }
@@ -449,6 +448,7 @@ namespace ModelNamer
                 int pad1 = binReader.ReadInt32();
                 int pad2 = binReader.ReadInt32();
                 int numBones = (blockSize - 16) / 32;
+                Debug.Assert(pad2 == numBones);
 
                 for (int i = 0; i < numBones; ++i)
                 {
@@ -458,6 +458,29 @@ namespace ModelNamer
                 }
                 ConstructSkeleton();
             }
+
+        }
+
+        public void ReadJLODSection(BinaryReader binReader)
+        {
+            // lod details for bones. - maybe. 
+            if (Common.FindCharsInStream(binReader, Common.jlodTag))
+            {
+                int blockSize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int numElements = binReader.ReadInt32();
+                Debug.Assert(numElements == m_bones.Count);
+
+                HashSet<int> set = new HashSet<int>();
+                for (int i = 0; i < numElements; ++i)
+                {
+                    int info = binReader.ReadInt32();
+                    m_jlodInfo.Add(info);
+                    set.Add(info);
+                }
+                int ibreak = 0;
+            }
+
 
         }
 
@@ -472,8 +495,18 @@ namespace ModelNamer
 
                 for (int i = 0; i < numEntries; ++i)
                 {
-                    DisplayListHeader header = m_modelMeshes[i] as DisplayListHeader;
-                    header.dslcEntry = binReader.ReadByte();
+                    DisplayListHeader header = new DisplayListHeader();
+                    header.m_model = this;
+                    //header.dsliInfo = info;
+
+                    //DisplayListHeader header = m_modelMeshes[i] as DisplayListHeader;
+                    byte val = binReader.ReadByte();
+                    header.dslcEntry = val;
+                    // add based on number of times?
+                    for(byte j=0;j<val;++j)
+                    {
+                        m_modelMeshes.Add(header);
+                    }
                 }
             }
 
@@ -524,11 +557,14 @@ namespace ModelNamer
                 int blocksize = binReader.ReadInt32();
                 int pad1 = binReader.ReadInt32();
                 int numElements = binReader.ReadInt32();
+                int counter = 0;
                 for (int i = 0; i < numElements; ++i)
                 {
                     SkinBlock skinBlock = SkinBlock.ReadBlock(binReader);
-                    (m_modelMeshes[i] as DisplayListHeader).skinBlock = skinBlock;
+                    DisplayListHeader h = (m_modelMeshes[counter] as DisplayListHeader);
+                    h.skinBlock = skinBlock;
                     m_skinBlocks.Add(skinBlock);
+                    counter += h.dslcEntry;
                 }
             }
         }
@@ -580,51 +616,106 @@ namespace ModelNamer
 
         }
 
-        public void WriteOBJ(StreamWriter writer, StreamWriter materialWriter)
+        public void WriteOBJ(StreamWriter writer, StreamWriter materialWriter,String texturePath,int desiredLod=-1)
         {
-            //// write material?
-            //foreach (String name in m_textures)
-            //{
-            //    String textureName = name + ".png";
-            //    materialWriter.WriteLine("newmtl " + textureName);
-            //    materialWriter.WriteLine("Ka 1.000 1.000 1.000");
-            //    materialWriter.WriteLine("Kd 1.000 1.000 1.000");
-            //    materialWriter.WriteLine("Ks 0.000 0.000 0.000");
-            //    materialWriter.WriteLine("d 1.0");
-            //    materialWriter.WriteLine("illum 2");
-            //    materialWriter.WriteLine("map_Ka ../Textures/" + textureName);
-            //    materialWriter.WriteLine("map_Kd ../Textures/" + textureName);
-            //}
+            int vertexCountOffset = 0;
+            int normalCountOffset = 0;
+            int uvCountOffset = 0;
 
-            //writer.WriteLine("mtllib " + m_name + ".mtl");
-            //// and now points, uv's and normals.
-            //foreach (Vector3 v in m_points)
-            //{
-            //    writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-            //}
-            //foreach (Vector2 v in m_uvs)
-            //{
-            //    writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, 1.0f - v.Y));
-            //}
-            //foreach (Vector3 v in m_points)
-            //{
-            //    writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-            //}
+            //String materialName = null;
 
-            //writer.WriteLine("usemtl " + m_textures[m_textures.Count - 1] + ".png");
+            string reflectname = "skygold_R.tga";
+            // write material?
+            if (m_textures.Count == 2 && (m_textures[0].textureName.Contains(reflectname) || m_textures[1].textureName.Contains(reflectname)))
+            {
+                int notsgindex = m_textures[0].textureName.Contains(reflectname) ? 1 : 0;
 
-            //foreach (DisplayListHeader dlh in m_modelMeshes)
-            //{
-            //    int counter = 0;
-            //    int offset = 1;
-            //    for (int i = 0; i < dlh.entries.Count; )
-            //    {
-            //        writer.WriteLine(String.Format("f {0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex + offset, dlh.entries[i].UVIndex + offset, dlh.entries[i].NormIndex + offset,
-            //            dlh.entries[i + 1].PosIndex + offset, dlh.entries[i + 1].UVIndex + offset, dlh.entries[i + 1].NormIndex + offset,
-            //            dlh.entries[i + 2].PosIndex + offset, dlh.entries[i + 2].UVIndex + offset, dlh.entries[i + 2].NormIndex + offset));
-            //        i += 3;
-            //    }
-            //}
+                String textureName = m_textures[notsgindex].textureName + ".jpg";
+                materialWriter.WriteLine("newmtl " + textureName);
+                materialWriter.WriteLine("Ka 1.000 1.000 1.000");
+                materialWriter.WriteLine("Kd 1.000 1.000 1.000");
+                materialWriter.WriteLine("Ks 0.000 0.000 0.000");
+                materialWriter.WriteLine("d 1.0");
+                materialWriter.WriteLine("illum 3");
+                materialWriter.WriteLine("map_Ka " + texturePath + textureName);
+                materialWriter.WriteLine("map_Kd " + texturePath + textureName);
+
+                materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname+".jpg"); 
+
+
+            }
+            else
+            {
+
+                foreach (TextureData textureData in m_textures)
+                {
+                    String textureName = textureData.textureName + ".jpg";
+                    materialWriter.WriteLine("newmtl " + textureName);
+                    materialWriter.WriteLine("Ka 1.000 1.000 1.000");
+                    materialWriter.WriteLine("Kd 1.000 1.000 1.000");
+                    materialWriter.WriteLine("Ks 0.000 0.000 0.000");
+                    materialWriter.WriteLine("d 1.0");
+                    materialWriter.WriteLine("illum 2");
+                    materialWriter.WriteLine("map_Ka " + texturePath + textureName);
+                    materialWriter.WriteLine("map_Kd " + texturePath + textureName);
+
+                    materialWriter.WriteLine("refl -type sphere -mm 0 1 clouds.mpc");
+                }
+            }
+            writer.WriteLine("mtllib " + m_name + ".mtl");
+            int submeshCount = 0;
+            foreach (DisplayListHeader headerBlock in m_modelMeshes)
+            {
+                // just want highest lod.
+                if (headerBlock.LodLevel != 0 && ((headerBlock.LodLevel & desiredLod) == 0))
+                {
+                    continue;
+                }
+
+                string groupName = String.Format("{0}-submesh{1}-LOD{2}" ,m_name,submeshCount,headerBlock.LodLevel);
+
+                writer.WriteLine("o " + groupName);
+                writer.WriteLine("g " + groupName);
+                // and now points, uv's and normals.
+                foreach (Vector3 v in headerBlock.Vertices)
+                {
+                    writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                }
+                foreach (Vector2 v in headerBlock.UVs)
+                {
+                    writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, 1.0f - v.Y));
+                }
+                foreach (Vector3 v in headerBlock.Normals)
+                {
+                    writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                }
+
+                
+                ShaderData shaderData = m_shaderData[headerBlock.MeshId];
+
+                int adjustedId = MathHelper.Clamp(shaderData.textureId2, 0, m_textures.Count - 1);
+
+                String materialName = m_textures[adjustedId].textureName+ ".jpg";
+                writer.WriteLine("usemtl " + materialName);
+
+                int counter = 0;
+                int vertexOffset = 1+vertexCountOffset;
+                int normalOffset = 1 + normalCountOffset;
+                int uvOffset = 1 + uvCountOffset;
+                for (int i = 0; i < headerBlock.entries.Count; )
+                {
+                    writer.WriteLine(String.Format("f {0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", 
+                        headerBlock.entries[i].PosIndex + vertexOffset, headerBlock.entries[i].UVIndex + uvOffset, headerBlock.entries[i].NormIndex + normalOffset,
+                        headerBlock.entries[i + 1].PosIndex + vertexOffset, headerBlock.entries[i + 1].UVIndex + uvOffset, headerBlock.entries[i + 1].NormIndex + normalOffset,
+                        headerBlock.entries[i + 2].PosIndex + vertexOffset, headerBlock.entries[i + 2].UVIndex + uvOffset, headerBlock.entries[i + 2].NormIndex + normalOffset));
+                    i += 3;
+                }
+
+                vertexCountOffset += headerBlock.Vertices.Count;
+                normalCountOffset += headerBlock.Normals.Count;
+                uvCountOffset += 0; // shared uvs?
+                submeshCount++;
+            }
         }
 
         public bool Valid
@@ -652,6 +743,7 @@ namespace ModelNamer
         public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
         //public List<DisplayListHeader> m_modelMeshes = new List<DisplayListHeader>();
         public List<SkinBlock> m_skinBlocks = new List<SkinBlock>();
+        public List<int> m_jlodInfo = new List<int>();
     }
 
     public class GCModelReader : BaseModelReader
@@ -815,7 +907,7 @@ namespace ModelNamer
             String modelPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed - Copy";
             String infoFile = @"D:\gladius-extracted-archive\gc-compressed\ModelInfo.txt";
             //String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
-            String objOutputPath = @"D:\gladius-extracted-archive\gc-compressed\test-models\obj-models\";
+            String objOutputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-Obj\";
             //String tagOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\tag-output";
 
             String tagOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\tag-output";
@@ -826,24 +918,52 @@ namespace ModelNamer
             //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
             //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\File 015227");
             int ibreak = 0;
-            //reader.LoadModels(modelPath, infoFile,400);
-            //foreach (GCModel model in reader.m_models)
-            //{
-            //    model.DumpSections(tagOutputPath);
-            //    //using(StreamWriter objSw = new StreamWriter(objOutputPath+model.m_name+".obj"))
-            //    //{
-            //    //    using(StreamWriter matSw = new StreamWriter(objOutputPath+model.m_name+".mtl"))
-            //    //    {
-            //    //        model.WriteOBJ(objSw,matSw);
-            //    //    }
-            //    //}
 
-            //}
-            //reader.LoadModels(modelPath,infoFile);
-            //reader.DumpPoints(infoFile);
-            reader.DumpSectionLengths(modelPath, sectionInfoFile);
+            String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
 
-            //String outputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-dsli-output";
+
+            List<string> filenames = new List<string>();
+
+
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
+
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
+            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\prop_practicepost1.mdl");
+
+            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons\swordM_gladius.mdl");
+            filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\scorpion.mdl");
+            foreach (string name in filenames)
+            {
+                reader.m_models.Add(reader.LoadSingleModel(name));
+            }
+            int ibreak2 = 0;
+
+
+            HashSet<string> shadernames = new HashSet<string>();
+            foreach (GCModel model in reader.m_models)
+            {
+                try
+                {
+                    //foreach (ShaderData sd in model.m_shaderData)
+                    //{
+                    //    shadernames.Add(sd.shaderName);
+                    //}
+                    ////model.DumpSections(tagOutputPath);
+                    using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
+                    {
+                        using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
+                        {
+                            model.WriteOBJ(objSw, matSw, texturePath);
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+
+                }
+            }
             String outputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed";
             infoFile = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-tag-output-results.txt";
             //using (StreamWriter objSw = new StreamWriter(@"d:\tmp\skin-data.txt"))
@@ -861,15 +981,18 @@ namespace ModelNamer
 
 
             //reader.LoadModels(modelPath, infoFile);
-            ////reader.m_models.Add(reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\bear.mdl"));
             //foreach (GCModel model in reader.m_models)
             //{
-            //    model.DumpSections(tagOutputPath);
-            //    //model.DumpSkinBlocks(outputPath);
+            //    //model.DumpSections(tagOutputPath);
+            //    model.DumpSkinBlocks(outputPath);
             //    //model.DumpSections(outputPath);
             //    //model.DumpDisplayBlocks(outputPath);
 
             //}
+
+
+
+
         }
 
 
@@ -887,7 +1010,7 @@ namespace ModelNamer
         public List<Vector3> m_points = new List<Vector3>();
         public List<Vector3> m_normals = new List<Vector3>();
         public int lodLevel;
-
+        public int numPairs = 0;
 
         public static SkinBlock ReadBlock(BinaryReader reader)
         {
@@ -908,6 +1031,19 @@ namespace ModelNamer
             }
 
             block.weightBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize) - (block.numElements * SkinElement.Size));
+
+            for (int i = 0; i < block.weightBlock.Length; )
+            {
+                if (block.weightBlock[i] + block.weightBlock[i + 1] == 256)
+                {
+                    block.numPairs++;
+                }
+                else
+                {
+                    break;
+                }
+                i += 2;
+            }
             //block.remainderBlock = reader.ReadBytes(block.blockSize - (4 + 4 + 4 + headerBlockSize));
 
             reader.BaseStream.Position = currentPos;
@@ -980,15 +1116,6 @@ namespace ModelNamer
 
     public class DSLIInfo
     {
-
-
-
-
-
-
-
-
-
         public int startPos;
         public int length;
 
@@ -1039,7 +1166,10 @@ namespace ModelNamer
 
         public override List<Vector3> Vertices
         {
-            get { return skinBlock != null ? skinBlock.m_points : m_model.m_pos; }
+            get 
+            { 
+                return skinBlock != null ? skinBlock.m_points : m_model.m_pos; 
+            }
         }
 
         public override List<Vector3> Normals
