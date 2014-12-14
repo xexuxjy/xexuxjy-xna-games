@@ -23,6 +23,8 @@ namespace ModelNamer
         public static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
         public static char[] normTag = new char[] { 'N', 'O', 'R', 'M' };
         public static char[] uv0Tag = new char[] { 'U', 'V', '0', ' ' };    // for non-skinned models, this seems to be 2 bigendian float32's
+        public static char[] uv1Tag = new char[] { 'U', 'V', '1', ' ' };    // for non-skinned models, this seems to be 2 bigendian float32's
+
         public static char[] vflaTag = new char[] { 'V', 'F', 'L', 'A' };
         public static char[] ramTag = new char[] { 'R', 'A', 'M', ' ' };
         public static char[] msarTag = new char[] { 'M', 'S', 'A', 'R' };
@@ -35,6 +37,10 @@ namespace ModelNamer
         public static char[] vflgTag = new char[] { 'V', 'F', 'L', 'G' };
         public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
         public static char[] pak1Tag = new char[] { 'P', 'A', 'K', '1' };
+        public static char[] jlodTag = new char[] { 'J', 'L', 'O', 'D' };
+
+
+
 
         public static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };
         public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
@@ -758,8 +764,8 @@ namespace ModelNamer
                         max = Vector3.Max(max, offset);
                     }
 
-                    MinBB = min;
-                    MaxBB = max;
+                    SkelMinBB = min;
+                    SkelMaxBB = max;
                     m_builtSkelBB = true;
                 }
 
@@ -799,6 +805,9 @@ namespace ModelNamer
 
         public Vector3 MinBB;
         public Vector3 MaxBB;
+        public Vector3 SkelMinBB;
+        public Vector3 SkelMaxBB;
+
         public Vector3 Center;
         public List<Matrix> m_matrices = new List<Matrix>();
         public List<BoneNode> m_bones = new List<BoneNode>();
