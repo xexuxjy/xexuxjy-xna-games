@@ -118,6 +118,10 @@ namespace ModelNamer
                         //float a = Common.FromStream2ByteToFloatR(binReader);
                         //float b = Common.FromStream2ByteToFloatR(binReader);
 
+                        // just use fractional part.
+                        a -= (int)a;
+                        b -= (int)b;
+
 
                         //float a = (((float)binReader.ReadByte()) / 255.0f);
                         //binReader.ReadByte();
@@ -432,7 +436,7 @@ namespace ModelNamer
                     m_shaderData.Add(ShaderData.FromStream(binReader));
 
                 }
-
+                int ibreak = 0;
             }
 
         }
