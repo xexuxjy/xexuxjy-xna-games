@@ -30,7 +30,8 @@ namespace XNAViewer
         private Vector3 up = Vector3.UnitY;
         private float pitch = 0.0f;
         private float facing = 0.0f;
-        public String textureBasePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
+        //public String textureBasePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
+        public String textureBasePath = @"D:\gladius-extracted-archive\gc-compressed\textures-resized\";
         //public String textureBasePath = @"C:\temp\textures\";
         public Texture2D m_missingTexture;
         public List<String> m_fileNames = new List<string>();
@@ -111,8 +112,16 @@ namespace XNAViewer
             //m_fileNames.Add(baseModelPath+"anklet_queen.mdl");
             //m_fileNames.Add(baseModelPath + @"characters\prop_practicepost1.mdl");
             //m_fileNames.Add(baseModelPath + @"characters\prop_practicepost2.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\bow_amazon.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\swordM_gladius.mdl");
+            //m_fileNames.Add(baseModelPath + @"characters\scorpion.mdl");
+            //m_fileNames.Add(baseModelPath + @"characters\scarab.mdl");
+            //m_fileNames.Add(baseModelPath + @"characters\galverg.mdl");
+            //m_fileNames.Add(baseModelPath + @"arenas\belfortgatenor.mdl");
+            
             //m_fileNames.Add(baseModelPath + @"characters\amazon.mdl");
-            m_fileNames.Add(baseModelPath + @"weapons\bow_bow.mdl");
+            //m_fileNames.Add(baseModelPath + @"characters\cat.mdl");
+            //m_fileNames.Add(baseModelPath + @"weapons\bow_bow.mdl");
             //m_fileNames.Add(baseModelPath + @"weapons\bow_coral.mdl");
             //m_fileNames.Add(baseModelPath + @"weapons\bow_hunters.mdl");
             //m_fileNames.Add(baseModelPath + @"weapons\bow_flaming.mdl");
@@ -120,7 +129,10 @@ namespace XNAViewer
             //m_fileNames.Add(baseModelPath + @"weapons\bowCS_snipers.mdl");
             //m_fileNames.Add(baseModelPath + "animalskull_uv.mdl");
             //m_fileNames.Add(baseModelPath + "alpha_box.mdl");
-            //m_fileNames.AddRange(Directory.GetFiles(baseModelPath, "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(baseModelPath+@"arenas", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(baseModelPath+@"characters\", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(baseModelPath+@"characters\temp", "*"));
+            //m_fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\UnidentifiedModels","*"));
             ChangeModelNext();
 
 
@@ -306,6 +318,7 @@ namespace XNAViewer
         void CalcBindFinalMatrix(BoneNode bone, Matrix parentMatrix)
         {
             bone.combinedMatrix = bone.localMatrix * parentMatrix;
+            //bone.combinedMatrix = parentMatrix * bone.localMatrix;
             //bone.finalMatrix = bone.offsetMatrix * bone.combinedMatrix;
             bone.finalMatrix = bone.combinedMatrix;
 
@@ -319,41 +332,114 @@ namespace XNAViewer
         {
             
             BoneNode start = m_currentModel.m_model.m_rootBone;
-            CalcBindFinalMatrix(start, Matrix.Identity);
+            Vector3 modelBounds = m_currentModel.m_model.MaxBB - m_currentModel.m_model.MinBB;
+            Vector3 skelBounds = m_currentModel.m_model.SkelMaxBB - m_currentModel.m_model.SkelMinBB;
+
 
             
+            Vector3 scaleVector = new Vector3(skelBounds.X > 0 ? modelBounds.X / skelBounds.X : 1.0f,
+                skelBounds.Y > 0 ? modelBounds.Y / skelBounds.Y : 1.0f,
+                skelBounds.Z > 0 ? modelBounds.Z / skelBounds.Z : 1.0f);
+
+            float longest = Math.Max(scaleVector.X, Math.Max(scaleVector.Y, scaleVector.Z));
+            scaleVector = new Vector3(longest);
+
+            scaleVector = (m_currentModel.m_model.MaxBB - m_currentModel.m_model.MinBB) / (m_currentModel.m_model.SkelMaxBB - m_currentModel.m_model.SkelMinBB);
+            Matrix skelScale = Matrix.CreateScale(scaleVector);
+
+            CalcBindFinalMatrix(start, skelScale);
+
+            
+
             Vector3 mid = new Vector3();
             //if (readDisplayLists)
             {
                 mid = (m_currentModel.m_model.MaxBB - m_currentModel.m_model.MinBB) / 2f;
             }
 
-            float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
+            //float longest = Math.Max(mid.X, Math.Max(mid.Y, mid.Z));
 
 
             float scale = longest * 0.05f;
 
-            Matrix scaleMatrix = Matrix.CreateScale(scale);
+            Matrix modelScaleMatrix = Matrix.CreateScale(scale);
 
             foreach (BoneNode node in m_currentModel.m_model.m_bones)
             {
-                foreach (ModelMesh mesh in m_unitSphere.Meshes)
+
+                Matrix m = Matrix.Identity;
+                m.Translation = node.finalMatrix.Translation;
+                DrawModel(m_unitSphere, modelScaleMatrix, m);
+
+                if (node.parent != null)
                 {
-                    foreach (BasicEffect effect in mesh.Effects)
-                    {
-                        effect.EnableDefaultLighting();
 
-                        effect.View = modelviewMatrix;
-                        effect.Projection = projectionMatrix;
-                        effect.World = node.finalMatrix * scaleMatrix;
-                        
 
-                    }
-                    mesh.Draw();
+                    Vector3 diff = node.parent.finalMatrix.Translation - node.finalMatrix.Translation;
+                    Vector3 newForward = Vector3.Normalize(diff);
+                    // calc the rotation so the avatar faces the target
+                    Quaternion q = GetRotation(Vector3.Forward, newForward, Vector3.Up);
+                    //Quaternion q = GetRotation(node.parent.finalMatrix.Translation, node.finalMatrix.Translation,Vector3.Up);
+                    
+                    Matrix rot = Matrix.CreateFromQuaternion(q);
+                    float len = diff.Length();
+                    Vector3 v = new Vector3(len * 0.1f, len * 0.1f,len);
+                    Matrix boneScale = Matrix.CreateScale(v);
+                    rot = boneScale * rot;
+
+                    rot.Translation = node.parent.finalMatrix.Translation - (diff/2f);
+
+
+                    DrawModel(m_unitCone, Matrix.Identity, rot);
+
                 }
 
             }
 
+
+        }
+
+        public static Quaternion GetRotation(Vector3 source, Vector3 dest, Vector3 up)
+        {
+            float dot = Vector3.Dot(source, dest);
+
+            if (Math.Abs(dot - (-1.0f)) < 0.000001f)
+            {
+                // vector a and b point exactly in the opposite direction, 
+                // so it is a 180 degrees turn around the up-axis
+                return new Quaternion(up, MathHelper.ToRadians(180.0f));
+            }
+            if (Math.Abs(dot - (1.0f)) < 0.000001f)
+            {
+                // vector a and b point exactly in the same direction
+                // so we return the identity quaternion
+                return Quaternion.Identity;
+            }
+
+            float rotAngle = (float)Math.Acos(dot);
+            Vector3 rotAxis = Vector3.Cross(source, dest);
+            rotAxis = Vector3.Normalize(rotAxis);
+            return Quaternion.CreateFromAxisAngle(rotAxis, rotAngle);
+        }
+
+        public void DrawModel(Model model,Matrix modelScaleMatrix,Matrix objectMatrix)
+        {
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.EnableDefaultLighting();
+
+                    effect.View = modelviewMatrix;
+                    effect.Projection = projectionMatrix;
+                    //effect.World = node.finalMatrix * rotationMatrix * scaleMatrix;
+                    //effect.World = scaleMatrix * rotationMatrix * node.finalMatrix;
+                    //effect.World = modelScaleMatrix * objectMatrix * rotationMatrix;
+                    effect.World = modelScaleMatrix * objectMatrix * rotationMatrix;
+
+                }
+                mesh.Draw();
+            }
 
         }
 
@@ -398,20 +484,22 @@ namespace XNAViewer
                 //m_textPrinter.Print(BuildDebugString(), font, Color.White);
                 //m_textPrinter.End();
 
-                spriteBatch.Begin();
-
-                spriteBatch.DrawString(viewerFont, BuildDebugString(), Vector2.Zero, Color.White);
-
-                spriteBatch.End();
 
                 DrawModel();
 
-                bool drawSkeleton = true;
+                bool drawSkeleton = false;
 
                 if (m_currentModel.m_model.m_skinned && drawSkeleton)
                 {
                     DrawSkeleton();
                 }
+
+                spriteBatch.Begin();
+                spriteBatch.DrawString(viewerFont, BuildDebugString(), Vector2.Zero, Color.White);
+                spriteBatch.End();
+
+                GraphicsDevice.BlendState = BlendState.Opaque;
+                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             }
             else
             {
@@ -432,17 +520,19 @@ namespace XNAViewer
                 counter++;
                 if (displayAll == false && counter != m_currentModelSubIndex)
                 {
-                    // continue;
+                    continue;
                 }
+
 
                 if (m_currentModel.m_model.m_skinned)
                 {
-                    if (header.m_modelSubMesh.MeshId != 6)
+                    if (header.m_modelSubMesh.MeshId != 0)
                     {
                         //continue;
                     }
 
-                    if (header.m_modelSubMesh.LodLevel != 0x01)
+                    // include levels 1 and 2
+                    if ((header.m_modelSubMesh.LodLevel & 0x01) == 0)
                     {
                         //continue;
                     }
@@ -475,7 +565,9 @@ namespace XNAViewer
                         //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices-2);
                         if (header.m_modelSubMesh is DisplayListHeader)
                         {
-                            GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices / 3);
+                            int start = 0;
+                            int range = (header.m_modelSubMesh.NumIndices / 3) - start;
+                            GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, start, range);
                         }
                         if (header.m_modelSubMesh is XBoxSubMesh)
                         {
@@ -493,12 +585,12 @@ namespace XNAViewer
 
         public void SetShaderData(ShaderData sd, out Effect effect)
         {
-            Texture2D tex1 = SetTexture(sd.textureId1);
+            Texture2D tex1 = SetTexture(sd);
             //Texture2D tex1 = SetTexture(1);
             //Texture2D tex2 = SetTexture(sd.textureId2);
 
 
-            if (sd.shaderName == "metal")
+            if (false && sd.shaderName == "metal")
             {
                 m_metalEffect.Parameters["Texture1"].SetValue(tex1);
                 //m_metalEffect.Parameters["Texture2"].SetValue(tex2);
@@ -689,7 +781,11 @@ namespace XNAViewer
             sb.AppendLine("MaxVertex : " + currentModel.MaxVertex);
 
             sb.AppendLine(String.Format("BB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.MinBB.X, currentModel.MinBB.Y, currentModel.MinBB.Z, currentModel.MaxBB.X, currentModel.MaxBB.Y, currentModel.MaxBB.Z));
-            sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] Valid[{3}] ", m_currentModelSubIndex, currentModel.m_modelMeshes.Count, currentModel.m_modelMeshes[m_currentModelSubIndex].NumIndices, currentModel.m_modelMeshes[m_currentModelSubIndex].Valid));
+            if (currentModel.m_skinned)
+            {
+                sb.AppendLine(String.Format("SBB : {0:0.00000000} {1:0.00000000} {2:0.00000000}][{3:0.00000000} {4:0.00000000} {5:0.00000000}]", currentModel.SkelMinBB.X, currentModel.SkelMinBB.Y, currentModel.SkelMinBB.Z, currentModel.SkelMaxBB.X, currentModel.SkelMaxBB.Y, currentModel.SkelMaxBB.Z));
+            }
+            sb.AppendLine(String.Format("DSL [{0}/{1}] Length [{2}] LOD[{3}] Valid[{4}] ", m_currentModelSubIndex, currentModel.m_modelMeshes.Count, currentModel.m_modelMeshes[m_currentModelSubIndex].NumIndices, currentModel.m_modelMeshes[m_currentModelSubIndex].LodLevel, currentModel.m_modelMeshes[m_currentModelSubIndex].Valid));
 
             sb.AppendLine("Textures : ");
             int counter = 0;
@@ -723,6 +819,11 @@ namespace XNAViewer
 
         public bool LoadTexture(string filename, out Texture2D texture)
             {
+                //if(filename.EndsWith(".tga"))
+                //{
+                //    filename = filename.Substring(0, filename.Length - 4);
+                //}
+            
                 String textureFileName = textureBasePath + filename + ".jpg";
                 FileInfo fileInfo = new FileInfo(textureFileName);
                 if (fileInfo.Exists)
@@ -754,12 +855,28 @@ namespace XNAViewer
         }
 
 
-        public Texture2D SetTexture(int index)
+        public Texture2D SetTexture(ShaderData sd)
         {
+            int index = sd.textureId1;
+            if (index == 255)
+            {
+                index = 0;
+            }
+            String textureName = m_currentModel.m_model.m_textures[index].textureName;
+            if (textureName.Contains("skygold"))
+            {
+                index = sd.textureId2;
+            }
+
+            if (index == 255)
+            {
+                index = 0;
+            }
+
             Texture2D texture = null;
             if (m_currentModel.m_model.m_textures.Count > 0 && index < m_currentModel.m_model.m_textures.Count)
             {
-                String textureName = m_currentModel.m_model.m_textures[index].textureName;
+                textureName = m_currentModel.m_model.m_textures[index].textureName;
                 if (!m_textureDictionary.ContainsKey(textureName))
                 {
                     LoadTexture(textureName, out texture);
@@ -843,9 +960,13 @@ namespace XNAViewer
             int counter = 0;
             foreach (ModelSubMesh modelMesh in model.m_modelMeshes)
             {
+                counter++;
+                if (counter < 2)
+                {
+                    //continue;
+                }
                 WrappedDisplayListHeader wrappedHeader = new WrappedDisplayListHeader(modelMesh, graphicsDevice, effect);
                 m_wrappedHeaderList.Add(wrappedHeader);
-                counter++;
             }
         }
 
@@ -888,8 +1009,19 @@ namespace XNAViewer
                 DisplayListHeader displayListHeader = modelSubMesh as DisplayListHeader;
 
                 VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[displayListHeader.entries.Count];
+                int maxEntryVertex = 0;
                 for (int i = 0; i < displayListHeader.entries.Count; ++i)
                 {
+                    maxEntryVertex = Math.Max(maxEntryVertex, displayListHeader.entries[i].PosIndex);
+                }
+
+                int ibreak = 0;
+
+                // dslc - 2 in first entry suggests that display list uses first block twice?
+
+                for (int i = 0; i < displayListHeader.entries.Count; ++i)
+                {
+
                     vertexData[i].Position = displayListHeader.Vertices[displayListHeader.entries[i].PosIndex];
                     Vector3 v = Vector3.Up;
                     if (displayListHeader.entries[i].NormIndex < displayListHeader.Normals.Count)
@@ -897,7 +1029,10 @@ namespace XNAViewer
                         v = displayListHeader.Normals[displayListHeader.entries[i].NormIndex];
                     }
                     vertexData[i].Normal = v;
-                    vertexData[i].TextureCoordinate = displayListHeader.UVs[displayListHeader.entries[i].UVIndex];
+                    Vector2 uvtemp = displayListHeader.UVs[displayListHeader.entries[i].UVIndex];
+                    uvtemp.X -= (int)uvtemp.X;
+                    uvtemp.Y -= (int)uvtemp.Y;
+                    vertexData[i].TextureCoordinate = uvtemp;
                 }
 
                 m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
