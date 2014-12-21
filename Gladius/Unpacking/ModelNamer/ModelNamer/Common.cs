@@ -683,8 +683,10 @@ namespace ModelNamer
                 for (int i = 0; i < numElements; ++i)
                 {
                     TextureData textureData = TextureData.FromStream(binReader);
-
-                    m_textures.Add(textureData);
+                    //if(!textureData.textureName.Contains("skygold"))
+                    {
+                        m_textures.Add(textureData);
+                    }
                 }
             }
 
@@ -800,7 +802,7 @@ namespace ModelNamer
         public List<Vector3> m_centers = new List<Vector3>();
         public List<String> m_selsInfo = new List<string>();
         public List<ShaderData> m_shaderData = new List<ShaderData>();
-        public List<Vector2> UVs = new List<Vector2>();
+        //public List<Vector2> UVs = new List<Vector2>();
 
 
         public Vector3 MinBB;
@@ -873,6 +875,11 @@ namespace ModelNamer
         public abstract List<Vector3> Normals
         {
             get;
+        }
+
+        public bool HasNormals
+        {
+            get { return Normals.Count > 0; }
         }
 
         public abstract List<Vector2> UVs

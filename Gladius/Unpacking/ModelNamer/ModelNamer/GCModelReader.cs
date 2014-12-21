@@ -17,6 +17,30 @@ namespace ModelNamer
             
         }
 
+        public string FindTextureName(ShaderData sd)
+        {
+            int index = sd.textureId1;
+            if (index == 255)
+            {
+                index = 0;
+            }
+            String textureName = m_textures[index].textureName;
+            if (textureName.Contains("skygold"))
+            {
+                index = sd.textureId2;
+            }
+
+            if (index == 255)
+            {
+                index = 0;
+            }
+
+            textureName = m_textures[index].textureName;
+
+            return textureName;
+        }
+
+
 
         public void LoadData(BinaryReader binReader,long startPosition=0)
         {
@@ -45,6 +69,10 @@ namespace ModelNamer
             binReader.BaseStream.Position = startPosition;
             ReadDSLISection(binReader);
             binReader.BaseStream.Position = startPosition;
+            ReadPOSISection(binReader);
+            binReader.BaseStream.Position = startPosition;
+            ReadNORMSection(binReader);
+            binReader.BaseStream.Position = startPosition;
             ReadDSLSSection(binReader);
             binReader.BaseStream.Position = startPosition;
             ReadMESHSection(binReader);
@@ -60,90 +88,9 @@ namespace ModelNamer
                 //int ibreak = 0;
             }
             // not skinned so look for fixed version.l
-            if (m_skinned == false)
-            {
-                if (Common.FindCharsInStream(binReader, Common.posiTag))
-                {
-                    int posSectionLength = binReader.ReadInt32();
-
-                    int uk2 = binReader.ReadInt32();
-                    int numPoints = binReader.ReadInt32();
-                    for (int i = 0; i < numPoints; ++i)
-                    {
-                        //model.m_points.Add(Common.FromStreamVector3BE(binReader));
-                        m_modelMeshes[0].Vertices.Add(Common.FromStreamVector3BE(binReader));
-                    }
-                }
-
-                if (Common.FindCharsInStream(binReader, Common.normTag))
-                {
-                    int normSectionLength = binReader.ReadInt32();
-                    int uk4 = binReader.ReadInt32();
-                    int numNormals = binReader.ReadInt32();
-
-                    for (int i = 0; i < numNormals; ++i)
-                    {
-                        //model.m_normals.Add(Common.FromStreamVector3BE(binReader));
-                        m_modelMeshes[0].Normals.Add(Common.FromStreamVector3BE(binReader));
-                    }
-
-
-                }
-            }
-
             binReader.BaseStream.Position = startPosition;
+            ReadUV0Section(binReader);
 
-            if (Common.FindCharsInStream(binReader, Common.uv0Tag))
-            {
-                int normSectionLength = binReader.ReadInt32();
-                int uk4 = binReader.ReadInt32();
-                int numUVs = binReader.ReadInt32();
-
-                // normal model has uv's as 8 bytes (2 floats) per block.
-                // skinned model has ub's as 4 bytes (2???) per block...
-
-                if (m_skinned)
-                {
-                    for (int i = 0; i < numUVs; ++i)
-                    {
-                        //model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
-                        //model.m_uvs.Add(new Vector2(Common.FromStream2ByteToFloat(binReader), Common.FromStream2ByteToFloat(binReader)));
-
-                        ushort ua = Common.ToUInt16BigEndian(binReader);
-                        ushort ub = Common.ToUInt16BigEndian(binReader);
-
-                        float a = (float)ua / 4096;
-                        float b = (float)ub / 4096;
-
-                        //float a = Common.FromStream2ByteToFloatR(binReader);
-                        //float b = Common.FromStream2ByteToFloatR(binReader);
-
-                        // just use fractional part.
-                        a -= (int)a;
-                        b -= (int)b;
-
-
-                        //float a = (((float)binReader.ReadByte()) / 255.0f);
-                        //binReader.ReadByte();
-                        //float b = (((float)binReader.ReadByte()) / 255.0f);
-                        //binReader.ReadByte();
-                        m_uvs.Add(new Vector2(a, b));
-
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < numUVs; ++i)
-                    {
-                        m_uvs.Add(Common.FromStreamVector2BE(binReader));
-                    }
-                }
-
-
-
-
-
-            }
             BuildBB();
             //model.Validate();
 
@@ -371,6 +318,112 @@ namespace ModelNamer
 
                 m_builtBB = true;
             }
+        }
+
+        public void ReadPOSISection(BinaryReader binReader)
+        {
+            if (m_skinned == false)
+            {
+                if (Common.FindCharsInStream(binReader, Common.posiTag))
+                {
+                    int posSectionLength = binReader.ReadInt32();
+
+                    int uk2 = binReader.ReadInt32();
+                    int numPoints = binReader.ReadInt32();
+                    for (int i = 0; i < numPoints; ++i)
+                    {
+                        //model.m_points.Add(Common.FromStreamVector3BE(binReader));
+                        m_modelMeshes[0].Vertices.Add(Common.FromStreamVector3BE(binReader));
+                    }
+                }
+            }
+        }
+
+        public void ReadNORMSection(BinaryReader binReader)
+        {
+            if (m_skinned == false)
+            {
+                if (Common.FindCharsInStream(binReader, Common.normTag))
+                {
+                    int normSectionLength = binReader.ReadInt32();
+                    int uk4 = binReader.ReadInt32();
+                    int numNormals = binReader.ReadInt32();
+
+                    for (int i = 0; i < numNormals; ++i)
+                    {
+                        //model.m_normals.Add(Common.FromStreamVector3BE(binReader));
+                        m_modelMeshes[0].Normals.Add(Common.FromStreamVector3BE(binReader));
+                    }
+
+
+                }
+            }
+
+        }
+
+        public void ReadUV0Section(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.uv0Tag))
+            {
+                int normSectionLength = binReader.ReadInt32();
+                int uk4 = binReader.ReadInt32();
+                int numUVs = binReader.ReadInt32();
+
+                // normal model has uv's as 8 bytes (2 floats) per block.
+                // skinned model has ub's as 4 bytes (2???) per block...
+
+                if (m_skinned)
+                {
+                    for (int i = 0; i < numUVs; ++i)
+                    {
+                        //model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
+                        //model.m_uvs.Add(new Vector2(Common.FromStream2ByteToFloat(binReader), Common.FromStream2ByteToFloat(binReader)));
+
+                        ushort ua = Common.ToUInt16BigEndian(binReader);
+                        ushort ub = Common.ToUInt16BigEndian(binReader);
+
+                        float a = (float)ua / 4096;
+                        float b = (float)ub / 4096;
+
+                        //float a = Common.FromStream2ByteToFloatR(binReader);
+                        //float b = Common.FromStream2ByteToFloatR(binReader);
+
+                        // just use fractional part.
+                        a -= (int)a;
+                        b -= (int)b;
+
+
+                        //float a = (((float)binReader.ReadByte()) / 255.0f);
+                        //binReader.ReadByte();
+                        //float b = (((float)binReader.ReadByte()) / 255.0f);
+                        //binReader.ReadByte();
+                        m_uvs.Add(new Vector2(a, b));
+
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < numUVs; ++i)
+                    {
+                        Vector2 uv = Common.FromStreamVector2BE(binReader);
+                        //uv.X -= (int)uv.X;
+                        //uv.Y -= (int)uv.Y;
+
+                        if (Math.Abs(uv.X) > 1 || Math.Abs(uv.Y) > 1)
+                        {
+                            int ibreak = 0;
+                        }
+
+                        m_uvs.Add(uv);
+                    }
+                }
+
+
+
+
+
+            }
+
         }
 
         public void ReadDSLISection(BinaryReader binReader)
@@ -620,6 +673,7 @@ namespace ModelNamer
 
         }
 
+
         public void WriteOBJ(StreamWriter writer, StreamWriter materialWriter,String texturePath,int desiredLod=-1)
         {
             int vertexCountOffset = 0;
@@ -646,7 +700,7 @@ namespace ModelNamer
 
                 materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname+".jpg"); 
 
-
+                
             }
             else
             {
@@ -663,11 +717,46 @@ namespace ModelNamer
                     materialWriter.WriteLine("map_Ka " + texturePath + textureName);
                     materialWriter.WriteLine("map_Kd " + texturePath + textureName);
 
-                    materialWriter.WriteLine("refl -type sphere -mm 0 1 clouds.mpc");
+                    //materialWriter.WriteLine("refl -type sphere -mm 0 1 clouds.mpc");
                 }
             }
             writer.WriteLine("mtllib " + m_name + ".mtl");
             int submeshCount = 0;
+
+            //writer.WriteLine("g allObjects");
+
+            if (!m_skinned)
+            {
+                foreach (Vector3 v in m_modelMeshes[0].Vertices)
+                {
+                    writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                }
+                foreach (Vector2 v in m_modelMeshes[0].UVs)
+                {
+                    Vector2 va = v;
+                    va.Y = 1.0f - v.Y;
+                    //va.X -= (int)va.X;
+                    //va.Y -= (int)va.Y;
+
+                    //if (va.X < 0f)
+                    //{
+                    //    va.X += 1.0f;
+                    //}
+                    //if (va.Y < 0f)
+                    //{ 
+                    //    va.Y += 1.0f; 
+                    //}
+
+
+                    writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
+                }
+                foreach (Vector3 v in m_modelMeshes[0].Normals)
+                {
+                    writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                }
+
+            }
+
             foreach (DisplayListHeader headerBlock in m_modelMeshes)
             {
                 // just want highest lod.
@@ -676,30 +765,65 @@ namespace ModelNamer
                     continue;
                 }
 
+                //bool test1 = false;
+                //for (int i = 0; i < headerBlock.entries.Count;++i )
+                //{
+                //    if (headerBlock.entries[i].PosIndex == 0)
+                //    {
+                //        test1 = true;
+                //        break;
+
+                //    }
+                //}
+                //if (!test1)
+                //{
+                //    continue;
+                //}
+                //if (submeshCount > 10)
+                //{
+                //    break;
+                //}
+
                 string groupName = String.Format("{0}-submesh{1}-LOD{2}" ,m_name,submeshCount,headerBlock.LodLevel);
 
                 writer.WriteLine("o " + groupName);
-                writer.WriteLine("g " + groupName);
+                //writer.WriteLine("g " + groupName);
                 // and now points, uv's and normals.
-                foreach (Vector3 v in headerBlock.Vertices)
+                if (m_skinned)
                 {
-                    writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-                }
-                foreach (Vector2 v in headerBlock.UVs)
-                {
-                    writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, 1.0f - v.Y));
-                }
-                foreach (Vector3 v in headerBlock.Normals)
-                {
-                    writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-                }
+                    foreach (Vector3 v in headerBlock.Vertices)
+                    {
+                        writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                    }
+                    foreach (Vector2 v in headerBlock.UVs)
+                    {
+                        Vector2 va = v;
+                        va.Y = 1.0f - v.Y;
+                        //va.X -= (int)va.X;
+                        //va.Y -= (int)va.Y;
 
+                        //if (va.X < 0f)
+                        //{
+                        //    va.X += 1.0f;
+                        //}
+                        //if (va.Y < 0f)
+                        //{ 
+                        //    va.Y += 1.0f; 
+                        //}
+
+
+                        writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
+                    }
+                    foreach (Vector3 v in headerBlock.Normals)
+                    {
+                        writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                    }
+                }
                 
                 ShaderData shaderData = m_shaderData[headerBlock.MeshId];
 
-                int adjustedId = MathHelper.Clamp(shaderData.textureId2, 0, m_textures.Count - 1);
-
-                String materialName = m_textures[adjustedId].textureName+ ".jpg";
+                string adjustedTexture = FindTextureName(shaderData);
+                String materialName = adjustedTexture+ ".jpg";
                 writer.WriteLine("usemtl " + materialName);
 
                 int counter = 0;
@@ -708,15 +832,24 @@ namespace ModelNamer
                 int uvOffset = 1 + uvCountOffset;
                 for (int i = 0; i < headerBlock.entries.Count; )
                 {
-                    writer.WriteLine(String.Format("f {0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", 
-                        headerBlock.entries[i].PosIndex + vertexOffset, headerBlock.entries[i].UVIndex + uvOffset, headerBlock.entries[i].NormIndex + normalOffset,
-                        headerBlock.entries[i + 1].PosIndex + vertexOffset, headerBlock.entries[i + 1].UVIndex + uvOffset, headerBlock.entries[i + 1].NormIndex + normalOffset,
-                        headerBlock.entries[i + 2].PosIndex + vertexOffset, headerBlock.entries[i + 2].UVIndex + uvOffset, headerBlock.entries[i + 2].NormIndex + normalOffset));
+                    if (headerBlock.HasNormals)
+                    {
+                        writer.WriteLine(String.Format("f {0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}",
+                            headerBlock.entries[i].PosIndex + vertexOffset, headerBlock.entries[i].UVIndex + uvOffset, headerBlock.entries[i].NormIndex + normalOffset,
+                            headerBlock.entries[i + 1].PosIndex + vertexOffset, headerBlock.entries[i + 1].UVIndex + uvOffset, headerBlock.entries[i + 1].NormIndex + normalOffset,
+                            headerBlock.entries[i + 2].PosIndex + vertexOffset, headerBlock.entries[i + 2].UVIndex + uvOffset, headerBlock.entries[i + 2].NormIndex + normalOffset));
+                    }
+                    else
+                    {
+                        writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}",
+                            headerBlock.entries[i].PosIndex + vertexOffset, headerBlock.entries[i].UVIndex + uvOffset,
+                            headerBlock.entries[i + 1].PosIndex + vertexOffset, headerBlock.entries[i + 1].UVIndex + uvOffset,
+                            headerBlock.entries[i + 2].PosIndex + vertexOffset, headerBlock.entries[i + 2].UVIndex + uvOffset ));
+                    }
                     i += 3;
                 }
-
-                vertexCountOffset += headerBlock.Vertices.Count;
-                normalCountOffset += headerBlock.Normals.Count;
+                vertexCountOffset += m_skinned?headerBlock.Vertices.Count:0;
+                normalCountOffset += m_skinned?headerBlock.Normals.Count:0;
                 uvCountOffset += 0; // shared uvs?
                 submeshCount++;
             }
@@ -860,7 +993,7 @@ namespace ModelNamer
                         {
                             sb.AppendLine(String.Format("P[{0}]N[{1}]U[{2}] MP[{3}]MN[{4}]MU[{5}]I[{6}]",
                                 modelMesh.MaxVertex, modelMesh.MaxNormal, modelMesh.MaxUV,
-                                modelMesh.Vertices.Count, modelMesh.Normals.Count, model.UVs.Count, modelMesh.NumIndices / 3));
+                                modelMesh.Vertices.Count, modelMesh.Normals.Count, modelMesh.UVs.Count, modelMesh.NumIndices / 3));
                         }
 
                         sb.AppendLine("SELS : ");
@@ -929,7 +1062,12 @@ namespace ModelNamer
             List<string> filenames = new List<string>();
 
 
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
+
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*palace*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
 
@@ -937,7 +1075,9 @@ namespace ModelNamer
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\prop_practicepost1.mdl");
 
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons\swordM_gladius.mdl");
-            filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\scorpion.mdl");
+            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\scorpion.mdl");
+            filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\palaceibliis.mdl");
+                            
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));
@@ -959,7 +1099,7 @@ namespace ModelNamer
                     {
                         using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
                         {
-                            model.WriteOBJ(objSw, matSw, texturePath);
+                            model.WriteOBJ(objSw, matSw, texturePath,1);
                         }
                     }
                 }
@@ -1278,7 +1418,7 @@ namespace ModelNamer
                     success = true;
                     for (int i = 0; i < header.indexCount; ++i)
                     {
-                        DisplayListEntry e = DisplayListEntry.FromStream(reader, header.adjustedSizeInt);
+                        DisplayListEntry e = DisplayListEntry.FromStream(reader, header);
                         header.entries.Add(e);
                         header.MaxVertex = Math.Max(header.MaxVertex, e.PosIndex);
                         header.MaxNormal = Math.Max(header.MaxNormal, e.NormIndex);
@@ -1312,16 +1452,24 @@ namespace ModelNamer
             return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex + " U2:" + UVIndex2 + " OB: " + oddByte;
         }
 
-        public static DisplayListEntry FromStream(BinaryReader reader, int sectionSize)
+        public static DisplayListEntry FromStream(BinaryReader reader, DisplayListHeader header)
         {
+            
             DisplayListEntry entry = new DisplayListEntry();
-
+            int sectionSize = header.adjustedSizeInt;
 
             // section size = 4,5,6,7,8,9
             if (sectionSize >= 4)
             {
                 entry.PosIndex = Common.ToUInt16BigEndian(reader);
-                entry.NormIndex = Common.ToUInt16BigEndian(reader);
+                if (header.HasNormals)
+                {
+                    entry.NormIndex = Common.ToUInt16BigEndian(reader);
+                }
+                else
+                {
+                    entry.UVIndex = Common.ToUInt16BigEndian(reader);
+                }
             }
 
 
