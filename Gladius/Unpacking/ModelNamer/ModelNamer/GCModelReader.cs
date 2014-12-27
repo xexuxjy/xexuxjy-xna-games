@@ -406,8 +406,8 @@ namespace ModelNamer
                     for (int i = 0; i < numUVs; ++i)
                     {
                         Vector2 uv = Common.FromStreamVector2BE(binReader);
-                        //uv.X -= (int)uv.X;
-                        //uv.Y -= (int)uv.Y;
+                        uv.X -= (int)uv.X;
+                        uv.Y -= (int)uv.Y;
 
                         if (Math.Abs(uv.X) > 1 || Math.Abs(uv.Y) > 1)
                         {
@@ -560,6 +560,10 @@ namespace ModelNamer
                     byte val = binReader.ReadByte();
                     header.dslcEntry = val;
                     // add based on number of times?
+                    if (val > 1)
+                    {
+                        int ibreak = 0;
+                    }
                     for(byte j=0;j<val;++j)
                     {
                         m_modelMeshes.Add(header);
@@ -735,17 +739,6 @@ namespace ModelNamer
                 {
                     Vector2 va = v;
                     va.Y = 1.0f - v.Y;
-                    //va.X -= (int)va.X;
-                    //va.Y -= (int)va.Y;
-
-                    //if (va.X < 0f)
-                    //{
-                    //    va.X += 1.0f;
-                    //}
-                    //if (va.Y < 0f)
-                    //{ 
-                    //    va.Y += 1.0f; 
-                    //}
 
 
                     writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
@@ -759,11 +752,25 @@ namespace ModelNamer
 
             foreach (DisplayListHeader headerBlock in m_modelMeshes)
             {
+                submeshCount++;
+
                 // just want highest lod.
                 if (headerBlock.LodLevel != 0 && ((headerBlock.LodLevel & desiredLod) == 0))
                 {
                     continue;
                 }
+
+                if (headerBlock.MaxUV > m_modelMeshes[0].UVs.Count)
+                {
+                    int ibreak = 0;
+                }
+
+                if (headerBlock.adjustedSizeInt != 7)
+                {
+                    //continue;
+                }
+
+                //DSLIInfo info = m_dsliInfos[submeshCount - 1];
 
                 //bool test1 = false;
                 //for (int i = 0; i < headerBlock.entries.Count;++i )
@@ -779,10 +786,16 @@ namespace ModelNamer
                 //{
                 //    continue;
                 //}
-                //if (submeshCount > 10)
+                //if (submeshCount > 0)
                 //{
                 //    break;
                 //}
+                if (submeshCount != 2)
+                {
+                    //continue;
+                }
+
+
 
                 string groupName = String.Format("{0}-submesh{1}-LOD{2}" ,m_name,submeshCount,headerBlock.LodLevel);
 
@@ -799,17 +812,6 @@ namespace ModelNamer
                     {
                         Vector2 va = v;
                         va.Y = 1.0f - v.Y;
-                        //va.X -= (int)va.X;
-                        //va.Y -= (int)va.Y;
-
-                        //if (va.X < 0f)
-                        //{
-                        //    va.X += 1.0f;
-                        //}
-                        //if (va.Y < 0f)
-                        //{ 
-                        //    va.Y += 1.0f; 
-                        //}
 
 
                         writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
@@ -845,6 +847,17 @@ namespace ModelNamer
                             headerBlock.entries[i].PosIndex + vertexOffset, headerBlock.entries[i].UVIndex + uvOffset,
                             headerBlock.entries[i + 1].PosIndex + vertexOffset, headerBlock.entries[i + 1].UVIndex + uvOffset,
                             headerBlock.entries[i + 2].PosIndex + vertexOffset, headerBlock.entries[i + 2].UVIndex + uvOffset ));
+
+                        int index1 = headerBlock.entries[i].UVIndex + uvOffset;
+                        int index2 = headerBlock.entries[i+1].UVIndex + uvOffset;
+                        int index3 = headerBlock.entries[i+2].UVIndex + uvOffset;
+
+                        Vector2 uv1 = m_modelMeshes[0].UVs[index1];
+                        Vector2 uv2 = m_modelMeshes[0].UVs[index2];
+                        Vector2 uv3 = m_modelMeshes[0].UVs[index3];
+
+                        writer.WriteLine(String.Format("# f {0:0.00000000} {1:0.00000000}, {2:0.00000000} {3:0.00000000} ,{4:0.00000000} {5:0.00000000}",
+                            uv1.X,uv1.Y,uv2.X,uv2.Y,uv3.X,uv3.Y));
                     }
                     i += 3;
                 }
@@ -1063,7 +1076,7 @@ namespace ModelNamer
 
 
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
-            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*"));
+            filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
 
@@ -1076,8 +1089,8 @@ namespace ModelNamer
 
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\scorpion.mdl");
-            filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\palaceibliis.mdl");
-                            
+            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\palaceibliis.mdl");
+            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\thefen.mdl");
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));
@@ -1459,7 +1472,7 @@ namespace ModelNamer
             int sectionSize = header.adjustedSizeInt;
 
             // section size = 4,5,6,7,8,9
-            if (sectionSize >= 4)
+            if (sectionSize == 4)
             {
                 entry.PosIndex = Common.ToUInt16BigEndian(reader);
                 if (header.HasNormals)
@@ -1471,21 +1484,25 @@ namespace ModelNamer
                     entry.UVIndex = Common.ToUInt16BigEndian(reader);
                 }
             }
-
-
-            if (sectionSize == 5)
+            else if (sectionSize == 5)
             {
+                entry.PosIndex = Common.ToUInt16BigEndian(reader);
                 entry.oddByte = reader.ReadByte();
+                entry.UVIndex = Common.ToUInt16BigEndian(reader);
             }
             else if (sectionSize == 6)
             {
+                entry.PosIndex = Common.ToUInt16BigEndian(reader);
+                entry.NormIndex = Common.ToUInt16BigEndian(reader);
                 entry.UVIndex = Common.ToUInt16BigEndian(reader);
-
             }
             else if (sectionSize == 7)
             {
-                entry.oddByte = reader.ReadByte(); // this is probably the texture index...
+                entry.PosIndex = Common.ToUInt16BigEndian(reader);
+                entry.oddByte = reader.ReadByte();
                 entry.UVIndex = Common.ToUInt16BigEndian(reader);
+                entry.UVIndex2 = Common.ToUInt16BigEndian(reader);
+                //entry.oddByte = reader.ReadByte();
 
             }
             else if (sectionSize == 8)
