@@ -17,28 +17,6 @@ namespace ModelNamer
             
         }
 
-        public string FindTextureName(ShaderData sd)
-        {
-            int index = sd.textureId1;
-            if (index == 255)
-            {
-                index = 0;
-            }
-            String textureName = m_textures[index].textureName;
-            if (textureName.Contains("skygold"))
-            {
-                index = sd.textureId2;
-            }
-
-            if (index == 255)
-            {
-                index = 0;
-            }
-
-            textureName = m_textures[index].textureName;
-
-            return textureName;
-        }
 
 
 
@@ -275,44 +253,6 @@ namespace ModelNamer
 
 
 
-                //if (m_skinned)
-                //{
-                //    int count = 0;
-                //    foreach (DisplayListHeader header in m_modelMeshes)
-                //    {
-                //        if (m_skinned)
-                //        {
-                //            if (count < m_skinBlocks.Count)
-                //            {
-                //                header.skinBlock = m_skinBlocks[count];
-                //            }
-                //            else
-                //            {
-                //                int ibreak = 0;
-                //            }
-                //        }
-                //        try
-                //        {
-                //            BuildBB(header.skinBlock.m_points, header);
-                //            min = Vector3.Min(header.MinBB, min);
-                //            max = Vector3.Max(header.MaxBB, max);
-                //        }
-                //        catch (System.Exception ex)
-                //        {
-                //            int ibreak = 0;
-                //        }
-                //        count++;
-
-                //    }
-
-
-                //}
-                //else
-                //{
-                //    BuildBB(m_points, out min, out max);
-                //}
-
-
                 MinBB = min;
                 MaxBB = max;
 
@@ -376,27 +316,16 @@ namespace ModelNamer
                 {
                     for (int i = 0; i < numUVs; ++i)
                     {
-                        //model.m_uvs.Add(new Vector2(Common.ToFloatUInt16BigEndian(binReader), Common.ToFloatUInt16BigEndian(binReader)));
-                        //model.m_uvs.Add(new Vector2(Common.FromStream2ByteToFloat(binReader), Common.FromStream2ByteToFloat(binReader)));
-
                         ushort ua = Common.ToUInt16BigEndian(binReader);
                         ushort ub = Common.ToUInt16BigEndian(binReader);
 
                         float a = (float)ua / 4096;
                         float b = (float)ub / 4096;
 
-                        //float a = Common.FromStream2ByteToFloatR(binReader);
-                        //float b = Common.FromStream2ByteToFloatR(binReader);
 
                         // just use fractional part.
                         a -= (int)a;
                         b -= (int)b;
-
-
-                        //float a = (((float)binReader.ReadByte()) / 255.0f);
-                        //binReader.ReadByte();
-                        //float b = (((float)binReader.ReadByte()) / 255.0f);
-                        //binReader.ReadByte();
                         m_uvs.Add(new Vector2(a, b));
 
                     }
@@ -739,8 +668,6 @@ namespace ModelNamer
                 {
                     Vector2 va = v;
                     va.Y = 1.0f - v.Y;
-
-
                     writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
                 }
                 foreach (Vector3 v in m_modelMeshes[0].Normals)
@@ -750,6 +677,10 @@ namespace ModelNamer
 
             }
 
+            int meshCount = 0;
+            int meshStart = 1;
+            int meshLimit = 1;
+
             foreach (DisplayListHeader headerBlock in m_modelMeshes)
             {
                 submeshCount++;
@@ -757,7 +688,7 @@ namespace ModelNamer
                 // just want highest lod.
                 if (headerBlock.LodLevel != 0 && ((headerBlock.LodLevel & desiredLod) == 0))
                 {
-                    continue;
+                 //   continue;
                 }
 
                 if (headerBlock.MaxUV > m_modelMeshes[0].UVs.Count)
@@ -765,36 +696,35 @@ namespace ModelNamer
                     int ibreak = 0;
                 }
 
-                if (headerBlock.adjustedSizeInt != 7)
+                if (headerBlock.MaxVertex > m_modelMeshes[0].Vertices.Count)
+                {
+                    int ibreak = 0;
+                }
+
+                if (headerBlock.adjustedSizeInt != 5)
                 {
                     //continue;
                 }
 
-                //DSLIInfo info = m_dsliInfos[submeshCount - 1];
 
-                //bool test1 = false;
-                //for (int i = 0; i < headerBlock.entries.Count;++i )
-                //{
-                //    if (headerBlock.entries[i].PosIndex == 0)
-                //    {
-                //        test1 = true;
-                //        break;
 
-                //    }
-                //}
-                //if (!test1)
+
+
+                meshCount++;
+
+                if (meshCount != 2)
+                {
+                    //continue;
+                }
+                //if (meshLimit > 0 && meshCount < meshStart)
                 //{
                 //    continue;
                 //}
-                //if (submeshCount > 0)
+
+                //if (meshLimit > 0 && meshCount > meshStart + meshLimit)
                 //{
                 //    break;
                 //}
-                if (submeshCount != 2)
-                {
-                    //continue;
-                }
-
 
 
                 string groupName = String.Format("{0}-submesh{1}-LOD{2}" ,m_name,submeshCount,headerBlock.LodLevel);
@@ -826,7 +756,17 @@ namespace ModelNamer
 
                 string adjustedTexture = FindTextureName(shaderData);
                 String materialName = adjustedTexture+ ".jpg";
-                writer.WriteLine("usemtl " + materialName);
+
+                List<String> testMaterialNames = new List<string>();
+                testMaterialNames.Add("walltexture_extra.tga.jpg");
+
+
+                if (!testMaterialNames.Contains(materialName))
+                {
+                    continue;
+                }
+
+                    writer.WriteLine("usemtl " + materialName);
 
                 int counter = 0;
                 int vertexOffset = 1+vertexCountOffset;
@@ -856,15 +796,37 @@ namespace ModelNamer
                         Vector2 uv2 = m_modelMeshes[0].UVs[index2];
                         Vector2 uv3 = m_modelMeshes[0].UVs[index3];
 
-                        writer.WriteLine(String.Format("# f {0:0.00000000} {1:0.00000000}, {2:0.00000000} {3:0.00000000} ,{4:0.00000000} {5:0.00000000}",
+                        writer.WriteLine(String.Format("# uv {0:0.00000000} {1:0.00000000}, {2:0.00000000} {3:0.00000000} ,{4:0.00000000} {5:0.00000000}",
                             uv1.X,uv1.Y,uv2.X,uv2.Y,uv3.X,uv3.Y));
+
+
+                        index1 = headerBlock.entries[i].PosIndex + vertexOffset;
+                        index2 = headerBlock.entries[i + 1].PosIndex + vertexOffset;
+                        index3 = headerBlock.entries[i + 2].PosIndex + vertexOffset;
+
+                        Vector3 pos1 = m_modelMeshes[0].Vertices[index1];
+                        Vector3 pos2 = m_modelMeshes[0].Vertices[index2];
+                        Vector3 pos3 = m_modelMeshes[0].Vertices[index3];
+
+                        Vector3 off1 = new Vector3(headerBlock.entries[i].oddByte, headerBlock.entries[i].oddByte, headerBlock.entries[i].oddByte);
+                        Vector3 off2 = new Vector3(headerBlock.entries[i+1].oddByte, headerBlock.entries[i+1].oddByte, headerBlock.entries[i+1].oddByte);
+                        Vector3 off3 = new Vector3(headerBlock.entries[i+2].oddByte, headerBlock.entries[i+2].oddByte, headerBlock.entries[i+2].oddByte);
+
+                        writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}",pos1.X + off1.X, pos1.Y+ off1.Y, pos1.Z+off1.Z));
+                        writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos2.X + off2.X, pos2.Y + off2.Y, pos2.Z + off2.Z));
+                        writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos3.X + off3.X, pos3.Y + off3.Y, pos3.Z + off3.Z));
+                        
+                        
+                        
+
+
                     }
                     i += 3;
                 }
                 vertexCountOffset += m_skinned?headerBlock.Vertices.Count:0;
                 normalCountOffset += m_skinned?headerBlock.Normals.Count:0;
                 uvCountOffset += 0; // shared uvs?
-                submeshCount++;
+                //break;
             }
         }
 
@@ -1076,7 +1038,7 @@ namespace ModelNamer
 
 
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
-            filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*"));
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
 
@@ -1088,8 +1050,8 @@ namespace ModelNamer
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\prop_practicepost1.mdl");
 
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons\swordM_gladius.mdl");
-            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\scorpion.mdl");
-            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\palaceibliis.mdl");
+            //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\yeti.mdl");
+            filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\palaceibliis.mdl");
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\thefen.mdl");
             foreach (string name in filenames)
             {
@@ -1414,34 +1376,24 @@ namespace ModelNamer
             if (true)
             {
                 byte header1 = reader.ReadByte();
-                //Debug.Assert(header1 == 0x98);
+                Debug.Assert(header1 == 0x98);
                 short pad1 = reader.ReadInt16();
 
                 //header = new DisplayListHeader();
                 header.primitiveFlags = reader.ReadByte();
-                //Debug.Assert(header.primitiveFlags== 0x090);
-                if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x00)
+                Debug.Assert(header.primitiveFlags == 0x90);
+                
+                header.indexCount = Common.ToInt16BigEndian(reader);
+                success = true;
+                for (int i = 0; i < header.indexCount; ++i)
                 {
-                    header.indexCount = Common.ToInt16BigEndian(reader);
-                    if (header.indexCount == 0)
-                    {
-                        int ibreak = 0;
-                    }
+                    DisplayListEntry e = DisplayListEntry.FromStream(reader, header);
+                    header.entries.Add(e);
+                    header.MaxVertex = Math.Max(header.MaxVertex, e.PosIndex);
+                    header.MaxNormal = Math.Max(header.MaxNormal, e.NormIndex);
+                    header.MaxUV = Math.Max(header.MaxUV, e.UVIndex);
+                }
 
-                    success = true;
-                    for (int i = 0; i < header.indexCount; ++i)
-                    {
-                        DisplayListEntry e = DisplayListEntry.FromStream(reader, header);
-                        header.entries.Add(e);
-                        header.MaxVertex = Math.Max(header.MaxVertex, e.PosIndex);
-                        header.MaxNormal = Math.Max(header.MaxNormal, e.NormIndex);
-                        header.MaxUV = Math.Max(header.MaxUV, e.UVIndex);
-                    }
-                }
-                else
-                {
-                    reader.BaseStream.Position = currentPosition;
-                }
             }
             return success;
         }
@@ -1502,22 +1454,22 @@ namespace ModelNamer
                 entry.oddByte = reader.ReadByte();
                 entry.UVIndex = Common.ToUInt16BigEndian(reader);
                 entry.UVIndex2 = Common.ToUInt16BigEndian(reader);
-                //entry.oddByte = reader.ReadByte();
-
+                int ibreak = 0;
             }
             else if (sectionSize == 8)
             {
+                entry.PosIndex = Common.ToUInt16BigEndian(reader);
+                entry.NormIndex = Common.ToUInt16BigEndian(reader);
                 entry.UVIndex = Common.ToUInt16BigEndian(reader);
                 entry.UVIndex2 = Common.ToUInt16BigEndian(reader);
-
-
             }
             else if (sectionSize == 9)
             {
+                entry.PosIndex = Common.ToUInt16BigEndian(reader);
+                entry.oddByte = reader.ReadByte();
+                entry.NormIndex = Common.ToUInt16BigEndian(reader);
                 entry.UVIndex = Common.ToUInt16BigEndian(reader);
                 entry.UVIndex2 = Common.ToUInt16BigEndian(reader);
-                entry.oddByte = reader.ReadByte();
-
             }
 
 

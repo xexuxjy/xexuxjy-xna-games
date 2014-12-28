@@ -68,23 +68,51 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String modelPath = @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed";
-            String infoFile = @"D:\gladius-extracted-archive\xbox-decompressed\ModelInfo.txt";
-            //String sectionInfoFile = @"C:\tmp\unpacking\xbox-ModelFiles\index-normal-data.txt";
+            String rootPath = @"D:\gladius-extracted-archive\xbox-decompressed\";
+            String modelPath = rootPath+"ModelFilesRenamed";
+            String infoFile = rootPath+"ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
-            //reader.LoadModels(modelPath, infoFile);
-            reader.LoadSingleModel(@"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\alpha_box.mdl");
-            //reader.DumpPoints(infoFile);
-            //reader.DumpSectionLengths(modelPath, sectionInfoFile);
+            String objOutputPath = rootPath+@"ModelFilesRenamed-Obj\";
+
+            String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
+
+
+            List<string> filenames = new List<string>();
+
+
+            filenames.AddRange(Directory.GetFiles(rootPath+@"ModelFilesRenamed\weapons", "sword*"));
+            foreach (string name in filenames)
+            {
+                reader.m_models.Add(reader.LoadSingleModel(name));
+            }
+            foreach (XboxModel model in reader.m_models)
+            {
+                try
+                {
+                    //foreach (ShaderData sd in model.m_shaderData)
+                    //{
+                    //    shadernames.Add(sd.shaderName);
+                    //}
+                    ////model.DumpSections(tagOutputPath);
+                    using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
+                    {
+                        using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
+                        {
+                            model.WriteOBJ(objSw, matSw, texturePath, 1);
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+
+                }
+            }
 
 
 
         }
 
-
-
-
-        List<XboxModel> m_models = new List<XboxModel>();
+        List<BaseModel> m_models = new List<BaseModel>();
     }
 
     public class XboxModel : BaseModel
@@ -297,25 +325,27 @@ namespace ModelNamer
                             try
                             {
                                 Vector3 p = Common.FromStreamVector3(binReader);
-                                subMesh.Vertices.Add(p);
-                                //float unk = binReader.ReadSingle();
-                                byte[] norms = binReader.ReadBytes(4);
+                                
+                                float nx = Common.ToFloatInt16(binReader);
+                                float ny = Common.ToFloatInt16(binReader);
+                                float nz = (float)Math.Sqrt(1.0 - ((nx * nx) + (ny * ny)));
+
                                 // convert to normal??
                                 Vector2 u = Common.FromStreamVector2(binReader);
-                                subMesh.UVs.Add(u);
                                 VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
                                 vpnt.Position = p;
                                 vpnt.TextureCoordinate = u;
 
-                                vpnt.Normal = Vector3.Up;
-                                subMesh.Normals.Add(vpnt.Normal);
+                                vpnt.Normal = new Vector3(nz, ny, nx);
 
+                                subMesh.Vertices.Add(vpnt.Position);
+                                subMesh.Normals.Add(vpnt.Normal);
+                                subMesh.UVs.Add(vpnt.TextureCoordinate);
                             }
                             catch (System.Exception ex)
                             {
                                 int ibreak = 0;
                             }
-                            //Vertices.Add(vpnt);
                         }       
 
                         byte[] endBlock = binReader.ReadBytes(4);
@@ -348,6 +378,148 @@ namespace ModelNamer
             }
 
         }
+
+
+        public void WriteOBJ(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1)
+        {
+            int vertexCountOffset = 0;
+            int normalCountOffset = 0;
+            int uvCountOffset = 0;
+
+            //String materialName = null;
+
+            string reflectname = "skygold_R.tga";
+            // write material?
+            if (m_textures.Count == 2 && (m_textures[0].textureName.Contains(reflectname) || m_textures[1].textureName.Contains(reflectname)))
+            {
+                int notsgindex = m_textures[0].textureName.Contains(reflectname) ? 1 : 0;
+
+                String textureName = m_textures[notsgindex].textureName + ".jpg";
+                materialWriter.WriteLine("newmtl " + textureName);
+                materialWriter.WriteLine("Ka 1.000 1.000 1.000");
+                materialWriter.WriteLine("Kd 1.000 1.000 1.000");
+                materialWriter.WriteLine("Ks 0.000 0.000 0.000");
+                materialWriter.WriteLine("d 1.0");
+                materialWriter.WriteLine("illum 3");
+                materialWriter.WriteLine("map_Ka " + texturePath + textureName);
+                materialWriter.WriteLine("map_Kd " + texturePath + textureName);
+
+                materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname + ".jpg");
+            }
+            else
+            {
+
+                foreach (TextureData textureData in m_textures)
+                {
+                    String textureName = textureData.textureName + ".jpg";
+                    materialWriter.WriteLine("newmtl " + textureName);
+                    materialWriter.WriteLine("Ka 1.000 1.000 1.000");
+                    materialWriter.WriteLine("Kd 1.000 1.000 1.000");
+                    materialWriter.WriteLine("Ks 0.000 0.000 0.000");
+                    materialWriter.WriteLine("d 1.0");
+                    materialWriter.WriteLine("illum 2");
+                    materialWriter.WriteLine("map_Ka " + texturePath + textureName);
+                    materialWriter.WriteLine("map_Kd " + texturePath + textureName);
+
+                    //materialWriter.WriteLine("refl -type sphere -mm 0 1 clouds.mpc");
+                }
+            }
+            writer.WriteLine("mtllib " + m_name + ".mtl");
+            int submeshCount = 0;
+
+            //writer.WriteLine("g allObjects");
+
+            if (!m_skinned)
+            {
+                foreach (Vector3 v in m_modelMeshes[0].Vertices)
+                {
+                    writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                }
+                foreach (Vector2 v in m_modelMeshes[0].UVs)
+                {
+                    Vector2 va = v;
+                    va.Y = 1.0f - v.Y;
+                    writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
+                }
+                foreach (Vector3 v in m_modelMeshes[0].Normals)
+                {
+                    //writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                }
+            }
+
+            foreach (XBoxSubMesh headerBlock in m_modelMeshes)
+            {
+                submeshCount++;
+
+                // just want highest lod.
+                if (headerBlock.LodLevel != 0 && ((headerBlock.LodLevel & desiredLod) == 0))
+                {
+                    //   continue;
+                }
+
+                if (headerBlock.MaxUV > m_modelMeshes[0].UVs.Count)
+                {
+                    int ibreak = 0;
+                }
+
+                if (headerBlock.MaxVertex > m_modelMeshes[0].Vertices.Count)
+                {
+                    int ibreak = 0;
+                }
+
+
+                string groupName = String.Format("{0}-submesh{1}-LOD{2}", m_name, submeshCount, headerBlock.LodLevel);
+
+                writer.WriteLine("o " + groupName);
+                //writer.WriteLine("g " + groupName);
+                // and now points, uv's and normals.
+                if (m_skinned)
+                {
+                    foreach (Vector3 v in headerBlock.Vertices)
+                    {
+                        writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                    }
+                    foreach (Vector2 v in headerBlock.UVs)
+                    {
+                        Vector2 va = v;
+                        va.Y = 1.0f - v.Y;
+                        writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
+                    }
+                    foreach (Vector3 v in headerBlock.Normals)
+                    {
+                        //writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
+                    }
+                }
+
+                ShaderData shaderData = m_shaderData[headerBlock.MeshId];
+
+                string adjustedTexture = FindTextureName(shaderData);
+                String materialName = adjustedTexture + ".jpg";
+
+                List<String> testMaterialNames = new List<string>();
+                testMaterialNames.Add("walltexture_extra.tga.jpg");
+
+
+                if (!testMaterialNames.Contains(materialName))
+                {
+                    //continue;
+                }
+
+                writer.WriteLine("usemtl " + materialName);
+                for (int i = 0; i < headerBlock.Indices.Count-2; )
+                {
+                    int i1 = headerBlock.Indices[i];
+                    int i2 = headerBlock.Indices[i+1];
+                    int i3 = headerBlock.Indices[i+2];
+
+                    writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}",i1,i1,i2,i2,i3,i3));
+                    i++;
+                }
+            }
+        }
+
+
+
 
         public override void BuildBB()
         {
@@ -452,6 +624,7 @@ namespace ModelNamer
 
 
         public void ReadSkinnedSubMesh(BinaryReader binReader)
+
         {
             // block size 56 bytes.
             int spacer = binReader.ReadInt32();
