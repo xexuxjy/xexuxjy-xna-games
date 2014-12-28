@@ -142,6 +142,15 @@ namespace ModelNamer
             return (ushort)(b1 << 8 | b2);
         }
 
+        public static ushort ToUInt24BigEndian(BinaryReader reader)
+        {
+            byte b1 = reader.ReadByte();
+            byte b2 = reader.ReadByte();
+            byte b3 = reader.ReadByte();
+            return (ushort)(b1 << 16 | b2 << 8 | b3);
+        }
+
+
         public static float  ToFloatUInt16BigEndian(BinaryReader reader)
         {
             byte b1 = reader.ReadByte();
@@ -672,6 +681,31 @@ namespace ModelNamer
                 }
             }
         }
+
+
+        public string FindTextureName(ShaderData sd)
+        {
+            int index = sd.textureId1;
+            if (index == 255)
+            {
+                index = 0;
+            }
+            String textureName = m_textures[index].textureName;
+            if (textureName.Contains("skygold"))
+            {
+                index = sd.textureId2;
+            }
+
+            if (index == 255)
+            {
+                index = 0;
+            }
+
+            textureName = m_textures[index].textureName;
+
+            return textureName;
+        }
+
 
         public void ReadTextureSection(BinaryReader binReader)
         {
