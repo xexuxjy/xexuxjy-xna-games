@@ -68,19 +68,21 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String rootPath = @"D:\gladius-extracted-archive\xbox-decompressed\";
+            String rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath+"ModelFilesRenamed";
             String infoFile = rootPath+"ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
             String objOutputPath = rootPath+@"ModelFilesRenamed-Obj\";
 
-            String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
+            String texturePath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\textures.jpg\";
 
 
             List<string> filenames = new List<string>();
 
 
-            filenames.AddRange(Directory.GetFiles(rootPath+@"ModelFilesRenamed\weapons", "sword*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath+@"ModelFilesRenamed\weapons", "sword*"));
+            //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\axeCS_declamatio.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));
@@ -506,14 +508,28 @@ namespace ModelNamer
                 }
 
                 writer.WriteLine("usemtl " + materialName);
-                for (int i = 0; i < headerBlock.Indices.Count-2; )
+                bool swap = false;
+                for (int i = 0; i < headerBlock.Indices.Count - 2; i++)
                 {
                     int i1 = headerBlock.Indices[i];
-                    int i2 = headerBlock.Indices[i+1];
-                    int i3 = headerBlock.Indices[i+2];
+                    int i2 = headerBlock.Indices[i + 1];
+                    int i3 = headerBlock.Indices[i + 2];
 
-                    writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}",i1,i1,i2,i2,i3,i3));
-                    i++;
+                    // 1 based.
+                    i1 += 1;
+                    i2 += 1;
+                    i3 += 1;
+                    
+                    // alternate winding
+                    if (swap)
+                    {
+                        writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", i3, i3, i2, i2, i1, i1));
+                    }
+                    else
+                    {
+                        writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", i1, i1, i2, i2, i3, i3));
+                    }
+                    swap = !swap;
                 }
             }
         }
