@@ -91,6 +91,7 @@ namespace Gladius
         DarkLegionnaire,
         Dervish,
         DervishF,
+        Dummy,
         Eiji,
         Galdr,
         Galverg,

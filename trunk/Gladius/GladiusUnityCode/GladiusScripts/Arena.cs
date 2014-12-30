@@ -608,6 +608,15 @@ namespace Gladius.arena
             Quaternion rotation = Quaternion.Euler(ModelRotation);
             m_modelObject.transform.rotation = rotation;
             //m_modelObject.active = true;
+            
+            //m_modelObject.get
+            //MeshFilter[] meshes = m_modelObject.GetComponents<MeshFilter>();
+
+            MeshCollider[] colliders = m_modelObject.GetComponentsInChildren<MeshCollider>();
+            foreach (MeshCollider collider in colliders)
+            {
+                collider.tag = "environment";
+            }
 
             Material m = Resources.Load<Material>(SkyBoxMaterialName);
             RenderSettings.skybox = m;

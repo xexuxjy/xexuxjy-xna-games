@@ -83,15 +83,16 @@ public class ArenaStartup : MonoBehaviour
                     SetActor2(ba1);
                 }
                 actors.Add(ba1);
-                ba1.SetupSkills(GladiusGlobals.AttackSkillDictionary);
+                //ba1.SetupSkills(GladiusGlobals.AttackSkillDictionary);
             }
         }
 
-        actors[0].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[0];
-        actors[1].ArenaPoint = GladiusGlobals.Arena.PlayerPointList[1];
+        AssignPointList(actors, 0, GladiusGlobals.Arena.PlayerPointList, 0);
+        AssignPointList(actors, 1, GladiusGlobals.Arena.PlayerPointList, 1);
+        AssignPointList(actors, 2, GladiusGlobals.Arena.Team1PointList, 0);
+        AssignPointList(actors, 3, GladiusGlobals.Arena.Team1PointList, 1);
 
-        actors[2].ArenaPoint = GladiusGlobals.Arena.Team1PointList[0];
-        actors[3].ArenaPoint = GladiusGlobals.Arena.Team1PointList[1];
+
 
         foreach (BaseActor actor in actors)
         {
@@ -102,12 +103,22 @@ public class ArenaStartup : MonoBehaviour
         GladiusGlobals.TurnManager.StartRound();
     }
 
+    public void AssignPointList(List<BaseActor> actors,int actorIndex,List<Point> pointList,int pointListIndex)
+    {
+        if (actorIndex < actors.Count && pointListIndex < pointList.Count)
+        {
+            actors[actorIndex].ArenaPoint = pointList[pointListIndex];
+        }
+    }
+
+
     void Awake()
     {
     }
 
     public void SetActor1(BaseActor actor)
     {
+        actor.CharacterModelName = "warriors/all_warrior";
         actor.HeadModelName = "w_head_01_01";
         actor.ShoulderModelName = "w_shoulder_01";
         actor.BodyModelName = "w_body_01";
@@ -124,6 +135,8 @@ public class ArenaStartup : MonoBehaviour
 
     public void SetActor2(BaseActor actor)
     {
+        //actor.CharacterModelName = GladiusGlobals.ModelsRoot+"banditA";
+        //actor.CharacterModelName = actor.m_char//GladiusGlobals.ModelsRoot + "ogre";
         actor.HeadModelName = "w_head_01_02";
         actor.ShoulderModelName = "w_shoulder_02";
         actor.BodyModelName = "w_body_02";
