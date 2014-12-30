@@ -440,6 +440,11 @@ namespace Gladius
                     if (lineTokens.Length == 4)
                     {
                         currentSkill.Name = lineTokens[1];
+                        if (currentSkill.Name == "Pass")
+                        {
+                            int ibreak1 = 0;
+                        }
+
                         currentSkill.Type = lineTokens[2];
                         skillTypeSet.Add(currentSkill.Type);
 

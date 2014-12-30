@@ -582,7 +582,11 @@ public class PlayerChoiceBar : MonoBehaviour
                         else
                         {
                             // remove all up to the last
-							CurrentActor.WayPointList.RemoveRange(pointIndex, CurrentActor.WayPointList.Count-pointIndex);
+                            int numRemove = CurrentActor.WayPointList.Count-pointIndex;
+                            int numRemove2 = CurrentActor.WayPointList.Count - pointIndex -1;
+                            int numRemove3 = CurrentActor.WayPointList.Count - (pointIndex-1);
+                            // removerange includes the index point so step over.
+							CurrentActor.WayPointList.RemoveRange(pointIndex+1, numRemove2);
                         }
                         
                         // check path validity.

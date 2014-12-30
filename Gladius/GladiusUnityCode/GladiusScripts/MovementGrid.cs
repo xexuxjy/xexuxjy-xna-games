@@ -330,7 +330,7 @@ public class MovementGrid : MonoBehaviour
                 //}
             }
 
-            RebuildMeshUV();
+            RebuildMeshData();
         }
     }
 
@@ -538,11 +538,17 @@ public class MovementGrid : MonoBehaviour
             GridSquareType squareType = GridSquareType.None;
             bool disabled = !CurrentActor.CurrentAttackSkill.InRange(i);
             prev = curr;
+            if (i == 0)
+            {
+                prev = CurrentActor.ArenaPoint;
+            }
+
+
             curr = m_pointsCopy[i];
             if (i < (numPoints - 1))
             {
                 next = m_pointsCopy[i + 1];
-                DrawIfValid(prev, curr, next, actor, (i > 0), true, disabled, squareType);
+                DrawIfValid(prev, curr, next, actor, (i >= 0), true, disabled, squareType);
             }
             else
             {
@@ -659,9 +665,9 @@ public class MovementGrid : MonoBehaviour
         int totalIndices = 6 * size * size;
         m_mesh = new Mesh();
 
-        Vector3[] vertices = new Vector3[totalVertices];
-        Vector3[] normals = new Vector3[totalVertices];
-        m_uvCopy = new Vector2[totalVertices];
+        m_vertices = new Vector3[totalVertices];
+        m_normals = new Vector3[totalVertices];
+        m_uvs = new Vector2[totalVertices];
 
         int[] triangles = new int[totalIndices];
 
@@ -684,25 +690,27 @@ public class MovementGrid : MonoBehaviour
 
         Rect bounds = textureRegion.BoundsUV;
 
+        //FIXME look at changing grid height point so it aligns with terrain better?
+
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
             {
 
-                vertices[vcount] = topLeft + (new Vector3(x, 0, y) * meshScalar);
-                vertices[vcount + 1] = topLeft + (new Vector3(x + 1, 0, y) * meshScalar);
-                vertices[vcount + 2] = topLeft + (new Vector3(x + 1, 0, y + 1) * meshScalar);
-                vertices[vcount + 3] = topLeft + (new Vector3(x, 0, y + 1) * meshScalar);
+                m_vertices[vcount] = topLeft + (new Vector3(x, 0, y) * meshScalar);
+                m_vertices[vcount + 1] = topLeft + (new Vector3(x + 1, 0, y) * meshScalar);
+                m_vertices[vcount + 2] = topLeft + (new Vector3(x + 1, 0, y + 1) * meshScalar);
+                m_vertices[vcount + 3] = topLeft + (new Vector3(x, 0, y + 1) * meshScalar);
 
-                m_uvCopy[vcount] = new Vector2(bounds.x, bounds.y);
-                m_uvCopy[vcount + 1] = new Vector2(bounds.width, bounds.y);
-                m_uvCopy[vcount + 2] = new Vector2(bounds.width, bounds.height);
-                m_uvCopy[vcount + 3] = new Vector2(bounds.x, bounds.height);
+                m_uvs[vcount] = new Vector2(bounds.x, bounds.y);
+                m_uvs[vcount + 1] = new Vector2(bounds.width, bounds.y);
+                m_uvs[vcount + 2] = new Vector2(bounds.width, bounds.height);
+                m_uvs[vcount + 3] = new Vector2(bounds.x, bounds.height);
 
-                normals[vcount] = Vector3.up;
-                normals[vcount + 1] = Vector3.up;
-                normals[vcount + 2] = Vector3.up;
-                normals[vcount + 3] = Vector3.up;
+                m_normals[vcount] = Vector3.up;
+                m_normals[vcount + 1] = Vector3.up;
+                m_normals[vcount + 2] = Vector3.up;
+                m_normals[vcount + 3] = Vector3.up;
 
 
                 triangles[icount] = vcount + 2;
@@ -719,9 +727,9 @@ public class MovementGrid : MonoBehaviour
             }
         }
 
-        m_mesh.vertices = vertices;
-        m_mesh.normals = normals;
-        m_mesh.uv = m_uvCopy;
+        m_mesh.vertices = m_vertices;
+        m_mesh.normals = m_normals;
+        m_mesh.uv = m_uvs;
         m_mesh.triangles = triangles;
 
         m_mesh.RecalculateBounds();
@@ -733,27 +741,49 @@ public class MovementGrid : MonoBehaviour
         m_meshFilter.renderer.material.mainTexture = m_moveAtlasTexture;
     }
 
-    private void RebuildMeshUV()
+    private void RebuildMeshData()
     {
         //return;
         int size = GridSize;
         int vcount = 0;
         Rect uvg = new Rect();
-
+        RaycastHit hitResult = new RaycastHit();
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
             {
                 UVForGrid(x, y, ref uvg);
-                m_uvCopy[vcount] = new Vector2(uvg.x, uvg.y);
-                m_uvCopy[vcount + 1] = new Vector2(uvg.width, uvg.y);
-                m_uvCopy[vcount + 2] = new Vector2(uvg.width, uvg.height);
-                m_uvCopy[vcount + 3] = new Vector2(uvg.x, uvg.height);
+                m_uvs[vcount] = new Vector2(uvg.x, uvg.y);
+                m_uvs[vcount + 1] = new Vector2(uvg.width, uvg.y);
+                m_uvs[vcount + 2] = new Vector2(uvg.width, uvg.height);
+                m_uvs[vcount + 3] = new Vector2(uvg.x, uvg.height);
+                Ray ray = new Ray(new Vector3(x,10,y),new Vector3(0,-1,0));
+                float height = 0f;
+                if (Physics.Raycast(ray, out hitResult))
+                {
+                    if (hitResult.collider.tag == "environment")
+                    {
+                        //height = hitResult.point.y;
+                        if (height < -0.1f)
+                        {
+                            int ibreak = 0;
+                        }
+                        //height = vcount / 10f;
+
+                    }
+                }
+
+                m_vertices[vcount + 0].y = height;
+                m_vertices[vcount + 1].y = height;
+                m_vertices[vcount + 2].y = height;
+                m_vertices[vcount + 3].y = height;
+
                 vcount += 4;
             }
         }
 
-        m_mesh.uv = m_uvCopy;
+        m_mesh.uv = m_uvs;
+        m_mesh.vertices = m_vertices;
     }
 
     private void UVForGrid(int x, int y, ref Rect uv)
@@ -764,7 +794,10 @@ public class MovementGrid : MonoBehaviour
         uv = tr.BoundsUV;
     }
 
-    private Vector2[] m_uvCopy;
+    private Vector2[] m_uvs;
+    private Vector3[] m_vertices;
+    private Vector3[] m_normals;
+
     private bool[,] m_skillActiveSquares;
 
 

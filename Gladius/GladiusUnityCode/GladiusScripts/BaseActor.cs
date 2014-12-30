@@ -13,6 +13,22 @@ public class BaseActor : MonoBehaviour
     public float MovementSpeed = 2f;
     public float TurnTime = 0.5f;
     public String m_name;
+    public Bounds m_bounds = new Bounds();
+
+    private Animator m_animator;
+
+    private string m_characterModelName;
+    public string CharacterModelName
+    {
+        get
+        { return m_characterModelName; }
+        set
+        {
+            m_characterModelName = value;
+        }
+
+    }
+
 
     public GameObject m_healthBar;
 
@@ -104,7 +120,7 @@ public class BaseActor : MonoBehaviour
 
     }
 
-    void Start()
+    public void Setup()
     {
         gameObject.SetActive(true);
 
@@ -117,18 +133,12 @@ public class BaseActor : MonoBehaviour
         // parent it to the gui
         m_healthBar.transform.parent = playerUIRoot.transform;
 
-        //m_healthBar.GetComponent<dfFollowObject3D>().attachedTo = gameObject.transform;
-
         dfFollowObject follow = m_healthBar.GetComponent<dfFollowObject>();
         follow.attach = gameObject;
         // toggle enabled so the attachment changes are picked up .
         follow.enabled = false;
         follow.enabled = true;
 
-
-
-
-        //m_healthBar.GetComponent<dfFollowObject>().RebuildAttach();
 
         m_turnManager = GladiusGlobals.TurnManager;
         m_turnManager.AddActor(this);
@@ -138,7 +148,7 @@ public class BaseActor : MonoBehaviour
 
         SetupSkills(GladiusGlobals.AttackSkillDictionary);
 
-        SetAnimationData();
+        SetupAnimationData();
 
         QueueAnimation(AnimationEnum.Idle);
 
@@ -147,9 +157,10 @@ public class BaseActor : MonoBehaviour
 
     static bool setEvents = false;
 
-    public void SetAnimationData()
+    public void SetupAnimationData()
     {
-        m_clipNameDictionary[AnimationEnum.Idle] = "idle-2";
+
+        m_clipNameDictionary[AnimationEnum.Idle] = "w_idle-2";
         m_clipNameDictionary[AnimationEnum.Walk] = "walk";
         m_clipNameDictionary[AnimationEnum.Attack1] = IsTwoHanded ? "w_2h_attack-1" : "w_attack-1";
         m_clipNameDictionary[AnimationEnum.Attack2] = IsTwoHanded ? "w_2h_attack-2" : "w_attack-2";
@@ -170,84 +181,158 @@ public class BaseActor : MonoBehaviour
 
         m_clipNameDictionary[AnimationEnum.Cast] = "w_cast_spell-1";
 
-        //UnityEngine.Object[] clips = Resources.LoadAll("warriors", typeof(AnimationClip));
-        //foreach (var o in clips)
-        //{
-        //    AnimationClip c = o as AnimationClip;
-
-        //    if (c.name == "idle-2" || c.name == "walk")
-        //    {
-        //        c.wrapMode = WrapMode.Loop;
-        //    }
-        //}
 
         if (!setEvents)
         {
             setEvents = true;
-            AnimationEvent dpae = new AnimationEvent();
-            dpae.functionName = "DamagePoint";
-            dpae.time = 0.2f;
-            animation["w_attack-1"].clip.AddEvent(dpae);
+            //AnimationClip animClip = null;
+            //m_characterGameObject.animation.GetClip("w_attack-1");
+            //if (animClip != null)
+            //{
+            //    AnimationEvent dpae = new AnimationEvent();
+            //    dpae.functionName = "DamagePoint";
+            //    dpae.time = 0.2f;
+            //    animClip.AddEvent(dpae);
+            //}
 
-            AnimationEvent baae = new AnimationEvent();
-            baae.functionName = "BowFirePoint";
-            baae.time = 0.2f;
-            animation["w_bow_action"].clip.AddEvent(baae);
+            //animClip = m_characterGameObject.animation.GetClip("w_bow_action");
+            //if(animClip != null)
+            //{
+            //    AnimationEvent baae = new AnimationEvent();
+            //    baae.functionName = "BowFirePoint";
+            //    baae.time = 0.2f;
+            //    animClip.AddEvent(baae);
+            //}
         }
-
-
-        SkinnedMeshRenderer[] smra = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-        int ibreak = 0;
-        //foreach (Transform bt in meshBones)
-        //{
-        //    if ("Bip01 L Hand".Equals(bt.name))
-        //    {
-        //        m_projectileHandTransform = bt;
-        //        break;
-        //    }
-        //}
 
     }
 
     public void SetMeshData()
     {
-        SkinnedMeshRenderer[] childMeshes = GetComponentsInChildren<SkinnedMeshRenderer>();
 
-        Component[] allComps = GetComponents<Component>();
-
-
-
-        foreach (SkinnedMeshRenderer m in childMeshes)
+        if (ModelName != null)
         {
-            //Debug.Log("Mesh : " + m.name);
-            CheckMesh(m, "w_helmet", HelmetModelName);
-            CheckMesh(m, "w_head", HeadModelName);
-            CheckMesh(m, "w_body", BodyModelName);
-            CheckMesh(m, "w_hand", HandModelName);
-            CheckMesh(m, "w_shoes", ShoesModelName);
-            CheckMesh(m, "w_shoulder", ShoulderModelName);
+            GameObject prefab = Resources.Load(ModelName) as GameObject; 
+            GameObject load = Instantiate(prefab)as GameObject;
+            m_characterGameObject = load;
+            m_characterGameObject.transform.parent = transform;
+
+            m_animator = m_characterGameObject.GetComponent<Animator>();
+            Animator goAnimator = gameObject.GetComponent<Animator>();
+            if (goAnimator != null)
+            {
+                m_animator.runtimeAnimatorController = goAnimator.runtimeAnimatorController;
+            }
+
+
+            //if (m_characterGameObject.animation == null)
+            //{
+            //    m_characterGameObject.AddComponent<Animation>();
+            //    int ibreak = 0;
+            //}
 
         }
 
-        SkinnedMeshRenderer[] smra = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (SkinnedMeshRenderer smr in smra)
+
+        if (m_characterGameObject != null)
         {
-            if (HandModelName.Equals(smr.name))
+            Setup();
+
+
+            SkinnedMeshRenderer[] childMeshes = m_characterGameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+            foreach (SkinnedMeshRenderer m in childMeshes)
             {
-                Transform[] boneTransforms = smr.bones;
-                foreach (Transform t in boneTransforms)
+                //Debug.Log("Mesh : " + m.name);
+                CheckMesh(m, "w_helmet", HelmetModelName);
+                CheckMesh(m, "w_head", HeadModelName);
+                CheckMesh(m, "w_body", BodyModelName);
+                CheckMesh(m, "w_hand", HandModelName);
+                CheckMesh(m, "w_shoes", ShoesModelName);
+                CheckMesh(m, "w_shoulder", ShoulderModelName);
+
+            }
+
+
+            SkinnedMeshRenderer[] smra = m_characterGameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+            if (smra.Length > 0)
+            {
+                foreach (SkinnedMeshRenderer smr in smra)
                 {
-                    if (t.name.Equals("Bip01 L Hand"))
+                    m_bounds.min = Vector3.Min(m_bounds.min, smr.bounds.min);
+                    m_bounds.max = Vector3.Max(m_bounds.max, smr.bounds.max);
+
+                    if (HandModelName.Equals(smr.name))
                     {
-                        m_projectileHandTransform = t;
+                        Transform[] boneTransforms = smr.bones;
+                        foreach (Transform t in boneTransforms)
+                        {
+                            if (t.name.Equals("Bip01 L Hand"))
+                            {
+                                m_projectileHandTransform = t;
+                                break;
+                            }
+                        }
                         break;
                     }
                 }
-                break;
             }
+            else
+            {
+                // can't find skinned version, look for normal one
+                MeshFilter[] mra = m_characterGameObject.GetComponentsInChildren<MeshFilter>();
+                foreach (MeshFilter mr in mra)
+                {
+                    Vector3[] verts = mr.mesh.vertices;
+                    foreach (Vector3 vert in verts)
+                    {
+                        m_bounds.min = Vector3.Min(m_bounds.min, vert);
+                        m_bounds.max = Vector3.Max(m_bounds.max, vert);
+                    }
+                }
+            }
+
+            // align imported character models.
+            if (ModelName.Contains(GladiusGlobals.ModelsRoot))
+            {
+                m_characterGameObject.transform.localRotation = Quaternion.Euler(new Vector3(270, 180, 0));
+                // set scale up.
+
+                float desiredHeight = 0.8f;
+                float scalingFactor = desiredHeight / m_bounds.extents.z;
+
+                m_characterGameObject.transform.localScale = new Vector3(scalingFactor, scalingFactor, scalingFactor);
+            }
+
+
+
+
+
+
+            SetupRagdollItems();
+
         }
     }
+
+    private void SetupRagdollItems()
+    {
+        Item item = m_characterData.GetItemAtLocation(ItemLocation.Weapon);
+        if (item != null)
+        {
+            LoadAndAttachModel("RightHandAttach", item.ModelMeshName);
+        }
+        item = m_characterData.GetItemAtLocation(ItemLocation.Shield);
+        if (item != null)
+        {
+            LoadAndAttachModel("LeftHandAttach", item.ModelMeshName);
+        }
+        item = m_characterData.GetItemAtLocation(ItemLocation.Helmet);
+        if (item != null)
+        {
+            LoadAndAttachModel("Bip01 Head", item.ModelMeshName);
+        }
+    }
+
 
     private void CheckMesh(SkinnedMeshRenderer m, String matchingName, String variableName)
     {
@@ -262,23 +347,6 @@ public class BaseActor : MonoBehaviour
     public void SetupCharacterData(CharacterData characterData)
     {
         m_characterData = characterData;
-
-
-        Item item = characterData.GetItemAtLocation(ItemLocation.Weapon);
-        if(item != null)
-        {
-            LoadAndAttachModel("RightHandAttach", item.ModelMeshName);
-        }
-        item = characterData.GetItemAtLocation(ItemLocation.Shield);
-        if(item != null)
-        {
-            LoadAndAttachModel("LeftHandAttach", item.ModelMeshName);
-        }
-        item = characterData.GetItemAtLocation(ItemLocation.Helmet);
-        if(item != null)
-        {
-            LoadAndAttachModel("Bip01 Head", item.ModelMeshName);
-        }
 
         if (characterData.StartPosition.HasValue)
         {
@@ -462,7 +530,10 @@ public class BaseActor : MonoBehaviour
             {
                 String key = m_clipNameDictionary[animEnum];
 
-                animation.Play(key);
+                //m_characterGameObject.animation.Play(key);
+                //RuntimeAnimatorController runtimeAnimController = animator.runtimeAnimatorController;
+                m_animator.Play(key);
+
                 AnimationStarted(m_currentAnimEnum);
             }
             catch (Exception e)
@@ -651,7 +722,7 @@ public class BaseActor : MonoBehaviour
 
     public void LoadAndAttachModel(String boneName, String modelName)
     {
-        Transform boneTransform = GladiusGlobals.FindChild(boneName, gameObject.transform);
+        Transform boneTransform = GladiusGlobals.FindChild(boneName, m_characterGameObject.transform);
         if (boneTransform != null)
         {
             GameObject load = Instantiate(Resources.Load(GladiusGlobals.ModelsRoot + modelName)) as GameObject;
@@ -706,7 +777,7 @@ public class BaseActor : MonoBehaviour
             if (!TurnComplete)
             {
                 UpdateMovement();
-                UpdateAttack();
+                UpdateAttackSkill();
             }
             TurnComplete = CheckTurnComplete();
 
@@ -729,8 +800,19 @@ public class BaseActor : MonoBehaviour
     public void CheckAnimationEnd()
     {
         // if the current anim loops, and we have others queued , or anim has finished then jump to next
+        //AnimationClip animClip = m_characterGameObject.animation.clip;
 
-        if ((animation.clip != null && animation.clip.wrapMode == WrapMode.Loop && m_animationQueue.Count > 0) || animation.isPlaying == false)
+        AnimationInfo[] clipState = m_animator.GetCurrentAnimationClipState(0);
+        if (clipState.Length == 0)
+        {
+            return;
+        }
+
+        AnimationClip animClip = clipState[0].clip;
+        AnimatorStateInfo animStateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+        
+
+        if ((animClip != null && animClip.wrapMode == WrapMode.Loop && m_animationQueue.Count > 0) || animStateInfo.normalizedTime > 1f)
         {
             AnimationStopped(m_currentAnimEnum);
         }
@@ -1005,6 +1087,9 @@ public class BaseActor : MonoBehaviour
     public void StartAttack()
     {
         //ChooseAttackSkill();
+        // use the combat engine to display skill choice
+        GladiusGlobals.CombatEngineUI.DrawFloatingText(this.Position, Color.yellow, CurrentAttackSkill.Name, 1f);
+
         GladiusGlobals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", Name, m_currentTarget != null ? m_currentTarget.Name : "NoActorTarget", CurrentAttackSkill.Name));
         AnimationEnum attackAnim = CurrentAttackSkill.Animation != AnimationEnum.None ? CurrentAttackSkill.Animation : AnimationEnum.Attack1;
         QueueAnimation(attackAnim);
@@ -1020,21 +1105,39 @@ public class BaseActor : MonoBehaviour
         // FIXME - need to worry about out of turn attacks (ripostes, groups etc)
     }
 
-    public void UpdateAttack()
+    public void UpdateAttackSkill()
     {
-        if (!Attacking && !FollowingWayPoints)
+        // eventually this will be anim driven for all command anims (except maybe idle...)
+        if (CurrentAttackSkill != null && CurrentAttackSkill.Type == "Command")
         {
-
-            if (GladiusGlobals.CombatEngine.IsAttackerInRange(this, m_currentTarget))
+            if (!Attacking)
             {
-                if (CurrentAttackSkill.FaceOnAttack)
-                {
-                    SnapToFace(m_currentTarget);
-                }
-                m_currentTarget.SnapToFace(this);
                 StartAttack();
             }
+            else
+            {
+                StopAttack();
+            }
         }
+        else
+        {
+            if (!Attacking && !FollowingWayPoints)
+            {
+
+
+
+                if (GladiusGlobals.CombatEngine.IsAttackerInRange(this, m_currentTarget))
+                {
+                    if (CurrentAttackSkill.FaceOnAttack)
+                    {
+                        SnapToFace(m_currentTarget);
+                    }
+                    m_currentTarget.SnapToFace(this);
+                    StartAttack();
+                }
+            }
+        }
+
     }
 
     private bool m_attacking;
@@ -1434,9 +1537,18 @@ public class BaseActor : MonoBehaviour
 
     public void ChooseTargetAndSkill()
     {
+        // check for pass only skill.
+        if (m_knownAttacks.Count == 1 && m_knownAttacks[0].Name == "Pass")
+        {
+            CurrentAttackSkill = m_knownAttacks[0];
+            return;
+        }
+
 
         // if theres an actor nearby with low health , prioritise that target to finish it off.
+        
         bool foundTargetInRange = false;
+
         foreach (BaseActor actor in TurnManager.AllActors)
         {
             // reset threats
@@ -1621,6 +1733,14 @@ public class BaseActor : MonoBehaviour
         get { return (int)(m_totalMovePoints * MovePointMultiplier); }
     }
 
+    public string ModelName
+    {
+        get
+        {
+            return CharacterModelName != null ? CharacterModelName : GladiusGlobals.ModelsRoot+ActorClassData.MeshName;
+        }
+    }
+
 
     public void FaceCardinal()
     {
@@ -1737,6 +1857,7 @@ public class BaseActor : MonoBehaviour
     public Transform m_rightHandTransforms;
 
     public GameObject m_projectileGameObject;
+    public GameObject m_characterGameObject;
 
 
     private Transform m_projectileHandTransform;
