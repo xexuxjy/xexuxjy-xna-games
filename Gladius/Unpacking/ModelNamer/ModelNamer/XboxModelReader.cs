@@ -83,9 +83,14 @@ namespace ModelNamer
             //filenames.AddRange(Directory.GetFiles(rootPath+@"ModelFilesRenamed\weapons", "club*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*"));
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\axeCS_declamatio.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordCS_unofan.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\charm_catseye.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             foreach (string name in filenames)
             {
@@ -213,49 +218,63 @@ namespace ModelNamer
                     
                     int doegToTextureSize = binReader.ReadInt32();
 
-                    byte[] doegEnd = binReader.ReadBytes(4);
+                    byte[] doegEnd = binReader.ReadBytes(4);    
                     Debug.Assert(doegEnd[0] == 'd' && doegEnd[3] == 'g');
                     int numIndexOffset = 180;
 
                     binReader.BaseStream.Position += numIndexOffset;
 
-                    List<int> indexData = new List<int>();
+                    List<MeshInfo> meshInfoList = new List<MeshInfo>();
 //                    List<int> vertexData = new List<int>();
+                    m_numMeshes = 1;
 
-                    for (int i = 0; i<m_numMeshes; ++i)
+                    for (int i = 0; i < m_numMeshes; ++i)
                     {
-                        int val = binReader.ReadInt32();
-                        indexData.Add(val);
-                        if (val == 0)
-                        {
-                            int ibreak = 0;
-                        }
-                        if (i > 2 && (indexData[indexData.Count - 1] < indexData[indexData.Count - 2]))
-                        {
-                            int ibreak = 0;
-                        }
+                        meshInfoList.Add(MeshInfo.FromStream(binReader));
                     }
 
 
-                    int totalIndices = indexData[indexData.Count - 1];
+                    //for (int i = 0; i<m_numMeshes; ++i)
+                    //{
+                    //    int val = binReader.ReadInt32();
+                    //    indexData.Add(val);
+                    //    if (val == 0)
+                    //    {
+                    //        int ibreak = 0;
+                    //    }
+                    //    if (i > 2 && (indexData[indexData.Count - 1] < indexData[indexData.Count - 2]))
+                    //    {
+                    //        int ibreak = 0;
+                    //    }
+                    //}
 
-                    int skip1 = binReader.ReadInt32();
-                    int skip2 = binReader.ReadInt32();
 
-                    int totalVertices = binReader.ReadInt32();
+                    //int totalIndices = indexData[indexData.Count - 1];
+
+                    binReader.BaseStream.Position += doegToTextureSize-4-numIndexOffset-(m_numMeshes * 20);
+
+                    int totalIndices = 0;
+                    int totalVertices = 0;
+
+                    //int skip1 = binReader.ReadInt32();
+                    //int skip2 = binReader.ReadInt32();
+
+                    //int totalVertices = binReader.ReadInt32();
                     //for (int i = 0; i<m_numMeshes; ++i)
                     //{
                     //    vertexData.Add(binReader.ReadInt32());
                     //}
 
 
-                    int jumpMultiplier = 1;
+                    //int jumpMultiplier = 1;
                     //jumpMultiplier = 5;
                     //jumpMultiplier = 3;
-                    int jumpOffset = (doegToTextureSize - numIndexOffset - (jumpMultiplier*4));
-                    binReader.BaseStream.Position += jumpOffset;
+                    //int jumpOffset = (doegToTextureSize - numIndexOffset - (jumpMultiplier*4));
+                    //binReader.BaseStream.Position += jumpOffset;
 
                     StringBuilder sb = new StringBuilder();
+                    
+                    
                     List<string> textureNames = new List<string>();
                     char b;
                     int count = 0;
@@ -273,8 +292,12 @@ namespace ModelNamer
                         sb.Clear();
                     }
 
-                    
 
+                    foreach (MeshInfo mi in meshInfoList)
+                    {
+                        totalIndices += mi.m_numIndices;
+                        totalVertices += mi.m_numVertices;
+                    }
 
                     for (int i = 0; i < totalIndices; ++i)
                     {
@@ -282,15 +305,15 @@ namespace ModelNamer
                         m_allIndices.Add((ushort)binReader.ReadInt16());
                     }
 
-                    int startIndex = 0;
-                    for (int i = 0; i < indexData.Count; ++i)
-                    {
-                        XBoxSubMesh subMesh = new XBoxSubMesh();
-                        m_modelMeshes.Add(subMesh);
-                        int endIndex = i < indexData.Count - 1 ? indexData[i + 1] : indexData[indexData.Count - 1];
-                        subMesh.Indices.AddRange(m_allIndices.Skip(startIndex).Take(endIndex - startIndex));
-                        startIndex = endIndex;
-                    }
+                    //int startIndex = 0;
+                    //for (int i = 0; i < indexData.Count; ++i)
+                    //{
+                    //    XBoxSubMesh subMesh = new XBoxSubMesh();
+                    //    m_modelMeshes.Add(subMesh);
+                    //    int endIndex = i < indexData.Count - 1 ? indexData[i + 1] : indexData[indexData.Count - 1];
+                    //    subMesh.Indices.AddRange(m_allIndices.Skip(startIndex).Take(endIndex - startIndex));
+                    //    startIndex = endIndex;
+                    //}
 
 
                     int padding = (totalIndices * 2) % 4;
@@ -699,6 +722,35 @@ namespace ModelNamer
     
     }
 
+    public class MeshInfo
+    {
+        public int m_numIndices;
+        public int m_pad1;
+        public int m_pad2;
+        public int m_pad3;
+        public int m_numVertices;
+
+
+        // seems to be 20 bytes for index, vertex data per mesh?
+        //2C000000 5C000000 06000000 0000803F 00040000
+        //2C000000 5C000000 06000000 0000803F B8040000
+        //2C000000 5C000000 06000000 0000803F 70050000
+        //2C000000 5C000000 06000000 0000803F 28060000
+        //2C000000 5C000000 06000000 0000803F E0060000
+        //2C000000 5C000000 06000000 0000803F 98070000
+        
+        public static MeshInfo FromStream(BinaryReader binReader)
+        {
+            MeshInfo mi = new MeshInfo();
+            mi.m_numIndices = binReader.ReadInt32();
+            mi.m_pad1 = binReader.ReadInt32();
+            mi.m_pad2 = binReader.ReadInt32();
+            mi.m_numVertices = binReader.ReadInt32();
+            mi.m_pad3 = binReader.ReadInt32();
+            return mi;
+        }
+
+    }
 
 }
 
