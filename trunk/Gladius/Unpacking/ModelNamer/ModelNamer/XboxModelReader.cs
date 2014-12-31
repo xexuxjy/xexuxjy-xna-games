@@ -226,7 +226,7 @@ namespace ModelNamer
 
                     List<MeshInfo> meshInfoList = new List<MeshInfo>();
 //                    List<int> vertexData = new List<int>();
-                    m_numMeshes = 1;
+                    //m_numMeshes = 1;
 
                     for (int i = 0; i < m_numMeshes; ++i)
                     {
@@ -293,11 +293,29 @@ namespace ModelNamer
                     }
 
 
-                    foreach (MeshInfo mi in meshInfoList)
+                    //foreach (MeshInfo mi in meshInfoList)
+                    //{
+                    //    totalIndices += mi.m_numIndices;
+                    //    totalVertices += mi.m_numVertices;
+                    //}
+
+                    ushort val1 = 0;
+                    while (true)
                     {
-                        totalIndices += mi.m_numIndices;
-                        totalVertices += mi.m_numVertices;
+                        ushort val2 = (ushort)binReader.ReadInt16();
+                        //if(val2 >= val1+1000) // yuck
+                        if(Math.Abs(val1 - val2) > 1000)
+                        {
+                            binReader.BaseStream.Position -= 2;
+                            break;
+                        }
+                        else
+                        {
+                            m_allIndices.Add(val2);
+                            val1 = val2;
+                        }
                     }
+
 
                     for (int i = 0; i < totalIndices; ++i)
                     {
@@ -331,16 +349,8 @@ namespace ModelNamer
                         ReadUnskinnedVertexData(binReader, m_allVertices, totalVertices);
                     }
 
-                    byte[] endBlock = binReader.ReadBytes(4);
-                    char[] endBlockChar = new char[endBlock.Length];
-                    for (int i = 0; i < endBlock.Length; ++i)
-                    {
-                        endBlockChar[i] = (char)endBlock[i];
-                    }
-                    if (endBlockChar[0] != 'E' && endBlockChar[2] != 'D')
-                    {
-                        Debug.Assert(false);
-                    }
+                    binReader.BaseStream.Position -= 4;
+                    Debug.Assert(IsEnd(binReader));
 
                     BuildBB();
 
@@ -357,6 +367,21 @@ namespace ModelNamer
 
             }
 
+        }
+
+        public bool IsEnd(BinaryReader binReader)
+        {
+            byte[] endBlock = binReader.ReadBytes(4);
+            char[] endBlockChar = new char[endBlock.Length];
+            for (int i = 0; i < endBlock.Length; ++i)
+            {
+                endBlockChar[i] = (char)endBlock[i];
+            }
+            if (endBlockChar[0] == 'E' && endBlockChar[1] == 'N' && endBlock[2]  == 'D')
+            {
+                return true;
+            }
+            return false;
         }
 
 
@@ -484,10 +509,21 @@ namespace ModelNamer
 
         public void ReadUnskinnedVertexData(BinaryReader binReader,List<VertexPositionNormalTexture> allVertices ,int numVertices)
         {
-            for (int i = 0; i < numVertices; ++i)
+            //for (int i = 0; i < numVertices; ++i)
+            while(true)
             {
                 try
                 {
+                    if (IsEnd(binReader))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        binReader.BaseStream.Position -= 4;
+                    }
+
+                    // 24 bytes per entry?
                     Vector3 p = Common.FromStreamVector3(binReader);
 
                     float nx = Common.ToFloatInt16(binReader);
@@ -533,10 +569,20 @@ namespace ModelNamer
 
         public void ReadSkinnedVertexData(BinaryReader binReader, List<VertexPositionNormalTexture> allVertices, int numVertices)
         {
-            for (int i = 0; i < numVertices; ++i)
+            //for (int i = 0; i < numVertices; ++i)
+            while(true)
             {
                 try
                 {
+                    if (IsEnd(binReader))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        binReader.BaseStream.Position -= 4;
+                    }
+
                     Vector3 p = Common.FromStreamVector3(binReader);
                     int skip3 = binReader.ReadInt32();
                     Vector2 u = Common.FromStreamVector2(binReader);

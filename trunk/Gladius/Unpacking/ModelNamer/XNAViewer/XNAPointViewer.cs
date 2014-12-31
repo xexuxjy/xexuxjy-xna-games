@@ -31,7 +31,7 @@ namespace XNAViewer
         private float pitch = 0.0f;
         private float facing = 0.0f;
         //public String textureBasePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
-        public String textureBasePath = @"D:\gladius-extracted-archive\gc-compressed\textures-resized\";
+        public String textureBasePath = @"c:\tmp\gladius-extracted-archive\gc-compressed\textures-resized\";
         //public String textureBasePath = @"C:\temp\textures\";
         public Texture2D m_missingTexture;
         public List<String> m_fileNames = new List<string>();
@@ -92,7 +92,7 @@ namespace XNAViewer
             //this.VSync = VSyncMode.Off;
             m_modelReader = new GCModelReader();
             //m_modelReader = new XboxModelReader();
-            string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
+            string baseModelPath = m_modelReader is GCModelReader ? @"c:\tmp\gladius-extracted-archive\gc-compressed\AllModelsRenamed\" : @"c:\tmp\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
             //string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\UnidentifiedModels\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
 
             
