@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 namespace ModelNamer
 {
@@ -167,8 +168,17 @@ namespace ModelNamer
             return result;
         }
 
+        public static float ToHalfFloatInt16(BinaryReader reader)
+        {
+            ushort val = reader.ReadUInt16();
+            HalfSingle hs = new HalfSingle();
+            hs.PackedValue = val;
+            return hs.ToSingle();
+        }
+
         public static float ToFloatInt16(BinaryReader reader)
         {
+        
             short val = reader.ReadInt16();
             float result = (val / (float)(Int16.MaxValue));
             return result;
