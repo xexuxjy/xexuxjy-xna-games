@@ -701,18 +701,22 @@ namespace ModelNamer
                     int ibreak = 0;
                 }
 
-                if (headerBlock.adjustedSizeInt != 5)
+                if (headerBlock.adjustedSizeInt != 7)
                 {
-                    //continue;
+                    continue;
                 }
 
 
+                if (headerBlock.entries.Count % 3 != 0)
+                {
+                    int ibreak = 0;
+                }
 
 
 
                 meshCount++;
 
-                if (meshCount != 2)
+                if (meshCount !=2 )
                 {
                     //continue;
                 }
@@ -763,16 +767,27 @@ namespace ModelNamer
 
                 if (!testMaterialNames.Contains(materialName))
                 {
-                    continue;
+                    //continue;
                 }
 
-                    writer.WriteLine("usemtl " + materialName);
+                if (headerBlock.entries.Count != 42)
+                {
+                    int ibreak = 0;
+                    //continue;
+                }
+
+
+
+                writer.WriteLine("usemtl " + materialName);
 
                 int counter = 0;
-                int vertexOffset = 1+vertexCountOffset;
+                int vertexOffset = 1+vertexCountOffset+1928;
                 int normalOffset = 1 + normalCountOffset;
                 int uvOffset = 1 + uvCountOffset;
-                for (int i = 0; i < headerBlock.entries.Count; )
+
+                bool alternate = true;
+
+                for (int i = 0; i < headerBlock.entries.Count; i += 3)
                 {
                     if (headerBlock.HasNormals)
                     {
@@ -783,45 +798,58 @@ namespace ModelNamer
                     }
                     else
                     {
-                        writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}",
-                            headerBlock.entries[i].PosIndex + vertexOffset, headerBlock.entries[i].UVIndex + uvOffset,
-                            headerBlock.entries[i + 1].PosIndex + vertexOffset, headerBlock.entries[i + 1].UVIndex + uvOffset,
-                            headerBlock.entries[i + 2].PosIndex + vertexOffset, headerBlock.entries[i + 2].UVIndex + uvOffset ));
+                        int uvIndex1 = headerBlock.entries[i].UVIndex + uvOffset;
+                        int uvIndex2 = headerBlock.entries[i + 1].UVIndex + uvOffset;
+                        int uvIndex3 = headerBlock.entries[i + 2].UVIndex + uvOffset;
 
-                        int index1 = headerBlock.entries[i].UVIndex + uvOffset;
-                        int index2 = headerBlock.entries[i+1].UVIndex + uvOffset;
-                        int index3 = headerBlock.entries[i+2].UVIndex + uvOffset;
+                        int posIndex1 = headerBlock.entries[i].PosIndex + vertexOffset;
+                        int posIndex2 = headerBlock.entries[i + 1].PosIndex + vertexOffset;
+                        int posIndex3 = headerBlock.entries[i + 2].PosIndex + vertexOffset;
+                        
+                        //alternate = !alternate;
+                        if (alternate)
+                        {
+                            writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", posIndex1, uvIndex1, posIndex2, uvIndex2, posIndex3, uvIndex3));
+                        }
+                        else
+                        {
+                            writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", posIndex3, uvIndex1, posIndex2, uvIndex2, posIndex1, uvIndex3));
+                        }
 
-                        Vector2 uv1 = m_modelMeshes[0].UVs[index1];
-                        Vector2 uv2 = m_modelMeshes[0].UVs[index2];
-                        Vector2 uv3 = m_modelMeshes[0].UVs[index3];
 
-                        writer.WriteLine(String.Format("# uv {0:0.00000000} {1:0.00000000}, {2:0.00000000} {3:0.00000000} ,{4:0.00000000} {5:0.00000000}",
-                            uv1.X,uv1.Y,uv2.X,uv2.Y,uv3.X,uv3.Y));
+                        Vector2 uv1 = m_modelMeshes[0].UVs[uvIndex1];
+                        Vector2 uv2 = m_modelMeshes[0].UVs[uvIndex2];
+                        Vector2 uv3 = m_modelMeshes[0].UVs[uvIndex3];
+
+                        //writer.WriteLine(String.Format("# uv {0:0.00000000} {1:0.00000000}, {2:0.00000000} {3:0.00000000} ,{4:0.00000000} {5:0.00000000}",
+                        //    uv1.X,uv1.Y,uv2.X,uv2.Y,uv3.X,uv3.Y));
 
 
-                        index1 = headerBlock.entries[i].PosIndex + vertexOffset;
-                        index2 = headerBlock.entries[i + 1].PosIndex + vertexOffset;
-                        index3 = headerBlock.entries[i + 2].PosIndex + vertexOffset;
+                        if (posIndex1 > m_modelMeshes[0].Vertices.Count || posIndex2 > m_modelMeshes[0].Vertices.Count || posIndex3 > m_modelMeshes[0].Vertices.Count)
+                        {
+                            int ibreak = 0;
+                        }
 
-                        Vector3 pos1 = m_modelMeshes[0].Vertices[index1];
-                        Vector3 pos2 = m_modelMeshes[0].Vertices[index2];
-                        Vector3 pos3 = m_modelMeshes[0].Vertices[index3];
+
+                        Vector3 pos1 = m_modelMeshes[0].Vertices[posIndex1];
+                        Vector3 pos2 = m_modelMeshes[0].Vertices[posIndex2];
+                        Vector3 pos3 = m_modelMeshes[0].Vertices[posIndex3];
 
                         Vector3 off1 = new Vector3(headerBlock.entries[i].oddByte, headerBlock.entries[i].oddByte, headerBlock.entries[i].oddByte);
                         Vector3 off2 = new Vector3(headerBlock.entries[i+1].oddByte, headerBlock.entries[i+1].oddByte, headerBlock.entries[i+1].oddByte);
                         Vector3 off3 = new Vector3(headerBlock.entries[i+2].oddByte, headerBlock.entries[i+2].oddByte, headerBlock.entries[i+2].oddByte);
 
-                        writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}",pos1.X + off1.X, pos1.Y+ off1.Y, pos1.Z+off1.Z));
-                        writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos2.X + off2.X, pos2.Y + off2.Y, pos2.Z + off2.Z));
-                        writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos3.X + off3.X, pos3.Y + off3.Y, pos3.Z + off3.Z));
+
+                        //writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}",pos1.X + off1.X, pos1.Y+ off1.Y, pos1.Z+off1.Z));
+                        //writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos2.X + off2.X, pos2.Y + off2.Y, pos2.Z + off2.Z));
+                        //writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos3.X + off3.X, pos3.Y + off3.Y, pos3.Z + off3.Z));
                         
                         
                         
 
 
                     }
-                    i += 3;
+                    
                 }
                 vertexCountOffset += m_skinned?headerBlock.Vertices.Count:0;
                 normalCountOffset += m_skinned?headerBlock.Normals.Count:0;
@@ -1015,23 +1043,19 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            //String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
-            String modelPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed - Copy";
-            String infoFile = @"D:\gladius-extracted-archive\gc-compressed\ModelInfo.txt";
-            //String sectionInfoFile = @"C:\tmp\unpacking\gc-probable-models-renamed\sectionInfo.txt";
-            String objOutputPath = @"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed-Obj\";
-            //String tagOutputPath = @"C:\tmp\unpacking\xbox-ModelFiles\tag-output";
+            String rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\";
+            String modelPath = rootPath + @"AllModelsRenamed\";
+            String infoFile = rootPath + "ModelInfo.txt";
+            
+            String objOutputPath = rootPath + @"AllModelsRenamed-Obj\";
 
-            String tagOutputPath = @"D:\gladius-extracted-archive\gc-compressed\probable-skinned-models\tag-output";
+            String texturePath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\textures.jpg\";
 
-            string sectionInfoFile = @"D:\gladius-extracted-archive\gc-compressed\ModelInfo.txt";
 
             GCModelReader reader = new GCModelReader();
             //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
             //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\File 015227");
             int ibreak = 0;
-
-            String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures.jpg\";
 
 
             List<string> filenames = new List<string>();
@@ -1051,7 +1075,8 @@ namespace ModelNamer
 
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\yeti.mdl");
-            filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\palaceibliis.mdl");
+            filenames.Add(modelPath+@"arenas\palaceibliis.mdl");
+            filenames.Add(modelPath + @"arenas\offeringplate.mdl");
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\thefen.mdl");
             foreach (string name in filenames)
             {
@@ -1410,6 +1435,7 @@ namespace ModelNamer
 
         public byte oddByte;
 
+        public static HashSet<byte> s_oddByteSet = new HashSet<byte>();
 
 
         public String ToString()
@@ -1454,6 +1480,8 @@ namespace ModelNamer
                 entry.oddByte = reader.ReadByte();
                 entry.UVIndex = Common.ToUInt16BigEndian(reader);
                 entry.UVIndex2 = Common.ToUInt16BigEndian(reader);
+
+                s_oddByteSet.Add(entry.oddByte);
                 int ibreak = 0;
             }
             else if (sectionSize == 8)

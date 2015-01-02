@@ -83,14 +83,15 @@ namespace ModelNamer
             //filenames.AddRange(Directory.GetFiles(rootPath+@"ModelFilesRenamed\weapons", "club*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*"));
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\axeCS_declamatio.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordCS_unofan.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\charm_catseye.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             foreach (string name in filenames)
             {
@@ -323,6 +324,12 @@ namespace ModelNamer
                         m_allIndices.Add((ushort)binReader.ReadInt16());
                     }
 
+                    for (int i = 0; i < m_numMeshes; ++i)
+                    {
+                        XBoxSubMesh subMesh = new XBoxSubMesh();
+                        m_modelMeshes.Add(subMesh);
+                    }
+
                     //int startIndex = 0;
                     //for (int i = 0; i < indexData.Count; ++i)
                     //{
@@ -482,11 +489,12 @@ namespace ModelNamer
 
                 writer.WriteLine("usemtl " + materialName);
                 bool swap = false;
-                for (int i = 0; i < headerBlock.Indices.Count - 2; i++)
+                //for (int i = 0; i < headerBlock.Indices.Count - 2; i++)
+                for (int i = 0; i < m_allIndices.Count - 2; i++)
                 {
-                    int i1 = headerBlock.Indices[i];
-                    int i2 = headerBlock.Indices[i + 1];
-                    int i3 = headerBlock.Indices[i + 2];
+                    int i1 = m_allIndices[i];
+                    int i2 = m_allIndices[i + 1];
+                    int i3 = m_allIndices[i + 2];
 
                     // 1 based.
                     i1 += 1;
@@ -504,6 +512,7 @@ namespace ModelNamer
                     }
                     swap = !swap;
                 }
+                break;
             }
         }
 
@@ -526,8 +535,13 @@ namespace ModelNamer
                     // 24 bytes per entry?
                     Vector3 p = Common.FromStreamVector3(binReader);
 
+                    //float nx = Common.ToHalfFloatInt16(binReader);
+                    //float ny = Common.ToHalfFloatInt16(binReader);
+
                     float nx = Common.ToFloatInt16(binReader);
                     float ny = Common.ToFloatInt16(binReader);
+
+
 
                     float nx2 = nx * nx;
                     float ny2 = ny * ny;
@@ -553,7 +567,7 @@ namespace ModelNamer
                     vpnt.Position = p;
                     vpnt.TextureCoordinate = u;
 
-                    vpnt.Normal = new Vector3(nz, ny, nx);
+                    vpnt.Normal = new Vector3(nx, ny, nz);
                     allVertices.Add(vpnt);
 
                     //subMesh.Vertices.Add(vpnt.Position);
