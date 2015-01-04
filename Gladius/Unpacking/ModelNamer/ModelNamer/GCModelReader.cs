@@ -270,6 +270,8 @@ namespace ModelNamer
 
                     int uk2 = binReader.ReadInt32();
                     int numPoints = binReader.ReadInt32();
+                    int calcPoints = (posSectionLength - 4 -4 -4 -4) / 12 ;
+
                     for (int i = 0; i < numPoints; ++i)
                     {
                         //model.m_points.Add(Common.FromStreamVector3BE(binReader));
@@ -335,8 +337,8 @@ namespace ModelNamer
                     for (int i = 0; i < numUVs; ++i)
                     {
                         Vector2 uv = Common.FromStreamVector2BE(binReader);
-                        uv.X -= (int)uv.X;
-                        uv.Y -= (int)uv.Y;
+                        //uv.X -= (int)uv.X;
+                        //uv.Y -= (int)uv.Y;
 
                         if (Math.Abs(uv.X) > 1 || Math.Abs(uv.Y) > 1)
                         {
@@ -615,13 +617,17 @@ namespace ModelNamer
 
             //String materialName = null;
 
+            String textureExtension = ".png";
+
+
             string reflectname = "skygold_R.tga";
             // write material?
             if (m_textures.Count == 2 && (m_textures[0].textureName.Contains(reflectname) || m_textures[1].textureName.Contains(reflectname)))
             {
                 int notsgindex = m_textures[0].textureName.Contains(reflectname) ? 1 : 0;
 
-                String textureName = m_textures[notsgindex].textureName + ".jpg";
+
+                String textureName = m_textures[notsgindex].textureName + textureExtension;
                 materialWriter.WriteLine("newmtl " + textureName);
                 materialWriter.WriteLine("Ka 1.000 1.000 1.000");
                 materialWriter.WriteLine("Kd 1.000 1.000 1.000");
@@ -631,7 +637,7 @@ namespace ModelNamer
                 materialWriter.WriteLine("map_Ka " + texturePath + textureName);
                 materialWriter.WriteLine("map_Kd " + texturePath + textureName);
 
-                materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname+".jpg"); 
+                materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname + textureExtension); 
 
                 
             }
@@ -640,7 +646,7 @@ namespace ModelNamer
 
                 foreach (TextureData textureData in m_textures)
                 {
-                    String textureName = textureData.textureName + ".jpg";
+                    String textureName = textureData.textureName + textureExtension;
                     materialWriter.WriteLine("newmtl " + textureName);
                     materialWriter.WriteLine("Ka 1.000 1.000 1.000");
                     materialWriter.WriteLine("Kd 1.000 1.000 1.000");
@@ -703,7 +709,7 @@ namespace ModelNamer
 
                 if (headerBlock.adjustedSizeInt != 7)
                 {
-                    continue;
+//                    continue;
                 }
 
 
@@ -759,7 +765,7 @@ namespace ModelNamer
                 ShaderData shaderData = m_shaderData[headerBlock.MeshId];
 
                 string adjustedTexture = FindTextureName(shaderData);
-                String materialName = adjustedTexture+ ".jpg";
+                String materialName = adjustedTexture + textureExtension;
 
                 List<String> testMaterialNames = new List<string>();
                 testMaterialNames.Add("walltexture_extra.tga.jpg");
@@ -770,22 +776,17 @@ namespace ModelNamer
                     //continue;
                 }
 
-                if (headerBlock.entries.Count != 42)
-                {
-                    int ibreak = 0;
-                    //continue;
-                }
 
 
 
                 writer.WriteLine("usemtl " + materialName);
 
                 int counter = 0;
-                int vertexOffset = 1+vertexCountOffset+1928;
+                int vertexOffset = 1+vertexCountOffset;
                 int normalOffset = 1 + normalCountOffset;
                 int uvOffset = 1 + uvCountOffset;
 
-                bool alternate = true;
+                //bool alternate = true;
 
                 for (int i = 0; i < headerBlock.entries.Count; i += 3)
                 {
@@ -805,16 +806,14 @@ namespace ModelNamer
                         int posIndex1 = headerBlock.entries[i].PosIndex + vertexOffset;
                         int posIndex2 = headerBlock.entries[i + 1].PosIndex + vertexOffset;
                         int posIndex3 = headerBlock.entries[i + 2].PosIndex + vertexOffset;
-                        
-                        //alternate = !alternate;
-                        if (alternate)
+
+                        if (posIndex1 >= m_modelMeshes[0].Vertices.Count || posIndex2 >= m_modelMeshes[0].Vertices.Count || posIndex3 >= m_modelMeshes[0].Vertices.Count)
                         {
-                            writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", posIndex1, uvIndex1, posIndex2, uvIndex2, posIndex3, uvIndex3));
+                            int ibreak = 0;
+                            continue;
                         }
-                        else
-                        {
-                            writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", posIndex3, uvIndex1, posIndex2, uvIndex2, posIndex1, uvIndex3));
-                        }
+
+                        writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", posIndex1, uvIndex1, posIndex2, uvIndex2, posIndex3, uvIndex3));
 
 
                         Vector2 uv1 = m_modelMeshes[0].UVs[uvIndex1];
@@ -834,10 +833,6 @@ namespace ModelNamer
                         Vector3 pos1 = m_modelMeshes[0].Vertices[posIndex1];
                         Vector3 pos2 = m_modelMeshes[0].Vertices[posIndex2];
                         Vector3 pos3 = m_modelMeshes[0].Vertices[posIndex3];
-
-                        Vector3 off1 = new Vector3(headerBlock.entries[i].oddByte, headerBlock.entries[i].oddByte, headerBlock.entries[i].oddByte);
-                        Vector3 off2 = new Vector3(headerBlock.entries[i+1].oddByte, headerBlock.entries[i+1].oddByte, headerBlock.entries[i+1].oddByte);
-                        Vector3 off3 = new Vector3(headerBlock.entries[i+2].oddByte, headerBlock.entries[i+2].oddByte, headerBlock.entries[i+2].oddByte);
 
 
                         //writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}",pos1.X + off1.X, pos1.Y+ off1.Y, pos1.Z+off1.Z));
@@ -1043,14 +1038,14 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\";
+            String rootPath = @"d:\gladius-extracted-archive\gc-compressed\";
             String modelPath = rootPath + @"AllModelsRenamed\";
             String infoFile = rootPath + "ModelInfo.txt";
             
             String objOutputPath = rootPath + @"AllModelsRenamed-Obj\";
-
-            String texturePath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\textures.jpg\";
-
+            String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures\";
+            
+            texturePath = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
 
             GCModelReader reader = new GCModelReader();
             //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
@@ -1075,9 +1070,11 @@ namespace ModelNamer
 
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\yeti.mdl");
-            filenames.Add(modelPath+@"arenas\palaceibliis.mdl");
-            filenames.Add(modelPath + @"arenas\offeringplate.mdl");
+            //filenames.Add(modelPath + @"arenas\altahrunruins.mdl");
+            filenames.Add(modelPath + @"arenas\mongrelsmaw.mdl");
+            //filenames.Add(modelPath + @"arenas\palaceibliis.mdl");
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\thefen.mdl");
+            //filenames.AddRange(Directory.GetFiles(modelPath+@"arenas\", "*"));
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));

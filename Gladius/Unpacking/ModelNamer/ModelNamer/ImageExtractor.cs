@@ -9,6 +9,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace ModelNamer
 {
@@ -23,18 +24,9 @@ namespace ModelNamer
         private GCHandle ImageByteHandle;
         private System.Collections.Generic.List<System.Collections.Generic.List<byte>> rows = new System.Collections.Generic.List<System.Collections.Generic.List<byte>>();
         private System.Collections.Generic.List<byte> row = new System.Collections.Generic.List<byte>();
+        public string ImageName;
 
-        //String targetDirectory = @"d:/gladius-extracted/test-extract/";
-        ////String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
-        //String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
-        //String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
-        //String infoFile = @"d:\gladius-extracted\ps2-texturelist";
-
-
-
-        /// <summary>
-        /// Creates a new instance of the TargaImage object.
-        /// </summary>
+        public static Dictionary<string, Point> s_sizeMap = new Dictionary<string, Point>();
         public GladiusImage()
         {
             this.gladiusHeader = new GladiusHeader();
@@ -68,13 +60,6 @@ namespace ModelNamer
         }
 
 
-        /// <summary>
-        /// Gets the byte offset between the beginning of one scan line and the next. Used when loading the image into the Image Bitmap.
-        /// </summary>
-        /// <remarks>
-        /// The memory allocated for Microsoft Bitmaps must be aligned on a 32bit boundary.
-        /// The stride refers to the number of bytes allocated for one scanline of the bitmap.
-        /// </remarks>
         public int Stride
         {
             get { return this.intStride; }
@@ -85,6 +70,8 @@ namespace ModelNamer
             Dispose(false);
         }
 
+        static HashSet<byte> alphaValues = new HashSet<byte>();
+
         public void LoadColourMapInfo(BinaryReader binReader)
         {
             int paletteSize = 1024;
@@ -93,7 +80,6 @@ namespace ModelNamer
             this.gladiusHeader.SwizzledColourMap = new byte[paletteSize];
 
             int rawCounter = 0;
-
             while (rawCounter < paletteSize)
             {
                 int a = 0;
@@ -110,6 +96,7 @@ namespace ModelNamer
                 this.gladiusHeader.RawColourMap[rawCounter++] = gbyte;
                 this.gladiusHeader.RawColourMap[rawCounter++] = bbyte;
                 this.gladiusHeader.RawColourMap[rawCounter++] = abyte;
+
             }
 
             byte[] src = this.gladiusHeader.RawColourMap;
@@ -159,12 +146,47 @@ namespace ModelNamer
 
             }
 
+            bool allAlpha = true;
+            for (int i = 0; i < tgt.Length; i += 4)
+            {
+                if (tgt[i + 3] != 0)
+                {
+                    allAlpha = false;
+                    break;
+                }
+            }
+
+
+            if (allAlpha)
+            {
+                for (int i = 0; i < tgt.Length; i += 4)
+                {
+                    tgt[i + 3] = 255;
+                }
+            }
+
+
             // skip 12?
             int a1 = binReader.ReadInt32();
             int a2 = binReader.ReadInt32();
-            
-            this.gladiusHeader.Width = binReader.ReadInt16();
-            this.gladiusHeader.Height = binReader.ReadInt16();
+
+
+            int widthCopy = binReader.ReadInt16();
+            int heightCopy = binReader.ReadInt16();
+
+            if (widthCopy != gladiusHeader.Width)
+            {
+                int ibreak = 0;
+            }
+            if (heightCopy != gladiusHeader.Height)
+            {
+                int ibreak = 0;
+            }
+
+
+            //this.gladiusHeader.Width = binReader.ReadInt16();
+            //this.gladiusHeader.Height = binReader.ReadInt16();
+            int ibreak2 = 0;
         }
 
         // assumes we've position the stream.
@@ -179,15 +201,14 @@ namespace ModelNamer
 
             try
             {
-                if(Header.PixelFormat == PixelFormat.Format8bppIndexed)
+                if(Header.BytesPerPixel == 1)
                 {
                     for (int i = 0; i < data.Length; ++i)
                     {
-
                         data[i] = binReader.ReadByte();
                     }
                 }
-                else if (Header.PixelFormat == PixelFormat.Format32bppArgb)
+                else if (Header.BytesPerPixel == 4)
                 {
                     byte[] subBytes = new byte[4];
                     int adjustedLength = data.Length / 4;
@@ -201,7 +222,7 @@ namespace ModelNamer
 
                         //bgr
                         //Array.Reverse(subBytes);
-                        subBytes[3] = 0xff;
+                        //subBytes[3] = 0xff;
                         data[counter++] = subBytes[2];
                         data[counter++] = subBytes[1];
                         data[counter++] = subBytes[0];
@@ -225,13 +246,13 @@ namespace ModelNamer
 
         public void LoadGladiusImage(BinaryReader binReader)
         {
-            this.intStride = (((int)this.gladiusHeader.Width * (int)this.gladiusHeader.PixelDepth + 31) & ~31) >> 3; // width in bytes
+            intStride = gladiusHeader.Width * gladiusHeader.BytesPerPixel;
 
             byte[] bimagedata = this.LoadImageBytes(binReader);
 
             this.ImageByteHandle = GCHandle.Alloc(bimagedata, GCHandleType.Pinned);
 
-            PixelFormat pf = this.Header.PixelFormat;
+            PixelFormat pf = this.Header.BytesPerPixel == 1 ? PixelFormat.Format8bppIndexed : PixelFormat.Format32bppArgb;
 
 
             this.bitmapImage = new Bitmap((int)this.gladiusHeader.Width,
@@ -251,8 +272,14 @@ namespace ModelNamer
                     map = gladiusHeader.SwizzledColourMap;
                     for (int i = 0; i < numColourEntries; i++)
                     {
-                        Color c = Color.FromArgb(255, map[i * 4], map[(i * 4) + 1], map[(i * 4) + 2]);
-                        Color c2 = Color.FromArgb(c.A, c.B, c.G, c.R);
+                        //Color c = Color.FromArgb(255, map[i * 4], map[(i * 4) + 1], map[(i * 4) + 2]);
+                        Color c = Color.FromArgb(map[(i * 4)+3], map[i * 4], map[(i * 4) + 1], map[(i * 4) + 2]);
+                        byte A = c.A;
+                        if (A == 0)
+                        {
+                            //A = 20;
+                        }
+                        Color c2 = Color.FromArgb(A, c.B, c.G, c.R);
                         pal.Entries[i] = c2;
                     }
                     this.bitmapImage.Palette = pal;
@@ -307,14 +334,16 @@ namespace ModelNamer
     {
         private short sColorMapFirstEntryIndex = 0;
         private short sColorMapLength = 0;
-        private byte bColorMapEntrySize = 0;
+
         public int Width = 0;
         public int Height = 0;
-        private byte bPixelDepth = 0;
-        private byte bImageDescriptor = 0;
+        public int BytesPerPixel;
+        public bool ContainsDefinition;
+
         public byte[] RawColourMap;
         public byte[] SwizzledColourMap;
-        public PixelFormat PixelFormat;
+
+
 
         public static char[] PTTPHeader = new char[] { 'P', 'T', 'T', 'P' };
         public static char[] NAMEHeader = new char[] { 'N', 'A', 'M', 'E' };
@@ -328,113 +357,10 @@ namespace ModelNamer
         static char[][] allTags = { PTTPHeader, NAMEHeader, NMPTHeader, PFHDHeader, r2d2Header };
 
 
-        //readpfhd!
-
-
-        /// <summary>
-        /// Gets the index of the first color map entry. ColorMapFirstEntryIndex refers to the starting entry in loading the color map.
-        /// </summary>
-        public short ColorMapFirstEntryIndex
+        public static bool ReadToNextTMapBlock(BinaryReader binReader)
         {
-            get { return this.sColorMapFirstEntryIndex; }
-        }
+            return Common.FindCharsInStream(binReader,GladiusHeader.tmapHeader);
 
-        /// <summary>
-        /// Sets the ColorMapFirstEntryIndex property, available only to objects in the same assembly as TargaHeader.
-        /// </summary>
-        /// <param name="sColorMapFirstEntryIndex">The First Entry Index value read from the file.</param>
-        internal protected void SetColorMapFirstEntryIndex(short sColorMapFirstEntryIndex)
-        {
-            this.sColorMapFirstEntryIndex = sColorMapFirstEntryIndex;
-        }
-
-        /// <summary>
-        /// Gets total number of color map entries included.
-        /// </summary>
-        public short ColorMapLength
-        {
-            get { return this.sColorMapLength; }
-        }
-
-        /// <summary>
-        /// Sets the ColorMapLength property, available only to objects in the same assembly as TargaHeader.
-        /// </summary>
-        /// <param name="sColorMapLength">The Color Map Length value read from the file.</param>
-        internal protected void SetColorMapLength(short sColorMapLength)
-        {
-            this.sColorMapLength = sColorMapLength;
-        }
-
-        /// <summary>
-        /// Gets the number of bits per entry in the Color Map. Typically 15, 16, 24 or 32-bit values are used.
-        /// </summary>
-        public byte ColorMapEntrySize
-        {
-            get { return this.bColorMapEntrySize; }
-        }
-
-        /// <summary>
-        /// Sets the ColorMapEntrySize property, available only to objects in the same assembly as TargaHeader.
-        /// </summary>
-        /// <param name="bColorMapEntrySize">The Color Map Entry Size value read from the file.</param>
-        internal protected void SetColorMapEntrySize(byte bColorMapEntrySize)
-        {
-            this.bColorMapEntrySize = bColorMapEntrySize;
-        }
-
-
-        /// <summary>
-        /// Gets the number of bits per pixel. This number includes
-        /// the Attribute or Alpha channel bits. Common values are 8, 16, 24 and 32.
-        /// </summary>
-        public byte PixelDepth
-        {
-            get { return this.bPixelDepth; }
-        }
-
-        /// <summary>
-        /// Sets the PixelDepth property, available only to objects in the same assembly as TargaHeader.
-        /// </summary>
-        /// <param name="bPixelDepth">The Pixel Depth value read from the file.</param>
-        internal protected void SetPixelDepth(byte bPixelDepth)
-        {
-            this.bPixelDepth = bPixelDepth;
-        }
-
-        /// <summary>
-        /// Gets the number of bytes per pixel.
-        /// </summary>
-        public int BytesPerPixel
-        {
-            get
-            {
-                return (int)this.bPixelDepth / 8;
-            }
-        }
-
-        public static bool ReadToNextTMapBlock(BinaryReader binReader, ref int imageCount, ImageInfo imageInfo)
-        {
-            bool foundTmap = false;
-
-            while (Common.FindCharsInStream(binReader, GladiusHeader.r2d2Header))
-            {
-                if (imageInfo.m_segments.Count > 0 && imageInfo.m_segments[imageCount].containsDefinition != 0)
-                {
-                    if (Common.FindCharsInStream(binReader, GladiusHeader.tmapHeader))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        int ibreak = 0;
-                    }
-
-                }
-                imageCount++;
-
-            }
-
-            return foundTmap;
         }
 
 
@@ -450,14 +376,6 @@ namespace ModelNamer
                     int unknown1 = binReader.ReadInt32();
                     int unknown2 = binReader.ReadInt32();
                     int numTextures = binReader.ReadInt32();
-                    //byte pad1 = binReader.ReadByte();
-                    //byte pad2 = binReader.ReadByte();
-                    //byte pad3 = binReader.ReadByte();
-
-
-
-                    //for (int i = 0; i < numTextures; ++i)
-                    //
                     {
                         StringBuilder sb = new StringBuilder();
                         char b = (char)binReader.ReadByte();
@@ -496,104 +414,11 @@ namespace ModelNamer
             return textureNameList;
         }
 
-
-
-        public bool KnownFormat()
-        {
-            return PixelFormat == PixelFormat.Format8bppIndexed || PixelFormat == PixelFormat.Format32bppArgb;
-        }
-
         public bool ValidSize()
         {
             return !(Width <= 0 || Height <= 0 || Width > 1024 || Height > 1024);
         }
 
-
-        public void LoadHeaderInfo(BinaryReader binReader, StreamWriter errorStream,String file,ImageInfo imageInfo, int counter)
-        {
-            int headerPadding = 0;
-
-            byte[] extraHeader = new byte[24];
-            binReader.Read(extraHeader, 0, extraHeader.Length);
-
-            //19th extra byte should determine image format (8bppIndexed,32rgba)
-            //20th extra byte should be FF
-            int imagewidth = extraHeader[2];
-            int imageHeight = extraHeader[3];
-
-            int imageFormat = extraHeader[22];
-
-            //if (imageFormat == 0xB0)
-            if(false)
-            {
-                if (imagewidth == 0x10)
-                {
-                    Width = 256;
-                }
-                else if (imagewidth == 0x08)
-                {
-                    Width = 128;
-                }
-                else if (imagewidth == 0x04)
-                {
-                    Width = 64;
-                }
-                else if (imagewidth == 0x02)
-                {
-                    Width = 32;
-                }
-                else if (imagewidth == 0x01)
-                {
-                    Width = 16;
-                }
-                if (imageHeight == 0x40)
-                {
-                    Height = 256;
-                }
-                else if(imageHeight == 0x20)
-                {
-                    Height = 128;
-                }
-                else if (imageHeight == 0x10)
-                {
-                    Height = 64;
-                }
-                else if (imageHeight == 0x08)
-                {
-                    Height = 32;
-                }
-                else if (imageHeight == 0x04)
-                {
-                    Height = 16;
-                }
-
-
-
-                else
-                {
-                    //errorStream.WriteLine(String.Format("Unknown size [{0}] File [{1}]", imageSize, file));
-                }
-
-                PixelFormat= PixelFormat.Format32bppArgb;
-                headerPadding = 101;
-            }
-            //else if (imageFormat == 0xD8 || imageFormat == 0x60)
-            else
-            {
-                PixelFormat = PixelFormat.Format8bppIndexed;
-                headerPadding = 0x78 - 20;
-            }
-            //else
-            //{
-            //    errorStream.WriteLine(String.Format("Unknown Output Format [{0}] File [{1}]", imageFormat, file));
-            //}
-
-            {
-                binReader.BaseStream.Seek(headerPadding, SeekOrigin.Current);
-                //return binReader.BaseStream.Position;
-                
-            }
-        }
 
         public static bool PositionReaderAtNextImage(BinaryReader binReader,StreamWriter errorStream,String file)
         {
@@ -601,7 +426,7 @@ namespace ModelNamer
         }
 
 
-        }
+    }
 
 
 
@@ -637,8 +462,6 @@ namespace ModelNamer
 
         public void ExtractImages(List<string> fileNames, string targetDirectory)
         {
-            GladiusImage targaImage = new GladiusImage();
-
             System.IO.DirectoryInfo targetInfo = new DirectoryInfo(targetDirectory);
             if (!targetInfo.Exists)
             {
@@ -654,176 +477,148 @@ namespace ModelNamer
                 }
             }
 
-
-            //DirectoryInfo d = new DirectoryInfo(filepath);
-            //FileInfo[] files = d.GetFiles(); //Getting Text files
-            using (StreamWriter errorStream = new StreamWriter(new FileStream(targetDirectory+"\\errors.txt", FileMode.OpenOrCreate)))
+            using (StreamWriter errorStream = new StreamWriter(new FileStream(targetDirectory + "\\errors.txt", FileMode.OpenOrCreate)))
             {
-                GladiusImage image = null;
                 foreach (string fileName in fileNames)
                 {
-                    FileInfo file = new FileInfo(fileName);
-                    using (FileStream fs = new FileStream(file.FullName, FileMode.Open))
-                    using (BinaryReader binReader = new BinaryReader(fs))
+                    List<GladiusImage> imageList = new List<GladiusImage>();
+                    try
                     {
-                        int headerPadding = 0;
-                        //PixelFormat pf = PixelFormat.Format8bppIndexed;
-                        //int width = 0;
-                        //int height = 0;
-
-                        int subImageCounter = 0;
-                        ImageInfo imageInfo = new ImageInfo();
-                        imageInfo.m_name = file.Name;
-                        List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
-                        if (file.Name.EndsWith("r2t"))
+                        FileInfo file = new FileInfo(fileName);
+                        using (FileStream fs = new FileStream(file.FullName, FileMode.Open))
+                        using (BinaryReader binReader = new BinaryReader(fs))
                         {
-                            HeaderSegment headerSegment = new HeaderSegment();
-                            headerSegment.containsDefinition = 1;
-                            headerSegment.width = 128;
-                            headerSegment.height = 128;
-                            headerSegment.bpp = 8;
-                            imageInfo.m_segments.Add(headerSegment);
+                            int headerPadding = 0;
+
+                            int subImageCounter = 0;
+                            List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
+                            List<string> ignoreList = new List<string>();
+
+                            long currentPos = binReader.BaseStream.Position;
+                            int tmapSections = Common.CountCharsInStream(binReader, GladiusHeader.tmapHeader);
+                            binReader.BaseStream.Position = currentPos;
+
+                            ReadHeaderSection(binReader, imageList);
+
+                            binReader.BaseStream.Position = 0;
+
+                            int counter = 0;
+                            foreach(GladiusImage image in imageList)
+                            {
+                                image.ImageName = textureNameList[counter++];
+
+                                if (image.ImageName == "citizenNor_skin_var04.tga")
+                                {
+                                    int ibreak = 0;
+                                }
+
+                                if (image.Header.ContainsDefinition)
+                                {
+                                    Debug.Assert(GladiusHeader.ReadToNextTMapBlock(binReader));
+                                    subImageCounter++;
+
+                                    binReader.BaseStream.Position += 024;
+                                    headerPadding = 0;
+                                    if (image.Header.BytesPerPixel == 1)
+                                    {
+                                        headerPadding = 0x78 - 20;
+                                    }
+                                    else if (image.Header.BytesPerPixel == 4)
+                                    {
+                                        headerPadding = 101;
+                                    }
+
+                                    binReader.BaseStream.Position += headerPadding;
+
+                                    bool saveImage = true;
+                                    String outputFileName = image.ImageName;
+
+                                    errorStream.WriteLine(String.Format("Extracting [{0}][{1}][{2}]", file.Name, subImageCounter, outputFileName));
+                                    int imagePadding = 0x13;// 0x24;
+
+                                    if (image.ImageName.Contains("valens"))
+                                    {
+                                        int ibreak = 0;
+                                    }
+
+
+                                    //if (pf == PixelFormat.Format8bppIndexed)
+                                    if (image.Header.BytesPerPixel == 1)
+                                    {
+                                        if (binReader.BaseStream.Position + 1024 > binReader.BaseStream.Length)
+                                        {
+                                            // not enough room for a colour map?
+                                            break;
+                                        }
+                                        image.LoadColourMapInfo(binReader);
+
+                                    }
+
+                                    if (image.Header.ValidSize())
+                                    {
+                                        binReader.BaseStream.Seek(imagePadding, SeekOrigin.Current);
+                                        try
+                                        {
+                                            image.LoadGladiusImage(binReader);
+                                            if (saveImage)
+                                            {
+                                                bool checkSize = true;
+                                                bool saveImage2 = true;
+                                                if (checkSize)
+                                                {
+                                                    Point p = new Point();
+                                                    if (GladiusImage.s_sizeMap.TryGetValue(image.ImageName, out p))
+                                                    {
+                                                        if (p.X > image.Header.Width || p.Y > image.Header.Height)
+                                                        {
+                                                            saveImage2 = false;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        GladiusImage.s_sizeMap.Add(image.ImageName, new Point(image.Header.Width, image.Header.Height));
+                                                    }
+                                                }
+
+                                                if(checkSize)
+                                                {
+                                                    if(saveImage2)
+                                                    {
+                                                        errorStream.WriteLine(String.Format("Saving image [{0}] [{1}][{2}]", image.ImageName, image.Header.Width, image.Header.Height));
+                                                    }
+                                                    else
+                                                    {
+                                                        errorStream.WriteLine(String.Format("skipping image [{0}] [{1}][{2}] as larger exists", image.ImageName, image.Header.Width, image.Header.Height));
+                                                    }
+                                                }
+                                                if (saveImage && saveImage2)
+                                                {
+                                                    image.Image.Save(targetDirectory + outputFileName + ".png", ImageFormat.Png);
+                                                }
+                                            }
+                                        }
+                                        catch (AccessViolationException e)
+                                        {
+                                            // bleugh.
+                                        }
+
+
+                                    }
+                                }
+                            }
                         }
 
-                        //DumpHeaderSection(binReader, imageInfo);
-                        binReader.BaseStream.Position = 0;
-                        while (GladiusHeader.ReadToNextTMapBlock(binReader, ref subImageCounter,imageInfo))
-                        {
-                            image = new GladiusImage();
-
-                            //image.Header.LoadHeaderInfo(binReader, errorStream, file.Name,imageInfo,subImageCounter);
-                            image.Header.Width = imageInfo.m_segments[subImageCounter].width;
-                            image.Header.Height = imageInfo.m_segments[subImageCounter].height;
-                            image.Header.PixelFormat = imageInfo.m_segments[subImageCounter].bpp == 32 ? PixelFormat.Format32bppArgb : PixelFormat.Format8bppIndexed;
-
-                            binReader.BaseStream.Position += 024;
-                            headerPadding = 0;
-                            if(image.Header.PixelFormat == PixelFormat.Format8bppIndexed)
-                            {
-                                headerPadding = 0x78 - 20;                
-                            }
-                            else if(image.Header.PixelFormat == PixelFormat.Format32bppArgb)
-                            {
-                                headerPadding = 101;
-                            }
-
-                            binReader.BaseStream.Position += headerPadding;
-
-                            bool saveImage = true;
-                            String outputFileName = null;
-                            if (imageInfo.Next() && textureNameList.Count > 0)
-                            {
-                                outputFileName = textureNameList[imageInfo.imageCounter];
-                            }
-                            else
-                            {
-                                outputFileName = file.Name+"-"+(subImageCounter);
-                            }
-
-
-                            //if (textureNameList.Count > 0 && subImageCounter < textureNameList.Count)
-                            //{
-                            //    //outputFileName = file.Name + "-" + textureNameList[subImageCounter];
-                            //    outputFileName = textureNameList[subImageCounter];
-                            //}
-                            //else
-                            //{
-                            //    outputFileName = file.Name + "-" + (subImageCounter);
-                            //}
-
-
-                            errorStream.WriteLine(String.Format("Extracting [{0}][{1}][{2}]", file.Name, subImageCounter, outputFileName));
-                            int imagePadding = 0x13;// 0x24;
-
-
-                            //if (pf == PixelFormat.Format8bppIndexed)
-                            if (image.Header.PixelFormat == PixelFormat.Format8bppIndexed)
-                            {
-                                //image.Header.Se
-                                image.Header.SetColorMapLength(256);
-                                image.Header.SetColorMapEntrySize(32);
-
-                                //int mapPadding = 0x78;
-                                //long offset = position + mapPadding;
-
-
-                                //binReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                                if (binReader.BaseStream.Position + 1024 > binReader.BaseStream.Length)
-                                {
-                                    // not enough room for a colour map?
-                                    break;
-                                }
-                                image.Header.SetPixelDepth(8);
-                                image.LoadColourMapInfo(binReader);
-                                //saveImage = false;
-
-                            }
-                            else if (image.Header.PixelFormat == PixelFormat.Format32bppArgb)
-                            {
-                                image.Header.SetPixelDepth(32);
-                            }
-                            else
-                            {
-                                int ibreak = 0;
-                            }
-
-                            if (image.Header.ValidSize() && image.Header.KnownFormat())
-                            {
-
-
-                                binReader.BaseStream.Seek(imagePadding, SeekOrigin.Current);
-                                try
-                                {
-                                    image.LoadGladiusImage(binReader);
-                                    if (saveImage)
-                                    {
-                                        image.Image.Save(targetDirectory + outputFileName + ".png", ImageFormat.Png);
-                                    }
-                                }
-                                catch (AccessViolationException e)
-                                {
-                                    // bleugh.
-                                }
-
-                                bool writePalette = false;
-                                if (writePalette)
-                                {
-                                    using (var fs2 = new FileStream(targetDirectory + file.Name + "-pal.bin", FileMode.CreateNew))
-                                    {
-                                        using (var bw = new BinaryWriter(fs2))
-                                        {
-                                            bw.Write(image.Header.RawColourMap);
-                                        }
-                                    }
-
-                                    using (var fs2 = new FileStream(targetDirectory + file.Name + "-cpal.bin", FileMode.CreateNew))
-                                    {
-                                        using (var bw = new BinaryWriter(fs2))
-                                        {
-                                            bw.Write(image.Header.SwizzledColourMap);
-                                        }
-                                    }
-                                }
-                            }
-
-                            //foundR2D2 = FindCharsInStream(binReader, GladiusHeader.r2d2Header);
-                            //foundtmap = FindCharsInStream(binReader, GladiusHeader.tmapHeader);
-
-
-                            //imageExists = PositionReaderAtNextImage(binReader, errorStream, file.Name);
-                            //if (imageExists)
-                            //{
-                            //    image = new GladiusImage();
-                            //}
-
-                        }
+                    }
+                    catch (Exception e)
+                    {
+                        int ibreak = 0;
                     }
                 }
             }
 
         }
 
-        public void ListImageData(string sourceDirectory,string targetDirectory)
+        public void ListImageData(string sourceDirectory, string targetDirectory)
         {
             //String filepath = @"C:\gladius-extracted\ps2-decompressed\PTTP\";
             //String errorFile = @"C:\gladius-extracted\ps2-decompressed-errors";
@@ -865,8 +660,7 @@ namespace ModelNamer
                         //int height = 0;
 
                         int subImageCounter = 0;
-                        ImageInfo imageInfo = new ImageInfo();
-
+                        
                         List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
 
                         errorStream.WriteLine(file.Name);
@@ -877,65 +671,6 @@ namespace ModelNamer
                             errorStream.WriteLine(textureName);
                         }
 
-                        //DumpHeaderSection(binReader, imageInfo);
-                        //foreach (HeaderSegment hs in imageInfo.m_segments)
-                        //{
-                        //    errorStream.WriteLine(String.Format("[{0}][{1}][{2}][{3}][{4}][{5}][{6}]", hs.unk1, hs.unk2, hs.width, hs.height, hs.unk3, hs.containsDefinition, hs.unk5));
-                        //}
-
-
-                        //while (GladiusHeader.ReadToNextTMapBlock(binReader, ref subImageCounter))
-                        //{
-                        //    int val1 = binReader.ReadInt32();
-                        //    int val1 = binReader.ReadInt32();
-                        //    int val1 = binReader.ReadInt32();
-                        //    int val1 = binReader.ReadInt32();
-                        //    int val1 = binReader.ReadInt32();
-                        //    int val1 = binReader.ReadInt32();
-
-                        //    byte[] extraHeader = new byte[24];
-                        //    binReader.Read(extraHeader, 0, extraHeader.Length);
-
-                        //    //19th extra byte should determine image format (8bppIndexed,32rgba)
-                        //    //20th extra byte should be FF
-                        //    int imageSize = extraHeader[2];
-                        //    int imageFormat = extraHeader[22];
-
-                        //    if (imageFormat == 0xB0)
-                        //    {
-                        //        if (imageSize == 0x10)
-                        //        {
-                        //            Width = Height = 256;
-                        //        }
-                        //        else if (imageSize == 0x08)
-                        //        {
-                        //            Width = Height = 0x20;
-                        //        }
-                        //        else if (imageSize == 0x04)
-                        //        {
-                        //            Width = Height = 64;
-                        //        }
-                        //        else
-                        //        {
-                        //            errorStream.WriteLine(String.Format("Unknown size [{0}] File [{1}]", imageSize, file));
-                        //        }
-
-                        //        PixelFormat = PixelFormat.Format32bppArgb;
-                        //        headerPadding = 101;
-                        //    }
-                        //    else if (imageFormat == 0xD8 || imageFormat == 0x60)
-                        //    {
-                        //        PixelFormat = PixelFormat.Format8bppIndexed;
-                        //        headerPadding = 0x78 - 20;
-                        //    }
-                        //    else
-                        //    {
-                        //        errorStream.WriteLine(String.Format("Unknown Output Format [{0}] File [{1}]", imageFormat, file));
-                        //    }
-
-
-
-                        //}
 
                         errorStream.WriteLine();
                         errorStream.WriteLine();
@@ -945,136 +680,58 @@ namespace ModelNamer
 
         }
 
-        //public void DumpSectionLengths()
-        //{
-        //    String infoFile2 = "c:/gladius-extracted/test-extract/image-section-lengths.txt";
 
-        //    string[] filePaths = Directory.GetFiles(filepath);
-        //    List<ImageInfo> imageInfoList = new List<ImageInfo>();
-        //    DirectoryInfo d = new DirectoryInfo(filepath);
-        //    FileInfo[] files = d.GetFiles(); //Getting Text files
-        //    using (StreamWriter infoStream = new StreamWriter(new FileStream(infoFile2, FileMode.OpenOrCreate)))
-        //    {
-        //        GladiusImage image = null;
-        //        foreach (FileInfo file in files)
-        //        {
+        public void ReadHeaderSection(BinaryReader binReader,List<GladiusImage> imageList)
+        {
+            if (Common.FindCharsInStream(binReader, PFHDHeader, true))
+            {
+                int sectionSize = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                //if (pad1 != 0 || pad1 != 1)
+                if (pad1 != 0 && pad1 != 1)
+                {
+                    int ibreak = 0;
+                }
+                int numTextures = binReader.ReadInt32();
 
-        //            using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
-        //            using (BinaryReader binReader = new BinaryReader(fs))
-        //            {
-        //                ImageInfo imageInfo = new ImageInfo();
-        //                imageInfoList.Add(imageInfo);
-        //                infoStream.WriteLine("File : " + imageInfo.m_name);
-        //                foreach (char[] tag in allTags)
-        //                {
-        //                    if (Common.FindCharsInStream(binReader, tag, true))
-        //                    {
-        //                        int blockSize = binReader.ReadInt32();
-        //                        imageInfo.m_tagSizes[tag] = blockSize;
-        //                        infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), blockSize));
-        //                    }
-        //                    else
-        //                    {
-        //                        imageInfo.m_tagSizes[tag] = -1;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-
-        //public void DumpHeaderInfo()
-        //{
-        //    String infoFile2 = "c:/gladius-extracted/image-header-info.txt";
-
-        //    string[] filePaths = Directory.GetFiles(filepath);
-        //    List<ImageInfo> imageInfoList = new List<ImageInfo>();
-        //    DirectoryInfo d = new DirectoryInfo(filepath);
-        //    FileInfo[] files = d.GetFiles(); //Getting Text files
-        //    using (StreamWriter infoStream = new StreamWriter(new FileStream(infoFile2, FileMode.OpenOrCreate)))
-        //    {
-        //        GladiusImage image = null;
-        //        foreach (FileInfo file in files)
-        //        {
-        //            if (file.Name != "File_000391")
-        //            {
-        //                continue;
-        //            }
-        //            using (FileStream fs = new FileStream(filepath + file.Name, FileMode.Open))
-        //            using (BinaryReader binReader = new BinaryReader(fs))
-        //            {
-        //                try
-        //                {
-        //                    ImageInfo imageInfo = new ImageInfo();
-        //                    imageInfo.m_name = file.Name;
-        //                    imageInfoList.Add(imageInfo);
-        //                    List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
-        //                    DumpHeaderSection(binReader, imageInfo);
-        //                    infoStream.WriteLine("File : " + imageInfo.m_name);
-        //                    int counter = 0;
-        //                    foreach (HeaderSegment hs in imageInfo.m_segments)
-        //                    {
-        //                        hs.textureName = textureNameList[counter++];
-        //                        infoStream.WriteLine(hs.ToString());                       
-        //                    }
-        //                    infoStream.WriteLine();
-        //                }
-        //                catch (System.Exception ex)
-        //                {
-                        	
-        //                }
-
-        //            }
-        //        }
-        //    }
-        //}
+                for (int u = 0; u < numTextures; ++u)
+                {
+                    GladiusImage image = new GladiusImage();
+                    imageList.Add(image);
 
 
 
+                    binReader.ReadInt32();
+                    binReader.ReadInt32();
+                    //image.Header.BytesPerPixel = binReader.ReadInt16();
+                    image.Header.BytesPerPixel = 1;
+                    image.Header.Width = binReader.ReadInt16();
+                    image.Header.Height = binReader.ReadInt16();
+                    
+                    binReader.ReadInt32();
 
-        //public void DumpHeaderSection(BinaryReader binReader, ImageInfo imageInfo)
-        //{
-        //    if (Common.FindCharsInStream(binReader, PFHDHeader, true))
-        //    {
-        //        int sectionSide = binReader.ReadInt32();
-        //        int pad1 = binReader.ReadInt32();
-        //        int numTextures = binReader.ReadInt32();
+                    image.Header.ContainsDefinition = (binReader.ReadInt32() != -1);
+                    if (pad1 == 1)
+                    {
+                        image.Header.ContainsDefinition = false;
+                    }
 
-        //        for (int u = 0; u < numTextures; ++u)
-        //        {
-        //            HeaderSegment hs = new HeaderSegment();
-        //            imageInfo.m_segments.Add(hs);
-        //            hs.bpp = Common.ReadInt32BigEndian(binReader);
-        //            hs.unk2 = binReader.ReadInt32();
-        //            hs.width = binReader.ReadInt16();
-        //            hs.height = binReader.ReadInt16();
-        //            hs.unks1 = binReader.ReadInt16();
-        //            hs.unks2 = binReader.ReadInt16();
-        //            hs.containsDefinition = binReader.ReadInt16();
-        //            hs.textureOrder = binReader.ReadInt16();
-        //            hs.counter1 = binReader.ReadInt16();
-        //            hs.alwaysZero1 = binReader.ReadInt16();
-        //            hs.alwaysZero2 = binReader.ReadInt32();
-        //            hs.alwaysZero3 = binReader.ReadInt32();
+                    binReader.ReadInt32();
+                    binReader.ReadInt32();
+                    binReader.ReadInt32();
 
-        //            //if (hs.alwaysZero != 0 || hs.alwaysZero1 != 0 || hs.alwaysZero2 != 0 || hs.alwaysZero3 != 0)
-        //            if (hs.unks2 != 0 && hs.unks2 != 1)
-        //            {
-        //                int ibreak = 0;
-        //            }
 
-        //            if (hs.alwaysZero1 != 0 || hs.alwaysZero2 != 0 || hs.alwaysZero3 != 0)
-        //            {
-        //                int ibreak = 0;
-        //            }
+                    if (image.Header.Height == 0 || image.Header.Width == 0)
+                    {
+                        int ibreak = 0;
+                    }
 
-        //        }
+                }
 
-        //    }
-             
-            
-        //}
+            }
+
+
+        }
 
 
         static int Main(string[] args)
@@ -1084,55 +741,25 @@ namespace ModelNamer
             //new ImageExtractor().DumpSectionLengths();
             //new ImageExtractor().DumpHeaderInfo();
             List<string> fileNames = new List<string>();
-            fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extract-all-systems\ps2\pak", "*.r2t"));
-            String outputDirectory = @"D:\gladius-extract-all-systems\ps2\textures\";
+            //fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extract-all-systems\ps2\pak", "*.r2t"));
+
+            String sourcePath = @"D:\gladius-extracted-archive\ps2-decompressed\PTTP\";
+            fileNames.AddRange(Directory.GetFiles(sourcePath, "*"));
+
+            //fileNames.Add(sourcePath + "File_023484");
+            //fileNames.Add(sourcePath + "File_023911");
+            //fileNames.Add(sourcePath + "File_000024");
+            //fileNames.Add(sourcePath + "File_001178");
+            //fileNames.Add(sourcePath + "File_006095"); // thepit textures - small
+            //fileNames.Add(sourcePath + "File_020217"); // thepit textures - large
+
+            String outputDirectory = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
+
+
             new ImageExtractor().ExtractImages(fileNames,outputDirectory);
             return 0;
         }
     }
 
-    public class HeaderSegment
-    {
-        public String textureName;
-        public int bpp;
-        public int unk2;
-        public short width;
-        public short height;
-        public short unks1;
-        public short unks2;
-        public short containsDefinition;
-        public short textureOrder;
-        public short counter1;
-        public short alwaysZero1;
-        public int alwaysZero2;
-        public int alwaysZero3;
-
-        public String ToString()
-        {
-            return String.Format("[{0,64}] [{1}][{2}] W[{3,4}] H [{4,4}][{5,6}] C[{6,8}] O[{7,2}] C1[{8,6}]", textureName, bpp, unk2, width, height, unks1, containsDefinition, textureOrder, counter1);
-        }
-    }
-
-    public class ImageInfo
-    {
-        public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
-        public List<HeaderSegment> m_segments = new List<HeaderSegment>();
-        public String m_name;
-
-        public int imageCounter = -1;
-        public bool Next()
-        {
-            while(imageCounter <m_segments.Count)
-            {
-                imageCounter++;
-                if (imageCounter < m_segments.Count && m_segments[imageCounter].containsDefinition != -1)
-                {
-                    break;
-                }
-            }
-            return imageCounter < m_segments.Count;
-        }
-
-    }
 
 }

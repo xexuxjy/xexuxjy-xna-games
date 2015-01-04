@@ -45,6 +45,9 @@ namespace XNAViewer
         public Model m_unitCube;
 
 
+        RasterizerState m_noCullState = new RasterizerState();
+
+
 
         InputState inputState;
 
@@ -90,10 +93,16 @@ namespace XNAViewer
 
 
             //this.VSync = VSyncMode.Off;
-            m_modelReader = new GCModelReader();
-            //m_modelReader = new XboxModelReader();
+            //m_modelReader = new GCModelReader();
+            m_modelReader = new XboxModelReader();
             string baseModelPath = m_modelReader is GCModelReader ? @"c:\tmp\gladius-extracted-archive\gc-compressed\AllModelsRenamed\" : @"c:\tmp\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
             //string baseModelPath = m_modelReader is GCModelReader ? @"D:\gladius-extracted-archive\gc-compressed\UnidentifiedModels\" : @"D:\gladius-extracted-archive\xbox-decompressed\ModelFilesRenamed\";
+
+            if (m_modelReader is XboxModelReader)
+            {
+                m_noCullState.CullMode = CullMode.None;
+                GraphicsDevice.RasterizerState = m_noCullState;
+            }
 
             
             //m_modelReader = new XboxModelReader();
@@ -114,7 +123,7 @@ namespace XNAViewer
             //m_fileNames.Add(baseModelPath + @"characters\prop_practicepost2.mdl");
             //m_fileNames.Add(baseModelPath + @"weapons\bow_amazon.mdl");
             //m_fileNames.Add(baseModelPath + @"weapons\swordM_gladius.mdl");
-            //m_fileNames.Add(baseModelPath + @"characters\scorpion.mdl");
+            m_fileNames.Add(baseModelPath + @"characters\bear.mdl");
             //m_fileNames.Add(baseModelPath + @"characters\scarab.mdl");
             //m_fileNames.Add(baseModelPath + @"characters\galverg.mdl");
             //m_fileNames.Add(baseModelPath + @"arenas\belfortgatenor.mdl");
@@ -483,6 +492,12 @@ namespace XNAViewer
 
                 //m_textPrinter.Print(BuildDebugString(), font, Color.White);
                 //m_textPrinter.End();
+
+                if (m_modelReader is XboxModelReader)
+                {
+                    m_noCullState.CullMode = CullMode.None;
+                    GraphicsDevice.RasterizerState = m_noCullState;
+                }
 
 
                 DrawModel();
@@ -1057,33 +1072,12 @@ namespace XNAViewer
                 {
                     vertexData[i].Position = modelSubMesh.Vertices[i];
                     vertexData[i].TextureCoordinate= modelSubMesh.UVs[i];
-                    vertexData[i].Normal= modelSubMesh.Normals[i];
+                    vertexData[i].Normal = modelSubMesh.Normals[i];
                 }
                 m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
                 m_vertexBuffer.SetData(vertexData);
 
                 ushort[] indexData = modelSubMesh.Indices.ToArray();
-
-                //ushort[] indexData = new ushort[modelSubMesh.Indices.Count];
-                //int adjustedIndexLength = (indexData.Length / 3) * 3;
-
-                //for (int i = 0; i < adjustedIndexLength; i += 3)
-                //{
-                //    indexData[i + 0] = modelSubMesh.Indices[(i + 0)];
-                //    indexData[i + 1] = modelSubMesh.Indices[(i + 1)];
-                //    indexData[i + 2] = modelSubMesh.Indices[(i + 2)];
-                //}
-
-                //int adjustedIndexLength = (indexData.Length / 3) * 3;
-
-                //for (int i = 0; i < adjustedIndexLength; i += 3)
-                //{
-                //    indexData[i + 0] = (ushort)(i + 0);
-                //    indexData[i + 1] = (ushort)(i + 2);
-                //    indexData[i + 2] = (ushort)(i + 1);
-                //}
-
-
 
                 m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.None);
                 m_indexBuffer.SetData(indexData);
