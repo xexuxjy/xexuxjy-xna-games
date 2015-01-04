@@ -57,6 +57,26 @@ namespace ModelNamer
         public static char[][] xboxTags = { versTag, cprtTag, selsTag, txtrTag, xrndTag};
 
 
+        public static int CountCharsInStream(BinaryReader binReader, char[] charsToFind)
+        {
+            int count = 0;
+            try
+            {
+                while (binReader.BaseStream.Position < binReader.BaseStream.Length)
+                {
+                    if (FindCharsInStream(binReader, charsToFind,false))
+                    {
+                        count++;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return count;
+        }
+
+
         public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
         {
             bool found = false;
