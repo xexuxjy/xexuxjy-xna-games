@@ -25,6 +25,7 @@ namespace ModelNamer
         private System.Collections.Generic.List<System.Collections.Generic.List<byte>> rows = new System.Collections.Generic.List<System.Collections.Generic.List<byte>>();
         private System.Collections.Generic.List<byte> row = new System.Collections.Generic.List<byte>();
         public string ImageName;
+        public bool ContainsSkygold = false;
 
         public static Dictionary<string, Point> s_sizeMap = new Dictionary<string, Point>();
         public GladiusImage()
@@ -157,7 +158,7 @@ namespace ModelNamer
             }
 
 
-            if (allAlpha)
+            if (allAlpha || ContainsSkygold)
             {
                 for (int i = 0; i < tgt.Length; i += 4)
                 {
@@ -492,7 +493,7 @@ namespace ModelNamer
 
                             int subImageCounter = 0;
                             List<String> textureNameList = GladiusHeader.BuildImageList(binReader);
-                            List<string> ignoreList = new List<string>();
+
 
                             long currentPos = binReader.BaseStream.Position;
                             int tmapSections = Common.CountCharsInStream(binReader, GladiusHeader.tmapHeader);
@@ -506,10 +507,13 @@ namespace ModelNamer
                             foreach(GladiusImage image in imageList)
                             {
                                 image.ImageName = textureNameList[counter++];
-
-                                if (image.ImageName == "citizenNor_skin_var04.tga")
+                                foreach(String textureName in textureNameList)
                                 {
-                                    int ibreak = 0;
+                                    if(textureName.Contains("skygold"))
+                                    {
+                                        image.ContainsSkygold = true;
+
+                                    }
                                 }
 
                                 if (image.Header.ContainsDefinition)
@@ -754,7 +758,7 @@ namespace ModelNamer
             //fileNames.Add(sourcePath + "File_020217"); // thepit textures - large
 
             String outputDirectory = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
-
+            outputDirectory = @"D:\gladius-extracted-archive\gc-compressed\textures\";
 
             new ImageExtractor().ExtractImages(fileNames,outputDirectory);
             return 0;

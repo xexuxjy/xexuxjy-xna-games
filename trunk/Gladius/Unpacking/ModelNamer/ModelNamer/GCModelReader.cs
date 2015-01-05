@@ -69,6 +69,11 @@ namespace ModelNamer
             binReader.BaseStream.Position = startPosition;
             ReadUV0Section(binReader);
 
+            binReader.BaseStream.Position = startPosition;
+            ReadELEMSection(binReader);
+            binReader.BaseStream.Position = startPosition;
+            ReadOBBTSection(binReader);
+
             BuildBB();
             //model.Validate();
 
@@ -299,6 +304,71 @@ namespace ModelNamer
 
 
                 }
+            }
+
+        }
+
+        public void ReadELEMSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.elemTag))
+            {
+                int sectionLength = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int numItems = binReader.ReadInt32();
+                int itemLength = (sectionLength - 12) / numItems;
+                int ibreak = 0;
+            }
+
+        }
+        public void ReadOBBTSection(BinaryReader binReader)
+        {
+            if (Common.FindCharsInStream(binReader, Common.obbtTag))
+            {
+                int sectionLength = binReader.ReadInt32();
+                int pad1 = binReader.ReadInt32();
+                int numItems = binReader.ReadInt32();
+
+                //int itemLength = (sectionLength - 12) / numItems;
+                short val1 = 0;
+                short val2 = 0;
+                List<short> list1 = new List<short>();
+
+                while (true)
+                {
+                    val1 = binReader.ReadInt16();
+                    if (val1 == 0x6969 && val2 == 0x6969)
+                    {
+                        break;
+                    }
+                    list1.Add(val1);
+                    val2 = val1;
+                }
+                // had 2 0x69's in a row...
+                //skip forward another 6
+                // 0x69696969 0x69696969 seems to be the gap.
+                binReader.BaseStream.Position += 4;
+                list1.RemoveAt(list1.Count - 1);
+
+
+
+                long currentPos = binReader.BaseStream.Position;
+                Common.FindCharsInStream(binReader, Common.endTag);
+                int diff = (int)(binReader.BaseStream.Position - currentPos);
+                binReader.BaseStream.Position = currentPos;
+
+                int numItemsA = (diff - 8) / 4;
+                List<float> list2 = new List<float>();
+
+                //numItemsA -= 2;
+                for (int i = 0; i < numItemsA; ++i)
+                {
+                    float val = binReader.ReadSingle();
+                    list2.Add(val);
+                }
+
+
+
+                int ibreak = 0;
             }
 
         }
@@ -620,24 +690,26 @@ namespace ModelNamer
             String textureExtension = ".png";
 
 
-            string reflectname = "skygold_R.tga";
+            string reflectname = "skygold";
             // write material?
-            if (m_textures.Count == 2 && (m_textures[0].textureName.Contains(reflectname) || m_textures[1].textureName.Contains(reflectname)))
+            if (false && m_textures.Count == 2 && (m_textures[0].textureName.Contains(reflectname) || m_textures[1].textureName.Contains(reflectname)))
             {
                 int notsgindex = m_textures[0].textureName.Contains(reflectname) ? 1 : 0;
 
 
-                String textureName = m_textures[notsgindex].textureName + textureExtension;
-                materialWriter.WriteLine("newmtl " + textureName);
+                String baseName = m_textures[notsgindex].textureName + textureExtension;
+                String alphaName = m_textures[1-notsgindex].textureName + textureExtension;
+
+                materialWriter.WriteLine("newmtl " + baseName);
                 materialWriter.WriteLine("Ka 1.000 1.000 1.000");
                 materialWriter.WriteLine("Kd 1.000 1.000 1.000");
                 materialWriter.WriteLine("Ks 0.000 0.000 0.000");
                 materialWriter.WriteLine("d 1.0");
                 materialWriter.WriteLine("illum 3");
-                materialWriter.WriteLine("map_Ka " + texturePath + textureName);
-                materialWriter.WriteLine("map_Kd " + texturePath + textureName);
+                materialWriter.WriteLine("map_Ka " + texturePath + baseName);
+                materialWriter.WriteLine("map_d " + texturePath + alphaName);
 
-                materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname + textureExtension); 
+                //materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + alphaName + textureExtension); 
 
                 
             }
@@ -739,8 +811,9 @@ namespace ModelNamer
 
                 string groupName = String.Format("{0}-submesh{1}-LOD{2}" ,m_name,submeshCount,headerBlock.LodLevel);
 
+                // just using o means everything gets grouped together, though using g means file sizes get larger?
                 writer.WriteLine("o " + groupName);
-                //writer.WriteLine("g " + groupName);
+                writer.WriteLine("g " + groupName);
                 // and now points, uv's and normals.
                 if (m_skinned)
                 {
@@ -1045,7 +1118,7 @@ namespace ModelNamer
             String objOutputPath = rootPath + @"AllModelsRenamed-Obj\";
             String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures\";
             
-            texturePath = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
+            //texturePath = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
 
             GCModelReader reader = new GCModelReader();
             //GCModel model = reader.LoadSingleModel(@"D:\gladius-extracted-archive\gc-compressed\test-models\bow.mdl");
@@ -1070,11 +1143,24 @@ namespace ModelNamer
 
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\yeti.mdl");
-            //filenames.Add(modelPath + @"arenas\altahrunruins.mdl");
-            filenames.Add(modelPath + @"arenas\mongrelsmaw.mdl");
+            //filenames.Add(modelPath + @"arenas\arenasuren.mdl");
+            //filenames.Add(modelPath + @"arenas\belfortarena.mdl");
+            filenames.Add(modelPath + @"arenas\bloodyhalo.mdl");
+            //filenames.Add(modelPath + @"arenas\calthaarena.mdl");
+            //filenames.Add(modelPath + @"arenas\exuroseye.mdl");
+            //filenames.Add(modelPath + @"arenas\fjordfallen.mdl");
+            //filenames.Add(modelPath + @"arenas\mongrelsmaw.mdl");
+            //filenames.Add(modelPath + @"arenas\mordaresden.mdl");
+            //filenames.Add(modelPath + @"arenas\ononhaar.mdl");
+            //filenames.Add(modelPath + @"arenas\orinskeep.mdl");
             //filenames.Add(modelPath + @"arenas\palaceibliis.mdl");
+            //filenames.Add(modelPath + @"arenas\pirgosarena.mdl");
+            //filenames.Add(modelPath + @"arenas\thefen.mdl");
+            //filenames.Add(modelPath + @"arenas\thepit.mdl");
+            //filenames.Add(modelPath + @"arenas\nordagh_worldmap.mdl");
+            //filenames.AddRange(Directory.GetFiles(modelPath + @"arenas\", "*"));
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\thefen.mdl");
-            //filenames.AddRange(Directory.GetFiles(modelPath+@"arenas\", "*"));
+            
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));
