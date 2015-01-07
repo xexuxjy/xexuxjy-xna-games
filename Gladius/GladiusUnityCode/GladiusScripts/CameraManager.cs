@@ -11,6 +11,7 @@ public class CameraManager : MonoBehaviour
     public KGFOrbitCamSettings NormalModeSettings;
     public KGFOrbitCamSettings ManualModeSettings;
     public KGFOrbitCamSettings CombatModeSettings;
+    public KGFOrbitCamSettings OverlandModeSettings;
 
     public GameObject CameraTarget;
 
@@ -89,6 +90,9 @@ public class CameraManager : MonoBehaviour
                         break;
                     case (CameraMode.Combat):
                         CombatModeSettings.Apply();
+                        break;
+                    case(CameraMode.Overland):
+                        OverlandModeSettings.Apply();
                         break;
                 }
 

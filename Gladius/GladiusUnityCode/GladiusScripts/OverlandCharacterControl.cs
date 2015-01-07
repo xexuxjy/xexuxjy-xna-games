@@ -1,63 +1,61 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Gladius;
 
-public class OverlandCharacterControl : MonoBehaviour {
+public class OverlandCharacterControl : MonoBehaviour
+{
 
-    public float MovementSpeed = 10f;
-	// Use this for initialization
-	void Start () 
+    public float MovementSpeed = 2f;
+    OverlandGUIController m_overlandGuiController;
+
+    // Use this for initialization
+    void Start()
     {
-    	
-	}
-	
-    void PlayIdle()
-    {
-        String animName = "idle-2";
-        if (!animation.IsPlaying(animName))
-        {
-            animation.Play(animName);
-        }
-        
+        RegisterListeners();
+        GameObject go = GameObject.Find("UIRoot");
+        m_overlandGuiController = go.GetComponent<OverlandGUIController>();
     }
 
-    void PlayRun()
+    public void RegisterListeners()
     {
-        String animName = "walk";
-        if (!animation.IsPlaying(animName))
-        {
-            animation.Play(animName);
-        }
+        EventManager.ActionPressed +=EventManager_ActionPressed;
+                
     }
 
-	// Update is called once per frame
-	void Update () 
+    void EventManager_ActionPressed(object sender, ActionButtonPressedArgs e)
     {
         Vector3 adjust = new Vector3();
-	    if(CursorLeftHeld())
+        switch (e.ActionButton)
         {
-            adjust += Vector3.left;
+            case (ActionButton.Move1Left):
+                {
+                    adjust += Vector3.left;
+                    break;
+                }
+            case (ActionButton.Move1Right):
+                {
+                    adjust += Vector3.right;
+                    break;
+                }
+            case (ActionButton.Move1Up):
+                {
+                    adjust += Vector3.up;
+                    break;
+                }
+            case (ActionButton.Move1Down):
+                {
+                    adjust += Vector3.down;
+                    break;
+                }
         }
-        if (CursorRightHeld())
-        {
-            adjust += Vector3.right;
-        }
-        if (CursorUpHeld())
-        {
-            adjust += Vector3.forward;
-        }
-        if (CursorDownHeld())
-        {
-            adjust += Vector3.back;
-        }
-
         if (adjust.sqrMagnitude > 0)
         {
             adjust *= MovementSpeed * Time.deltaTime;
-            Quaternion q = Quaternion.LookRotation(adjust);
-                            
+            //Quaternion q = Quaternion.LookRotation(adjust);
+
             transform.position += adjust;
-            transform.rotation = q;
+            //transform.rotation = q;
             PlayRun();
 
         }
@@ -66,68 +64,34 @@ public class OverlandCharacterControl : MonoBehaviour {
             PlayIdle();
         }
 
-	}
-
-    public bool CursorLeftPressed()
-    {
-        return Input.GetButtonUp("CursorLeft");
-    }
-
-    public bool CursorRightPressed()
-    {
-        return Input.GetButtonUp("CursorRight");
 
     }
 
-    public bool CursorUpPressed()
+
+
+    void PlayIdle()
     {
-        return Input.GetButtonUp("CursorUp");
+        //String animName = "idle-2";
+        //if (!animation.IsPlaying(animName))
+        //{
+        //    animation.Play(animName);
+        //}
 
     }
 
-    public bool CursorDownPressed()
+    void PlayRun()
     {
-        return Input.GetButtonUp("CursorDown");
+        //String animName = "walk";
+        //if (!animation.IsPlaying(animName))
+        //{
+        //    animation.Play(animName);
+        //}
     }
 
-    public bool CursorLeftHeld()
+    // Update is called once per fame
+    void Update()
     {
-        return Input.GetButton("CursorLeft");
-    }
-    public bool CursorRightHeld()
-    {
-        return Input.GetButton("CursorRight");
-    }
-    public bool CursorUpHeld()
-    {
-        return Input.GetButton("CursorUp");
-    }
-    public bool CursorDownHeld()
-    {
-        return Input.GetButton("CursorDown");
-    }
 
-
-    public bool Action1Pressed()
-    {
-        return Input.GetButtonDown("Action1");
-    }
-
-    public bool Action2Pressed()
-    {
-        return Input.GetButtonDown("Action2");
-
-    }
-
-    public bool Action3Pressed()
-    {
-        return Input.GetButtonDown("Action3");
-
-    }
-
-    public bool Action4Pressed()
-    {
-        return Input.GetButtonDown("Action4");
     }
 
 
@@ -137,12 +101,21 @@ public class OverlandCharacterControl : MonoBehaviour {
         if (other.tag == "Town")
         {
             m_currentTownData = other.GetComponent<TownData>();
+            if (m_overlandGuiController != null)
+            {
+                m_overlandGuiController.ReachedTown(m_currentTownData);
+            }
+
+
             if (m_currentTownData != null)
             {
                 Debug.Log("Found Town " + m_currentTownData.TownName);
             }
+
+        
+
         }
-    
+
     }
 
 
@@ -152,6 +125,10 @@ public class OverlandCharacterControl : MonoBehaviour {
         {
             m_currentTownData = null;
             Debug.Log("Left Town " + m_currentTownData.TownName);
+            if (m_overlandGuiController != null)
+            {
+                m_overlandGuiController.ReachedTown(m_currentTownData);
+            }
         }
     }
 

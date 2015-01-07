@@ -20,4 +20,5 @@ public class TownData : MonoBehaviour
 
     public String TownName = "A Town";
     public String TownDataPath;
+    public int Popularity;
 }
