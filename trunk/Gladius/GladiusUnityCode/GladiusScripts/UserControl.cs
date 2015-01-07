@@ -37,7 +37,7 @@ public class UserControl : MonoBehaviour
 
     public void PeformActionOnAxis(String axisName, ActionButton negAction, ActionButton posAction, ref bool flag)
     {
-        if (flag == false)
+        if (flag == false || GridMoveDelay == 0.0f)
         {
             float axisVal = Input.GetAxis(axisName);
             if (Math.Abs(axisVal) > ActionMoveDelta)
@@ -79,23 +79,25 @@ public class UserControl : MonoBehaviour
             {
                 PeformActionOnAxis("PadLeftStickH", ActionButton.Move1Left, ActionButton.Move1Right,ref HaveMovedGrid);
                 PeformActionOnAxis("PadLeftStickV", ActionButton.Move1Down, ActionButton.Move1Up,ref HaveMovedGrid);
-
-                if(HaveMovedGrid)
+            }
+            else if (GladiusGlobals.CameraManager.CurrentCameraMode == CameraMode.Overland)
+            {
+                PeformActionOnAxis("PadLeftStickH", ActionButton.Move1Left, ActionButton.Move1Right, ref HaveMovedGrid);
+                PeformActionOnAxis("PadLeftStickV", ActionButton.Move1Down, ActionButton.Move1Up, ref HaveMovedGrid);
+            }
+            if (HaveMovedGrid)
+            {
+                CurrentMoveDelay += Time.deltaTime;
+                if (CurrentMoveDelay > GridMoveDelay)
                 {
-                    CurrentMoveDelay += Time.deltaTime;
-                    if(CurrentMoveDelay > GridMoveDelay)
-                    {
-                        HaveMovedGrid = false;
-                        CurrentMoveDelay = 0f;
-                    }
-
+                    HaveMovedGrid = false;
+                    CurrentMoveDelay = 0f;
                 }
+
             }
 
 
         }
-
-
     }
 
     public Dictionary<String, ActionButton> m_actionButtonDictionary = new Dictionary<String,ActionButton>();
