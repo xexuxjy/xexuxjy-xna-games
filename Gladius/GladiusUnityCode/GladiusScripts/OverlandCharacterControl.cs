@@ -13,8 +13,15 @@ public class OverlandCharacterControl : MonoBehaviour
     void Start()
     {
         RegisterListeners();
-        GameObject go = GameObject.Find("UIRoot");
-        m_overlandGuiController = go.GetComponent<OverlandGUIController>();
+        GameObject go = GameObject.Find("UI Root");
+        if (go != null)
+        {
+            m_overlandGuiController = go.GetComponent<OverlandGUIController>();
+            if (m_overlandGuiController == null)
+            {
+                int ibreak = 0;
+            }
+        }
     }
 
     public void RegisterListeners()
@@ -40,12 +47,12 @@ public class OverlandCharacterControl : MonoBehaviour
                 }
             case (ActionButton.Move1Up):
                 {
-                    adjust += Vector3.up;
+                    adjust += Vector3.forward;
                     break;
                 }
             case (ActionButton.Move1Down):
                 {
-                    adjust += Vector3.down;
+                    adjust += Vector3.back;
                     break;
                 }
         }
@@ -123,8 +130,8 @@ public class OverlandCharacterControl : MonoBehaviour
     {
         if (other.tag == "Town")
         {
-            m_currentTownData = null;
             Debug.Log("Left Town " + m_currentTownData.TownName);
+            m_currentTownData = null;
             if (m_overlandGuiController != null)
             {
                 m_overlandGuiController.ReachedTown(m_currentTownData);
