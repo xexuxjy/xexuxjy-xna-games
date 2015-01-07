@@ -8,7 +8,15 @@ public class OverlandGUIController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        dfPanel[] panels =gameObject.GetComponentsInChildren<dfPanel>();
+        foreach (dfPanel panel in panels)
+        {
+            if (panel.name == "TownInfoPanel")
+            {
+                m_townInfoPanel = panel;
+                break;
+            }
+        }
     }
 
     // Update is called once per frame
