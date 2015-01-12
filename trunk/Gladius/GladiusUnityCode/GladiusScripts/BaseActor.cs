@@ -1414,7 +1414,7 @@ public class BaseActor : MonoBehaviour
                 ConfirmMove();
             }
 
-            GladiusGlobals.CameraManager.ReparentTarget(gameObject);
+            GladiusGlobals.GameStateManager.CurrentStateData.CameraManager.ReparentTarget(gameObject);
 
             StartAttackSkill();
         }

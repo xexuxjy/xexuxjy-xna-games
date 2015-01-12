@@ -89,8 +89,8 @@ public class TurnManager : MonoBehaviour
 
             CurrentActor.StartTurn();
 
-            GladiusGlobals.CameraManager.ReparentTarget(CurrentActor.gameObject);
-            GladiusGlobals.CameraManager.CurrentCameraMode = CameraMode.Normal;
+            GladiusGlobals.GameStateManager.CurrentStateData.CameraManager.ReparentTarget(CurrentActor.gameObject);
+            GladiusGlobals.GameStateManager.CurrentStateData.CameraManager.CurrentCameraMode = CameraMode.Normal;
 
             //GladiusGlobals.CameraManager.TargetObject = CurrentActor.gameObject;
             if (CurrentActor.PlayerControlled)

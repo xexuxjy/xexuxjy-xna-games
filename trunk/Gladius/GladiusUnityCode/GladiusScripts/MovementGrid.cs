@@ -577,7 +577,7 @@ public class MovementGrid : MonoBehaviour
             {
                 int ibreak = 0;
             }
-            GladiusGlobals.CameraManager.ReparentTarget(m_cursorObject);
+            GladiusGlobals.GameStateManager.CurrentStateData.CameraManager.ReparentTarget(m_cursorObject);
 
         }
     }
