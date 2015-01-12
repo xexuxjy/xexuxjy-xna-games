@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using Gladius.combat;
-using Gladius.arena;
 using Gladius;
 
 //namespace Gladius
@@ -93,12 +91,18 @@ public class BaseActor : MonoBehaviour
         } 
     }
 
+    public ArenaStateCommon ArenaStateCommon
+    {
+        get { return GladiusGlobals.GameStateManager.ArenaStateCommon; }
+    }
+
+
 
     public int INIAddition
     {
         get
         {
-            if (GladiusGlobals.Crowd.GetValueForSchool(m_characterData.School) > 75)
+            if (ArenaStateCommon.Crowd.GetValueForSchool(m_characterData.School) > 75)
             {
                 return 20;
             }
@@ -140,13 +144,11 @@ public class BaseActor : MonoBehaviour
         follow.enabled = true;
 
 
-        m_turnManager = GladiusGlobals.TurnManager;
-        m_turnManager.AddActor(this);
-        Arena = GladiusGlobals.Arena;
+        ArenaStateCommon.TurnManager.AddActor(this);
 
         Health = MaxHealth = CON * 10;
 
-        SetupSkills(GladiusGlobals.AttackSkillDictionary);
+        SetupSkills();
 
         SetupAnimationData();
 
@@ -214,10 +216,18 @@ public class BaseActor : MonoBehaviour
         {
             GameObject prefab = Resources.Load(ModelName) as GameObject; 
             GameObject load = Instantiate(prefab)as GameObject;
+            if (load == null)
+            {
+                int ibreak=0;
+            }
             m_characterGameObject = load;
             m_characterGameObject.transform.parent = transform;
 
             m_animator = m_characterGameObject.GetComponent<Animator>();
+            if (m_animator == null)
+            {
+                int ibreak = 0;
+            }
             Animator goAnimator = gameObject.GetComponent<Animator>();
             if (goAnimator != null)
             {
@@ -378,7 +388,7 @@ public class BaseActor : MonoBehaviour
     private void DamagePoint()
     {
         // only do this at the animation hitpoint.
-        GladiusGlobals.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
+        ArenaStateCommon.CombatEngine.ResolveAttack(this, m_currentTarget, CurrentAttackSkill);
     }
 
     private void BowFirePoint(String name)
@@ -500,7 +510,7 @@ public class BaseActor : MonoBehaviour
     }
 
 
-    public Gladius.arena.Arena Arena
+    public Arena Arena
     {
         get;
         set;
@@ -964,7 +974,7 @@ public class BaseActor : MonoBehaviour
                                 WayPointList.RemoveAt(0);
 
                                 // rebuild this now we've reached a point.
-                                GladiusGlobals.MovementGrid.RebuildMesh = true;
+                                ArenaStateCommon.MovementGrid.RebuildMesh = true;
 
                                 // we've moved one step so reduce our movement.
                                 m_currentMovePoints--;
@@ -1088,7 +1098,7 @@ public class BaseActor : MonoBehaviour
     {
         //ChooseAttackSkill();
         // use the combat engine to display skill choice
-        GladiusGlobals.CombatEngineUI.DrawFloatingText(this.Position, Color.yellow, CurrentAttackSkill.Name, 1f);
+        ArenaStateCommon.CombatEngineUI.DrawFloatingText(this.Position, Color.yellow, CurrentAttackSkill.Name, 1f);
 
         GladiusGlobals.EventLogger.LogEvent(EventTypes.Action, String.Format("[{0}] Attack started on [{1}] Skill[{2}].", Name, m_currentTarget != null ? m_currentTarget.Name : "NoActorTarget", CurrentAttackSkill.Name));
         AnimationEnum attackAnim = CurrentAttackSkill.Animation != AnimationEnum.None ? CurrentAttackSkill.Animation : AnimationEnum.Attack1;
@@ -1126,7 +1136,7 @@ public class BaseActor : MonoBehaviour
 
 
 
-                if (GladiusGlobals.CombatEngine.IsAttackerInRange(this, m_currentTarget))
+                if (ArenaStateCommon.CombatEngine.IsAttackerInRange(this, m_currentTarget))
                 {
                     if (CurrentAttackSkill.FaceOnAttack)
                     {
@@ -1318,7 +1328,7 @@ public class BaseActor : MonoBehaviour
         TurnStarted = true;
         MovedThisRound = true;
 
-        GladiusGlobals.MovementGrid.RebuildMesh = true;
+        ArenaStateCommon.MovementGrid.RebuildMesh = true;
         m_currentMovePoints = m_totalMovePoints;
 
         ArenaSkillPoints++;
@@ -1466,15 +1476,15 @@ public class BaseActor : MonoBehaviour
         set;
     }
 
-    public void SetupSkills(AttackSkillDictionary skillDictionary)
+    public void SetupSkills()
     {
         // simple for now.
         m_knownAttacks.Clear();
         foreach (string skillname in m_characterData.m_skillList)
         {
-            if (skillDictionary.Data.ContainsKey(skillname))
+            if (AttackSkillDictionary.Data.ContainsKey(skillname))
             {
-                m_knownAttacks.Add(skillDictionary.Data[skillname]);
+                m_knownAttacks.Add(AttackSkillDictionary.Data[skillname]);
             }
             else
             {
@@ -1553,7 +1563,7 @@ public class BaseActor : MonoBehaviour
         {
             // reset threats
             UpdateThreat(actor, 0, false);
-            if (GladiusGlobals.CombatEngine.IsValidTarget(this, actor, null))
+            if (ArenaStateCommon.CombatEngine.IsValidTarget(this, actor, null))
             {
                 int weighting = 0;
                 int distance = GladiusGlobals.PointDist2(this.ArenaPoint, actor.ArenaPoint);
@@ -1562,7 +1572,7 @@ public class BaseActor : MonoBehaviour
                 UpdateThreat(actor, distanceAdjust);
 
                 // look and see if we have an advantage from class (light v heavy, heavy v medium etc)
-                int categoryBonus = GladiusGlobals.CombatEngine.GetClassAdvantage(this, actor);
+                int categoryBonus = ArenaStateCommon.CombatEngine.GetClassAdvantage(this, actor);
                 if (categoryBonus < 0)
                 {
                     UpdateThreat(actor, -2);
@@ -1581,7 +1591,7 @@ public class BaseActor : MonoBehaviour
 
                     // if we can't get there. then knock it down a lot.
                     // FIXME - this should be updated to take into account ranged skills...
-                    if (!GladiusGlobals.Arena.DoesPathExist(ArenaPoint, actor.ArenaPoint))
+                    if (!GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.DoesPathExist(ArenaPoint, actor.ArenaPoint))
                     {
                         UpdateThreat(actor, -10);
                     }
@@ -1598,7 +1608,7 @@ public class BaseActor : MonoBehaviour
 
 
                     // prioritise finishing off targets.
-                    if (GladiusGlobals.CombatEngine.IsNearDeath(actor))
+                    if (ArenaStateCommon.CombatEngine.IsNearDeath(actor))
                     {
                         UpdateThreat(actor, 5);
                     }
@@ -1668,7 +1678,7 @@ public class BaseActor : MonoBehaviour
             foreach (AttackSkill skill in AttackSkills.FindAll(skill => HaveAvailableSkillForRange(distance) && skill.Available(this)))
             {
                 // decide which one will do the most.
-                float expectedDamage = GladiusGlobals.CombatEngine.CalculateExpectedDamage(this, target, skill);
+                float expectedDamage = ArenaStateCommon.CombatEngine.CalculateExpectedDamage(this, target, skill);
                 if (expectedDamage > bestDamage)
                 {
                     bestDamage = expectedDamage;
@@ -1700,7 +1710,7 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            if (GladiusGlobals.Crowd.GetValueForSchool(m_characterData.School) > 25)
+            if (GladiusGlobals.GameStateManager.ArenaStateCommon.Crowd.GetValueForSchool(m_characterData.School) > 25)
             {
                 return 1.3f;
             }
@@ -1718,7 +1728,7 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            if (GladiusGlobals.Crowd.GetValueForSchool(m_characterData.School) > 50)
+            if (GladiusGlobals.GameStateManager.ArenaStateCommon.Crowd.GetValueForSchool(m_characterData.School) > 50)
             {
                 return 1.5f;
             }
@@ -1737,7 +1747,7 @@ public class BaseActor : MonoBehaviour
     {
         get
         {
-            return CharacterModelName != null ? CharacterModelName : GladiusGlobals.ModelsRoot+ActorClassData.MeshName;
+            return CharacterModelName != null ? CharacterModelName : GladiusGlobals.CharacterModelsRoot + ActorClassData.MeshName;
         }
     }
 
@@ -1877,7 +1887,6 @@ public class BaseActor : MonoBehaviour
 				Quaternion.AngleAxis (90, Vector3.up),
 				Quaternion.AngleAxis (270, Vector3.up)
 		};
-    private TurnManager m_turnManager;
 
 }
 

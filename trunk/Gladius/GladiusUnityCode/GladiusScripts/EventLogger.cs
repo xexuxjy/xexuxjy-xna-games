@@ -1,6 +1,4 @@
 ﻿using System;
-namespace Gladius
-{
     public class EventLogger
     {
         public EventLogger(String filename)
@@ -72,4 +70,3 @@ namespace Gladius
         All = -1
     }
 
-}

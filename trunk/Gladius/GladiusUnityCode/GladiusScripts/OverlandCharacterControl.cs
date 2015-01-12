@@ -17,10 +17,6 @@ public class OverlandCharacterControl : MonoBehaviour
         if (go != null)
         {
             m_overlandGuiController = go.GetComponent<OverlandGUIController>();
-            if (m_overlandGuiController == null)
-            {
-                int ibreak = 0;
-            }
         }
     }
 
@@ -35,6 +31,12 @@ public class OverlandCharacterControl : MonoBehaviour
         Vector3 adjust = new Vector3();
         switch (e.ActionButton)
         {
+            case (ActionButton.ActionButton1):
+                {
+                    // enter town.
+                    break;
+                }
+
             case (ActionButton.Move1Left):
                 {
                     adjust += Vector3.left;
@@ -58,12 +60,35 @@ public class OverlandCharacterControl : MonoBehaviour
         }
         if (adjust.sqrMagnitude > 0)
         {
-            adjust *= MovementSpeed * Time.deltaTime;
-            //Quaternion q = Quaternion.LookRotation(adjust);
+            float gravity = 10.0f;
 
-            transform.position += adjust;
+            Quaternion q = Quaternion.LookRotation(adjust);
+
+            adjust *= MovementSpeed * Time.deltaTime;
+
+            adjust.y = -gravity * Time.deltaTime;
+
+            
+            CharacterController cc = GetComponent<CharacterController>();
+            cc.Move(adjust);
+
+            //Vector3 newPosition = transform.position + adjust;
+
+            //Ray r = new Ray(newPosition, Vector3.down);
+            //RaycastHit hitInfo;
+
+            //float distance = 2.0f;
+            //if (collider.Raycast(r, out hitInfo, distance))
+            //{
+            //    if (hitInfo.collider.gameObject.tag == "Floor")
+            //    {
+            //        newPosition.y = hitInfo.point.y;
+            //    }
+
+            //}
+            //transform.position = newPosition;
             //transform.rotation = q;
-            PlayRun();
+            //PlayRun();
 
         }
         else
@@ -98,7 +123,10 @@ public class OverlandCharacterControl : MonoBehaviour
     // Update is called once per fame
     void Update()
     {
-
+        if (m_overlandGuiController != null && GladiusGlobals.GladiatorSchool != null)
+        {
+            m_overlandGuiController.UpdateData(GladiusGlobals.GladiatorSchool);
+        }
     }
 
 
@@ -126,6 +154,8 @@ public class OverlandCharacterControl : MonoBehaviour
     }
 
 
+
+
     public void OnTriggerExit(Collider other)
     {
         if (other.tag == "Town")
@@ -136,6 +166,19 @@ public class OverlandCharacterControl : MonoBehaviour
             {
                 m_overlandGuiController.ReachedTown(m_currentTownData);
             }
+        }
+    }
+
+    public TownData TownData
+    {
+        get
+        {
+            return m_currentTownData;
+        }
+
+        set
+        {
+            m_currentTownData = value;
         }
     }
 

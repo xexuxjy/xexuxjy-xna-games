@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using Gladius;
 
-namespace GladiusCommon.Scripts
-{
 	public class LeagueData
 	{
 
@@ -44,4 +42,3 @@ namespace GladiusCommon.Scripts
 
     
     }
-}

@@ -5,8 +5,6 @@ using System.Text;
 using StringLeakTest;
 using Gladius.util;
 using UnityEngine;
-using Gladius.arena;
-using Gladius;
 
     public class CombatEngineUI : MonoBehaviour
     {
@@ -26,8 +24,6 @@ using Gladius;
 
         public void Start()
         {
-            GladiusGlobals.CombatEngineUI = this;
-
         }
 
         public void DrawFloatingText(Vector3 initialPosition, Color textColor, StringBuilder text, float age)
@@ -67,9 +63,9 @@ using Gladius;
 
             if (DrawHealthBars)
             {
-                if (GladiusGlobals.TurnManager != null)
+                if (GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager != null)
                 {
-                    foreach (BaseActor baseActor in GladiusGlobals.TurnManager.AllActors)
+                    foreach (BaseActor baseActor in GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager.AllActors)
                     {
                         DrawNameHealthIndicators(baseActor);
                     }
@@ -102,12 +98,12 @@ using Gladius;
             EventManager.BaseActorChanged += new EventManager.BaseActorSelectionChanged(EventManager_BaseActorChanged);
         }
 
-        public static Vector3 WorldToScreenAdjusted(Vector3 world)
-        {
-            Vector3 result = GladiusGlobals.Camera.WorldToScreenPoint(world);
-            result.y = Screen.height - result.y;
-            return result;
-        }
+        //public static Vector3 WorldToScreenAdjusted(Vector3 world)
+        //{
+        //    Vector3 result = GladiusGlobals.Camera.WorldToScreenPoint(world);
+        //    result.y = Screen.height - result.y;
+        //    return result;
+        //}
 
         public void DrawNameHealthIndicators(BaseActor actor)
         {
@@ -127,18 +123,19 @@ using Gladius;
                 dfp.ProgressColor = dfp.Value < 0.2 ? Color.red : Color.green;
             }
             // Draw an enemy indicator based on current player.
-            if (GladiusGlobals.TurnManager != null)
+            if (GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager != null)
             {
                 dfSprite indicator = GladiusGlobals.FindChild("Indicator", uiPanel.transform).GetComponent<dfSprite>();
                 String markerName = "EnemyIndicator";
-                if (GladiusGlobals.TurnManager.CurrentActor.TeamName == actor.TeamName)
+                if (GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager.CurrentActor != null)
                 {
-                    markerName = "FriendIndicator";
+                    if (GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager.CurrentActor.TeamName == actor.TeamName)
+                    {
+                        markerName = "FriendIndicator";
+                    }
                 }
                 indicator.SpriteName = markerName;
             }
-
-            //}
         }
 
 

@@ -4,7 +4,7 @@ using System.Collections;
 using Gladius;
 using System.Collections.Generic;
 using System;
-using GladiusCommon.Scripts;
+
 
 public class GameOverWinController : MonoBehaviour
 {
@@ -24,10 +24,10 @@ public class GameOverWinController : MonoBehaviour
     {
         RegisterListeners();
 
-        GladiusGlobals.CurrentBattleData = BattleData.GenerateDummyBattleData();
-        GladiusGlobals.GladiatorSchool = new GladiatorSchool();
-        GladiusGlobals.AttackSkillDictionary = new AttackSkillDictionary();
-        GladiusGlobals.AttackSkillDictionary.Load(null);
+        //GladiusGlobals.CurrentBattleData = BattleData.GenerateDummyBattleData();
+        //GladiusGlobals.GladiatorSchool = new GladiatorSchool();
+        //GladiusGlobals.AttackSkillDictionary = new AttackSkillDictionary();
+        //GladiusGlobals.AttackSkillDictionary.Load(null);
 
         m_largeFont = Resources.Load<Font>("GladiusUI/Arena/TREBUC");
 
@@ -114,43 +114,43 @@ public class GameOverWinController : MonoBehaviour
 
     public void DrawStage2()
     {
-        Rect textPos = new Rect(100, 100, 300, 50);
-        Rect textPosCopy = textPos;
-        int lineSeparator = 20;
-        if (GladiusGlobals.CurrentBattleData != null)
-        {
-            GUI.Label(textPosCopy, GladiusGlobals.CurrentBattleData.Name, m_largeTextStyle);
-            textPosCopy.y += lineSeparator;
-            GUI.Label(textPosCopy, "XP Gained " + GladiusGlobals.CurrentBattleData.XPReward, m_largeTextStyle);
-            textPosCopy.y += lineSeparator;
-            GUI.Label(textPosCopy, "Gold Gained " + GladiusGlobals.CurrentBattleData.GoldReward, m_largeTextStyle);
-            textPosCopy.y += lineSeparator*2;
-            List<CharacterData> partyData = GladiusGlobals.GladiatorSchool.CurrentParty;
-            for (int i = 0; i < partyData.Count; ++i)
-            {
-                //if (ActorGenerator.CheckLevelUp(partyData[i], GladiusGlobals.CurrentBattleData.XPReward))
-                //{
-                //    GUI.Label(textPosCopy, String.Format("{0} leveled up!   {1} ---> {2}", partyData[i].Name, partyData[i].Level, partyData[i].Level + 1), m_largeTextStyle);
-                //}
-            }
+        //Rect textPos = new Rect(100, 100, 300, 50);
+        //Rect textPosCopy = textPos;
+        //int lineSeparator = 20;
+        //if (GladiusGlobals.CurrentBattleData != null)
+        //{
+        //    GUI.Label(textPosCopy, GladiusGlobals.CurrentBattleData.Name, m_largeTextStyle);
+        //    textPosCopy.y += lineSeparator;
+        //    GUI.Label(textPosCopy, "XP Gained " + GladiusGlobals.CurrentBattleData.XPReward, m_largeTextStyle);
+        //    textPosCopy.y += lineSeparator;
+        //    GUI.Label(textPosCopy, "Gold Gained " + GladiusGlobals.CurrentBattleData.GoldReward, m_largeTextStyle);
+        //    textPosCopy.y += lineSeparator*2;
+        //    List<CharacterData> partyData = GladiusGlobals.GladiatorSchool.CurrentParty;
+        //    for (int i = 0; i < partyData.Count; ++i)
+        //    {
+        //        //if (ActorGenerator.CheckLevelUp(partyData[i], GladiusGlobals.CurrentBattleData.XPReward))
+        //        //{
+        //        //    GUI.Label(textPosCopy, String.Format("{0} leveled up!   {1} ---> {2}", partyData[i].Name, partyData[i].Level, partyData[i].Level + 1), m_largeTextStyle);
+        //        //}
+        //    }
 
 
 
 
-        }
+        //}
     }
 
     public void ApplyXPGain()
     {
-            List<CharacterData> partyData = GladiusGlobals.GladiatorSchool.CurrentParty;
-            for (int i = 0; i < partyData.Count; ++i)
-            {
-                partyData[i].XP += GladiusGlobals.CurrentBattleData.XPReward;
-                //if (ActorGenerator.CheckLevelUp(partyData[i], GladiusGlobals.CurrentBattleData.XPReward))
-                //{
-                //    partyData[i].XP += GladiusGlobals.CurrentBattleData.XPReward;
-                //}
-            }
+            //List<CharacterData> partyData = GladiusGlobals.GladiatorSchool.CurrentParty;
+            //for (int i = 0; i < partyData.Count; ++i)
+            //{
+            //    partyData[i].XP += GladiusGlobals.GameStateManager.ArenaStateCommon.CurrentBattleData.XPReward;
+            //    //if (ActorGenerator.CheckLevelUp(partyData[i], GladiusGlobals.CurrentBattleData.XPReward))
+            //    //{
+            //    //    partyData[i].XP += GladiusGlobals.CurrentBattleData.XPReward;
+            //    //}
+            //}
 
     }
 

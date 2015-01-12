@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Gladius;
 
 public class OverlandGUIController : MonoBehaviour
 {
     dfPanel m_townInfoPanel;
-    
+    dfPanel m_overlandGUIPanel;
+    dfPanel m_statusPanel;
+    dfPanel m_dayNightPanel;
+
     // Use this for initialization
     void Start()
     {
@@ -14,9 +18,28 @@ public class OverlandGUIController : MonoBehaviour
             if (panel.name == "TownInfoPanel")
             {
                 m_townInfoPanel = panel;
-                break;
+            }
+            else if(panel.name == "OverlandGUIPanel")
+            {
+                m_overlandGUIPanel = panel;
+            }
+            else if(panel.name == "StatusPanel")
+            {
+                m_statusPanel = panel;
+            }
+            else if(panel.name == "DayNightPanel")
+            {
+                m_dayNightPanel= panel;
             }
         }
+    }
+
+    public void UpdateData(GladiatorSchool school)
+    {
+        var rtLbl = m_statusPanel.Find<dfRichTextLabel>("Info");
+        rtLbl.Text = string.Format("<h2 color=\"white\">Rank : {0}</h2>   <h2 color=\"yellow\">Gold {1}</h2>", school.SchoolRank,school.Gold);
+        var lbl = m_dayNightPanel.Find<dfLabel>("Days");
+        lbl.Text = "Days : "+school.Days;
     }
 
     // Update is called once per frame
@@ -35,14 +58,7 @@ public class OverlandGUIController : MonoBehaviour
             tween.Length = 1f;
             tween.Play();
 
-
             m_townInfoPanel.Find<dfRichTextLabel>("Label").Text = string.Format("<h2 color=\"yellow\">{0}</h2>   <h2 color=\"blue\">{1}</h2>", townData.TownName,townData.Popularity);
-
-            //dfTweenFloat[] tweens = m_townInfoPanel.GetComponents<dfTweenFloat>();
-            
-            //("AlphaTween").SetStartValue(0f).SetEndValue(1f).SetDuration(0.5f);
-
-            //var tweenOpacity = m_townInfoPanel.Find<dfTweenFloat>("AlphaTween").SetStartValue(0f).SetEndValue(1f).SetDuration(0.5f);
 
             // fadein town view
         }

@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Gladius
-{
     public class ItemPanelInit : MonoBehaviour
     {
 
@@ -30,9 +28,9 @@ namespace Gladius
         }
 
 
-        public void Populate()
+        public void Populate(Shop currentShop)
         {
-            List<string> shopItemNames = GladiusGlobals.CurrentShop.GetItemList();
+            List<string> shopItemNames = currentShop.GetItemList();
             List<ShopItem> shopItems = new List<ShopItem>();
 
             dfScrollPanel container = gameObject.GetComponent<dfScrollPanel>();
@@ -121,4 +119,4 @@ namespace Gladius
         }
 
     }
-}
+

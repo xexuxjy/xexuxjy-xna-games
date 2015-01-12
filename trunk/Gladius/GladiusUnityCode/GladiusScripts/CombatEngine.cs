@@ -8,16 +8,9 @@ using System.Text;
 
 using StringLeakTest;
 
-namespace Gladius.combat
-{
-    public class CombatEngine
+    public class CombatEngine : MonoBehaviour
     {
-        public CombatEngine()
-        {
-            m_combatRandom = new System.Random();
-        }
-
-        public float CalculateExpectedDamage(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+        public  float CalculateExpectedDamage(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
         {
             //float totalDamage = attackSkill.BaseDamage;
 
@@ -62,11 +55,11 @@ namespace Gladius.combat
         }
 
 
-        public void ApplyCrowdBonus(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+        public  void ApplyCrowdBonus(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
         {
         }
 
-		public bool ImmuneToSkill(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+        public  bool ImmuneToSkill(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
 		{
 			DamageType dt = attackSkill.DamageType;
 			List<AttackSkill> activeSkills = defender.m_activeSkills;	
@@ -79,7 +72,7 @@ namespace Gladius.combat
 		}
 
 
-        public void ResolveAttack(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
+        public  void ResolveAttack(BaseActor attacker, BaseActor defender, AttackSkill attackSkill)
         {
             AttackResult attackResult = new AttackResult();
             attackResult.damageCauser = attacker;
@@ -126,7 +119,7 @@ namespace Gladius.combat
 
         }
 
-		public void CheckAndApplyConditions(BaseActor attacker, BaseActor defender, AttackSkill attackSkill,AttackResult attackResult)
+        public  void CheckAndApplyConditions(BaseActor attacker, BaseActor defender, AttackSkill attackSkill, AttackResult attackResult)
 		{
             if (attackResult.resultType == AttackResultType.Hit || attackResult.resultType == AttackResultType.Critical)
             {
@@ -145,7 +138,7 @@ namespace Gladius.combat
 		}
 
 
-        private void DrawCombatResult(AttackSkill attackSkill, AttackResult attackResult, BaseActor attacker, BaseActor defender)
+        private  void DrawCombatResult(AttackSkill attackSkill, AttackResult attackResult, BaseActor attacker, BaseActor defender)
         {
             String text = null;
             Color color = Color.white;
@@ -166,7 +159,7 @@ namespace Gladius.combat
                 }
             }
 
-            GladiusGlobals.CombatEngineUI.DrawFloatingText(defender.CameraFocusPoint, color, text, 2f);
+            GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngineUI.DrawFloatingText(defender.CameraFocusPoint, color, text, 2f);
 
             m_lastCombatResult.Length = 0;
             m_lastCombatResult.ConcatFormat("Attacker [{0}] Defender[{1}] Skill [{2}] ", attacker.Name, defender.Name, attackSkill.Name);
@@ -175,13 +168,13 @@ namespace Gladius.combat
 
         }
 
-        public StringBuilder LastCombatResult
+        public  StringBuilder LastCombatResult
         {
             get { return m_lastCombatResult; }
         }
 
 
-        private float GetCategoryDamageMultiplier(ActorClassData attacker, ActorClassData defender)
+        private  float GetCategoryDamageMultiplier(ActorClassData attacker, ActorClassData defender)
         {
             float categoryMultiplier = 1f;
             if (attacker != defender)
@@ -215,7 +208,7 @@ namespace Gladius.combat
         }
 
 
-        private float GetCategoryAccuracyBonus(ActorClassData attacker, ActorClassData defender)
+        private  float GetCategoryAccuracyBonus(ActorClassData attacker, ActorClassData defender)
         {
             float bonus = 0f;
             if (attacker.IsHeavy && defender.IsLight)
@@ -229,13 +222,13 @@ namespace Gladius.combat
             return bonus;
         }
 
-        public bool IsNearDeath(BaseActor actor)
+        public  bool IsNearDeath(BaseActor actor)
         {
             return actor.Health / actor.MaxHealth < 0.2f;
         }
 
 
-        public int GetClassAdvantage(BaseActor attacker, BaseActor defender)
+        public  int GetClassAdvantage(BaseActor attacker, BaseActor defender)
         {
 
             if (attacker.ActorClassData.IsHeavy && defender.ActorClassData.IsLight)
@@ -254,11 +247,11 @@ namespace Gladius.combat
         }
 
 
-        public void CheckInnateSkills(BaseActor attacker, BaseActor defender, AttackSkill skill, AttackResult attackResult)
+        public  void CheckInnateSkills(BaseActor attacker, BaseActor defender, AttackSkill skill, AttackResult attackResult)
         {
         }
 
-        public bool IsValidTarget(BaseActor attacker, BaseActor defender, AttackSkill skill)
+        public  bool IsValidTarget(BaseActor attacker, BaseActor defender, AttackSkill skill)
         {
                 if (attacker != null && defender != null)
                 {
@@ -276,7 +269,7 @@ namespace Gladius.combat
             return false;
         }
 
-        public bool IsAttackerInRange(BaseActor attacker, BaseActor defender, bool cursorOnly = false)
+        public  bool IsAttackerInRange(BaseActor attacker, BaseActor defender, bool cursorOnly = false)
         {
             if (defender != null && attacker != null)
             {
@@ -297,7 +290,7 @@ namespace Gladius.combat
             return false;
         }
 
-        public void ApplySkill(AttackSkill skill, BaseActor attacker, BaseActor defender, AttackResult result)
+        public  void ApplySkill(AttackSkill skill, BaseActor attacker, BaseActor defender, AttackResult result)
         {
             switch (skill.m_skillEffect.Name)
             {
@@ -329,10 +322,10 @@ namespace Gladius.combat
                     defender.QueueCounterAttack(attacker);
                     break;
                 case "Change Crowd Source":
-                    GladiusGlobals.Crowd.UpdateSchoolScore(attacker.School, (int)skill.m_skillEffect.Modifier1);
+                    GladiusGlobals.GameStateManager.ArenaStateCommon.Crowd.UpdateSchoolScore(attacker.School, (int)skill.m_skillEffect.Modifier1);
                     break;
                 case "Change Crowd Target":
-                    GladiusGlobals.Crowd.UpdateSchoolScore(defender.School, (int)skill.m_skillEffect.Modifier1);
+                    GladiusGlobals.GameStateManager.ArenaStateCommon.Crowd.UpdateSchoolScore(defender.School, (int)skill.m_skillEffect.Modifier1);
                     break;
                 case "Avoid":
                     result.resultType = AttackResultType.Avoided;
@@ -358,8 +351,8 @@ namespace Gladius.combat
 
 
 
-        private StringBuilder m_lastCombatResult = new StringBuilder();
-        private System.Random m_combatRandom;
+        private  StringBuilder m_lastCombatResult = new StringBuilder();
+        private  System.Random m_combatRandom = new System.Random();
     }
 
 
@@ -373,4 +366,3 @@ namespace Gladius.combat
 
 
 
-}

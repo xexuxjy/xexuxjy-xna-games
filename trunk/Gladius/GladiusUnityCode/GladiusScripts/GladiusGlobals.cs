@@ -1,59 +1,64 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using Gladius.combat;
-using Gladius.arena;
 using System.Collections.Generic;
-using GladiusCommon.Scripts;
 
-namespace Gladius
-{
+//namespace Gladius
+//{
 
     public static class GladiusGlobals
     {
-        public const float MovementStepTime = 2f;
+        //public const float MovementStepTime = 2f;
 
-        public static MovementGrid MovementGrid;
-        public static UserControl UserControl;
-		public static Camera Camera;
-		public static CameraManager CameraManager;
+        //public static MovementGrid MovementGrid;
+        //public static UserControl UserControl;
+        //public static Camera Camera;
+        
+        //public static ItemManager ItemManager = new ItemManager();
+        //public static CombatEngine CombatEngine = new CombatEngine();
+        //public static TurnManager TurnManager;
+        //public static LocalisationData LocalisationData;
+        //public static Arena Arena;
 
-        public static EventLogger EventLogger = new EventLogger(null);
+        //public static LOSTester LOSTester;
 
-        public static AttackSkillDictionary AttackSkillDictionary;
-        public static ItemManager ItemManager = new ItemManager();
-        public static CombatEngine CombatEngine = new CombatEngine();
-        public static TurnManager TurnManager;
-        public static LocalisationData LocalisationData;
-        public static Arena Arena;
+        //public static CombatEngineUI CombatEngineUI;
 
-        public static LOSTester LOSTester;
+        //public static BattleData CurrentBattleData;
 
-        public static CombatEngineUI CombatEngineUI;
-
-        public static GladiatorSchool GladiatorSchool;
-        public static BattleData CurrentBattleData;
-
-        public static ShopManager ShopManager;
-        public static Shop CurrentShop;
+        //public static ShopManager ShopManager;
+        //public static Shop CurrentShop;
 
         public static String DataRoot = "GladiusData/";
         public static String SchoolsPath = DataRoot+"Schools/";
         public static String EncountersPath = DataRoot + "Encounters/";
         public static String LeaguesPath = DataRoot + "Leagues/";
-        public static String ModelsRoot = "GladiusModels/FBXOutput/";
+        public static String ModelsRoot = "GladiusModels/";
+        public static String CharacterModelsRoot = ModelsRoot+"Characters/";
+        public static String WeaponModelsRoot = ModelsRoot + "Weapons/";
+        public static String ArenaModelsRoot = ModelsRoot + "Arenas/";
 
 
-        public static bool ArenaComponentsInitialised
-        {
-            get
-            {
-                return MovementGrid != null && UserControl != null && CameraManager != null && CombatEngine != null && Arena != null;
-            }
-        }
+        public static GameStateManager GameStateManager;
+        public static GladiatorSchool GladiatorSchool;
+        public static CameraManager CameraManager = new CameraManager();
+        public static LocalisationData LocalisationData = new LocalisationData();
+        //public static AttackSkillDictionary AttackSkillDictionary;
+        public static ItemManager ItemManager = new ItemManager();
+        public static EventLogger EventLogger = new EventLogger(null);
 
 
-        public static Crowd Crowd;
+
+        //public static bool ArenaComponentsInitialised
+        //{
+        //    get
+        //    {
+        //        return MovementGrid != null && UserControl != null && CameraManager != null && CombatEngine != null && Arena != null;
+        //    }
+        //}
+
+
+        //public static Crowd Crowd;
 
         public const int MaxLevel = 20;
 
@@ -112,50 +117,6 @@ namespace Gladius
 
 
 
-        //public static void DrawCameraDebugText(SpriteBatch spriteBatch,SpriteFont spriteFont,int fps)
-        //{
-        //    string text = null;
-        //    StringBuilder buffer = new StringBuilder();
-        //    Vector2 fontPos = new Vector2(1.0f, 1.0f);
-        //    buffer.AppendFormat("FPS: {0} \n", fps);
-        //    buffer.AppendFormat("Camera {0}:\n",Globals.Camera.Name);
-        //    buffer.AppendFormat("  Position: x:{0} y:{1} z:{2}\n",
-        //        Globals.Camera.Position.X.ToString("#0.00"),
-        //        Globals.Camera.Position.Y.ToString("#0.00"),
-        //        Globals.Camera.Position.Z.ToString("#0.00"));
-        //    buffer.AppendFormat("  Velocity: x:{0} y:{1} z:{2}\n",
-        //        Globals.Camera.Velocity.X.ToString("#0.00"),
-        //        Globals.Camera.Velocity.Y.ToString("#0.00"),
-        //        Globals.Camera.Velocity.Z.ToString("#0.00"));
-
-        //    buffer.AppendFormat("  Forward: x:{0} y:{1} z:{2}\n",
-        //        Globals.Camera.Forward.X.ToString("#0.00"),
-        //        Globals.Camera.Forward.Y.ToString("#0.00"),
-        //        Globals.Camera.Forward.Z.ToString("#0.00"));
-
-        //    //if(Globals.MovementGrid != null)
-        //    //{
-        //    //    buffer.AppendFormat("Cursor Pos : [{0},{1}]", Globals.MovementGrid.CurrentPosition.X, Globals.MovementGrid.CurrentPosition.Y);
-        //    //}
-
-        //    text = buffer.ToString();
-
-        //    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-        //    spriteBatch.DrawString(spriteFont, text, fontPos, Color.Yellow);
-        //    spriteBatch.End();
-        //}
-
-        //public static void RemapModel(Model model, Effect effect)
-        //{
-        //    foreach (ModelMesh mesh in model.Meshes)
-        //    {
-        //        foreach (ModelMeshPart part in mesh.MeshParts)
-        //        {
-        //            part.Effect = effect;
-        //        }
-        //    }
-        //}
-
         public static Rect AddRect(Rect a, Rect b)
         {
             return new Rect(a.x + b.x, a.y + b.y, a.width + b.width, a.height + b.height);
@@ -185,13 +146,6 @@ namespace Gladius
         }
 
 
-        //public static Vector2 CenterText(SpriteFont font, String text, Vector2 pos)
-        //{
-        //    Vector2 dims = font.MeasureString(text);
-        //    dims /= 2f;
-        //    return pos - dims;
-        //}
-
         public static int PointDist2(Point start, Point end)
         {
             Point diff = Point.Subtract(end, start);
@@ -211,21 +165,6 @@ namespace Gladius
             return v < min ? min : v > max ? max : v;
         }
 
-        //public static Quaternion LookRotation(Vector3 forward)
-        //{
-        //    return LookRotation(forward, Vector3.up);
-        //}
-
-        //public static Quaternion LookRotation(Vector3 forward, Vector3 up)
-        //{
-        //    Vector3 right = Vector3.Cross(forward, up);
-        //    Transform m = new Transform);
-            
-        //    m.forward = forward;
-        //    m.up = up;
-        //    m.right = right;
-        //    return Quaternion.CreateFromRotationMatrix(m);
-        //}
 
         public static Quaternion QuatNormalize(Quaternion q)
         {
@@ -325,4 +264,4 @@ namespace Gladius
 
     }
 
-}
+//}

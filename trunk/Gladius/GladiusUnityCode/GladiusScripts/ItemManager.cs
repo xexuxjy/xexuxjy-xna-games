@@ -5,9 +5,6 @@ using System.IO;
 using System.Diagnostics;
 using UnityEngine;
 
-namespace Gladius
-{
-
     public class ItemManager : Dictionary<String, Item>
     {
 
@@ -307,5 +304,3 @@ namespace Gladius
     //    private ItemLocation m_itemLocation;
       //private List<GameObjectAttributeModifier> m_modifiers = new List<GameObjectAttributeModifier>();
     }
-
-}

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Gladius;
-using Gladius.arena;
 using System.Collections.Generic;
 using System;
 
@@ -24,38 +23,26 @@ public class ArenaStartup : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Application.targetFrameRate = 30;
-
-        if (GladiusGlobals.LocalisationData == null)
+        if (GladiusGlobals.GameStateManager == null)
         {
-            GladiusGlobals.LocalisationData = new LocalisationData();
-            GladiusGlobals.LocalisationData.Load(null);
+            GladiusGlobals.GameStateManager = new GameStateManager();
         }
 
-        if (GladiusGlobals.AttackSkillDictionary == null)
-        {
-            GladiusGlobals.AttackSkillDictionary = new AttackSkillDictionary();
-            GladiusGlobals.AttackSkillDictionary.Load(null);
-        }
+        //ActorGenerator.Initialise();
+        //AttackSkillDictionary.
 
+        ArenaStateCommon state = new ArenaStateCommon();
+        state.TurnManager = GetComponent<TurnManager>();
+        state.Arena  = GetComponent<Arena>();
+        state.MovementGrid = GameObject.Find("MovementGrid").GetComponent<MovementGrid>();
+        state.CombatEngine = GetComponent<CombatEngine>();
+        state.CombatEngineUI = GetComponent<CombatEngineUI>();
+        state.Crowd = GetComponent<Crowd>();
+        state.BattleData  = new BattleData();
+        state.LOSTester  = new LOSTester();
+        GladiusGlobals.GameStateManager.SetStateData(state);
         
-
-        GladiusGlobals.ItemManager.Load(null);
-
-        ActorGenerator.InitCategories();
-
-        if (GladiusGlobals.TurnManager == null)
-        {
-            GladiusGlobals.TurnManager = new TurnManager();
-        }
-
-        if (GladiusGlobals.Arena == null)
-        {
-            //int dims =32;
-            //GladiusGlobals.Arena = new Arena(dims, dims);
-            GladiusGlobals.Arena = ArenaLoader.BuildArena(ArenaDataName,this);
-
-        }
+        ArenaLoader.SetupArena(ArenaDataName, state.Arena);
 
         List<BaseActor> actors = new List<BaseActor>();
 
@@ -72,7 +59,6 @@ public class ArenaStartup : MonoBehaviour
                 baseActorGameObject.name = "BaseActor" + name;
                 BaseActor ba1 = baseActorGameObject.GetComponent<BaseActor>();
                 ba1.SetupCharacterData(cd);
-                ba1.Arena = GladiusGlobals.Arena;
                 if (cd.TeamName == "Player")
                 {
                     SetActor1(ba1);
@@ -83,24 +69,25 @@ public class ArenaStartup : MonoBehaviour
                     SetActor2(ba1);
                 }
                 actors.Add(ba1);
+                ba1.Arena = state.Arena;
                 //ba1.SetupSkills(GladiusGlobals.AttackSkillDictionary);
             }
         }
 
-        AssignPointList(actors, 0, GladiusGlobals.Arena.PlayerPointList, 0);
-        AssignPointList(actors, 1, GladiusGlobals.Arena.PlayerPointList, 1);
-        AssignPointList(actors, 2, GladiusGlobals.Arena.Team1PointList, 0);
-        AssignPointList(actors, 3, GladiusGlobals.Arena.Team1PointList, 1);
+        AssignPointList(actors, 0, GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.PlayerPointList, 0);
+        AssignPointList(actors, 1, GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.PlayerPointList, 1);
+        AssignPointList(actors, 2, GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.Team1PointList, 0);
+        AssignPointList(actors, 3, GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.Team1PointList, 1);
 
 
 
         foreach (BaseActor actor in actors)
         {
-            GladiusGlobals.Arena.MoveActor(actor, actor.ArenaPoint);
-            GladiusGlobals.TurnManager.AddActor(actor);
+            GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.MoveActor(actor, actor.ArenaPoint);
+            GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager.AddActor(actor);
         }
 
-        GladiusGlobals.TurnManager.StartRound();
+        GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager.StartRound();
     }
 
     public void AssignPointList(List<BaseActor> actors,int actorIndex,List<Point> pointList,int pointListIndex)

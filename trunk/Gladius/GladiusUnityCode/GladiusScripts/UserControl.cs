@@ -17,7 +17,6 @@ public class UserControl : MonoBehaviour
 
     public void Start()
     {
-        GladiusGlobals.UserControl = this;
         m_actionButtonDictionary["Move1Left"] = ActionButton.Move1Left;
         m_actionButtonDictionary["Move1Right"] = ActionButton.Move1Right;
         m_actionButtonDictionary["Move1Up"] = ActionButton.Move1Up;

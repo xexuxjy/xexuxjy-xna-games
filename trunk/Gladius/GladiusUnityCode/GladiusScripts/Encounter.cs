@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace Gladius
-{
     public class Encounter 
     {
         public static Encounter Load(string name)
@@ -82,4 +80,3 @@ namespace Gladius
         }
 
     }
-}

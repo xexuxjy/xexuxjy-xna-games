@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Gladius
-{
     public class Crowd : MonoBehaviour
 	{
         List<dfProgressBar> m_teamBarList = new List<dfProgressBar>();
 
         public void Update()
         {
-            foreach (GladiatorSchool school in GladiusGlobals.TurnManager.AllSchools)
+            foreach (GladiatorSchool school in GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager.AllSchools)
             {
                 UpdateBar(school);
             }
@@ -20,7 +18,9 @@ namespace Gladius
 
         public int GetValueForSchool(GladiatorSchool school)
         {
-            return m_crowdRankings[school];
+            int val = 0;
+            m_crowdRankings.TryGetValue(school,out val);
+            return val;
         }
 
         public void UpdateBar(GladiatorSchool school)
@@ -48,8 +48,6 @@ namespace Gladius
             //m_teamBars[GladiusGlobals.EnemyTeam1] = m_team2Bar;
             //m_teamBars[GladiusGlobals.EnemyTeam2] = m_team3Bar;
             //m_teamBars[GladiusGlobals.EnemyTeam3] = m_team4Bar;
-
-            GladiusGlobals.Crowd = this;
         }
 
 
@@ -61,7 +59,7 @@ namespace Gladius
         public void RoundStarted()
         {
             int teamCounter = 0;
-            foreach (GladiatorSchool school in GladiusGlobals.TurnManager.AllSchools)
+            foreach (GladiatorSchool school in GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager.AllSchools)
             {
                 if (!m_crowdRankings.ContainsKey(school))
                 {
@@ -111,4 +109,3 @@ namespace Gladius
         Dictionary<GladiatorSchool, dfProgressBar> m_teamBars = new Dictionary<GladiatorSchool, dfProgressBar>();
         Dictionary<GladiatorSchool, int> m_crowdRankings = new Dictionary<GladiatorSchool, int>();
 	}
-}
