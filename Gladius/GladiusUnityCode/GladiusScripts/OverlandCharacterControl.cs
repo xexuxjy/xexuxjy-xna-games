@@ -123,9 +123,9 @@ public class OverlandCharacterControl : MonoBehaviour
     // Update is called once per fame
     void Update()
     {
-        if (m_overlandGuiController != null && GladiusGlobals.GladiatorSchool != null)
+        if (m_overlandGuiController != null && GladiusGlobals.GameStateManager.OverlandStateCommon.GladiatorSchool != null)
         {
-            m_overlandGuiController.UpdateData(GladiusGlobals.GladiatorSchool);
+            m_overlandGuiController.UpdateData(GladiusGlobals.GameStateManager.OverlandStateCommon.GladiatorSchool);
         }
     }
 

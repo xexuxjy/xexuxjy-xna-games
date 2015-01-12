@@ -458,7 +458,7 @@ public class PlayerChoiceBar : MonoBehaviour
 
         if (v.sqrMagnitude > 0)
         {
-            Vector3 camerav = GladiusGlobals.CameraManager.transform.TransformDirection(v);
+            Vector3 camerav = GladiusGlobals.GameStateManager.CurrentStateData.CameraManager.transform.TransformDirection(v);
 
             camerav.y = 0;
             camerav.Normalize();

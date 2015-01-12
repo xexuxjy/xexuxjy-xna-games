@@ -115,7 +115,7 @@ using System.Collections.Generic;
 
         public void PurchaseItem(ShopItemGUI itemGui)
         {
-            GladiusGlobals.GladiatorSchool.CurrentCharacter.ReplaceItem(itemGui.ShopItem.Item.Name);
+            //GladiusGlobals.GladiatorSchool.CurrentCharacter.ReplaceItem(itemGui.ShopItem.Item.Name);
         }
 
     }

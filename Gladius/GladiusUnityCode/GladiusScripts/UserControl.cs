@@ -70,16 +70,16 @@ public class UserControl : MonoBehaviour
                 CurrentMoveDelay = 0f;
             }
         }
-        
 
-        if (GladiusGlobals.CameraManager != null)
+
+        if (GladiusGlobals.GameStateManager.CurrentStateData.CameraManager != null)
         {
-            if (GladiusGlobals.CameraManager.CurrentCameraMode == CameraMode.Normal)
+            if (GladiusGlobals.GameStateManager.CurrentStateData.CameraManager.CurrentCameraMode == CameraMode.Normal)
             {
                 PeformActionOnAxis("PadLeftStickH", ActionButton.Move1Left, ActionButton.Move1Right,ref HaveMovedGrid);
                 PeformActionOnAxis("PadLeftStickV", ActionButton.Move1Down, ActionButton.Move1Up,ref HaveMovedGrid);
             }
-            else if (GladiusGlobals.CameraManager.CurrentCameraMode == CameraMode.Overland)
+            else if (GladiusGlobals.GameStateManager.CurrentStateData.CameraManager.CurrentCameraMode == CameraMode.Overland)
             {
                 PeformActionOnAxis("PadLeftStickH", ActionButton.Move1Left, ActionButton.Move1Right, ref HaveMovedGrid);
                 PeformActionOnAxis("PadLeftStickV", ActionButton.Move1Down, ActionButton.Move1Up, ref HaveMovedGrid);

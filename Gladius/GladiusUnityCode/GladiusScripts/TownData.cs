@@ -38,9 +38,9 @@ public class TownData : MonoBehaviour
     {
         get
         {
-            if (GladiusGlobals.GladiatorSchool != null)
+            if (GladiusGlobals.GameStateManager.OverlandStateCommon.GladiatorSchool != null)
             {
-                return GladiusGlobals.GladiatorSchool.TownPopularity(TownName);
+                return GladiusGlobals.GameStateManager.OverlandStateCommon.GladiatorSchool.TownPopularity(TownName);
             }
             return 0;
         }

@@ -40,8 +40,8 @@ using System.Collections.Generic;
 
 
         public static GameStateManager GameStateManager;
-        public static GladiatorSchool GladiatorSchool;
-        public static CameraManager CameraManager = new CameraManager();
+        //public static GladiatorSchool GladiatorSchool;
+        //public static CameraManager CameraManager = new CameraManager();
         public static LocalisationData LocalisationData = new LocalisationData();
         //public static AttackSkillDictionary AttackSkillDictionary;
         public static ItemManager ItemManager = new ItemManager();
