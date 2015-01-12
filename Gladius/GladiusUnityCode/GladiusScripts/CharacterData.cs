@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gladius
-{
-
     public class CharacterData
     {
         public void InitValues()
@@ -190,6 +187,53 @@ namespace Gladius
             return m_infoString;
         }
 
+        public void ToXml(StringBuilder sb)
+        {
+            //            	CON, PWR, ACC, DEF, INT, MOVE");
+            sb.AppendFormat("<Unit name=\"{0}\" class=\"{1}\" level=\"{2}\" con=\"{3}\" pwr=\"{4}\" acc=\"{5}\" def=\"{6}\" ini=\"{7}\" move=\"{8}\" xp=\"{9}\" jp=\"{10}\" >",Name,ActorClassData.Name,Level,CON,PWR,ACC,DEF,INI,MOV,XP,JobPoints);
+            //	weapon,	armor,	shield,	helmet,	accessory");
+            sb.AppendFormat("<Equipment weapon=\"{0}\" armor=\"{1}\" shield=\"{2}\" helmet=\"{3}\" accessory=\"{4}\"/>", GetItemNameAtLoc(ItemLocation.Weapon), GetItemAtLocation(ItemLocation.Armor), GetItemAtLocation(ItemLocation.Shield), GetItemAtLocation(ItemLocation.Helmet), GetItemAtLocation(ItemLocation.Accessory));
+
+                //skills
+            sb.AppendFormat("<Skills>");
+            foreach (string name in m_skillList)
+            {
+                sb.AppendFormat("<Skill id=\"{0}\">",name);
+            }
+            sb.AppendFormat("</Skills>");
+            sb.AppendFormat("</Unit>");
+        }
+
+        public static CharacterData FromXml(XmlNode node)
+        {
+            CharacterData cd = new CharacterData();
+            cd.Name = node.SelectSingleNode("@name").Value;
+            cd.ActorClass = (ActorClass)Enum.Parse(typeof(ActorClass), node.SelectSingleNode("@class").Value);
+            cd.Level= int.Parse(node.SelectSingleNode("@level").Value);
+            cd.CON = int.Parse(node.SelectSingleNode("@con").Value);
+            cd.PWR = int.Parse(node.SelectSingleNode("@pwr").Value);
+            cd.ACC = int.Parse(node.SelectSingleNode("@acc").Value);
+            cd.DEF = int.Parse(node.SelectSingleNode("@def").Value);
+            cd.INI = int.Parse(node.SelectSingleNode("@ini").Value);
+            cd.MOV = int.Parse(node.SelectSingleNode("@move").Value);
+            cd.XP = int.Parse(node.SelectSingleNode("@xp").Value);
+            cd.JobPoints = int.Parse(node.SelectSingleNode("@jp").Value);
+
+            cd.AddItemByNameAndLoc(node.SelectSingleNode("Equipment/@weapon").Value,ItemLocation.Weapon);
+            cd.AddItemByNameAndLoc(node.SelectSingleNode("Equipment/@armor").Value, ItemLocation.Armor);
+            cd.AddItemByNameAndLoc(node.SelectSingleNode("Equipment/@shield").Value, ItemLocation.Shield);
+            cd.AddItemByNameAndLoc(node.SelectSingleNode("Equipment/@helmet").Value, ItemLocation.Helmet);
+            cd.AddItemByNameAndLoc(node.SelectSingleNode("Equipment/@accessory").Value, ItemLocation.Accessory);
+
+            XmlNodeList skills = node.SelectNodes("//Skill");
+            foreach (XmlNode skill in skills)
+            {
+                cd.m_skillList.Add(node.SelectSingleNode("@id").Value);
+            }
+            return cd;
+
+        }
+
 
         public void AddSkill(String skillName)
         {
@@ -216,4 +260,3 @@ namespace Gladius
         private String m_infoString;
         public List<String> m_skillList = new List<String>();
     }
-}

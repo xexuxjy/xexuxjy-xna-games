@@ -8,8 +8,8 @@ using System.Text;
 using System.IO;
 using System.Xml;
 
-namespace Gladius
-{
+//namespace Gladius
+//{
     public class AttackSkill
     {
         public const int m_defaultMoveToAttackRange = 5;
@@ -373,9 +373,9 @@ namespace Gladius
 
     }
 
-    public class AttackSkillDictionary
+    public static class AttackSkillDictionary
     {
-        public void Load(String path)
+        static AttackSkillDictionary()
         {
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/SkillData");
             String data = textAsset.text;
@@ -387,8 +387,8 @@ namespace Gladius
             Data[noneSkill.Name] = noneSkill;
         }
 
-        HashSet<String> skillTypeSet = new HashSet<String>();
-        HashSet<String> skillTypeSet2 = new HashSet<String>();
+        static HashSet<String> skillTypeSet = new HashSet<String>();
+        static HashSet<String> skillTypeSet2 = new HashSet<String>();
 
         // move/strike
         // attack
@@ -397,7 +397,7 @@ namespace Gladius
         // affinty
 
 
-        private void AssignSubSkills()
+        static private void AssignSubSkills()
         {
             foreach(AttackSkill attackSkill in Data.Values)
             {
@@ -412,7 +412,7 @@ namespace Gladius
         }
 
 
-        public void Parse(String data)
+        static public void Parse(String data)
         {
             AttackSkill currentSkill = null;
             String[] lines = data.Split('\n');
@@ -588,7 +588,7 @@ namespace Gladius
             int ibreak = 0;
         }
 
-        public void HandleSkillStatus(AttackSkill skill,String attrName,String[] lineTokens)
+        static public void HandleSkillStatus(AttackSkill skill, String attrName, String[] lineTokens)
         {
             SkillStatus status=null;
             if(attrName.EndsWith("2:"))
@@ -668,8 +668,8 @@ namespace Gladius
             }
 
         }
-        
-        public Dictionary<String, AttackSkill> Data = new Dictionary<String, AttackSkill>();
+
+        public static Dictionary<String, AttackSkill> Data = new Dictionary<String, AttackSkill>();
     }
 
 
@@ -805,4 +805,4 @@ namespace Gladius
 
 
 
-}
+//}

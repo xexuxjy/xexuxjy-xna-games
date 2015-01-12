@@ -29,7 +29,7 @@ public class CombatEngineUITest : MonoBehaviour
                 deltaZ *= -1;
             }
 
-            GladiusGlobals.CombatEngineUI.DrawFloatingText(new Vector3(X+deltaX, Y, Z+deltaZ), Color.red, "Some Test TExt", Age);
+            GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngineUI.DrawFloatingText(new Vector3(X + deltaX, Y, Z + deltaZ), Color.red, "Some Test TExt", Age);
         }
     }
 

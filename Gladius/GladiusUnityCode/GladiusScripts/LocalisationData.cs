@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Gladius
-{
+//namespace Gladius
+//{
 	public class LocalisationData : Dictionary<int,String>
 	{
 
@@ -31,4 +31,4 @@ namespace Gladius
             int ibreak = 0;
         }
 	}
-}
+//}

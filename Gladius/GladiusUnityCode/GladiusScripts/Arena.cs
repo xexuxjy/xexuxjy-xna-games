@@ -11,12 +11,12 @@ using Gladius;
 using System.IO;
 using System.Xml;
 
-namespace Gladius.arena
-{
+//namespace Gladius.arena
+//{
     public class Arena : MonoBehaviour
     {
 
-        public Arena(int width, int breadth)
+        public void SetupData(int width, int breadth)
         {
             m_arenaGrid = new SquareType[width, breadth];
             m_width = width;
@@ -26,17 +26,13 @@ namespace Gladius.arena
             BuildDefaultArena();
         }
 
-        // used by the loader
-        public Arena()
-        {
 
-        }
 
-        public void InitialisePathFinding()
-        {
-            m_pathFinder = new ArenaPathFinder();
-            m_pathFinder.Initialize(this);
-        }
+        //public void InitialisePathFinding()
+        //{
+        //    m_pathFinder = new ArenaPathFinder();
+        //    m_pathFinder.Initialize(this);
+        //}
 
 
         public bool CheckValidPath(List<Point> points)
@@ -523,7 +519,7 @@ namespace Gladius.arena
             BaseActor closestActor = null;
             foreach (BaseActor enemy in m_baseActorMap.Values)
             {
-                if (GladiusGlobals.CombatEngine.IsValidTarget(searcher, enemy, searcher.CurrentAttackSkill))
+                if (GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.IsValidTarget(searcher, enemy, searcher.CurrentAttackSkill))
                 {
                     float dist = (enemy.Position - searcher.Position).sqrMagnitude;
                     if (dist < closest)
@@ -1108,4 +1104,4 @@ namespace Gladius.arena
     }
     #endregion
 
-}
+//}

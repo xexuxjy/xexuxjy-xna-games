@@ -6,8 +6,8 @@ using System;
 using System.Xml;
 using System.Text;
 using System.IO;
-namespace Gladius
-{
+//namespace Gladius
+//{
     public class GladiatorSchool
     {
 
@@ -21,6 +21,18 @@ namespace Gladius
             System.Diagnostics.Debug.Assert(m_recruits.ContainsKey(gladiator.Name));
 
         }
+
+        public int Days
+        { get; set; }
+
+        public int Gold
+        { get; set; }
+
+        public string Name
+        { get; set; }
+
+        public string HeroName
+        { get; set; }
 
         public SchoolRank SchoolRank
         {
@@ -92,15 +104,15 @@ namespace Gladius
 
                 if (lineTokens[0] == "NAME")
                 {
-                    schoolName = lineTokens[1];
+                    Name = lineTokens[1];
                 }
                 else if (lineTokens[0] == "HERO")
                 {
-                    heroName = lineTokens[1];
+                    HeroName = lineTokens[1];
                 }
                 else if (lineTokens[0] == "GOLD")
                 {
-                    gold = int.Parse(lineTokens[1]);
+                    Gold = int.Parse(lineTokens[1]);
                 }
                 else if (lineTokens[0] == "CREATEUNIT")
                 {
@@ -159,9 +171,9 @@ namespace Gladius
         public String SaveSchool()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(String.Format("NAME: \"{0}\"", schoolName));
-            sb.AppendLine(String.Format("HERO: \"{0}\"", heroName));
-            sb.AppendLine(String.Format("GOLD: {0}", gold));
+            sb.AppendLine(String.Format("NAME: \"{0}\"", Name));
+            sb.AppendLine(String.Format("HERO: \"{0}\"", HeroName));
+            sb.AppendLine(String.Format("GOLD: {0}", Gold));
 
             foreach (String item in m_schoolInventory)
             {
@@ -190,6 +202,77 @@ namespace Gladius
 
             return sb.ToString();
         }
+
+        public void SaveSchoolXml(StringBuilder sb)
+        {
+            sb.AppendFormat("<School name=\"{0}\"  hero=\"{1}\" gold=\"{3}\" days=\"{4}\">");
+            sb.Append("<Inventory>");
+            foreach (String item in m_schoolInventory)
+            {
+                sb.AppendFormat("<Item id=\"{0}\"/>", item);
+            }
+            sb.Append("</Inventory>");
+            foreach (CharacterData unit in m_recruits.Values)
+            {
+                unit.ToXml(sb);
+            }
+
+            sb.Append("<Badges>");
+            foreach (string badge in m_completedBadges)
+            {
+                sb.AppendFormat("<Badge id=\"{0}\"/>", badge);
+            }
+            sb.Append("</Badges>");
+
+            sb.Append("<Popularity>");
+            foreach (String town in m_townPopularity.Keys)
+            {
+                sb.AppendFormat("<Town name=\"{0}\" popularity=\"{1}\">", town, m_townPopularity[town]);
+            }
+            sb.Append("</Popularity>");
+
+            sb.Append("</School>");
+        }
+
+        public static GladiatorSchool LoadSchoolXml(XmlDocument doc)
+        {
+            GladiatorSchool school = new GladiatorSchool();
+            school.Name = doc.SelectSingleNode("School/@name").Value;
+            school.HeroName = doc.SelectSingleNode("School/@hero").Value;
+            school.Gold= int.Parse(doc.SelectSingleNode("School/@gold").Value);
+            school.Days = int.Parse(doc.SelectSingleNode("School/@days").Value);
+            XmlNodeList items = doc.SelectNodes("//Item");
+            foreach (XmlNode node in items)
+            {
+                school.AddToInventory(node.SelectSingleNode("@id").Value);
+            }
+
+            XmlNodeList recruits = doc.SelectNodes("//Unit");
+            foreach (XmlNode recruit in recruits)
+            {
+                CharacterData cd = CharacterData.FromXml(recruit);
+                school.m_recruits.Add(cd.Name, cd);
+            }
+
+            XmlNodeList badges = doc.SelectNodes("//Badge");
+            foreach (XmlNode node in badges)
+            {
+                school.m_completedBadges.Add(node.SelectSingleNode("@id").Value);
+            }
+
+            XmlNodeList towns = doc.SelectNodes("//Town");
+            foreach (XmlNode node in badges)
+            {
+                school.m_townPopularity[node.SelectSingleNode("@name").Value] = int.Parse(node.SelectSingleNode("@popularity").Value);
+            }
+
+            return school;
+
+        }
+
+
+
+
 
         public void AddToInventory(String item)
         {
@@ -227,16 +310,23 @@ namespace Gladius
 
         }
 
+
+        public int TownPopularity(string townName)
+        {
+            int val = 0;
+            m_townPopularity.TryGetValue(townName, out val);
+            return val;
+        }
         public String TeamName;
 
 
-        String schoolName;
-        String heroName;
-        int gold;
-        SchoolRank m_currentRank = SchoolRank.Bronze;
+         SchoolRank m_currentRank = SchoolRank.Bronze;
         Dictionary<String, CharacterData> m_recruits = new Dictionary<String, CharacterData>();
+        Dictionary<String, int> m_townPopularity = new Dictionary<string, int>();
         List<CharacterData> m_currentParty = new List<CharacterData>();
-        List<String> m_schoolInventory = new List<String>();
+        List<String> m_schoolInventory = new List<string>();
+        List<String> m_completedBadges = new List<string>();
+
     }
 
-}
+//}

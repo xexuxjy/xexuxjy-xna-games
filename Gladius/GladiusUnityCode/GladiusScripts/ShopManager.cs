@@ -3,8 +3,6 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-namespace Gladius
-{
     public class ShopManager : MonoBehaviour
     {
 
@@ -40,7 +38,7 @@ namespace Gladius
             int counter = 0;
             char[] splitTokens = new char[] { ':', ',','\t'};
             Shop shop = new Shop();
-            GladiusGlobals.CurrentShop = shop;
+            //GladiusGlobals.CurrentShop = shop;
     
             while (counter < allLines.Length)
             {
@@ -204,8 +202,4 @@ namespace Gladius
         }
 
     }
-
-
-
-}
 

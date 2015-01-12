@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Gladius
-{
     public class ColourTextureHelper
     {
         object loadLock;
@@ -44,4 +42,3 @@ namespace Gladius
         private Dictionary<Vector4, Texture2D> m_v4Map = new Dictionary<Vector4, Texture2D>();
 
     }
-}

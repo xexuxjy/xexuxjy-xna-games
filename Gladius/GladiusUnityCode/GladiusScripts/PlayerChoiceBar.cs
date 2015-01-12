@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using Gladius.arena;
 using Gladius;
 using System.Collections.Generic;
 using System.Text;
@@ -113,9 +112,9 @@ public class PlayerChoiceBar : MonoBehaviour
             if(target != null)
             {
                 sb.AppendFormat("Target [{0}] HP[{1}] SP[{2}]\n", target.Name, target.Health, target.ArenaSkillPoints);
-                if (GladiusGlobals.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
+                if (GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
                 {
-                    float damage = GladiusGlobals.CombatEngine.CalculateExpectedDamage(CurrentActor, target, CurrentActor.CurrentAttackSkill);
+                    float damage = GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.CalculateExpectedDamage(CurrentActor, target, CurrentActor.CurrentAttackSkill);
                     sb.AppendFormat("Skill [{0}] Damage [{1}]",CurrentActor.CurrentAttackSkill.Name,damage);
                 }
                 else
@@ -169,7 +168,7 @@ public class PlayerChoiceBar : MonoBehaviour
         {
             if (m_attackSkills[i].Count == 0)
             {
-                m_attackSkills[i].Add(GladiusGlobals.AttackSkillDictionary.Data["None"]);
+                m_attackSkills[i].Add(AttackSkillDictionary.Data["None"]);
             }
             m_currentAttackSkillLine.Add(m_attackSkills[i][0]);
         }
@@ -404,7 +403,7 @@ public class PlayerChoiceBar : MonoBehaviour
     {
         get
         {
-            return GladiusGlobals.TurnManager;
+            return GladiusGlobals.GameStateManager.ArenaStateCommon.TurnManager;
         }
     }
 
@@ -425,12 +424,12 @@ public class PlayerChoiceBar : MonoBehaviour
 
     public MovementGrid MovementGrid
     {
-        get { return GladiusGlobals.MovementGrid; }
+        get { return GladiusGlobals.GameStateManager.ArenaStateCommon.MovementGrid; }
     }
 
     public Arena Arena
     {
-        get { return GladiusGlobals.Arena; }
+        get { return GladiusGlobals.GameStateManager.ArenaStateCommon.Arena; }
     }
 
 
@@ -520,7 +519,7 @@ public class PlayerChoiceBar : MonoBehaviour
                     if (MovementGrid.CursorOnTarget(CurrentActor) )
                     {
                         BaseActor target = Arena.GetActorAtPosition(MovementGrid.CurrentCursorPoint);
-                        if (GladiusGlobals.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
+                        if (GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
                         {
                             CurrentActor.Target = target;
                             ConfirmAction();

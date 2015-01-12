@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Vectrosity;
-namespace Gladius
-{
 
     public class LOSTester : MonoBehaviour
     {
@@ -20,7 +18,7 @@ namespace Gladius
                 FreeBox(BuildDefaultBox());
             }
 
-            GladiusGlobals.LOSTester = this;
+            GladiusGlobals.GameStateManager.ArenaStateCommon.LOSTester = this;
             
         }
 
@@ -32,7 +30,7 @@ namespace Gladius
 
         public void SetStartAndEnd(Point startp,Point endp)
         {
-            GladiusGlobals.Arena.BuildPath(startp, endp, m_arenaPoints, m_arenaPointsOccupied);
+            GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.BuildPath(startp, endp, m_arenaPoints, m_arenaPointsOccupied);
             ResetBoxes();
             BuildBoxes();
         }
@@ -52,7 +50,7 @@ namespace Gladius
             for(int i=0;i<m_arenaPoints.Count;++i)
             {
                 Point p = m_arenaPoints[i];
-                Vector3 worldPos = GladiusGlobals.Arena.ArenaToWorld(p);
+                Vector3 worldPos = GladiusGlobals.GameStateManager.ArenaStateCommon.Arena.ArenaToWorld(p);
                 VectorLine vl = GetBox();
                 //vl.drawTransform.position = worldPos;
                 worldPos.y += halfDims.y;
@@ -122,7 +120,4 @@ namespace Gladius
 
         private List<VectorLine> m_activeLines = new List<VectorLine>();
 
-
-
-    }
 }

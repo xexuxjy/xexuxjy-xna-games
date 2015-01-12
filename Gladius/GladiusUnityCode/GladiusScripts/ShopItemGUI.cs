@@ -2,8 +2,6 @@
 using System.Collections;
 using System;
 
-namespace Gladius
-{
     public class ShopItemGUI : MonoBehaviour, IDFVirtualScrollingTile
     {
         private dfPanel m_panel;
@@ -122,4 +120,3 @@ namespace Gladius
 
         #endregion
     }
-}

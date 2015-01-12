@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
-using Gladius.combat;
-using Gladius.util;
 using UnityEngine;
-using Gladius.arena;
-using Gladius;
 
 public class MovementGrid : MonoBehaviour
 {
@@ -21,7 +17,7 @@ public class MovementGrid : MonoBehaviour
     {
         get
         {
-            return GladiusGlobals.Arena;
+            return GladiusGlobals.GameStateManager.ArenaStateCommon.Arena;
         }
     }
 
@@ -40,7 +36,7 @@ public class MovementGrid : MonoBehaviour
 
     public void Start()
     {
-        GladiusGlobals.MovementGrid = this;
+        GladiusGlobals.GameStateManager.ArenaStateCommon.MovementGrid = this;
         GridSize = 32;
         m_arenaSquares = new GridSquareType[GridSize, GridSize];
         m_skillActiveSquares = new bool[GridSize, GridSize];
@@ -494,9 +490,9 @@ public class MovementGrid : MonoBehaviour
             else
             {
                 BaseActor target = Arena.GetActorAtPosition(p);
-                if (GladiusGlobals.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
+                if (GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.IsValidTarget(CurrentActor, target, CurrentActor.CurrentAttackSkill))
                 {
-                    if (GladiusGlobals.CombatEngine.IsAttackerInRange(actor, target, cursorOnly: true))
+                    if (GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.IsAttackerInRange(actor, target, cursorOnly: true))
                     {
                         return GridSquareType.Select;
                     }
@@ -560,7 +556,7 @@ public class MovementGrid : MonoBehaviour
     public bool CursorOnTarget(BaseActor source)
     {
         BaseActor ba = Arena.GetActorAtPosition(CurrentCursorPoint);
-        return (ba != null && GladiusGlobals.CombatEngine.IsValidTarget(source, ba, source.CurrentAttackSkill));
+        return (ba != null && GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.IsValidTarget(source, ba, source.CurrentAttackSkill));
     }
 
 

@@ -34,7 +34,7 @@ public class Projectile : MonoBehaviour
         {
             // do damage.
             // end state.
-            GladiusGlobals.CombatEngine.ResolveAttack(Owner, Target, AttackSKill);
+            GladiusGlobals.GameStateManager.ArenaStateCommon.CombatEngine.ResolveAttack(Owner, Target, AttackSKill);
             //Owner.Attacking = false;
             Owner.StopAttack();
             gameObject.SetActive(false);

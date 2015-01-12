@@ -6,11 +6,11 @@ using System.IO;
 using System.Xml;
 
 
-namespace Gladius
-{
+//namespace Gladius
+//{
     public static class ActorGenerator
     {
-        public static void Initialise()
+        static ActorGenerator()
         {
             InitCategories();
             LoadALLMODCoreStats();
@@ -59,7 +59,7 @@ namespace Gladius
             ClassDataMap[ActorClass.DarkLegionnaire] = new ActorClassData("DarkLegionnaire","legionnaireDark", (ActorClassAttributes.Male | ActorClassAttributes.Medium | ActorClassAttributes.Imperia));
             ClassDataMap[ActorClass.Dervish] = new ActorClassData("Dervish", "dervish",(ActorClassAttributes.Male | ActorClassAttributes.Light | ActorClassAttributes.Expanse | ActorClassAttributes.Human));
             ClassDataMap[ActorClass.DervishF] = new ActorClassData("Dervish", "dervishF",(ActorClassAttributes.Female | ActorClassAttributes.Light | ActorClassAttributes.Expanse | ActorClassAttributes.Human));
-            ClassDataMap[ActorClass.Dummy] = new ActorClassData("Dummy", "prop_practicepost3",(ActorClassAttributes.Male | ActorClassAttributes.Light));
+            ClassDataMap[ActorClass.Dummy] = new ActorClassData("Dummy", "prop_practicepost1",(ActorClassAttributes.Male | ActorClassAttributes.Light));
 
 
             ClassDataMap[ActorClass.Eiji] = new ActorClassData("Eiji", "eiji",(ActorClassAttributes.Female | ActorClassAttributes.Support | ActorClassAttributes.Steppes | ActorClassAttributes.Human));
@@ -475,4 +475,4 @@ namespace Gladius
     }
 
 
-}
+//}

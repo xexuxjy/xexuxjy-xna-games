@@ -1,7 +1,22 @@
 using System.Collections.Generic;
 using System;
-namespace Gladius
-{
+//namespace Gladius
+//{
+    public enum GameState
+    {
+        Arena,
+        GameOverWin,
+        GameOverLose,
+        Shop,
+        Town,
+        OverlandNordargh,
+        OverlandImperia,
+        OverlandSteppes,
+        OverlandExpanse,
+        Loading,
+        Menu
+    };
+
 
     public enum GameObjectAttributeType
     {
@@ -355,4 +370,4 @@ namespace Gladius
             return (T[])Enum.GetValues(typeof(T));
         }
     }
-}
+//}

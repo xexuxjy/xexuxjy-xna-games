@@ -23,14 +23,8 @@ public class CameraManager : MonoBehaviour
 
     public void Start()
     {
-        GladiusGlobals.CameraManager = this;
         CurrentCameraMode = CameraMode.None;
-        
-        Camera c = (Camera)GameObject.FindObjectOfType(typeof(Camera));
-        GladiusGlobals.Camera = c;
-
         CameraTarget = GameObject.Find("CameraTarget");
-
     }
 
     public void ReparentTarget(GameObject newParent)

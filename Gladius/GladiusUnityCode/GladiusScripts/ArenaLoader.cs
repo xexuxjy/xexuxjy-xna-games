@@ -6,8 +6,6 @@ using System.Xml;
 using UnityEngine;
 
 
-namespace Gladius.arena
-{
     public static class ArenaLoader
     {
         public static Vector3 ReadVector3(String path, XmlDocument doc)
@@ -22,10 +20,8 @@ namespace Gladius.arena
 
 
 
-        public static Arena BuildArena(String arenaDataName,ArenaStartup arenaStartup)
+        public static void SetupArena(String arenaDataName,Arena arena)
         {
-
-            Arena arena = arenaStartup.gameObject.AddComponent<Arena>();
             //Arena arena = new Arena();
             List<String> lines = new List<String>();
 
@@ -80,20 +76,12 @@ namespace Gladius.arena
             }
 
 
-
-
-            arena.InitialisePathFinding();
             arena.SetupScenery();
 
             PopulateList(doc, "Arena/PlacementPoints/Player//Point", arena.PlayerPointList);
             PopulateList(doc, "Arena/PlacementPoints/Team1//Point", arena.Team1PointList);
             PopulateList(doc, "Arena/PlacementPoints/Team2//Point", arena.Team2PointList);
             PopulateList(doc, "Arena/PlacementPoints/Team3//Point", arena.Team3PointList);
-
-
-
-            return arena;
-
         }
 
         private static void PopulateList(XmlDocument doc, String xpath, List<Point> points)
@@ -109,6 +97,3 @@ namespace Gladius.arena
 
     }
 
-
-
-}

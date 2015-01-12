@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gladius
-{
     public class ClassDef
     {
         public String ClassName
@@ -67,4 +65,3 @@ namespace Gladius
 	public class ClassDefDictionary : Dictionary<String,ClassDef>
 	{
 	}
-}

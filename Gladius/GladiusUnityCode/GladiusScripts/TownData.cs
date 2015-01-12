@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Text;
+using System.Xml;
+using Gladius;
 
 public class TownData : MonoBehaviour
 {
@@ -17,8 +20,35 @@ public class TownData : MonoBehaviour
 
     }
 
+    public void ToXml(StringBuilder sb)
+    {
+        sb.AppendFormat("<Town name=\"{0}\" region=\"{1}\" popularity=\"{2}\"/>", TownName, TownRegion, Popularity);
+    }
+
+    public static TownData FromXml(XmlNode node)
+    {
+        TownData td = new TownData();
+        td.TownName = node.SelectSingleNode("@name").Value;
+        td.TownRegion = node.SelectSingleNode("@region").Value;
+        //td.Popularity = int.Parse(node.SelectSingleNode("@popularity").Value);
+        return td;
+    }
+
+    public int Popularity
+    {
+        get
+        {
+            if (GladiusGlobals.GladiatorSchool != null)
+            {
+                return GladiusGlobals.GladiatorSchool.TownPopularity(TownName);
+            }
+            return 0;
+        }
+    }
+
 
     public String TownName = "A Town";
+    public String TownRegion = "Imperia";
     public String TownDataPath;
-    public int Popularity;
+    private int m_popularity;
 }
