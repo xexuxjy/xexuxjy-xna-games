@@ -80,7 +80,7 @@ using UnityEngine;
             if (m_items[(int)location] == null && itemName != null)
             {
                 Item item = null;
-                if (GladiusGlobals.ItemManager.TryGetValue(itemName, out item))
+                if (GladiusGlobals.GameStateManager.ItemManager.TryGetValue(itemName, out item))
                 {
                     m_items[(int)location] = item;
                 }
@@ -119,7 +119,7 @@ using UnityEngine;
         {
             Item item;
             int location = -1;
-            if (GladiusGlobals.ItemManager.TryGetValue(itemKey, out item))
+            if (GladiusGlobals.GameStateManager.ItemManager.TryGetValue(itemKey, out item))
             {
                 location = (int)item.Location;
             }
@@ -138,7 +138,7 @@ using UnityEngine;
         public void AddItem(String itemKey)
         {
             Item item;
-            if (GladiusGlobals.ItemManager.TryGetValue(itemKey, out item))
+            if (GladiusGlobals.GameStateManager.ItemManager.TryGetValue(itemKey, out item))
             {
                 m_items[(int)item.Location] = item;
                 UpdateStats();
@@ -148,7 +148,7 @@ using UnityEngine;
         public void RemoveItem(String itemKey)
         {
             Item item;
-            if (GladiusGlobals.ItemManager.TryGetValue(itemKey, out item))
+            if (GladiusGlobals.GameStateManager.ItemManager.TryGetValue(itemKey, out item))
             {
                 m_items[(int)item.Location] = null;
                 UpdateStats();

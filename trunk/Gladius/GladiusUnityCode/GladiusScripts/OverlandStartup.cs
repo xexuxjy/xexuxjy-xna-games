@@ -28,11 +28,11 @@ public class OverlandStartup : MonoBehaviour
 
 
         GameObject[] towns = GameObject.FindGameObjectsWithTag("Town");
-        foreach (GameObject go in towns)
-        {
-            TownData td = go.AddComponent<TownData>();
-            td.TownName = go.name;
-        }
+        //foreach (GameObject go in towns)
+        //{
+        //    TownData td = go.AddComponent<TownData>();
+        //    td.TownName = go.name;
+        //}
 
 
 

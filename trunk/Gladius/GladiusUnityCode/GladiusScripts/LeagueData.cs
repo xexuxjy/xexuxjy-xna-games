@@ -11,6 +11,14 @@ using Gladius;
 
     }
 
+    public static class LeagueManager
+    {
+        public static LeagueData Load(String path)
+        {
+            return null;
+        }
+    }
+
 
     public class BattleData
     {
