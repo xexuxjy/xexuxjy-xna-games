@@ -8,15 +8,54 @@ using UnityEngine;
     {
         private GameState m_gameState;
         private CommonState m_stateData = null;
+
+        private LocalisationData m_localisationData;
+        public LocalisationData LocalisationData
+        {
+            get { return m_localisationData; }
+            private set 
+            { 
+                m_localisationData = value; 
+            }
+
+        }
+
+        private ItemManager m_itemManager;
+        public ItemManager ItemManager
+        {
+            get { return m_itemManager; }
+            private set { m_itemManager = value; }
+        }
+
+        private TownManager m_townManager;
+        public TownManager TownManager
+        {
+            get { return m_townManager; }
+            private set { m_townManager = value; }
+        }
+
+
         public void StartGame()
         {
             Application.targetFrameRate = 30;
 
-            GladiusGlobals.LocalisationData.Load(null);
-            GladiusGlobals.ItemManager.Load(null);
+            LocalisationData = new LocalisationData();
+            LocalisationData.Load();
+
+            ItemManager = new ItemManager();
+            ItemManager.Load();
+
+            TownManager = new TownManager();
+            TownManager.Load();
+
+
             ActorGenerator.InitCategories();
 
         }
+
+
+        //public static ItemManager ItemManager = new ItemManager();
+        //public static EventLogger EventLogger = new EventLogger(null);
 
         public void SetStateData(CommonState o)
         {
@@ -98,11 +137,24 @@ using UnityEngine;
             }
 
         }
+
+        public ShopStateCommon ShopStateCommon
+        {
+            get
+            {
+                System.Diagnostics.Debug.Assert(m_stateData is ShopStateCommon);
+                return m_stateData as ShopStateCommon;
+            }
+
+        }
+
     }
 
     public class CommonState
     {
         public CameraManager CameraManager;
+        public GladiatorSchool GladiatorSchool;
+        public TownData TownData;
     }
 
     public class ArenaStateCommon : CommonState
@@ -119,5 +171,10 @@ using UnityEngine;
 
     public class OverlandStateCommon : CommonState
     {
-        public GladiatorSchool GladiatorSchool;
     }
+
+    public class ShopStateCommon : CommonState
+    {
+
+    }
+

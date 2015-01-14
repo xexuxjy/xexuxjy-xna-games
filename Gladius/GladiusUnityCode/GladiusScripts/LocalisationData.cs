@@ -9,7 +9,7 @@ using UnityEngine;
 	public class LocalisationData : Dictionary<int,String>
 	{
 
-        public void Load(String path)
+        public void Load()
         {
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/LocalisationData");
             String data = textAsset.text;

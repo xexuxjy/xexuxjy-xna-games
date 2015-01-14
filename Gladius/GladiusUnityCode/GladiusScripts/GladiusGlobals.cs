@@ -31,6 +31,7 @@ using System.Collections.Generic;
 
         public static String DataRoot = "GladiusData/";
         public static String SchoolsPath = DataRoot+"Schools/";
+        public static String TownsPath = DataRoot + "Towns/";
         public static String EncountersPath = DataRoot + "Encounters/";
         public static String LeaguesPath = DataRoot + "Leagues/";
         public static String ModelsRoot = "GladiusModels/";
@@ -42,9 +43,9 @@ using System.Collections.Generic;
         public static GameStateManager GameStateManager;
         //public static GladiatorSchool GladiatorSchool;
         //public static CameraManager CameraManager = new CameraManager();
-        public static LocalisationData LocalisationData = new LocalisationData();
+        //public static LocalisationData LocalisationData = new LocalisationData();
         //public static AttackSkillDictionary AttackSkillDictionary;
-        public static ItemManager ItemManager = new ItemManager();
+        //public static ItemManager ItemManager = new ItemManager();
         public static EventLogger EventLogger = new EventLogger(null);
 
 

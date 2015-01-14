@@ -135,7 +135,7 @@ public class OverlandCharacterControl : MonoBehaviour
 
         if (other.tag == "Town")
         {
-            m_currentTownData = other.GetComponent<TownData>();
+            m_currentTownData = GladiusGlobals.GameStateManager.TownManager.Find(other.name);
             if (m_overlandGuiController != null)
             {
                 m_overlandGuiController.ReachedTown(m_currentTownData);
@@ -144,7 +144,7 @@ public class OverlandCharacterControl : MonoBehaviour
 
             if (m_currentTownData != null)
             {
-                Debug.Log("Found Town " + m_currentTownData.TownName);
+                Debug.Log("Found Town " + m_currentTownData.Name);
             }
 
         
@@ -160,7 +160,7 @@ public class OverlandCharacterControl : MonoBehaviour
     {
         if (other.tag == "Town")
         {
-            Debug.Log("Left Town " + m_currentTownData.TownName);
+            Debug.Log("Left Town " + m_currentTownData.Name);
             m_currentTownData = null;
             if (m_overlandGuiController != null)
             {

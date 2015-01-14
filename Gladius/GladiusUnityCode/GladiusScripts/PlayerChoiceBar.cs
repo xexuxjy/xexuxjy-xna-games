@@ -79,7 +79,7 @@ public class PlayerChoiceBar : MonoBehaviour
             m_healthProgressBar.MaxValue = CurrentActor.MaxHealth;
             m_healthProgressBar.Value = CurrentActor.Health;
             //m_skillNameLabel.Text = CurrentlySelectedSkill.Name;
-            m_skillNameLabel.Text = GladiusGlobals.LocalisationData[CurrentlySelectedSkill.DisplayNameId];
+            m_skillNameLabel.Text = GladiusGlobals.GameStateManager.LocalisationData[CurrentlySelectedSkill.DisplayNameId];
             m_skillTypeLabel.Text = m_skillGroupNames[m_actionCursor.X];
             m_skillPointProgressBar.Value = CurrentActor.ArenaSkillPoints;
 

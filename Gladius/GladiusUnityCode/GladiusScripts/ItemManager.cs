@@ -39,7 +39,7 @@ using UnityEngine;
         //}
 
 
-        public void Load(String path)
+        public void Load()
         {
             TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/ItemData");
             Parse(textAsset.text);
@@ -164,7 +164,7 @@ using UnityEngine;
             set
             {
                 _descriptionId = value;
-                Description = GladiusGlobals.LocalisationData[DescriptionId];
+                Description = GladiusGlobals.GameStateManager.LocalisationData[DescriptionId];
             }
 
         }

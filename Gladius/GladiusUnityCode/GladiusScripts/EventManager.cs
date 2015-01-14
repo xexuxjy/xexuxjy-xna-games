@@ -16,7 +16,7 @@ public static class EventManager
 
     public static void ChangeActor(Object caller, BaseActor originalBa, BaseActor newBa)
     {
-        GladiusGlobals.EventLogger.LogEvent(EventTypes.Update, "ChangeActorRaised");
+        //GladiusGlobals.EventLogger.LogEvent(EventTypes.Update, "ChangeActorRaised");
         if (BaseActorChanged != null)
         {
             BaseActorChanged(caller, new BaseActorChangedArgs(originalBa, newBa));
@@ -25,7 +25,7 @@ public static class EventManager
 
     public static void PerformAction(Object caller, ActionButton button)
     {
-        GladiusGlobals.EventLogger.LogEvent(EventTypes.Update, "PerformActionRaised [" + button + "]");
+        //GladiusGlobals.EventLogger.LogEvent(EventTypes.Update, "PerformActionRaised [" + button + "]");
         if (ActionPressed != null)
         {
             ActionPressed(caller, new ActionButtonPressedArgs(button));

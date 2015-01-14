@@ -53,7 +53,7 @@ using System.Collections.Generic;
                 {
                     String descIdStr = tokens[3];
                     int shopDescId = int.Parse(descIdStr);
-                    shop.Name = GladiusGlobals.LocalisationData[shopDescId];
+                    shop.Name = GladiusGlobals.GameStateManager.LocalisationData[shopDescId];
                 }
                 else if (line.StartsWith("SHOPKEEPER"))
                 {
@@ -136,9 +136,9 @@ using System.Collections.Generic;
 
             //Name = name;
 
-            if (GladiusGlobals.ItemManager.ContainsKey(name))
+            if (GladiusGlobals.GameStateManager.ItemManager.ContainsKey(name))
             {
-                Item = GladiusGlobals.ItemManager[name];
+                Item = GladiusGlobals.GameStateManager.ItemManager[name];
             }
             else
             {

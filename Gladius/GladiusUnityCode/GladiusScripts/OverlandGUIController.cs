@@ -58,7 +58,7 @@ public class OverlandGUIController : MonoBehaviour
             tween.Length = 1f;
             tween.Play();
 
-            m_townInfoPanel.Find<dfRichTextLabel>("Label").Text = string.Format("<h2 color=\"yellow\">{0}</h2>   <h2 color=\"blue\">{1}</h2>", townData.TownName,townData.Popularity);
+            m_townInfoPanel.Find<dfRichTextLabel>("Label").Text = string.Format("<h2 color=\"yellow\">{0}</h2>   <h2 color=\"blue\">{1}</h2>", townData.Name,townData.Popularity);
 
             // fadein town view
         }
