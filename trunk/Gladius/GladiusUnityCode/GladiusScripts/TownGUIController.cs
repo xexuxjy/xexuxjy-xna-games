@@ -8,22 +8,153 @@ public class TownGUIController : MonoBehaviour
     float time;
     float maxTime = 5f;
     int panelCounter = 0;
-    List<string> panelList = new List<string>();
+    List<string> m_panelList = new List<string>();
+
+    List<dfControl> m_mainMenuButtonList = new List<dfControl>();
+    List<dfControl> m_schoolMenuButtonList = new List<dfControl>();
+    List<dfControl> m_leagueMenuButtonList = new List<dfControl>();
+    List<dfControl> m_shopMenuButtonList = new List<dfControl>();
 
 
     // Use this for initialization
     void Start()
     {
-        //dfControl[] controls = gameObject.GetComponentsInChildren<dfControl>();
-        //foreach (dfControl control in controls)
-        //{
-        //    if(control.name == "TownMenuPanel
-        //}
-        panelList.Add("MainMenuPanel");
-        panelList.Add("ShopPanel");
-        panelList.Add("SchoolPanel");
-        panelList.Add("LeaguePanel");
+        m_panelList.Add("MainMenuPanel");
+        m_panelList.Add("ShopPanel");
+        m_panelList.Add("SchoolPanel");
+        m_panelList.Add("LeaguePanel");
+
+        m_mainMenuButtonList.Add(GameObject.Find("ShopButton").GetComponent<dfButton>());
+        m_mainMenuButtonList.Add(GameObject.Find("LeaguesButton").GetComponent<dfButton>());
+        m_mainMenuButtonList.Add(GameObject.Find("SchoolButton").GetComponent<dfButton>());
+        m_mainMenuButtonList.Add(GameObject.Find("LeaveButton").GetComponent<dfButton>());
+
+        SetupMainMenu();
+        SetupSchoolMenu();
+        SetupLeagueMenu();
+        SetupShopMenu();
+        
+        SwitchPanel(m_panelList[0]);
+
+
     }
+
+    void SetupMainMenu()
+    {
+        m_panelList.Add("MainMenuPanel");
+        m_panelList.Add("ShopPanel");
+        m_panelList.Add("SchoolPanel");
+        m_panelList.Add("LeaguePanel");
+
+        m_mainMenuButtonList.Add(GameObject.Find("ShopButton").GetComponent<dfButton>());
+        m_mainMenuButtonList.Add(GameObject.Find("LeaguesButton").GetComponent<dfButton>());
+        m_mainMenuButtonList.Add(GameObject.Find("SchoolButton").GetComponent<dfButton>());
+        m_mainMenuButtonList.Add(GameObject.Find("LeaveButton").GetComponent<dfButton>());
+
+        GameObject.Find("ShopButton").GetComponent<dfButton>().Click += MainMenuShopButtonClick;
+        GameObject.Find("LeaguesButton").GetComponent<dfButton>().Click += MainMenuLeaguesButtonClick;
+        GameObject.Find("SchoolButton").GetComponent<dfButton>().Click += MainMenuSchoolButtonClick;
+        GameObject.Find("LeaveButton").GetComponent<dfButton>().Click += MainMenuLeaveButtonClick;
+
+    }
+
+    void SetupSchoolMenu()
+    {
+        m_schoolMenuButtonList.Add(GameObject.Find("SchoolLeaveButton").GetComponent<dfButton>());
+        GameObject.Find("SchoolLeaveButton").GetComponent<dfButton>().Click += SchoolMenuLeaveButtonClick;
+    }
+
+    void SetupLeagueMenu()
+    {
+        m_leagueMenuButtonList.Add(GameObject.Find("LeagueLeaveButton").GetComponent<dfButton>());
+        GameObject.Find("LeagueLeaveButton").GetComponent<dfButton>().Click += LeagueMenuLeaveButtonClick;
+
+    }
+
+    void SetupShopMenu()
+    {
+        m_shopMenuButtonList.Add(GameObject.Find("ShopLeaveButton").GetComponent<dfButton>());
+        GameObject.Find("ShopLeaveButton").GetComponent<dfButton>().Click += ShopMenuLeaveButtonClick;
+
+    }
+
+
+
+
+
+    public void HandleUpDownList(List<dfControl> controls, bool up)
+    {
+        int i = 0;
+        // if main menu
+        for (i = 0; i < controls.Count; ++i)
+        {
+            if (controls[i].HasFocus)
+            {
+                break;
+            }
+        }
+
+        if (up)
+        {
+            i = (i + 1) % controls.Count;
+        }
+        else
+        {
+            i -= 1;
+            if (i < 0)
+            {
+                i += controls.Count;
+            }
+        }
+        controls[i].Focus();
+    }
+
+    public void OnKeyPressed()
+    {
+        bool up = true;
+        HandleUpDownList(m_mainMenuButtonList, up);
+    }
+
+
+
+    void SchoolMenuLeaveButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    {
+        SwitchPanel("MainMenuPanel");
+    }
+
+    void LeagueMenuLeaveButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    {
+        SwitchPanel("MainMenuPanel");
+    }
+
+    void ShopMenuLeaveButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    {
+        SwitchPanel("MainMenuPanel");
+    }
+
+    void MainMenuLeaveButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    {
+
+    }
+
+    void MainMenuLeaguesButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    {
+        SwitchPanel("LeaguePanel");
+    }
+
+    void MainMenuShopButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    {
+        SwitchPanel("ShopPanel");
+    }
+
+
+    void MainMenuSchoolButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    {
+        SwitchPanel("SchoolPanel");
+    }
+
+
+
 
     public void SetData(TownData townData)
     {
@@ -48,7 +179,6 @@ public class TownGUIController : MonoBehaviour
                 GameObject.Find("TownImage").GetComponent<dfTextureSprite>().Texture = bgTexture;
             }
         }
-
     }
 
     string lastPanelName = "";
@@ -75,15 +205,15 @@ public class TownGUIController : MonoBehaviour
     
     public void Update()
     {
-        time += Time.deltaTime;
-        if (time > maxTime)
-        {
-            time = 0f;
-            panelCounter++;
-            panelCounter %= panelList.Count;
-            string newPanelName = panelList[panelCounter];
-            SwitchPanel(newPanelName);
-        }
+        //time += Time.deltaTime;
+        //if (time > maxTime)
+        //{
+        //    time = 0f;
+        //    panelCounter++;
+        //    panelCounter %= m_panelList.Count;
+        //    string newPanelName = m_panelList[panelCounter];
+        //    SwitchPanel(newPanelName);
+        //}
     }
 
 
