@@ -344,23 +344,9 @@ namespace ModelNamer
         public byte[] RawColourMap;
         public byte[] SwizzledColourMap;
 
-
-
-        public static char[] PTTPHeader = new char[] { 'P', 'T', 'T', 'P' };
-        public static char[] NAMEHeader = new char[] { 'N', 'A', 'M', 'E' };
-
-        public static char[] NMPTHeader = new char[] { 'N', 'M', 'P', 'T' };
-        public static char[] PFHDHeader = new char[] { 'P', 'F', 'H', 'D' };
-
-        public static char[] r2d2Header = new char[] { 'R', '2', 'D', '2','p','s','x','2' };
-        public static char[] tmapHeader = new char[] { 't', 'm', 'a', 'p' };
-
-        static char[][] allTags = { PTTPHeader, NAMEHeader, NMPTHeader, PFHDHeader, r2d2Header };
-
-
         public static bool ReadToNextTMapBlock(BinaryReader binReader)
         {
-            return Common.FindCharsInStream(binReader,GladiusHeader.tmapHeader);
+            return Common.FindCharsInStream(binReader,Common.tmapTag);
 
         }
 
@@ -370,9 +356,9 @@ namespace ModelNamer
             List<String> textureNameList = new List<string>();
 
             // load header and map of image names.
-            if (Common.FindCharsInStream(binReader, GladiusHeader.PTTPHeader))
+            if (Common.FindCharsInStream(binReader, Common.pttpTag))
             {
-                if (Common.FindCharsInStream(binReader, GladiusHeader.NMPTHeader))
+                if (Common.FindCharsInStream(binReader, Common.nmptTag))
                 {
                     int unknown1 = binReader.ReadInt32();
                     int unknown2 = binReader.ReadInt32();
@@ -423,7 +409,7 @@ namespace ModelNamer
 
         public static bool PositionReaderAtNextImage(BinaryReader binReader,StreamWriter errorStream,String file)
         {
-            return Common.FindCharsInStream(binReader, GladiusHeader.r2d2Header) && Common.FindCharsInStream(binReader, GladiusHeader.tmapHeader);
+            return Common.FindCharsInStream(binReader, Common.r2d2Tag) && Common.FindCharsInStream(binReader, Common.tmapTag);
         }
 
 
@@ -433,26 +419,6 @@ namespace ModelNamer
 
     public class ImageExtractor
     {
-
-        //String targetDirectory = @"d:/gladius-extracted/test-extract/";
-        ////String filepath = @"D:\gladius-extracted\ps2-decompressed\converted1\";
-        //String filepath = @"d:\gladius-extracted\ps2-decompressed\PTTP\";
-        //String errorFile = @"d:\gladius-extracted\ps2-decompressed-errors";
-
-        public static char[] PTTPHeader = new char[] { 'P', 'T', 'T', 'P' };
-        public static char[] NAMEHeader = new char[] { 'N', 'A', 'M', 'E' };
-
-        public static char[] NMPTHeader = new char[] { 'N', 'M', 'P', 'T' };
-        public static char[] PFHDHeader = new char[] { 'P', 'F', 'H', 'D' };
-
-        public static char[] r2d2Header = new char[] { 'R', '2', 'D', '2','p','s','x','2' };
-        public static char[] tmapHeader = new char[] { 't', 'm', 'a', 'p' };
-
-        static char[][] allTags = { PTTPHeader, NAMEHeader, NMPTHeader, PFHDHeader, r2d2Header };
-
-
-        //String filepath = @"C:\gladius-extracted\ps2-decompressed\PTTP\";
-        //String errorFile = @"C:\gladius-extracted\ps2-decompressed-errors";
 
         public void ExtractImages(string sourceDirectory,string targetDirectory)
         {
@@ -496,7 +462,7 @@ namespace ModelNamer
 
 
                             long currentPos = binReader.BaseStream.Position;
-                            int tmapSections = Common.CountCharsInStream(binReader, GladiusHeader.tmapHeader);
+                            int tmapSections = Common.CountCharsInStream(binReader, Common.tmapTag);
                             binReader.BaseStream.Position = currentPos;
 
                             ReadHeaderSection(binReader, imageList);
@@ -687,7 +653,7 @@ namespace ModelNamer
 
         public void ReadHeaderSection(BinaryReader binReader,List<GladiusImage> imageList)
         {
-            if (Common.FindCharsInStream(binReader, PFHDHeader, true))
+            if (Common.FindCharsInStream(binReader, Common.pfhdTag, true))
             {
                 int sectionSize = binReader.ReadInt32();
                 int pad1 = binReader.ReadInt32();
