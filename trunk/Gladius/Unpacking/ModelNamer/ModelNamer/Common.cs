@@ -39,9 +39,12 @@ namespace ModelNamer
         public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
         public static char[] pak1Tag = new char[] { 'P', 'A', 'K', '1' };
         public static char[] jlodTag = new char[] { 'J', 'L', 'O', 'D' };
-        public static char[] obbtTag = new char[] { 'O', 'B', 'B', 'T' };
-
-
+        public static char[] nmptTag = new char[] { 'N', 'M', 'P', 'T' };
+        public static char[] pttpTag = new char[] { 'P', 'T', 'T', 'P' };
+        public static char[] r2d2Tag = new char[] { 'R', '2', 'D', '2', 'p', 's', 'x', '2' };
+        public static char[] pfhdTag = new char[] { 'P', 'F', 'H', 'D' };
+        public static char[] ptdtTag = new char[] { 'P', 'T', 'D', 'T' };
+        public static char[] tmapTag = new char[] { 't', 'm', 'a', 'p' };
 
         public static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };
         public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
