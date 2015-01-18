@@ -18,10 +18,10 @@ using System.Collections.Generic;
 
             if (panel != null)
             {
-                ItemPanelInit panelInit = panel.GetComponent<ItemPanelInit>();
+                ItemPanelController panelInit = panel.GetComponent<ItemPanelController>();
                 if (panelInit != null)
                 {
-                    panelInit.Populate(shop);
+                    panelInit.SetData(shop);
                 }
             }
         }
