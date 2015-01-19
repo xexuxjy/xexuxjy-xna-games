@@ -249,6 +249,7 @@ using System.Collections.Generic;
         public static String[] SplitAndTidyString(String input,char[] splitChars)
         {
             String[] lineTokens = input.Split(splitChars);
+            List<string> validTokens = new List<string>();
             for (int i = 0; i < lineTokens.Length; ++i)
             {
                 lineTokens[i] = lineTokens[i].Replace("\"", "").Trim(trimChars);
@@ -257,8 +258,12 @@ using System.Collections.Generic;
                 {
                     lineTokens[i] = lineTokens[i].Substring(0, commentIndex);
                 }
+                if (!String.IsNullOrEmpty(lineTokens[i]))
+                {
+                    validTokens.Add(lineTokens[i]);
+                }
             }
-            return lineTokens;
+            return validTokens.ToArray();
         }
 
 
