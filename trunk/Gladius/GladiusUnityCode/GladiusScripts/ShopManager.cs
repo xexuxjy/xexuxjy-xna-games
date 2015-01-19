@@ -51,13 +51,33 @@ using System.Collections.Generic;
 
                 if(line.StartsWith("NAME"))
                 {
-                    String descIdStr = tokens[3];
+                    String descIdStr = tokens[2];
                     int shopDescId = int.Parse(descIdStr);
                     shop.Name = GladiusGlobals.GameStateManager.LocalisationData[shopDescId];
+                }
+                else if (line.StartsWith("IMAGE"))
+                {
+                    shop.Image = tokens[1];
                 }
                 else if (line.StartsWith("SHOPKEEPER"))
                 {
                     shop.Owner = tokens[1];                                    
+                }
+                else if (line.StartsWith("OPENING"))
+                {
+                    shop.Opening = int.Parse(tokens[1]);
+                }
+                else if (line.StartsWith("SHOPCONFIRM"))
+                {
+                    shop.ShopConfirm = int.Parse(tokens[1]);
+                }
+                else if (line.StartsWith("TALKCONFIRM"))
+                {
+                    shop.TalkConfirm = int.Parse(tokens[1]);
+                }
+                else if (line.StartsWith("EXITPHRASE"))
+                {
+                    shop.ExitPhrase = int.Parse(tokens[1]);
                 }
                 else if (line.StartsWith("ITEM"))
                 {
@@ -77,10 +97,25 @@ using System.Collections.Generic;
         public String Name
         { get; set; }
 
+        public String Image
+        { get; set; }
+
         public String Owner
         { get; set; }
 
         public String Town
+        { get; set; }
+
+        public int Opening
+        { get; set; }
+
+        public int ShopConfirm
+        { get; set; }
+
+        public int TalkConfirm
+        { get; set; }
+
+        public int ExitPhrase
         { get; set; }
 
 
