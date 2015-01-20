@@ -108,6 +108,12 @@ using UnityEngine;
         public float MOV
         { get; set; }
 
+        public int HP
+        { get; set; }
+
+        public int DAM
+        { get; set; }
+
         public String TeamName
         {get;set;}
 
@@ -167,6 +173,13 @@ using UnityEngine;
             get;
             set;
         }
+
+        public int NEXTXP
+        {
+            get;
+            set;
+        }
+
 
         public String GetInfoString()
         {
