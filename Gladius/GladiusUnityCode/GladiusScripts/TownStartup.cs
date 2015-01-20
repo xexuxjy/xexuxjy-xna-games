@@ -17,7 +17,7 @@ public class TownStartup: MonoBehaviour
         }
 
         TownData = GladiusGlobals.GameStateManager.TownManager.Find(TownName);
-        GetComponent<TownGUIController>().SetData(TownData);
+        GetComponent<TownGUIController>().SetTownData(TownData);
         //ActorGenerator.Initialise();
         //AttackSkillDictionary.
 
