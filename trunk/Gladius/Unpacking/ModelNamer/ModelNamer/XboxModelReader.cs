@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 namespace ModelNamer
 {
@@ -68,19 +69,19 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
+            String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath+"ModelFilesRenamed";
             String infoFile = rootPath+"ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
             String objOutputPath = rootPath+@"ModelFilesRenamed-Obj\";
 
             String texturePath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\textures.jpg\";
-
+            texturePath = @"C:\tmp\xbox-texture-output\";
 
             List<string> filenames = new List<string>();
 
 
-            //filenames.AddRange(Directory.GetFiles(rootPath+@"ModelFilesRenamed\weapons", "club*"));
+            filenames.AddRange(Directory.GetFiles(rootPath+@"ModelFilesRenamed\weapons", "*sword*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*"));
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\axeCS_declamatio.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
@@ -91,7 +92,7 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\charm_catseye.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             foreach (string name in filenames)
             {
@@ -226,8 +227,6 @@ namespace ModelNamer
                     binReader.BaseStream.Position += numIndexOffset;
 
                     List<MeshInfo> meshInfoList = new List<MeshInfo>();
-//                    List<int> vertexData = new List<int>();
-                    //m_numMeshes = 1;
 
                     for (int i = 0; i < m_numMeshes; ++i)
                     {
@@ -235,43 +234,10 @@ namespace ModelNamer
                     }
 
 
-                    //for (int i = 0; i<m_numMeshes; ++i)
-                    //{
-                    //    int val = binReader.ReadInt32();
-                    //    indexData.Add(val);
-                    //    if (val == 0)
-                    //    {
-                    //        int ibreak = 0;
-                    //    }
-                    //    if (i > 2 && (indexData[indexData.Count - 1] < indexData[indexData.Count - 2]))
-                    //    {
-                    //        int ibreak = 0;
-                    //    }
-                    //}
-
-
-                    //int totalIndices = indexData[indexData.Count - 1];
-
                     binReader.BaseStream.Position += doegToTextureSize-4-numIndexOffset-(m_numMeshes * 20);
 
                     int totalIndices = 0;
                     int totalVertices = 0;
-
-                    //int skip1 = binReader.ReadInt32();
-                    //int skip2 = binReader.ReadInt32();
-
-                    //int totalVertices = binReader.ReadInt32();
-                    //for (int i = 0; i<m_numMeshes; ++i)
-                    //{
-                    //    vertexData.Add(binReader.ReadInt32());
-                    //}
-
-
-                    //int jumpMultiplier = 1;
-                    //jumpMultiplier = 5;
-                    //jumpMultiplier = 3;
-                    //int jumpOffset = (doegToTextureSize - numIndexOffset - (jumpMultiplier*4));
-                    //binReader.BaseStream.Position += jumpOffset;
 
                     StringBuilder sb = new StringBuilder();
                     
@@ -292,19 +258,10 @@ namespace ModelNamer
                         }
                         sb.Clear();
                     }
-
-
-                    //foreach (MeshInfo mi in meshInfoList)
-                    //{
-                    //    totalIndices += mi.m_numIndices;
-                    //    totalVertices += mi.m_numVertices;
-                    //}
-
                     ushort val1 = 0;
                     while (true)
                     {
                         ushort val2 = (ushort)binReader.ReadInt16();
-                        //if(val2 >= val1+1000) // yuck
                         if(Math.Abs(val1 - val2) > 1000)
                         {
                             binReader.BaseStream.Position -= 2;
@@ -320,7 +277,6 @@ namespace ModelNamer
 
                     for (int i = 0; i < totalIndices; ++i)
                     {
-                        //subMesh.Indices.Add((ushort)Common.ToInt16BigEndian(binReader));
                         m_allIndices.Add((ushort)binReader.ReadInt16());
                     }
 
@@ -330,22 +286,8 @@ namespace ModelNamer
                         m_modelMeshes.Add(subMesh);
                     }
 
-                    //int startIndex = 0;
-                    //for (int i = 0; i < indexData.Count; ++i)
-                    //{
-                    //    XBoxSubMesh subMesh = new XBoxSubMesh();
-                    //    m_modelMeshes.Add(subMesh);
-                    //    int endIndex = i < indexData.Count - 1 ? indexData[i + 1] : indexData[indexData.Count - 1];
-                    //    subMesh.Indices.AddRange(m_allIndices.Skip(startIndex).Take(endIndex - startIndex));
-                    //    startIndex = endIndex;
-                    //}
-
-
                     int padding = (totalIndices * 2) % 4;
                     binReader.BaseStream.Position += padding;
-
-
-
 
                     if (m_skinned)
                     {
@@ -353,11 +295,12 @@ namespace ModelNamer
                     }
                     else
                     {
-                        ReadUnskinnedVertexData(binReader, m_allVertices, totalVertices);
+                        //ReadUnskinnedVertexData(binReader, m_allVertices, totalVertices);
+                        ReadUnskinnedVertexData(binReader, m_allVertices, meshInfoList[0].m_numVertices);
                     }
 
-                    binReader.BaseStream.Position -= 4;
-                    Debug.Assert(IsEnd(binReader));
+                    //binReader.BaseStream.Position -= 4;
+                    //Debug.Assert(IsEnd(binReader));
 
                     BuildBB();
 
@@ -406,7 +349,7 @@ namespace ModelNamer
             {
                 int notsgindex = m_textures[0].textureName.Contains(reflectname) ? 1 : 0;
 
-                String textureName = m_textures[notsgindex].textureName + ".jpg";
+                String textureName = m_textures[notsgindex].textureName + ".png";
                 materialWriter.WriteLine("newmtl " + textureName);
                 materialWriter.WriteLine("Ka 1.000 1.000 1.000");
                 materialWriter.WriteLine("Kd 1.000 1.000 1.000");
@@ -416,14 +359,14 @@ namespace ModelNamer
                 materialWriter.WriteLine("map_Ka " + texturePath + textureName);
                 materialWriter.WriteLine("map_Kd " + texturePath + textureName);
 
-                materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname + ".jpg");
+                materialWriter.WriteLine("refl -type sphere -mm 0 1 " + texturePath + reflectname + ".png");
             }
             else
             {
 
                 foreach (TextureData textureData in m_textures)
                 {
-                    String textureName = textureData.textureName + ".jpg";
+                    String textureName = textureData.textureName + ".png";
                     materialWriter.WriteLine("newmtl " + textureName);
                     materialWriter.WriteLine("Ka 1.000 1.000 1.000");
                     materialWriter.WriteLine("Kd 1.000 1.000 1.000");
@@ -444,9 +387,19 @@ namespace ModelNamer
             foreach (VertexPositionNormalTexture vpnt in m_allVertices)
             {
                 writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
-                writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000} ", vpnt.TextureCoordinate.X, 1.0f-vpnt.TextureCoordinate.Y));
+            }
+
+            foreach (VertexPositionNormalTexture vpnt in m_allVertices)
+            {
+                writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000} ", vpnt.TextureCoordinate.X, 1.0f - vpnt.TextureCoordinate.Y));
+            }
+
+            foreach (VertexPositionNormalTexture vpnt in m_allVertices)
+            {
                 writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
             }
+
+
 
             foreach (XBoxSubMesh headerBlock in m_modelMeshes)
             {
@@ -476,7 +429,7 @@ namespace ModelNamer
                 ShaderData shaderData = m_shaderData[headerBlock.MeshId];
 
                 string adjustedTexture = FindTextureName(shaderData);
-                String materialName = adjustedTexture + ".jpg";
+                String materialName = adjustedTexture + ".png";
 
                 List<String> testMaterialNames = new List<string>();
                 testMaterialNames.Add("walltexture_extra.tga.jpg");
@@ -518,8 +471,8 @@ namespace ModelNamer
 
         public void ReadUnskinnedVertexData(BinaryReader binReader,List<VertexPositionNormalTexture> allVertices ,int numVertices)
         {
-            //for (int i = 0; i < numVertices; ++i)
-            while(true)
+            for (int i = 0; i < numVertices; ++i)
+            //while(true)
             {
                 try
                 {
@@ -532,54 +485,40 @@ namespace ModelNamer
                         binReader.BaseStream.Position -= 4;
                     }
 
+
                     // 24 bytes per entry?
                     Vector3 p = Common.FromStreamVector3(binReader);
-
-                    //float nx = Common.ToHalfFloatInt16(binReader);
-                    //float ny = Common.ToHalfFloatInt16(binReader);
-
-                    float nx = Common.ToFloatInt16(binReader);
-                    float ny = Common.ToFloatInt16(binReader);
-
-
-
-                    float nx2 = nx * nx;
-                    float ny2 = ny * ny;
-                    float rem = (float)(1.0 - (nx2 + ny2));
-                    float nz = 0f;
-                    if (!Common.FuzzyEquals(rem, 0.0f))
-                    {
-                        nz = (float)Math.Sqrt(Math.Abs(rem));
-                        if (rem < 0)
-                        {
-                            nz *= -1f;
-                        }
-                    }
-
-                    if (float.IsNaN(nx) || float.IsNaN(ny) || float.IsNaN(nz))
-                    {
-                        int ibreak = 0;
-                    }
-
-                    // convert to normal??
+                    int normal = binReader.ReadInt32();
+                    Vector3 normV = UncompressNormal(normal);
                     Vector2 u = Common.FromStreamVector2(binReader);
                     VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
                     vpnt.Position = p;
                     vpnt.TextureCoordinate = u;
-
-                    vpnt.Normal = new Vector3(nx, ny, nz);
+                    vpnt.Normal = normV; 
                     allVertices.Add(vpnt);
-
-                    //subMesh.Vertices.Add(vpnt.Position);
-                    //subMesh.Normals.Add(vpnt.Normal);
-                    //subMesh.UVs.Add(vpnt.TextureCoordinate);
                 }
                 catch (System.Exception ex)
                 {
                     int ibreak = 0;
                 }
             }
+            int ibreak2 = 0;
         }
+
+        // taken from old sol code and it seems to work. wow!
+        public Vector3 UncompressNormal(int cv)
+        {
+            Vector3 v = new Vector3();
+		    int x=((int)(cv&0x7ff)<<21)>>21,
+				    y=((int)(cv&0x3ffe00)<<10)>>21,
+				    z=(int)(cv&0xffc00000)>>22;
+
+		    v.X=((float)x)/(float)((1<<10)-1);
+		    v.Y=((float)y)/(float)((1<<10)-1);
+		    v.Z=((float)z)/(float)((1<<9)-1);
+            return v;
+        }
+	
 
         public void ReadSkinnedVertexData(BinaryReader binReader, List<VertexPositionNormalTexture> allVertices, int numVertices)
         {
@@ -614,9 +553,6 @@ namespace ModelNamer
 
                     vpnt.Normal = Vector3.Up;
                     allVertices.Add(vpnt);
-                    //subMesh.Vertices.Add(vpnt.Position);
-                    //subMesh.Normals.Add(vpnt.Normal);
-                    //subMesh.UVs.Add(vpnt.TextureCoordinate);
                 }
                 catch (System.Exception ex)
                 {
