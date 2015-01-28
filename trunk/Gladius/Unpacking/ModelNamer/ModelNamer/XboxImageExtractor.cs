@@ -73,11 +73,11 @@ namespace ModelNamer
 
 
 
-    public class ImageExtractor : Game
+    public class XboxImageExtractor : Game
     {
         GraphicsDeviceManager graphics;
 
-        public ImageExtractor()
+        public XboxImageExtractor()
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1024;
@@ -92,7 +92,7 @@ namespace ModelNamer
             fileNames.AddRange(Directory.GetFiles(sourceDirectory, "*"));
             ExtractImages(fileNames, targetDirectory);
         }
-
+        
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -105,9 +105,10 @@ namespace ModelNamer
             base.LoadContent();
             List<string> fileNames = new List<string>();
             String sourcePath = @"D:\gladius-extracted-archive\ps2-decompressed\ClassImages\";
-            sourcePath = @"D:\gladius-extracted-archive\xbox-decompressed\PTTPFiles";
+            sourcePath = @"C:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\PTTPFiles";
+            
             fileNames.AddRange(Directory.GetFiles(sourcePath, "**"));
-            String outputDirectory = @"D:\gladius-extracted-archive\xbox-decompressed\texture-output\";
+            String outputDirectory = @"C:\tmp\xbox-texture-output\";
             ExtractImages(fileNames, outputDirectory);
             Exit();
         }
@@ -232,9 +233,10 @@ namespace ModelNamer
                                 {
                                     if (gi.XNATexture != null)
                                     {
-                                        using (FileStream fs2 = new FileStream(targetDirectory + gi.ImageName + ".png", FileMode.OpenOrCreate))
+                                        //using (FileStream fs2 = new FileStream(targetDirectory + gi.ImageName + ".png", FileMode.OpenOrCreate))
                                         {
-                                            gi.XNATexture.SaveAsPng(fs2, gi.Header.Width, gi.Header.Height);
+                                            //gi.XNATexture.SaveAsPng(fs2, gi.Header.Width, gi.Header.Height);
+                                            TextureToPng(gi.XNATexture, gi.Header.Width, gi.Header.Height, ImageFormat.Png, targetDirectory + gi.ImageName + ".png");
                                         }
                                     }
                                     gi.CompressedData = null;
@@ -291,10 +293,34 @@ namespace ModelNamer
 
         }
 
+        public static void TextureToPng(Texture2D texture, int width, int height, ImageFormat imageFormat, string filename)
+        {
+            using (Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb))
+            {
+                byte blue;
+                IntPtr safePtr;
+                BitmapData bitmapData;
+                System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, width, height);
+                byte[] textureData = new byte[4 * width * height];
+
+                texture.GetData<byte>(textureData);
+                for (int i = 0; i < textureData.Length; i += 4)
+                {
+                    blue = textureData[i];
+                    textureData[i] = textureData[i + 2];
+                    textureData[i + 2] = blue;
+                }
+                bitmapData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                safePtr = bitmapData.Scan0;
+                Marshal.Copy(textureData, 0, safePtr, textureData.Length);
+                bitmap.UnlockBits(bitmapData);
+                bitmap.Save(filename, imageFormat);
+            }
+        }
 
         static int Main(string[] args)
         {
-            using (Game g = new ImageExtractor())
+            using (Game g = new XboxImageExtractor())
             {
                 g.Run();
             }
