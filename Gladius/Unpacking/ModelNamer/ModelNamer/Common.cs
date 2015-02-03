@@ -120,6 +120,54 @@ namespace ModelNamer
 
         }
 
+        public static bool FindCharsInStream(BinaryReader binReader, byte[] charsToFind, bool resetPositionIfNotFound = true)
+        {
+            bool found = false;
+            byte b = (byte)' ';
+            int lastFoundIndex = 0;
+            long currentPosition = binReader.BaseStream.Position;
+            try
+            {
+                while (true)
+                {
+                    b = binReader.ReadByte();
+                    if (b == charsToFind[lastFoundIndex])
+                    {
+                        lastFoundIndex++;
+                        if (lastFoundIndex > 2)
+                        {
+                            int ibreak = 0;
+                        }
+                        if (lastFoundIndex == charsToFind.Length)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        binReader.BaseStream.Position -= lastFoundIndex;
+                        lastFoundIndex = 0;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            if (!found && resetPositionIfNotFound)
+            {
+                binReader.BaseStream.Position = currentPosition;
+            }
+
+
+            return found;
+
+        }
+
+
+
+
+
         public static bool FuzzyEquals(float x, float y, float eps = float.Epsilon)
         {
             return Math.Abs(x - y) < eps;
@@ -175,6 +223,7 @@ namespace ModelNamer
             return (ushort)(b1 << 16 | b2 << 8 | b3);
         }
 
+        //public static ush
 
         public static float  ToFloatUInt16BigEndian(BinaryReader reader)
         {
@@ -483,30 +532,6 @@ namespace ModelNamer
                 }
             }
         }
-
-        public static void ReadNullSeparatedNames(BinaryReader binReader, List<String> selsNames)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            byte b;
-            byte lb = 0xFF;
-            int count = 0;
-            while ((b = binReader.ReadByte()) != 0x00 && lb != 0x00)
-            {
-                if (b != 0x00)
-                {
-                    sb.Append((char) b);
-                }
-                else if (sb.Length > 0)
-                {
-                    selsNames.Add(sb.ToString());
-                    sb.Clear();
-                }
-                lb = b;
-            }
-        }
-
-
 
         public static void ReadNullSeparatedNames(BinaryReader binReader, long position, int numAnims,List<String> selsNames)
         {

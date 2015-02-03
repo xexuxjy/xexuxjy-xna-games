@@ -529,73 +529,73 @@ namespace XNAViewer
 
         public void DrawModel()
         {
-            int counter = -1;
-            foreach (WrappedDisplayListHeader header in m_currentModel.m_wrappedHeaderList)
-            {
-                counter++;
-                if (displayAll == false && counter != m_currentModelSubIndex)
-                {
-                    continue;
-                }
+            //int counter = -1;
+            //foreach (WrappedDisplayListHeader header in m_currentModel.m_wrappedHeaderList)
+            //{
+            //    counter++;
+            //    if (displayAll == false && counter != m_currentModelSubIndex)
+            //    {
+            //        continue;
+            //    }
 
 
-                if (m_currentModel.m_model.m_skinned)
-                {
-                    if (header.m_modelSubMesh.MeshId != 0)
-                    {
-                        //continue;
-                    }
+            //    if (m_currentModel.m_model.m_skinned)
+            //    {
+            //        if (header.m_modelSubMesh.MeshId != 0)
+            //        {
+            //            //continue;
+            //        }
 
-                    // include levels 1 and 2
-                    if ((header.m_modelSubMesh.LodLevel & 0x01) == 0)
-                    {
-                        //continue;
-                    }
-                }
-
-
-
-                ShaderData sd = m_currentModel.m_model.m_shaderData[header.m_modelSubMesh.MeshId];
+            //        // include levels 1 and 2
+            //        if ((header.m_modelSubMesh.LodLevel & 0x01) == 0)
+            //        {
+            //            //continue;
+            //        }
+            //    }
 
 
-                //SetTexture(sd.textureId1);
 
-                //header.Render();
+            //    ShaderData sd = m_currentModel.m_model.m_shaderData[header.m_modelSubMesh.MeshId];
 
-                GraphicsDevice.SetVertexBuffer(header.m_vertexBuffer);
-                GraphicsDevice.Indices = header.m_indexBuffer;
-                //m_basicEffect.Texture = m_missingTexture;
 
-                Effect effect;
-                SetShaderData(sd, out effect);
+            //    //SetTexture(sd.textureId1);
 
-                if (effect != null)
-                {
-                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-                    {
-                        pass.Apply();
-                        //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
-                        //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
-                        //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices / 3);
-                        //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices-2);
-                        if (header.m_modelSubMesh is DisplayListHeader)
-                        {
-                            int start = 0;
-                            int range = (header.m_modelSubMesh.NumIndices / 3) - start;
-                            GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, start, range);
-                        }
-                        if (header.m_modelSubMesh is XBoxSubMesh)
-                        {
-                            GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices-2);
-                        }
+            //    //header.Render();
+
+            //    GraphicsDevice.SetVertexBuffer(header.m_vertexBuffer);
+            //    GraphicsDevice.Indices = header.m_indexBuffer;
+            //    //m_basicEffect.Texture = m_missingTexture;
+
+            //    Effect effect;
+            //    SetShaderData(sd, out effect);
+
+            //    if (effect != null)
+            //    {
+            //        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            //        {
+            //            pass.Apply();
+            //            //m_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, m_header.entries.Count, 0, m_header.entries.Count / 3);
+            //            //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
+            //            //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices / 3);
+            //            //GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices-2);
+            //            if (header.m_modelSubMesh is DisplayListHeader)
+            //            {
+            //                int start = 0;
+            //                int range = (header.m_modelSubMesh.NumIndices / 3) - start;
+            //                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, header.m_modelSubMesh.NumIndices, start, range);
+            //            }
+            //            if (header.m_modelSubMesh is XBoxSubMesh)
+            //            {
+            //                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, header.m_modelSubMesh.NumIndices, 0, header.m_modelSubMesh.NumIndices-2);
+            //            }
 
                         
-                    }
-                }
+            //        }
+            //    }
 
 
 
-            }
+            //}
         }
 
         public void SetShaderData(ShaderData sd, out Effect effect)
@@ -1064,25 +1064,25 @@ namespace XNAViewer
                 m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indexData.Count(), BufferUsage.None);
                 m_indexBuffer.SetData(indexData);
             }
-            else if (modelSubMesh is XBoxSubMesh)
-            {
-                XBoxSubMesh doegSection = modelSubMesh as XBoxSubMesh;
-                VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[modelSubMesh.Vertices.Count];
-                for (int i = 0; i < vertexData.Length; ++i)
-                {
-                    vertexData[i].Position = modelSubMesh.Vertices[i];
-                    vertexData[i].TextureCoordinate= modelSubMesh.UVs[i];
-                    vertexData[i].Normal = modelSubMesh.Normals[i];
-                }
-                m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
-                m_vertexBuffer.SetData(vertexData);
+            //else if (modelSubMesh is XBoxSubMesh)
+            //{
+            //    XBoxSubMesh doegSection = modelSubMesh as XBoxSubMesh;
+            //    VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[modelSubMesh.Vertices.Count];
+            //    for (int i = 0; i < vertexData.Length; ++i)
+            //    {
+            //        vertexData[i].Position = modelSubMesh.Vertices[i];
+            //        vertexData[i].TextureCoordinate= modelSubMesh.UVs[i];
+            //        vertexData[i].Normal = modelSubMesh.Normals[i];
+            //    }
+            //    m_vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertexData.Length, BufferUsage.None);
+            //    m_vertexBuffer.SetData(vertexData);
 
-                ushort[] indexData = modelSubMesh.Indices.ToArray();
+            //    ushort[] indexData = modelSubMesh.Indices.ToArray();
 
-                m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.None);
-                m_indexBuffer.SetData(indexData);
+            //    m_indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.None);
+            //    m_indexBuffer.SetData(indexData);
 
-            }
+            //}
       }
 
 

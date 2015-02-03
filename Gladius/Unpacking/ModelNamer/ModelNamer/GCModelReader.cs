@@ -72,7 +72,7 @@ namespace ModelNamer
             binReader.BaseStream.Position = startPosition;
             ReadELEMSection(binReader);
             binReader.BaseStream.Position = startPosition;
-            ReadOBBTSection(binReader);
+            //ReadOBBTSection(binReader);
 
             BuildBB();
             //model.Validate();
@@ -766,54 +766,16 @@ namespace ModelNamer
                 // just want highest lod.
                 if (headerBlock.LodLevel != 0 && ((headerBlock.LodLevel & desiredLod) == 0))
                 {
-                 //   continue;
+                    continue;
                 }
-
-                if (headerBlock.MaxUV > m_modelMeshes[0].UVs.Count)
-                {
-                    int ibreak = 0;
-                }
-
-                if (headerBlock.MaxVertex > m_modelMeshes[0].Vertices.Count)
-                {
-                    int ibreak = 0;
-                }
-
-                if (headerBlock.adjustedSizeInt != 7)
-                {
-//                    continue;
-                }
-
-
-                if (headerBlock.entries.Count % 3 != 0)
-                {
-                    int ibreak = 0;
-                }
-
-
 
                 meshCount++;
-
-                if (meshCount !=2 )
-                {
-                    //continue;
-                }
-                //if (meshLimit > 0 && meshCount < meshStart)
-                //{
-                //    continue;
-                //}
-
-                //if (meshLimit > 0 && meshCount > meshStart + meshLimit)
-                //{
-                //    break;
-                //}
-
 
                 string groupName = String.Format("{0}-submesh{1}-LOD{2}" ,m_name,submeshCount,headerBlock.LodLevel);
 
                 // just using o means everything gets grouped together, though using g means file sizes get larger?
                 writer.WriteLine("o " + groupName);
-                writer.WriteLine("g " + groupName);
+                //writer.WriteLine("g " + groupName);
                 // and now points, uv's and normals.
                 if (m_skinned)
                 {
@@ -825,7 +787,6 @@ namespace ModelNamer
                     {
                         Vector2 va = v;
                         va.Y = 1.0f - v.Y;
-
 
                         writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", va.X, va.Y));
                     }
@@ -848,9 +809,6 @@ namespace ModelNamer
                 {
                     //continue;
                 }
-
-
-
 
                 writer.WriteLine("usemtl " + materialName);
 
@@ -880,42 +838,15 @@ namespace ModelNamer
                         int posIndex2 = headerBlock.entries[i + 1].PosIndex + vertexOffset;
                         int posIndex3 = headerBlock.entries[i + 2].PosIndex + vertexOffset;
 
-                        if (posIndex1 >= m_modelMeshes[0].Vertices.Count || posIndex2 >= m_modelMeshes[0].Vertices.Count || posIndex3 >= m_modelMeshes[0].Vertices.Count)
+                        if (!m_skinned)
                         {
-                            int ibreak = 0;
-                            continue;
+                            if (posIndex1 >= m_modelMeshes[0].Vertices.Count || posIndex2 >= m_modelMeshes[0].Vertices.Count || posIndex3 >= m_modelMeshes[0].Vertices.Count)
+                            {
+                                int ibreak = 0;
+                                continue;
+                            }
                         }
-
                         writer.WriteLine(String.Format("f {0}/{1} {2}/{3} {4}/{5}", posIndex1, uvIndex1, posIndex2, uvIndex2, posIndex3, uvIndex3));
-
-
-                        Vector2 uv1 = m_modelMeshes[0].UVs[uvIndex1];
-                        Vector2 uv2 = m_modelMeshes[0].UVs[uvIndex2];
-                        Vector2 uv3 = m_modelMeshes[0].UVs[uvIndex3];
-
-                        //writer.WriteLine(String.Format("# uv {0:0.00000000} {1:0.00000000}, {2:0.00000000} {3:0.00000000} ,{4:0.00000000} {5:0.00000000}",
-                        //    uv1.X,uv1.Y,uv2.X,uv2.Y,uv3.X,uv3.Y));
-
-
-                        if (posIndex1 > m_modelMeshes[0].Vertices.Count || posIndex2 > m_modelMeshes[0].Vertices.Count || posIndex3 > m_modelMeshes[0].Vertices.Count)
-                        {
-                            int ibreak = 0;
-                        }
-
-
-                        Vector3 pos1 = m_modelMeshes[0].Vertices[posIndex1];
-                        Vector3 pos2 = m_modelMeshes[0].Vertices[posIndex2];
-                        Vector3 pos3 = m_modelMeshes[0].Vertices[posIndex3];
-
-
-                        //writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}",pos1.X + off1.X, pos1.Y+ off1.Y, pos1.Z+off1.Z));
-                        //writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos2.X + off2.X, pos2.Y + off2.Y, pos2.Z + off2.Z));
-                        //writer.WriteLine(String.Format("# pos {0:0.00000000} {1:0.00000000} {2:0.00000000}", pos3.X + off3.X, pos3.Y + off3.Y, pos3.Z + off3.Z));
-                        
-                        
-                        
-
-
                     }
                     
                 }
@@ -1117,7 +1048,7 @@ namespace ModelNamer
             
             String objOutputPath = rootPath + @"AllModelsRenamed-Obj\";
             String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures\";
-            
+            texturePath = @"D:\gladius-extracted-archive\xbox-decompressed\texture-output\";
             //texturePath = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
 
             GCModelReader reader = new GCModelReader();
@@ -1145,7 +1076,7 @@ namespace ModelNamer
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\yeti.mdl");
             //filenames.Add(modelPath + @"arenas\arenasuren.mdl");
             //filenames.Add(modelPath + @"arenas\belfortarena.mdl");
-            filenames.Add(modelPath + @"arenas\bloodyhalo.mdl");
+            //filenames.Add(modelPath + @"arenas\bloodyhalo.mdl");
             //filenames.Add(modelPath + @"arenas\calthaarena.mdl");
             //filenames.Add(modelPath + @"arenas\exuroseye.mdl");
             //filenames.Add(modelPath + @"arenas\fjordfallen.mdl");
@@ -1160,7 +1091,8 @@ namespace ModelNamer
             //filenames.Add(modelPath + @"arenas\nordagh_worldmap.mdl");
             //filenames.AddRange(Directory.GetFiles(modelPath + @"arenas\", "*"));
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\thefen.mdl");
-            
+            //filenames.AddRange(Directory.GetFiles(modelPath + @"characters\", "**"));
+            filenames.AddRange(Directory.GetFiles(modelPath + @"weapons\", "*unofan*"));
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));
