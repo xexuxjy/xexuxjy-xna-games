@@ -23,6 +23,7 @@ namespace XNAViewer
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
+            
             Content.RootDirectory = "Content";
         }
 
