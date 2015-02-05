@@ -108,7 +108,7 @@ namespace ModelNamer
                 {
                     using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
                     {
-                        infoSW.WriteLine(String.Format("[{0}][{1}] Found IS at [{2}] count [{3}] VS[{4}][{5}] count [{6}].",model.m_name,model.NumMeshes,model.IndexStart,model.CountedIndices,model.VertexStart,model.VertexForm,model.CountedVertices));
+                        infoSW.WriteLine(String.Format("[{0}][{1}] Found IS at [{2}] count [{3}] VS[{4}][{5}] count [{6}].", model.m_name, model.NumMeshes, model.IndexStart, model.CountedIndices, model.VertexStart, model.VertexForm, model.CountedVertices));
 
                         using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
                         {
@@ -157,7 +157,7 @@ namespace ModelNamer
         List<ushort> m_allIndices = new List<ushort>();
         List<SubMeshData1> m_subMeshData1List = new List<SubMeshData1>();
         List<SubMeshData2> m_subMeshData2List = new List<SubMeshData2>();
-        
+
         public int IndexStart = -1;
         public int CountedIndices = -1;
         public int VertexStart = -1;
@@ -217,7 +217,7 @@ namespace ModelNamer
                     int unk1h = binReader.ReadInt32();
                     Debug.Assert(unk1h == 0x00);
 
-                                        
+
                     int blockStart1 = binReader.ReadInt32();
                     Debug.Assert(blockStart1 == 0x70);
                     int blockStart2 = binReader.ReadInt32();
@@ -247,7 +247,7 @@ namespace ModelNamer
                     int unk1s = binReader.ReadInt32();
                     int unk1t = binReader.ReadInt32();
                     int unk1u = binReader.ReadInt32();
-                    
+
                     int minus1e = binReader.ReadInt32();
 
                     Debug.Assert(minus1a == -1 && minus1b == -1 && minus1c == -1 && minus1d == -1 && minus1e == -1);
@@ -258,25 +258,25 @@ namespace ModelNamer
 
                     byte[] doegEnd = binReader.ReadBytes(4);
                     Debug.Assert(doegEnd[0] == 'd' && doegEnd[3] == 'g');
-                    int doegEndVal = (int)(binReader.BaseStream.Position-4);
+                    int doegEndVal = (int)(binReader.BaseStream.Position - 4);
 
                     binReader.BaseStream.Position = doegEndVal + blockStart1;
 
                     List<int> blockOneValues = new List<int>();
-                    for(int i=0;i<NumMeshes;++i)
+                    for (int i = 0; i < NumMeshes; ++i)
                     {
                         blockOneValues.Add(binReader.ReadInt32());
                     }
 
                     List<SubMeshData1> subMeshData1List = new List<SubMeshData1>();
-                    for(int i=0;i<NumMeshes;++i)
+                    for (int i = 0; i < NumMeshes; ++i)
                     {
                         SubMeshData1 smd = SubMeshData1.FromStream(binReader);
                         subMeshData1List.Add(smd);
                     }
 
                     int TotalIndices = 0;
-                    
+
 
                     //NumMeshes += 1;
                     int maxVal5 = 0;
@@ -306,13 +306,13 @@ namespace ModelNamer
                     binReader.BaseStream.Position += 4;
                     int TotalVertices = binReader.ReadInt32();
                     binReader.BaseStream.Position = doegEndVal + doegToTextureSize;
-                    
-                    Common.ReadNullSeparatedNames(binReader,binReader.BaseStream.Position,numTextures,m_names);
+
+                    Common.ReadNullSeparatedNames(binReader, binReader.BaseStream.Position, numTextures, m_names);
 
                     int rem = TotalIndices % 3;
                     //TotalIndices += rem;
 
-                    foreach(SubMeshData2 smd in m_subMeshData2List)
+                    foreach (SubMeshData2 smd in m_subMeshData2List)
                     {
                         for (int i = 0; i < smd.NumIndices; ++i)
                         {
@@ -343,7 +343,7 @@ namespace ModelNamer
                     //pad = 2;
                     //binReader.BaseStream.Position += pad;
                     int fixedPos = 0x7aFa0;
-                    int diff1 = fixedPos- (int)binReader.BaseStream.Position;
+                    int diff1 = fixedPos - (int)binReader.BaseStream.Position;
                     //binReader.BaseStream.Position = fixedPos;
 
                     long testPosition = binReader.BaseStream.Position;
@@ -352,20 +352,20 @@ namespace ModelNamer
                     //testPosition += pad;
                     binReader.BaseStream.Position = testPosition;
 
-                    ReadUnskinnedVertexData36(binReader,m_allVertices,TotalVertices);
+                    ReadUnskinnedVertexData36(binReader, m_allVertices, TotalVertices);
                     bool valid = ValidVertex(m_allVertices[0].Position) && ValidVertex(m_allVertices[1].Position);
-                    if(!valid)
+                    if (!valid)
                     {
                         binReader.BaseStream.Position = testPosition;
                         m_allVertices.Clear();
-                        ReadUnskinnedVertexData28(binReader,m_allVertices,TotalVertices);
+                        ReadUnskinnedVertexData28(binReader, m_allVertices, TotalVertices);
                         valid = ValidVertex(m_allVertices[0].Position) && ValidVertex(m_allVertices[1].Position);
                     }
-                    if(!valid)
+                    if (!valid)
                     {
                         binReader.BaseStream.Position = testPosition;
                         m_allVertices.Clear();
-                        ReadUnskinnedVertexData24(binReader,m_allVertices,TotalVertices);
+                        ReadUnskinnedVertexData24(binReader, m_allVertices, TotalVertices);
                         valid = ValidVertex(m_allVertices[0].Position) && ValidVertex(m_allVertices[1].Position);
                     }
 
@@ -373,7 +373,7 @@ namespace ModelNamer
                     {
                         int ibreak = 0;
                     }
-                    
+
                     BuildBB();
 
                     ShaderData shaderData = new ShaderData();
@@ -513,9 +513,9 @@ namespace ModelNamer
                         }
                         if (index2 >= m_allIndices.Count)
                         {
-                            index2=index1;
+                            index2 = index1;
                         }
-                        if (i  >= m_allIndices.Count)
+                        if (i >= m_allIndices.Count)
                         {
                             int ibreak = 0;
                         }
@@ -574,7 +574,7 @@ namespace ModelNamer
                     Vector2 u = Common.FromStreamVector2(binReader);
                     XboxVertexInstance vpnt = new XboxVertexInstance();
                     vpnt.Position = p;
-                    vpnt.UV= u;
+                    vpnt.UV = u;
                     vpnt.Normal = normV;
                     allVertices.Add(vpnt);
                 }
@@ -776,10 +776,128 @@ namespace ModelNamer
 
         //public List<VertexPositionNormalTexture> m_points = new List<VertexPositionNormalTexture>();
 
+        public void WriteFBXAHeader(StreamWriter writer)
+        {
+            // write header.
+            writer.WriteLine("; FBX 6.1.0 project file");
+            writer.WriteLine("; Created by Blender FBX Exporter");
+            writer.WriteLine("; for support mail: ideasman42@gmail.com");
+            writer.WriteLine("; ----------------------------------------------------");
+            writer.WriteLine("");
+            writer.WriteLine("FBXHeaderExtension:  {");
+            writer.WriteLine("FBXHeaderVersion: 1003");
+            writer.WriteLine("FBXVersion: 6100");
+            writer.WriteLine("Creator: \"FBX SDK/FBX Plugins build 20070228\"");
+            writer.WriteLine("OtherFlags:  {");
+            writer.WriteLine("FlagPLE: 0");
+            writer.WriteLine("}");
+            writer.WriteLine("}");
+            writer.WriteLine("CreationTime: \"2014-03-20 17:38:29:000\"");
+            writer.WriteLine("Creator: \"Blender version 2.69 (sub 10)\"");
+
+            writer.WriteLine("; Object definitions");
+            writer.WriteLine(";------------------------------------------------------------------");
+
+            writer.WriteLine("Definitions:  {");
+            writer.WriteLine("Version: 100");
+            writer.WriteLine("Count: 3");
+            writer.WriteLine("ObjectType: \"Model\" {");
+            writer.WriteLine("Count: 1");
+            writer.WriteLine("}");
+            writer.WriteLine("ObjectType: \"Geometry\" {");
+            writer.WriteLine("Count: 1");
+            writer.WriteLine("}");
+            writer.WriteLine("	ObjectType: \"Material\" {");
+            writer.WriteLine("Count: 1");
+            writer.WriteLine("}");
+            writer.WriteLine("	ObjectType: \"Pose\" {");
+            writer.WriteLine("		Count: 1");
+            writer.WriteLine("	}");
+            writer.WriteLine("	ObjectType: \"GlobalSettings\" {");
+            writer.WriteLine("		Count: 1");
+            writer.WriteLine("	}");
+            writer.WriteLine("}");
+            writer.WriteLine("");
+            writer.WriteLine("; Object properties");
+            writer.WriteLine(";------------------------------------------------------------------");
+
+        }
+
+        public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1)
+        {
+            WriteFBXAHeader(writer);
+            writer.WriteLine("Objects:  {");
+	        writer.WriteLine("Model: \""+m_name+"\", \"Mesh\" {");
+		    writer.WriteLine("Version: 232");
+
+            // write vertices
+            WriteVertices(writer);
+            // write indices.
+            //https://banexdevblog.wordpress.com/2014/06/23/a-quick-tutorial-about-the-fbx-ascii-format/
+            WriteNormals(writer);
+            WriteUVs(writer);
+
+
+        }
+
+        public void WriteVertices(StreamWriter writer)
+        {
+            // write vertices
+            writer.WriteLine("Vertices:");
+            for (int i = 0; i < m_allVertices.Length; ++i)
+            {
+                XboxVertexInstance vpnt = m_allVertices[i];
+                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
+                if (i < m_allVertices.Count - 1)
+                {
+                    writer.WriteLine(",");
+                }
+            }
+
+        }
+
+        public void WriteNormals(StreamWriter writer)
+        {
+            writer.WriteLine("LayerElementNormal: 0 {");
+            writer.WriteLine("Version: 101");
+            writer.WriteLine("Name: \"\"");
+            writer.WriteLine("MappingInformationType: \"ByVertex\"");
+            writer.WriteLine("ReferenceInformationType: \"Direct\"");
+            writer.WriteLine("Normals:");
+            for (int i = 0; i < m_allVertices.Length; ++i)
+            {
+                XboxVertexInstance vpnt = m_allVertices[i];
+                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
+                if (i < m_allVertices.Count - 1)
+                {
+                    writer.WriteLine(",");
+                }
+            }
+            writer.WriteLine("}");
+        }
+        public void WriteUVs(StreamWriter writer)
+        {
+            writer.WriteLine("LayerElementUV: 0 {");
+            writer.WriteLine("Version: 101");
+            writer.WriteLine("Name: \"\"");
+            writer.WriteLine("MappingInformationType: \"ByVertex\"");
+            writer.WriteLine("ReferenceInformationType: \"Direct\"");
+            writer.WriteLine("Normals:");
+            for (int i = 0; i < m_allVertices.Length; ++i)
+            {
+                XboxVertexInstance vpnt = m_allVertices[i];
+                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000}", vpnt.UV.X, vpnt.UV.Y));
+                if (i < m_allVertices.Count - 1)
+                {
+                    writer.WriteLine(",");
+                }
+            }
+            writer.WriteLine("}");
+        }
 
     }
 
-
+    
 
 
 
@@ -826,7 +944,7 @@ namespace ModelNamer
     }
 
     public class SubMeshData2
-    {   
+    {
         public float val1;
         public int StartOffset;
         public int val3;
@@ -856,7 +974,7 @@ namespace ModelNamer
         public Vector2 UV;
         public Vector2 UV2;
         public int ExtraData;
-        
+
 
         // I use arithmetic here to show clearly where these numbers come from
         // You can just type 28 if you want
