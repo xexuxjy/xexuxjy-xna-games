@@ -81,6 +81,18 @@ namespace ModelNamer
         }
 
 
+        public static String ToString(Vector3 v3)
+        {
+            return String.Format("{0:0.00000000} {1:0.00000000} {2:0.00000000}", v3.X, v3.Y, v3.Z);
+        }
+
+        public static String ToString(Vector2 v2)
+        {
+            return String.Format("{0:0.00000000} {1:0.00000000}", v2.X, v2.Y);
+        }
+
+
+
         public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
         {
             bool found = false;
@@ -891,7 +903,8 @@ namespace ModelNamer
         public List<ModelSubMesh> m_modelMeshes = new List<ModelSubMesh>();
         public String m_name;
         public List<TextureData> m_textures = new List<TextureData>();
-        public List<String> m_names = new List<String>();
+        public List<String> m_boneNames = new List<String>();
+        public List<String> m_textureNames = new List<String>();
         public List<Vector3> m_centers = new List<Vector3>();
         public List<String> m_selsInfo = new List<string>();
         public List<ShaderData> m_shaderData = new List<ShaderData>();
@@ -919,6 +932,39 @@ namespace ModelNamer
         public int m_maxUv;
     }
 
+
+    /*
+     * lodlevel 1
+        gc : 'full' model at 'best' quality?
+
+        lodlevel 2 
+        gc : front face minus eyes, quiver
+
+
+        lodlevel 4
+        gc: eyes and quiver
+
+
+        lodlevel 8 
+        gc: hair with bar and quiver
+
+        lodlevel 16
+        gc: hair sides , ears and quiver
+
+        lodlevel 32
+        gc: looks like 'good model' simialr to lod 1?
+
+
+        lodlevel 64
+        gc: lower quality full model , lod 2?
+
+
+        lodlevel 128
+        gc: lower quality full model , lod 3?
+
+        lodlevel 128
+        gc: lowest quality full model , lod 4?
+     * */
 
     public abstract class ModelSubMesh
     {
@@ -948,6 +994,13 @@ namespace ModelNamer
             get;
             set;
         }
+
+        public int MinUV
+        {
+            get;
+            set;
+        }
+
 
         public int MaxUV
         {
@@ -985,6 +1038,14 @@ namespace ModelNamer
             get;
         }
 
+        public void BuildMinMax()
+        {
+            MinUV = int.MaxValue;
+            MaxUV = int.MinValue;
+
+
+
+            }
 
         //public List<Vector3> Vertices = new List<Vector3>();
         //public List<Vector3> Normals = new List<Vector3>();
@@ -1080,6 +1141,54 @@ namespace ModelNamer
 
     }
 
+    public class TextureData
+    {
+        public string textureName;
+        public int minusOne;
+        public int unknown;
+        public int width;
+        public int height;
+        public int three;
+        public int zero;
+
+
+        public static TextureData FromStream(BinaryReader binReader)
+        {
+            TextureData textureData = new TextureData();
+            StringBuilder sb = new StringBuilder();
+            int count = 0;
+            char b;
+            int textureNameLength = 0x80;
+            for (int i = 0; i < textureNameLength; ++i)
+            {
+                b = (char)binReader.ReadByte();
+                if (b != 0x00)
+                {
+                    sb.Append(b);
+                }
+            }
+
+            String textureName = sb.ToString();
+            textureData.textureName = textureName;
+            textureData.minusOne = binReader.ReadInt32();
+            textureData.unknown = binReader.ReadInt32();
+            textureData.width = binReader.ReadInt32();
+            textureData.height = binReader.ReadInt32();
+            textureData.three = binReader.ReadInt32();
+            textureData.zero = binReader.ReadInt32();
+
+            //Debug.Assert(textureData.three == 3);
+            //Debug.Assert(textureData.zero == 0);
+
+            return textureData;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("N {0} a {1} b {2} w {3} h {4} u1 {5} u2 {6}", textureName, minusOne, unknown, width, height, three, zero);
+        }
+
+    }
 
 
 }

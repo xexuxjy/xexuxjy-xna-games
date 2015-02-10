@@ -81,68 +81,180 @@ namespace ModelNamer
 
             List<string> filenames = new List<string>();
 
-            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*carafe_dec*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "**"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*armor_all*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*carafe_decanter*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*animalsk*"));
-            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\arenas\", "*belfortgatenor*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*PropPracticePost1*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*amazon*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\arenas\", "*imperiafield*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*"));
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\axeCS_declamatio.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordCS_unofan.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_black.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\charm_catseye.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_carafe.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));
             }
 
-            using (StreamWriter infoSW = new StreamWriter(rootPath + "index-details.txt"))
-            {
-                foreach (XboxModel model in reader.m_models)
-                {
-                    using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
-                    {
-                        infoSW.WriteLine(String.Format("[{0}][{1}] Found IS at [{2}] count [{3}] VS[{4}][{5}] count [{6}].", model.m_name, model.NumMeshes, model.IndexStart, model.CountedIndices, model.VertexStart, model.VertexForm, model.CountedVertices));
-
-                        using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
-                        {
-                            model.WriteOBJ(objSw, matSw, texturePath);
-                        }
-                    }
-                }
-            }
-
-
-
-
-            //foreach (XboxModel model in reader.m_models)
+            //using (StreamWriter infoSW = new StreamWriter(rootPath + "index-details.txt"))
             //{
-            //    try
+            //    foreach (XboxModel model in reader.m_models)
             //    {
-            //        //foreach (ShaderData sd in model.m_shaderData)
-            //        //{
-            //        //    shadernames.Add(sd.shaderName);
-            //        //}
-            //        ////model.DumpSections(tagOutputPath);
             //        using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
             //        {
+            //            infoSW.WriteLine(String.Format("[{0}][{1}] Found IS at [{2}] count [{3}] VS[{4}][{5}] count [{6}].", model.m_name, model.NumMeshes, model.IndexStart, model.CountedIndices, model.VertexStart, model.VertexForm, model.CountedVertices));
+
             //            using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
             //            {
-            //                model.WriteOBJ(objSw, matSw, texturePath, 1);
+            //                model.WriteOBJ(objSw, matSw, texturePath,32);
             //            }
             //        }
             //    }
-            //    catch (System.Exception ex)
-            //    {
-
-            //    }
             //}
+
+            using (StreamWriter infoSW = new StreamWriter(rootPath + "submesh-details.txt"))
+            {
+                foreach (XboxModel model in reader.m_models)
+                {
+                    int adjc = model.m_textures.Count;
+                    foreach (string tn in model.m_textureNames)
+                    {
+                        if (tn.Contains("skygold"))
+                        {
+                            adjc--;
+                        }
+                    }
+
+                    if (adjc > 1 && model.m_avgVertex == 24)
+                    {
+                        int ibreak = 0;
+                    }
+
+                    //if (model.m_subMeshData1List.Count > 1 && model.m_avgVertex == 24)
+                    //{
+                    //    int ibreak = 0;
+                    //}
+
+                    infoSW.WriteLine("SubMesh1");
+                    foreach (SubMeshData1 smd1 in model.m_subMeshData1List)
+                    {
+                        smd1.WriteInfo(infoSW);
+                    }
+
+                    infoSW.WriteLine("SubMesh2");
+                    foreach (SubMeshData2 smd2 in model.m_subMeshData2List)
+                    {
+                        smd2.WriteInfo(infoSW);
+                    }
+
+                    foreach (TextureData td in model.m_textures)
+                    {
+                        infoSW.WriteLine(td.ToString());
+                    }
+
+
+                    foreach (SubMeshData2 smd2 in model.m_subMeshData2List)
+                    {
+                        infoSW.WriteLine("*************************************************************");
+                        for(int i=smd2.MinVertex;i<smd2.MaxVertex;++i)
+                        {
+                            infoSW.WriteLine(model.m_allVertices[i].ToString());
+                        }
+                        //smd2.WriteInfo(infoSW);
+                    }
+
+
+                    //foreach (XboxVertexInstance vbi in model.m_allVertices)
+                    //{
+                    //    infoSW.WriteLine(vbi.ToString());
+                    //}
+                    int startIndex = 0;
+
+                    //foreach (SubMeshData2 headerBlock in model.m_subMeshData2List)
+                    //{
+                    //    infoSW.WriteLine("*************************************************************");
+                    //    try
+                    //    {
+                    //        int end = startIndex + headerBlock.NumIndices - 2;
+                    //        for (int i = startIndex; i < end; i++)
+                    //        {
+                    //            int index1 = i;
+                    //            int index2 = i + 1;
+                    //            int index3 = i + 2;
+                    //            if (index3 >= model.m_allIndices.Count)
+                    //            {
+                    //                index3 = index1;
+                    //            }
+                    //            if (index2 >= model.m_allIndices.Count)
+                    //            {
+                    //                index2 = index1;
+                    //            }
+                    //            if (i >= model.m_allIndices.Count)
+                    //            {
+                    //                int ibreak = 0;
+                    //            }
+
+                    //            int i1 = model.m_allIndices[index1];
+                    //            int i2 = model.m_allIndices[index2];
+                    //            int i3 = model.m_allIndices[index3];
+
+                    //            // 1 based.
+                    //            //i1 += 1;
+                    //            //i2 += 1;
+                    //            //i3 += 1;
+
+                    //            // alternate winding
+                    //            infoSW.WriteLine(model.m_allVertices[i]);
+                    //            infoSW.WriteLine(model.m_allVertices[i2]);
+                    //            infoSW.WriteLine(model.m_allVertices[i3]);
+                    //        }
+                    //        startIndex += headerBlock.NumIndices;
+
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        int ibreak = 0;
+                    //    }
+                    //    //break;
+                    //}
+
+                }
+            }
+
+            foreach (XboxModel model in reader.m_models)
+            {
+                try
+                {
+                    //foreach (ShaderData sd in model.m_shaderData)
+                    //{
+                    //    shadernames.Add(sd.shaderName);
+                    //}
+                    ////model.DumpSections(tagOutputPath);
+                    using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
+                    {
+                        using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
+                        {
+                            model.WriteOBJ(objSw, matSw, texturePath, -1);
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+
+                }
+            }
 
 
 
@@ -151,20 +263,22 @@ namespace ModelNamer
         List<BaseModel> m_models = new List<BaseModel>();
     }
 
+    /*
+     * Model Amazon
+     * 
+     * mesh1 : teeth
+     * 
+    */
+
     public class XboxModel : BaseModel
     {
-        List<XboxVertexInstance> m_allVertices = new List<XboxVertexInstance>();
-        List<ushort> m_allIndices = new List<ushort>();
-        List<SubMeshData1> m_subMeshData1List = new List<SubMeshData1>();
-        List<SubMeshData2> m_subMeshData2List = new List<SubMeshData2>();
-
-        public int IndexStart = -1;
-        public int CountedIndices = -1;
-        public int VertexStart = -1;
-        public int CountedVertices = -1;
-        public int VertexForm = -1;
+        public List<XboxVertexInstance> m_allVertices = new List<XboxVertexInstance>();
+        public List<ushort> m_allIndices = new List<ushort>();
+        public List<SubMeshData1> m_subMeshData1List = new List<SubMeshData1>();
+        public List<SubMeshData2> m_subMeshData2List = new List<SubMeshData2>();
+        
         public int NumMeshes = 0;
-
+        public int m_avgVertex;
         public XboxModel(String name)
             : base(name)
         {
@@ -174,7 +288,7 @@ namespace ModelNamer
         public override void LoadData(BinaryReader binReader)
         {
             binReader.BaseStream.Position = 0;
-            Common.ReadNullSeparatedNames(binReader, Common.nameTag, m_names);
+            Common.ReadNullSeparatedNames(binReader, Common.nameTag, m_boneNames);
             binReader.BaseStream.Position = 0;
             ReadTextureSection(binReader);
             binReader.BaseStream.Position = 0;
@@ -217,7 +331,7 @@ namespace ModelNamer
                     int unk1h = binReader.ReadInt32();
                     Debug.Assert(unk1h == 0x00);
 
-
+                                        
                     int blockStart1 = binReader.ReadInt32();
                     Debug.Assert(blockStart1 == 0x70);
                     int blockStart2 = binReader.ReadInt32();
@@ -247,7 +361,7 @@ namespace ModelNamer
                     int unk1s = binReader.ReadInt32();
                     int unk1t = binReader.ReadInt32();
                     int unk1u = binReader.ReadInt32();
-
+                    
                     int minus1e = binReader.ReadInt32();
 
                     Debug.Assert(minus1a == -1 && minus1b == -1 && minus1c == -1 && minus1d == -1 && minus1e == -1);
@@ -258,28 +372,28 @@ namespace ModelNamer
 
                     byte[] doegEnd = binReader.ReadBytes(4);
                     Debug.Assert(doegEnd[0] == 'd' && doegEnd[3] == 'g');
-                    int doegEndVal = (int)(binReader.BaseStream.Position - 4);
+                    int doegEndVal = (int)(binReader.BaseStream.Position-4);
 
                     binReader.BaseStream.Position = doegEndVal + blockStart1;
 
                     List<int> blockOneValues = new List<int>();
-                    for (int i = 0; i < NumMeshes; ++i)
+                    for(int i=0;i<NumMeshes;++i)
                     {
                         blockOneValues.Add(binReader.ReadInt32());
                     }
 
-                    List<SubMeshData1> subMeshData1List = new List<SubMeshData1>();
-                    for (int i = 0; i < NumMeshes; ++i)
+
+                    for(int i=0;i<NumMeshes;++i)
                     {
                         SubMeshData1 smd = SubMeshData1.FromStream(binReader);
-                        subMeshData1List.Add(smd);
+                        m_subMeshData1List.Add(smd);
                     }
 
                     int TotalIndices = 0;
-
+                    
 
                     //NumMeshes += 1;
-                    int maxVal5 = 0;
+
                     for (int i = 0; i < NumMeshes; ++i)
                     {
                         SubMeshData2 smd = SubMeshData2.FromStream(binReader);
@@ -287,100 +401,120 @@ namespace ModelNamer
                         TotalIndices += smd.NumIndices;
                         int val1a = smd.NumIndices * 2;
                         smd.pad = val1a % 4;
-
-                        //if (i > 1)
-                        //{
-                        //    int val1 = (m_subMeshData2List[i - 1].NumIndices *2);
-                        //    //smd.pad = val1 % 4;
-                        //    int diff = m_subMeshData2List[i - 1].StartOffset + val1 + smd.pad;
-                        //    Debug.Assert(diff == smd.StartOffset);
-                        //    int ibreak = 0;
-                        //}
-
-                        maxVal5 = Math.Max(smd.val5, maxVal5);
-
                     }
-
-
 
                     binReader.BaseStream.Position += 4;
                     int TotalVertices = binReader.ReadInt32();
-                    binReader.BaseStream.Position = doegEndVal + doegToTextureSize;
+                    
+                    // do stuff...
+                    SubMeshData3 smd3 = SubMeshData3.FromStream(binReader, NumMeshes);
+                    
+                    
+                    
+                    //binReader.BaseStream.Position = doegEndVal + doegToTextureSize;
 
-                    Common.ReadNullSeparatedNames(binReader, binReader.BaseStream.Position, numTextures, m_names);
+                    Common.ReadNullSeparatedNames(binReader, binReader.BaseStream.Position, numTextures, m_textureNames);
 
-                    int rem = TotalIndices % 3;
-                    //TotalIndices += rem;
-
-                    foreach (SubMeshData2 smd in m_subMeshData2List)
+                    foreach(SubMeshData2 smd in m_subMeshData2List)
                     {
                         for (int i = 0; i < smd.NumIndices; ++i)
                         {
-                            int val = binReader.ReadUInt16();
-                            m_allIndices.Add((ushort)val);
+                            ushort val = binReader.ReadUInt16();
+                            smd.indices.Add(val);
                         }
-                        binReader.BaseStream.Position += smd.pad;
+                        m_allIndices.AddRange(smd.indices);
+                        smd.padBytes = binReader.ReadBytes(smd.pad);
+                        smd.BuildMinMax();
                     }
-
-                    //for(int i=0;i<TotalIndices;++i)
-                    //{
-                    //    int val = binReader.ReadUInt16();
-                    //    //if (val >= TotalIndices)
-                    //    //{
-                    //    //    TotalIndices = Math.Max(TotalIndices,val);
-                    //    //    TotalIndices++;
-                    //    //}
-                    //    m_allIndices.Add((ushort)val);
-                    //}
-
-
-                    // fixme - figure out why sometimes there is a gap here, maybe to do with num mesh count being wrong
-                    // e.g. belfrort has either 334 or 333 meshes?
-
-                    //int pad = ((int)binReader.BaseStream.Position - doegEndVal) % 4;
-                    //int pad = TotalIndices % 16;
-                    //pad = 0x176;
-                    //pad = 2;
-                    //binReader.BaseStream.Position += pad;
-                    int fixedPos = 0x7aFa0;
-                    int diff1 = fixedPos - (int)binReader.BaseStream.Position;
-                    //binReader.BaseStream.Position = fixedPos;
 
                     long testPosition = binReader.BaseStream.Position;
-                    int pad = (int)testPosition % 16;
-                    pad = 8;
-                    //testPosition += pad;
-                    binReader.BaseStream.Position = testPosition;
 
-                    ReadUnskinnedVertexData36(binReader, m_allVertices, TotalVertices);
-                    bool valid = ValidVertex(m_allVertices[0].Position) && ValidVertex(m_allVertices[1].Position);
-                    if (!valid)
+                    if (m_skinned)
                     {
-                        binReader.BaseStream.Position = testPosition;
-                        m_allVertices.Clear();
-                        ReadUnskinnedVertexData28(binReader, m_allVertices, TotalVertices);
-                        valid = ValidVertex(m_allVertices[0].Position) && ValidVertex(m_allVertices[1].Position);
-                    }
-                    if (!valid)
-                    {
-                        binReader.BaseStream.Position = testPosition;
-                        m_allVertices.Clear();
-                        ReadUnskinnedVertexData24(binReader, m_allVertices, TotalVertices);
-                        valid = ValidVertex(m_allVertices[0].Position) && ValidVertex(m_allVertices[1].Position);
-                    }
+                        ReadSkinnedVertexData28(binReader, m_allVertices, TotalVertices);
+                        //ReadSkinnedVertexData32(binReader, m_allVertices, TotalVertices);
 
-                    if (!valid)
-                    {
-                        int ibreak = 0;
-                    }
+                        int maxWeight = -1; 
+                        foreach (XboxVertexInstance vbi in m_allVertices)
+                        {
+                            vbi.Weights = binReader.ReadBytes(6);
+                            //if (vbi.Weights[0] / 3 >= m_bones.Count)
+                            //{
+                            //    int ibreak = 0;
+                            //}
+                            //if (vbi.Weights[2] / 3 >= m_bones.Count)
+                            //{
+                            //    int ibreak = 0;
+                            //}
 
+                            if (vbi.Weights[0] != 255 && vbi.Weights[0] % 3 !=0)
+                            {
+                                int ibreak = 0;
+                            }
+
+                            if (vbi.Weights[2] != 255 && vbi.Weights[2] % 3 != 0)
+                            {
+                                int ibreak = 0;
+                            }
+
+                            if (vbi.Weights[0] != 255)
+                            {
+                                maxWeight = Math.Max(vbi.Weights[0] / 3, maxWeight);
+                            }
+                            if (vbi.Weights[2] != 255)
+                            {
+                                maxWeight = Math.Max(vbi.Weights[2] / 3, maxWeight);
+                            }
+                            if (vbi.Weights[4] != 255)
+                            {
+                                maxWeight = Math.Max(vbi.Weights[4] / 3, maxWeight);
+                            }
+
+
+                            //if (vbi.Weights[0] / 3 >= m_bones.Count)
+                            //{
+                            //    int ibreak = 0;
+                            //}
+
+                        }
+                        int ibreak2 = 0;
+                    }
+                    else
+                    {
+
+                        if (Common.FindCharsInStream(binReader, Common.endTag))
+                        {
+                            m_avgVertex = ((int)binReader.BaseStream.Position - 4 - (int)testPosition) / TotalVertices;
+                            binReader.BaseStream.Position = testPosition;
+
+                            //ReadUnskinnedVertexData36(binReader, m_allVertices, TotalVertices);
+                            switch (m_avgVertex)
+                            {
+                                case 24:
+                                    ReadUnskinnedVertexData24(binReader, m_allVertices, TotalVertices);
+                                    break;
+                                case 28:
+                                    ReadUnskinnedVertexData28(binReader, m_allVertices, TotalVertices);
+                                    break;
+                                case 36:
+                                    ReadUnskinnedVertexData36(binReader, m_allVertices, TotalVertices);
+                                    break;
+                                default:
+                                    int ibreak = 0;
+                                    break;
+                            }
+                        }
+                    }
                     BuildBB();
 
-                    ShaderData shaderData = new ShaderData();
-                    shaderData.shaderName = "test";
-                    shaderData.textureId1 = 0;
-                    shaderData.textureId2 = 1;
-                    m_shaderData.Add(shaderData);
+                    for (int i = 0; i < m_textureNames.Count; ++i)
+                    {
+                        ShaderData shaderData = new ShaderData();
+                        shaderData.shaderName = "test";
+                        shaderData.textureId1 = (byte)i;
+                        shaderData.textureId2 = (byte)(i + 1);
+                        m_shaderData.Add(shaderData);
+                    }
                 }
                 else
                 {
@@ -475,24 +609,49 @@ namespace ModelNamer
                 writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
             }
 
+            if (m_skinned)
+            {
+                foreach (XboxVertexInstance vpnt in m_allVertices)
+                {
+                    writer.WriteLine(String.Format("# weights BI2[{0}] [{1}][{2}][{3}][{4}][{5}][{6}]", vpnt.BoneInfo2, vpnt.Weights[0], vpnt.Weights[1], vpnt.Weights[2], vpnt.Weights[3], vpnt.Weights[4], vpnt.Weights[5]));
+                }
+            }
+
+
             int startIndex = 0;
 
-            foreach (SubMeshData2 headerBlock in m_subMeshData2List)
+            for(int a=0;a<m_subMeshData2List.Count;++a)
             {
+                SubMeshData2 headerBlock = m_subMeshData2List[a];
+                SubMeshData1 data1 = m_subMeshData1List[a];
+
                 try
                 {
+                    if(a != 3)
+                    {
+                        //continue;
+                    }
+
                     submeshCount++;
+
+                    //if (data1.LodLevel != 0 && ((data1.LodLevel & desiredLod) == 0))
+                    //{
+                    //    continue;
+                    //}
+
 
                     if (submeshCount == m_subMeshData2List.Count)
                     {
                         //continue;
                     }
 
-                    string groupName = String.Format("{0}-submesh{1}-LOD{2}", m_name, submeshCount, headerBlock.val1);
+                    string groupName = String.Format("{0}-submesh{1}-LOD{2}", m_name, submeshCount, data1.LodLevel);
 
                     writer.WriteLine("o " + groupName);
 
                     //ShaderData shaderData = m_shaderData[headerBlock.MeshId];
+                    //ShaderData shaderData = m_shaderData[0];
+                    //ShaderData shaderData = m_shaderData[data1.pad5b];
                     ShaderData shaderData = m_shaderData[0];
                     string adjustedTexture = FindTextureName(shaderData);
                     String materialName = adjustedTexture + ".png";
@@ -513,9 +672,9 @@ namespace ModelNamer
                         }
                         if (index2 >= m_allIndices.Count)
                         {
-                            index2 = index1;
+                            index2=index1;
                         }
-                        if (i >= m_allIndices.Count)
+                        if (i  >= m_allIndices.Count)
                         {
                             int ibreak = 0;
                         }
@@ -574,7 +733,7 @@ namespace ModelNamer
                     Vector2 u = Common.FromStreamVector2(binReader);
                     XboxVertexInstance vpnt = new XboxVertexInstance();
                     vpnt.Position = p;
-                    vpnt.UV = u;
+                    vpnt.UV= u;
                     vpnt.Normal = normV;
                     allVertices.Add(vpnt);
                 }
@@ -606,13 +765,14 @@ namespace ModelNamer
                     // 24 bytes per entry? , or 28...
                     Vector3 p = Common.FromStreamVector3(binReader);
                     Vector3 normV = UncompressNormal(binReader.ReadInt32());
+                    //Vector3 normU = UncompressNormal(binReader.ReadInt32());
                     int unk1 = binReader.ReadInt32();
                     Vector2 u = Common.FromStreamVector2(binReader);
                     XboxVertexInstance vpnt = new XboxVertexInstance();
                     vpnt.Position = p;
                     vpnt.UV = u;
                     vpnt.Normal = normV;
-                    vpnt.ExtraData = unk1;
+                    vpnt.ExtraData = -1;
                     allVertices.Add(vpnt);
                 }
                 catch (System.Exception ex)
@@ -662,6 +822,63 @@ namespace ModelNamer
         }
 
 
+        public void ReadSkinnedVertexData28(BinaryReader binReader, List<XboxVertexInstance> allVertices, int numVertices)
+        {
+            for (int i = 0; i < numVertices; ++i)
+            {
+                try
+                {
+                    XboxVertexInstance vpnt = new XboxVertexInstance();
+                    vpnt.Position = Common.FromStreamVector3(binReader);
+                    //vpnt.BoneInfo1 = binReader.ReadInt32();
+                    vpnt.Normal = UncompressNormal(binReader.ReadInt32());
+                    //int unk1 = binReader.ReadInt32();
+                    vpnt.UV = Common.FromStreamVector2(binReader);
+                    vpnt.BoneInfo2 = binReader.ReadInt32();
+
+                    if (vpnt.BoneInfo2 != 255)
+                    {
+                        int ibreak = 0;
+                    }
+
+                    allVertices.Add(vpnt);
+                }
+                catch (System.Exception ex)
+                {
+                    int ibreak = 0;
+                }
+            }
+            int ibreak2 = 0;
+        }
+
+        public void ReadSkinnedVertexData32(BinaryReader binReader, List<XboxVertexInstance> allVertices, int numVertices)
+        {
+            for (int i = 0; i < numVertices; ++i)
+            {
+                try
+                {
+                    // 24 bytes per entry? , or 28...
+                    Vector3 p = Common.FromStreamVector3(binReader);
+                    int boneInfo1 = binReader.ReadInt32();
+                    int boneInfo2 = binReader.ReadInt32();
+                    Vector2 u = Common.FromStreamVector2(binReader);
+                    int boneInfo3 = binReader.ReadInt32();
+                    XboxVertexInstance vpnt = new XboxVertexInstance();
+                    vpnt.Position = p;
+                    vpnt.UV = u;
+                    //vpnt.Normal = normV;
+                    //vpnt.ExtraData = unk1;
+                    allVertices.Add(vpnt);
+                }
+                catch (System.Exception ex)
+                {
+                    int ibreak = 0;
+                }
+            }
+            int ibreak2 = 0;
+        }
+
+
 
         // taken from old sol code and it seems to work. wow!
         public Vector3 UncompressNormal(int cv)
@@ -676,54 +893,6 @@ namespace ModelNamer
             v.Z = ((float)z) / (float)((1 << 9) - 1);
             return v;
         }
-
-
-        public void ReadSkinnedVertexData(BinaryReader binReader, List<VertexPositionNormalTexture> allVertices, int numVertices)
-        {
-            //for (int i = 0; i < numVertices; ++i)
-            while (true)
-            {
-                try
-                {
-                    if (IsEnd(binReader))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        binReader.BaseStream.Position -= 4;
-                    }
-
-                    Vector3 p = Common.FromStreamVector3(binReader);
-                    int skip3 = binReader.ReadInt32();
-                    Vector2 u = Common.FromStreamVector2(binReader);
-                    //Vector2 u2 = Common.FromStreamVector2(binReader);
-                    int skip4 = binReader.ReadInt32();
-                    VertexPositionNormalTexture vpnt = new VertexPositionNormalTexture();
-                    vpnt.Position = p;
-                    vpnt.TextureCoordinate = u;
-                    //vpnt.TextureCoordinate = new Vector2();
-
-                    if (float.IsNaN(u.X) || float.IsNaN(u.Y))
-                    {
-                        int ibreak = 0;
-                    }
-
-                    vpnt.Normal = Vector3.Up;
-                    allVertices.Add(vpnt);
-                }
-                catch (System.Exception ex)
-                {
-                    int ibreak = 0;
-                }
-            }
-
-            // Now weight info.
-            binReader.BaseStream.Position += (numVertices * 6);
-
-
-        }
-
 
 
 
@@ -753,7 +922,7 @@ namespace ModelNamer
                 for (int i = 0; i < numBones; ++i)
                 {
                     BoneNode node = BoneNode.FromStream(binReader);
-                    node.name = m_names[i];
+                    node.name = m_boneNames[i];
                     m_bones.Add(node);
                 }
                 ConstructSkeleton();
@@ -776,128 +945,10 @@ namespace ModelNamer
 
         //public List<VertexPositionNormalTexture> m_points = new List<VertexPositionNormalTexture>();
 
-        public void WriteFBXAHeader(StreamWriter writer)
-        {
-            // write header.
-            writer.WriteLine("; FBX 6.1.0 project file");
-            writer.WriteLine("; Created by Blender FBX Exporter");
-            writer.WriteLine("; for support mail: ideasman42@gmail.com");
-            writer.WriteLine("; ----------------------------------------------------");
-            writer.WriteLine("");
-            writer.WriteLine("FBXHeaderExtension:  {");
-            writer.WriteLine("FBXHeaderVersion: 1003");
-            writer.WriteLine("FBXVersion: 6100");
-            writer.WriteLine("Creator: \"FBX SDK/FBX Plugins build 20070228\"");
-            writer.WriteLine("OtherFlags:  {");
-            writer.WriteLine("FlagPLE: 0");
-            writer.WriteLine("}");
-            writer.WriteLine("}");
-            writer.WriteLine("CreationTime: \"2014-03-20 17:38:29:000\"");
-            writer.WriteLine("Creator: \"Blender version 2.69 (sub 10)\"");
-
-            writer.WriteLine("; Object definitions");
-            writer.WriteLine(";------------------------------------------------------------------");
-
-            writer.WriteLine("Definitions:  {");
-            writer.WriteLine("Version: 100");
-            writer.WriteLine("Count: 3");
-            writer.WriteLine("ObjectType: \"Model\" {");
-            writer.WriteLine("Count: 1");
-            writer.WriteLine("}");
-            writer.WriteLine("ObjectType: \"Geometry\" {");
-            writer.WriteLine("Count: 1");
-            writer.WriteLine("}");
-            writer.WriteLine("	ObjectType: \"Material\" {");
-            writer.WriteLine("Count: 1");
-            writer.WriteLine("}");
-            writer.WriteLine("	ObjectType: \"Pose\" {");
-            writer.WriteLine("		Count: 1");
-            writer.WriteLine("	}");
-            writer.WriteLine("	ObjectType: \"GlobalSettings\" {");
-            writer.WriteLine("		Count: 1");
-            writer.WriteLine("	}");
-            writer.WriteLine("}");
-            writer.WriteLine("");
-            writer.WriteLine("; Object properties");
-            writer.WriteLine(";------------------------------------------------------------------");
-
-        }
-
-        public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1)
-        {
-            WriteFBXAHeader(writer);
-            writer.WriteLine("Objects:  {");
-	        writer.WriteLine("Model: \""+m_name+"\", \"Mesh\" {");
-		    writer.WriteLine("Version: 232");
-
-            // write vertices
-            WriteVertices(writer);
-            // write indices.
-            //https://banexdevblog.wordpress.com/2014/06/23/a-quick-tutorial-about-the-fbx-ascii-format/
-            WriteNormals(writer);
-            WriteUVs(writer);
-
-
-        }
-
-        public void WriteVertices(StreamWriter writer)
-        {
-            // write vertices
-            writer.WriteLine("Vertices:");
-            for (int i = 0; i < m_allVertices.Length; ++i)
-            {
-                XboxVertexInstance vpnt = m_allVertices[i];
-                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
-                if (i < m_allVertices.Count - 1)
-                {
-                    writer.WriteLine(",");
-                }
-            }
-
-        }
-
-        public void WriteNormals(StreamWriter writer)
-        {
-            writer.WriteLine("LayerElementNormal: 0 {");
-            writer.WriteLine("Version: 101");
-            writer.WriteLine("Name: \"\"");
-            writer.WriteLine("MappingInformationType: \"ByVertex\"");
-            writer.WriteLine("ReferenceInformationType: \"Direct\"");
-            writer.WriteLine("Normals:");
-            for (int i = 0; i < m_allVertices.Length; ++i)
-            {
-                XboxVertexInstance vpnt = m_allVertices[i];
-                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
-                if (i < m_allVertices.Count - 1)
-                {
-                    writer.WriteLine(",");
-                }
-            }
-            writer.WriteLine("}");
-        }
-        public void WriteUVs(StreamWriter writer)
-        {
-            writer.WriteLine("LayerElementUV: 0 {");
-            writer.WriteLine("Version: 101");
-            writer.WriteLine("Name: \"\"");
-            writer.WriteLine("MappingInformationType: \"ByVertex\"");
-            writer.WriteLine("ReferenceInformationType: \"Direct\"");
-            writer.WriteLine("Normals:");
-            for (int i = 0; i < m_allVertices.Length; ++i)
-            {
-                XboxVertexInstance vpnt = m_allVertices[i];
-                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000}", vpnt.UV.X, vpnt.UV.Y));
-                if (i < m_allVertices.Count - 1)
-                {
-                    writer.WriteLine(",");
-                }
-            }
-            writer.WriteLine("}");
-        }
 
     }
 
-    
+
 
 
 
@@ -908,16 +959,34 @@ namespace ModelNamer
         public int zero2;
         public int counter1;
         //byte[] name1;
-        float f1;
-        float f2;
-        float f3;
-        float f4;
+        //byte f1a;
+        //byte f1b;
+        //byte f1c;
+        //byte f1d;
+
+        //float f1;
+        //float f2;
+        //float f3;
+        //float f4;
+
+        int f1;
+        int f2;
+        int f3;
+        int f4;
+        //byte[] usefulBytes;
+        //byte[] padBytes;
+
         public int pad1;
         public int pad2;
         public int pad3;
         public int pad4;
         public int pad5;
-        public int pad6;
+        //public byte pad5a;
+        //public byte pad5b;
+        //public byte pad5c;
+        //public byte pad5d;
+        public int LodLevel;
+        public static HashSet<int> s_lodLevels = new HashSet<int>();
 
 
         public static SubMeshData1 FromStream(BinaryReader binReader)
@@ -927,96 +996,272 @@ namespace ModelNamer
             smd.zero2 = binReader.ReadInt32();
             smd.counter1 = binReader.ReadInt32();
             //smd.name1 = binReader.ReadBytes(16);
-            smd.f1 = binReader.ReadSingle();
-            smd.f2 = binReader.ReadSingle();
-            smd.f3 = binReader.ReadSingle();
-            smd.f4 = binReader.ReadSingle();
+            //smd.f1 = binReader.ReadSingle();
+
+
+            
+            //smd.f1a = binReader.ReadByte();
+            //smd.f1b = binReader.ReadByte();
+            //smd.f1c = binReader.ReadByte();
+            //smd.f1d = binReader.ReadByte();
+
+            //smd.f1 = binReader.ReadSingle();
+            //smd.f2 = binReader.ReadSingle();
+            //smd.f3 = binReader.ReadSingle();
+            //smd.f4 = binReader.ReadSingle();
+
+            //smd.usefulBytes = binReader.ReadBytes(16);
+            //smd.padBytes = binReader.ReadBytes(20);
+            smd.f1 = binReader.ReadInt32();
+            smd.f2 = binReader.ReadInt32();
+            smd.f3 = binReader.ReadInt32();
+            smd.f4 = binReader.ReadInt32();
+
+
             smd.pad1 = binReader.ReadInt32();
             smd.pad2 = binReader.ReadInt32();
             smd.pad3 = binReader.ReadInt32();
             smd.pad4 = binReader.ReadInt32();
             smd.pad5 = binReader.ReadInt32();
-            smd.pad6 = binReader.ReadInt32();
+            //smd.pad5a = binReader.ReadByte();
+            //smd.pad5b = binReader.ReadByte();
+            //smd.pad5c = binReader.ReadByte();
+            //smd.pad5d = binReader.ReadByte();
+            smd.LodLevel = binReader.ReadInt32();
             smd.minus1 = binReader.ReadInt32();
-
+            s_lodLevels.Add(smd.LodLevel);
             return smd;
         }
+
+        public String PrintTidy(byte[] data)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < data.Length; ++i)
+            {
+                sb.Append("[" + data[i] + "]\t");
+            }
+            return sb.ToString();
+        }
+
+
+        public void WriteInfo(StreamWriter sw)
+        {
+            //sw.WriteLine(String.Format("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][{7}][{8}][{9}][{10}] a[{11}] b[{12}] c[{13}] d[{14}] lod[{15}]", zero1, zero2, counter1, , pad1, pad2, pad3, pad4, pad5a, pad5b, pad5c, pad5d, LodLevel));
+            sw.WriteLine(String.Format("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][{7}][{8}][{9}][{10}] a[{11}] lod[{12}]", zero1, zero2, counter1, f1,f2,f3,f4,pad1, pad2, pad3, pad4, pad5,LodLevel));
+            //sw.WriteLine(String.Format("[{0}][{1}][{2}][{3}][{4}]", zero1, zero2, counter1,PrintTidy(usefulBytes),PrintTidy(padBytes),LodLevel));
+            //sw.WriteLine(String.Format("[{0}][{1}][{2}][{3}]",f1a,f1b,f1c,f1d));
+        }
+
+
     }
 
     public class SubMeshData2
-    {
+    {   
         public float val1;
         public int StartOffset;
-        public int val3;
+        public int val2;
         public int NumIndices;
-        public int val5;
+
+        public int val3;
         public int pad;
+        public byte[] padBytes;
+        public List<ushort> indices = new List<ushort>();
+        public int MinVertex = int.MaxValue;
+        public int MaxVertex = int.MinValue;
 
         public static SubMeshData2 FromStream(BinaryReader binReader)
         {
             SubMeshData2 smd = new SubMeshData2();
             smd.val1 = binReader.ReadSingle();
             smd.StartOffset = binReader.ReadInt32();
-            smd.val3 = binReader.ReadInt32();
+            smd.val1 = binReader.ReadInt32();
             smd.NumIndices = binReader.ReadInt32();
             //smd.NumIndices *= 2;
-            smd.val5 = binReader.ReadInt32();
+            smd.val2 = binReader.ReadInt32();
             return smd;
         }
+        public void WriteInfo(StreamWriter sw)
+        {
+            sw.WriteLine(String.Format("SO[{0}]NI[{1}]V1[{2}]V2[{3}]V3[{4}]", StartOffset,NumIndices,val1,val2,val3));
+        }
+
+        public void BuildMinMax()
+        {
+            for (int i = 0; i < indices.Count; ++i)
+            {
+                MinVertex = Math.Min(MinVertex, indices[i]);
+                MaxVertex = Math.Max(MaxVertex, indices[i]);
+            }
+
+        }
+
+    }
+
+    public class SubMeshData3
+    {
+        public int val1;
+        public int val2;
+        public int val3;
+        public int val4;
+        public int val5;
+        public int val6;
+        public List<int> list1 = new List<int>();
+        public List<int[]> list2 = new List<int[]>();
+        public List<int[]> list3 = new List<int[]>();
+        public float val7;
+        public List<SubMeshData4> data4list = new List<SubMeshData4>();
+
+        public int lastElementOffset;
+        public int headerEnd2;
+        public int headerEnd3;
+        public int headerEnd4;
+        public int headerEnd5;
+        public float headerEnd6;
+        public int[] headerEndZero = new int[8];
+        public int[] headerEndZero2 = new int[3];
+
+        public static SubMeshData3 FromStream(BinaryReader binReader, int numMeshes)
+        {
+            SubMeshData3 smd3 = new SubMeshData3();
+            smd3.val1 = binReader.ReadInt32();
+            smd3.val2 = binReader.ReadInt32();
+            smd3.val3 = binReader.ReadInt32();
+            smd3.val4 = binReader.ReadInt32();
+            smd3.val5 = binReader.ReadInt32();
+            smd3.val6 = binReader.ReadInt32();
+            Debug.Assert(smd3.val2 == -1);
+            Debug.Assert(smd3.val4 == -1);
+            Debug.Assert(smd3.val6 == -1);
+            for (int i = 0; i < numMeshes; ++i)
+            {
+                smd3.list1.Add(binReader.ReadInt32());
+            }
+
+            for (int i = 0; i < numMeshes; ++i)
+            {
+                int[] a = new int[3];
+                for (int j = 0; j < a.Length; ++j)
+                {
+                    a[j] = binReader.ReadInt32();
+                }
+                smd3.list2.Add(a);
+            }
+            for (int i = 0; i < numMeshes; ++i)
+            {
+                int[] a = new int[11];
+                for (int j = 0; j < a.Length; ++j)
+                {
+                    a[j] = binReader.ReadInt32();
+                }
+                smd3.list3.Add(a);
+            }
+
+
+
+            smd3.lastElementOffset = binReader.ReadInt32();
+            smd3.headerEnd2 = binReader.ReadInt32();
+            smd3.headerEnd3 = binReader.ReadInt32();
+            smd3.headerEnd4 = binReader.ReadInt32();
+            smd3.headerEnd5 = binReader.ReadInt32();
+            smd3.headerEnd6 = binReader.ReadSingle();
+            Debug.Assert(smd3.headerEnd6 == 1.0f);
+            for (int i = 0; i < smd3.headerEndZero.Length; ++i)
+            {
+                smd3.headerEndZero[i] = binReader.ReadInt32();
+                Debug.Assert(smd3.headerEndZero[i] == 0);
+            }
+            for(int i=0;i<numMeshes;++i)
+            {
+                int startVal = smd3.list3[i][5];
+                int endVal = i < smd3.list3.Count-1? smd3.list3[i+1][5]:smd3.lastElementOffset;
+                int sectionLength = endVal - startVal;
+
+                smd3.data4list.Add(SubMeshData4.FromStream(binReader,numMeshes,sectionLength));
+            }
+            for (int i = 0; i < smd3.headerEndZero2.Length; ++i)
+            {
+                smd3.headerEndZero2[i] = binReader.ReadInt32();
+                Debug.Assert(smd3.headerEndZero2[i] == 0);
+            }
+
+            return smd3;
+        }
+
+    }
+
+    public class SubMeshData4
+    {
+        public float[] array0 = new float[4];
+
+        public List<int> m_data = new List<int>();
+
+        public static SubMeshData4 FromStream(BinaryReader binReader, int numMeshes,int sectionLength)
+        {
+            SubMeshData4 smd = new SubMeshData4();
+            for(int i=0;i<smd.array0.Length;++i)
+            {
+                smd.array0[i] = binReader.ReadSingle();
+                Debug.Assert(smd.array0[i] == 1.0f);
+            }
+
+            int offset = (smd.array0.Length * 4);
+            int count = (sectionLength - offset) / 4;
+            for (int i = 0; i < count; ++i)
+            {
+                smd.m_data.Add(binReader.ReadInt32());
+            }
+
+
+            return smd;
+        }
+
     }
 
 
-    public struct XboxVertexInstance : IVertexType
+
+    public class XboxVertexInstance
     {
+
 
         public Vector3 Position;
         public Vector3 Normal;
         public Vector2 UV;
         public Vector2 UV2;
         public int ExtraData;
-
+        public byte[] Weights;
+        public int BoneInfo1;
+        public int BoneInfo2;
+        public int BoneInfo3;
 
         // I use arithmetic here to show clearly where these numbers come from
         // You can just type 28 if you want
-        public static readonly int SizeInBytes = sizeof(float) * 11;
+        //public static readonly int SizeInBytes = sizeof(float) * 11;
 
-        // Vertex Element array for our struct above
-        public static readonly VertexElement[] VertexElements = 
-        {
-            new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
-            new VertexElement(sizeof(float) * 3, VertexElementFormat.Vector3, VertexElementUsage.Normal, 1),
-            new VertexElement(sizeof(float) * 6, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 2),
-            new VertexElement(sizeof(float) * 8, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 3),
-            new VertexElement(sizeof(float) * 10, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 4),
-            new VertexElement(sizeof(float) * 11, VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 5),
-        };
+        //// Vertex Element array for our struct above
+        //public static readonly VertexElement[] VertexElements = 
+        //{
+        //    new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
+        //    new VertexElement(sizeof(float) * 3, VertexElementFormat.Vector3, VertexElementUsage.Normal, 1),
+        //    new VertexElement(sizeof(float) * 6, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 2),
+        //    new VertexElement(sizeof(float) * 8, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 3),
+        //    new VertexElement(sizeof(float) * 10, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 4),
+        //    new VertexElement(sizeof(float) * 11, VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 5),
+        //};
 
-        public static VertexDeclaration Declaration
-        {
-            get { return new VertexDeclaration(VertexElements); }
-        }
+        //public static VertexDeclaration Declaration
+        //{
+        //    get { return new VertexDeclaration(VertexElements); }
+        //}
 
-        VertexDeclaration IVertexType.VertexDeclaration
-        {
-            get { return new VertexDeclaration(VertexElements); }
-        }
+        //VertexDeclaration IVertexType.VertexDeclaration
+        //{
+        //    get { return new VertexDeclaration(VertexElements); }
+        //}
 
         public override string ToString()
         {
-            return String.Format("P {0} N {1} UV {2} E {3}", ToString(Position), ToString(Normal), ToString(UV), ExtraData);
+            return String.Format("P {0}\tN {1}\tUV {2}\tE {3}", Common.ToString(Position), Common.ToString(Normal), Common.ToString(UV), ExtraData);
         }
-
-        public String ToString(Vector3 v3)
-        {
-            return String.Format("{0:0.00000000} {1:0.00000000} {2:0.00000000}", v3.X, v3.Y, v3.Z);
-        }
-
-        public String ToString(Vector2 v2)
-        {
-            return String.Format("{0:0.00000000} {1:0.00000000}", v2.X, v2.Y);
-        }
-
-
     }
 
 
