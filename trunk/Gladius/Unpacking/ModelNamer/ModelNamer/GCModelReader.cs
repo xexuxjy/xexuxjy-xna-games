@@ -35,7 +35,7 @@ namespace ModelNamer
 
             // Look for skeleton and skin if they exist. need to load names first.
             binReader.BaseStream.Position = startPosition;
-            Common.ReadNullSeparatedNames(binReader, Common.nameTag, m_names);
+            Common.ReadNullSeparatedNames(binReader, Common.nameTag, m_boneNames);
             binReader.BaseStream.Position = startPosition;
             ReadSKELSection(binReader);
             binReader.BaseStream.Position = startPosition;
@@ -473,6 +473,7 @@ namespace ModelNamer
                     header.meshUnk3 = binReader.ReadInt32();
                     header.meshUnk4 = binReader.ReadInt32();
                     header.LodLevel = binReader.ReadInt32();
+                    GCModel.s_lodLevels.Add(header.LodLevel);
                 }
             }
         }
@@ -511,7 +512,7 @@ namespace ModelNamer
                 for (int i = 0; i < numBones; ++i)
                 {
                     BoneNode node = BoneNode.FromStream(binReader);
-                    node.name = m_names[i];
+                    node.name = m_boneNames[i];
                     m_bones.Add(node);
                 }
                 ConstructSkeleton();
@@ -850,6 +851,14 @@ namespace ModelNamer
                     }
                     
                 }
+                writer.WriteLine("#*************************************************************************************");
+                for (int i = 0; i < headerBlock.entries.Count; i++)
+                {
+                    Vector3 Position = headerBlock.Vertices[headerBlock.entries[i].PosIndex];
+                    Vector3 Normal = headerBlock.Normals[headerBlock.entries[i].NormIndex];
+                    Vector2 UV = headerBlock.UVs[headerBlock.entries[i].UVIndex];
+                    writer.WriteLine(String.Format("#P {0}\tN {1}\tUV {2}", Common.ToString(Position), Common.ToString(Normal), Common.ToString(UV)));
+                }
                 vertexCountOffset += m_skinned?headerBlock.Vertices.Count:0;
                 normalCountOffset += m_skinned?headerBlock.Normals.Count:0;
                 uvCountOffset += 0; // shared uvs?
@@ -883,6 +892,10 @@ namespace ModelNamer
         //public List<DisplayListHeader> m_modelMeshes = new List<DisplayListHeader>();
         public List<SkinBlock> m_skinBlocks = new List<SkinBlock>();
         public List<int> m_jlodInfo = new List<int>();
+        public static HashSet<int> s_lodLevels = new HashSet<int>();
+
+
+
     }
 
     public class GCModelReader : BaseModelReader
@@ -1005,7 +1018,7 @@ namespace ModelNamer
                         }
 
                         sb.AppendLine("NAME : ");
-                        foreach (string name in model.m_names)
+                        foreach (string name in model.m_boneNames)
                         {
                             sb.AppendLine("\t" + name);
                         }
@@ -1043,10 +1056,10 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             String rootPath = @"d:\gladius-extracted-archive\gc-compressed\";
-            String modelPath = rootPath + @"AllModelsRenamed\";
+            String modelPath = rootPath + @"ModelFilesRenamed\";
             String infoFile = rootPath + "ModelInfo.txt";
-            
-            String objOutputPath = rootPath + @"AllModelsRenamed-Obj\";
+
+            String objOutputPath = rootPath + @"ModelFilesRenamed-Obj\";
             String texturePath = @"D:\gladius-extracted-archive\gc-compressed\textures\";
             texturePath = @"D:\gladius-extracted-archive\xbox-decompressed\texture-output\";
             //texturePath = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
@@ -1060,14 +1073,14 @@ namespace ModelNamer
             List<string> filenames = new List<string>();
 
 
-            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*amazon*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
-
+            filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\weapons", "*carafe_decanter*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*palace*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
-            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
+            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*armor_all*"));
 
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*"));
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters\prop_practicepost1.mdl");
@@ -1092,7 +1105,7 @@ namespace ModelNamer
             //filenames.AddRange(Directory.GetFiles(modelPath + @"arenas\", "*"));
             //filenames.Add(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas\thefen.mdl");
             //filenames.AddRange(Directory.GetFiles(modelPath + @"characters\", "**"));
-            filenames.AddRange(Directory.GetFiles(modelPath + @"weapons\", "*unofan*"));
+            //filenames.AddRange(Directory.GetFiles(modelPath + @"weapons\", "*unofan*"));
             foreach (string name in filenames)
             {
                 reader.m_models.Add(reader.LoadSingleModel(name));
@@ -1114,7 +1127,7 @@ namespace ModelNamer
                     {
                         using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
                         {
-                            model.WriteOBJ(objSw, matSw, texturePath,1);
+                            model.WriteOBJ(objSw, matSw, texturePath,256);
                         }
                     }
                 }
@@ -1170,6 +1183,7 @@ namespace ModelNamer
         public List<Vector3> m_normals = new List<Vector3>();
         public int lodLevel;
         public int numPairs = 0;
+
 
         public static SkinBlock ReadBlock(BinaryReader reader)
         {
@@ -1425,6 +1439,9 @@ namespace ModelNamer
                 
                 header.indexCount = Common.ToInt16BigEndian(reader);
                 success = true;
+                header.MinUV = int.MaxValue;
+                header.MaxUV = int.MinValue;
+
                 for (int i = 0; i < header.indexCount; ++i)
                 {
                     DisplayListEntry e = DisplayListEntry.FromStream(reader, header);
@@ -1432,6 +1449,7 @@ namespace ModelNamer
                     header.MaxVertex = Math.Max(header.MaxVertex, e.PosIndex);
                     header.MaxNormal = Math.Max(header.MaxNormal, e.NormIndex);
                     header.MaxUV = Math.Max(header.MaxUV, e.UVIndex);
+                    header.MinUV = Math.Min(header.MinUV, e.UVIndex);
                 }
 
             }
@@ -1521,49 +1539,5 @@ namespace ModelNamer
     }
 
 
-    public class TextureData
-    {
-        public string textureName;
-        public int minusOne;
-        public int unknown;
-        public int width;
-        public int height;
-        public int three;
-        public int zero;
-
-
-        public static TextureData FromStream(BinaryReader binReader)
-        {
-            TextureData textureData = new TextureData();
-            StringBuilder sb = new StringBuilder();
-            int count = 0;
-            char b;
-            int textureNameLength = 0x80;
-            for(int i=0;i<textureNameLength;++i)
-            {
-                b = (char)binReader.ReadByte();
-                if(b != 0x00)
-                {
-                    sb.Append(b);
-                }
-            }
-
-            String textureName = sb.ToString();
-            textureData.textureName = textureName;
-            textureData.minusOne = binReader.ReadInt32();
-            textureData.unknown = binReader.ReadInt32();
-            textureData.width = binReader.ReadInt32();
-            textureData.height = binReader.ReadInt32();
-            textureData.three = binReader.ReadInt32();
-            textureData.zero = binReader.ReadInt32();
-
-            //Debug.Assert(textureData.three == 3);
-            //Debug.Assert(textureData.zero == 0);
-
-            return textureData;
-        }
-
-
-    }
 
 }
