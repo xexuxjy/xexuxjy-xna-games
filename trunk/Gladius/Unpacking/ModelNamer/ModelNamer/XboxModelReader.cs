@@ -945,10 +945,121 @@ namespace ModelNamer
 
         //public List<VertexPositionNormalTexture> m_points = new List<VertexPositionNormalTexture>();
 
+        public void WriteFBXAHeader(StreamWriter writer)
+        {
+            // write header.
+            writer.WriteLine("; FBX 6.1.0 project file");
+            writer.WriteLine("; Created by Blender FBX Exporter");
+            writer.WriteLine("; for support mail: ideasman42@gmail.com");
+            writer.WriteLine("; ----------------------------------------------------");
+            writer.WriteLine("");
+            writer.WriteLine("FBXHeaderExtension:  {");
+            writer.WriteLine("FBXHeaderVersion: 1003");
+            writer.WriteLine("FBXVersion: 6100");
+            writer.WriteLine("Creator: \"FBX SDK/FBX Plugins build 20070228\"");
+            writer.WriteLine("OtherFlags:  {");
+            writer.WriteLine("FlagPLE: 0");
+            writer.WriteLine("}");
+            writer.WriteLine("}");
+            writer.WriteLine("CreationTime: \"2014-03-20 17:38:29:000\"");
+            writer.WriteLine("Creator: \"Blender version 2.69 (sub 10)\"");
+
+            writer.WriteLine("; Object definitions");
+            writer.WriteLine(";------------------------------------------------------------------");
+
+            writer.WriteLine("Definitions:  {");
+            writer.WriteLine("Version: 100");
+            writer.WriteLine("Count: 3");
+            writer.WriteLine("ObjectType: \"Model\" {");
+            writer.WriteLine("Count: 1");
+            writer.WriteLine("}");
+            writer.WriteLine("ObjectType: \"Geometry\" {");
+            writer.WriteLine("Count: 1");
+            writer.WriteLine("}");
+            writer.WriteLine("	ObjectType: \"Material\" {");
+            writer.WriteLine("Count: 1");
+            writer.WriteLine("}");
+            writer.WriteLine("	ObjectType: \"Pose\" {");
+            writer.WriteLine("		Count: 1");
+            writer.WriteLine("	}");
+            writer.WriteLine("	ObjectType: \"GlobalSettings\" {");
+            writer.WriteLine("		Count: 1");
+            writer.WriteLine("	}");
+            writer.WriteLine("}");
+            writer.WriteLine("");
+            writer.WriteLine("; Object properties");
+            writer.WriteLine(";------------------------------------------------------------------");
+
+        }
+
+        public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1)
+        {
+            WriteFBXAHeader(writer);
+            writer.WriteLine("Objects:  {");
+	        writer.WriteLine("Model: \""+m_name+"\", \"Mesh\" {");
+		    writer.WriteLine("Version: 232");
+
+
+
+
+        public void WriteVertices(StreamWriter writer)
+        {
+            // write vertices
+            writer.WriteLine("Vertices:");
+            for (int i = 0; i < m_allVertices.Length; ++i)
+            {
+                XboxVertexInstance vpnt = m_allVertices[i];
+                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
+                if (i < m_allVertices.Count - 1)
+                {
+                    writer.WriteLine(",");
+                }
+            }
+
+        }
+
+        public void WriteNormals(StreamWriter writer)
+        {
+            writer.WriteLine("LayerElementNormal: 0 {");
+            writer.WriteLine("Version: 101");
+            writer.WriteLine("Name: \"\"");
+            writer.WriteLine("MappingInformationType: \"ByVertex\"");
+            writer.WriteLine("ReferenceInformationType: \"Direct\"");
+            writer.WriteLine("Normals:");
+            for (int i = 0; i < m_allVertices.Length; ++i)
+            {
+                XboxVertexInstance vpnt = m_allVertices[i];
+                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
+                if (i < m_allVertices.Count - 1)
+                {
+                    writer.WriteLine(",");
+                }
+            }
+            writer.WriteLine("}");
+        }
+        public void WriteUVs(StreamWriter writer)
+        {
+            writer.WriteLine("LayerElementUV: 0 {");
+            writer.WriteLine("Version: 101");
+            writer.WriteLine("Name: \"\"");
+            writer.WriteLine("MappingInformationType: \"ByVertex\"");
+            writer.WriteLine("ReferenceInformationType: \"Direct\"");
+            writer.WriteLine("Normals:");
+            for (int i = 0; i < m_allVertices.Length; ++i)
+            {
+                XboxVertexInstance vpnt = m_allVertices[i];
+                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000}", vpnt.UV.X, vpnt.UV.Y));
+                if (i < m_allVertices.Count - 1)
+                {
+                    writer.WriteLine(",");
+                }
+            }
+            writer.WriteLine("}");
+        }
 
     }
 
-
+    
 
 
 
