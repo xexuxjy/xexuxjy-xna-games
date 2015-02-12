@@ -996,9 +996,9 @@ namespace ModelNamer
         {
             WriteFBXAHeader(writer);
             writer.WriteLine("Objects:  {");
-	        writer.WriteLine("Model: \""+m_name+"\", \"Mesh\" {");
-		    writer.WriteLine("Version: 232");
-
+            writer.WriteLine("Model: \"" + m_name + "\", \"Mesh\" {");
+            writer.WriteLine("Version: 232");
+        }
 
 
 
@@ -1006,7 +1006,7 @@ namespace ModelNamer
         {
             // write vertices
             writer.WriteLine("Vertices:");
-            for (int i = 0; i < m_allVertices.Length; ++i)
+            for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
                 writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
@@ -1026,7 +1026,7 @@ namespace ModelNamer
             writer.WriteLine("MappingInformationType: \"ByVertex\"");
             writer.WriteLine("ReferenceInformationType: \"Direct\"");
             writer.WriteLine("Normals:");
-            for (int i = 0; i < m_allVertices.Length; ++i)
+            for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
                 writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
@@ -1045,7 +1045,7 @@ namespace ModelNamer
             writer.WriteLine("MappingInformationType: \"ByVertex\"");
             writer.WriteLine("ReferenceInformationType: \"Direct\"");
             writer.WriteLine("Normals:");
-            for (int i = 0; i < m_allVertices.Length; ++i)
+            for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
                 writer.WriteLine(String.Format("{0:0.00000},{1:0.00000}", vpnt.UV.X, vpnt.UV.Y));
@@ -1057,6 +1057,43 @@ namespace ModelNamer
             writer.WriteLine("}");
         }
 
+        public int GenerateNodeId()
+        {
+            return 1;
+        }
+
+        public void WriteSkeleton(StreamWriter writer)
+        {
+            writer.WriteLine("; Object properties");
+            writer.WriteLine(";------------------------------------------------------------------");
+
+            writer.WriteLine("Objects: {");
+
+            foreach(BoneNode boneNode in m_bones)
+            {
+                writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {",GenerateNodeId(),boneNode.name));
+                writer.WriteLine("Properties70: {");
+                writer.WriteLine(String.Format("P: \"Size\", \"double\", \"Number\",\"\",{0}",1.0f));
+                writer.WriteLine("}");
+                writer.WriteLine("TypeFlags: \"Skeleton\"");
+                writer.WriteLine("}");
+            }
+            writer.WriteLine("}");
+
+
+            writer.WriteLine("; Object connections");
+            writer.WriteLine(";------------------------------------------------------------------");
+
+            writer.WriteLine("Connections: {");
+
+            foreach(BoneNode boneNode in m_bones)
+            {
+                //
+            }
+
+            writer.WriteLine("}");
+
+        }
     }
 
     
