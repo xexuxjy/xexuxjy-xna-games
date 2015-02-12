@@ -1071,7 +1071,8 @@ namespace ModelNamer
 
             foreach(BoneNode boneNode in m_bones)
             {
-                writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {",GenerateNodeId(),boneNode.name));
+                boneNode.fbxNodeId = GenerateNodeId();
+                writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {",boneNode.fbxNodeId,boneNode.name));
                 writer.WriteLine("Properties70: {");
                 writer.WriteLine(String.Format("P: \"Size\", \"double\", \"Number\",\"\",{0}",1.0f));
                 writer.WriteLine("}");
@@ -1088,7 +1089,12 @@ namespace ModelNamer
 
             foreach(BoneNode boneNode in m_bones)
             {
-                //
+                foreach (BoneNode childNode in boneNode.children)
+                {
+                    writer.WriteLine(String.Format(";  {0}::{1}", boneNode.name, childNode.name));
+                    writer.WriteLine(String.Format("C: \"OO\",{0},{1}", boneNode.fbxNodeId, childNode.fbxNodeId));
+                    writer.WriteLine();
+                }
             }
 
             writer.WriteLine("}");

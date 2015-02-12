@@ -704,6 +704,8 @@ namespace ModelNamer
         public BoneNode parent;
         public List<BoneNode> children = new List<BoneNode>();
 
+        public int fbxNodeId;
+
         public static BoneNode FromStream(BinaryReader binReader)
         {
             BoneNode node = new BoneNode();
