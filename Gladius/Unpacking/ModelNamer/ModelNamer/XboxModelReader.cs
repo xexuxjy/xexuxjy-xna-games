@@ -70,11 +70,11 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
-            //rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
+            rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath + "ModelFilesRenamed";
             String infoFile = rootPath + "ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
-            String objOutputPath = rootPath + @"ModelFilesRenamed-Obj\";
+            String objOutputPath = rootPath + @"ModelFilesRenamed-FBXA\";
 
             String texturePath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\textures.jpg\";
             texturePath = @"C:\tmp\xbox-texture-output\";
@@ -94,14 +94,14 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordCS_unofan.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_black.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_carafe.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\carafe_carafe.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             foreach (string name in filenames)
             {
@@ -242,13 +242,18 @@ namespace ModelNamer
                     //    shadernames.Add(sd.shaderName);
                     //}
                     ////model.DumpSections(tagOutputPath);
-                    using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
+                    //using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".obj"))
+                    //{
+                    //    using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
+                    //    {
+                    //        model.WriteOBJ(objSw, matSw, texturePath, -1);
+                    //    }
+                    //}
+                    using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".fbx"))
                     {
-                        using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
-                        {
-                            model.WriteOBJ(objSw, matSw, texturePath, -1);
-                        }
+                        model.WriteFBXA(objSw, null, texturePath, -1);
                     }
+
                 }
                 catch (System.Exception ex)
                 {
@@ -407,11 +412,11 @@ namespace ModelNamer
                     int TotalVertices = binReader.ReadInt32();
                     
                     // do stuff...
-                    SubMeshData3 smd3 = SubMeshData3.FromStream(binReader, NumMeshes);
+                    //SubMeshData3 smd3 = SubMeshData3.FromStream(binReader, NumMeshes);
                     
                     
                     
-                    //binReader.BaseStream.Position = doegEndVal + doegToTextureSize;
+                    binReader.BaseStream.Position = doegEndVal + doegToTextureSize;
 
                     Common.ReadNullSeparatedNames(binReader, binReader.BaseStream.Position, numTextures, m_textureNames);
 
@@ -998,6 +1003,16 @@ namespace ModelNamer
             writer.WriteLine("Objects:  {");
             writer.WriteLine("Model: \"" + m_name + "\", \"Mesh\" {");
             writer.WriteLine("Version: 232");
+
+            WriteVertices(writer);
+            WriteNormals(writer);
+            WriteUVs(writer);
+            WriteSkeleton(writer);
+            WriteMaterials(writer, texturePath);
+            WriteConnections(writer);
+
+
+            writer.WriteLine("}");
         }
 
 
@@ -1056,18 +1071,18 @@ namespace ModelNamer
             }
             writer.WriteLine("}");
         }
-
+        static int s_nodeCount;
         public int GenerateNodeId()
         {
-            return 1;
+            return s_nodeCount++;
         }
 
         public void WriteSkeleton(StreamWriter writer)
         {
-            writer.WriteLine("; Object properties");
-            writer.WriteLine(";------------------------------------------------------------------");
+            //writer.WriteLine("; Object properties");
+            //writer.WriteLine(";------------------------------------------------------------------");
 
-            writer.WriteLine("Objects: {");
+            //writer.WriteLine("Objects: {");
 
             foreach(BoneNode boneNode in m_bones)
             {
@@ -1082,12 +1097,19 @@ namespace ModelNamer
             writer.WriteLine("}");
 
 
+
+        }
+
+
+        public void WriteConnections(StreamWriter writer)
+        {
+
             writer.WriteLine("; Object connections");
             writer.WriteLine(";------------------------------------------------------------------");
 
             writer.WriteLine("Connections: {");
 
-            foreach(BoneNode boneNode in m_bones)
+            foreach (BoneNode boneNode in m_bones)
             {
                 foreach (BoneNode childNode in boneNode.children)
                 {
@@ -1098,8 +1120,41 @@ namespace ModelNamer
             }
 
             writer.WriteLine("}");
+        }
+
+        public void WriteMaterials(StreamWriter writer,String texturePath)
+        {
+            foreach (TextureData material in m_textures)
+            {
+                material.fbxNodeId = GenerateNodeId();
+                String fullPath = texturePath + material.textureName;
+                string line = String.Format("Texture: {0} , \"Texture::{1}\",\"\" {", material.fbxNodeId, material.textureName);
+ 
+                //String line = String.Format("Texture: {0}","foo");
+                writer.WriteLine(line);
+                writer.WriteLine("Type: \"Clip\"");
+                writer.WriteLine("Properties70: {");
+                writer.WriteLine(String.Format("P: \"Path\", \"KString\", \"XRefUrl\",\"\",\"{0}\"",fullPath));
+                writer.WriteLine("}");
+                writer.WriteLine("UseMipMap: 0");
+                writer.WriteLine(String.Format("Filename: \"{0}\"",fullPath));
+                writer.WriteLine("}");
+                writer.WriteLine("}");
+            }
+
+                //            writer.WriteLine(String.Format("Material: \"Material::{0}\",\"\" {", material.textureName));
+                //writer.WriteLine("ShadingModel: \"lambert\"");
+                //writer.WriteLine("Properties60: {");
+                //writer.WriteLine(
+
+
+
+                //writer.WriteLine("}");
+                //writer.WriteLine("}");
+
 
         }
+
     }
 
     
