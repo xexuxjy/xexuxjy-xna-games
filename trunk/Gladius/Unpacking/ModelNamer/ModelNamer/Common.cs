@@ -1146,13 +1146,14 @@ namespace ModelNamer
     public class TextureData
     {
         public string textureName;
+        public string fullPathName;
         public int minusOne;
         public int unknown;
         public int width;
         public int height;
         public int three;
         public int zero;
-
+        public int fbxNodeId;
 
         public static TextureData FromStream(BinaryReader binReader)
         {
