@@ -1013,12 +1013,15 @@ namespace ModelNamer
             WriteIndices(writer, m_subMeshData2List[0]);
             WriteNormals(writer);
             WriteUVs(writer);
+            WriteTexture(writer);
             WriteSkeleton(writer);
-            WriteMaterials(writer,m_subMeshData2List[0], texturePath);
+            //WriteMaterials(writer,m_subMeshData2List[0], texturePath);
             WriteModelEnd(writer);
+            WriteMaterials(writer, m_subMeshData2List[0], texturePath);
             WriteGlobals(writer);
             writer.WriteLine("}");
             //WriteMaterials(writer, texturePath);
+            
             WriteRelations(writer);
             WriteConnections(writer);
 
@@ -1028,7 +1031,7 @@ namespace ModelNamer
 
         public void WriteModelStart(StreamWriter writer,SubMeshData2 smd2)
         {
-            writer.WriteLine("Model: \"" + m_name + "\", \"Mesh\" {");
+            writer.WriteLine("Model: \"" + smd2.fbxNodeId + "\", \"Mesh\" {");
             writer.WriteLine("Version: 232");
 
         }
@@ -1187,6 +1190,20 @@ namespace ModelNamer
             writer.WriteLine("}");
         }
 
+        public void WriteTexture(StreamWriter writer)
+        {
+		    writer.WriteLine("LayerElementTexture: 0 {");
+		    writer.WriteLine("	Version: 101");
+		    writer.WriteLine("	Name: \"\" ");
+		    writer.WriteLine("	MappingInformationType: \"NoMappingInformation\"");
+		    writer.WriteLine("	ReferenceInformationType: \"IndexToDirect\"");
+		    writer.WriteLine("	BlendMode: \"Translucent\"");
+		    writer.WriteLine("	TextureAlpha: 1");
+		    writer.WriteLine("	TextureId: ");
+		    writer.WriteLine("}");
+                
+        }
+
         static int s_nodeCount;
         public string GenerateNodeId()
         {
@@ -1250,10 +1267,14 @@ namespace ModelNamer
 
             foreach(SubMeshData2 headerBlock in m_subMeshData2List)
             {
-                writer.WriteLine(String.Format("C: \"OO\",{0}, \"Model::Scene\"", headerBlock.fbxNodeId));
+                writer.WriteLine(String.Format("C: \"OO\",\"{0}\", \"Model::Scene\"", headerBlock.fbxNodeId));
                 // fixme . find the texture name here and link to the model as well...
             }
-
+            //TextureData material = m_textures[0];
+            foreach (TextureData material in m_textures)
+            {
+                writer.WriteLine(String.Format("C: \"OO\",\"{0}\", \"{1}\"", material.fbxNodeId, m_subMeshData2List[0].fbxNodeId));
+            }
 
             foreach (BoneNode boneNode in m_bones)
             {
@@ -1270,22 +1291,30 @@ namespace ModelNamer
 
         public void WriteMaterials(StreamWriter writer,SubMeshData2 headerBlock,String texturePath)
         {
-            //foreach (TextureData material in m_textures)
-            TextureData material = m_textures[0];
+            
+            //TextureData material = m_textures[0];
+            foreach (TextureData material in m_textures)
             {
                 material.fbxNodeId = GenerateNodeId();
+                
                 String fullPath = texturePath + material.textureName;
-                string line = String.Format("Texture: {0} , \"Texture::{1}\",\"\" {{", material.fbxNodeId, material.textureName);
+	            writer.WriteLine(String.Format("Material: \"{0}\", \"\" {{",material.fbxNodeId));
+		        writer.WriteLine("    Version: 102");
+		        writer.WriteLine("    ShadingModel: \"lambert\"");
+                writer.WriteLine("    MultiLayer: 0");
+                writer.WriteLine("}");
+
+                //string line = String.Format("Texture: {0} , \"Texture::{1}\",\"\" {{", material.fbxNodeId, material.textureName);
  
-                //String line = String.Format("Texture: {0}","foo");
-                writer.WriteLine(line);
-                writer.WriteLine("Type: \"Clip\"");
-                writer.WriteLine("Properties70: {");
-                writer.WriteLine(String.Format("P: \"Path\", \"KString\", \"XRefUrl\",\"\",\"{0}\"",fullPath));
-                writer.WriteLine("}");
-                writer.WriteLine("UseMipMap: 0");
-                writer.WriteLine(String.Format("Filename: \"{0}\"",fullPath));
-                writer.WriteLine("}");
+                ////String line = String.Format("Texture: {0}","foo");
+                //writer.WriteLine(line);
+                //writer.WriteLine("Type: \"Clip\"");
+                //writer.WriteLine("Properties70: {");
+                //writer.WriteLine(String.Format("P: \"Path\", \"KString\", \"XRefUrl\",\"\",\"{0}\"",fullPath));
+                //writer.WriteLine("}");
+                //writer.WriteLine("UseMipMap: 0");
+                //writer.WriteLine(String.Format("Filename: \"{0}\"",fullPath));
+                //writer.WriteLine("}");
             }
 
                 //            writer.WriteLine(String.Format("Material: \"Material::{0}\",\"\" {", material.textureName));
