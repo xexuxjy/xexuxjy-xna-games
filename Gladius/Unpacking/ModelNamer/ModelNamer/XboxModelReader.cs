@@ -402,7 +402,10 @@ namespace ModelNamer
                     for (int i = 0; i < NumMeshes; ++i)
                     {
                         SubMeshData2 smd = SubMeshData2.FromStream(binReader);
+                        string groupName = String.Format("{0}-submesh{1}", m_name, i);
+                        smd.fbxNodeId = groupName;
                         m_subMeshData2List.Add(smd);
+
                         TotalIndices += smd.NumIndices;
                         int val1a = smd.NumIndices * 2;
                         smd.pad = val1a % 4;
@@ -984,9 +987,9 @@ namespace ModelNamer
             writer.WriteLine("	ObjectType: \"Material\" {");
             writer.WriteLine("Count: 1");
             writer.WriteLine("}");
-            writer.WriteLine("	ObjectType: \"Pose\" {");
-            writer.WriteLine("		Count: 1");
-            writer.WriteLine("	}");
+            //writer.WriteLine("	ObjectType: \"Pose\" {");
+            //writer.WriteLine("		Count: 1");
+            //writer.WriteLine("	}");
             writer.WriteLine("	ObjectType: \"GlobalSettings\" {");
             writer.WriteLine("		Count: 1");
             writer.WriteLine("	}");
@@ -1001,17 +1004,75 @@ namespace ModelNamer
         {
             WriteFBXAHeader(writer);
             writer.WriteLine("Objects:  {");
-            writer.WriteLine("Model: \"" + m_name + "\", \"Mesh\" {");
-            writer.WriteLine("Version: 232");
+
+            // loop here?
+
+            WriteModelStart(writer,m_subMeshData2List[0]);
 
             WriteVertices(writer);
+            WriteIndices(writer, m_subMeshData2List[0]);
             WriteNormals(writer);
             WriteUVs(writer);
             WriteSkeleton(writer);
-            WriteMaterials(writer, texturePath);
+            WriteMaterials(writer,m_subMeshData2List[0], texturePath);
+            WriteModelEnd(writer);
+            WriteGlobals(writer);
+            writer.WriteLine("}");
+            //WriteMaterials(writer, texturePath);
+            WriteRelations(writer);
             WriteConnections(writer);
 
 
+            //writer.WriteLine("}");
+        }
+
+        public void WriteModelStart(StreamWriter writer,SubMeshData2 smd2)
+        {
+            writer.WriteLine("Model: \"" + m_name + "\", \"Mesh\" {");
+            writer.WriteLine("Version: 232");
+
+        }
+
+        public void WriteModelEnd(StreamWriter writer)
+        {
+		    writer.WriteLine("Layer: 0 {");
+			writer.WriteLine("Version: 100");
+			writer.WriteLine("LayerElement:  {");
+			writer.WriteLine("	Type: \"LayerElementNormal\"");
+			writer.WriteLine("	TypedIndex: 0");
+			writer.WriteLine("}");
+            //writer.WriteLine("LayerElement:  {");
+            //writer.WriteLine("	Type: "LayerElementSmoothing"";
+            //writer.WriteLine("	TypedIndex: 0";
+            //writer.WriteLine("}";
+			writer.WriteLine("LayerElement:  {");
+			writer.WriteLine("	Type: \"LayerElementUV\"");
+			writer.WriteLine("	TypedIndex: 0");
+			writer.WriteLine("}");
+			writer.WriteLine("LayerElement:  {");
+			writer.WriteLine("	Type: \"LayerElementTexture\"");
+			writer.WriteLine("	TypedIndex: 0");
+			writer.WriteLine("}");
+			writer.WriteLine("LayerElement:  {");
+			writer.WriteLine("	Type: \"LayerElementMaterial\"");
+			writer.WriteLine("	TypedIndex: 0");
+			writer.WriteLine("}");
+            writer.WriteLine("}");
+        }
+
+        public void WriteGlobals(StreamWriter writer)
+        {
+        	writer.WriteLine("GlobalSettings:  {");
+		    writer.WriteLine("Version: 1000");
+		    writer.WriteLine("Properties60:  {");
+			writer.WriteLine("Property: \"UpAxis\", \"int\", \"\",1");
+			writer.WriteLine("Property: \"UpAxisSign\", \"int\", \"\",1");
+			writer.WriteLine("Property: \"FrontAxis\", \"int\", \"\",2");
+			writer.WriteLine("Property: \"FrontAxisSign\", \"int\", \"\",1");
+			writer.WriteLine("Property: \"CoordAxis\", \"int\", \"\",0");
+			writer.WriteLine("Property: \"CoordAxisSign\", \"int\", \"\",1");
+			writer.WriteLine("Property: \"UnitScaleFactor\", \"double\", \"\",1");
+            writer.WriteLine("}");
             writer.WriteLine("}");
         }
 
@@ -1020,18 +1081,70 @@ namespace ModelNamer
         public void WriteVertices(StreamWriter writer)
         {
             // write vertices
-            writer.WriteLine("Vertices:");
+            writer.Write("Vertices: ");
             for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
-                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
+                writer.Write(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
                 if (i < m_allVertices.Count - 1)
                 {
-                    writer.WriteLine(",");
+                    writer.Write(",");
                 }
             }
-
+            writer.WriteLine();
         }
+
+        public void WriteIndices(StreamWriter writer,SubMeshData2 headerBlock)
+        {
+            // write vertices
+            writer.Write("PolygonVertexIndex: ");
+            bool swap = false;
+            int startIndex = 0;
+            int endIndex = m_allIndices.Count-2;
+
+            int end = endIndex;//startIndex + headerBlock.NumIndices - 2;
+            for (int i = startIndex; i < end; i++)
+            {
+                int index1 = i;
+                int index2 = i + 1;
+                int index3 = i + 2;
+                if (index3 >= m_allIndices.Count)
+                {
+                    index3 = index1;
+                }
+                if (index2 >= m_allIndices.Count)
+                {
+                    index2 = index1;
+                }
+                if (i >= m_allIndices.Count)
+                {
+                    int ibreak = 0;
+                }
+
+                int i1 = m_allIndices[index1];
+                int i2 = m_allIndices[index2];
+                int i3 = m_allIndices[index3];
+
+                // 1 based.
+                i1 += 1;
+                i2 += 1;
+                i3 += 1;
+
+                // alternate winding
+                if (swap)
+                {
+                    writer.Write(String.Format("{0},{1},-{2}", i3, i2, i1));
+                }
+                else
+                {
+                    writer.Write(String.Format("{0},{1},-{2}", i1, i2, i3));
+                }
+                swap = !swap;
+            }
+            //startIndex += headerBlock.NumIndices;
+            writer.WriteLine();
+        }
+
 
         public void WriteNormals(StreamWriter writer)
         {
@@ -1040,41 +1153,44 @@ namespace ModelNamer
             writer.WriteLine("Name: \"\"");
             writer.WriteLine("MappingInformationType: \"ByVertex\"");
             writer.WriteLine("ReferenceInformationType: \"Direct\"");
-            writer.WriteLine("Normals:");
+            writer.Write("Normals: ");
             for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
-                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
+                writer.Write(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
                 if (i < m_allVertices.Count - 1)
                 {
-                    writer.WriteLine(",");
+                    writer.Write(",");
                 }
             }
+            writer.WriteLine();
             writer.WriteLine("}");
         }
         public void WriteUVs(StreamWriter writer)
         {
             writer.WriteLine("LayerElementUV: 0 {");
             writer.WriteLine("Version: 101");
-            writer.WriteLine("Name: \"\"");
+            writer.WriteLine("Name: \"UVMap\"");
             writer.WriteLine("MappingInformationType: \"ByVertex\"");
             writer.WriteLine("ReferenceInformationType: \"Direct\"");
-            writer.WriteLine("Normals:");
+            writer.Write("UV: ");
             for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
-                writer.WriteLine(String.Format("{0:0.00000},{1:0.00000}", vpnt.UV.X, vpnt.UV.Y));
+                writer.Write(String.Format("{0:0.00000},{1:0.00000}", vpnt.UV.X, vpnt.UV.Y));
                 if (i < m_allVertices.Count - 1)
                 {
-                    writer.WriteLine(",");
+                    writer.Write(",");
                 }
             }
+            writer.WriteLine();
             writer.WriteLine("}");
         }
+
         static int s_nodeCount;
-        public int GenerateNodeId()
+        public string GenerateNodeId()
         {
-            return s_nodeCount++;
+            return ""+s_nodeCount++;
         }
 
         public void WriteSkeleton(StreamWriter writer)
@@ -1087,7 +1203,7 @@ namespace ModelNamer
             foreach(BoneNode boneNode in m_bones)
             {
                 boneNode.fbxNodeId = GenerateNodeId();
-                writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {",boneNode.fbxNodeId,boneNode.name));
+                writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {{",boneNode.fbxNodeId,boneNode.name));
                 writer.WriteLine("Properties70: {");
                 writer.WriteLine(String.Format("P: \"Size\", \"double\", \"Number\",\"\",{0}",1.0f));
                 writer.WriteLine("}");
@@ -1101,6 +1217,29 @@ namespace ModelNamer
         }
 
 
+        public void WriteRelations(StreamWriter writer)
+        {
+            writer.WriteLine("; Object relations");
+            writer.WriteLine(";------------------------------------------------------------------");
+
+            writer.WriteLine("Relations: {");
+            foreach (SubMeshData2 headerBlock in m_subMeshData2List)
+            {
+                writer.WriteLine(String.Format("Model: \"{0}\", \"Mesh\" {{", headerBlock.fbxNodeId));
+                writer.WriteLine("}");
+                // fixme . find the texture name here and link to the model as well...
+            }
+            foreach (TextureData material in m_textures)
+            {
+                string line = String.Format("Material: \"{0}\" , \"\" {{", material.fbxNodeId);
+
+                //String line = String.Format("Texture: {0}","foo");
+                writer.WriteLine(line);
+                writer.WriteLine("}");
+            }
+            writer.WriteLine("}");
+        }
+
         public void WriteConnections(StreamWriter writer)
         {
 
@@ -1108,6 +1247,13 @@ namespace ModelNamer
             writer.WriteLine(";------------------------------------------------------------------");
 
             writer.WriteLine("Connections: {");
+
+            foreach(SubMeshData2 headerBlock in m_subMeshData2List)
+            {
+                writer.WriteLine(String.Format("C: \"OO\",{0}, \"Model::Scene\"", headerBlock.fbxNodeId));
+                // fixme . find the texture name here and link to the model as well...
+            }
+
 
             foreach (BoneNode boneNode in m_bones)
             {
@@ -1122,13 +1268,14 @@ namespace ModelNamer
             writer.WriteLine("}");
         }
 
-        public void WriteMaterials(StreamWriter writer,String texturePath)
+        public void WriteMaterials(StreamWriter writer,SubMeshData2 headerBlock,String texturePath)
         {
-            foreach (TextureData material in m_textures)
+            //foreach (TextureData material in m_textures)
+            TextureData material = m_textures[0];
             {
                 material.fbxNodeId = GenerateNodeId();
                 String fullPath = texturePath + material.textureName;
-                string line = String.Format("Texture: {0} , \"Texture::{1}\",\"\" {", material.fbxNodeId, material.textureName);
+                string line = String.Format("Texture: {0} , \"Texture::{1}\",\"\" {{", material.fbxNodeId, material.textureName);
  
                 //String line = String.Format("Texture: {0}","foo");
                 writer.WriteLine(line);
@@ -1138,7 +1285,6 @@ namespace ModelNamer
                 writer.WriteLine("}");
                 writer.WriteLine("UseMipMap: 0");
                 writer.WriteLine(String.Format("Filename: \"{0}\"",fullPath));
-                writer.WriteLine("}");
                 writer.WriteLine("}");
             }
 
@@ -1277,6 +1423,8 @@ namespace ModelNamer
         public List<ushort> indices = new List<ushort>();
         public int MinVertex = int.MaxValue;
         public int MaxVertex = int.MinValue;
+        public string fbxNodeId;
+
 
         public static SubMeshData2 FromStream(BinaryReader binReader)
         {

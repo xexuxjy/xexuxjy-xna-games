@@ -704,7 +704,7 @@ namespace ModelNamer
         public BoneNode parent;
         public List<BoneNode> children = new List<BoneNode>();
 
-        public int fbxNodeId;
+        public String fbxNodeId;
 
         public static BoneNode FromStream(BinaryReader binReader)
         {
@@ -1153,7 +1153,7 @@ namespace ModelNamer
         public int height;
         public int three;
         public int zero;
-        public int fbxNodeId;
+        public String fbxNodeId;
 
         public static TextureData FromStream(BinaryReader binReader)
         {
