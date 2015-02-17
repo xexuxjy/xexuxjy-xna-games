@@ -985,11 +985,11 @@ namespace ModelNamer
             writer.WriteLine("Count: 1");
             writer.WriteLine("}");
             writer.WriteLine("	ObjectType: \"Material\" {");
-            writer.WriteLine("Count: 1");
+            writer.WriteLine("Count: "+m_textures.Count);
             writer.WriteLine("}");
-            //writer.WriteLine("	ObjectType: \"Pose\" {");
-            //writer.WriteLine("		Count: 1");
-            //writer.WriteLine("	}");
+            writer.WriteLine("	ObjectType: \"Pose\" {");
+            writer.WriteLine("		Count: 1");
+            writer.WriteLine("	}");
             writer.WriteLine("	ObjectType: \"GlobalSettings\" {");
             writer.WriteLine("		Count: 1");
             writer.WriteLine("	}");
@@ -1014,10 +1014,12 @@ namespace ModelNamer
             WriteNormals(writer);
             WriteUVs(writer);
             WriteTexture(writer);
+            WriteLayerElementMaterial(writer);
             WriteSkeleton(writer);
             //WriteMaterials(writer,m_subMeshData2List[0], texturePath);
             WriteModelEnd(writer);
             WriteMaterials(writer, m_subMeshData2List[0], texturePath);
+            WritePose(writer, m_subMeshData2List[0]);
             WriteGlobals(writer);
             writer.WriteLine("}");
             //WriteMaterials(writer, texturePath);
@@ -1059,8 +1061,24 @@ namespace ModelNamer
 			writer.WriteLine("LayerElement:  {");
 			writer.WriteLine("	Type: \"LayerElementMaterial\"");
 			writer.WriteLine("	TypedIndex: 0");
-			writer.WriteLine("}");
             writer.WriteLine("}");
+            writer.WriteLine("}");
+            writer.WriteLine("}");
+        }
+
+        public void WritePose(StreamWriter writer,SubMeshData2 smd2)
+        {
+	        writer.WriteLine("Pose: \"Pose::BIND_POSES\", \"BindPose\" {");
+		    writer.WriteLine("Type: \"BindPose\"");
+		    writer.WriteLine("Version: 100");
+		    writer.WriteLine("Properties60:  {");
+		    writer.WriteLine("}");
+		    writer.WriteLine("NbPoseNodes: 1");
+		    writer.WriteLine("PoseNode:  {");
+		    writer.WriteLine(String.Format("Node: \"{0}\"",smd2.fbxNodeId));
+            writer.WriteLine("			Matrix: 0.000000075497901,1.000000000000000,0.000000162920685,0.000000000000000,-1.000000000000000,0.000000075497901,0.000000000000012,0.000000000000000,0.000000000000000,-0.000000162920685,1.000000000000000,0.000000000000000,0.000000000000000,0.000000000000000,-534.047119140625000,1.000000000000000");
+		    writer.WriteLine("}");
+	        writer.WriteLine("}");
         }
 
         public void WriteGlobals(StreamWriter writer)
@@ -1083,6 +1101,11 @@ namespace ModelNamer
 
         public void WriteVertices(StreamWriter writer)
         {
+		    writer.WriteLine("MultiLayer: 0");
+		    writer.WriteLine("MultiTake: 1");
+		    writer.WriteLine("Shading: Y");
+		    writer.WriteLine("Culling: \"CullingOff\"");
+
             // write vertices
             writer.Write("Vertices: ");
             for (int i = 0; i < m_allVertices.Count; ++i)
@@ -1227,12 +1250,23 @@ namespace ModelNamer
                 writer.WriteLine("TypeFlags: \"Skeleton\"");
                 writer.WriteLine("}");
             }
-            writer.WriteLine("}");
+            //writer.WriteLine("}");
 
 
 
         }
 
+        public void WriteLayerElementMaterial(StreamWriter writer)
+        {
+            writer.WriteLine("LayerElementMaterial: 0 {");
+            writer.WriteLine("Version: 101");
+            writer.WriteLine("Name: \"\"");
+            writer.WriteLine("MappingInformationType: \"AllSame\"");
+            writer.WriteLine("ReferenceInformationType: \"IndexToDirect\"");
+            writer.WriteLine("Materials: 0");
+            writer.WriteLine("}");
+
+        }
 
         public void WriteRelations(StreamWriter writer)
         {
