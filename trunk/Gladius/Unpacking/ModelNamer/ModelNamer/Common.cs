@@ -91,6 +91,15 @@ namespace ModelNamer
             return String.Format("{0:0.00000000} {1:0.00000000}", v2.X, v2.Y);
         }
 
+        public static String ToStringFA(float[] fa)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (float f in fa)
+            {
+                sb.AppendFormat("{0:0.00000000},");
+            }
+            return sb.ToString();
+        }
 
 
         public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
@@ -723,6 +732,13 @@ namespace ModelNamer
 
             return node;
         }
+
+        public String ToString()
+        {
+            return String.Format("{0}\t {1}\t {2}", name, id, parentId);
+
+        }
+
     }
 
     public class BaseModel
@@ -1153,7 +1169,8 @@ namespace ModelNamer
         public int height;
         public int three;
         public int zero;
-        public String fbxNodeId;
+        public String textureFbxNodeId;
+        public String videoFbxNodeId;
 
         public static TextureData FromStream(BinaryReader binReader)
         {
