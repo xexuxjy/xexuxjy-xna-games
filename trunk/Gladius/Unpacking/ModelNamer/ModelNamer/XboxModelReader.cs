@@ -1111,7 +1111,7 @@ namespace ModelNamer
             writer.WriteLine("Count: 1");
             writer.WriteLine("}");
             writer.WriteLine("	ObjectType: \"Material\" {");
-            writer.WriteLine("Count: 1");
+            writer.WriteLine("Count: " + m_textures.Count);
             writer.WriteLine("PropertyTemplate: \"FbxSurfacePhong\" {");
 			writer.WriteLine("Properties70:  {");
 			writer.WriteLine("	P: \"ShadingModel\", \"KString\", \"\", \"\", \"Phong\"");
@@ -1403,14 +1403,57 @@ namespace ModelNamer
 
         }
 
+        public List<int> BuildLayerElementMaterial()
+        {
+            int startIndex = 0;
+            int endIndex = 0;
+            int submeshCount = 0;
+            int matIndex;
+            int adjustedIndex;
+
+            List<int> materialList = new List<int>();
+            for (int a = 0; a < m_subMeshData2List.Count; ++a)
+            {
+                SubMeshData2 headerBlock = m_subMeshData2List[a];
+                SubMeshData1 data1 = m_subMeshData1List[a];
+
+                submeshCount++;
+                matIndex = m_meshMaterialList[a][2] / 44;
+                MaterialData materialData = m_materialDataList[matIndex];
+                adjustedIndex = materialData.textureId / 64;
+                adjustedIndex = AdjustForModel(adjustedIndex);
+
+                int end = startIndex + headerBlock.NumIndices - 2;
+
+                for (int i = startIndex; i < end; i += 3)
+                {
+                    materialList.Add(adjustedIndex);
+                }
+                startIndex += headerBlock.NumIndices;
+            }
+            return materialList;
+        }
+
+
         public void WriteLayerElementMaterial(StreamWriter writer)
         {
+            List<int> materialList = BuildLayerElementMaterial();
             writer.WriteLine("LayerElementMaterial: 0 {");
             writer.WriteLine("  Version: 101");
             writer.WriteLine("  Name: \"\"");
-            writer.WriteLine("  MappingInformationType: \"AllSame\"");
+            writer.WriteLine("  MappingInformationType: \"ByPolygon\"");
             writer.WriteLine("  ReferenceInformationType: \"IndexToDirect\"");
-            writer.WriteLine("  Materials: 0");
+            writer.WriteLine(String.Format("  Materials: *{0} {{",materialList.Count));
+            writer.Write("      a:");
+            for (int i = 0; i < materialList.Count; ++i)
+            {
+                writer.Write(materialList[i]);
+                if(i<materialList.Count-1)
+                {
+                    writer.Write(";");
+                }
+            }
+            writer.WriteLine("}");
             writer.WriteLine("}");
 
         }
@@ -1453,12 +1496,20 @@ namespace ModelNamer
             }
 
             // Connect material to the object...
-            writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", m_baseMaterialName,m_subMeshData2List[0].fbxNodeId));
-            writer.WriteLine(String.Format("    Connect: \"OP\",\"{0}\", \"{1}\",\"DiffuseColor\"", m_textures[1].textureFbxNodeId, m_baseMaterialName));
+            //writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", m_baseMaterialName,m_subMeshData2List[0].fbxNodeId));
+            //writer.WriteLine(String.Format("    Connect: \"OP\",\"{0}\", \"{1}\",\"DiffuseColor\"", m_textures[1].textureFbxNodeId, m_baseMaterialName));
 
+            int count = 0;
             foreach (TextureData material in m_textures)
             {
-                writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", material.videoFbxNodeId, material.textureFbxNodeId));
+                if (!material.textureName.Contains("skygold"))
+                {
+                    writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", material.materialFbxNodeId, m_subMeshData2List[count].fbxNodeId));
+                    writer.WriteLine(String.Format("    Connect: \"OP\",\"{0}\", \"{1}\",\"DiffuseColor\"", material.textureFbxNodeId, material.materialFbxNodeId));
+
+                    writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", material.videoFbxNodeId, material.textureFbxNodeId));
+                    count++;
+                }
             }
 
 
@@ -1475,18 +1526,22 @@ namespace ModelNamer
             writer.WriteLine("}");
         }
 
-        public string m_baseMaterialName = "Material::BaseMaterial";
+        //public string m_baseMaterialName = "Material::BaseMaterial";
 
         public void WriteMaterials(StreamWriter writer,SubMeshData2 headerBlock,String texturePath)
         {
-	        writer.WriteLine(String.Format("Material: \"{0}\", \"\" {{",m_baseMaterialName));
-		    writer.WriteLine("    Version: 102");
-		    writer.WriteLine("    ShadingModel: \"phong\"");
-            writer.WriteLine("    MultiLayer: 0");
-            writer.WriteLine("    Properties70:  {");
-			writer.WriteLine("    P: \"DiffuseColor\", \"Color\", \"\", \"A\",1,1,1");
-            writer.WriteLine("  }");
-            writer.WriteLine("}");
+            foreach (TextureData texture in m_textures)
+            {
+                texture.materialFbxNodeId = GenerateNodeId();
+                writer.WriteLine(String.Format("Material: \"{0}\", \"\" {{", texture.materialFbxNodeId));
+                writer.WriteLine("    Version: 102");
+                writer.WriteLine("    ShadingModel: \"phong\"");
+                writer.WriteLine("    MultiLayer: 0");
+                writer.WriteLine("    Properties70:  {");
+                writer.WriteLine("    P: \"DiffuseColor\", \"Color\", \"\", \"A\",1,1,1");
+                writer.WriteLine("  }");
+                writer.WriteLine("}");
+            }
         }
 
         public void WriteTexturesAndVideos(StreamWriter writer,String texturePath)

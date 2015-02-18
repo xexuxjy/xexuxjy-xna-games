@@ -1169,6 +1169,7 @@ namespace ModelNamer
         public int height;
         public int three;
         public int zero;
+        public String materialFbxNodeId;
         public String textureFbxNodeId;
         public String videoFbxNodeId;
 
