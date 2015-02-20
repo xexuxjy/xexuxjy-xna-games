@@ -85,7 +85,7 @@ namespace ModelNamer
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*armor_all*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*carafe_decanter*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*animalsk*"));
-            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*PropPracticePost1*"))
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*PropPracticePost1*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*cinemat*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\arenas\", "*thepit*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\arenas\", "*caltha*"));
@@ -105,8 +105,8 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\urlancinematic.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\carafe_carafe.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_carafe.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\darkgod.mdl");
 
@@ -1491,11 +1491,11 @@ namespace ModelNamer
                 if (!material.textureName.Contains("skygold"))
                 {
                     writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, m_subMeshData2List[count].fbxNodeId));
-                    writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", material.materialFbxNodeId, m_subMeshData2List[count].fbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OO\",\"{0}\", \"{1}\"", material.materialFbxNodeId, m_subMeshData2List[count].fbxNodeId));
                     writer.WriteLine(String.Format(";    \"Texture::{0}\", \"Material::{1}\"", material.textureName, material.textureName));
-                    writer.WriteLine(String.Format("    Connect: \"OP\",\"{0}\", \"{1}\",\"DiffuseColor\"", material.textureFbxNodeId, material.materialFbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OP\",\"{0}\", \"{1}\",\"DiffuseColor\"", material.textureFbxNodeId, material.materialFbxNodeId));
                     writer.WriteLine(String.Format(";    \"Video::{0}\", \"Texture::{1}\"", material.textureName, material.textureName));
-                    writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", material.videoFbxNodeId, material.textureFbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OO\",\"{0}\", \"{1}\"", material.videoFbxNodeId, material.textureFbxNodeId));
                     count++;
                 }
             }
@@ -1506,7 +1506,7 @@ namespace ModelNamer
                 foreach (BoneNode childNode in boneNode.children)
                 {
                     writer.WriteLine(String.Format(";  {0}::{1}", boneNode.name, childNode.name));
-                    writer.WriteLine(String.Format("    Connect: \"OO\",{0},{1}", boneNode.fbxNodeId, childNode.fbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", boneNode.fbxNodeId, childNode.fbxNodeId));
                     writer.WriteLine();
                 }
             }
