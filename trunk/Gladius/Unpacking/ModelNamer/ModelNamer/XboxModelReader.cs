@@ -70,7 +70,7 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
-            //rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
+            rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath + "ModelFilesRenamed";
             String infoFile = rootPath + "ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
@@ -1081,68 +1081,28 @@ namespace ModelNamer
 
         public void WriteFBXAHeader(StreamWriter writer)
         {
-            // write header.
-            writer.WriteLine("; FBX 6.1.0 project file");
-            writer.WriteLine("; Created by Blender FBX Exporter");
-            writer.WriteLine("; for support mail: ideasman42@gmail.com");
-            writer.WriteLine("; ----------------------------------------------------");
-            writer.WriteLine("");
-            writer.WriteLine("FBXHeaderExtension:  {");
-            writer.WriteLine("FBXHeaderVersion: 1003");
-            writer.WriteLine("FBXVersion: 6100");
-            writer.WriteLine("Creator: \"FBX SDK/FBX Plugins build 20070228\"");
-            writer.WriteLine("OtherFlags:  {");
-            writer.WriteLine("FlagPLE: 0");
-            writer.WriteLine("}");
-            writer.WriteLine("}");
-            writer.WriteLine("CreationTime: \"2014-03-20 17:38:29:000\"");
-            writer.WriteLine("Creator: \"Blender version 2.69 (sub 10)\"");
-
-            writer.WriteLine("; Object definitions");
-            writer.WriteLine(";------------------------------------------------------------------");
 
             int total = m_subMeshData2List.Count + (3 * m_textures.Count) + 2;
+            using (StreamReader sr = new StreamReader("FBXAHeader.txt"))
+            {
+                string line = sr.ReadToEnd();
+                writer.Write(line);
+            }
+            using (StreamReader sr = new StreamReader("FBXADocumentDescription.txt"))
+            {
+                string line = sr.ReadToEnd();
+                writer.Write(line);
+            }
+            using (StreamReader sr = new StreamReader("FBXADefinitions.txt"))
+            {
+                string line = sr.ReadToEnd();
+                writer.Write(line);
+            }
 
-            writer.WriteLine("Definitions:  {");
-            writer.WriteLine("Version: 100");
-            writer.WriteLine("Count: "+total);
-            writer.WriteLine("ObjectType: \"Model\" {");
-            writer.WriteLine("Count: " + m_subMeshData2List.Count);
-            writer.WriteLine("}");
-            writer.WriteLine("ObjectType: \"Geometry\" {");
-            writer.WriteLine("Count: 1");
-            writer.WriteLine("}");
-            writer.WriteLine("	ObjectType: \"Material\" {");
-            writer.WriteLine("Count: " + m_textures.Count);
-            writer.WriteLine("PropertyTemplate: \"FbxSurfacePhong\" {");
-            writer.WriteLine("Properties70:  {");
-            writer.WriteLine("	P: \"ShadingModel\", \"KString\", \"\", \"\", \"Phong\"");
-            writer.WriteLine("	P: \"MultiLayer\", \"bool\", \"\", \"\",0");
-            writer.WriteLine("	P: \"EmissiveColor\", \"Color\", \"\", \"A\",0,0,0");
-            writer.WriteLine("	P: \"EmissiveFactor\", \"Number\", \"\", \"A\",1");
-            writer.WriteLine("	P: \"AmbientColor\", \"Color\", \"\", \"A\",0.2,0.2,0.2");
-            writer.WriteLine("	P: \"AmbientFactor\", \"Number\", \"\", \"A\",1");
-            writer.WriteLine("	P: \"DiffuseColor\", \"Color\", \"\", \"A\",0.8,0.8,0.8");
-            writer.WriteLine("  }");
-            writer.WriteLine("}");
-            writer.WriteLine("}");
-            writer.WriteLine("	ObjectType: \"Texture\" {");
-            writer.WriteLine("Count: " + m_textures.Count);
-            writer.WriteLine("}");
-            writer.WriteLine("	ObjectType: \"Video\" {");
-            writer.WriteLine("Count: " + m_textures.Count);
-            writer.WriteLine("}");
-            writer.WriteLine("	ObjectType: \"GlobalSettings\" {");
-            writer.WriteLine("		Count: 1");
-            writer.WriteLine("	}");
-            writer.WriteLine("}");
-            writer.WriteLine("");
-            writer.WriteLine("; Object properties");
-            writer.WriteLine(";------------------------------------------------------------------");
-
+            
         }
 
-        public string m_geometryId = "geomId";
+        public string m_geometryId = "9999";
 
         public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1)
         {
@@ -1182,7 +1142,7 @@ namespace ModelNamer
 
         public void WriteGeometryStart(StreamWriter writer, SubMeshData2 smd2)
         {
-            writer.WriteLine("Geometry: \"" + m_geometryId + "\", \"Mesh\" {");
+            writer.WriteLine("Geometry: " + m_geometryId + ",\"Geometry::\", \"Mesh\" {");
             writer.WriteLine("Version: 232");
 
         }
@@ -1232,31 +1192,14 @@ namespace ModelNamer
 
         public void WriteGlobals(StreamWriter writer)
         {
-            writer.WriteLine("GlobalSettings:  {");
-            writer.WriteLine("  Version: 1000");
-            writer.WriteLine("  Properties60:  {");
-            writer.WriteLine("      Property: \"UpAxis\", \"int\", \"\",1");
-            writer.WriteLine("      Property: \"UpAxisSign\", \"int\", \"\",1");
-            writer.WriteLine("      Property: \"FrontAxis\", \"int\", \"\",2");
-            writer.WriteLine("      Property: \"FrontAxisSign\", \"int\", \"\",1");
-            writer.WriteLine("      Property: \"CoordAxis\", \"int\", \"\",0");
-            writer.WriteLine("      Property: \"CoordAxisSign\", \"int\", \"\",1");
-            writer.WriteLine("      Property: \"UnitScaleFactor\", \"double\", \"\",1");
-            writer.WriteLine("  }");
-            writer.WriteLine("}");
         }
 
 
 
         public void WriteVertices(StreamWriter writer)
         {
-            writer.WriteLine("MultiLayer: 0");
-            writer.WriteLine("MultiTake: 1");
-            writer.WriteLine("Shading: Y");
-            writer.WriteLine("Culling: \"CullingOff\"");
-
             // write vertices
-            writer.Write(String.Format("Vertices: *{0} {{ ",m_allVertices.Count*3));
+            writer.WriteLine(String.Format("Vertices: *{0} {{ ",m_allVertices.Count*3));
             for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
@@ -1277,7 +1220,7 @@ namespace ModelNamer
             int startIndex = 0;
             int endIndex = m_allIndices.Count - 2;
 
-            writer.Write(String.Format("PolygonVertexIndex: *{0} {{ ",endIndex*3));
+            writer.WriteLine(String.Format("PolygonVertexIndex: *{0} {{ ",endIndex*3));
 
 
             int end = endIndex;//startIndex + headerBlock.NumIndices - 2;
@@ -1391,7 +1334,7 @@ namespace ModelNamer
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
                 m_subMeshData2List[a].fbxNodeId = GenerateNodeId();
-	            writer.WriteLine(String.Format("Model: {0}, \"\", \"Null\" {{",m_subMeshData2List[a].fbxNodeId));
+                writer.WriteLine(String.Format("Model: {0}, \"{1}\", \"Mesh\" {{", m_subMeshData2List[a].fbxNodeId,"ModelName"));
 		        writer.WriteLine("  Version: 232");
 		        writer.WriteLine("  Properties70:  {");
 			    writer.WriteLine("  P: \"ScalingMax\", \"Vector3D\", \"Vector\", \"\",0,0,0");
@@ -1404,7 +1347,7 @@ namespace ModelNamer
 
         }
 
-        static int s_nodeCount;
+        static int s_nodeCount = 10;
         public string GenerateNodeId()
         {
             return "" + s_nodeCount++;
@@ -1524,16 +1467,16 @@ namespace ModelNamer
             {
                 if (count == 0)
                 {
-                    writer.WriteLine(String.Format("    C: \"OO\",\"{0}\", \"Model::Scene\"", headerBlock.fbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, 0", headerBlock.fbxNodeId));
                 }
                 else
                 {
-                    writer.WriteLine(String.Format("    C: \"OO\",\"{0}\", \"{1}\"", headerBlock.fbxNodeId, m_subMeshData2List[count-1].fbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", headerBlock.fbxNodeId, m_subMeshData2List[count-1].fbxNodeId));
                 }
 
                 if(count == m_subMeshData1List.Count-1)
                 {
-                    writer.WriteLine(String.Format("    C: \"OO\",\"{0}\", \"{1}\"",m_geometryId, headerBlock.fbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}",m_geometryId, headerBlock.fbxNodeId));
                 }
 
                 count++;
