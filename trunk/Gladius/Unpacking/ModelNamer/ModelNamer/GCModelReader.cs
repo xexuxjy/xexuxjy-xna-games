@@ -1074,10 +1074,10 @@ namespace ModelNamer
 
 
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\characters", "*amazon*"));
-            //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*"));
+            filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*thepit*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\weapons", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
-            filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\weapons", "*carafe_decanter*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\weapons", "*carafe_decanter*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed\arenas", "*palace*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*"));
             //filenames.AddRange(Directory.GetFiles(@"D:\gladius-extracted-archive\gc-compressed\AllModelsRenamed", "*armor_all*"));
