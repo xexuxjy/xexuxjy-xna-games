@@ -70,7 +70,7 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
-            rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
+            //rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath + "ModelFilesRenamed";
             String infoFile = rootPath + "ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
@@ -1117,7 +1117,7 @@ namespace ModelNamer
             WriteIndices(writer, m_subMeshData2List[0]);
             WriteNormals(writer);
             WriteUVs(writer);
-            WriteLayerElementTexture(writer);
+            //WriteLayerElementTexture(writer);
             WriteLayerElementMaterial(writer);
             WriteSkeleton(writer);
             WriteGeometryEnd(writer);
@@ -1334,7 +1334,8 @@ namespace ModelNamer
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
                 m_subMeshData2List[a].fbxNodeId = GenerateNodeId();
-                writer.WriteLine(String.Format("Model: {0}, \"{1}\", \"Mesh\" {{", m_subMeshData2List[a].fbxNodeId,"ModelName"));
+                m_subMeshData2List[a].fbxNodeName = "Subpart"+a;
+                writer.WriteLine(String.Format("Model: {0}, \"Model::{1}\", \"Mesh\" {{", m_subMeshData2List[a].fbxNodeId, m_subMeshData2List[a].fbxNodeName));
 		        writer.WriteLine("  Version: 232");
 		        writer.WriteLine("  Properties70:  {");
 			    writer.WriteLine("  P: \"ScalingMax\", \"Vector3D\", \"Vector\", \"\",0,0,0");
@@ -1396,9 +1397,9 @@ namespace ModelNamer
                 adjustedIndex = materialData.textureId / 64;
                 adjustedIndex = AdjustForModel(adjustedIndex);
 
-                int end = startIndex + headerBlock.NumIndices - 2;
+                int end = startIndex + (headerBlock.NumIndices )-1;
 
-                for (int i = startIndex; i < end; i += 3)
+                for (int i = startIndex; i < end; i++)
                 {
                     materialList.Add(adjustedIndex);
                 }
@@ -1426,6 +1427,7 @@ namespace ModelNamer
                     writer.Write(",");
                 }
             }
+            writer.WriteLine();
             writer.WriteLine("}");
             writer.WriteLine("}");
 
@@ -1463,24 +1465,33 @@ namespace ModelNamer
             writer.WriteLine("Connections: {");
 
             int count = 0;
+            string endModelId = "-1";
             foreach (SubMeshData2 headerBlock in m_subMeshData2List)
             {
                 if (count == 0)
                 {
+                    writer.WriteLine(String.Format(";Model::{0}, Model::RootNode", headerBlock.fbxNodeName));
                     writer.WriteLine(String.Format("    C: \"OO\",{0}, 0", headerBlock.fbxNodeId));
                 }
                 else
                 {
+                    //;Model::default, Model::carafe_decanter.mdl_root
+                    writer.WriteLine(String.Format(";   Model::{0} ,Model::{1}", headerBlock.fbxNodeName, m_subMeshData2List[count - 1].fbxNodeName));
                     writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", headerBlock.fbxNodeId, m_subMeshData2List[count-1].fbxNodeId));
                 }
 
                 if(count == m_subMeshData1List.Count-1)
                 {
+                    writer.WriteLine(String.Format(";   Geometry:: ,Model::{0}", headerBlock.fbxNodeName));
                     writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}",m_geometryId, headerBlock.fbxNodeId));
+                    endModelId = headerBlock.fbxNodeId;
                 }
 
                 count++;
             }
+
+
+            
 
             // Connect material to the object...
             //writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", m_baseMaterialName,m_subMeshData2List[0].fbxNodeId));
@@ -1490,12 +1501,13 @@ namespace ModelNamer
             {
                 if (!material.textureName.Contains("skygold"))
                 {
-                    writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, m_subMeshData2List[count].fbxNodeId));
-                    writer.WriteLine(String.Format("    C: \"OO\",\"{0}\", \"{1}\"", material.materialFbxNodeId, m_subMeshData2List[count].fbxNodeId));
+                    //writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, m_subMeshData2List[count].fbxNodeId));
+                    writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, endModelId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.materialFbxNodeId, endModelId));
                     writer.WriteLine(String.Format(";    \"Texture::{0}\", \"Material::{1}\"", material.textureName, material.textureName));
-                    writer.WriteLine(String.Format("    C: \"OP\",\"{0}\", \"{1}\",\"DiffuseColor\"", material.textureFbxNodeId, material.materialFbxNodeId));
-                    writer.WriteLine(String.Format(";    \"Video::{0}\", \"Texture::{1}\"", material.textureName, material.textureName));
-                    writer.WriteLine(String.Format("    C: \"OO\",\"{0}\", \"{1}\"", material.videoFbxNodeId, material.textureFbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OP\",{0}, {1},\"DiffuseColor\"", material.textureFbxNodeId, material.materialFbxNodeId));
+                    writer.WriteLine(String.Format(";    Video::{0}, Texture::{1}", material.textureName, material.textureName));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.videoFbxNodeId, material.textureFbxNodeId));
                     count++;
                 }
             }
@@ -1521,7 +1533,7 @@ namespace ModelNamer
             foreach (TextureData texture in m_textures)
             {
                 texture.materialFbxNodeId = GenerateNodeId();
-                writer.WriteLine(String.Format("Material: \"{0}\", \"\" {{", texture.materialFbxNodeId));
+                writer.WriteLine(String.Format("Material: {0}, \"Material::{1}\" , \"\" {{", texture.materialFbxNodeId,texture.textureName));
                 writer.WriteLine("    Version: 102");
                 writer.WriteLine("    ShadingModel: \"phong\"");
                 writer.WriteLine("    MultiLayer: 0");
@@ -1698,7 +1710,7 @@ namespace ModelNamer
         public int MinVertex = int.MaxValue;
         public int MaxVertex = int.MinValue;
         public string fbxNodeId;
-
+        public string fbxNodeName;
 
         public static SubMeshData2 FromStream(BinaryReader binReader)
         {
