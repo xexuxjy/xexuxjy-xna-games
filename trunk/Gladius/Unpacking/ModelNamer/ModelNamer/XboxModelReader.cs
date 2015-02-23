@@ -1361,16 +1361,16 @@ namespace ModelNamer
 
             //writer.WriteLine("Objects: {");
 
-            foreach (BoneNode boneNode in m_bones)
-            {
-                boneNode.fbxNodeId = GenerateNodeId();
-                writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {{", boneNode.fbxNodeId, boneNode.name));
-                writer.WriteLine("  Properties70: {");
-                writer.WriteLine(String.Format("    P: \"Size\", \"double\", \"Number\",\"\",{0}", 1.0f));
-                writer.WriteLine("  }");
-                writer.WriteLine("  TypeFlags: \"Skeleton\"");
-                writer.WriteLine("}");
-            }
+            //foreach (BoneNode boneNode in m_bones)
+            //{
+            //    boneNode.fbxNodeId = GenerateNodeId();
+            //    writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {{", boneNode.fbxNodeId, boneNode.name));
+            //    writer.WriteLine("  Properties70: {");
+            //    writer.WriteLine(String.Format("    P: \"Size\", \"double\", \"Number\",\"\",{0}", 1.0f));
+            //    writer.WriteLine("  }");
+            //    writer.WriteLine("  TypeFlags: \"Skeleton\"");
+            //    writer.WriteLine("}");
+            //}
             //writer.WriteLine("}");
 
 
@@ -1513,12 +1513,14 @@ namespace ModelNamer
             }
 
 
+
+
             foreach (BoneNode boneNode in m_bones)
             {
                 foreach (BoneNode childNode in boneNode.children)
                 {
                     writer.WriteLine(String.Format(";  {0}::{1}", boneNode.name, childNode.name));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", boneNode.fbxNodeId, childNode.fbxNodeId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", childNode.fbxDeformerNodeId,boneNode.fbxDeformerNodeId ));
                     writer.WriteLine();
                 }
             }
@@ -1583,6 +1585,43 @@ namespace ModelNamer
                 writer.WriteLine("}");
             }
 
+
+        }
+
+        public void WriteDeformers(StreamWriter writer)
+        {
+            foreach (BoneNode boneNode in m_bones)
+            {
+                boneNode.fbxDeformerNodeId = GenerateNodeId();
+                writer.WriteLine(String.Format("Deformer: {0}, \"Deformer::Skin\" , \"Skin\" {{", boneNode.fbxDeformerNodeId));
+                writer.WriteLine("  Version: 101");
+                writer.WriteLine("  Link_DeformAccuracy: 50");
+                writer.WriteLine(" }");
+            }
+
+
+            foreach (BoneNode boneNode in m_bones)
+            {
+                boneNode.fbxSubDeformerNodeId = GenerateNodeId();
+                writer.WriteLine(String.Format("Deformer: {0}, \"SubDeformer::\" , \"Cluster\" {{", boneNode.fbxSubDeformerNodeId));
+                writer.WriteLine("  Version: 100");
+                writer.WriteLine("  UserData: \"\", \"\"");
+                // to do, 
+                writer.WriteLine(String.Format("  Indexes: *{0} {{",0));
+                writer.WriteLine(" }");
+                writer.WriteLine(String.Format("  Weights: *{0} {{",0));
+                writer.WriteLine(" }");
+                // local offset as matrix.
+                writer.WriteLine(String.Format("  Transform: *{0} {{",16));
+                writer.WriteLine("a: "+Common.ToStringC(Matrix.Identity));   
+                writer.WriteLine(" }");
+                writer.WriteLine(" }");
+                // parent link as matrix
+                writer.WriteLine(String.Format("  TransformLink: *{0} {{",16));
+                writer.WriteLine("a: "+Common.ToStringC(boneNode.finalMatrix));   
+                writer.WriteLine(" }");
+                writer.WriteLine(" }");
+            }
 
         }
 
