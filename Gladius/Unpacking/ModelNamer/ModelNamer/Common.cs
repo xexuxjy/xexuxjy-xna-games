@@ -80,6 +80,28 @@ namespace ModelNamer
             return count;
         }
 
+        public static String ToStringC(Matrix m)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M11,m.M12,m.M13,m.M14));
+            sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M21, m.M22, m.M23, m.M24));
+            sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M31, m.M32, m.M33, m.M34));
+            sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000} ", m.M41, m.M42, m.M43, m.M44));
+            return sb.ToString();
+        }
+
+
+        public static String ToStringC(Vector4 v4)
+        {
+            return String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}", v4.X, v4.Y, v4.Z, v4.W);
+        }
+
+
+        public static String ToString(Vector4 v4)
+        {
+            return String.Format("{0:0.00000000} {1:0.00000000} {2:0.00000000} {3:0.00000000}", v4.X, v4.Y, v4.Z,v4.W);
+        }
+
 
         public static String ToString(Vector3 v3)
         {
@@ -713,7 +735,8 @@ namespace ModelNamer
         public BoneNode parent;
         public List<BoneNode> children = new List<BoneNode>();
 
-        public String fbxNodeId;
+        public String fbxDeformerNodeId;
+        public String fbxSubDeformerNodeId;
 
         public static BoneNode FromStream(BinaryReader binReader)
         {
