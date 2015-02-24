@@ -86,7 +86,7 @@ namespace ModelNamer
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*carafe_decanter*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed", "*animalsk*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*PropPracticePost1*"));
-            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*cinemat*"));
+            //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\characters\", "*amazon*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\arenas\", "*thepit*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\arenas\", "*caltha*"));
             //filenames.AddRange(Directory.GetFiles(rootPath + @"ModelFilesRenamed\arenas\", "*exuros*"));
@@ -96,7 +96,7 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\axeCS_declamatio.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordCS_unofan.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_black.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
@@ -105,7 +105,7 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\urlancinematic.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_carafe.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\darkgod.mdl");
@@ -179,7 +179,7 @@ namespace ModelNamer
                     //{
                     //    using (StreamWriter matSw = new StreamWriter(objOutputPath + model.m_name + ".mtl"))
                     //    {
-                    //        model.WriteOBJ(objSw, matSw, texturePath, -1);    
+                    //        model.WriteOBJ(objSw, matSw, texturePath, -1);
                     //    }
                     //}
                     using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".fbx"))
@@ -359,10 +359,7 @@ namespace ModelNamer
                     int TotalVertices = binReader.ReadInt32();
 
                     // do stuff...
-                    //if (!m_skinned)
-                    {
-                        m_subMeshData3 = SubMeshData3.FromStream(this, binReader, NumMeshes, unk1m);
-                    }
+                    m_subMeshData3 = SubMeshData3.FromStream(this, binReader, NumMeshes, unk1m,m_skinned);
 
 
                     binReader.BaseStream.Position = doegEndVal + doegToTextureSize;
@@ -1111,6 +1108,8 @@ namespace ModelNamer
 
             // loop here?
 
+            BuildClusterInfo();
+
             WriteGeometryStart(writer, m_subMeshData2List[0]);
 
             WriteVertices(writer);
@@ -1120,6 +1119,7 @@ namespace ModelNamer
             //WriteLayerElementTexture(writer);
             WriteLayerElementMaterial(writer);
             WriteSkeleton(writer);
+            WriteDeformers(writer);
             WriteGeometryEnd(writer);
             WriteModels(writer);
 
@@ -1281,16 +1281,26 @@ namespace ModelNamer
             writer.WriteLine("  Name: \"\"");
             writer.WriteLine("  MappingInformationType: \"ByVertice\"");
             writer.WriteLine("  ReferenceInformationType: \"Direct\"");
-            writer.Write("  Normals: ");
+            writer.WriteLine(String.Format("  Normals: *{0} {{",m_allVertices.Count*3));
+            writer.Write("  a: ");
+            bool swap = true;
             for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
-                writer.Write(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Normal.X, vpnt.Normal.Y, vpnt.Normal.Z));
+                Vector3 norm = vpnt.Normal;
+                if (swap)
+                {
+                    //norm = -norm;
+                }
+                swap = !swap;
+                writer.Write(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", norm.X,norm.Y,norm.Z));
                 if (i < m_allVertices.Count - 1)
                 {
                     writer.Write(",");
                 }
             }
+            writer.WriteLine();
+            writer.WriteLine("}");
             writer.WriteLine();
             writer.WriteLine("}");
         }
@@ -1301,7 +1311,8 @@ namespace ModelNamer
             writer.WriteLine("  Name: \"UVSet0\"");
             writer.WriteLine("  MappingInformationType: \"ByVertice\"");
             writer.WriteLine("  ReferenceInformationType: \"Direct\"");
-            writer.Write("  UV: ");
+            writer.WriteLine(String.Format("  UV: *{0} {{",m_allVertices.Count*2));
+            writer.Write("  a: ");
             for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
@@ -1311,6 +1322,9 @@ namespace ModelNamer
                     writer.Write(",");
                 }
             }
+            writer.WriteLine();
+            writer.WriteLine("}");
+
             writer.WriteLine();
             writer.WriteLine("}");
         }
@@ -1354,25 +1368,63 @@ namespace ModelNamer
             return "" + s_nodeCount++;
         }
 
+        public void BuildClusterInfo()
+        {
+            if (m_skinned)
+            {
+                Dictionary<short, BoneNode> boneMap = new Dictionary<short, BoneNode>();
+                foreach (BoneNode node in m_bones)
+                {
+                    boneMap[node.id] = node;
+                }
+
+                for (int i = 0; i < m_allVertices.Count; ++i)
+                {
+                    XboxVertexInstance xbi = m_allVertices[i];
+                    for (int a = 0; a < 3; ++a)
+                    {
+                        short index1 = (short)xbi.AdjustBone(xbi.BoneIndices[a]);
+                        if (index1 != -1)
+                        {
+                            boneMap[index1].AddIndexAndWeight(i, xbi.Weight(a));
+                        }
+                    }
+                }
+                foreach (BoneNode node in m_bones)
+                {
+                    if (node.weightVertexIndices.Count > 0)
+                    {
+                        int ibreak2 = 0;
+                    }
+                }
+            
+            }
+
+            int ibreak = 0;
+        }
+
+
         public void WriteSkeleton(StreamWriter writer)
         {
-            //writer.WriteLine("; Object properties");
-            //writer.WriteLine(";------------------------------------------------------------------");
+            if (m_skinned)
+            {
+                //writer.WriteLine("; Object properties");
+                //writer.WriteLine(";------------------------------------------------------------------");
 
-            //writer.WriteLine("Objects: {");
+                //writer.WriteLine("Objects: {");
 
-            //foreach (BoneNode boneNode in m_bones)
-            //{
-            //    boneNode.fbxNodeId = GenerateNodeId();
-            //    writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {{", boneNode.fbxNodeId, boneNode.name));
-            //    writer.WriteLine("  Properties70: {");
-            //    writer.WriteLine(String.Format("    P: \"Size\", \"double\", \"Number\",\"\",{0}", 1.0f));
-            //    writer.WriteLine("  }");
-            //    writer.WriteLine("  TypeFlags: \"Skeleton\"");
-            //    writer.WriteLine("}");
-            //}
-            //writer.WriteLine("}");
-
+                foreach (BoneNode boneNode in m_bones)
+                {
+                    boneNode.fbxBoneAttributeId = GenerateNodeId();
+                    writer.WriteLine(String.Format("NodeAttribute: {0}, \"NodeAttribute::{1}\", \"LimbNode\" {{", boneNode.fbxBoneAttributeId, boneNode.name));
+                    writer.WriteLine("  Properties70: {");
+                    writer.WriteLine(String.Format("    P: \"Size\", \"double\", \"Number\",\"\",{0}", 1.0f));
+                    writer.WriteLine("  }");
+                    writer.WriteLine("  TypeFlags: \"Skeleton\"");
+                    writer.WriteLine("}");
+                }
+                //writer.WriteLine("}");
+            }
 
 
         }
@@ -1534,15 +1586,31 @@ namespace ModelNamer
         {
             foreach (TextureData texture in m_textures)
             {
-                texture.materialFbxNodeId = GenerateNodeId();
-                writer.WriteLine(String.Format("Material: {0}, \"Material::{1}\" , \"\" {{", texture.materialFbxNodeId,texture.textureName));
-                writer.WriteLine("    Version: 102");
-                writer.WriteLine("    ShadingModel: \"phong\"");
-                writer.WriteLine("    MultiLayer: 0");
-                writer.WriteLine("    Properties70:  {");
-                writer.WriteLine("    P: \"DiffuseColor\", \"Color\", \"\", \"A\",1,1,1");
-                writer.WriteLine("  }");
-                writer.WriteLine("}");
+                if (!texture.textureName.Contains("skygold"))
+                {
+
+                    texture.materialFbxNodeId = GenerateNodeId();
+                    writer.WriteLine(String.Format("Material: {0}, \"Material::{1}\" , \"\" {{", texture.materialFbxNodeId, texture.textureName));
+                    writer.WriteLine("    Version: 102");
+                    writer.WriteLine("    ShadingModel: \"phong\"");
+                    writer.WriteLine("    MultiLayer: 0");
+                    writer.WriteLine("    Properties70:  {");
+			        writer.WriteLine("    P: \"AmbientColor\", \"Color\", \"\", \"A\",1,1,1");
+			        writer.WriteLine("    P: \"DiffuseColor\", \"Color\", \"\", \"A\",1,1,1");
+			        writer.WriteLine("    P: \"TransparentColor\", \"Color\", \"\", \"A\",1,1,1");
+			        writer.WriteLine("    P: \"SpecularColor\", \"Color\", \"\", \"A\",0,0,0");
+			        writer.WriteLine("    P: \"Emissive\", \"Vector3D\", \"Vector\", \"\",0,0,0");
+			        writer.WriteLine("    P: \"Ambient\", \"Vector3D\", \"Vector\", \"\",1,1,1");
+			        writer.WriteLine("    P: \"Diffuse\", \"Vector3D\", \"Vector\", \"\",1,1,1");
+			        writer.WriteLine("    P: \"Specular\", \"Vector3D\", \"Vector\", \"\",0,0,0");
+			        writer.WriteLine("    P: \"Shininess\", \"double\", \"Number\", \"\",20");
+			        writer.WriteLine("    P: \"Opacity\", \"double\", \"Number\", \"\",1");
+			        writer.WriteLine("    P: \"Reflectivity\", \"double\", \"Number\", \"\",0");
+
+                    
+                    writer.WriteLine("  }");
+                    writer.WriteLine("}");
+                }
             }
         }
 
@@ -1550,39 +1618,47 @@ namespace ModelNamer
         {
             foreach (TextureData texture in m_textures)
             {
-                String fullPath = texturePath + texture.textureName + ".png";
-                texture.videoFbxNodeId = GenerateNodeId();
-                string line = String.Format("Video: {0} , \"Video::{1}\",\"Clip\" {{", texture.videoFbxNodeId, texture.textureName);
-                writer.WriteLine(line);
-                writer.WriteLine("Type: \"Clip\"");
-                writer.WriteLine("Properties70:  {");
-                writer.WriteLine("P: \"Path\", \"KString\", \"XRefUrl\", \"\", \"" + fullPath + "\"");
-                writer.WriteLine("}");
-                writer.WriteLine("UseMipMap: 0");
-                writer.WriteLine("Filename: \"" + fullPath + "\"");
-                writer.WriteLine("RelativeFilename: \"" + fullPath + "\"");
-                writer.WriteLine("}");
+                if (!texture.textureName.Contains("skygold"))
+                {
+
+                    String fullPath = texturePath + texture.textureName + ".png";
+                    texture.videoFbxNodeId = GenerateNodeId();
+                    string line = String.Format("Video: {0} , \"Video::{1}\",\"Clip\" {{", texture.videoFbxNodeId, texture.textureName);
+                    writer.WriteLine(line);
+                    writer.WriteLine("Type: \"Clip\"");
+                    writer.WriteLine("Properties70:  {");
+                    writer.WriteLine("P: \"Path\", \"KString\", \"XRefUrl\", \"\", \"" + fullPath + "\"");
+                    writer.WriteLine("}");
+                    writer.WriteLine("UseMipMap: 0");
+                    writer.WriteLine("Filename: \"" + fullPath + "\"");
+                    writer.WriteLine("RelativeFilename: \"" + fullPath + "\"");
+                    writer.WriteLine("}");
+                }
             }
 
             foreach (TextureData texture in m_textures)
             {
-                texture.textureFbxNodeId = GenerateNodeId();
-                //String line = String.Format("Texture: {0}","foo");
-                String fullPath = texturePath + texture.textureName + ".png";
-                writer.WriteLine(String.Format("Texture: {0}, \"Texture::{1}\",\"\" {{", texture.textureFbxNodeId, texture.textureName));
-                writer.WriteLine("	Type: \"TextureVideoClip\"");
-                writer.WriteLine(String.Format("	TextureName: \"Texture::{0}\"", texture.textureName));
-                writer.WriteLine("	Properties70:  {");
-                writer.WriteLine("		P: \"UVSet\", \"KString\", \"\", \"\", \"UVSet0\"");
-                writer.WriteLine("	}");
-                writer.WriteLine(String.Format("	Media: \"Video::{0}\"", texture.textureName));
-                writer.WriteLine(String.Format("	FileName: \"{0}\"", fullPath));
-                writer.WriteLine(String.Format("	RelativeFilename: \"{0}\"", fullPath));
-                writer.WriteLine("	ModelUVTranslation: 0,0");
-                writer.WriteLine("	ModelUVScaling: 1,1");
-                writer.WriteLine("	Texture_Alpha_Source: \"None\"");
-                writer.WriteLine("	Cropping: 0,0,0,0");
-                writer.WriteLine("}");
+                if (!texture.textureName.Contains("skygold"))
+                {
+
+                    texture.textureFbxNodeId = GenerateNodeId();
+                    //String line = String.Format("Texture: {0}","foo");
+                    String fullPath = texturePath + texture.textureName + ".png";
+                    writer.WriteLine(String.Format("Texture: {0}, \"Texture::{1}\",\"\" {{", texture.textureFbxNodeId, texture.textureName));
+                    writer.WriteLine("	Type: \"TextureVideoClip\"");
+                    writer.WriteLine(String.Format("	TextureName: \"Texture::{0}\"", texture.textureName));
+                    writer.WriteLine("	Properties70:  {");
+                    writer.WriteLine("		P: \"UVSet\", \"KString\", \"\", \"\", \"UVSet0\"");
+                    writer.WriteLine("	}");
+                    writer.WriteLine(String.Format("	Media: \"Video::{0}\"", texture.textureName));
+                    writer.WriteLine(String.Format("	FileName: \"{0}\"", fullPath));
+                    writer.WriteLine(String.Format("	RelativeFilename: \"{0}\"", fullPath));
+                    writer.WriteLine("	ModelUVTranslation: 0,0");
+                    writer.WriteLine("	ModelUVScaling: 1,1");
+                    writer.WriteLine("	Texture_Alpha_Source: \"None\"");
+                    writer.WriteLine("	Cropping: 0,0,0,0");
+                    writer.WriteLine("}");
+                }
             }
 
 
@@ -1603,14 +1679,36 @@ namespace ModelNamer
             foreach (BoneNode boneNode in m_bones)
             {
                 boneNode.fbxSubDeformerNodeId = GenerateNodeId();
+                writer.WriteLine(String.Format("; {0}",boneNode.name));
                 writer.WriteLine(String.Format("Deformer: {0}, \"SubDeformer::\" , \"Cluster\" {{", boneNode.fbxSubDeformerNodeId));
                 writer.WriteLine("  Version: 100");
                 writer.WriteLine("  UserData: \"\", \"\"");
                 // to do, 
-                writer.WriteLine(String.Format("  Indexes: *{0} {{",0));
+                writer.WriteLine(String.Format("  Indexes: *{0} {{",boneNode.weightVertexIndices.Count));
+                writer.Write("a: ");
+                for (int i = 0; i < boneNode.weightVertexIndices.Count; ++i)
+                {
+                    writer.Write(""+boneNode.weightVertexIndices[i]);
+                    if (i < boneNode.weightVertexIndices.Count - 1)
+                    {
+                        writer.Write(",");
+                    }
+                }
+                writer.WriteLine();
                 writer.WriteLine(" }");
-                writer.WriteLine(String.Format("  Weights: *{0} {{",0));
+                writer.WriteLine(String.Format("  Weights: *{0} {{", boneNode.weightVertexWeights.Count));
+                writer.Write("a: ");
+                for (int i = 0; i < boneNode.weightVertexWeights.Count; ++i)
+                {
+                    writer.Write(String.Format("{0:0.00000}",boneNode.weightVertexWeights[i]));
+                    if (i < boneNode.weightVertexWeights.Count - 1)
+                    {
+                        writer.Write(",");
+                    }
+                }
+                writer.WriteLine();
                 writer.WriteLine(" }");
+
                 // local offset as matrix.
                 writer.WriteLine(String.Format("  Transform: *{0} {{",16));
                 writer.WriteLine("a: "+Common.ToStringC(Matrix.Identity));   
@@ -1830,94 +1928,112 @@ namespace ModelNamer
         // read those vals to sensible floats.
 
 
-        public static SubMeshData3 FromStream(XboxModel model, BinaryReader binReader, int numMeshes, int endOffset)
+        public static SubMeshData3 FromStream(XboxModel model, BinaryReader binReader, int numMeshes, int endOffset,bool skinned)
         {
             SubMeshData3 smd3 = new SubMeshData3();
             smd3.model = model;
-            int val1 = binReader.ReadInt32();
-            int val2 = binReader.ReadInt32();
-            Debug.Assert(val1 == 0);
-            //Debug.Assert(val2 == -1);
 
-            int numElements = binReader.ReadInt32();
-            smd3.initialValsList.Add(numElements);
-            int count = (numElements - 4) / 4;
-            count = 3;
-            for (int i = 0; i < count; ++i)
+            if (skinned)
             {
-                smd3.initialValsList.Add(binReader.ReadInt32());
-            }
-            //smd3.val3 = binReader.ReadInt32();
-            //smd3.val4 = binReader.ReadInt32();
-            //smd3.val5 = binReader.ReadInt32();
-            //smd3.val6 = binReader.ReadInt32();
-            // only -1 on unskinned?
-            //Debug.Assert(smd3.val2 == -1);
-            //Debug.Assert(smd3.val4 == -1);
-            //Debug.Assert(smd3.val6 == -1);
-            for (int i = 0; i < numMeshes; ++i)
-            {
-                smd3.list1.Add(binReader.ReadInt32());
-            }
+                MaterialData md = new MaterialData();
+                md.textureId = 0;
+                
+                model.m_materialDataList.Add(md);
 
-            int maxOffset = 0;
-
-            for (int i = 0; i < numMeshes; ++i)
-            {
-                int[] a = new int[3];
-                //for (int j = 0; j < a.Length; ++j)
-                //{
-                //    a[j] = binReader.ReadInt32();
-                //}
-                a[0] = binReader.ReadInt32();
-                a[1] = binReader.ReadInt32();
-                a[2] = binReader.ReadInt32();
-                maxOffset = Math.Max(maxOffset, a[2]);
-                model.m_meshMaterialList.Add(a);
-            }
-
-            Debug.Assert(maxOffset % 44 == 0);
-            maxOffset /= 44;
-            maxOffset += 1;
-            int ibreak2 = 0;
-
-            for (int i = 0; i < maxOffset; ++i)
-            {
-                int arraySize = 11;
-                int[] a = new int[arraySize];
-                for (int j = 0; j < a.Length; ++j)
+                int[] matdata = new int[3];
+                for (int i = 0; i < model.NumMeshes; ++i)
                 {
-                    a[j] = binReader.ReadInt32();
+                    model.m_meshMaterialList.Add(matdata);
                 }
-                smd3.list3.Add(a);
             }
+            else
+            {
 
-            smd3.lastElementOffset = binReader.ReadInt32();
-            smd3.headerEnd2 = binReader.ReadInt32();
-            smd3.headerEnd3 = binReader.ReadInt32();
-            smd3.headerEnd4 = binReader.ReadInt32();
-            smd3.headerEnd5 = binReader.ReadInt32();
-            smd3.headerEnd6 = binReader.ReadSingle();
-            Debug.Assert(smd3.headerEnd6 == 1.0f);
-            for (int i = 0; i < smd3.headerEndZero.Length; ++i)
-            {
-                smd3.headerEndZero[i] = binReader.ReadInt32();
-                //Debug.Assert(smd3.headerEndZero[i] == 0);
-            }
-            //maxOffset -= 1;
-            for (int i = 0; i < maxOffset; ++i)
-            {
-                int startVal = smd3.list3[i][5];
-                //int endVal = i < smd3.list3.Count-1? smd3.list3[i+1][5]:smd3.lastElementOffset;
-                //int endVal = i < smd3.list3.Count - 1 ? smd3.list3[i + 1][5] : endOffset;
-                if (i == smd3.list3.Count - 1)
+                int val1 = binReader.ReadInt32();
+                int val2 = binReader.ReadInt32();
+                Debug.Assert(val1 == 0);
+                //Debug.Assert(val2 == -1);
+
+                int numElements = binReader.ReadInt32();
+                smd3.initialValsList.Add(numElements);
+                int count = (numElements - 4) / 4;
+                count = 3;
+                for (int i = 0; i < count; ++i)
                 {
-                    int ibreak = 0;
+                    smd3.initialValsList.Add(binReader.ReadInt32());
                 }
-                int endVal = i < smd3.list3.Count - 1 ? smd3.list3[i + 1][5] : startVal + (28 * 4);//100;
-                int sectionLength = endVal - startVal;
+                //smd3.val3 = binReader.ReadInt32();
+                //smd3.val4 = binReader.ReadInt32();
+                //smd3.val5 = binReader.ReadInt32();
+                //smd3.val6 = binReader.ReadInt32();
+                // only -1 on unskinned?
+                //Debug.Assert(smd3.val2 == -1);
+                //Debug.Assert(smd3.val4 == -1);
+                //Debug.Assert(smd3.val6 == -1);
+                for (int i = 0; i < numMeshes; ++i)
+                {
+                    smd3.list1.Add(binReader.ReadInt32());
+                }
 
-                model.m_materialDataList.Add(MaterialData.FromStream(binReader, numMeshes, sectionLength));
+                int maxOffset = 0;
+
+                for (int i = 0; i < numMeshes; ++i)
+                {
+                    int[] a = new int[3];
+                    //for (int j = 0; j < a.Length; ++j)
+                    //{
+                    //    a[j] = binReader.ReadInt32();
+                    //}
+                    a[0] = binReader.ReadInt32();
+                    a[1] = binReader.ReadInt32();
+                    a[2] = binReader.ReadInt32();
+                    maxOffset = Math.Max(maxOffset, a[2]);
+                    model.m_meshMaterialList.Add(a);
+                }
+
+                Debug.Assert(maxOffset % 44 == 0);
+                maxOffset /= 44;
+                maxOffset += 1;
+                int ibreak2 = 0;
+
+                for (int i = 0; i < maxOffset; ++i)
+                {
+                    int arraySize = 11;
+                    int[] a = new int[arraySize];
+                    for (int j = 0; j < a.Length; ++j)
+                    {
+                        a[j] = binReader.ReadInt32();
+                    }
+                    smd3.list3.Add(a);
+                }
+
+                smd3.lastElementOffset = binReader.ReadInt32();
+                smd3.headerEnd2 = binReader.ReadInt32();
+                smd3.headerEnd3 = binReader.ReadInt32();
+                smd3.headerEnd4 = binReader.ReadInt32();
+                smd3.headerEnd5 = binReader.ReadInt32();
+                smd3.headerEnd6 = binReader.ReadSingle();
+                Debug.Assert(smd3.headerEnd6 == 1.0f || smd3.headerEnd6 == 0.0f);
+                for (int i = 0; i < smd3.headerEndZero.Length; ++i)
+                {
+                    smd3.headerEndZero[i] = binReader.ReadInt32();
+                    //Debug.Assert(smd3.headerEndZero[i] == 0);
+                }
+                //maxOffset -= 1;
+                for (int i = 0; i < maxOffset; ++i)
+                {
+                    int startVal = smd3.list3[i][5];
+                    //int endVal = i < smd3.list3.Count-1? smd3.list3[i+1][5]:smd3.lastElementOffset;
+                    //int endVal = i < smd3.list3.Count - 1 ? smd3.list3[i + 1][5] : endOffset;
+                    if (i == smd3.list3.Count - 1)
+                    {
+                        int ibreak = 0;
+                    }
+                    int endVal = i < smd3.list3.Count - 1 ? smd3.list3[i + 1][5] : startVal + (28 * 4);//100;
+                    int sectionLength = endVal - startVal;
+
+                    model.m_materialDataList.Add(MaterialData.FromStream(binReader, numMeshes, sectionLength));
+                }
             }
             //for (int i = 0; i < smd3.headerEndZero2.Length; ++i)
             //{
