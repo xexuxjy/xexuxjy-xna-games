@@ -737,6 +737,11 @@ namespace ModelNamer
 
         public String fbxDeformerNodeId;
         public String fbxSubDeformerNodeId;
+        public String fbxBoneAttributeId;
+
+
+        public List<int> weightVertexIndices = new List<int>();
+        public List<float> weightVertexWeights = new List<float>();
 
         public static BoneNode FromStream(BinaryReader binReader)
         {
@@ -761,6 +766,13 @@ namespace ModelNamer
             return String.Format("{0}\t {1}\t {2}", name, id, parentId);
 
         }
+
+        public void AddIndexAndWeight(int vertexIndex, float weight)
+        {
+            weightVertexIndices.Add(vertexIndex);
+            weightVertexWeights.Add(weight);
+        }
+
 
     }
 
