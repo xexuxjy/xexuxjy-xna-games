@@ -96,12 +96,12 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\axeCS_declamatio.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordM_gladius.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\swordCS_unofan.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\weapons\bow_black.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\urlancinematic.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
@@ -182,9 +182,10 @@ namespace ModelNamer
                     //        model.WriteOBJ(objSw, matSw, texturePath, -1);
                     //    }
                     //}
+                    bool skinned = true;
                     using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".fbx"))
                     {
-                        model.WriteFBXA(objSw, null, texturePath, -1);
+                        model.WriteFBXA(objSw, null, texturePath, 1, skinned);
                     }
 
                 }
@@ -1101,7 +1102,7 @@ namespace ModelNamer
 
         public string m_geometryId = "9999";
 
-        public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1)
+        public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1,bool skinned=false)
         {
             WriteFBXAHeader(writer);
             writer.WriteLine("Objects:  {");
@@ -1118,21 +1119,24 @@ namespace ModelNamer
             WriteUVs(writer);
             //WriteLayerElementTexture(writer);
             WriteLayerElementMaterial(writer);
-            WriteSkeleton(writer);
-            WriteDeformers(writer);
             WriteGeometryEnd(writer);
             WriteModels(writer);
 
             WriteMaterials(writer, m_subMeshData2List[0], texturePath);
             WriteTexturesAndVideos(writer, texturePath);
-
-            //WritePose(writer, m_subMeshData2List[0]);
+            if(skinned)
+            {
+                WriteSkeleton(writer);
+                WriteDeformers(writer);
+            }
+             
             WriteGlobals(writer);
             writer.WriteLine("}");
-            //WriteMaterials(writer, texturePath);
-
-            //WriteRelations(writer);
-            WriteConnections(writer);
+            if (skinned)
+            {
+                WritePose(writer);
+            }
+            WriteConnections(writer,skinned);
 
 
             //writer.WriteLine("}");
@@ -1175,18 +1179,29 @@ namespace ModelNamer
             writer.WriteLine("}");
         }
 
-        public void WritePose(StreamWriter writer, SubMeshData2 smd2)
+
+        public string m_fbxPoseNodeId;
+        public void WritePose(StreamWriter writer)
         {
-            writer.WriteLine("Pose: \"Pose::BIND_POSES\", \"BindPose\" {");
+            m_fbxPoseNodeId = GenerateNodeId();
+            writer.WriteLine(String.Format("Pose: {0}, \"Pose::BinePose\", \"BindPose\" {{",m_fbxPoseNodeId));
             writer.WriteLine("  Type: \"BindPose\"");
             writer.WriteLine("  Version: 100");
-            writer.WriteLine("  Properties60:  {");
-            writer.WriteLine("  }");
-            writer.WriteLine("  NbPoseNodes: 1");
-            writer.WriteLine("  PoseNode:  {");
-            writer.WriteLine(String.Format("Node: \"{0}\"", smd2.fbxNodeId));
-            writer.WriteLine("			Matrix: 0.000000075497901,1.000000000000000,0.000000162920685,0.000000000000000,-1.000000000000000,0.000000075497901,0.000000000000012,0.000000000000000,0.000000000000000,-0.000000162920685,1.000000000000000,0.000000000000000,0.000000000000000,0.000000000000000,-534.047119140625000,1.000000000000000");
-            writer.WriteLine("  }");
+            writer.WriteLine("  NbPoseNodes: "+m_bones.Count);
+            foreach (BoneNode boneNode in m_bones)
+            {
+                Matrix m = Matrix.Identity;
+
+                writer.WriteLine("  PoseNode:  {");
+                writer.WriteLine(String.Format("Node: {0}", boneNode.fbxLimbNodeId));
+                writer.WriteLine(String.Format("  Matrix: *{0} {{", 16));
+                writer.WriteLine("a: " + Common.ToStringC(m));
+                writer.WriteLine(" }");
+                writer.WriteLine(" }");
+
+            }
+            
+            
             writer.WriteLine("}");
         }
 
@@ -1199,12 +1214,39 @@ namespace ModelNamer
         public void WriteVertices(StreamWriter writer)
         {
             // write vertices
-            writer.WriteLine(String.Format("Vertices: *{0} {{ ",m_allVertices.Count*3));
-            for (int i = 0; i < m_allVertices.Count; ++i)
+
+            int startMesh = 0;
+            int numMesh = m_subMeshData2List.Count;
+            int endIndex = 0;
+            int startIndex = 0;
+            
+            for (int a = 0; a < startMesh + numMesh; ++a)
+            {
+                if (a < startMesh)
+                {
+                    startIndex = endIndex;
+                }
+                SubMeshData2 headerBlock = m_subMeshData2List[a];
+                endIndex += headerBlock.NumIndices;
+            }
+
+            
+            int minVertex = int.MaxValue;
+            int maxVertex = int.MinValue;
+
+            for (int i = startIndex; i < endIndex; ++i)
+            {
+                minVertex = Math.Min(minVertex, m_allIndices[i]);
+                maxVertex = Math.Max(maxVertex, m_allIndices[i]);
+            }
+
+            maxVertex++;
+            writer.WriteLine(String.Format("Vertices: *{0} {{ ",(maxVertex-minVertex)*3));
+            for (int i = minVertex; i < maxVertex; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
                 writer.Write(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", vpnt.Position.X, vpnt.Position.Y, vpnt.Position.Z));
-                if (i < m_allVertices.Count - 1)
+                if (i < maxVertex - 1)
                 {
                     writer.Write(",");
                 }
@@ -1213,15 +1255,170 @@ namespace ModelNamer
             writer.WriteLine("}");
         }
 
-        public void WriteIndices(StreamWriter writer, SubMeshData2 headerBlock)
+
+        public List<int> BuildIndexList2L(bool adjust)
         {
-            // write vertices
+            List<int> result = new List<int>();
+            bool swap = true;
+            int startIndex = 0;
+            int endIndex = m_allIndices.Count - 2;
+
+            StringBuilder sb = new StringBuilder();
+
+
+            for (int a = 0; a < m_subMeshData2List.Count; ++a)
+            {
+                SubMeshData2 headerBlock = m_subMeshData2List[a];
+
+                int end = startIndex + headerBlock.NumIndices - 2;
+
+                for (int i = startIndex; i < end; i++)
+                {
+                    int index1 = i;
+                    int index2 = i + 1;
+                    int index3 = i + 2;
+                    if (index3 >= m_allIndices.Count)
+                    {
+                        index3 = index1;
+                    }
+                    if (index2 >= m_allIndices.Count)
+                    {
+                        index2 = index1;
+                    }
+                    if (i >= m_allIndices.Count)
+                    {
+                        int ibreak = 0;
+                    }
+
+                    int i1 = m_allIndices[index1];
+                    int i2 = m_allIndices[index2];
+                    int i3 = m_allIndices[index3];
+
+
+                    // alternate winding
+                    if (swap)
+                    {
+                        if (adjust)
+                        {
+                            result.Add(i3);
+                            result.Add(i2);
+                            result.Add((i1+1)*-1);
+
+                        }
+                        else
+                        {
+                            result.Add(i3);
+                            result.Add(i2);
+                            result.Add(i1);
+                        }
+                    }
+                    else
+                    {
+                        if (adjust)
+                        {
+                            result.Add(i1);
+                            result.Add(i2);
+                            result.Add((i3 + 1) * -1);
+
+                        }
+                        else
+                        {
+                            result.Add(i1);
+                            result.Add(i2);
+                            result.Add(i3);
+                        }
+                    }
+                    swap = !swap;
+                }
+                startIndex += headerBlock.NumIndices;
+            }
+
+            return result;
+        }
+
+        public String BuildIndexList2(bool adjust )
+        {
             bool swap = false;
             int startIndex = 0;
             int endIndex = m_allIndices.Count - 2;
 
-            writer.WriteLine(String.Format("PolygonVertexIndex: *{0} {{ ",endIndex*3));
+            StringBuilder sb = new StringBuilder();
 
+
+            for (int a = 0; a < m_subMeshData2List.Count; ++a)
+            {
+                SubMeshData2 headerBlock = m_subMeshData2List[a];
+
+                int end = startIndex + headerBlock.NumIndices - 2;
+
+                for (int i = startIndex; i < end; i++)
+                {
+                    int index1 = i;
+                    int index2 = i + 1;
+                    int index3 = i + 2;
+                    if (index3 >= m_allIndices.Count)
+                    {
+                        index3 = index1;
+                    }
+                    if (index2 >= m_allIndices.Count)
+                    {
+                        index2 = index1;
+                    }
+                    if (i >= m_allIndices.Count)
+                    {
+                        int ibreak = 0;
+                    }
+
+                    int i1 = m_allIndices[index1];
+                    int i2 = m_allIndices[index2];
+                    int i3 = m_allIndices[index3];
+
+
+                    // alternate winding
+                    if (swap)
+                    {
+                        if (adjust)
+                        {
+                            sb.Append(String.Format("{0},{1},-{2}", i3, i2, (i1 + 1)));
+                        }
+                        else
+                        {
+                            sb.Append(String.Format("{0},{1},{2}", i3, i2, (i1)));
+                        }
+                    }
+                    else
+                    {
+                        if (adjust)
+                        {
+                            sb.Append(String.Format("{0},{1},-{2}", i1, i2, (i3 + 1)));
+                        }
+                        else
+                        {
+                            sb.Append(String.Format("{0},{1},{2}", i1, i2, i3));
+                        }
+                        //writer.Write(String.Format("{0},{1},-{2}", i1, i2, (i3)));
+                    }
+                    if (i != end - 1)
+                    {
+                        sb.Append(",");
+                    }
+                    swap = !swap;
+                }
+                startIndex += headerBlock.NumIndices;
+            }
+            return sb.ToString();
+        }
+
+
+
+
+        public String BuildIndexList(bool adjust )
+        {
+            bool swap = false;
+            int startIndex = 0;
+            int endIndex = m_allIndices.Count - 2;
+
+            StringBuilder sb = new StringBuilder();
 
             int end = endIndex;//startIndex + headerBlock.NumIndices - 2;
             for (int i = startIndex; i < end; i++)
@@ -1246,29 +1443,60 @@ namespace ModelNamer
                 int i2 = m_allIndices[index2];
                 int i3 = m_allIndices[index3];
 
-                // 1 based.
-                //i1 += 1;
-                //i2 += 1;
-                //i3 += 1;
 
                 // alternate winding
                 if (swap)
                 {
-                    writer.Write(String.Format("{0},{1},-{2}", i3, i2, (i1 + 1)));
-                    //writer.Write(String.Format("{0},{1},-{2}", i3, i2, (i1)));
+                    if (adjust)
+                    {
+                        sb.Append(String.Format("{0},{1},-{2}", i3, i2, (i1 + 1)));
+                    }
+                    else
+                    {
+                        sb.Append(String.Format("{0},{1},{2}", i3, i2, (i1)));
+                    }
                 }
                 else
                 {
-                    writer.Write(String.Format("{0},{1},-{2}", i1, i2, (i3 + 1)));
+                    if (adjust)
+                    {
+                        sb.Append(String.Format("{0},{1},-{2}", i1, i2, (i3 + 1)));
+                    }
+                    else
+                    {
+                        sb.Append(String.Format("{0},{1},{2}", i1, i2, i3));
+                    }
                     //writer.Write(String.Format("{0},{1},-{2}", i1, i2, (i3)));
                 }
                 if (i != end - 1)
                 {
-                    writer.Write(",");
+                    sb.Append(",");
                 }
                 swap = !swap;
             }
+            return sb.ToString();
+        }
+
+        public void WriteIndices(StreamWriter writer, SubMeshData2 headerBlock)
+        {
+            // write vertices
+            bool swap = false;
+            int startIndex = 0;
+            List<int> indexList = BuildIndexList2L(true);
+            int endIndex = indexList.Count;
+            writer.WriteLine(String.Format("PolygonVertexIndex: *{0} {{ ",endIndex));
+            for (int i = 0; i < indexList.Count; ++i)
+            {
+                writer.Write(indexList[i]);
+                if (i < indexList.Count - 1)
+                {
+                    writer.Write(",");
+                }
+            }
+
+            //String indices = BuildIndexList2(true);
             //startIndex += headerBlock.NumIndices;
+            //writer.WriteLine(indices);
             writer.WriteLine();
             writer.WriteLine("}");
         }
@@ -1279,8 +1507,8 @@ namespace ModelNamer
             writer.WriteLine("LayerElementNormal: 0 {");
             writer.WriteLine("  Version: 101");
             writer.WriteLine("  Name: \"\"");
-            writer.WriteLine("  MappingInformationType: \"ByVertice\"");
-            writer.WriteLine("  ReferenceInformationType: \"Direct\"");
+            writer.WriteLine("  MappingInformationType: \"ByPolygonVertex\"");
+            writer.WriteLine("  ReferenceInformationType: \"IndexToDirect\"");
             writer.WriteLine(String.Format("  Normals: *{0} {{",m_allVertices.Count*3));
             writer.Write("  a: ");
             bool swap = true;
@@ -1288,11 +1516,6 @@ namespace ModelNamer
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
                 Vector3 norm = vpnt.Normal;
-                if (swap)
-                {
-                    //norm = -norm;
-                }
-                swap = !swap;
                 writer.Write(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", norm.X,norm.Y,norm.Z));
                 if (i < m_allVertices.Count - 1)
                 {
@@ -1302,6 +1525,22 @@ namespace ModelNamer
             writer.WriteLine();
             writer.WriteLine("}");
             writer.WriteLine();
+            int startIndex = 0;
+            int endIndex = m_allIndices.Count - 2;
+            List<int> indexList = BuildIndexList2L(false);
+            writer.WriteLine(String.Format("NormalIndex: *{0} {{ ", indexList.Count));
+            for (int i = 0; i < indexList.Count; ++i)
+            {
+                writer.Write(indexList[i]);
+                if (i < indexList.Count - 1)
+                {
+                    writer.Write(",");
+                }
+            }
+            writer.WriteLine();
+            writer.WriteLine("}");
+
+
             writer.WriteLine("}");
         }
         public void WriteUVs(StreamWriter writer)
@@ -1343,23 +1582,19 @@ namespace ModelNamer
 
         }
 
+        public string m_mainModelId;
         public void WriteModels(StreamWriter writer)
         {
-            for (int a = 0; a < m_subMeshData2List.Count; ++a)
-            {
-                m_subMeshData2List[a].fbxNodeId = GenerateNodeId();
-                m_subMeshData2List[a].fbxNodeName = "Subpart"+a;
-                writer.WriteLine(String.Format("Model: {0}, \"Model::{1}\", \"Mesh\" {{", m_subMeshData2List[a].fbxNodeId, m_subMeshData2List[a].fbxNodeName));
-		        writer.WriteLine("  Version: 232");
-		        writer.WriteLine("  Properties70:  {");
-			    writer.WriteLine("  P: \"ScalingMax\", \"Vector3D\", \"Vector\", \"\",0,0,0");
-                writer.WriteLine("  P: \"DefaultAttributeIndex\", \"int\", \"Integer\", \"\",0");
-		        writer.WriteLine("  }");
-		        writer.WriteLine("  Shading: Y");
-		        writer.WriteLine("  Culling: \"CullingOff\"");
-	            writer.WriteLine("}");
-            }
-
+            m_mainModelId = GenerateNodeId();
+            writer.WriteLine(String.Format("Model: {0}, \"Model::Main\", \"Mesh\" {{", m_mainModelId));
+            writer.WriteLine("  Version: 232");
+            writer.WriteLine("  Properties70:  {");
+            writer.WriteLine("  P: \"ScalingMax\", \"Vector3D\", \"Vector\", \"\",0,0,0");
+            writer.WriteLine("  P: \"DefaultAttributeIndex\", \"int\", \"Integer\", \"\",0");
+            writer.WriteLine("  }");
+            writer.WriteLine("  Shading: Y");
+            writer.WriteLine("  Culling: \"CullingOff\"");
+            writer.WriteLine("}");
         }
 
         static int s_nodeCount = 10;
@@ -1424,6 +1659,29 @@ namespace ModelNamer
                     writer.WriteLine("}");
                 }
                 //writer.WriteLine("}");
+
+                foreach (BoneNode boneNode in m_bones)
+                {
+                    boneNode.fbxLimbNodeId = GenerateNodeId();
+                    
+                    writer.WriteLine(String.Format("Model: {0}, \"Model::{1}\", \"LimbNode\" {{", boneNode.fbxLimbNodeId, boneNode.name));
+                    writer.WriteLine("  Properties70: {");
+                    writer.WriteLine(String.Format("    P: \"Size\", \"double\", \"Number\",\"\",{0}", 1.0f));
+                    writer.WriteLine("	P: \"RotationActive\", \"bool\", \"\", \"\",1");
+                    writer.WriteLine("	P: \"InheritType\", \"enum\", \"\", \"\",1");
+                    writer.WriteLine("	P: \"ScalingMax\", \"Vector3D\", \"Vector\", \"\",0,0,0");
+                    writer.WriteLine("	P: \"PreferedAngleX\", \"double\", \"Number\", \"\",0.0");
+                    writer.WriteLine("	P: \"PreferedAngleY\", \"double\", \"Number\", \"\",0.0");
+                    writer.WriteLine("	P: \"PreferedAngleZ\", \"double\", \"Number\", \"\",0.0");
+                    writer.WriteLine("	P: \"DefaultAttributeIndex\", \"int\", \"Integer\", \"\",0");
+                    writer.WriteLine("	P: \"Lcl Translation\", \"Lcl Translation\", \"\", \"A+\", "+Common.ToStringC(boneNode.offset));
+                    writer.WriteLine("	P: \"Lcl Rotation\", \"Lcl Rotation\", \"\", \"A+\",0.0,0.0,0.0");
+                    writer.WriteLine("	P: \"liw\", \"Bool\", \"\", \"A+U\",0");
+                    writer.WriteLine("  }");
+                    writer.WriteLine("  TypeFlags: \"Skeleton\"");
+                    writer.WriteLine("}");
+                }
+            
             }
 
 
@@ -1449,13 +1707,16 @@ namespace ModelNamer
                 adjustedIndex = materialData.textureId / 64;
                 adjustedIndex = AdjustForModel(adjustedIndex);
 
-                int end = startIndex + (headerBlock.NumIndices )-1;
+                int end = startIndex + (headerBlock.NumIndices );
 
+                //end -= 1;
                 for (int i = startIndex; i < end; i++)
                 {
                     materialList.Add(adjustedIndex);
                 }
                 startIndex += headerBlock.NumIndices;
+                //startIndex -= 1;
+                break;
             }
             return materialList;
         }
@@ -1508,7 +1769,7 @@ namespace ModelNamer
             writer.WriteLine("}");
         }
 
-        public void WriteConnections(StreamWriter writer)
+        public void WriteConnections(StreamWriter writer,bool skinned)
         {
 
             writer.WriteLine("; Object connections");
@@ -1518,29 +1779,39 @@ namespace ModelNamer
 
             int count = 0;
             string endModelId = "-1";
-            foreach (SubMeshData2 headerBlock in m_subMeshData2List)
-            {
-                if (count == 0)
-                {
-                    writer.WriteLine(String.Format(";Model::{0}, Model::RootNode", headerBlock.fbxNodeName));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0}, 0", headerBlock.fbxNodeId));
-                }
-                else
-                {
-                    //;Model::default, Model::carafe_decanter.mdl_root
-                    writer.WriteLine(String.Format(";   Model::{0} ,Model::{1}", headerBlock.fbxNodeName, m_subMeshData2List[count - 1].fbxNodeName));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", headerBlock.fbxNodeId, m_subMeshData2List[count-1].fbxNodeId));
-                }
 
-                if(count == m_subMeshData1List.Count-1)
-                {
-                    writer.WriteLine(String.Format(";   Geometry:: ,Model::{0}", headerBlock.fbxNodeName));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}",m_geometryId, headerBlock.fbxNodeId));
-                    endModelId = headerBlock.fbxNodeId;
-                }
+            writer.WriteLine(String.Format(";Model::{0}, Model::RootNode", m_mainModelId));
+            writer.WriteLine(String.Format("    C: \"OO\",{0}, 0", m_mainModelId));
 
-                count++;
-            }
+
+            writer.WriteLine(String.Format(";   Geometry:: ,MainModel"));
+            writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", m_geometryId, m_mainModelId));
+
+
+
+            //foreach (SubMeshData2 headerBlock in m_subMeshData2List)
+            //{
+            //    if (count == 0)
+            //    {
+            //        writer.WriteLine(String.Format(";Model::{0}, Model::RootNode", headerBlock.fbxNodeName));
+            //        writer.WriteLine(String.Format("    C: \"OO\",{0}, 0", headerBlock.fbxNodeId));
+            //    }
+            //    else
+            //    {
+            //        //;Model::default, Model::carafe_decanter.mdl_root
+            //        writer.WriteLine(String.Format(";   Model::{0} ,Model::{1}", headerBlock.fbxNodeName, m_subMeshData2List[count - 1].fbxNodeName));
+            //        writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", headerBlock.fbxNodeId, m_subMeshData2List[count-1].fbxNodeId));
+            //    }
+
+            //    if(count == m_subMeshData1List.Count-1)
+            //    {
+            //        writer.WriteLine(String.Format(";   Geometry:: ,Model::{0}", headerBlock.fbxNodeName));
+            //        writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}",m_geometryId, headerBlock.fbxNodeId));
+            //        endModelId = headerBlock.fbxNodeId;
+            //    }
+
+            //    count++;
+            //}
 
 
             
@@ -1554,8 +1825,8 @@ namespace ModelNamer
                 if (!material.textureName.Contains("skygold"))
                 {
                     //writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, m_subMeshData2List[count].fbxNodeId));
-                    writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, endModelId));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.materialFbxNodeId, endModelId));
+                    writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, m_mainModelId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.materialFbxNodeId, m_mainModelId));
                     writer.WriteLine(String.Format(";    \"Texture::{0}\", \"Material::{1}\"", material.textureName, material.textureName));
                     writer.WriteLine(String.Format("    C: \"OP\",{0}, {1},\"DiffuseColor\"", material.textureFbxNodeId, material.materialFbxNodeId));
                     writer.WriteLine(String.Format(";    Video::{0}, Texture::{1}", material.textureName, material.textureName));
@@ -1566,16 +1837,39 @@ namespace ModelNamer
 
 
 
-
-            foreach (BoneNode boneNode in m_bones)
+            if (skinned)
             {
-                foreach (BoneNode childNode in boneNode.children)
+                writer.WriteLine(String.Format(";    TopLevelDeformer , Geometry "));
+                writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", m_topLevelDeformerId,m_geometryId));
+
+                foreach (BoneNode boneNode in m_bones)
                 {
-                    writer.WriteLine(String.Format(";  {0}::{1}", boneNode.name, childNode.name));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", childNode.fbxDeformerNodeId,boneNode.fbxDeformerNodeId ));
-                    writer.WriteLine();
+                        writer.WriteLine(String.Format(";  {0} , TopLevelDeformer", boneNode.name));
+                        writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", boneNode.fbxDeformerNodeId,m_topLevelDeformerId ));
+                        writer.WriteLine();
                 }
+
+                foreach (BoneNode boneNode in m_bones)
+                {
+                        writer.WriteLine(String.Format(";  NodeAttribute::{0} , LimbModel::{1}", boneNode.name,boneNode.name));
+                        writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", boneNode.fbxBoneAttributeId,boneNode.fbxDeformerNodeId));
+                        writer.WriteLine();
+                }
+
+
             }
+
+
+
+            //foreach (BoneNode boneNode in m_bones)
+            //{
+            //    foreach (BoneNode childNode in boneNode.children)
+            //    {
+            //        writer.WriteLine(String.Format(";  {0}::{1}", boneNode.name, childNode.name));
+            //        writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", childNode.fbxDeformerNodeId,boneNode.fbxDeformerNodeId ));
+            //        writer.WriteLine();
+            //    }
+            //}
 
             writer.WriteLine("}");
         }
@@ -1664,16 +1958,15 @@ namespace ModelNamer
 
         }
 
+        public string m_topLevelDeformerId;
         public void WriteDeformers(StreamWriter writer)
         {
-            foreach (BoneNode boneNode in m_bones)
-            {
-                boneNode.fbxDeformerNodeId = GenerateNodeId();
-                writer.WriteLine(String.Format("Deformer: {0}, \"Deformer::Skin\" , \"Skin\" {{", boneNode.fbxDeformerNodeId));
-                writer.WriteLine("  Version: 101");
-                writer.WriteLine("  Link_DeformAccuracy: 50");
-                writer.WriteLine(" }");
-            }
+            m_topLevelDeformerId = GenerateNodeId();
+            //return;
+            writer.WriteLine(String.Format("Deformer: {0}, \"Deformer::Skin\" , \"Skin\" {{", m_topLevelDeformerId));
+            writer.WriteLine("  Version: 101");
+            writer.WriteLine("  Link_DeformAccuracy: 50");
+            writer.WriteLine(" }");
 
 
             foreach (BoneNode boneNode in m_bones)
@@ -1713,13 +2006,15 @@ namespace ModelNamer
                 writer.WriteLine(String.Format("  Transform: *{0} {{",16));
                 writer.WriteLine("a: "+Common.ToStringC(Matrix.Identity));   
                 writer.WriteLine(" }");
-                writer.WriteLine(" }");
+                
                 // parent link as matrix
                 writer.WriteLine(String.Format("  TransformLink: *{0} {{",16));
                 writer.WriteLine("a: "+Common.ToStringC(boneNode.finalMatrix));   
                 writer.WriteLine(" }");
+
                 writer.WriteLine(" }");
             }
+            
 
         }
 
