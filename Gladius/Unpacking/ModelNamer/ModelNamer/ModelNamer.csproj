@@ -43,7 +43,7 @@
       <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="ManagedSquish">
-      <HintPath>..\..\..\..\..\tmp\ManagedSquish_v2.0.0.0\lib\net40\ManagedSquish.dll</HintPath>
+      <HintPath>E:\Downloads\ManagedSquish_v2.0.0.0\lib\net40\ManagedSquish.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>

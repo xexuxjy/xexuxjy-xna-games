@@ -102,6 +102,11 @@ namespace ModelNamer
             return String.Format("{0:0.00000000} {1:0.00000000} {2:0.00000000} {3:0.00000000}", v4.X, v4.Y, v4.Z,v4.W);
         }
 
+        public static String ToStringC(Vector3 v3)
+        {
+            return String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}", v3.X, v3.Y, v3.Z);
+        }
+
 
         public static String ToString(Vector3 v3)
         {
@@ -738,7 +743,7 @@ namespace ModelNamer
         public String fbxDeformerNodeId;
         public String fbxSubDeformerNodeId;
         public String fbxBoneAttributeId;
-
+        public String fbxLimbNodeId;
 
         public List<int> weightVertexIndices = new List<int>();
         public List<float> weightVertexWeights = new List<float>();

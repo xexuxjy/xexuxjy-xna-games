@@ -169,4 +169,11 @@
 			}
 		}
 	}
+	
+	ObjectType: "Deformer" {
+		Count: 1
+	}
+
+
+
 }
