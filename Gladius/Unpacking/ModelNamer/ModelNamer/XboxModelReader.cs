@@ -70,7 +70,7 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
-            //rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
+            rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath + "ModelFilesRenamed";
             String infoFile = rootPath + "ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
@@ -183,10 +183,43 @@ namespace ModelNamer
                     //    }
                     //}
                     bool skinned = true;
+                    //for (int i = 0; i < model.NumMeshes; ++i)
+                    //{
+                    int bestSkinnedLod = (1|2|4|8|16|32);
+                    
+                        //using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + "-" + model.m_subMeshData1List[i].LodLevel+"-" + i + ".fbx"))
                     using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".fbx"))
-                    {
-                        model.WriteFBXA(objSw, null, texturePath, 1, skinned);
-                    }
+                        {
+                            List<int> excludeList = new List<int>();
+                            List<int> includeList = new List<int>();
+
+                            if (model.m_skinned)
+                            {
+                                for (int j = 0; j < model.NumMeshes; ++j)
+                                {
+                                    if (model.m_subMeshData1List[j].LodLevel < bestSkinnedLod)
+                                    {
+
+                                        includeList.Add(j);
+                                    }
+                                }
+                            }
+
+                            if (includeList.Count > 0)
+                            {
+                                for (int j = 0; j < model.NumMeshes; ++j)
+                                {
+                                    if (!includeList.Contains(j))
+                                    {
+                                        excludeList.Add(j);
+                                    }
+                                }
+                            }
+
+
+                            model.WriteFBXA(objSw, null, texturePath, skinned, excludeList);
+                        }
+                    //}
 
                 }
                 catch (System.Exception ex)
@@ -1102,8 +1135,12 @@ namespace ModelNamer
 
         public string m_geometryId = "9999";
 
-        public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, int desiredLod = -1,bool skinned=false)
+        public void WriteFBXA(StreamWriter writer, StreamWriter materialWriter, String texturePath, bool skinned=false,List<int> excludeList = null)
         {
+            if (excludeList == null)
+            {
+                excludeList = new List<int>();
+            }
             WriteFBXAHeader(writer);
             writer.WriteLine("Objects:  {");
 
@@ -1114,11 +1151,10 @@ namespace ModelNamer
             WriteGeometryStart(writer, m_subMeshData2List[0]);
 
             WriteVertices(writer);
-            WriteIndices(writer, m_subMeshData2List[0]);
-            WriteNormals(writer);
-            WriteUVs(writer);
-            //WriteLayerElementTexture(writer);
-            WriteLayerElementMaterial(writer);
+            WriteIndices(writer, excludeList);
+            WriteNormals(writer,excludeList);
+            WriteUVs(writer,excludeList);
+            WriteLayerElementMaterial(writer, excludeList);
             WriteGeometryEnd(writer);
             WriteModels(writer);
 
@@ -1256,7 +1292,7 @@ namespace ModelNamer
         }
 
 
-        public List<int> BuildIndexList2L(bool adjust)
+        public List<int> BuildIndexList2L(bool adjust,List<int> excludeList)
         {
             List<int> result = new List<int>();
             bool swap = true;
@@ -1269,66 +1305,69 @@ namespace ModelNamer
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
                 SubMeshData2 headerBlock = m_subMeshData2List[a];
-
-                int end = startIndex + headerBlock.NumIndices - 2;
-
-                for (int i = startIndex; i < end; i++)
+                if (!excludeList.Contains(a))
                 {
-                    int index1 = i;
-                    int index2 = i + 1;
-                    int index3 = i + 2;
-                    if (index3 >= m_allIndices.Count)
-                    {
-                        index3 = index1;
-                    }
-                    if (index2 >= m_allIndices.Count)
-                    {
-                        index2 = index1;
-                    }
-                    if (i >= m_allIndices.Count)
-                    {
-                        int ibreak = 0;
-                    }
 
-                    int i1 = m_allIndices[index1];
-                    int i2 = m_allIndices[index2];
-                    int i3 = m_allIndices[index3];
+                    int end = startIndex + headerBlock.NumIndices - 2;
 
-
-                    // alternate winding
-                    if (swap)
+                    for (int i = startIndex; i < end; i++)
                     {
-                        if (adjust)
+                        int index1 = i;
+                        int index2 = i + 1;
+                        int index3 = i + 2;
+                        if (index3 >= m_allIndices.Count)
                         {
-                            result.Add(i3);
-                            result.Add(i2);
-                            result.Add((i1+1)*-1);
+                            index3 = index1;
+                        }
+                        if (index2 >= m_allIndices.Count)
+                        {
+                            index2 = index1;
+                        }
+                        if (i >= m_allIndices.Count)
+                        {
+                            int ibreak = 0;
+                        }
 
+                        int i1 = m_allIndices[index1];
+                        int i2 = m_allIndices[index2];
+                        int i3 = m_allIndices[index3];
+
+
+                        // alternate winding
+                        if (swap)
+                        {
+                            if (adjust)
+                            {
+                                result.Add(i3);
+                                result.Add(i2);
+                                result.Add((i1 + 1) * -1);
+
+                            }
+                            else
+                            {
+                                result.Add(i3);
+                                result.Add(i2);
+                                result.Add(i1);
+                            }
                         }
                         else
                         {
-                            result.Add(i3);
-                            result.Add(i2);
-                            result.Add(i1);
-                        }
-                    }
-                    else
-                    {
-                        if (adjust)
-                        {
-                            result.Add(i1);
-                            result.Add(i2);
-                            result.Add((i3 + 1) * -1);
+                            if (adjust)
+                            {
+                                result.Add(i1);
+                                result.Add(i2);
+                                result.Add((i3 + 1) * -1);
 
+                            }
+                            else
+                            {
+                                result.Add(i1);
+                                result.Add(i2);
+                                result.Add(i3);
+                            }
                         }
-                        else
-                        {
-                            result.Add(i1);
-                            result.Add(i2);
-                            result.Add(i3);
-                        }
+                        swap = !swap;
                     }
-                    swap = !swap;
                 }
                 startIndex += headerBlock.NumIndices;
             }
@@ -1477,12 +1516,12 @@ namespace ModelNamer
             return sb.ToString();
         }
 
-        public void WriteIndices(StreamWriter writer, SubMeshData2 headerBlock)
+        public void WriteIndices(StreamWriter writer, List<int> excludeList)
         {
             // write vertices
             bool swap = false;
             int startIndex = 0;
-            List<int> indexList = BuildIndexList2L(true);
+            List<int> indexList = BuildIndexList2L(true,excludeList);
             int endIndex = indexList.Count;
             writer.WriteLine(String.Format("PolygonVertexIndex: *{0} {{ ",endIndex));
             for (int i = 0; i < indexList.Count; ++i)
@@ -1502,7 +1541,7 @@ namespace ModelNamer
         }
 
 
-        public void WriteNormals(StreamWriter writer)
+        public void WriteNormals(StreamWriter writer,List<int> excludeList)
         {
             writer.WriteLine("LayerElementNormal: 0 {");
             writer.WriteLine("  Version: 101");
@@ -1527,7 +1566,7 @@ namespace ModelNamer
             writer.WriteLine();
             int startIndex = 0;
             int endIndex = m_allIndices.Count - 2;
-            List<int> indexList = BuildIndexList2L(false);
+            List<int> indexList = BuildIndexList2L(false, excludeList);
             writer.WriteLine(String.Format("NormalIndex: *{0} {{ ", indexList.Count));
             for (int i = 0; i < indexList.Count; ++i)
             {
@@ -1543,13 +1582,13 @@ namespace ModelNamer
 
             writer.WriteLine("}");
         }
-        public void WriteUVs(StreamWriter writer)
+        public void WriteUVs(StreamWriter writer, List<int> excludeList)
         {
             writer.WriteLine("LayerElementUV: 0 {");
             writer.WriteLine("  Version: 101");
             writer.WriteLine("  Name: \"UVSet0\"");
-            writer.WriteLine("  MappingInformationType: \"ByVertice\"");
-            writer.WriteLine("  ReferenceInformationType: \"Direct\"");
+            writer.WriteLine("  MappingInformationType: \"ByPolygonVertex\"");
+            writer.WriteLine("  ReferenceInformationType: \"IndexToDirect\"");
             writer.WriteLine(String.Format("  UV: *{0} {{",m_allVertices.Count*2));
             writer.Write("  a: ");
             for (int i = 0; i < m_allVertices.Count; ++i)
@@ -1563,6 +1602,22 @@ namespace ModelNamer
             }
             writer.WriteLine();
             writer.WriteLine("}");
+
+            int startIndex = 0;
+            int endIndex = m_allIndices.Count - 2;
+            List<int> indexList = BuildIndexList2L(false, excludeList);
+            writer.WriteLine(String.Format("UVIndex: *{0} {{ ", indexList.Count));
+            for (int i = 0; i < indexList.Count; ++i)
+            {
+                writer.Write(indexList[i]);
+                if (i < indexList.Count - 1)
+                {
+                    writer.Write(",");
+                }
+            }
+            writer.WriteLine();
+            writer.WriteLine("}");
+
 
             writer.WriteLine();
             writer.WriteLine("}");
@@ -1687,7 +1742,7 @@ namespace ModelNamer
 
         }
 
-        public List<int> BuildLayerElementMaterial()
+        public List<int> BuildLayerElementMaterial(List<int> excludeList)
         {
             int startIndex = 0;
             int endIndex = 0;
@@ -1699,32 +1754,35 @@ namespace ModelNamer
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
                 SubMeshData2 headerBlock = m_subMeshData2List[a];
-                SubMeshData1 data1 = m_subMeshData1List[a];
-
-                submeshCount++;
-                matIndex = m_meshMaterialList[a][2] / 44;
-                MaterialData materialData = m_materialDataList[matIndex];
-                adjustedIndex = materialData.textureId / 64;
-                adjustedIndex = AdjustForModel(adjustedIndex);
-
-                int end = startIndex + (headerBlock.NumIndices );
-
-                //end -= 1;
-                for (int i = startIndex; i < end; i++)
+                if (!excludeList.Contains(a))
                 {
-                    materialList.Add(adjustedIndex);
+                    SubMeshData1 data1 = m_subMeshData1List[a];
+
+                    submeshCount++;
+                    matIndex = m_meshMaterialList[a][2] / 44;
+                    MaterialData materialData = m_materialDataList[matIndex];
+                    adjustedIndex = materialData.textureId / 64;
+                    adjustedIndex = AdjustForModel(adjustedIndex);
+
+                    int end = startIndex + (headerBlock.NumIndices);
+
+                    //end -= 1;
+                    for (int i = startIndex; i < end; i++)
+                    {
+                        materialList.Add(adjustedIndex);
+                    }
                 }
                 startIndex += headerBlock.NumIndices;
                 //startIndex -= 1;
-                break;
+                //break;
             }
             return materialList;
         }
 
 
-        public void WriteLayerElementMaterial(StreamWriter writer)
+        public void WriteLayerElementMaterial(StreamWriter writer,List<int> excludeList)
         {
-            List<int> materialList = BuildLayerElementMaterial();
+            List<int> materialList = BuildLayerElementMaterial(excludeList);
             writer.WriteLine("LayerElementMaterial: 0 {");
             writer.WriteLine("  Version: 101");
             writer.WriteLine("  Name: \"\"");
