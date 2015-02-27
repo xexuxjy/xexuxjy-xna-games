@@ -101,7 +101,8 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\characters\bear.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\urlancinematic.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
@@ -1760,6 +1761,9 @@ namespace ModelNamer
 
                     submeshCount++;
                     matIndex = m_meshMaterialList[a][2] / 44;
+
+                    matIndex = Math.Min(matIndex, m_materialDataList.Count - 1);
+
                     MaterialData materialData = m_materialDataList[matIndex];
                     adjustedIndex = materialData.textureId / 64;
                     adjustedIndex = AdjustForModel(adjustedIndex);
@@ -2288,16 +2292,42 @@ namespace ModelNamer
 
             if (skinned)
             {
-                MaterialData md = new MaterialData();
-                md.textureId = 0;
-                
-                model.m_materialDataList.Add(md);
-
-                int[] matdata = new int[3];
-                for (int i = 0; i < model.NumMeshes; ++i)
+                for(int i=0;i<model.m_textures.Count;++i)
                 {
-                    model.m_meshMaterialList.Add(matdata);
+                    MaterialData md = new MaterialData();
+                    md.textureId = i;
+                    model.m_materialDataList.Add(md);
                 }
+
+                byte[] searchBytes = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00 };
+                if (Common.FindCharsInStream(binReader,searchBytes))
+                {
+                    binReader.BaseStream.Position -= searchBytes.Length;
+                    for (int i = 0; i < numMeshes; ++i)
+                    {
+                        smd3.list1.Add(binReader.ReadInt32());
+                    }
+
+                    for (int i = 0; i < numMeshes; ++i)
+                    {
+                        int[] a = new int[3];
+                        //for (int j = 0; j < a.Length; ++j)
+                        //{
+                        //    a[j] = binReader.ReadInt32();
+                        //}
+                        a[0] = binReader.ReadInt32();
+                        a[1] = binReader.ReadInt32();
+                        a[2] = binReader.ReadInt32();
+                        model.m_meshMaterialList.Add(a);
+                    }
+
+                    int ibreak = 0;
+                }
+
+
+
+
+                // fixme... figure out which material should be used?
             }
             else
             {
