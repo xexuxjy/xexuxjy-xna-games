@@ -12,6 +12,7 @@ namespace ModelNamer
 {
     public class XboxModelReader : BaseModelReader
     {
+        
 
         public void LoadModels(String sourceDirectory, String infoFile, int maxFiles = -1)
         {
@@ -70,7 +71,7 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
-            rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
+            //rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath + "ModelFilesRenamed";
             String infoFile = rootPath + "ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
@@ -101,8 +102,8 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\armor_all.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\wheel.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arcane_water_crown.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
-            filenames.Add(rootPath + @"ModelFilesRenamed\characters\bear.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\characters\amazon.mdl");
+            //filenames.Add(rootPath + @"ModelFilesRenamed\characters\bear.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\urlancinematic.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
@@ -187,7 +188,19 @@ namespace ModelNamer
                     //for (int i = 0; i < model.NumMeshes; ++i)
                     //{
                     int bestSkinnedLod = (1|2|4|8|16|32);
-                    
+                    //bestSkinnedLod = 512;
+                    // 256 is main part of body at lower lod.
+                    // 128 is main part of body at lower lod.
+                    // 64 is main part of body at lower lod.
+                    // 32 is main part of body at lower lod.
+                    // 16 is ears and hair for remove with helmet.
+                    // 8 is top of head?
+                    // 4 is eyes and front of face
+                    // 2 is rest of face and teeth
+                    // 1 is main part of body, but also eyes and face and most of body apart from addons?
+                    bestSkinnedLod = (1);
+
+
                         //using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + "-" + model.m_subMeshData1List[i].LodLevel+"-" + i + ".fbx"))
                     using (StreamWriter objSw = new StreamWriter(objOutputPath + model.m_name + ".fbx"))
                         {
@@ -198,13 +211,18 @@ namespace ModelNamer
                             {
                                 for (int j = 0; j < model.NumMeshes; ++j)
                                 {
-                                    if (model.m_subMeshData1List[j].LodLevel < bestSkinnedLod)
+                                    //if (model.m_subMeshData1List[j].LodLevel < bestSkinnedLod)
+                                    if ((model.m_subMeshData1List[j].LodLevel & bestSkinnedLod) != 0)
                                     {
-
                                         includeList.Add(j);
                                     }
                                 }
                             }
+
+                            //for (int i = 0; i < 7; ++i)
+                            //{
+                            //    includeList.Add(i);
+                            //}
 
                             if (includeList.Count > 0)
                             {
@@ -217,7 +235,8 @@ namespace ModelNamer
                                 }
                             }
 
-
+                            //excludeList.Remove(0);
+                            //excludeList.Clear();
                             model.WriteFBXA(objSw, null, texturePath, skinned, excludeList);
                         }
                     //}
@@ -251,6 +270,9 @@ namespace ModelNamer
         public List<SubMeshData2> m_subMeshData2List = new List<SubMeshData2>();
         public List<MaterialData> m_materialDataList = new List<MaterialData>();
         public List<int[]> m_meshMaterialList = new List<int[]>();
+
+        public const int s_textureBlockSize = 64;
+        public const int s_materialBlockSize = 44;
 
         public SubMeshData3 m_subMeshData3;
         public int NumMeshes = 0;
@@ -422,6 +444,31 @@ namespace ModelNamer
                     }
 
                     long testPosition = binReader.BaseStream.Position;
+
+                    int skygoldIndex = -1;
+                    //foreach (MaterialData materialData in m_materialDataList)
+                    for(int i=0;i<m_materialDataList.Count;++i)
+                    {
+                        MaterialData materialData = m_materialDataList[i];
+                        //materialData.textureId = AdjustForModel(materialData.textureId);
+                        int textureIndex = materialData.diffuseTextureId / s_textureBlockSize;
+                        materialData.diffuseTextureData = m_textures[textureIndex];
+                        if (materialData.diffuseTextureData.textureName.Contains("skygold"))
+                        {
+                            skygoldIndex = i;
+                        }
+                    }
+                    // if we have skygold then make the specular of the following it and remove from list.
+                    if (skygoldIndex != -1)
+                    {
+                        Debug.Assert(skygoldIndex < m_materialDataList.Count - 1);
+                        MaterialData skyGoldMaterial = m_materialDataList[skygoldIndex];
+                        MaterialData skyGoldFollowMaterial = m_materialDataList[skygoldIndex+1];
+
+                        skyGoldFollowMaterial.specularTextureId = skygoldIndex;
+                        skyGoldFollowMaterial.specularTextureData = m_textures[skygoldIndex];
+                        m_materialDataList.RemoveAt(skygoldIndex);
+                    }
 
                     if (m_skinned)
                     {
@@ -631,7 +678,7 @@ namespace ModelNamer
             int maxMatIndex = -1;
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
-                maxMatIndex = Math.Max(maxMatIndex, m_meshMaterialList[a][2] / 44);
+                maxMatIndex = Math.Max(maxMatIndex, m_meshMaterialList[a][2] / s_materialBlockSize);
             }
 
             int lastMatIndex = -1;
@@ -639,13 +686,13 @@ namespace ModelNamer
             {
                 try
                 {
-                    matIndex = m_meshMaterialList[a][2] / 44;
+                    matIndex = m_meshMaterialList[a][2] / s_materialBlockSize;
                     if (lastMatIndex != matIndex)
                     {
                         lastMatIndex = matIndex;
                     }
                     MaterialData materialData = m_materialDataList[matIndex];
-                    adjustedIndex = materialData.textureId / 64;
+                    adjustedIndex = materialData.diffuseTextureId / s_textureBlockSize;
                     if (adjustedIndex == meshTextureId)
                     {
                         modelCount++;
@@ -678,9 +725,9 @@ namespace ModelNamer
                     //{
                     //    continue;
                     //}
-                    matIndex = m_meshMaterialList[a][2] / 44;
+                    matIndex = m_meshMaterialList[a][2] / s_materialBlockSize;
                     MaterialData materialData = m_materialDataList[matIndex];
-                    adjustedIndex = materialData.textureId / 64;
+                    adjustedIndex = materialData.diffuseTextureId / s_textureBlockSize;
 
 
                     if (meshTextureId != -1 && adjustedIndex != meshTextureId)
@@ -703,8 +750,8 @@ namespace ModelNamer
 
                     writer.WriteLine("o " + groupName);
 
-                    materialData.textureName = m_textures[adjustedIndex].textureName;
-                    string adjustedTexture = materialData.textureName;
+                    materialData.diffuseTextureData = m_textures[adjustedIndex];
+                    string adjustedTexture = materialData.diffuseTextureData.textureName;
                     String materialName = adjustedTexture + ".png";
 
                     writer.WriteLine("usemtl " + materialName);
@@ -1296,7 +1343,7 @@ namespace ModelNamer
         public List<int> BuildIndexList2L(bool adjust,List<int> excludeList)
         {
             List<int> result = new List<int>();
-            bool swap = true;
+            bool swap = false;
             int startIndex = 0;
             int endIndex = m_allIndices.Count - 2;
 
@@ -1305,10 +1352,10 @@ namespace ModelNamer
 
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
-                SubMeshData2 headerBlock = m_subMeshData2List[a];
-                if (!excludeList.Contains(a))
-                {
+                bool includeSubMesh = !excludeList.Contains(a);
 
+                SubMeshData2 headerBlock = m_subMeshData2List[a];
+                {
                     int end = startIndex + headerBlock.NumIndices - 2;
 
                     for (int i = startIndex; i < end; i++)
@@ -1335,36 +1382,39 @@ namespace ModelNamer
 
 
                         // alternate winding
-                        if (swap)
+                        if (includeSubMesh)
                         {
-                            if (adjust)
+                            if (swap)
                             {
-                                result.Add(i3);
-                                result.Add(i2);
-                                result.Add((i1 + 1) * -1);
+                                if (adjust)
+                                {
+                                    result.Add(i3);
+                                    result.Add(i2);
+                                    result.Add((i1 + 1) * -1);
 
+                                }
+                                else
+                                {
+                                    result.Add(i3);
+                                    result.Add(i2);
+                                    result.Add(i1);
+                                }
                             }
                             else
                             {
-                                result.Add(i3);
-                                result.Add(i2);
-                                result.Add(i1);
-                            }
-                        }
-                        else
-                        {
-                            if (adjust)
-                            {
-                                result.Add(i1);
-                                result.Add(i2);
-                                result.Add((i3 + 1) * -1);
+                                if (adjust)
+                                {
+                                    result.Add(i1);
+                                    result.Add(i2);
+                                    result.Add((i3 + 1) * -1);
 
-                            }
-                            else
-                            {
-                                result.Add(i1);
-                                result.Add(i2);
-                                result.Add(i3);
+                                }
+                                else
+                                {
+                                    result.Add(i1);
+                                    result.Add(i2);
+                                    result.Add(i3);
+                                }
                             }
                         }
                         swap = !swap;
@@ -1376,151 +1426,10 @@ namespace ModelNamer
             return result;
         }
 
-        public String BuildIndexList2(bool adjust )
-        {
-            bool swap = false;
-            int startIndex = 0;
-            int endIndex = m_allIndices.Count - 2;
-
-            StringBuilder sb = new StringBuilder();
-
-
-            for (int a = 0; a < m_subMeshData2List.Count; ++a)
-            {
-                SubMeshData2 headerBlock = m_subMeshData2List[a];
-
-                int end = startIndex + headerBlock.NumIndices - 2;
-
-                for (int i = startIndex; i < end; i++)
-                {
-                    int index1 = i;
-                    int index2 = i + 1;
-                    int index3 = i + 2;
-                    if (index3 >= m_allIndices.Count)
-                    {
-                        index3 = index1;
-                    }
-                    if (index2 >= m_allIndices.Count)
-                    {
-                        index2 = index1;
-                    }
-                    if (i >= m_allIndices.Count)
-                    {
-                        int ibreak = 0;
-                    }
-
-                    int i1 = m_allIndices[index1];
-                    int i2 = m_allIndices[index2];
-                    int i3 = m_allIndices[index3];
-
-
-                    // alternate winding
-                    if (swap)
-                    {
-                        if (adjust)
-                        {
-                            sb.Append(String.Format("{0},{1},-{2}", i3, i2, (i1 + 1)));
-                        }
-                        else
-                        {
-                            sb.Append(String.Format("{0},{1},{2}", i3, i2, (i1)));
-                        }
-                    }
-                    else
-                    {
-                        if (adjust)
-                        {
-                            sb.Append(String.Format("{0},{1},-{2}", i1, i2, (i3 + 1)));
-                        }
-                        else
-                        {
-                            sb.Append(String.Format("{0},{1},{2}", i1, i2, i3));
-                        }
-                        //writer.Write(String.Format("{0},{1},-{2}", i1, i2, (i3)));
-                    }
-                    if (i != end - 1)
-                    {
-                        sb.Append(",");
-                    }
-                    swap = !swap;
-                }
-                startIndex += headerBlock.NumIndices;
-            }
-            return sb.ToString();
-        }
-
-
-
-
-        public String BuildIndexList(bool adjust )
-        {
-            bool swap = false;
-            int startIndex = 0;
-            int endIndex = m_allIndices.Count - 2;
-
-            StringBuilder sb = new StringBuilder();
-
-            int end = endIndex;//startIndex + headerBlock.NumIndices - 2;
-            for (int i = startIndex; i < end; i++)
-            {
-                int index1 = i;
-                int index2 = i + 1;
-                int index3 = i + 2;
-                if (index3 >= m_allIndices.Count)
-                {
-                    index3 = index1;
-                }
-                if (index2 >= m_allIndices.Count)
-                {
-                    index2 = index1;
-                }
-                if (i >= m_allIndices.Count)
-                {
-                    int ibreak = 0;
-                }
-
-                int i1 = m_allIndices[index1];
-                int i2 = m_allIndices[index2];
-                int i3 = m_allIndices[index3];
-
-
-                // alternate winding
-                if (swap)
-                {
-                    if (adjust)
-                    {
-                        sb.Append(String.Format("{0},{1},-{2}", i3, i2, (i1 + 1)));
-                    }
-                    else
-                    {
-                        sb.Append(String.Format("{0},{1},{2}", i3, i2, (i1)));
-                    }
-                }
-                else
-                {
-                    if (adjust)
-                    {
-                        sb.Append(String.Format("{0},{1},-{2}", i1, i2, (i3 + 1)));
-                    }
-                    else
-                    {
-                        sb.Append(String.Format("{0},{1},{2}", i1, i2, i3));
-                    }
-                    //writer.Write(String.Format("{0},{1},-{2}", i1, i2, (i3)));
-                }
-                if (i != end - 1)
-                {
-                    sb.Append(",");
-                }
-                swap = !swap;
-            }
-            return sb.ToString();
-        }
 
         public void WriteIndices(StreamWriter writer, List<int> excludeList)
         {
             // write vertices
-            bool swap = false;
             int startIndex = 0;
             List<int> indexList = BuildIndexList2L(true,excludeList);
             int endIndex = indexList.Count;
@@ -1551,11 +1460,16 @@ namespace ModelNamer
             writer.WriteLine("  ReferenceInformationType: \"IndexToDirect\"");
             writer.WriteLine(String.Format("  Normals: *{0} {{",m_allVertices.Count*3));
             writer.Write("  a: ");
-            bool swap = true;
+            bool swap = false;
             for (int i = 0; i < m_allVertices.Count; ++i)
             {
                 XboxVertexInstance vpnt = m_allVertices[i];
                 Vector3 norm = vpnt.Normal;
+                swap = !swap;
+                if (swap)
+                {
+                    //norm *= -1f;
+                }
                 writer.Write(String.Format("{0:0.00000},{1:0.00000},{2:0.00000}", norm.X,norm.Y,norm.Z));
                 if (i < m_allVertices.Count - 1)
                 {
@@ -1565,8 +1479,6 @@ namespace ModelNamer
             writer.WriteLine();
             writer.WriteLine("}");
             writer.WriteLine();
-            int startIndex = 0;
-            int endIndex = m_allIndices.Count - 2;
             List<int> indexList = BuildIndexList2L(false, excludeList);
             writer.WriteLine(String.Format("NormalIndex: *{0} {{ ", indexList.Count));
             for (int i = 0; i < indexList.Count; ++i)
@@ -1755,19 +1667,39 @@ namespace ModelNamer
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
                 SubMeshData2 headerBlock = m_subMeshData2List[a];
+                int adjustment = 0;
+
                 if (!excludeList.Contains(a))
                 {
                     SubMeshData1 data1 = m_subMeshData1List[a];
 
                     submeshCount++;
-                    matIndex = m_meshMaterialList[a][2] / 44;
+                    matIndex = m_meshMaterialList[a][2] / s_materialBlockSize;
 
-                    matIndex = Math.Min(matIndex, m_materialDataList.Count - 1);
+                    matIndex = Math.Min(matIndex, m_materialDataList.Count);
 
-                    MaterialData materialData = m_materialDataList[matIndex];
-                    adjustedIndex = materialData.textureId / 64;
-                    adjustedIndex = AdjustForModel(adjustedIndex);
+                    for (int i = 0; i < matIndex; ++i)
+                    {
+                        if (m_materialDataList[i].specularTextureData != null)
+                        {
+                            adjustment = 1;
+                        }
+                    }
+                    matIndex -= adjustment;
 
+                    //adjustedIndex = materialData.diffuseTextureId / s_textureBlockSize;
+                    //adjustedIndex -= adjustment;
+                    adjustedIndex = AdjustForModel(matIndex);
+
+                    if (adjustedIndex >= m_materialDataList.Count)
+                    {
+                        int ibreak = 0;
+                    }
+
+                    if (adjustedIndex < 0)
+                    {
+                        int ibreak = 0;
+                    }
                     int end = startIndex + (headerBlock.NumIndices);
 
                     //end -= 1;
@@ -1882,17 +1814,26 @@ namespace ModelNamer
             //writer.WriteLine(String.Format("    Connect: \"OO\",\"{0}\", \"{1}\"", m_baseMaterialName,m_subMeshData2List[0].fbxNodeId));
             //writer.WriteLine(String.Format("    Connect: \"OP\",\"{0}\", \"{1}\",\"DiffuseColor\"", m_textures[1].textureFbxNodeId, m_baseMaterialName));
             count = 0;
-            foreach (TextureData material in m_textures)
+            int i = 0;
+            //foreach (TextureData material in m_textures)
+            foreach(MaterialData material in m_materialDataList)
             {
-                if (!material.textureName.Contains("skygold"))
+                //if (!material.textureName.Contains("skygold"))
                 {
                     //writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, m_subMeshData2List[count].fbxNodeId));
-                    writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.textureName, m_mainModelId));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.materialFbxNodeId, m_mainModelId));
-                    writer.WriteLine(String.Format(";    \"Texture::{0}\", \"Material::{1}\"", material.textureName, material.textureName));
-                    writer.WriteLine(String.Format("    C: \"OP\",{0}, {1},\"DiffuseColor\"", material.textureFbxNodeId, material.materialFbxNodeId));
-                    writer.WriteLine(String.Format(";    Video::{0}, Texture::{1}", material.textureName, material.textureName));
-                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.videoFbxNodeId, material.textureFbxNodeId));
+                    writer.WriteLine(String.Format(";    \"Material::{0}\", \"Model::{1}\"", material.diffuseTextureData.textureName, m_mainModelId));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.fbxNodeId, m_mainModelId));
+
+                    writer.WriteLine(String.Format(";    \"Texture::{0}\", \"Material::{1}\"", material.diffuseTextureData.textureName, material.diffuseTextureData.textureName));
+                    writer.WriteLine(String.Format("    C: \"OP\",{0}, {1},\"DiffuseColor\"", material.diffuseTextureData.textureFbxNodeId, material.fbxNodeId));
+                    if (material.specularTextureData != null)
+                    {
+                        writer.WriteLine(String.Format(";    \"Texture::{0}\", \"Material::{1}\"", material.specularTextureData.textureName, material.specularTextureData.textureName));
+                        writer.WriteLine(String.Format("    C: \"OP\",{0}, {1},\"SpecularColor\"", material.specularTextureData.textureFbxNodeId, material.fbxNodeId));
+                    }
+
+                    writer.WriteLine(String.Format(";    Video::{0}, Texture::{1}", material.diffuseTextureData.textureName, material.diffuseTextureData.textureName));
+                    writer.WriteLine(String.Format("    C: \"OO\",{0}, {1}", material.diffuseTextureData.videoFbxNodeId, material.diffuseTextureData.textureFbxNodeId));
                     count++;
                 }
             }
@@ -1918,6 +1859,15 @@ namespace ModelNamer
                         writer.WriteLine();
                 }
 
+                foreach (BoneNode boneNode in m_bones)
+                {
+                    if (boneNode.parent != null)
+                    {
+                        writer.WriteLine(String.Format(";  LimbModel::{0} , LimbModel::{1}", boneNode.name, boneNode.parent.name));
+                        writer.WriteLine(String.Format("    C: \"OO\",{0},{1}", boneNode.fbxLimbNodeId, boneNode.parent.fbxLimbNodeId));
+                        writer.WriteLine();
+                    }
+                }
 
             }
 
@@ -1940,13 +1890,14 @@ namespace ModelNamer
 
         public void WriteMaterials(StreamWriter writer, SubMeshData2 headerBlock, String texturePath)
         {
-            foreach (TextureData texture in m_textures)
+            //foreach (TextureData texture in m_textures)
+            foreach(MaterialData materialData in m_materialDataList)
             {
-                if (!texture.textureName.Contains("skygold"))
+                //if (!texture.textureName.Contains("skygold"))
                 {
 
-                    texture.materialFbxNodeId = GenerateNodeId();
-                    writer.WriteLine(String.Format("Material: {0}, \"Material::{1}\" , \"\" {{", texture.materialFbxNodeId, texture.textureName));
+                    materialData.fbxNodeId = GenerateNodeId();
+                    writer.WriteLine(String.Format("Material: {0}, \"Material::{1}\" , \"\" {{", materialData.fbxNodeId, materialData.fbxNodeId));
                     writer.WriteLine("    Version: 102");
                     writer.WriteLine("    ShadingModel: \"phong\"");
                     writer.WriteLine("    MultiLayer: 0");
@@ -1954,11 +1905,11 @@ namespace ModelNamer
 			        writer.WriteLine("    P: \"AmbientColor\", \"Color\", \"\", \"A\",1,1,1");
 			        writer.WriteLine("    P: \"DiffuseColor\", \"Color\", \"\", \"A\",1,1,1");
 			        writer.WriteLine("    P: \"TransparentColor\", \"Color\", \"\", \"A\",1,1,1");
-			        writer.WriteLine("    P: \"SpecularColor\", \"Color\", \"\", \"A\",0,0,0");
+			        writer.WriteLine("    P: \"SpecularColor\", \"Color\", \"\", \"A\",1,1,1");
 			        writer.WriteLine("    P: \"Emissive\", \"Vector3D\", \"Vector\", \"\",0,0,0");
 			        writer.WriteLine("    P: \"Ambient\", \"Vector3D\", \"Vector\", \"\",1,1,1");
 			        writer.WriteLine("    P: \"Diffuse\", \"Vector3D\", \"Vector\", \"\",1,1,1");
-			        writer.WriteLine("    P: \"Specular\", \"Vector3D\", \"Vector\", \"\",0,0,0");
+			        writer.WriteLine("    P: \"Specular\", \"Vector3D\", \"Vector\", \"\",1,1,1");
 			        writer.WriteLine("    P: \"Shininess\", \"double\", \"Number\", \"\",20");
 			        writer.WriteLine("    P: \"Opacity\", \"double\", \"Number\", \"\",1");
 			        writer.WriteLine("    P: \"Reflectivity\", \"double\", \"Number\", \"\",0");
@@ -1974,7 +1925,7 @@ namespace ModelNamer
         {
             foreach (TextureData texture in m_textures)
             {
-                if (!texture.textureName.Contains("skygold"))
+                //if (!texture.textureName.Contains("skygold"))
                 {
 
                     String fullPath = texturePath + texture.textureName + ".png";
@@ -1994,7 +1945,7 @@ namespace ModelNamer
 
             foreach (TextureData texture in m_textures)
             {
-                if (!texture.textureName.Contains("skygold"))
+                //if (!texture.textureName.Contains("skygold"))
                 {
 
                     texture.textureFbxNodeId = GenerateNodeId();
@@ -2295,7 +2246,8 @@ namespace ModelNamer
                 for(int i=0;i<model.m_textures.Count;++i)
                 {
                     MaterialData md = new MaterialData();
-                    md.textureId = i;
+                    // multiply by 64 here to keep the same convention as the non-skinned models
+                    md.diffuseTextureId = i * XboxModel.s_textureBlockSize;
                     model.m_materialDataList.Add(md);
                 }
 
@@ -2374,8 +2326,8 @@ namespace ModelNamer
                     model.m_meshMaterialList.Add(a);
                 }
 
-                Debug.Assert(maxOffset % 44 == 0);
-                maxOffset /= 44;
+                Debug.Assert(maxOffset % XboxModel.s_materialBlockSize == 0);
+                maxOffset /= XboxModel.s_materialBlockSize;
                 maxOffset += 1;
                 int ibreak2 = 0;
 
@@ -2435,7 +2387,8 @@ namespace ModelNamer
         public int header1;
         public int header2;
         public int header3;
-        public int textureId;
+        public int diffuseTextureId=-1;
+        public int specularTextureId=-1;
         public int header4;
         public float startVal;
         public int header5;
@@ -2444,7 +2397,12 @@ namespace ModelNamer
         public float endVal;
         public int[] endBlock2 = new int[8];
         public List<int[]> m_data = new List<int[]>();
-        public String textureName;
+        //public String diffuseTextureName;
+        //public String specularTextureName;
+
+        public TextureData diffuseTextureData;
+        public TextureData specularTextureData;
+        public string fbxNodeId;
 
         public static MaterialData FromStream(BinaryReader binReader, int numMeshes, int sectionLength)
         {
@@ -2459,7 +2417,7 @@ namespace ModelNamer
             smd.header2 = binReader.ReadInt32();
             Debug.Assert(smd.header2 == 3073);
             smd.header3 = binReader.ReadInt32();
-            smd.textureId = binReader.ReadInt32();
+            smd.diffuseTextureId = binReader.ReadInt32();
             smd.header4 = binReader.ReadInt32();
             //Debug.Assert(smd.header4 == 330761);
             smd.startVal = binReader.ReadSingle();
@@ -2522,7 +2480,7 @@ namespace ModelNamer
         public void WriteInfo(StreamWriter sw)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("T{0} {1} {2} {3} {4} {5:0.00000} {6} {7}", textureId / 64, header1, header2, header3, header4, startVal, header5, header6);
+            sb.AppendFormat("T{0} {1} {2} {3} {4} {5:0.00000} {6} {7}", diffuseTextureId / XboxModel.s_textureBlockSize, header1, header2, header3, header4, startVal, header5, header6);
             sb.AppendLine();
             foreach (int[] db in m_data)
             {
