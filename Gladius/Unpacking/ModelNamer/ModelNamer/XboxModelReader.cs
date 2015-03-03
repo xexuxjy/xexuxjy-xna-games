@@ -71,7 +71,7 @@ namespace ModelNamer
         static void Main(string[] args)
         {
             String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
-            //rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
+            rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\xbox-decompressed\";
             String modelPath = rootPath + "ModelFilesRenamed";
             String infoFile = rootPath + "ModelInfo.txt";
             XboxModelReader reader = new XboxModelReader();
@@ -107,7 +107,7 @@ namespace ModelNamer
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\urlancinematic.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\characters\yeti.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\armband_base.mdl");
-            //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
+            filenames.Add(rootPath + @"ModelFilesRenamed\carafe_decanter.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\carafe_carafe.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\palaceibliis.mdl");
             //filenames.Add(rootPath + @"ModelFilesRenamed\arenas\darkgod.mdl");
@@ -269,7 +269,7 @@ namespace ModelNamer
         public List<SubMeshData1> m_subMeshData1List = new List<SubMeshData1>();
         public List<SubMeshData2> m_subMeshData2List = new List<SubMeshData2>();
         public List<MaterialData> m_materialDataList = new List<MaterialData>();
-        public List<int[]> m_meshMaterialList = new List<int[]>();
+        public List<MeshMaterial> m_meshMaterialList = new List<MeshMaterial>();
 
         public const int s_textureBlockSize = 64;
         public const int s_materialBlockSize = 44;
@@ -678,7 +678,7 @@ namespace ModelNamer
             int maxMatIndex = -1;
             for (int a = 0; a < m_subMeshData2List.Count; ++a)
             {
-                maxMatIndex = Math.Max(maxMatIndex, m_meshMaterialList[a][2] / s_materialBlockSize);
+                maxMatIndex = Math.Max(maxMatIndex, m_meshMaterialList[a].val3 / s_materialBlockSize);
             }
 
             int lastMatIndex = -1;
@@ -686,7 +686,7 @@ namespace ModelNamer
             {
                 try
                 {
-                    matIndex = m_meshMaterialList[a][2] / s_materialBlockSize;
+                    matIndex = m_meshMaterialList[a].val3 / s_materialBlockSize;
                     if (lastMatIndex != matIndex)
                     {
                         lastMatIndex = matIndex;
@@ -725,7 +725,7 @@ namespace ModelNamer
                     //{
                     //    continue;
                     //}
-                    matIndex = m_meshMaterialList[a][2] / s_materialBlockSize;
+                    matIndex = m_meshMaterialList[a].val3 / s_materialBlockSize;
                     MaterialData materialData = m_materialDataList[matIndex];
                     adjustedIndex = materialData.diffuseTextureId / s_textureBlockSize;
 
@@ -1674,7 +1674,7 @@ namespace ModelNamer
                     SubMeshData1 data1 = m_subMeshData1List[a];
 
                     submeshCount++;
-                    matIndex = m_meshMaterialList[a][2] / s_materialBlockSize;
+                    matIndex = m_meshMaterialList[a].val3 / s_materialBlockSize;
 
                     matIndex = Math.Min(matIndex, m_materialDataList.Count);
 
@@ -2188,14 +2188,8 @@ namespace ModelNamer
     public class SubMeshData3
     {
         public List<int> initialValsList = new List<int>();
-        //public int val1;
-        //public int val2;
-        //public int val3;
-        //public int val4;
-        //public int val5;
-        //public int val6;
         public List<int> list1 = new List<int>();
-        public List<int[]> list3 = new List<int[]>();
+        public List<MaterialBlock> materialBlockList = new List<MaterialBlock>();
         public float val7;
 
         public int lastElementOffset;
@@ -2236,54 +2230,26 @@ namespace ModelNamer
         // read those vals to sensible floats.
 
 
-        public static SubMeshData3 FromStream(XboxModel model, BinaryReader binReader, int numMeshes, int endOffset,bool skinned)
+        public static SubMeshData3 FromStream(XboxModel model, BinaryReader binReader, int numMeshes, int endOffset, bool skinned)
         {
             SubMeshData3 smd3 = new SubMeshData3();
             smd3.model = model;
+            int maxOffset = 0;
 
             if (skinned)
             {
-                for(int i=0;i<model.m_textures.Count;++i)
-                {
-                    MaterialData md = new MaterialData();
-                    // multiply by 64 here to keep the same convention as the non-skinned models
-                    md.diffuseTextureId = i * XboxModel.s_textureBlockSize;
-                    model.m_materialDataList.Add(md);
-                }
-
                 byte[] searchBytes = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00 };
-                if (Common.FindCharsInStream(binReader,searchBytes))
+                if (Common.FindCharsInStream(binReader, searchBytes))
                 {
                     binReader.BaseStream.Position -= searchBytes.Length;
                     for (int i = 0; i < numMeshes; ++i)
                     {
                         smd3.list1.Add(binReader.ReadInt32());
                     }
-
-                    for (int i = 0; i < numMeshes; ++i)
-                    {
-                        int[] a = new int[3];
-                        //for (int j = 0; j < a.Length; ++j)
-                        //{
-                        //    a[j] = binReader.ReadInt32();
-                        //}
-                        a[0] = binReader.ReadInt32();
-                        a[1] = binReader.ReadInt32();
-                        a[2] = binReader.ReadInt32();
-                        model.m_meshMaterialList.Add(a);
-                    }
-
-                    int ibreak = 0;
                 }
-
-
-
-
-                // fixme... figure out which material should be used?
             }
             else
             {
-
                 int val1 = binReader.ReadInt32();
                 int val2 = binReader.ReadInt32();
                 Debug.Assert(val1 == 0);
@@ -2309,66 +2275,58 @@ namespace ModelNamer
                 {
                     smd3.list1.Add(binReader.ReadInt32());
                 }
+            }
 
-                int maxOffset = 0;
-
-                for (int i = 0; i < numMeshes; ++i)
+            MeshMaterial mm = null;
+            do
+            {
+                mm = MeshMaterial.FromStream(binReader);
+                if (mm != null)
                 {
-                    int[] a = new int[3];
-                    //for (int j = 0; j < a.Length; ++j)
-                    //{
-                    //    a[j] = binReader.ReadInt32();
-                    //}
-                    a[0] = binReader.ReadInt32();
-                    a[1] = binReader.ReadInt32();
-                    a[2] = binReader.ReadInt32();
-                    maxOffset = Math.Max(maxOffset, a[2]);
-                    model.m_meshMaterialList.Add(a);
+                    model.m_meshMaterialList.Add(mm);
+                    maxOffset = Math.Max(maxOffset, mm.val3);
                 }
+            }
+            while (mm != null);
 
-                Debug.Assert(maxOffset % XboxModel.s_materialBlockSize == 0);
-                maxOffset /= XboxModel.s_materialBlockSize;
-                maxOffset += 1;
-                int ibreak2 = 0;
+            Debug.Assert(maxOffset % XboxModel.s_materialBlockSize == 0);
+            maxOffset /= XboxModel.s_materialBlockSize;
+            maxOffset += 1;
+            int ibreak2 = 0;
 
-                for (int i = 0; i < maxOffset; ++i)
-                {
-                    int arraySize = 11;
-                    int[] a = new int[arraySize];
-                    for (int j = 0; j < a.Length; ++j)
-                    {
-                        a[j] = binReader.ReadInt32();
-                    }
-                    smd3.list3.Add(a);
-                }
 
-                smd3.lastElementOffset = binReader.ReadInt32();
-                smd3.headerEnd2 = binReader.ReadInt32();
-                smd3.headerEnd3 = binReader.ReadInt32();
-                smd3.headerEnd4 = binReader.ReadInt32();
-                smd3.headerEnd5 = binReader.ReadInt32();
-                smd3.headerEnd6 = binReader.ReadSingle();
-                Debug.Assert(smd3.headerEnd6 == 1.0f || smd3.headerEnd6 == 0.0f);
-                for (int i = 0; i < smd3.headerEndZero.Length; ++i)
-                {
-                    smd3.headerEndZero[i] = binReader.ReadInt32();
-                    //Debug.Assert(smd3.headerEndZero[i] == 0);
-                }
-                //maxOffset -= 1;
-                for (int i = 0; i < maxOffset; ++i)
-                {
-                    int startVal = smd3.list3[i][5];
-                    //int endVal = i < smd3.list3.Count-1? smd3.list3[i+1][5]:smd3.lastElementOffset;
-                    //int endVal = i < smd3.list3.Count - 1 ? smd3.list3[i + 1][5] : endOffset;
-                    if (i == smd3.list3.Count - 1)
-                    {
-                        int ibreak = 0;
-                    }
-                    int endVal = i < smd3.list3.Count - 1 ? smd3.list3[i + 1][5] : startVal + (28 * 4);//100;
-                    int sectionLength = endVal - startVal;
+            
 
-                    model.m_materialDataList.Add(MaterialData.FromStream(binReader, numMeshes, sectionLength));
-                }
+            for (int i = 0; i < maxOffset; ++i)
+            {
+                smd3.materialBlockList.Add(MaterialBlock.FromStream(binReader));
+            }
+
+            smd3.lastElementOffset = binReader.ReadInt32();
+            smd3.headerEnd2 = binReader.ReadInt32();
+            smd3.headerEnd3 = binReader.ReadInt32();
+            smd3.headerEnd4 = binReader.ReadInt32();
+            smd3.headerEnd5 = binReader.ReadInt32();
+            smd3.headerEnd6 = binReader.ReadSingle();
+            Debug.Assert(smd3.headerEnd6 == 1.0f || smd3.headerEnd6 == 0.0f);
+            for (int i = 0; i < smd3.headerEndZero.Length; ++i)
+            {
+                smd3.headerEndZero[i] = binReader.ReadInt32();
+                //Debug.Assert(smd3.headerEndZero[i] == 0);
+            }
+            //maxOffset -= 1;
+
+            float[] toFind = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
+            int index = 0;
+            while(Common.PositionAtFloats(binReader,toFind))
+            {
+                int startVal = smd3.materialBlockList[index].Offset;
+                int endVal = index < smd3.materialBlockList.Count - 1 ? smd3.materialBlockList[index + 1].Offset : startVal + (28 * 4);//100;
+                int sectionLength = endVal - startVal;
+                MaterialBlock materialBlock = smd3.materialBlockList[index];
+
+                model.m_materialDataList.Add(MaterialData.FromStream(binReader, numMeshes, sectionLength,materialBlock));
+                ++index;
             }
             //for (int i = 0; i < smd3.headerEndZero2.Length; ++i)
             //{
@@ -2378,7 +2336,6 @@ namespace ModelNamer
 
             return smd3;
         }
-
     }
 
     public class MaterialData
@@ -2397,81 +2354,99 @@ namespace ModelNamer
         public float endVal;
         public int[] endBlock2 = new int[8];
         public List<int[]> m_data = new List<int[]>();
-        //public String diffuseTextureName;
-        //public String specularTextureName;
 
         public TextureData diffuseTextureData;
         public TextureData specularTextureData;
         public string fbxNodeId;
 
-        public static MaterialData FromStream(BinaryReader binReader, int numMeshes, int sectionLength)
+        public static MaterialData FromStream(BinaryReader binReader, int numMeshes, int sectionLength,MaterialBlock materialBlock)
         {
             MaterialData smd = new MaterialData();
             for (int i = 0; i < smd.array0.Length; ++i)
             {
                 smd.array0[i] = binReader.ReadSingle();
-                //Debug.Assert(smd.array0[i] == 1.0f);
+                Debug.Assert(smd.array0[i] == 1.0f);
             }
 
             smd.header1 = binReader.ReadInt32();
-            smd.header2 = binReader.ReadInt32();
-            Debug.Assert(smd.header2 == 3073);
-            smd.header3 = binReader.ReadInt32();
-            smd.diffuseTextureId = binReader.ReadInt32();
-            smd.header4 = binReader.ReadInt32();
+
+            int count1 = (sectionLength - 112) / 12;
+
+            int val1 = -1;
+            do
+            {
+                val1 = binReader.ReadInt32();
+                if (val1 == 3073)
+                {
+                    int val2 = binReader.ReadInt32();
+                    int val3 = binReader.ReadInt32();
+                    int[] tdata = new int[] { val1, val2, val3 };
+                    smd.m_data.Add(tdata);
+                }
+                else
+                {
+                    binReader.BaseStream.Position -= 4;
+                }
+            }
+            while (val1 == 3073);
+
+            int val4 = binReader.ReadInt32();
+            Debug.Assert(val4 == 330761);
+
+            //smd.header3 = binReader.ReadInt32();
+            //smd.diffuseTextureId = binReader.ReadInt32();
+            //smd.header4 = binReader.ReadInt32();
             //Debug.Assert(smd.header4 == 330761);
             smd.startVal = binReader.ReadSingle();
             smd.header5 = binReader.ReadInt32();
-            //Debug.Assert(smd.header5 == 3);
+            //Debug.Assert(smd.header5 == 3 || smd.header5 == 8);
             smd.header6 = binReader.ReadInt32();
             //Debug.Assert(smd.header6 == 1036 smd.header6 == 1036);
 
             int offset = (smd.array0.Length * 4);
             int count = (sectionLength - offset) / 4;
 
-            //Debug.Assert(((count-17)%3) == 0);
-            //int numPasses = (count - 17) / 3;
-            ////numPasses -= 2;
-            //for (int i = 0; i<numPasses; ++i)
-            //{
-            //    int[] data = new int[3];
-            //    for (int j = 0; j < data.Length; ++j)
-            //    {
-            //        data[j] = binReader.ReadInt32();
-            //    }
-            //    smd.m_data.Add(data);
-            //}
 
-            int[] data = new int[count - 17];
-            for (int i = 0; i < data.Length; ++i)
+            int toFind = 1036;
+            Common.PositionAtInt(binReader, toFind);
+
+            bool keepGoing = true;
+            int[] data = null;
+            List<int[]> iaList = new List<int[]>();
+            while (keepGoing)
             {
-                data[i] = binReader.ReadInt32();
+                
+                data = new int[7];//new int[count - 17];
+                
+                for (int i = 0; i < data.Length; ++i)
+                {
+                    data[i] = binReader.ReadInt32();
+                    if (i == 0 && data[i] != toFind)
+                    {
+                        binReader.BaseStream.Position -= 4;
+                        keepGoing = false;
+                        break;
+                    }
+                    else
+                    {
+                        iaList.Add(data);
+                    }
+                }
+
             }
-
-            //int a = binReader.ReadInt32();
-            //Debug.Assert(a == 1024);
-            //int b = binReader.ReadInt32();
-            //Debug.Assert(b == 1038);
-            //int c = binReader.ReadInt32();
-            //Debug.Assert(c == 18434);
-            //int d = binReader.ReadInt32();
-            //Debug.Assert(d == 0);
-            //int e = binReader.ReadInt32();
-            //Debug.Assert(e == 0);
-            //int f = binReader.ReadInt32();
-            //Debug.Assert(f == 0);
-
-
-            //for (int i = 0; i < count; ++i)
-            //{
-            //    smd.m_data.Add(binReader.ReadInt32());
-            //}
-
-            smd.endVal = binReader.ReadSingle();
-            for (int i = 0; i < smd.endBlock2.Length; ++i)
+            //if (Common.PositionAtFloat(binReader, 1.0f) || Common.PositionAtFloat(binReader, 0.0f))
+            if (Common.PositionAtFloat(binReader, 1.0f))
             {
-                smd.endBlock2[i] = binReader.ReadInt32();
-                Debug.Assert(smd.endBlock2[i] == 0);
+                smd.endVal = binReader.ReadSingle();
+                for (int i = 0; i < smd.endBlock2.Length; ++i)
+                {
+                    smd.endBlock2[i] = binReader.ReadInt32();
+                    //Debug.Assert(smd.endBlock2[i] == 0);
+                }
+            }
+            else
+            {
+                int ibreak = 0;
             }
 
             return smd;
@@ -2516,31 +2491,6 @@ namespace ModelNamer
         public int BoneWeights;
         public int BoneInfo3;
 
-        // I use arithmetic here to show clearly where these numbers come from
-        // You can just type 28 if you want
-        //public static readonly int SizeInBytes = sizeof(float) * 11;
-
-        //// Vertex Element array for our struct above
-        //public static readonly VertexElement[] VertexElements = 
-        //{
-        //    new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
-        //    new VertexElement(sizeof(float) * 3, VertexElementFormat.Vector3, VertexElementUsage.Normal, 1),
-        //    new VertexElement(sizeof(float) * 6, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 2),
-        //    new VertexElement(sizeof(float) * 8, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 3),
-        //    new VertexElement(sizeof(float) * 10, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 4),
-        //    new VertexElement(sizeof(float) * 11, VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 5),
-        //};
-
-        //public static VertexDeclaration Declaration
-        //{
-        //    get { return new VertexDeclaration(VertexElements); }
-        //}
-
-        //VertexDeclaration IVertexType.VertexDeclaration
-        //{
-        //    get { return new VertexDeclaration(VertexElements); }
-        //}
-
         public override string ToString()
         {
             return String.Format("P {0}\tN {1}\tUV {2}\tE {3}", Common.ToString(Position), Common.ToString(Normal), Common.ToString(UV), ExtraData);
@@ -2572,6 +2522,58 @@ namespace ModelNamer
         }
 
     }
+
+    public class MeshMaterial
+    {
+        public float val1;
+        public int val2;
+        public int val3;
+
+        public static MeshMaterial FromStream(BinaryReader binReader)
+        {
+            MeshMaterial meshMaterial = new MeshMaterial();
+            meshMaterial.val1 = binReader.ReadSingle();
+            if (meshMaterial.val1 == 1.0f)
+            {
+                meshMaterial.val2 = binReader.ReadInt32();
+                meshMaterial.val3 = binReader.ReadInt32();
+            }
+            else
+            {
+                binReader.BaseStream.Position -= 4;
+                meshMaterial = null;
+            }
+
+            return meshMaterial;
+        }
+    }
+
+    public class MaterialBlock
+    {
+        public int[] blockData = new int[11];
+
+        public int Offset
+        {
+            get{return blockData[5];}
+        }
+
+        public int Lod
+        {
+            get{return blockData[4];}
+        }
+
+
+        public static MaterialBlock FromStream(BinaryReader binReader)
+        {
+            MaterialBlock materialBlock = new MaterialBlock();
+            for(int i=0;i<materialBlock.blockData.Length;++i)
+            {
+                materialBlock.blockData[i] = binReader.ReadInt32();
+            }
+            return materialBlock;
+        }
+    }
+
 
 
 }

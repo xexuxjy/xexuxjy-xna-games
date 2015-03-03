@@ -128,6 +128,97 @@ namespace ModelNamer
             return sb.ToString();
         }
 
+        public static bool PositionAtFloat(BinaryReader binReader, float val,bool skipBack=true)
+        {
+            long startPosition = binReader.BaseStream.Position;
+            bool found = false;
+            while (binReader.BaseStream.Position < binReader.BaseStream.Length-4)
+            {
+                float sval = binReader.ReadSingle();
+                if(val == sval)
+                {
+                    found = true;
+                    if (skipBack)
+                    {
+                        binReader.BaseStream.Position -= 4;
+                    }
+                    break;
+                }
+            }
+            if (!found)
+            {
+                binReader.BaseStream.Position = startPosition;
+                int ibreak = 0;
+            }
+            return found;
+
+        }
+
+        public static bool PositionAtFloats(BinaryReader binReader, float[] vals, bool skipBack = true)
+        {
+            long startPosition = binReader.BaseStream.Position;
+            bool found = false;
+            int count = 0;
+            while (binReader.BaseStream.Position < binReader.BaseStream.Length - 4)
+            {
+                float sval = binReader.ReadSingle();
+                if(sval == vals[count])
+                {
+                    count++;
+                    if (count == vals.Length)
+                    {
+                        found = true;
+                        if (skipBack)
+                        {
+                            binReader.BaseStream.Position -= 4*vals.Length;
+                        }
+                        break;
+                    }
+                }
+                else
+                {
+                    count = 0;
+                    binReader.BaseStream.Position -= ((count - 1) * 4);
+                }
+
+            }
+            if (!found)
+            {
+                binReader.BaseStream.Position = startPosition;
+                int ibreak = 0;
+            }
+            return found;
+
+        }
+
+
+
+
+        public static bool PositionAtInt(BinaryReader binReader, int val,bool skipBack=true)
+        {
+            bool found = false;
+            long startPosition = binReader.BaseStream.Position;
+            while (binReader.BaseStream.Position < binReader.BaseStream.Length-4)
+            {
+                int sval = binReader.ReadInt32();
+                if (val == sval)
+                {
+                    found = true;
+                    if (skipBack)
+                    {
+                        binReader.BaseStream.Position -= 4;
+                    }
+                    break;
+                }
+            }
+            if (!found)
+            {
+                binReader.BaseStream.Position = startPosition;
+                int ibreak = 0;
+            }
+            return found;
+        }
+
 
         public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
         {
@@ -718,8 +809,6 @@ namespace ModelNamer
             return r2v2;
 
         }
-
-
     }
 
     public class BoneNode
