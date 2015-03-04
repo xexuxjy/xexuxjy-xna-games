@@ -25,7 +25,7 @@ public class OverlandStartup : MonoBehaviour
 
         state.CameraManager.CameraTarget = PlayerParty;
         state.CameraManager.CurrentCameraMode = CameraMode.Overland;
-
+            
 
         GameObject[] towns = GameObject.FindGameObjectsWithTag("Town");
         //foreach (GameObject go in towns)

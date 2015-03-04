@@ -32,10 +32,12 @@ public class TownGUIController : MonoBehaviour
         SetupShopMenu();
         SetupCharacterPanel();
         //SwitchPanel(m_townPanel);
-        SwitchPanel(m_characterPanel);
+        //SwitchPanel(m_characterPanel);
+        SwitchPanel(m_shopItemPanel);
 
         m_school = new GladiatorSchool();
-        m_school.Load("Orins-school");
+        //m_school.Load("Orins-school");
+        m_school.Load("Legionaires-School");
         if (m_school.Gladiators.Count > 0)
         {
             foreach (CharacterData cd in m_school.Gladiators.Values)
@@ -396,6 +398,11 @@ public class TownGUIController : MonoBehaviour
             get { return "ShopItemPanel"; }
         }
 
+        public override void SetTownData(TownData townData)
+        {
+            m_panel.GetComponent<ItemPanelController>().SetData(townData.Shop);
+        }
+
         void ShopItemMenuPanel_Click(dfControl control, dfMouseEventArgs mouseEvent)
         {
             if (control.gameObject.name == "ShopItemLeaveButton")
@@ -494,6 +501,8 @@ public class TownGUIController : MonoBehaviour
 
         public override void SetCharacterData(CharacterData characterData)
         {
+            GameObject.Find(PanelName + "NameAndClass").GetComponent<dfRichTextLabel>().Text = "" + characterData.Name + "\n"+characterData.ActorClass;
+            //GameObject.Find(PanelName + "NameAndClass").GetComponent<dfRichTextLabel>().Text = "" + characterData.Name;
             GameObject.Find(PanelName + "/StatsPanel/LevelPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.Level;
             GameObject.Find(PanelName + "/StatsPanel/XPPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.XP;
             GameObject.Find(PanelName + "/StatsPanel/NextXPPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.NEXTXP;
@@ -507,6 +516,13 @@ public class TownGUIController : MonoBehaviour
             GameObject.Find(PanelName + "/StatsPanel/MOVPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.MOV;
             GameObject.Find(PanelName + "/StatsPanel/ArmourPanel/Value").GetComponent<dfLabel>().Text = "" + "armour";
             GameObject.Find(PanelName + "/StatsPanel/WeaponPanel/Value").GetComponent<dfLabel>().Text = "" + "weapon";
+
+            // Try and get a class image?
+            Texture2D classTex = Resources.Load<Texture2D>(GladiusGlobals.UIRoot+"ClassImages/"+characterData.ActorClassData.MeshName);
+            if(classTex != null)
+            {
+                GameObject.Find(PanelName + "CharacterSprite").GetComponent<dfTextureSprite>().Texture = classTex;
+            }
 
         }
 

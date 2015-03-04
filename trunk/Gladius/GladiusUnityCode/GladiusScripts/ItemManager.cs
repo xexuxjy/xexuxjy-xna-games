@@ -88,18 +88,19 @@ using UnityEngine;
                 }
                 else if (line.StartsWith(".ITEMMESH:"))
                 {
-                    currentItem.MeshName = lineTokens[1];
-                    if (currentItem.MeshName.Contains("\\"))
+                    currentItem.MeshName = lineTokens[1].Replace('\\','/');
+                    
+                    if (currentItem.MeshName.Contains("/"))
                     {
-                        currentItem.ShortMeshName = currentItem.MeshName.Substring(currentItem.MeshName.LastIndexOf('\\')+1);
+                        currentItem.ShortMeshName = currentItem.MeshName.Substring(currentItem.MeshName.LastIndexOf('/')+1);
                     }
                 }
                 else if (line.StartsWith(".ITEMMESH2:"))
                 {
-                    currentItem.MeshName2 = lineTokens[1];
-                    if (currentItem.MeshName2.Contains("\\"))
+                    currentItem.MeshName2 = lineTokens[1].Replace('\\', '/'); ;
+                    if (currentItem.MeshName2.Contains("/"))
                     {
-                        currentItem.ShortMeshName2 = currentItem.MeshName2.Substring(currentItem.MeshName2.LastIndexOf('\\') + 1);
+                        currentItem.ShortMeshName2 = currentItem.MeshName2.Substring(currentItem.MeshName2.LastIndexOf('/') + 1);
                     }
                 }
                 else if (line.StartsWith(".ITEMMATERIAL:"))

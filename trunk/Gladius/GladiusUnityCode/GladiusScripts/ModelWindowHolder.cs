@@ -6,7 +6,8 @@ public class ModelWindowHolder : MonoBehaviour
 {
     private GameObject m_gameObjectInstance;
     private GameObject m_gameObjectPrefab;
-    private GameObject m_modelCamera;
+    
+    public  GameObject m_modelCamera;
     private dfTextureSprite m_parentSprite;
     GUITexture gtexture = new GUITexture();
     public float RotationSpeed = 30f;
@@ -15,7 +16,7 @@ public class ModelWindowHolder : MonoBehaviour
 
     public void Awake()
     {
-        m_modelCamera = GameObject.Find("ModelCamera");
+        //m_modelCamera = GameObject.Find("ModelCamera");
         //m_modelCamera.GetComponent<SnapshotCamera>().ScreenReadyEvent += new SnapshotCamera.ScreenReadyEventDelegate(ModelWindowHolder_ScreenReadyEvent);
         m_parentSprite = GetComponent<dfTextureSprite>();
     }

@@ -59,7 +59,7 @@ using System.Collections.Generic;
             GameObject panel = GameObject.Find("ShopItemDescriptionLabel");
             detailsPanelLabel = panel.GetComponent<dfRichTextLabel>();
 
-            modelImageSprite = GameObject.Find("ShopItemSpritePanel");
+            modelImageSprite = GameObject.Find("ItemSprite");
 
         }
 
@@ -86,6 +86,10 @@ using System.Collections.Generic;
                 currentSelection = 0;
 
                 scrollIncrement = container.VertScrollbar.MaxValue / shopItems.Count;
+                if (shopItems.Count > 0)
+                {
+                    ItemSelectionChanged(null, shopItems[0]);
+                }
             }
 
         }
@@ -128,10 +132,13 @@ using System.Collections.Generic;
                 detailsPanelLabel.Text = current.Item.Name;
                 detailsPanelLabel.Text = string.Format("<h2 color=\"yellow\">{0}</h1><p>PWR: {1} CON:{2} INI: {3}</p><p><i>{4}</i></p>", current.Name, 10, 10, 10, current.Item.Description);
 
-                GameObject goPrefab = (GameObject)(Resources.Load(GladiusGlobals.ModelsRoot + current.Item.ShortMeshName));
-                if (goPrefab != null)
+
+                string modelPath = GladiusGlobals.ModelsRoot + current.Item.MeshName;
+                //GameObject goPrefab = (GameObject)(Resources.Load(modelPath));
+                GameObject load = Resources.Load(modelPath) as GameObject;
+                if (load != null)
                 {
-                    modelImageSprite.GetComponent<ModelWindowHolder>().AttachedModelPrefabToWindow(goPrefab);
+                    modelImageSprite.GetComponent<ModelWindowHolder>().AttachedModelPrefabToWindow(load);
                 }
                 else
                 {

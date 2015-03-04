@@ -734,7 +734,7 @@ public class MovementGrid : MonoBehaviour
         //renderer.material = new Material(Shader.Find("Transparent/Diffuse"));
         //renderer.material = new Material(Shader.Find("Gladius/UITeamColours"));
 
-        m_meshFilter.renderer.material.mainTexture = m_moveAtlasTexture;
+        m_meshFilter.GetComponent<Renderer>().material.mainTexture = m_moveAtlasTexture;
     }
 
     private void RebuildMeshData()

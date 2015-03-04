@@ -405,7 +405,7 @@ using System.Xml;
         public String MeshName;
         ActorClassAttributes m_mask;
 
-        public ActorClassData(String name, String meshName,ActorClassAttributes mask)
+        public ActorClassData(String name, String meshName, ActorClassAttributes mask)
         {
             Name = name;
             MeshName = meshName;

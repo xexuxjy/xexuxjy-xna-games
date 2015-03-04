@@ -83,6 +83,7 @@ public class UserControl : MonoBehaviour
             {
                 PeformActionOnAxis("PadLeftStickH", ActionButton.Move1Left, ActionButton.Move1Right, ref HaveMovedGrid);
                 PeformActionOnAxis("PadLeftStickV", ActionButton.Move1Down, ActionButton.Move1Up, ref HaveMovedGrid);
+                Vector2 leftJoystickPos = dfTouchJoystick.GetJoystickPosition("TouchJoystickLeft");
             }
             if (HaveMovedGrid)
             {

@@ -58,47 +58,32 @@ public class OverlandCharacterControl : MonoBehaviour
                     break;
                 }
         }
-        if (adjust.sqrMagnitude > 0)
+        UpdateMovement(adjust,false);
+    }
+
+    public void UpdateMovement(Vector3 v,bool scalar)
+    {
+        float vl = v.magnitude;
+        v.Normalize();
+        if (vl > 0)
         {
             float gravity = 10.0f;
 
-            Quaternion q = Quaternion.LookRotation(adjust);
+            Quaternion q = Quaternion.LookRotation(v);
 
-            adjust *= MovementSpeed * Time.deltaTime;
+            v *= vl * MovementSpeed * Time.deltaTime;
 
-            adjust.y = -gravity * Time.deltaTime;
+            v.y = -gravity * Time.deltaTime;
 
-            
             CharacterController cc = GetComponent<CharacterController>();
-            cc.Move(adjust);
-
-            //Vector3 newPosition = transform.position + adjust;
-
-            //Ray r = new Ray(newPosition, Vector3.down);
-            //RaycastHit hitInfo;
-
-            //float distance = 2.0f;
-            //if (collider.Raycast(r, out hitInfo, distance))
-            //{
-            //    if (hitInfo.collider.gameObject.tag == "Floor")
-            //    {
-            //        newPosition.y = hitInfo.point.y;
-            //    }
-
-            //}
-            //transform.position = newPosition;
-            //transform.rotation = q;
-            //PlayRun();
-
+            cc.Move(v);
         }
         else
         {
             PlayIdle();
         }
 
-
     }
-
 
 
     void PlayIdle()
@@ -123,6 +108,12 @@ public class OverlandCharacterControl : MonoBehaviour
     // Update is called once per fame
     void Update()
     {
+        Vector2 leftHandJoystickPosition = dfTouchJoystick.GetJoystickPosition("TouchJoystickLeft");
+        Vector3 v3 = new Vector3(leftHandJoystickPosition.x, 0, leftHandJoystickPosition.y);
+        UpdateMovement(v3,true);
+
+
+
         if (m_overlandGuiController != null && GladiusGlobals.GameStateManager.OverlandStateCommon.GladiatorSchool != null)
         {
             m_overlandGuiController.UpdateData(GladiusGlobals.GameStateManager.OverlandStateCommon.GladiatorSchool);
