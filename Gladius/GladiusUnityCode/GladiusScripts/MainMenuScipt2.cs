@@ -21,11 +21,11 @@ public class MainMenuScipt2 : MonoBehaviour {
     void OnMouseOver()
     {
 
-        if (renderer.material.color.a <= 0)
+        if (GetComponent<Renderer>().material.color.a <= 0)
         {
             adjustUp = true;
         }
-        if (renderer.material.color.a >= 1)
+        if (GetComponent<Renderer>().material.color.a >= 1)
         {
             adjustUp = false;
         }
@@ -36,19 +36,19 @@ public class MainMenuScipt2 : MonoBehaviour {
         if (adjustUp)
         {
 
-            renderer.material.color += c * Time.deltaTime;
+            GetComponent<Renderer>().material.color += c * Time.deltaTime;
         }
         else
         {
-            renderer.material.color -= c * Time.deltaTime;
+            GetComponent<Renderer>().material.color -= c * Time.deltaTime;
         }
     }
 
     void OnMouseExit()
     {
-        Color c = renderer.material.color;
+        Color c = GetComponent<Renderer>().material.color;
         c.a = 1;
-        renderer.material.color = c;
+        GetComponent<Renderer>().material.color = c;
         adjustUp = false;
     }
 

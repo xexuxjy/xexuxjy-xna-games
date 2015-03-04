@@ -27,7 +27,7 @@ public class OverlandCameraControl : MonoBehaviour {
     {
         if (TargetObject != null)
         {
-            Vector3 target = TargetObject.rigidbody.transform.position;
+            Vector3 target = TargetObject.GetComponent<Rigidbody>().transform.position;
             transform.LookAt(target);
             target += LookatOffset;
             transform.position = target;
@@ -38,7 +38,7 @@ public class OverlandCameraControl : MonoBehaviour {
     void SmoothUpdate()
     {
         float deltaTime = Time.deltaTime;
-        Vector3 target = TargetObject.rigidbody.transform.position;
+        Vector3 target = TargetObject.GetComponent<Rigidbody>().transform.position;
         transform.LookAt(target);
 
         target += LookatOffset;
@@ -77,7 +77,7 @@ public class OverlandCameraControl : MonoBehaviour {
 
         // Set the position of the camera on the x-z plane to:
         // distance meters behind the target
-        Vector3 target = TargetObject.rigidbody.transform.position;
+        Vector3 target = TargetObject.GetComponent<Rigidbody>().transform.position;
 
 
         transform.LookAt(target);

@@ -11,11 +11,11 @@ public class RandomAnimation : MonoBehaviour {
 	void Start () 
     {
         Object[] clips = Resources.LoadAll("warriors", typeof(AnimationClip));
-        Debug.Log("Start called. " + animation.GetClipCount()+"  ,  "+clips.Length);
+        Debug.Log("Start called. " + GetComponent<Animation>().GetClipCount()+"  ,  "+clips.Length);
         foreach (var o in clips)
         {
             AnimationClip c = o as AnimationClip;
-            animation.AddClip(c, c.name.Contains("@") ? c.name.Substring(c.name.LastIndexOf("@") + 1) : c.name);
+            GetComponent<Animation>().AddClip(c, c.name.Contains("@") ? c.name.Substring(c.name.LastIndexOf("@") + 1) : c.name);
         }
 
         m_material = Resources.Load("Health", typeof(Material)) as Material;
@@ -40,16 +40,16 @@ public class RandomAnimation : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        if (!animation.isPlaying)
+        if (!GetComponent<Animation>().isPlaying)
         {
             float f = Random.value;
             if (f < 0.5f)
             {
-                animation.Play("w_bow_action");
+                GetComponent<Animation>().Play("w_bow_action");
             }
             else
             {
-                animation.Play("w_death-1");
+                GetComponent<Animation>().Play("w_death-1");
             }
         }
         else

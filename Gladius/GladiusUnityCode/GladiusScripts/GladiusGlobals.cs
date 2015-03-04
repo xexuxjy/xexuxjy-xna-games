@@ -38,7 +38,7 @@ using System.Collections.Generic;
         public static String CharacterModelsRoot = ModelsRoot+"Characters/";
         public static String WeaponModelsRoot = ModelsRoot + "Weapons/";
         public static String ArenaModelsRoot = ModelsRoot + "Arenas/";
-
+        public static String UIRoot = "GladiusUI/";
 
         public static GameStateManager GameStateManager;
         //public static GladiatorSchool GladiatorSchool;

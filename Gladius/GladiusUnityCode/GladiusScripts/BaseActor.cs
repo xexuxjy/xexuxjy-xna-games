@@ -812,7 +812,7 @@ public class BaseActor : MonoBehaviour
         // if the current anim loops, and we have others queued , or anim has finished then jump to next
         //AnimationClip animClip = m_characterGameObject.animation.clip;
 
-        AnimationInfo[] clipState = m_animator.GetCurrentAnimationClipState(0);
+        AnimatorClipInfo[] clipState = m_animator.GetCurrentAnimatorClipInfo(0);
         if (clipState.Length == 0)
         {
             return;
