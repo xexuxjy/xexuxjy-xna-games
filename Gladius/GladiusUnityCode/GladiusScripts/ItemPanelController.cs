@@ -99,23 +99,38 @@ using System.Collections.Generic;
         void Update()
         {
 
-            //// test
-            //if(Input.GetMouseButton(0))
-            //{
-            //    dfControl controlUnderMouse = dfInputManager.ControlUnderMouse;
-            //    if(controlUnderMouse != null)
-            //    {
-            //        GameObject go = controlUnderMouse.gameObject;
-            //        ShopItemGUI shopItemGUI = go.GetComponent<ShopItemGUI>();
-            //        if (shopItemGUI != null)
-            //        {
-            //            ShopItem currentShopItem = shopItemGUI.ShopItem;
-            //            ItemSelectionChanged(lastShopItem, currentShopItem);
-            //        }
-            //        lastControl = controlUnderMouse;
+            // test
+            if (Input.GetMouseButton(0))
+            {
+                dfControl controlUnderMouse = dfInputManager.ControlUnderMouse;
+                if (controlUnderMouse != null)
+                {
+                    GameObject go = FindParentWithName(controlUnderMouse.gameObject,"ItemSlotPanel");
                     
-            //    }
-            //}
+                    ShopItemGUI shopItemGUI = go.GetComponent<ShopItemGUI>();
+                    if (shopItemGUI != null)
+                    {
+                        ShopItem currentShopItem = shopItemGUI.ShopItem;
+                        ItemSelectionChanged(lastShopItem, currentShopItem);
+                    }
+                    lastControl = controlUnderMouse;
+
+                }
+            }
+        }
+
+        public GameObject FindParentWithName(GameObject go, string name)
+        {
+            Transform current = go.transform;
+            while (current != null)
+            {
+                if (current.gameObject.name.StartsWith(name))
+                {
+                    return current.gameObject;
+                }
+                current = current.transform.parent;
+            }
+            return null;
         }
 
         public void ItemSelectionChanged(ShopItem previous, ShopItem current)
