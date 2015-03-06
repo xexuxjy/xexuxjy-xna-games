@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Gladius;
 using System.Collections.Generic;
@@ -26,6 +26,7 @@ public class ArenaStartup : MonoBehaviour
         if (GladiusGlobals.GameStateManager == null)
         {
             GladiusGlobals.GameStateManager = new GameStateManager();
+            GladiusGlobals.GameStateManager.StartGame();
         }
 
         //ActorGenerator.Initialise();

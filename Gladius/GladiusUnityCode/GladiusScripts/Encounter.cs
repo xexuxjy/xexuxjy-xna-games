@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
     public class Encounter 
@@ -26,26 +26,27 @@ using System.Collections.Generic;
                 }
 
                 string[] lineTokens = GladiusGlobals.SplitAndTidyString(line,new char[] { ',', ':' });
-
-                if (lineTokens[0] == "SCHOOL")
-                {
-                    side = new EncounterSide();
-                    Sides.Add(side);
-                    side.School = new GladiatorSchool();
-                    side.School.Load(lineTokens[1]);
-                }
-                else if (lineTokens[0] == "TEAM")
-                {
-                    side.TeamName = lineTokens[1];
-                    //heroName = lineTokens[1];
-                }
-                else if (lineTokens[0] == "GLADIATOR")
-                {
-                    side.ChosenGladiators.Add(lineTokens[1]);
-                }
-            }
-        }
-
+				if(lineTokens.Length > 0)
+				{
+					if (lineTokens[0] == "SCHOOL")
+					{
+						side = new EncounterSide();
+						Sides.Add(side);
+						side.School = new GladiatorSchool();
+						side.School.Load(lineTokens[1]);
+					}
+					else if (lineTokens[0] == "TEAM")
+					{
+						side.TeamName = lineTokens[1];
+						//heroName = lineTokens[1];
+					}
+					else if (lineTokens[0] == "GLADIATOR")
+					{
+						side.ChosenGladiators.Add(lineTokens[1]);
+					}
+            	}
+        	}
+		}
 
 
         public List<EncounterSide> Sides = new List<EncounterSide>();

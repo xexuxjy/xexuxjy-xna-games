@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 using System;
@@ -596,7 +596,7 @@ using System.Xml;
             //Mesh m = Resources.Load<Mesh>(ModelName);
             //MeshFilter mf = m_modelObject.AddComponent<MeshFilter>();
             //mf.mesh = m;
-
+			//ModelScale = new 
             m_modelObject = (GameObject)Instantiate(Resources.Load<GameObject>(PrefabName));
             m_modelObject.name = "Scenery";
             m_modelObject.transform.position = ModelPosition;

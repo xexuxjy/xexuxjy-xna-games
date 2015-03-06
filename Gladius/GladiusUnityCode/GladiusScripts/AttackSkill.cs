@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 using System;
@@ -639,7 +639,7 @@ using System.Xml;
             }
             else if (attrName.Contains("STATUSSITUATIONUNITCONDITION"))
             {
-                status.skillStatusSituationUnitCondition.Add(lineTokens[1]);
+                //status.skillStatusSituationUnitCondition.Add(lineTokens[1]);
             }
             else if (attrName.Contains("STATUSSITUATIONAFFINITYCONDITION"))
             {
