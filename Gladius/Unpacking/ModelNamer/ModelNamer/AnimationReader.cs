@@ -44,8 +44,13 @@ namespace ModelNamer
             for (int i = 0; i < numAnimations; ++i)
             {
                 AnimationData animationData;
+                if (i == 20)
+                {
+                    int ibreak = 0;
+                }
                 if (AnimationData.FromStream(binReader, out animationData))
                 {
+                    animationData.animationName = animNames[i];
                     animations.Add(animationData);
                 }
             }
@@ -219,19 +224,60 @@ namespace ModelNamer
 
         static void Main(string[] args)
         {
-            String filename = @"D:\gladius-extracted-archive\gc-compressed\Animations\File 022821";
-            AnimationReader animationReader = new AnimationReader();
-            using (BinaryReader binReader = new BinaryReader(new FileStream(filename, FileMode.Open)))
+            String rootPath = @"d:\gladius-extracted-archive\xbox-decompressed\";
+            rootPath = @"c:\tmp\gladius-extracted-archive\gladius-extracted-archive\gc-compressed\";
+            String animPath = rootPath + @"Animations\";
+            String infoFile = rootPath + "ModelInfo.txt";
+
+            List<string> filenames = new List<string>();
+
+            //filenames.AddRange(Directory.GetFiles(animPath, "File 000008"));
+            filenames.AddRange(Directory.GetFiles(animPath, "*"));
+
+            List<AnimationReader> readerList = new List<AnimationReader>();
+
+            //String filename = @"D:\gladius-extracted-archive\gc-compressed\Animations\File 022821";
+            foreach (String filename in filenames)
             {
-                animationReader.Read(binReader);
+                AnimationReader animationReader = new AnimationReader();
+                readerList.Add(animationReader);
+                using (BinaryReader binReader = new BinaryReader(new FileStream(filename, FileMode.Open)))
+                {
+                    animationReader.Read(binReader);
+                }
             }
-            //int ibreak = 0;
-            //AnimationReader.DumpAllSectionLengths("c:/tmp/unpacking/PAK1/PAK1", "c:/tmp/unpacking/PAK1/header-results.txt");
 
-            //AnimationReader.DumpAllSectionData(@"D:\gladius-extracted-archive\gc-compressed\Animations", @"D:\gladius-extracted-archive\gc-compressed\Animations-output");
+            foreach (AnimationReader reader in readerList)
+            {
+                foreach (AnimationData data in reader.animations)
+                {
+                    foreach (DCRTItem item in data.dcrtHeaderItems)
+                    {
+                        if (item.m_rawData[0] > 0x03)
+                        {
+                            int ibreak = 0;
+                        }
+
+                        if (item.m_rawData[5] > 0x03)
+                        {
+                            int ibreak = 0;
+                        }
+
+                        if(item.m_rawData[6] != 0x00 || item.m_rawData[7] != 0x00)
+                        {
+                            int ibreak = 0;
+                        }
+
+                        if (item.Val1 > 100)
+                        {
+                            int ibreak = 0;
+                        }
+                    }
+                }
+            }
 
 
-            //new AnimationReader().DumpSectionData(new FileInfo(@"D:\gladius-extracted-archive\gc-compressed\Animations\File 022821"), @"D:\gladius-extracted-archive\gc-compressed\Animations-output");
+
         }
 
     }
@@ -239,10 +285,13 @@ namespace ModelNamer
     public class AnimationData
     {
         public String animationName;
-        List<string> boneList = new List<string>();
-        List<float> timeStepList = new List<float>();
-        List<int> boolList = new List<int>();
+        public List<string> boneList = new List<string>();
+        public List<float> timeStepList = new List<float>();
+        public List<int> boolList = new List<int>();
+        public List<DCRTItem> dcrtHeaderItems = new List<DCRTItem>();
         public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
+
+
 
         public static bool FromStream(BinaryReader reader, out AnimationData animationData)
         {
@@ -257,6 +306,7 @@ namespace ModelNamer
 
        
             // bktm section
+            reader.BaseStream.Position = startStreamPos;
             if (Common.FindCharsInStream(reader, AnimationReader.bktmTag))
             {
                 int sectionLength = reader.ReadInt32();
@@ -267,7 +317,7 @@ namespace ModelNamer
                     animationData.timeStepList.Add(reader.ReadSingle());
                 }
             }
-
+            reader.BaseStream.Position = startStreamPos;
             if (Common.FindCharsInStream(reader, AnimationReader.boolTag))
             {
                 int sectionLength = reader.ReadInt32();
@@ -279,12 +329,9 @@ namespace ModelNamer
                 {
                     animationData.boolList.Add(reader.ReadInt32());
                 }
-
-
             }
-
+            reader.BaseStream.Position = startStreamPos;
             // These 2 seem optional, but always exist together.
-
             if (Common.FindCharsInStream(reader, AnimationReader.dcptTag))
             {
                 int sectionLength = reader.ReadInt32();
@@ -292,27 +339,29 @@ namespace ModelNamer
                 int numBones = reader.ReadInt32();
                 // each entry here is 16 bytes
             }
-
+            reader.BaseStream.Position = startStreamPos;            
             if (Common.FindCharsInStream(reader, AnimationReader.dcpdTag))
             {
                 int sectionLength = reader.ReadInt32();
                 int pad1 = reader.ReadInt32();
                 int numBones = reader.ReadInt32();
                 // each entry here is 16 bytes
-
-
             }
 
-
+            reader.BaseStream.Position = startStreamPos;
             if (Common.FindCharsInStream(reader, AnimationReader.dcrtTag))
             {
                 int sectionLength = reader.ReadInt32();
                 int pad1 = reader.ReadInt32();
-                int numBones = reader.ReadInt32();
-                int i = 0;
-                // each entry here is 8? bytes
+                int numElements = reader.ReadInt32();
+                for (int i = 0; i < numElements; ++i)
+                {
+                    DCRTItem item = DCRTItem.FromStream(reader);
+                    animationData.dcrtHeaderItems.Add(item);
+                }
+                
            }
-
+            reader.BaseStream.Position = startStreamPos;            
             if (Common.FindCharsInStream(reader, AnimationReader.dcrdTag))
             {
                 int sectionLength = reader.ReadInt32();
@@ -322,15 +371,15 @@ namespace ModelNamer
                 // each entry here is 16 bytes
                 int numfloats = 20;
                 List<float> fl = new List<float>();
-                for(int i=0;i<numfloats;++i)
+                for (int i = 0; i < numfloats; ++i)
                 {
                     fl.Add(Common.FromStream2ByteToFloat(reader));
                 }
                 int ibreak = 0;
             }
+            reader.BaseStream.Position = startStreamPos;            
 
-
-            Common.FindCharsInStream(reader, AnimationReader.endTag);
+            Debug.Assert(Common.FindCharsInStream(reader, AnimationReader.endTag));
 
 
             return true;
@@ -374,4 +423,24 @@ namespace ModelNamer
             Common.FindCharsInStream(binReader, AnimationReader.endTag, true);
         }
     }
+
+    public class DCRTItem
+    {
+        public int sectionLength = 8;
+        public byte[] m_rawData;
+        public static DCRTItem FromStream(BinaryReader binReader)
+        {
+            DCRTItem item = new DCRTItem();
+            item.m_rawData = binReader.ReadBytes(item.sectionLength);
+            return item;
+        }
+
+
+        public int Val1
+        {
+            get { return BitConverter.ToInt16(m_rawData, 4); }
+        }
+
+    }
+
 }
