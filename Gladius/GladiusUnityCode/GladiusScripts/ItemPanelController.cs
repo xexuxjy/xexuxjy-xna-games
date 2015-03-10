@@ -44,7 +44,7 @@ using System.Collections.Generic;
             }
 
             previousSelection = currentSelection;
-
+ 
             currentSelection = (int)(shopItems.Count * (sp.VertScrollbar.Value / sp.VertScrollbar.MaxValue));
 
             ItemSelectionChanged(shopItems[previousSelection], shopItems[currentSelection]);
@@ -66,32 +66,34 @@ using System.Collections.Generic;
 
         public void SetData(Shop currentShop)
         {
-            shopItemNames = currentShop.GetItemList();
-            shopItems = new List<ShopItem>();
-
-            dfScrollPanel container = GameObject.Find("ItemPanel").GetComponent<dfScrollPanel>();
-
-            dfPanel itemPanel = itemSlotPrefab.GetComponent<dfPanel>();
-
-            if (container != null)
+            if (currentShop != null)
             {
-                //container.
-                foreach (string itemName in shopItemNames)
+                shopItemNames = currentShop.GetItemList();
+                shopItems = new List<ShopItem>();
+
+                dfScrollPanel container = GameObject.Find("ItemPanel").GetComponent<dfScrollPanel>();
+
+                dfPanel itemPanel = itemSlotPrefab.GetComponent<dfPanel>();
+
+                if (container != null)
                 {
-                    shopItems.Add(new ShopItem(itemName));
-                }
+                    //container.
+                    foreach (string itemName in shopItemNames)
+                    {
+                        shopItems.Add(new ShopItem(itemName));
+                    }
 
-                container.Virtualize<ShopItem>(shopItems, itemPanel);
+                    container.Virtualize<ShopItem>(shopItems, itemPanel);
 
-                currentSelection = 0;
+                    currentSelection = 0;
 
-                scrollIncrement = container.VertScrollbar.MaxValue / shopItems.Count;
-                if (shopItems.Count > 0)
-                {
-                    ItemSelectionChanged(null, shopItems[0]);
+                    scrollIncrement = container.VertScrollbar.MaxValue / shopItems.Count;
+                    if (shopItems.Count > 0)
+                    {
+                        ItemSelectionChanged(null, shopItems[0]);
+                    }
                 }
             }
-
         }
 
 
@@ -106,12 +108,14 @@ using System.Collections.Generic;
                 if (controlUnderMouse != null)
                 {
                     GameObject go = FindParentWithName(controlUnderMouse.gameObject,"ItemSlotPanel");
-                    
-                    ShopItemGUI shopItemGUI = go.GetComponent<ShopItemGUI>();
-                    if (shopItemGUI != null)
+                    if (go != null)
                     {
-                        ShopItem currentShopItem = shopItemGUI.ShopItem;
-                        ItemSelectionChanged(lastShopItem, currentShopItem);
+                        ShopItemGUI shopItemGUI = go.GetComponent<ShopItemGUI>();
+                        if (shopItemGUI != null)
+                        {
+                            ShopItem currentShopItem = shopItemGUI.ShopItem;
+                            ItemSelectionChanged(lastShopItem, currentShopItem);
+                        }
                     }
                     lastControl = controlUnderMouse;
 
