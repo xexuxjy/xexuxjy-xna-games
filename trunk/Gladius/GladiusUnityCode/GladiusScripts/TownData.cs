@@ -16,12 +16,29 @@ public class TownData
     public static TownData FromXml(XmlNode node)
     {
         TownData td = new TownData();
+        td.Shop = new Shop();
+        td.ArenaData = new ArenaData();
+
         td.Name = node.SelectSingleNode("@name").Value;
         td.Region = node.SelectSingleNode("@region").Value;
-        td.ShopFile = node.SelectSingleNode("@shopFile").Value;
-        td.LeagueFile = node.SelectSingleNode("@leagueFile").Value;
         td.BackgroundTextureName = node.SelectSingleNode("@texture").Value;
-        td.Arena = node.SelectSingleNode("@arena").Value;
+
+        td.Shop.ShopFile = node.SelectSingleNode("Shop/@dataFile").Value;
+        td.Shop.OwnerThumbnailName = node.SelectSingleNode("Shop/@owner").Value;
+        if (String.IsNullOrEmpty(td.Shop.OwnerThumbnailName))
+        {
+            td.Shop.OwnerThumbnailName = "GladiusUI/ClassThumbnails/shopkeeper_" + td.Name.ToLower() + ".tga";
+        }
+
+        td.ArenaData.ArenaName = node.SelectSingleNode("Arena/@name").Value;
+        td.ArenaData.LeagueFile = node.SelectSingleNode("Arena/@leagueFile").Value;
+        td.ArenaData.BackgroundTextureName = node.SelectSingleNode("Arena/@texture").Value;
+        td.ArenaData.OwnerThumbnailName = node.SelectSingleNode("Arena/@owner").Value;
+        if (String.IsNullOrEmpty(td.ArenaData.OwnerThumbnailName))
+        {
+            td.ArenaData.OwnerThumbnailName = "GladiusUI/ClassThumbnails/leagueowner_" + td.Name.ToLower() + ".tga";
+        }
+        
         return td;
     }
 
@@ -39,24 +56,15 @@ public class TownData
 
     public void BuildData()
     {
-        if (Shop == null && LeagueData == null)
-        {
-            Shop = ShopManager.Load(ShopFile);
-            LeagueData = LeagueManager.Load(LeagueFile);
-            BackgroundTexture = Resources.Load<Texture2D>(GladiusGlobals.TownsPath + BackgroundTextureName);
-
-        }
+        Shop.LoadData(); 
+        ArenaData.LoadData();
     }
 
 
     public String Name = "A Town";
     public String Region = "Imperia";
-    public String Arena = "";
-    public String ShopFile;
-    public String LeagueFile;
     public String BackgroundTextureName;
-    public Texture2D BackgroundTexture;
     public Shop Shop;
-    public LeagueData LeagueData;
+    public ArenaData ArenaData;
     
 }

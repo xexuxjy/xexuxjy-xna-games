@@ -20,7 +20,8 @@ using System.Collections.Generic;
 
         public static Shop Load(String filename)
         {
-            TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/Shops/ShopAkarAnGeneric");
+            //TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/Shops/ShopAkarAnGeneric");
+            TextAsset textAsset = (TextAsset)Resources.Load(filename);
             if (textAsset != null)
             {
                 Debug.Log("Loading shop file");
@@ -94,6 +95,9 @@ using System.Collections.Generic;
 
     public class Shop
     {
+        public Boolean DataLoaded
+        { get; set; }
+
         public String Name
         { get; set; }
 
@@ -118,6 +122,14 @@ using System.Collections.Generic;
         public int ExitPhrase
         { get; set; }
 
+        public String OwnerThumbnailName
+        { get; set; }
+
+        public Texture OwnerThumnnailTexture
+        { get; set; }
+
+        public String ShopFile
+        { get; set; }
 
         public void AddItemData(String[] data)
         {
@@ -128,8 +140,6 @@ using System.Collections.Generic;
             
             if (!shopItems.TryGetValue(itemName,out shopItem))
             {
-
-
                 itemList.Add(itemName);
                 shopItem = new ShopItem(data[1]);
                 shopItems[shopItem.LongName] = shopItem;
@@ -153,6 +163,80 @@ using System.Collections.Generic;
         {
             return itemList;
         }
+
+
+        public void LoadData()
+        {
+            if (!DataLoaded)
+            {
+                //TextAsset textAsset = (TextAsset)Resources.Load("ExtractedData/Shops/ShopAkarAnGeneric");
+                TextAsset textAsset = (TextAsset)Resources.Load(ShopFile);
+                if (textAsset != null)
+                {
+                    Debug.Log("Loading shop file");
+                    String data = textAsset.text;
+                    ParseExtractedData(data);
+                }
+                DataLoaded = true;
+            }
+        }
+
+
+        public void ParseExtractedData(String data)
+        {
+            String[] allLines = data.Split('\n');
+
+            int counter = 0;
+            char[] splitTokens = new char[] { ':', ',', '\t' };
+
+            while (counter < allLines.Length)
+            {
+                String line = allLines[counter];
+                //if(line.StartsWith("//"))
+                //{
+                //    continue;
+                //}
+                String[] tokens = GladiusGlobals.SplitAndTidyString(line, splitTokens);
+
+                if (line.StartsWith("NAME"))
+                {
+                    String descIdStr = tokens[2];
+                    int shopDescId = int.Parse(descIdStr);
+                    Name = GladiusGlobals.GameStateManager.LocalisationData[shopDescId];
+                }
+                else if (line.StartsWith("IMAGE"))
+                {
+                    Image = tokens[1];
+                }
+                else if (line.StartsWith("SHOPKEEPER"))
+                {
+                    Owner = tokens[1];
+                }
+                else if (line.StartsWith("OPENING"))
+                {
+                    Opening = int.Parse(tokens[1]);
+                }
+                else if (line.StartsWith("SHOPCONFIRM"))
+                {
+                    ShopConfirm = int.Parse(tokens[1]);
+                }
+                else if (line.StartsWith("TALKCONFIRM"))
+                {
+                    TalkConfirm = int.Parse(tokens[1]);
+                }
+                else if (line.StartsWith("EXITPHRASE"))
+                {
+                    ExitPhrase = int.Parse(tokens[1]);
+                }
+                else if (line.StartsWith("ITEM"))
+                {
+                    AddItemData(tokens);
+                }
+                counter++;
+            }
+        }
+
+
 
         List<string> itemList = new List<string>();
         Dictionary<String, ShopItem> shopItems = new Dictionary<String, ShopItem>();

@@ -16,6 +16,7 @@ public class TownGUIController : MonoBehaviour
     BaseGUIPanel m_currentPanel = null;
     TownMenuPanel m_townPanel;
     SchoolMenuPanel m_schoolPanel;
+    ArenaMenuPanel m_arenaMenuPanel;
     LeagueMenuPanel m_leaguePanel;
     ShopMenuPanel m_shopPanel;
     ShopItemMenuPanel m_shopItemPanel;
@@ -28,7 +29,7 @@ public class TownGUIController : MonoBehaviour
     {
         SetupMainMenu();
         SetupSchoolMenu();
-        SetupLeagueMenu();
+        SetupArenaMenu();
         SetupShopMenu();
         SetupCharacterPanel();
         SwitchPanel(m_townPanel);
@@ -65,9 +66,9 @@ public class TownGUIController : MonoBehaviour
         m_schoolPanel = new SchoolMenuPanel(m_townPanel, this);
     }
 
-    public void SetupLeagueMenu()
+    public void SetupArenaMenu()
     {
-        m_leaguePanel = new LeagueMenuPanel(m_townPanel, this);
+        m_arenaMenuPanel = new ArenaMenuPanel(m_townPanel, this);
     }
 
     public void SetupShopMenu()
@@ -121,7 +122,7 @@ public class TownGUIController : MonoBehaviour
 
     }
 
-    void MainMenuLeaguesButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
+    void MainMenuLeagueButtonClick(dfControl control, dfMouseEventArgs mouseEvent)
     {
         SwitchPanel(m_leaguePanel);
     }
@@ -173,33 +174,6 @@ public class TownGUIController : MonoBehaviour
         {
             m_townData = townData;
             m_townData.BuildData();
-
-            dfPanel p = GameObject.Find("MainMenuPanel").GetComponent<dfPanel>();
-            p.GUIManager.BringToFront(p);
-            //p.Position();
-            GameObject.Find("TownTitleLabel").GetComponent<dfRichTextLabel>().Text = m_townData.Name;
-            GameObject.Find("ShopButton").GetComponent<dfButton>().Text = m_townData.Shop.Name;
-            GameObject.Find("LeaguesButton").GetComponent<dfButton>().Text = m_townData.Arena;
-            GameObject.Find("SchoolButton").GetComponent<dfButton>().Text = "School";
-            GameObject.Find("LeaveButton").GetComponent<dfButton>().Text = "Leave Town";
-
-
-            Texture2D bgTexture = m_townData.BackgroundTexture;
-            if (bgTexture != null)
-            {
-                GameObject.Find("TownImage").GetComponent<dfTextureSprite>().Texture = bgTexture;
-            }
-
-
-            //m_townMenuPanel.SetData(townData);
-            //m_schoolMenuPanel.SetData(townData);
-            //m_leagueMenuPanel.SetData(townData);
-            //m_shopMenuPanel.SetData(townData);
-            //m_shopItemPanel.SetData(townData);
-
-
-
-
         }
     }
 
@@ -212,34 +186,20 @@ public class TownGUIController : MonoBehaviour
             Debug.Log("Moving panel : " + m_currentPanel.PanelName + " to " + newPanel.PanelName);
             m_currentPanel.m_panel.RelativePosition = lastPanelPosition;
         }
-
-        newPanel.m_panel.Focus();
-        lastPanelPosition = newPanel.m_panel.RelativePosition;
-        newPanel.m_panel.RelativePosition = new Vector3();
-        newPanel.m_panel.BringToFront();
-        newPanel.SetTownData(m_townData);
+        if (newPanel != null)
+        {
+            newPanel.m_panel.Focus();
+            lastPanelPosition = newPanel.m_panel.RelativePosition;
+            newPanel.m_panel.RelativePosition = new Vector3();
+            newPanel.m_panel.BringToFront();
+            newPanel.SetTownData(m_townData);
+        }
     }
-
-
-
-
 
 
     public void Update()
     {
-        //time += Time.deltaTime;
-        //if (time > maxTime)
-        //{
-        //    time = 0f;
-        //    panelCounter++;
-        //    panelCounter %= m_panelList.Count;
-        //    string newPanelName = m_panelList[panelCounter];
-        //    SwitchPanel(newPanelName);
-        //}
     }
-
-
-
 
 
     private TownData m_townData = null;
@@ -262,7 +222,7 @@ public class TownGUIController : MonoBehaviour
             m_townGuiController = townGuiController;
             m_panel = GameObject.Find(m_panelName).GetComponent<dfPanel>();
 
-            dfControl leaveButton = m_panel.Find(leaveButton);
+            dfControl leaveButton = m_panel.Find(m_leaveName);
             if (leaveButton != null)
             {
                 leaveButton.Click += leaveButton_Click;
@@ -278,7 +238,7 @@ public class TownGUIController : MonoBehaviour
         } 
 
 
-        virtual void SetTownData(TownData townData)
+        public virtual void SetTownData(TownData townData)
         {
         }
 
@@ -291,25 +251,18 @@ public class TownGUIController : MonoBehaviour
         {
         }
 
-        public bool HasLeaveButton
-        {
-            get;
-            set;
-        }
-
-        public abstract String PanelName
-        { get; }
+        public String PanelName
+        { get { return m_panelName; } }
     }
 
     public class TownMenuPanel : BaseGUIPanel
     {
 
         public TownMenuPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
-            : base(parentPanel, townGuiController)
+            : base("MainMenuPanel",parentPanel, townGuiController)
         {
-            m_panel = GameObject.Find("MainMenuPanel").GetComponent<dfPanel>();
             m_buttonList.Add(GameObject.Find("ShopButton").GetComponent<dfButton>());
-            m_buttonList.Add(GameObject.Find("LeaguesButton").GetComponent<dfButton>());
+            m_buttonList.Add(GameObject.Find("ArenaButton").GetComponent<dfButton>());
             m_buttonList.Add(GameObject.Find("SchoolButton").GetComponent<dfButton>());
             m_buttonList.Add(GameObject.Find("LeaveButton").GetComponent<dfButton>());
 
@@ -317,11 +270,6 @@ public class TownGUIController : MonoBehaviour
             m_buttonList[1].Click += TownMenuPanel_Click;
             m_buttonList[2].Click += TownMenuPanel_Click;
             m_buttonList[3].Click += TownMenuPanel_Click;
-        }
-
-        public override string PanelName
-        {
-            get { return "MainMenuPanel"; }
         }
 
         void TownMenuPanel_Click(dfControl control, dfMouseEventArgs mouseEvent)
@@ -334,13 +282,9 @@ public class TownGUIController : MonoBehaviour
             {
                 m_townGuiController.SwitchPanel(m_townGuiController.m_schoolPanel);
             }
-            else if (control.gameObject.name == "LeagueButton")
+            else if (control.gameObject.name == "ArenaButton")
             {
-                m_townGuiController.SwitchPanel(m_townGuiController.m_leaguePanel);
-            }
-            else if (control.gameObject.name == "LeaveButton")
-            {
-                m_townGuiController.SwitchPanel(m_parentPanel);
+                m_townGuiController.SwitchPanel(m_townGuiController.m_arenaMenuPanel);
             }
         }
 
@@ -350,11 +294,32 @@ public class TownGUIController : MonoBehaviour
 
         public override void SetTownData(TownData townData)
         {
-            GameObject.Find("TownTitleLabel").GetComponent<dfRichTextLabel>().Text = townData.Name;
-            GameObject.Find("ShopButton").GetComponent<dfButton>().Text = townData.Shop.Name;
-            GameObject.Find("LeaguesButton").GetComponent<dfButton>().Text = townData.Arena;
-            GameObject.Find("SchoolButton").GetComponent<dfButton>().Text = "School";
-            GameObject.Find("LeaveButton").GetComponent<dfButton>().Text = "Leave Town";
+            m_panel.Find<dfRichTextLabel>("TownTitleLabel").Text = townData.Name;
+            m_panel.Find<dfButton>("ShopButton").Text = townData.Shop.Name;
+            m_panel.Find<dfButton>("ArenaButton").Text = townData.ArenaData.ArenaName;
+            m_panel.Find<dfButton>("SchoolButton").Text = "School";
+            m_panel.Find<dfButton>("LeaveButton").Text = "Leave Town";
+
+            string regionTextureName = "GladiusUI/TownOverland/TownBackground/";
+            switch (townData.Region)
+            {
+                case "expanse":
+                    regionTextureName += "town_headere.tga";
+                    break;
+                case "imperia":
+                    regionTextureName += "town_headeri.tga";
+                    break;
+                case "nordargh":
+                    regionTextureName += "town_headern.tga";
+                    break;
+                case "steppes":
+                    regionTextureName += "town_headers.tga";
+                    break;
+            }
+            m_panel.Find<dfTextureSprite>("TownRegionImage").Texture = Resources.Load<Texture2D>(regionTextureName);
+            m_panel.Find<dfTextureSprite>("TownImage").Texture = Resources.Load<Texture2D>(townData.BackgroundTextureName);
+
+
         }
 
     }
@@ -363,9 +328,8 @@ public class TownGUIController : MonoBehaviour
     public class ShopMenuPanel : BaseGUIPanel
     {
         public ShopMenuPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
-            : base(parentPanel, townGuiController)
+            : base("ShopPanel",parentPanel, townGuiController)
         {
-            m_panel = GameObject.Find("ShopPanel").GetComponent<dfPanel>();
             m_buttonList.Add(GameObject.Find("ShopItemButton").GetComponent<dfButton>());
             m_buttonList.Add(GameObject.Find("ShopChatButton").GetComponent<dfButton>());
             //m_buttonList.Add(GameObject.Find("ShopLeaveButton").GetComponent<dfButton>());
@@ -382,12 +346,6 @@ public class TownGUIController : MonoBehaviour
 
         }
 
-        public override string PanelName
-        {
-            get { return "ShopMenuPanel"; }
-        }
-
-
         void ShopMenuPanel_Click(dfControl control, dfMouseEventArgs mouseEvent)
         {
             if (control.gameObject.name == "ShopItemButton")
@@ -398,9 +356,9 @@ public class TownGUIController : MonoBehaviour
 
         public override void SetTownData(TownData townData)
         {
-            GameObject.Find("ShopPanel/Label").GetComponent<dfLabel>().Text = townData.Shop.Name;
-            GameObject.Find("ShopPanel/ShopKeeperDialogueLabel").GetComponent<dfRichTextLabel>().Text = GladiusGlobals.GameStateManager.LocalisationData[townData.Shop.Opening];
-            GameObject.Find("ShopPanel/TownPicture/Texture").GetComponent<dfTextureSprite>().Texture = Resources.Load<Texture>(townData.Shop.Image);
+            m_panel.Find<dfLabel>("Label").Text = townData.Shop.Name;
+            m_panel.Find<dfRichTextLabel>("ShopKeeperDialogueLabel").Text = GladiusGlobals.GameStateManager.LocalisationData[townData.Shop.Opening];
+            m_panel.FindPath<dfTextureSprite>("TownPicture/Texture").Texture = Resources.Load<Texture>(townData.Shop.Image);
         }
 
     }
@@ -408,14 +366,8 @@ public class TownGUIController : MonoBehaviour
     public class ShopItemMenuPanel : BaseGUIPanel
     {
         public ShopItemMenuPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
-            : base(parentPanel, townGuiController)
+            : base("ShopItemPanel",parentPanel, townGuiController)
         {
-            m_panel = GameObject.Find("ShopItemPanel").GetComponent<dfPanel>();
-        }
-
-        public override string PanelName
-        {
-            get { return "ShopItemPanel"; }
         }
 
         public override void SetTownData(TownData townData)
@@ -424,22 +376,67 @@ public class TownGUIController : MonoBehaviour
         }
     }
 
-    public class LeagueMenuPanel : BaseGUIPanel
+    public class ArenaMenuPanel : BaseGUIPanel
     {
 
-        public LeagueMenuPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
-            : base(parentPanel, townGuiController)
+        public ArenaMenuPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
+            : base("ArenaPanel", parentPanel, townGuiController)
         {
-            m_panel = GameObject.Find("LeaguePanel").GetComponent<dfPanel>();
+            townGuiController.m_leaguePanel = new LeagueMenuPanel(this, townGuiController);
+            m_buttonList.Add(GameObject.Find("ChampionshipButton").GetComponent<dfButton>());
+            m_buttonList.Add(GameObject.Find("TournamentButton").GetComponent<dfButton>());
+            m_buttonList.Add(GameObject.Find("LeaguesButton").GetComponent<dfButton>());
+            m_buttonList.Add(GameObject.Find("RecruitingButton").GetComponent<dfButton>());
+            m_buttonList.Add(GameObject.Find("HistoryButton").GetComponent<dfButton>());
+
+            m_buttonList[0].Click += ArenaMenuPanel_Click;
+            m_buttonList[1].Click += ArenaMenuPanel_Click;
+            m_buttonList[2].Click += ArenaMenuPanel_Click;
+            m_buttonList[3].Click += ArenaMenuPanel_Click;
+            m_buttonList[4].Click += ArenaMenuPanel_Click;
+
         }
 
-        public override string PanelName
+        void ArenaMenuPanel_Click(dfControl control, dfMouseEventArgs mouseEvent)
         {
-            get { return "LeaguePanel"; }
+            if (control.gameObject.name == "ChampionshipButton")
+            {
+                m_townGuiController.SwitchPanel(m_townGuiController.m_leaguePanel);
+            }
+            if (control.gameObject.name == "TournamentButton")
+            {
+                m_townGuiController.SwitchPanel(m_townGuiController.m_leaguePanel);
+            }
+            if (control.gameObject.name == "LeaguesButton")
+            {
+                m_townGuiController.SwitchPanel(m_townGuiController.m_leaguePanel);
+            }
+            
         }
 
         public override void SetTownData(TownData townData)
         {
+            //m_panel.Find<dfLabel>("Label").Text = "League Data";
+            m_panel.Find<dfLabel>("LeagueName").Text = townData.ArenaData.ArenaName;
+            m_panel.Find<dfTextureSprite>("LeagueImage").Texture = Resources.Load<Texture2D>(townData.ArenaData.BackgroundTextureName);
+            m_panel.Find<dfTextureSprite>("OwnerThumbnail").Texture = Resources.Load<Texture2D>(townData.ArenaData.OwnerThumbnailName);
+        }
+    }
+
+
+
+    public class LeagueMenuPanel : BaseGUIPanel
+    {
+
+        public LeagueMenuPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
+            : base("LeaguePanel",parentPanel, townGuiController)
+        {
+        }
+
+        public override void SetTownData(TownData townData)
+        {
+            //m_panel.Find<dfLabel>("Label").Text = "League Data";
+            m_panel.Find<dfLabel>("Label").Text = townData.ArenaData.ArenaName;
 
         }
     }
@@ -447,14 +444,8 @@ public class TownGUIController : MonoBehaviour
     public class SchoolMenuPanel : BaseGUIPanel
     {
         public SchoolMenuPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
-            : base(parentPanel, townGuiController)
+            : base("SchoolPanel",parentPanel, townGuiController)
         {
-            m_panel = GameObject.Find("SchoolPanel").GetComponent<dfPanel>();
-        }
-
-        public override string PanelName
-        {
-            get { return "SchoolPanel"; }
         }
 
         public override void SetTownData(TownData townData)
@@ -468,52 +459,46 @@ public class TownGUIController : MonoBehaviour
     public class CharacterPanel : BaseGUIPanel
     {
         public CharacterPanel(BaseGUIPanel parentPanel, TownGUIController townGuiController)
-            : base(parentPanel, townGuiController)
+            : base("CharacterPanel",parentPanel, townGuiController)
         {
-            m_panel = GameObject.Find("CharacterPanel").GetComponent<dfPanel>();
-            GameObject.Find(PanelName + "/StatsPanel/LevelPanel/Label").GetComponent<dfLabel>().Text = "LVL";
-            GameObject.Find(PanelName + "/StatsPanel/XPPanel/Label").GetComponent<dfLabel>().Text = "XP";
-            GameObject.Find(PanelName + "/StatsPanel/NextXPPanel/Label").GetComponent<dfLabel>().Text = "NEXT";
-            GameObject.Find(PanelName + "/StatsPanel/HPPanel/Label").GetComponent<dfLabel>().Text = "HP";
-            GameObject.Find(PanelName + "/StatsPanel/DAMPanel/Label").GetComponent<dfLabel>().Text = "DAM";
-            GameObject.Find(PanelName + "/StatsPanel/PWRPanel/Label").GetComponent<dfLabel>().Text = "PWR";
-            GameObject.Find(PanelName + "/StatsPanel/ACCPanel/Label").GetComponent<dfLabel>().Text = "ACC";
-            GameObject.Find(PanelName + "/StatsPanel/DEFPanel/Label").GetComponent<dfLabel>().Text = "DEF";
-            GameObject.Find(PanelName + "/StatsPanel/INIPanel/Label").GetComponent<dfLabel>().Text = "INI";
-            GameObject.Find(PanelName + "/StatsPanel/CONPanel/Label").GetComponent<dfLabel>().Text = "CON";
-            GameObject.Find(PanelName + "/StatsPanel/MOVPanel/Label").GetComponent<dfLabel>().Text = "MOV";
-            GameObject.Find(PanelName + "/StatsPanel/ArmourPanel/Label").GetComponent<dfLabel>().Text = "Arm";
-            GameObject.Find(PanelName + "/StatsPanel/WeaponPanel/Label").GetComponent<dfLabel>().Text = "Wpn";
-        }
-
-        public override string PanelName
-        {
-            get { return "CharacterPanel"; }
+            m_panel.FindPath<dfLabel>("StatsPanel/LevelPanel/Label").Text = "LVL";
+            m_panel.FindPath<dfLabel>("StatsPanel/XPPanel/Label").Text = "XP";
+            m_panel.FindPath<dfLabel>("StatsPanel/NextXPPanel/Label").Text = "NEXT";
+            m_panel.FindPath<dfLabel>("StatsPanel/HPPanel/Label").Text = "HP";
+            m_panel.FindPath<dfLabel>("StatsPanel/DAMPanel/Label").Text = "DAM";
+            m_panel.FindPath<dfLabel>("StatsPanel/PWRPanel/Label").Text = "PWR";
+            m_panel.FindPath<dfLabel>("StatsPanel/ACCPanel/Label").Text = "ACC";
+            m_panel.FindPath<dfLabel>("StatsPanel/DEFPanel/Label").Text = "DEF";
+            m_panel.FindPath<dfLabel>("StatsPanel/INIPanel/Label").Text = "INI";
+            m_panel.FindPath<dfLabel>("StatsPanel/CONPanel/Label").Text = "CON";
+            m_panel.FindPath<dfLabel>("StatsPanel/MOVPanel/Label").Text = "MOV";
+            m_panel.FindPath<dfLabel>("StatsPanel/ArmourPanel/Label").Text = "Arm";
+            m_panel.FindPath<dfLabel>("StatsPanel/WeaponPanel/Label").Text = "Wpn";
         }
 
         public override void SetCharacterData(CharacterData characterData)
         {
-            GameObject.Find(PanelName + "NameAndClass").GetComponent<dfRichTextLabel>().Text = "" + characterData.Name + "\n"+characterData.ActorClass;
-            //GameObject.Find(PanelName + "NameAndClass").GetComponent<dfRichTextLabel>().Text = "" + characterData.Name;
-            GameObject.Find(PanelName + "/StatsPanel/LevelPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.Level;
-            GameObject.Find(PanelName + "/StatsPanel/XPPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.XP;
-            GameObject.Find(PanelName + "/StatsPanel/NextXPPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.NEXTXP;
-            GameObject.Find(PanelName + "/StatsPanel/HPPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.HP;
-            GameObject.Find(PanelName + "/StatsPanel/DAMPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.DAM;
-            GameObject.Find(PanelName + "/StatsPanel/PWRPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.PWR;
-            GameObject.Find(PanelName + "/StatsPanel/ACCPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.ACC;
-            GameObject.Find(PanelName + "/StatsPanel/DEFPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.DEF;
-            GameObject.Find(PanelName + "/StatsPanel/INIPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.INI;
-            GameObject.Find(PanelName + "/StatsPanel/CONPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.CON;
-            GameObject.Find(PanelName + "/StatsPanel/MOVPanel/Value").GetComponent<dfLabel>().Text = "" + characterData.MOV;
-            GameObject.Find(PanelName + "/StatsPanel/ArmourPanel/Value").GetComponent<dfLabel>().Text = "" + "armour";
-            GameObject.Find(PanelName + "/StatsPanel/WeaponPanel/Value").GetComponent<dfLabel>().Text = "" + "weapon";
+            m_panel.FindPath<dfRichTextLabel>("NameAndClass").GetComponent<dfRichTextLabel>().Text = "" + characterData.Name + "\n" + characterData.ActorClass;
+            //GameObject.FindPath(PanelName + "NameAndClass").GetComponent<dfRichTextLabel>().Text = "" + characterData.Name;
+            m_panel.FindPath<dfLabel>("StatsPanel/LevelPanel/Value").Text = "" + characterData.Level;
+            m_panel.FindPath<dfLabel>("StatsPanel/XPPanel/Value").Text = "" + characterData.XP;
+            m_panel.FindPath<dfLabel>("StatsPanel/NextXPPanel/Value").Text = "" + characterData.NEXTXP;
+            m_panel.FindPath<dfLabel>("StatsPanel/HPPanel/Value").Text = "" + characterData.HP;
+            m_panel.FindPath<dfLabel>("StatsPanel/DAMPanel/Value").Text = "" + characterData.DAM;
+            m_panel.FindPath<dfLabel>("StatsPanel/PWRPanel/Value").Text = "" + characterData.PWR;
+            m_panel.FindPath<dfLabel>("StatsPanel/ACCPanel/Value").Text = "" + characterData.ACC;
+            m_panel.FindPath<dfLabel>("StatsPanel/DEFPanel/Value").Text = "" + characterData.DEF;
+            m_panel.FindPath<dfLabel>("StatsPanel/INIPanel/Value").Text = "" + characterData.INI;
+            m_panel.FindPath<dfLabel>("StatsPanel/CONPanel/Value").Text = "" + characterData.CON;
+            m_panel.FindPath<dfLabel>("StatsPanel/MOVPanel/Value").Text = "" + characterData.MOV;
+            m_panel.FindPath<dfLabel>("StatsPanel/ArmourPanel/Value").Text = "" + "armour";
+            m_panel.FindPath<dfLabel>("StatsPanel/WeaponPanel/Value").Text = "" + "weapon";
 
             // Try and get a class image?
             Texture2D classTex = Resources.Load<Texture2D>(GladiusGlobals.UIRoot+"ClassImages/"+characterData.ActorClassData.MeshName);
             if(classTex != null)
             {
-                GameObject.Find(PanelName + "CharacterSprite").GetComponent<dfTextureSprite>().Texture = classTex;
+                m_panel.FindPath<dfTextureSprite>("CharacterSprite").Texture = classTex;
             }
 
         }
