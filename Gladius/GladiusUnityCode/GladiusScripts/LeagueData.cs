@@ -34,7 +34,7 @@ public class ArenaData
     public String OwnerThumbnailName
     { get; set; }
 
-    public Texture OwnerThumnnailTexture
+    public Texture OwnerThumbnailTexture
     { get; set; }
 
     public int LeaguePointsNeeded
@@ -139,12 +139,12 @@ public class ArenaData
             {
                 encounter = new ArenaEncounter();
                 encounter.Name = tokens[1];
-                encounter.Id = tokens[2];
+                encounter.Id = int.Parse(tokens[2]);
                 leagueData.ArenaEncounters.Add(encounter);
             }
             else if (tokens[0] == ("LEAGUEDESC"))
             {
-                leagueData.DescriptionId = tokens[1];
+                leagueData.DescriptionId = int.Parse(tokens[1]);
             }
             else if (tokens[0] == ("LEAGUEPTS"))
             {
@@ -231,6 +231,11 @@ public class ArenaData
                 //    Debug.LogError("unexpected prize tier : " + tokens[1]);
                 //}
             }
+            else if (tokens[0] == ("ENCDESC"))
+            {
+                encounter.EncounterDescId = int.Parse(tokens[1]);
+            }
+
         }
     }
 
@@ -332,8 +337,12 @@ public class ArenaEncounter
 
     public string Name
     { get; set; }
-    public string Id
+    public int Id
     { get; set; }
+
+    public int EncounterDescId
+    { get; set; }
+
     public string EncounterFile
     { get; set; }
     public int EncounterPoints
@@ -404,10 +413,13 @@ public class ArenaEncounter
     public String Name
     { get; set; }
 
+    public String ImageName
+    { get; set; }
+
     public String Id
     { get; set; }
 
-    public String DescriptionId
+    public int DescriptionId
     { get; set; }
 
     public int LeaguePoints
@@ -465,20 +477,20 @@ public class ArenaEncounter
 
 public static class LeagueManager
 {
-    public static ArenaData Load(String path)
-    {
-        TextAsset textAsset = (TextAsset)Resources.Load(path);
-        if (textAsset != null)
-        {
-            Debug.Log("Loading ArenaData file : "+path);
-            String data = textAsset.text;
-            return ParseExtractedData(data);
-        }
-        return null;
-    }
+    //public static ArenaData Load(String path)
+    //{
+    //    TextAsset textAsset = (TextAsset)Resources.Load(path);
+    //    if (textAsset != null)
+    //    {
+    //        Debug.Log("Loading ArenaData file : "+path);
+    //        String data = textAsset.text;
+    //        return ParseExtractedData(data);
+    //    }
+    //    return null;
+    //}
 
 
-    public static ArenaData ParseExtractedData(String data)
+    public static ArenaData ParseExtractedData3(String data)
     {
         String[] allLines = data.Split('\n');
 
@@ -551,12 +563,12 @@ public static class LeagueManager
             {
                 encounter = new ArenaEncounter();
                 encounter.Name = tokens[1];
-                encounter.Id = tokens[2];
+                encounter.Id = int.Parse(tokens[2]);
                 leagueData.ArenaEncounters.Add(encounter);
             }
             else if (tokens[0] == ("LEAGUEDESC"))
             {
-                leagueData.DescriptionId = tokens[1];
+                leagueData.DescriptionId = int.Parse(tokens[1]);
 
             }
             else if (tokens[0] == ("LEAGUEPTS"))

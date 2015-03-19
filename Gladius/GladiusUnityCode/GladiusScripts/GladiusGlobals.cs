@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 //namespace Gladius
 //{
@@ -269,5 +270,8 @@ using System.Collections.Generic;
 
 
     }
+
+
+public class DebugUtils { [Conditional("DEBUG")] public static void Assert(bool condition) { if (!condition) throw new Exception(); } }
 
 //}
