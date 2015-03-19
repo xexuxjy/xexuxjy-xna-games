@@ -36,7 +36,7 @@ public class TownData
         td.ArenaData.OwnerThumbnailName = node.SelectSingleNode("Arena/@owner").Value;
         if (String.IsNullOrEmpty(td.ArenaData.OwnerThumbnailName))
         {
-            td.ArenaData.OwnerThumbnailName = "GladiusUI/ClassThumbnails/leagueowner_" + td.Name.ToLower() + ".tga";
+            td.ArenaData.OwnerThumbnailName = "leagueowner_" + td.Name.ToLower() + ".tga";
         }
         
         return td;
