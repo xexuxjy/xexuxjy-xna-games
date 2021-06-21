@@ -997,10 +997,10 @@ public class BoneNode
     {
         BoneNode node = new BoneNode();
         node.offset = Common.FromStreamVector3(binReader);
-        GladiusGlobals.AdjustV3(ref node.offset);
+        //GladiusGlobals.AdjustV3(ref node.offset);
 
         node.rotation = Common.FromStreamQuaternion(binReader);
-        GladiusGlobals.AdjustQuaternion(ref node.rotation);
+        //GladiusGlobals.AdjustQuaternion(ref node.rotation);
 
         node.Type = binReader.ReadByte();
         node.Index = binReader.ReadByte();

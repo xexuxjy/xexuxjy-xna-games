@@ -355,18 +355,20 @@ namespace Assets.Editor
                         go.transform.localPosition = bn.offset;
                         go.transform.localRotation = bn.rotation;
 
-                        Quaternion q = bn.rotation;
-                        //q.x *= -1.0f;
-                        go.transform.localRotation = q;
+                        bool debugBones = false;
+                        GameObject sphere = debugBones?GameObject.CreatePrimitive(PrimitiveType.Sphere):null;
+                        
 
-                        //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        //sphere.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-
-                        //sphere.transform.SetParent(go.transform);
                         if (bn.parent != null)
                         {
                             GameObject parentGo = boneObjectMap[bn.parent];
-                            go.transform.SetParent(parentGo.transform);
+                            go.transform.SetParent(parentGo.transform,false);
+                            if(sphere != null)
+                            {
+                                sphere.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                                sphere.transform.localPosition = bn.offset;
+                                sphere.transform.SetParent(parentGo.transform, false);
+                            }
                         }
 
                         go.transform.localPosition = bn.offset;
