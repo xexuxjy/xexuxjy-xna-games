@@ -13,8 +13,10 @@ namespace Assets.Editor
     //http://answers.unity3d.com/questions/600046/importing-custom-assets.html
     public class XboxModelProcessor : AssetPostprocessor
     {
+        public static bool MERGE_MESH = true;
         public const string m_extension = ".mdl";
         public const string m_newExtension = ".asset";
+        public const string OriginalModelDirectory = "XboxModels";
 
         public static bool HasExtension(string asset)
         {
@@ -49,16 +51,26 @@ namespace Assets.Editor
             }
         }
 
+        static void ImportMyAsset(string asset)
+        {
+            ImportXBoxModel(asset);
+        }
 
 
 
-        public static GameObject CreateSubMesh(CommonModelData model, CommonMeshData submesh)
+        public static GameObject CreateSubMesh(CommonModelData commonModel, CommonMeshData submesh, string name)
         {
             GameObject submeshObject = new GameObject();
+            string fullName = commonModel.Name + name;
 
+            submeshObject.name = fullName;
+            if(submesh.Index == 9)
+            {
+                int ibreak = 0;
+            }
             MeshFilter mf = submeshObject.AddComponent<MeshFilter>();
             Renderer renderer = null;
-            if (model.Skinned)
+            if (commonModel.Skinned)
             {
                 renderer = submeshObject.AddComponent<SkinnedMeshRenderer>();
             }
@@ -68,8 +80,8 @@ namespace Assets.Editor
             }
             
 
-            CommonMaterialData commonMaterial = model.CommonMaterials[submesh.MaterialId];
-            Material m = GetOrCreateMaterial(model, commonMaterial);
+            CommonMaterialData commonMaterial = commonModel.CommonMaterials[submesh.MaterialId];
+            Material m = GetOrCreateMaterial(commonModel, commonMaterial, submesh);
             if (m != null)
             {
                 renderer.material = m;
@@ -85,7 +97,7 @@ namespace Assets.Editor
             mesh.vertices = new Vector3[submesh.Vertices.Count];
             for (int i = 0; i < tempPos.Length; ++i)
             {
-                Vector3 pos = model.VertexDataLists[0].VertexData[submesh.Vertices[i]].Position;
+                Vector3 pos = commonModel.AllVertices[submesh.Vertices[i]].Position;
                 tempPos[i] = pos;
             }
 
@@ -93,14 +105,38 @@ namespace Assets.Editor
             //mesh.normals = new Vector3[submesh.Vertices.Count];
             for (int i = 0; i < tempNormal.Length; ++i)
             {
-                tempNormal[i] = model.VertexDataLists[0].VertexData[submesh.Vertices[i]].Normal;
+                tempNormal[i] = commonModel.AllVertices[submesh.Vertices[i]].Normal;
             }
 
             Vector2[] tempUV = new Vector2[submesh.Vertices.Count];
+            float maxy = 1.0f;
             for (int i = 0; i < tempUV.Length; ++i)
             {
-                Vector2 uv = model.VertexDataLists[0].VertexData[submesh.Vertices[i]].UV;
+                Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV;
                 tempUV[i] = new Vector2(uv.x, 1.0f - uv.y);
+                maxy = Math.Max(maxy, uv.y);
+            }
+            for (int i = 0; i < tempUV.Length; ++i)
+            {
+                Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV;
+                tempUV[i] = new Vector2(uv.x, maxy - uv.y);
+            }
+            Vector2[] tempUV2 = null;
+            if (commonModel.HasUV2)
+            {
+                tempUV2 = new Vector2[submesh.Vertices.Count];
+                maxy = 1.0f;
+                for (int i = 0; i < tempUV.Length; ++i)
+                {
+                    Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV2;
+                    tempUV2[i] = new Vector2(uv.x, 1.0f - uv.y);
+                    maxy = Math.Max(maxy, uv.y);
+                }
+                for (int i = 0; i < tempUV.Length; ++i)
+                {
+                    Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV2;
+                    tempUV2[i] = new Vector2(uv.x, maxy - uv.y);
+                }
             }
 
             int[] tempTriangles = new int[submesh.Indices.Count];
@@ -116,40 +152,78 @@ namespace Assets.Editor
             mesh.uv = tempUV;
             mesh.triangles = tempTriangles;
 
-            if (model.Skinned)
+            if (commonModel.HasUV2)
+            {
+                mesh.uv2 = tempUV2;
+            }
+            if (commonModel.HasColor)
+            {
+                Color[] tempColors = new Color[submesh.Vertices.Count];
+                for (int i = 0; i < tempPos.Length; ++i)
+                {
+                    Color color = commonModel.AllVertices[submesh.Vertices[i]].DiffuseColor;
+                    tempColors[i] = color;
+                }
+                mesh.colors = tempColors;
+            }
+            if (commonModel.Skinned)
             {
                 BoneWeight[] tempBoneWeights = new BoneWeight[mesh.vertices.Length];
                 for (int i = 0; i < tempBoneWeights.Length; ++i)
                 {
                     BoneWeight bw = new BoneWeight();
-                    var vertex = model.VertexDataLists[0].VertexData[submesh.Vertices[i]];
+                    var vertex = commonModel.AllVertices[submesh.Vertices[i]];
+                    vertex.TranslatedBoneIndices = new short[vertex.BoneIndices.Length];
+                    for(int j=0; j < vertex.BoneIndices.Length;++j)
+                    {
+                        int originalBoneId = -1;
+                        originalBoneId = commonModel.XBoxModel.AdjustBone(vertex.BoneIndices[j], submesh.Index);
+                        vertex.TranslatedBoneIndices[j] = (short)originalBoneId;
+                    }
                     int numWeights = vertex.ActiveWeights();
+                    float sum = 0.0f;
                     if (numWeights > 0)
                     {
                         bw.weight0 = vertex.Weight(0);
                         bw.boneIndex0 = vertex.TranslatedBoneIndices[0];
+                        sum += vertex.Weight(0);
                     }
                     if (numWeights > 1)
                     {
                         bw.weight1 = vertex.Weight(1);
                         bw.boneIndex1 = vertex.TranslatedBoneIndices[1];
+                        sum += vertex.Weight(1);
                     }
                     if (numWeights > 2)
                     {
                         bw.weight2 = vertex.Weight(2);
                         bw.boneIndex2 = vertex.TranslatedBoneIndices[2];
+                        sum += vertex.Weight(2);
                     }
                     if (numWeights > 3)
                     {
                         bw.weight3 = vertex.Weight(3);
                         bw.boneIndex3 = vertex.TranslatedBoneIndices[3];
+                        sum += vertex.Weight(3);
                     }
                     tempBoneWeights[i] = bw;
+                    if (sum > 1.01f)
+                    {
+                        int ibreak = 0;
+                    }
                 }
                 mesh.boneWeights = tempBoneWeights;
             }
 
+            if (commonMaterial.IsTwoSided)
+            {
+                Mesh invertedMesh = CreateInvertedMesh(mesh);
+                Mesh combinedMesh = CombineMeshes(mesh, invertedMesh, commonModel,false);
+                mesh = combinedMesh;
+            }
 
+            mesh.name = fullName;
+            mf.sharedMesh = mesh;
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
 
@@ -160,38 +234,91 @@ namespace Assets.Editor
             return submeshObject;
         }
 
+        public static Mesh CombineMeshes(Mesh mesh, Mesh invertedMesh,CommonModelData commonModel,bool remapBones = true)
+        {
+            List<Mesh> originalMeshes = new List<Mesh>();
+            originalMeshes.Add(mesh);
+            originalMeshes.Add(invertedMesh);
+            Dictionary<int, int> boneConversionDictionary = new Dictionary<int, int>();
+            List<BoneNode> remappedBoneNodeList = new List<BoneNode>();
+            List<Mesh> combinedMeshes = MergeMesh(true, originalMeshes.ToArray(), boneConversionDictionary, commonModel.BoneList, remappedBoneNodeList,remapBones);
+            return combinedMeshes[0];
+        }
+        public static Mesh CreateInvertedMesh(Mesh mesh)
+        {
+            Vector3[] normals = mesh.normals;
+            Vector3[] invertedNormals = new Vector3[normals.Length];
+            for (int i = 0; i < invertedNormals.Length; i++)
+            {
+                invertedNormals[i] = -normals[i];
+            }
+            return new Mesh
+            {
+                vertices = mesh.vertices,
+                uv = mesh.uv,
+                uv2 = mesh.uv2,
+                colors = mesh.colors,
+                boneWeights = mesh.boneWeights,
+                bindposes = mesh.bindposes,
+                normals = invertedNormals,
+                triangles = mesh.triangles.Reverse().ToArray()
+            };
+        }
         // merge basic mesh properties.
         // assume that submesh list is filtered my material
-        public static Mesh MergeMesh(MeshFilter[] subMeshList,Dictionary<int,int> boneConversionDictionary,List<BoneNode> originalBoneNodeList, List<BoneNode> remappedBoneNodeList)
+        public static List<Mesh> MergeMesh(bool merge, Mesh[] meshes, Dictionary<int, int> boneConversionDictionary, List<BoneNode> originalBoneNodeList, List<BoneNode> remappedBoneNodeList,bool remapBones=true)
         {
-            Mesh mergedMesh = new Mesh();
+            List<Mesh> mergedMeshes = new List<Mesh>();
             List<Vector3> vertices = new List<Vector3>();
             List<Vector3> normals = new List<Vector3>();
             List<Vector2> uvs = new List<Vector2>();
+            List<Vector2> uv2s = new List<Vector2>();
             List<int> triangles = new List<int>();
             List<BoneWeight> boneWeights = new List<BoneWeight>();
-
+            List<Color> colors = new List<Color>();
 
 
             int vertexOffset = 0;
 
-            foreach (MeshFilter subMesh in subMeshList)
+            foreach (Mesh subMesh in meshes)
             {
-                vertices.AddRange(subMesh.sharedMesh.vertices);
-                normals.AddRange(subMesh.sharedMesh.normals);
-                uvs.AddRange(subMesh.sharedMesh.uv);
-                if (subMesh.sharedMesh.boneWeights != null)
+                if (!merge)
+                {
+                    vertices.Clear();
+                    normals.Clear();
+                    uvs.Clear();
+                    uv2s.Clear();
+                    triangles.Clear();
+                    boneWeights.Clear();
+                    colors.Clear();
+                    vertexOffset = 0;
+                }
+                vertices.AddRange(subMesh.vertices);
+                normals.AddRange(subMesh.normals);
+                uvs.AddRange(subMesh.uv);
+                if (subMesh.uv2 != null)
+                {
+                    uv2s.AddRange(subMesh.uv2);
+                }
+                if (subMesh.colors != null)
+                {
+                    colors.AddRange(subMesh.colors);
+                }
+                if (subMesh.boneWeights != null)
                 {
                     //
                     //foreach(BoneWeight bw in subMesh.sharedMesh.boneWeights)
-                    BoneWeight[] bonesCopy = new BoneWeight[subMesh.sharedMesh.boneWeights.Length];
-                    for (int i = 0; i < subMesh.sharedMesh.boneWeights.Length; ++i)
+                    BoneWeight[] bonesCopy = new BoneWeight[subMesh.boneWeights.Length];
+                    for (int i = 0; i < subMesh.boneWeights.Length; ++i)
                     {
-                        BoneWeight bw = subMesh.sharedMesh.boneWeights[i];
+                        BoneWeight bw = subMesh.boneWeights[i];
+                        if (remapBones)
+                        {
                         bw.boneIndex0 = RemapBone(bw.boneIndex0, bw.weight0, boneConversionDictionary, originalBoneNodeList, remappedBoneNodeList);
                         bw.boneIndex1 = RemapBone(bw.boneIndex1, bw.weight1, boneConversionDictionary, originalBoneNodeList, remappedBoneNodeList);
                         bw.boneIndex2 = RemapBone(bw.boneIndex2, bw.weight2, boneConversionDictionary, originalBoneNodeList, remappedBoneNodeList);
                         bw.boneIndex3 = RemapBone(bw.boneIndex3, bw.weight3, boneConversionDictionary, originalBoneNodeList, remappedBoneNodeList);
+                        }
                         //subMesh.sharedMesh.boneWeights[i] = bw;
                         bonesCopy[i] = bw;
 
@@ -200,21 +327,53 @@ namespace Assets.Editor
                     boneWeights.AddRange(bonesCopy);
                 }
 
-                for (int i = 0; i < subMesh.sharedMesh.triangles.Length; ++i)
+                for (int i = 0; i < subMesh.triangles.Length; ++i)
                 {
-                    triangles.Add(vertexOffset + subMesh.sharedMesh.triangles[i]);
+                    triangles.Add(vertexOffset + subMesh.triangles[i]);
                 }
-                vertexOffset += subMesh.sharedMesh.vertices.Length;
+                vertexOffset += subMesh.vertices.Length;
+                if (!merge)
+                {
+                    Mesh mergedMesh = new Mesh();
+                    mergedMesh.vertices = vertices.ToArray();
+                    mergedMesh.triangles = triangles.ToArray();
+                    mergedMesh.normals = normals.ToArray();
+                    mergedMesh.uv = uvs.ToArray();
+                    mergedMesh.boneWeights = boneWeights.ToArray();
+                    if (uv2s.Count > 0)
+                    {
+                        mergedMesh.uv2 = uv2s.ToArray();
+                    }
+                    if (colors.Count > 0)
+                    {
+                        mergedMesh.colors = colors.ToArray();
+                    }
+                    mergedMeshes.Add(mergedMesh);
+                }
             }
 
+            bool validMesh = !(vertices.Count == 0 || triangles.Count == 0 || normals.Count == 0 || uvs.Count == 0);
+            if (validMesh && merge)
+            {
+                Mesh mergedMesh = new Mesh();
             mergedMesh.vertices = vertices.ToArray();
             mergedMesh.triangles = triangles.ToArray();
             mergedMesh.normals = normals.ToArray();
             mergedMesh.uv = uvs.ToArray();
             mergedMesh.boneWeights = boneWeights.ToArray();
 
+                if (uv2s.Count > 0)
+                {
+                    mergedMesh.uv2 = uv2s.ToArray();
+                }
+                if (colors.Count > 0)
+                {
+                    mergedMesh.colors = colors.ToArray();
+                }
 
-            return mergedMesh;
+                mergedMeshes.Add(mergedMesh);
+            }
+            return mergedMeshes;
 
         }
 
@@ -236,272 +395,507 @@ namespace Assets.Editor
         public static Dictionary<CommonMaterialData, List<CommonMeshData>> SplitByMaterial(CommonModelData model)
         {
             Dictionary<CommonMaterialData, List<CommonMeshData>> result = new Dictionary<CommonMaterialData, List<CommonMeshData>>();
-            foreach (CommonMeshData dlh in model.CommonMeshData)
+            foreach (CommonMeshData mesh in model.CommonMeshData)
             {
-                if (dlh.MaterialId >= 0 && dlh.MaterialId < model.CommonMaterials.Count)
+                CommonMaterialData materialData = model.CommonMaterials[mesh.MaterialId];
+                List<CommonMeshData> listResult = null;
+                if (!result.TryGetValue(materialData, out listResult))
                 {
-                    CommonMaterialData cmd = model.CommonMaterials[dlh.MaterialId];
-                    ;// model.gedlh.MaterialId
-                    List<CommonMeshData> listResult = null;
-                    if (!result.TryGetValue(cmd, out listResult))
-                    {
-                        listResult = new List<CommonMeshData>();
-                        result[cmd] = listResult;
-                    }
-
-                    listResult.Add(dlh);
+                    listResult = new List<CommonMeshData>();
+                    result[materialData] = listResult;
                 }
+
+                listResult.Add(mesh);
             }
             return result;
         }
 
-        public static Material GetOrCreateMaterial(CommonModelData model, CommonMaterialData sd)
+        static string TidyTextureName(string texturename)
         {
-            //String materialName = sd.te
-            CommonTextureData textureData1 = sd.TextureData1;
-            CommonTextureData textureData2 = sd.TextureData2;
-            Material m = null;
-            if (textureData1 != null)
+            if (texturename != null)
             {
-                try
-                {
-                    String tex2Name = textureData2 != null ? ("-" + textureData2.textureName) : "";
-                    String materialname = textureData1.textureName + tex2Name;
-                    materialname = GladiusGlobals.StripTextureExtension(materialname);
+                texturename = texturename.Replace(".png", "");
+                texturename = texturename.Replace(".tga", "");
+            }
+            return texturename;
+        }
 
-                    m = Resources.Load<Material>("Materials/" + materialname);
+        static string TidyMaterialName(string texturename)
+        {
+            if (texturename != null)
+            {
+                texturename = texturename.Replace(".tga", "");
+                texturename = texturename.Replace(".png", "");
+            }
+            return texturename;
+        }
+
+        static Dictionary<String, Material> TempMaterialStore = new Dictionary<string, Material>();
+
+
+        public static Material GetOrCreateMaterial(CommonModelData modelData, CommonMaterialData materialData, CommonMeshData commonMeshData)
+        {
+            Debug.Log("GetOrCreatingMaterial " + materialData.Name);
+            //String materialName = sd.te
+            CommonTextureData textureData1 = materialData.TextureData1;
+            CommonTextureData textureData2 = materialData.TextureData2;
+
+            Material m = null;
+
+            try
+            {
+                textureData1.fullPathName = TidyTextureName(textureData1.fullPathName);
+                textureData1.textureName = TidyTextureName(textureData1.textureName);
+
+                if (textureData2 != null)
+                {
+                    textureData2.fullPathName = TidyTextureName(textureData2.fullPathName);
+                    textureData2.textureName = TidyTextureName(textureData2.textureName);
+                }
+
+                Shader shader = Shader.Find("Gladius/Standard");
+
+                m = UnityEngine.Resources.Load<Material>("Materials/" + materialData.Name);
+                if (m == null)
+                {
+                    TempMaterialStore.TryGetValue(materialData.Name, out m);
+                }
+                if (textureData1 != null)
+                {
+                    Texture texture1 = UnityEngine.Resources.Load<Texture>("Textures/" + textureData1.textureName);
+
+                    if (texture1 == null)
+                    {
+                        Debug.LogWarningFormat("Can't find texture {0}", textureData1.textureName);
+                    }
+
+                    // force rebuild all.
+                    //m = null;
+
                     if (m == null)
                     {
-                        m = new Material(Shader.Find("Standard"));
-                        m.name = materialname;
-
-                        String adjustedTextureName = GladiusGlobals.StripTextureExtension(textureData1.textureName);
-
-                        Texture texture = Resources.Load<Texture>("Textures/" + adjustedTextureName);
-                        //Debug.LogFormat("Found texture [{0}] as [{1}]", textureData1.textureName, texture != null ? "" + texture.GetHashCode() : "Null");
-                        //m.SetTexture("Diffuse", texture);
-                        m.mainTexture = texture;
-                        // update for transparent
-                        if (textureData1.textureName.Contains(".cc"))
+                        if (commonMeshData.IsTransparent)
                         {
-                            m.SetFloat("_Mode", 3.0f);
+                            shader = Shader.Find("Gladius/Transparent");
+                        }
+                        else if (materialData.IsCubeMapReflect)
+                        {
+                            shader = Shader.Find("Gladius/CubemapReflection");
+                        }
+                        else if (materialData.IsDetailMap)
+                        {
+                            shader = Shader.Find("Gladius/DetailMap");
+
+                        }
+                        else if (materialData.IsCutOut)
+                        {
+                            //shader = Shader.Find("Gladius/Cutout");
+                            shader = Shader.Find("Standard");
+                        }
+                        else if (materialData.IsTwoSided)
+                        {
+                            // done this by creating extra inverted mesh
+                            //shader = Shader.Find("Gladius/TwoSided");
+                            //shader = Shader.Find("Standard");
+                        }
+                        else if (materialData.IsColouredVertex)
+                        {
+                            //shader = Shader.Find("Gladius/VertexColorTexture");
                         }
 
+
+                        m = new Material(shader);
+                        m.name = materialData.Name;
+
+                        if (texture1 != null)
+                        {
+                            try
+                            {
+                                m.SetTexture("_MainTex", texture1);
+                            }
+                            catch (Exception e)
+                            {
+                                int ibreak = 0;
+                            }
+                        }
+
+                        if (materialData.IsCubeMapReflect)
+                        {
+                            Cubemap cubeMap = UnityEngine.Resources.Load<Cubemap>("Textures/" + textureData2.textureName);
+                            m.SetTexture("_Cube", cubeMap);
+                        }
+                        else if (materialData.IsDetailMap)
+                        {
+                            Texture texture2 = UnityEngine.Resources.Load<Texture>("Textures/" + textureData2.textureName);
+
+                            if (texture2 == null)
+                            {
+                                Debug.LogWarningFormat("Can't find texture {0}", textureData2.textureName);
+                            }
+
+
+                            m.SetTexture("_Detail", texture2);
+
+                        }
+                        else if (materialData.IsCutOut)
+                        {
+                            //shader = Shader.Find("Gladius/Cutout");
+                            m.SetFloat("_Mode", 1.0f);
+                        }
+
+
+                        TempMaterialStore[m.name] = m;
                         AssetDatabase.CreateAsset(m, "Assets/Resources/Materials/" + m.name + ".mat");
                     }
                 }
-                catch(Exception e)
+            }
+            catch (Exception e)
+            {
+                int ibreak = 0;
+            }
+            return m;
+        }
+
+        public static bool DoesTextureHaveAlpha(Texture texture)
+        {
+            bool hasAlpha = false;
+            // Create a temporary RenderTexture of the same size as the texture
+            RenderTexture tmp = RenderTexture.GetTemporary(
+                                texture.width,
+                                texture.height,
+                                0,
+                                RenderTextureFormat.Default,
+                                RenderTextureReadWrite.Linear);
+
+            // Blit the pixels on texture to the RenderTexture
+            Graphics.Blit(texture, tmp);
+            // Backup the currently set RenderTexture
+            RenderTexture previous = RenderTexture.active;
+            // Set the current RenderTexture to the temporary one we created
+            RenderTexture.active = tmp;
+            // Create a new readable Texture2D to copy the pixels to it
+            Texture2D myTexture2D = new Texture2D(texture.width, texture.width);
+            // Copy the pixels from the RenderTexture to the new Texture
+            myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
+            myTexture2D.Apply();
+
+            Color32[] pixels = myTexture2D.GetPixels32();
+            for (int i = 0; i < pixels.Length; ++i)
+            {
+                if (pixels[i].a < 240)
                 {
-                    Debug.LogError("");
+                    hasAlpha = true;
+                    break;
                 }
             }
 
-            return m;
+
+            // Reset the active RenderTexture
+            RenderTexture.active = previous;
+            // Release the temporary RenderTexture
+            RenderTexture.ReleaseTemporary(tmp);
+
+            // "myTexture2D" now has the same pixels from "texture" and it's readable.
+            return hasAlpha;
         }
 
 
         // Imports my asset from the file
-        static void ImportMyAsset(string asset)
+        static void ImportXBoxModel(string assetName)
         {
-            String rootPath = "Assets/XBoxModels/";
-            Debug.Log("XboxModelProcessor importing : " + asset);
-            String assetPath = asset.Substring(0, asset.LastIndexOf('/'));
-            String filename = asset.Substring(asset.LastIndexOf('/') + 1);
-            int startIndex = asset.IndexOf(rootPath) + rootPath.Length;
-            int endIndex = asset.LastIndexOf('/');
-            String assetSubDirectories = "";
-            if (startIndex < endIndex)
-            {
-                assetSubDirectories = asset.Substring(startIndex, endIndex - startIndex);
-            }
+            Debug.Log("XboxModelProcessor importing : " + assetName);
+
+
             try
             {
 
-                Debug.LogFormat("[{0}] [{1}] [{2}]", filename, assetPath, assetSubDirectories);
-                XboxModel model = new XboxModel("");
-                TextAsset assetData = AssetDatabase.LoadAssetAtPath<TextAsset>(asset);
+                //Debug.LogFormat("[{0}] [{1}] [{2}]", filename, assetPath, assetSubDirectories);
 
-                model.LoadData(new BinaryReader(new MemoryStream(assetData.bytes)));
-
-                string adjustedFilename = filename.Replace(".bytes", "");
-
-
-                JSONModelData jsonModelData = null;
-
-                CommonModelData commonModel = model.ToCommon(null);
-
-                Dictionary<CommonMaterialData, List<CommonMeshData>> materialMeshLists = SplitByMaterial(commonModel);
-                //Debug.LogFormat("Has {0} meshes {1} materials", model.m_modelMeshes.Count, materialMeshLists.Keys.Count);
-
-                GameObject splitPrefab = new GameObject("SplitPrefab");
-                //MeshFilter splitPrefabMeshFilter = splitPrefab.AddComponent<MeshFilter>();
-
-                GameObject combinedPrefab = new GameObject(filename.Replace(".mdl.bytes", ""));
-                //MeshFilter combinedPrefabMeshFilter = combinedPrefab.AddComponent<MeshFilter>();
-                //combinedPrefab.AddComponent<MeshRenderer>();
-
-                Matrix4x4[] bindPoses = null;
-                // Build structure if mapped.
-                var boneObjectMap = new Dictionary<BoneNode, GameObject>();
-                GameObject rootGO = null;
-
-                if (model.m_skinned)
+                TextAsset assetData = AssetDatabase.LoadAssetAtPath<TextAsset>(assetName);
+                if (assetData != null)
                 {
-                    // create transform tree?
-                    foreach (BoneNode bn in model.BoneList)
-                    {
-                        GameObject go = new GameObject(bn.UniqueName);
-                        boneObjectMap[bn] = go;
-                        go.transform.localPosition = bn.offset;
-                        go.transform.localRotation = bn.rotation;
-
-                        bool debugBones = false;
-                        GameObject sphere = debugBones?GameObject.CreatePrimitive(PrimitiveType.Sphere):null;
-                        
-
-                        if (bn.parent != null)
-                        {
-                            GameObject parentGo = boneObjectMap[bn.parent];
-                            go.transform.SetParent(parentGo.transform,false);
-                            if(sphere != null)
-                            {
-                                sphere.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-                                sphere.transform.localPosition = bn.offset;
-                                sphere.transform.SetParent(parentGo.transform, false);
-                            }
-                        }
-
-                        go.transform.localPosition = bn.offset;
-                        go.transform.localRotation = bn.rotation;
-
-                        //sphere.transform.localPosition = Vector3.zero;
-
-                    }
+                    BinaryReader binReader = new BinaryReader(new MemoryStream(assetData.bytes));
 
 
+                    String assetPath = assetName.Substring(0, assetName.LastIndexOf('/'));
+                    String filename = assetName.Substring(assetName.LastIndexOf('/') + 1);
+                    int startIndex = assetName.IndexOf(OriginalModelDirectory) + OriginalModelDirectory.Length;
+                    int endIndex = assetName.LastIndexOf('/');
+                    String assetSubDirectories = assetName.Substring(startIndex, endIndex - startIndex);
+                    string adjustedFilename = filename.Replace(".bytes", "");
 
-                    rootGO = boneObjectMap[model.BoneList[0]];
-                    rootGO.transform.SetParent(combinedPrefab.transform);
+                    XboxModel model = new XboxModel("");
 
-                    //bindPoses = new Matrix4x4[model.BoneList.Count];
 
-                    //for (int i = 0; i < bindPoses.Length; ++i)
-                    //{
-                    //    GameObject go = boneObjectMap[model.BoneList[i]];
-                    //    bindPoses[i] = go.transform.worldToLocalMatrix * rootGO.transform.localToWorldMatrix;
-                    //}
+                    model.m_name = adjustedFilename;
 
-                    // and assign default components
+                    // deal with empty files
 
-                    String replacedName = combinedPrefab.name;
-                    replacedName += ".pak1";
-                    Debug.Log("Set pak1 name to " + replacedName);
+                    binReader.BaseStream.Position = 0;
+                    model.LoadData(binReader);
+                    model.GetIndices(null);
+
+
+                    CommonModelData commonModel = model.ToCommon();
+
+                    commonModel.Name = adjustedFilename;
+                    int lodLevel = -1; //model.m_selsInfo.GetBestLodData();
+                    ProcessModel(assetName, lodLevel, commonModel);
+
+
+                    Debug.Log("Best lod level is : " + lodLevel);
                 }
-
-                int counter = 0;
-                foreach (CommonMaterialData shader in materialMeshLists.Keys)
-                {
-                    GameObject splitParent = new GameObject();
-                    splitParent.transform.SetParent(splitPrefab.transform);
-                    List<CommonMeshData> dlhList = materialMeshLists[shader];
-
-
-                    foreach (var dlh in dlhList)
-                    {
-                        GameObject submesh = CreateSubMesh(commonModel, dlh);
-                        submesh.transform.SetParent(splitParent.transform);
-                        //submesh.transform.SetParent(splitPrefab.transform);
-                    }
-
-                    GameObject combinedParent = new GameObject("Submesh-" + counter);
-                    combinedParent.transform.SetParent(combinedPrefab.transform);
-                    MeshFilter combinedParentMeshFilter = combinedParent.AddComponent<MeshFilter>();
-
-                    Renderer renderer = null;
-                    if (model.m_skinned)
-                    {
-                        renderer = combinedParent.AddComponent<SkinnedMeshRenderer>();
-                    }
-                    else
-                    {
-                        renderer = combinedParent.AddComponent<MeshRenderer>();
-                    }
-
-                    Material m = GetOrCreateMaterial(commonModel, shader);
-                    if (m != null)
-                    {
-                        renderer.material = m;
-                    }
-
-                    MeshFilter[] meshFilters = splitParent.GetComponentsInChildren<MeshFilter>();
-                    SkinnedMeshRenderer[] splitSkinnedRenderers = splitParent.GetComponentsInChildren<SkinnedMeshRenderer>();
-                    Dictionary<int, int> boneConversionDictionary = new Dictionary<int, int>();
-                    List<BoneNode> remappedBoneNodeList = new List<BoneNode>();
-
-
-                    Mesh combinedMesh = MergeMesh(meshFilters,boneConversionDictionary,model.BoneList,remappedBoneNodeList);
-                    //for (int i = 0; i < model.BoneList.Count; ++i)
-                    //{
-                    //    boneConversionDictionary[i] = i;
-                    //    remappedBoneNodeList.Add(model.BoneList[i]);
-                    //}
-
-                    combinedParentMeshFilter.sharedMesh = combinedMesh;
-                    combinedParentMeshFilter.sharedMesh.name = adjustedFilename + "_" + counter++;
-
-
-                    if (model.m_skinned)
-                    {
-                        SkinnedMeshRenderer smr = (SkinnedMeshRenderer)renderer;
-
-                        
-                        smr.sharedMesh = combinedParentMeshFilter.sharedMesh;
-                        smr.rootBone = boneObjectMap[model.BoneList[0]].transform;
-
-						// need these as temporary arrays so we can assign at the end of processing.
-						// trying to set them directly on the skinned mesh renderer while they are processing doesn't work
-                        Transform[] bonesCopy = new Transform[remappedBoneNodeList.Count];
-                        bindPoses = new Matrix4x4[remappedBoneNodeList.Count];
-
-                        for (int i = 0; i < bindPoses.Length; ++i)
-                        {
-                            GameObject go = boneObjectMap[remappedBoneNodeList[i]];
-                            bonesCopy[i] = go.transform;
-                            bindPoses[i] = go.transform.worldToLocalMatrix;
-                        }
-
-                        smr.bones = bonesCopy;
-                        combinedParentMeshFilter.sharedMesh.bindposes = bindPoses;
-                        smr.sharedMesh.RecalculateBounds();
-
-                        BoneWeight[] bwa = combinedParentMeshFilter.sharedMesh.boneWeights;
-                        Matrix4x4[] bpa = combinedParentMeshFilter.sharedMesh.bindposes;
-                        Transform[] ta = smr.bones;
-                        int ibreak = 0;
-                    }
-
-                    AssetDatabase.CreateAsset(combinedParentMeshFilter.sharedMesh, "Assets/Resources/Meshes/" + combinedParentMeshFilter.sharedMesh.name + ".mesh");
-                    //break;
-                }
-
-                UnityEngine.Object.DestroyImmediate(splitPrefab);
-                // Path to out new asset
-                //string newPath = ConvertToInternalPath(asset);
-                combinedPrefab.transform.localRotation = Quaternion.Euler(270.0f, 0, 0);
-
-                String outputDirName = "Resources/XboxModelPrefabs/" + assetSubDirectories + "/";
-                String fullOuputDirName = Application.dataPath + "/" + outputDirName;
-                if (!Directory.Exists(fullOuputDirName))
-                {
-                    Directory.CreateDirectory(fullOuputDirName);
-                }
-                PrefabUtility.CreatePrefab("Assets/" + outputDirName + adjustedFilename + ".prefab", combinedPrefab);
             }
             catch (Exception e)
             {
-                Debug.LogErrorFormat("Failed [{0}] [{1}]", filename, e);
+                Debug.LogErrorFormat("Failed [{0}] [{1}]", assetName, e.StackTrace);
             }
         }
+
+
+        public static string ProcessModel(string fullAssetPath, int lodLevel, CommonModelData commonModel)
+        {
+
+
+            //lodLevel = model.GetMeshLodLevel("set_LOD1");
+            Debug.Log("Best lod level is : " + lodLevel);
+
+            List<CommonMeshData> filteredList = new List<CommonMeshData>();
+
+            foreach (CommonMeshData mesh in commonModel.CommonMeshData)
+            {
+                if (mesh.LodLevel != 0 && (mesh.LodLevel & lodLevel) == 0)
+                {
+                    continue;
+                }
+                filteredList.Add(mesh);
+            }
+
+            commonModel.CommonMeshData = filteredList;
+
+            Dictionary<CommonMaterialData, List<CommonMeshData>> materialMeshLists = SplitByMaterial(commonModel);
+
+            GameObject splitPrefab = new GameObject(commonModel.Name + "-SplitPrefab");
+
+            GameObject combinedPrefab = new GameObject(commonModel.Name);
+            GameObject gladiusToUnity = new GameObject("GladiusToUnity");
+            gladiusToUnity.transform.SetParent(combinedPrefab.transform, false);
+
+
+            // Build structure if mapped.
+            var boneObjectMap = new Dictionary<BoneNode, GameObject>();
+            GameObject rootGO = null;
+
+            if (commonModel.Skinned)
+            {
+                // create transform tree?
+                foreach (BoneNode bn in commonModel.BoneList)
+                {
+                    GameObject go = new GameObject(bn.UniqueName);
+                    boneObjectMap[bn] = go;
+                    Quaternion q = bn.rotation;
+
+                    if (bn.Index != bn.ParentIndex)
+                    {
+                        GameObject parentGo = boneObjectMap[bn.parent];
+                        go.transform.SetParent(parentGo.transform, false);
+                    }
+
+                    go.transform.localPosition = bn.offset;
+                    go.transform.localRotation = bn.rotation;
+
+                    bool useSpheres = false;
+                    if (useSpheres)
+                    {
+                        //sphere.GetComponent<Renderer>().material.color = bn.name.Contains("_L") ? Color.green : bn.name.Contains("_R") ? Color.red : Color.black;
+                        GameObject dummy = bn.name.Contains("_L") ? GameObject.CreatePrimitive(PrimitiveType.Sphere) : bn.name.Contains("_R") ? GameObject.CreatePrimitive(PrimitiveType.Cube) : null;
+                        if (dummy != null)
+                        {
+                            dummy.transform.SetParent(go.transform, false);
+                            dummy.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                            dummy.transform.localPosition = Vector3.zero;
+                        }
+                        //sphere.GetComponent<Renderer>().material = new Material(Shader.Find("Diffuse"));
+                        //sphere.GetComponent<Renderer>().material.color = bn.name.Contains("_L") ? Color.green : bn.name.Contains("_R") ? Color.red : Color.black;
+                    }
+
+                }
+
+                rootGO = boneObjectMap[commonModel.BoneList[0]];
+                rootGO.transform.SetParent(gladiusToUnity.transform, false);
+
+
+                String noExtensionName = commonModel.Name.Replace(".mdl", "");
+
+            }
+
+            int everyMeshCounter = 0;
+            int everyMeshLowBound = -1;
+            int everyMeshHighBound = everyMeshLowBound + 300;
+
+            int counter = 0;
+            if (MERGE_MESH)
+            {
+
+                foreach (CommonMaterialData commonMaterialData in materialMeshLists.Keys)
+                {
+                    List<CommonMeshData> commonMeshDataList = materialMeshLists[commonMaterialData];
+                    //Process(assetName, adjustedFilename, commonModel, model, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity, counter++, boneObjectMap);
+                    Process(commonModel, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity, counter++, boneObjectMap);
+                }
+            }
+            else
+            {
+
+                foreach (CommonMeshData mesh in commonModel.CommonMeshData)
+                {
+                    List<CommonMeshData> commonMeshDataList = new List<CommonMeshData>();
+                    commonMeshDataList.Add(mesh);
+                    //Process(assetName, adjustedFilename, commonModel, model, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity, counter++, boneObjectMap);
+                    Process(commonModel, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity, counter++, boneObjectMap);
+                }
+            }
+
+
+            //gladiusToUnity.transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
+
+
+            String outputDirName = "Resources/XboxModelPrefabs/" + commonModel.AssetSubDirectories + "/";
+            String fullOuputDirName = Application.dataPath + "/" + outputDirName;
+            if (!Directory.Exists(fullOuputDirName))
+            {
+                Directory.CreateDirectory(fullOuputDirName);
+            }
+
+            String prefabName = "Assets/" + outputDirName + commonModel.Name + ".prefab";
+
+
+            UnityEngine.Object existingPrefab = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(prefabName);
+            if (existingPrefab == null)
+            {
+                PrefabUtility.CreatePrefab(prefabName, combinedPrefab, ReplacePrefabOptions.ReplaceNameBased);
+
+            }
+            else
+            {
+                PrefabUtility.ReplacePrefab(combinedPrefab, existingPrefab);
+            }
+
+
+
+            if (splitPrefab != null)
+            {
+                UnityEngine.Object.DestroyImmediate(splitPrefab);
+            }
+
+            if (combinedPrefab != null)
+            {
+                UnityEngine.Object.DestroyImmediate(combinedPrefab);
+            }
+
+            return outputDirName + commonModel.Name;
+
+        }
+
+
+
+
+        //public static void Process(String assetName, String adjustedFilename, CommonModelData commonModel, XboxModelRW xboxModel, List<CommonMeshData> meshList, bool merge, GameObject splitPrefab, GameObject combinedPrefab, int index, Dictionary<BoneNode, GameObject> boneObjectMap)
+        public static void Process(CommonModelData commonModel, List<CommonMeshData> meshList, bool merge, GameObject splitPrefab, GameObject combinedPrefab, int index, Dictionary<BoneNode, GameObject> boneObjectMap)
+        {
+            int count = 0;
+
+            GameObject splitParent = new GameObject();
+            splitParent.transform.SetParent(splitPrefab.transform, false);
+
+            foreach (CommonMeshData mesh in meshList)
+            {
+                GameObject submesh = CreateSubMesh(commonModel, mesh, "Submesh_" + index + "_" + (count++));
+                submesh.transform.SetParent(splitParent.transform, false);
+            }
+
+            MeshFilter[] meshFilters = splitParent.GetComponentsInChildren<MeshFilter>();
+            Mesh[] meshes = new Mesh[meshFilters.Length];
+            for (int i = 0; i < meshFilters.Length; ++i)
+            {
+                meshes[i] = meshFilters[i].sharedMesh;
+            }
+
+
+            SkinnedMeshRenderer[] splitSkinnedRenderers = splitParent.GetComponentsInChildren<SkinnedMeshRenderer>();
+            Dictionary<int, int> boneConversionDictionary = new Dictionary<int, int>();
+            List<BoneNode> remappedBoneNodeList = new List<BoneNode>();
+
+            if (index == 9)
+            {
+                int ibreak = 0;
+            }
+            // always merge here as the splits handled furhter up..
+            List<Mesh> combinedMeshes = MergeMesh(merge, meshes, boneConversionDictionary, commonModel.BoneList, remappedBoneNodeList);
+
+            CommonMaterialData commonMaterialData = commonModel.CommonMaterials[meshList.First().MaterialId];
+
+            foreach (Mesh combinedMesh in combinedMeshes)
+            {
+                GameObject combinedParent = new GameObject("Submesh-" + index + "-" + commonMaterialData.TextureData1.textureName);
+                combinedParent.transform.SetParent(combinedPrefab.transform, false);
+                MeshFilter combinedParentMeshFilter = combinedParent.AddComponent<MeshFilter>();
+
+                Renderer renderer = null;
+                if (commonModel.Skinned)
+                {
+                    renderer = combinedParent.AddComponent<SkinnedMeshRenderer>();
+                }
+                else
+                {
+                    renderer = combinedParent.AddComponent<MeshRenderer>();
+                }
+
+                Material m = GetOrCreateMaterial(commonModel, commonMaterialData, meshList[0]);
+                if (m != null)
+                {
+                    renderer.sharedMaterial = m;
+                }
+
+
+                combinedMesh.RecalculateBounds();
+                //modelInfo.NumVertices += combinedMesh.vertexCount;
+                //modelInfo.NumIndices += combinedMesh.triangles.Length;
+                //modelInfo.Bounds.Encapsulate(combinedMesh.bounds);
+
+                combinedParentMeshFilter.sharedMesh = combinedMesh;
+                combinedParentMeshFilter.sharedMesh.name = commonModel.Name + "_" + index;
+
+                if (commonModel.Skinned)
+                {
+                    SkinnedMeshRenderer smr = (SkinnedMeshRenderer)renderer;
+
+
+                    smr.sharedMesh = combinedParentMeshFilter.sharedMesh;
+                    smr.rootBone = boneObjectMap[commonModel.BoneList[0]].transform;
+
+                    Transform[] bonesCopy = new Transform[remappedBoneNodeList.Count];
+
+                    Matrix4x4[] bindPoses = new Matrix4x4[remappedBoneNodeList.Count];
+
+                    for (int i = 0; i < bindPoses.Length; ++i)
+                    {
+                        GameObject go = boneObjectMap[remappedBoneNodeList[i]];
+                        bonesCopy[i] = go.transform;
+                        bindPoses[i] = go.transform.worldToLocalMatrix;
+                    }
+
+                    smr.bones = bonesCopy;
+                    combinedParentMeshFilter.sharedMesh.bindposes = bindPoses;
+                    smr.sharedMesh.RecalculateBounds();
+                    smr.receiveShadows = true;
+                    smr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+
+                }
+                AssetDatabase.CreateAsset(combinedParentMeshFilter.sharedMesh, "Assets/Resources/Meshes/" + combinedParentMeshFilter.sharedMesh.name + ".mesh");
+            }
+        }
+
     }
 
 }

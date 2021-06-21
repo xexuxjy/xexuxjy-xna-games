@@ -52,6 +52,7 @@ public static class CommonModelImporter
     public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
     public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
     public static char[] obbtTag = new char[] { 'O', 'B', 'B', 'T' };
+    public static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
     //public static char[] endTag = new char[] { (char)0x3F,'E', 'N', 'D'};
 
 
@@ -1572,21 +1573,22 @@ public class CommonMeshData
     public Dictionary<int, BoneNode> BoneIdDictionary = null;
 }
 
-public class CommonTopLevelModelData // Yuck
-{
-    public String Name;
-    public List<Mesh> AllMeshes = new List<Mesh>();
-    public List<VertexDataAndDesc> m_vertexDataList = new List<VertexDataAndDesc>();
-    public List<List<int>> m_indexDataList = new List<List<int>>();
-    public List<CommonModelData> Models = new List<CommonModelData>();
-    public List<string> demandLoadVertexList = new List<string>();
-    public List<string> demandLoadIndexList = new List<string>();
-
-}
-
 public class CommonModelData
 {
+    public String Name;
+    public String AssetSubDirectories;
+    public List<CommonVertexInstance> AllVertices = new List<CommonVertexInstance>();
+    public bool HasColor;
+    public bool HasUV2;
     public XboxModel XBoxModel;
+    public List<VertexDataAndDesc> VertexDataLists = new List<VertexDataAndDesc>();
+    public List<List<int>> IndexDataList = new List<List<int>>();
+    public List<CommonMeshData> CommonMeshData = new List<CommonMeshData>();
+    public List<CommonTextureData> CommonTextures = new List<CommonTextureData>();
+    public List<CommonMaterialData> CommonMaterials = new List<CommonMaterialData>();
+    public List<BoneNode> BoneList = new List<BoneNode>();
+    public Dictionary<int, BoneNode> BoneIdDictionary = new Dictionary<int, BoneNode>();
+
 
     public int AdjustBone(int index, int adjust)
     {
@@ -1612,16 +1614,18 @@ public class CommonModelData
     }
 
 
-    public String Name;
-    public List<VertexDataAndDesc> VertexDataLists = new List<VertexDataAndDesc>();
-    public List<List<int>> IndexDataList = new List<List<int>>();
-    public List<CommonMeshData> CommonMeshData = new List<CommonMeshData>();
-    public List<CommonTextureData> CommonTextures = new List<CommonTextureData>();
-    public List<CommonMaterialData> CommonMaterials = new List<CommonMaterialData>();
-    public Dictionary<int, BoneNode> BoneIdDictionary = new Dictionary<int, BoneNode>();
-    public List<BoneNode> BoneList = new List<BoneNode>();
-    public BoneNode RootBone;
 
+    public BoneNode RootBone
+    {
+        get
+        {
+            if (BoneList.Count > 0)
+            {
+                return BoneList[0];
+            }
+            return null;
+        }
+    }
     public bool Skinned { get { return BoneList.Count > 0; } }
     public bool AnimsLoaded;
 }

@@ -30,9 +30,7 @@ public class XboxModelReader : BaseModelReader
 
                 XboxModel model = LoadSingleModel(sourceFile.FullName) as XboxModel;
 
-                JSONModelData jsonModelData = null;
-
-                CommonModelData commonModel = model.ToCommon(null);
+                CommonModelData commonModel = model.ToCommon();
 
                 m_models.Add(model);
 
@@ -100,7 +98,7 @@ public class XboxModelReader : BaseModelReader
                 int limit = 0;
                 modelMeshMap.TryGetValue(model.m_name, out limit);
 
-                for (int j = 0; j < model.m_doegData.NumMeshes; ++j)
+                for (int j = 0; j < model.m_xrndSection.m_doegData.NumMeshes; ++j)
                 {
                     //if (model.m_subMeshData1List[j].LodLevel < bestSkinnedLod)
                     if ((model.m_subMeshData1List[j].LodLevel & bestSkinnedLod) != 0)
@@ -115,7 +113,7 @@ public class XboxModelReader : BaseModelReader
 
             if (includeList.Count > 0)
             {
-                for (int j = 0; j < model.m_doegData.NumMeshes; ++j)
+                for (int j = 0; j < model.m_xrndSection.m_doegData.NumMeshes; ++j)
                 {
                     if (!includeList.Contains(j))
                     {
@@ -155,7 +153,8 @@ public class XboxModel : BaseModel
     public List<MaterialData> m_materialDataList = new List<MaterialData>();
     public List<MeshMaterialOffsets> m_meshMaterialOffsetList = new List<MeshMaterialOffsets>();
     public List<MaterialBlock> m_materialBlockList = new List<MaterialBlock>();
-    public DoegData m_doegData;
+    public XRNDSection m_xrndSection;
+    public List<String> m_selsInfo = new List<string>();
     public List<List<byte>> m_materialDataByteBlocks = new List<List<byte>>();
 
     public List<int> m_rebuildOffsets = new List<int>();
@@ -164,72 +163,69 @@ public class XboxModel : BaseModel
 
     public const int s_textureBlockSize = 64;
     public const int s_materialBlockSize = 44;
+    public const int s_mmoOffsetBlockSize = 12;
 
     public SubMeshData3 m_subMeshData3;
     public int m_avgVertex;
     public XboxModel(String name)
         : base(name)
     {
+    }
 
+    public void ReadXBOXDataChunk(BinaryReader binReader)
+    {
+        if (CommonModelImporter.FindCharsInStream(binReader, CommonModelImporter.xrndTag))
+        {
+            int sectionLength = binReader.ReadInt32();
+            int version = binReader.ReadInt32();
+            int numEntries = binReader.ReadInt32();
+            int numLodSets = binReader.ReadInt32();
+            List<uint> lodSetMasks = new List<uint>();
+            for (int i = 0; i < numLodSets; ++i)
+            {
+                lodSetMasks.Add(binReader.ReadUInt32());
+            }
+        }
     }
 
 
-    public CommonModelData ToCommon(JSONModelData jsonModelData)
+    public CommonModelData ToCommon()
     {
         CommonModelData cmd = new CommonModelData();
         cmd.XBoxModel = this;
         cmd.BoneList = BoneList;
-        cmd.RootBone = m_rootBone;
+        //cmd.RootBone = m_rootBone;
         cmd.BoneIdDictionary = m_boneIdDictionary;
         cmd.Name = m_name;
         cmd.VertexDataLists = new List<VertexDataAndDesc>();
         cmd.VertexDataLists.Add(m_vertexDataAndDesc);
         cmd.IndexDataList = new List<List<int>>();
         cmd.IndexDataList.Add(m_allIndices);
+
+        foreach(VertexDataAndDesc vdad in cmd.VertexDataLists)
+        {
+            cmd.AllVertices.AddRange(vdad.VertexData);
+        }
+
+        //foreach (List<int> list in cmd.IndexDataList)
+        //{
+        //    cmd.
+        //}
+        int count = 0;
+
         foreach (MaterialData md in m_materialDataList)
         {
-            cmd.CommonMaterials.Add(md.ToCommon());
+            CommonMaterialData cm = md.ToCommon();
+            cm.Name = m_name + (count++);
+            cmd.CommonMaterials.Add(cm);
         }
 
         List<int> meshIdList = new List<int>();
         Dictionary<string, int> materialLookup = new Dictionary<string, int>();
 
-        if (jsonModelData != null)
+        for (int i = 0; i < m_subMeshData1List.Count; ++i)
         {
-            // we're going to create new ones based on our json data.
-            cmd.CommonMaterials.Clear();
-
-            int materialIdCount = 0;
-
-            foreach (JSONMeshMaterial mm in jsonModelData.meshMaterials)
-            {
-                CommonMaterialData commonMaterial = new CommonMaterialData();
-                commonMaterial.Name = mm.materialName;
-                commonMaterial.TextureData1 = new CommonTextureData();
-                commonMaterial.TextureData1.textureName = mm.textureDiffuse;
-                commonMaterial.TextureData1.fullPathName = commonMaterial.TextureData1.textureName;
-                if (!String.IsNullOrEmpty(mm.textureSpecular))
-                {
-                    commonMaterial.TextureData2 = new CommonTextureData();
-                    commonMaterial.TextureData2.textureName = mm.textureSpecular;
-                    commonMaterial.TextureData2.fullPathName = commonMaterial.TextureData2.textureName;
-                }
-
-                materialLookup[mm.materialName] = materialIdCount++;
-                cmd.CommonMaterials.Add(commonMaterial);
-                foreach (int meshId in mm.MeshIds)
-                {
-                    meshIdList.Add(meshId);
-                }
-            }
-
-        }
-        else
-        {
-            for (int i = 0; i < m_subMeshData1List.Count; ++i)
-            {
-                meshIdList.Add(i);
-            }
+            meshIdList.Add(i);
         }
 
 
@@ -247,24 +243,8 @@ public class XboxModel : BaseModel
             cmd.CommonMeshData.Add(smd.ToCommon());
         }
 
-        if (jsonModelData != null)
-        {
-            // fixup materials?
-            foreach (CommonMeshData meshData in cmd.CommonMeshData)
-            {
-                string materialName = jsonModelData.GetMaterial(meshData.Index);
-                int materialIndex = materialLookup[materialName];
-                meshData.MaterialId = materialIndex;
-            }
-        }
-
-
-
-
         return cmd;
     }
-
-
 
 
 
@@ -301,27 +281,27 @@ public class XboxModel : BaseModel
     {
         if (CommonModelImporter.FindCharsInStream(binReader, CommonModelImporter.xrndTag))
         {
-            int sectionLength = binReader.ReadInt32();
-            int uk2a = binReader.ReadInt32();
-            int numEntries = binReader.ReadInt32();
-            int numSkip = binReader.ReadInt32();
-            binReader.BaseStream.Position += numSkip * 4;
+            m_xrndSection = new XRNDSection();
+            m_xrndSection.sectionLength = binReader.ReadInt32();
+            m_xrndSection.uk2a = binReader.ReadInt32();
+            m_xrndSection.numEntries = binReader.ReadInt32();
+            m_xrndSection.numSkip = binReader.ReadInt32();
+            binReader.BaseStream.Position += m_xrndSection.numSkip * 4;
             //int uk2c = binReader.ReadInt32();
 
             //int uk2d = binReader.ReadInt32();
-            m_doegData = DoegData.FromStream(binReader);
+            m_xrndSection.m_doegData = DoegData.FromStream(binReader);
 
             int doegEndVal = (int)(binReader.BaseStream.Position - 4);
-            binReader.BaseStream.Position = doegEndVal + m_doegData.Block1Start;
+            binReader.BaseStream.Position = doegEndVal + m_xrndSection.m_doegData.Block1Start;
 
-            List<int> blockOneValues = new List<int>();
-            for (int i = 0; i < m_doegData.NumMeshes; ++i)
+            for (int i = 0; i < m_xrndSection.m_doegData.NumMeshes; ++i)
             {
-                blockOneValues.Add(binReader.ReadInt32());
+                m_xrndSection.blockOneValues.Add(binReader.ReadInt32());
             }
 
 
-            for (int i = 0; i < m_doegData.NumMeshes; ++i)
+            for (int i = 0; i < m_xrndSection.m_doegData.NumMeshes; ++i)
             {
                 SubMeshData1 smd = SubMeshData1.FromStream(binReader);
                 m_subMeshData1List.Add(smd);
@@ -332,7 +312,7 @@ public class XboxModel : BaseModel
 
             //NumMeshes += 1;
 
-            for (int i = 0; i < m_doegData.NumMeshes; ++i)
+            for (int i = 0; i < m_xrndSection.m_doegData.NumMeshes; ++i)
             {
                 SubMeshData2 smd = SubMeshData2.FromStream(binReader);
                 string groupName = String.Format("{0}-submesh{1}", m_name, i);
@@ -345,15 +325,18 @@ public class XboxModel : BaseModel
             }
 
             binReader.BaseStream.Position += 4;
-            int TotalVertices = binReader.ReadInt32();
+            m_xrndSection.TotalVertices1 = binReader.ReadInt32();
+            binReader.BaseStream.Position += 16;
+            m_xrndSection.TotalVertices2 = binReader.ReadInt32();
 
+            binReader.BaseStream.Position -= 20;
             // do stuff...
-            m_subMeshData3 = SubMeshData3.FromStream(this, binReader, m_doegData.NumMeshes, m_doegData.Block5Start, m_skinned);
+            m_subMeshData3 = SubMeshData3.FromStream(this, binReader, m_xrndSection.m_doegData.NumMeshes, m_xrndSection.m_doegData.Block5Start, m_skinned);
 
 
-            binReader.BaseStream.Position = doegEndVal + m_doegData.TextureBlockOffset;
+            binReader.BaseStream.Position = doegEndVal + m_xrndSection.m_doegData.TextureBlockOffset;
 
-            CommonModelImporter.ReadNullSeparatedNames(binReader, binReader.BaseStream.Position, m_doegData.NumTextures, m_textureNames);
+            CommonModelImporter.ReadNullSeparatedNames(binReader, binReader.BaseStream.Position, m_xrndSection.m_doegData.NumTextures, m_textureNames);
 
             for (int i = 0; i < m_textureNames.Count; ++i)
             {
@@ -368,13 +351,9 @@ public class XboxModel : BaseModel
             //foreach (MaterialData materialData in m_materialDataList)
             for (int i = 0; i < m_materialDataList.Count; ++i)
             {
-                string baseName = m_textureNames[textureCount];
-                if (!baseName.Contains("skygold"))
-                {
-                    textureCount++;
-                    MaterialData materialData = m_materialDataList[i];
-                    materialData.FixupMaterialData(baseName, m_textureNames);
-                }
+
+                MaterialData.FixupMaterialSlots(m_materialDataList[i], m_textureNames);
+
                 //materialData.textureId = AdjustForModel(materialData.textureId);
                 //int textureIndex = materialData.diffuseTextureId / s_textureBlockSize;
                 //materialData.TextureData1 = m_textures[textureIndex];
@@ -393,19 +372,29 @@ public class XboxModel : BaseModel
             //        MaterialData skyGoldMaterial = m_materialDataList[skygoldIndex];
             //        MaterialData skyGoldFollowMaterial = m_materialDataList[skygoldIndex + 1];
 
-            //        skyGoldFollowMaterial.specularTextureId = skygoldIndex;
-            //        skyGoldFollowMaterial.TextureData2 = m_textures[skygoldIndex];
-            //        m_materialDataList.RemoveAt(skygoldIndex);
+            bool wrappedInt16 = false;
+            int lastIndex = -1;
+            int lastIndexWrapVal = 0;
             //    }
             //}
 
-
+            bool hasDoubleVertex = m_name.Contains("worldmap");
 
             foreach (SubMeshData2 smd in m_subMeshData2List)
             {
                 for (int i = 0; i < smd.NumIndices; ++i)
                 {
-                    ushort val = binReader.ReadUInt16();
+                    int val = binReader.ReadUInt16();
+                    if (hasDoubleVertex && val < (lastIndex - 100))
+                    {
+                        wrappedInt16 = true;
+                        lastIndexWrapVal = lastIndex;
+                    }
+                    lastIndex = val;
+                    if (wrappedInt16)
+                    {
+                        val += (lastIndexWrapVal + 1);
+                    }
                     smd.indices.Add(val);
                 }
                 m_allIndices.AddRange(smd.indices);
@@ -421,18 +410,19 @@ public class XboxModel : BaseModel
                 {
                     int diff = ((int)binReader.BaseStream.Position - 4 - (int)testPosition);
 
-                    diff -= TotalVertices * 6;
+                    diff -= m_xrndSection.TotalVertices1 * 6;
 
-                    m_avgVertex = diff / TotalVertices;
+                    m_avgVertex = diff / m_xrndSection.TotalVertices1;
                     binReader.BaseStream.Position = testPosition;
 
                     if (m_avgVertex == 28)
                     {
-                        ReadSkinnedVertexData28(binReader, m_vertexDataAndDesc, TotalVertices);
+                        ReadSkinnedVertexData28(binReader, m_vertexDataAndDesc, m_xrndSection.TotalVertices1);
                     }
                     else if (m_avgVertex == 32)
                     {
-                        ReadSkinnedVertexData32(binReader, m_vertexDataAndDesc, TotalVertices);
+                        m_hasColorInfo = true;
+                        ReadSkinnedVertexData32(binReader, m_vertexDataAndDesc, m_xrndSection.TotalVertices1);
                     }
 
 
@@ -471,23 +461,30 @@ public class XboxModel : BaseModel
                 {
                     int diff = ((int)binReader.BaseStream.Position - 4 - (int)testPosition);
 
-                    m_avgVertex = diff / TotalVertices;
+                    int totalVertices = m_xrndSection.TotalVertices1;
+                    if (m_xrndSection.TotalVertices2 > 0 && m_xrndSection.TotalVertices2 != m_xrndSection.TotalVertices1)
+                    {
+                        totalVertices += m_xrndSection.TotalVertices2;
+                    }
+                    m_avgVertex = diff / totalVertices;
                     binReader.BaseStream.Position = testPosition;
 
                     //ReadUnskinnedVertexData36(binReader, m_allVertices, TotalVertices);
                     switch (m_avgVertex)
                     {
                         case 24:
-                            ReadUnskinnedVertexData24(binReader, m_vertexDataAndDesc, TotalVertices);
+                            ReadUnskinnedVertexData24(binReader, m_vertexDataAndDesc, totalVertices);
                             break;
                         case 28:
-                        case 29:
-                            ReadUnskinnedVertexData28(binReader, m_vertexDataAndDesc, TotalVertices);
+                            //ReadUnskinnedVertexData28(binReader, m_vertexDataAndDesc, TotalVertices);
+                            ReadUnskinnedVertexData28(binReader, m_vertexDataAndDesc, totalVertices);
                             break;
                         case 36:
-                            ReadUnskinnedVertexData36(binReader, m_vertexDataAndDesc, TotalVertices);
+                            ReadUnskinnedVertexData36(binReader, m_vertexDataAndDesc, totalVertices);
                             break;
                         default:
+                            Debug.LogErrorFormat("Model [{0}] unexpected vertex average tv1[{1}] tv2[{2}] t[{3}] avg[{4}] diff[{5}] ",
+                                m_name, m_xrndSection.TotalVertices1, m_xrndSection.TotalVertices2, totalVertices, m_avgVertex, diff);
                             int ibreak = 0;
                             break;
                     }
@@ -549,21 +546,23 @@ public class XboxModel : BaseModel
     public List<SubmeshData> GetIndices(List<int> includeList)
     {
         List<SubmeshData> result = new List<SubmeshData>();
-        bool swap = false;
+        bool swap = true;
         int startIndex = 0;
         int limit = m_subMeshData2List.Count;
         for (int submeshIndex = 0; submeshIndex < limit; submeshIndex++)
         {
+            try
+            {
             SubMeshData2 headerBlock = m_subMeshData2List[submeshIndex];
             SubMeshData1 data1 = m_subMeshData1List[submeshIndex];
-            swap = false;
+                swap = true;
 
             int end = startIndex + headerBlock.NumIndices - 2;
-            if (!includeList.Contains(submeshIndex))
-            {
-                startIndex += headerBlock.NumIndices;
-                continue;
-            }
+                //if (!includeList.Contains(submeshIndex))
+                //{
+                //    startIndex += headerBlock.NumIndices;
+                //    continue;
+                //}
 
             SubmeshData smi = new SubmeshData();
             smi.index = submeshIndex;
@@ -571,11 +570,18 @@ public class XboxModel : BaseModel
             smi.subMeshData = data1;
             smi.indices = new List<int>();
 
-            int materialIndex = Math.Min(submeshIndex, m_meshMaterialOffsetList.Count - 1);
+                //int materialIndex = Math.Min(submeshIndex, m_meshMaterialOffsetList.Count - 1);
 
-            smi.meshMaterial = m_meshMaterialOffsetList[materialIndex];
-            GetTextureId(smi.index, out smi.originalMaterialId, out smi.materialId);
+                //smi.meshMaterial = m_meshMaterialOffsetList[materialIndex];
+                ////GetTextureId(smi.index, out smi.originalMaterialId, out smi.materialId);
 
+                int materialBlockId = 0;
+                Debug.Assert(submeshIndex < m_subMeshData3.offsetList.Count);
+                int offsetId = m_subMeshData3.offsetList[submeshIndex] / s_mmoOffsetBlockSize;
+                Debug.Assert(offsetId < m_meshMaterialOffsetList.Count);
+                materialBlockId = m_meshMaterialOffsetList[offsetId].convertedOffset;
+                smi.originalMaterialId = materialBlockId;
+                smi.materialId = materialBlockId;
             //smi.vertices = new List<CommonVertexInstance>();
             List<int> indexList = smi.indices;
 
@@ -603,7 +609,7 @@ public class XboxModel : BaseModel
                 int i2 = m_allIndices[index2];
                 int i3 = m_allIndices[swap ? index3 : index1];
 
-                bool removeDegenerate = true;
+                    bool removeDegenerate = false;
                 if (!(removeDegenerate && (i1 == i2 || i2 == i3 || i3 == i1)))
                 {
                     indexList.Add(i1);
@@ -672,8 +678,32 @@ public class XboxModel : BaseModel
                 }
             }
             //smi.boneIds.Sort();
+                bool validMesh = true;
+                int lookup = smi.materialId;
+                while (lookup < m_materialDataList.Count - 1)
+                {
+                    MaterialData materialData = m_materialDataList[lookup];
+                    if (materialData.m_materialSlotInfoList.Count == 0)
+                    {
+                        lookup++;
+                        Debug.LogWarningFormat("Mesh [{0}] has no materials [{1}]", smi.index, smi.materialId);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                smi.materialId = lookup;
+                if (validMesh)
+                {
             result.Add(smi);
+                }
             startIndex += headerBlock.NumIndices;
+            }
+            catch (Exception e)
+            {
+                int ibreak = 0;
+            }
         }
         return result;
     }
@@ -706,8 +736,9 @@ public class XboxModel : BaseModel
                 IndexedVector3 normV = UncompressNormal(normal);
                 IndexedVector2 u = CommonModelImporter.FromStreamVector2(binReader);
                 CommonVertexInstance vpnt = new CommonVertexInstance();
-                vpnt.Position = p;
-                vpnt.Normal = normV;
+                vpnt.Position = GladiusGlobals.AdjustV3(p);
+                vpnt.UV = u;
+                vpnt.Normal = GladiusGlobals.AdjustV3(normV);
                 desc.VertexData.Add(vpnt);
             }
             catch (System.Exception ex)
@@ -748,10 +779,9 @@ public class XboxModel : BaseModel
                 int unk1 = binReader.ReadInt32();
                 IndexedVector2 u = CommonModelImporter.FromStreamVector2(binReader);
                 CommonVertexInstance vpnt = new CommonVertexInstance();
-                vpnt.Position = p;
+                vpnt.Position = GladiusGlobals.AdjustV3(p); ;
                 vpnt.UV = u;
-                vpnt.Normal = normV;
-                vpnt.ExtraData = -1;
+                vpnt.Normal = GladiusGlobals.AdjustV3(normV);
                 desc.VertexData.Add(vpnt);
             }
             catch (System.Exception ex)
@@ -765,6 +795,7 @@ public class XboxModel : BaseModel
     public void ReadUnskinnedVertexData36(BinaryReader binReader, VertexDataAndDesc desc, int numVertices)
     {
         desc.Description = "UnskinnedVertexData36";
+        desc.HasUV2 = true;
         for (int i = 0; i < numVertices; ++i)
         //while(true)
         {
@@ -786,11 +817,11 @@ public class XboxModel : BaseModel
                 IndexedVector2 u = CommonModelImporter.FromStreamVector2(binReader);
                 IndexedVector2 u2 = CommonModelImporter.FromStreamVector2(binReader);
                 CommonVertexInstance vpnt = new CommonVertexInstance();
-                vpnt.Position = p;
+                vpnt.Position = GladiusGlobals.AdjustV3(p);
                 vpnt.UV = u;
                 vpnt.UV2 = u2;
-                vpnt.Normal = normV;
-                vpnt.ExtraData = unk1;
+                vpnt.Normal = GladiusGlobals.AdjustV3(normV);
+                //vpnt.ExtraData = unk1;
                 desc.VertexData.Add(vpnt);
             }
             catch (System.Exception ex)
@@ -800,6 +831,7 @@ public class XboxModel : BaseModel
         }
         int ibreak2 = 0;
     }
+    public bool SwapLeftRight = false;
 
 
     public void ReadSkinnedVertexData28(BinaryReader binReader, VertexDataAndDesc desc, int numVertices)
@@ -811,8 +843,10 @@ public class XboxModel : BaseModel
             {
                 CommonVertexInstance vpnt = new CommonVertexInstance();
                 vpnt.Position = CommonModelImporter.FromStreamVector3(binReader);
+                vpnt.Position = GladiusGlobals.AdjustV3(vpnt.Position);
                 //vpnt.BoneInfo1 = binReader.ReadInt32();
                 vpnt.Normal = UncompressNormal(binReader.ReadInt32());
+                vpnt.Normal = GladiusGlobals.AdjustV3(vpnt.Normal);
                 //int unk1 = binReader.ReadInt32();
                 vpnt.UV = CommonModelImporter.FromStreamVector2(binReader);
                 vpnt.BoneWeights = binReader.ReadInt32();
@@ -837,8 +871,10 @@ public class XboxModel : BaseModel
             {
                 CommonVertexInstance vpnt = new CommonVertexInstance();
                 vpnt.Position = CommonModelImporter.FromStreamVector3(binReader);
+                vpnt.Position = GladiusGlobals.AdjustV3(vpnt.Position);
                 vpnt.Normal = UncompressNormal(binReader.ReadInt32());
-                vpnt.Tangent = UncompressNormal(binReader.ReadInt32());
+                vpnt.Normal = GladiusGlobals.AdjustV3(vpnt.Normal);
+                vpnt.DiffuseColor = CommonModelImporter.FromStreamColor32(binReader);
                 vpnt.UV = CommonModelImporter.FromStreamVector2(binReader);
                 vpnt.BoneWeights = binReader.ReadInt32();
                 desc.VertexData.Add(vpnt);
@@ -854,7 +890,7 @@ public class XboxModel : BaseModel
 
 
     // taken from old sol code and it seems to work. wow!
-    public IndexedVector3 UncompressNormal(int cv)
+    public static IndexedVector3 UncompressNormal(int cv)
     {
         IndexedVector3 v = new IndexedVector3();
         int x = ((int)(cv & 0x7ff) << 21) >> 21,
@@ -1559,11 +1595,7 @@ public class SubMeshData1
 
     public int minus1;
 
-
-    float f1;
-    float f2;
-    float f3;
-    float f4;
+    public Vector4 boundingSphere;
 
     public int pad1;
     public int pad2;
@@ -1584,10 +1616,10 @@ public class SubMeshData1
         smd.counter1 = binReader.ReadInt32();
         //smd.counter2 = binReader.ReadInt32();
 
-        smd.f1 = binReader.ReadSingle();
-        smd.f2 = binReader.ReadSingle();
-        smd.f3 = binReader.ReadSingle();
-        smd.f4 = binReader.ReadSingle();
+        smd.boundingSphere.w = binReader.ReadSingle();
+        smd.boundingSphere.x = binReader.ReadSingle();
+        smd.boundingSphere.y = binReader.ReadSingle();
+        smd.boundingSphere.z = binReader.ReadSingle();
 
         smd.pad1 = binReader.ReadInt32();
         smd.pad2 = binReader.ReadInt32();
@@ -1616,7 +1648,7 @@ public class SubMeshData1
     {
         //sw.WriteLine(String.Format("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][{7}][{8}][{9}][{10}] a[{11}] b[{12}] c[{13}] d[{14}] lod[{15}]", zero1, zero2, counter1, , pad1, pad2, pad3, pad4, pad5a, pad5b, pad5c, pad5d, LodLevel));
         //sw.WriteLine(String.Format("[{0}][{1}] counter[{2}] f1[{3}][{4}][{5}] f4[{6}] pad1[{7}][{8}][{9}][{10}] pad5[{11}] lod[{12}]", zero1, zero2, counter1, f1, f2, f3, f4, pad1, pad2, pad3, pad4, pad5, LodLevel));
-        sw.WriteLine(String.Format("[{0}][{1}] counter[{2}] f1[{3:0.0000}][{4:0.0000}][{5:0.0000}] f4[{6:0.0000}] pad1[{7}][{8}][{9}][{10}] pad5[{11}] lod[{12}]", zero1, zero2, counter1, f1, f2, f3, f4, pad1, pad2, pad3, pad4, pad5, LodLevel));
+        //sw.WriteLine(String.Format("[{0}][{1}] counter[{2}] f1[{3:0.0000}][{4:0.0000}][{5:0.0000}] f4[{6:0.0000}] pad1[{7}][{8}][{9}][{10}] pad5[{11}] lod[{12}]", zero1, zero2, counter1, f1, f2, f3, f4, pad1, pad2, pad3, pad4, pad5, LodLevel));
         //sw.WriteLine(String.Format("[{0}][{1}][{2}][{3}][{4}]", zero1, zero2, counter1,PrintTidy(usefulBytes),PrintTidy(padBytes),LodLevel));
         //sw.WriteLine(String.Format("[{0}][{1}][{2}][{3}]",f1a,f1b,f1c,f1d));
     }
@@ -1686,6 +1718,10 @@ public class SubMeshData3
 
     public List<List<byte>> boneListInfo = new List<List<byte>>();
 
+    public int mmoSearchStartPos = -1;
+    public int mmoSearchEndPos = -1;
+    public byte[] mmoData = null;
+    public List<int> offsetList = new List<int>();
     public XboxModel model;
 
     public void WriteInfo(StreamWriter sw)
@@ -1743,11 +1779,33 @@ public class SubMeshData3
             }
         }
 
+        smd3.mmoSearchStartPos = (int)binReader.BaseStream.Position;
 
+        while (true)
+        {
+            int val1 = binReader.ReadInt32();
+            if (val1 == 0)
+            {
+                int val2 = binReader.ReadInt32();
+                if (val2 == 12 || val2 == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    binReader.BaseStream.Position -= 4;
+                }
+            }
+        }
         // This works for both skinned and none skinned objects to find the mesh material offsets.
-        List<int> offsets = new List<int>();
+        binReader.BaseStream.Position -= (2 * 4);
+        for (int i = 0; i < smd3.model.m_subMeshData1List.Count; ++i)
+        {
+            smd3.offsetList.Add(binReader.ReadInt32());
+        }
+        binReader.BaseStream.Position = smd3.mmoSearchStartPos;
         byte[] texSearchBytes = new byte[] { 0x00, 0x00, 0x80, 0x3F, 0x01, 0x00, 0x00, 0x00 };
-        if (CommonModelImporter.FindCharsInStream(binReader, texSearchBytes))
+        if (Common.FindCharsInStream(binReader, texSearchBytes))
         {
             binReader.BaseStream.Position -= texSearchBytes.Length;
             MeshMaterialOffsets mm = null;
@@ -1756,16 +1814,15 @@ public class SubMeshData3
                 mm = MeshMaterialOffsets.FromStream(binReader);
                 if (mm != null)
                 {
-                    if (!offsets.Contains(mm.offset))
-                    {
-                        offsets.Add(mm.offset);
-                    }
                     model.m_meshMaterialOffsetList.Add(mm);
                     maxOffset = Math.Max(maxOffset, mm.offset);
                 }
             }
             while (mm != null);
         }
+        smd3.mmoSearchEndPos = (int)binReader.BaseStream.Position;
+        binReader.BaseStream.Position = smd3.mmoSearchStartPos;
+        smd3.mmoData = binReader.ReadBytes(smd3.mmoSearchEndPos - smd3.mmoSearchStartPos);
 
         if (model.m_meshMaterialOffsetList.Count == 0)
         {
@@ -1879,6 +1936,7 @@ public class SubMeshData3
     public float val1;
     public int always1;
     public int offset;
+    public int convertedOffset;
 
     public static MeshMaterialOffsets FromStream(BinaryReader binReader)
     {
@@ -1890,6 +1948,7 @@ public class SubMeshData3
             Debug.Assert(meshMaterial.always1 == 1);
             meshMaterial.offset = binReader.ReadInt32();
             Debug.Assert(meshMaterial.offset % XboxModel.s_materialBlockSize == 0);
+            meshMaterial.convertedOffset = meshMaterial.offset / XboxModel.s_materialBlockSize;
         }
         else
         {
@@ -2001,6 +2060,8 @@ public class SubmeshData
         cmd.MaterialId = materialId;
         cmd.Indices = adjustedIndices;
         cmd.Vertices = verticesInMesh;
+        cmd.boundingSphere = subMeshData.boundingSphere;
+        cmd.LodLevel = subMeshData.LodLevel;
         return cmd;
     }
 
@@ -2126,28 +2187,25 @@ public class DoegData
 
 }
 
-public class JSONMeshMaterial
-{
-    public string materialName;
-    public string textureDiffuse;
-    public string textureSpecular;
-    public List<int> MeshIds = new List<int>();
-}
 
-public class JSONModelData
+public class XRNDSection
 {
-    public string modelName;
-    public List<JSONMeshMaterial> meshMaterials = new List<JSONMeshMaterial>();
-
-    public string GetMaterial(int meshId)
+    public int sectionLength;
+    public int uk2a;
+    public int numEntries;
+    public int numSkip;
+    public DoegData m_doegData;
+    public List<int> blockOneValues = new List<int>();
+    public int TotalVertices1;
+    public int TotalVertices2;
+    public void WriteInfo(StreamWriter sw)
     {
-        foreach (JSONMeshMaterial mm in meshMaterials)
+        sw.WriteLine(String.Format("XRND : SL[{0}] NE[{1}] ns[{2}] Tv1[{3}] TV2[{4}] Block1[{5}]", sectionLength, numEntries, numSkip, TotalVertices1, TotalVertices2, blockOneValues.Count));
+        foreach (int i in blockOneValues)
         {
-            if (mm.MeshIds.Contains(meshId))
-            {
-                return mm.materialName;
-            }
+            sw.Write(i);
+            sw.Write(",");
         }
-        return "";
+        sw.WriteLine();
     }
 }
