@@ -1,0 +1,10 @@
+*.db
+*.suo
+Browse.VC.opendb
+storage.ide-shm
+ModelImporter/Logs/Packages-Update.log
+ModelImporter/Assembly-CSharp-Editor.csproj
+ModelImporter/Assembly-CSharp.csproj
+ModelImporter/Library
+ModelImporter/Logs
+UnityLockFile
