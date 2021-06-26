@@ -432,6 +432,16 @@ namespace Assets.Editor
 
         static Dictionary<String, Material> TempMaterialStore = new Dictionary<string, Material>();
 
+        public static Texture GetTexture(string name)
+        {
+            Texture t = UnityEngine.Resources.Load<Texture>("Textures/" + name);
+            if(t == null && !name.EndsWith(".tga"))
+            {
+                t = UnityEngine.Resources.Load<Texture>("Textures/" + name+".tga");
+            }
+            return t;
+        }
+
 
         public static Material GetOrCreateMaterial(CommonModelData modelData, CommonMaterialData materialData, CommonMeshData commonMeshData)
         {
@@ -462,7 +472,7 @@ namespace Assets.Editor
                 }
                 if (textureData1 != null)
                 {
-                    Texture texture1 = UnityEngine.Resources.Load<Texture>("Textures/" + textureData1.textureName);
+                    Texture texture1 = GetTexture(textureData1.textureName);
 
                     if (texture1 == null)
                     {
@@ -526,7 +536,7 @@ namespace Assets.Editor
                         }
                         else if (materialData.IsDetailMap)
                         {
-                            Texture texture2 = UnityEngine.Resources.Load<Texture>("Textures/" + textureData2.textureName);
+                            Texture texture2 = GetTexture(textureData2.textureName);
 
                             if (texture2 == null)
                             {
