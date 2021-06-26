@@ -484,8 +484,8 @@ namespace Assets.Editor
 
                     if (m == null)
                     {
-                        if (commonMeshData.IsTransparent)
-                        {
+                        if (commonMeshData.IsTransparent || textureData1.textureName.Contains(".cc"))
+s                        {
                             shader = Shader.Find("Gladius/Transparent");
                         }
                         else if (materialData.IsCubeMapReflect)
