@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using GCTextureTools;
 using System.Drawing.Imaging;
-using System.Buffers.Binary;
 using System.Drawing;
 
 namespace GCTextureTools
@@ -597,9 +596,10 @@ namespace GCTextureTools
         }
 
 
-        public static ushort Swap16(ushort val)
+        public static ushort Swap16(ushort x)
         {
-            return BinaryPrimitives.ReverseEndianness(val);
+            //return BinaryPrimitives.ReverseEndianness(val);
+            return (ushort)((ushort)((x & 0xff) << 8) | ((x >> 8) & 0xff));
         }
 
 
