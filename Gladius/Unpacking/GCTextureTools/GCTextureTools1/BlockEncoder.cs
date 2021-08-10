@@ -1,4 +1,6 @@
-﻿using BCnEncoder.Encoder;
+﻿// https://github.com/Nominom/BCnEncoder.NET/blob/master/BCnEnc.Net/Encoder/Bc1BlockEncoder.cs
+
+using BCnEncoder.Encoder;
 using BCnEncoder.Shared;
 using System;
 using System.Collections.Generic;
@@ -13,13 +15,13 @@ namespace GCTextureTools
 
     public static class BlockEncoder
     {
-		private static class Bc1BlockEncoderSlow
+		public static class Bc1BlockEncoderSlow
 		{
-			private const int MaxTries = 9999;
-			private const float ErrorThreshold = 0.01f;
+			public const int MaxTries = 9999;
+			public const float ErrorThreshold = 0.01f;
 
 
-			private static Vector4 CalculateMean(Vector4[] colors)
+			public static Vector4 CalculateMean(Vector4[] colors)
 			{
 
 				float r = 0;
@@ -117,10 +119,10 @@ namespace GCTextureTools
             {
 				for(int i=0;i<colors.Length;++i)
                 {
-					vectors[i].X = colors[i].R;
-					vectors[i].Y = colors[i].G;
-					vectors[i].Z = colors[i].B;
-					vectors[i].W = colors[i].A;
+					vectors[i].X += colors[i].R / 255f;
+					vectors[i].Y += colors[i].G / 255f;
+					vectors[i].Z += colors[i].B / 255f;
+					vectors[i].W += colors[i].A / 255f;
 				}
             }
 
@@ -202,13 +204,11 @@ namespace GCTextureTools
 
 
 
-			internal static DXTBlock EncodeBlock(DXTBlock rawBlock)
+			public static DXTBlock EncodeBlock(DXTBlock rawBlock)
 			{
 				CreateVectors(rawBlock.SourceColours, out var mean, out var pa);
 				
 				GetMinMaxColor565(rawBlock.SourceColours, mean, pa, out var min, out var max);
-
-
 
 				var c0 = max;
 				var c1 = min;
@@ -259,7 +259,7 @@ namespace GCTextureTools
 			}
 		}
 
-		private static DXTBlock TryColors(DXTBlock rawBlock, ColorRgb565 color0, ColorRgb565 color1, out float error, float rWeight = 0.3f, float gWeight = 0.6f, float bWeight = 0.1f)
+		public static DXTBlock TryColors(DXTBlock rawBlock, ColorRgb565 color0, ColorRgb565 color1, out float error, float rWeight = 0.3f, float gWeight = 0.6f, float bWeight = 0.1f)
 		{
 			DXTBlock resultBlock = new DXTBlock();
 			var pixels = rawBlock.SourceColours;
@@ -277,7 +277,7 @@ namespace GCTextureTools
 			for (var i = 0; i < 16; i++)
 			{
 				var color = pixels[i];
-				resultBlock.Lines[i] = (uint)ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e);
+				resultBlock.DecodedColours[i] = Color.FromArgb(ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e));
 				error += e;
 			}
 			return resultBlock;
@@ -297,12 +297,12 @@ namespace GCTextureTools
 			InterpolateColor(c0, c1, num, 3);
 
 
-		private static Color InterpolateColor(Color c0, Color c1, int num, int den) => Color.FromArgb(255,
+		public static Color InterpolateColor(Color c0, Color c1, int num, int den) => Color.FromArgb(255,
 		(byte)Interpolate(c0.R, c1.R, num, den),
 		(byte)Interpolate(c0.G, c1.G, num, den),
 		(byte)Interpolate(c0.B, c1.B, num, den));
 
-		private static int Interpolate(int a, int b, int num, int den, int correction = 0) =>
+		public static int Interpolate(int a, int b, int num, int den, int correction = 0) =>
 			(int)(((den - num) * a + num * b + correction) / (float)den);
 
 
@@ -373,11 +373,11 @@ namespace GCTextureTools
 			return !left.Equals(right);
 		}
 
-		private const ushort RedMask = 0b11111_000000_00000;
-		private const int RedShift = 11;
-		private const ushort GreenMask = 0b00000_111111_00000;
-		private const int GreenShift = 5;
-		private const ushort BlueMask = 0b00000_000000_11111;
+		public const ushort RedMask = 0b11111_000000_00000;
+		public const int RedShift = 11;
+		public const ushort GreenMask = 0b00000_111111_00000;
+		public const int GreenShift = 5;
+		public const ushort BlueMask = 0b00000_000000_11111;
 
 		public ushort data;
 
