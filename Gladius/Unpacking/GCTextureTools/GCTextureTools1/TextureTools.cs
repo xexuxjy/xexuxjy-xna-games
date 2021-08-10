@@ -101,17 +101,9 @@ namespace GCTextureTools
                     int potWidth = ToNextNearest(image.Header.Width);
                     int potHeight = ToNextNearest(image.Header.Height);
 
-                    //potWidth *= 2;
-                    //potHeight *= 2;
-
                     image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
 
-
-
                     DecompressDXT1GC(image.CompressedData, potWidth, potHeight, image.DirectBitmap.Bits);
-                    //Decode(potWidth, potHeight, image.CompressedData, image.DirectBitmap.Bits);
-
-                    //Decode2Converter(potWidth, potHeight, image.CompressedData, ref image.DirectBitmap.Bits);
                 }
             }
         }
@@ -304,16 +296,16 @@ namespace GCTextureTools
             Rgb565(q0, out r0, out g0, out b0);
             Rgb565(q1, out r1, out g1, out b1);
 
-            colors[0] = Color(r0, g0, b0, 255);
-            colors[1] = Color(r1, g1, b1, 255);
+            colors[0] = ColorPacked(r0, g0, b0, 255);
+            colors[1] = ColorPacked(r1, g1, b1, 255);
             if (q0 > q1)
             {
-                colors[2] = Color((r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3, 255);
-                colors[3] = Color((r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3, 255);
+                colors[2] = ColorPacked((r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3, 255);
+                colors[3] = ColorPacked((r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3, 255);
             }
             else
             {
-                colors[2] = Color((r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2, 255);
+                colors[2] = ColorPacked((r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2, 255);
             }
 
             DXTBlock block = new DXTBlock();
@@ -327,6 +319,7 @@ namespace GCTextureTools
 
             for (int y = 0; y < 4; y++)
             {
+                // swap order here to get correct picture.
                 for (int x = 3; x >= 0; --x)
                 {
                     block.LineIndices[(y * 4) + x] = (uint)(d & 3);
@@ -384,6 +377,7 @@ namespace GCTextureTools
             }
             return block;
         }
+
 
         public static int DXTBlend(int v1, int v2)
         {
@@ -451,31 +445,81 @@ namespace GCTextureTools
         }
 
 
+        public static void ReadBitmap(DirectBitmap bitmap)
+        {
+
+            List<DXTBlock> blockList = new List<DXTBlock>();
+            ImageConverter converter = new ImageConverter();
+            //Color[] pixels = (Color[])converter.ConvertTo(bitmap.Bitmap, typeof(Color[]));
+
+            byte[] bytes = bitmap.Bits;
+            
+            Color[] pixels = new Color[bytes.Length / 4];
+            int count = 0;
+            for(int i=0;i<bytes.Length;i+=4)
+            {
+                pixels[count++] = Color.FromArgb(bytes[i + 0], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
+            }
+
+            for (int y = 0;y<bitmap.Height;y+=4)
+            {
+                for (int x = 0; x < bitmap.Width; x += 4)
+                {
+                    int offset = (y * bitmap.Width) + x;
+                    blockList.Add(DXTBlock.FromUncompressed(pixels, offset,bitmap.Width));
+                }
+
+            }
+            int ibreak = 0;
+            
+
+        }
+
+
 
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static uint Color(int r, int g, int b, int a)
+        private static uint ColorPacked(int r, int g, int b, int a)
         {
             return (uint)(r << 16 | g << 8 | b | a << 24);
         }
 
         static void Main(string[] args)
         {
-            new ImageExtractor().ProcessImages();
+            //new ImageExtractor().ProcessImages();
+            String basepath = @"F:\UnityProjects\GladiusDFGui\Assets\Resources\Textures\";
+            string filename = basepath + "endlesshorizons_tournament.png";
+
+            DirectBitmap directBitmap = new DirectBitmap(filename);
+            ReadBitmap(directBitmap);
+
         }
     }
         public sealed class DirectBitmap : IDisposable
-    {
+        {
         public DirectBitmap(int width, int height)
         {
             Width = width;
             Height = height;
             Bits = new byte[width * height * 4];
             m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-            //Bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
-            //Bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
             Bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
         }
+
+        public DirectBitmap(string filename)
+        {
+            Bitmap = new Bitmap(filename);
+            Width = Bitmap.Width;
+            Height = Bitmap.Height;
+
+            BitmapData bitmapData = Bitmap.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            Bits = new byte[Math.Abs(bitmapData.Stride * bitmapData.Height)];
+            Marshal.Copy(bitmapData.Scan0, Bits, 0, Bits.Length);
+
+
+            int ibreak = 0;
+        }
+
 
         ~DirectBitmap()
         {
@@ -513,7 +557,10 @@ namespace GCTextureTools
             if (!m_disposed)
             {
                 Bitmap.Dispose();
-                m_bitsHandle.Free();
+                if (m_bitsHandle != null && m_bitsHandle.IsAllocated)
+                {
+                    m_bitsHandle.Free();
+                }
                 m_disposed = true;
             }
         }
@@ -522,7 +569,6 @@ namespace GCTextureTools
         public int Width { get; }
         public int Stride => Width * 4;
         public Bitmap Bitmap { get; }
-        //public byte[] Bits { get; }
 
         public byte[] Bits = null;
         public IntPtr BitsPtr => m_bitsHandle.AddrOfPinnedObject();
@@ -541,6 +587,8 @@ namespace GCTextureTools
 
         public uint[] DecodedColours = new uint[4];
         public Color[] SourceColours = new Color[16];
+        
+        
         public ColorRgb565 CalculatedColor0 = new ColorRgb565();
         public ColorRgb565 CalculatedColor1 = new ColorRgb565();
 
@@ -552,6 +600,20 @@ namespace GCTextureTools
             }
         }
 
+        public static DXTBlock FromUncompressed(Color[] data, int offset, int stride)
+        {
+            DXTBlock block = new DXTBlock();
+            int count = 0;
+            for (int y = 0; y < 4; ++y)
+            {
+                for (int x = 0; x < 4; ++x)
+                {
+                    block.SourceColours[count++] = data[offset + x];
+                }
+                offset += stride;
+            }
+            return block;
+        }
 
     };
 
