@@ -73,10 +73,11 @@ namespace GCTextureTools
             String sourcePath = @"D:\gladius-extracted-archive\ps2-decompressed\ClassImages\";
             sourcePath = @"E:\gladius-extracted-archive\xbox-decompressed\PTTPFiles";
             sourcePath = @"D:\GladiusISOWorkingExtracted\python-gc\gc\data\texture\gui\leagues\";
+            sourcePath = @"M:\GladiusISOExtracted\python-gc\gc\data\texture\gui\leagues\";
 
             fileNames.AddRange(Directory.GetFiles(sourcePath, "**"));
             String outputDirectory = @"E:\gladius-extracted-archive\skygold-texture-output\";
-            outputDirectory = @"d:\tmp\gladius\textures-gc\";
+            outputDirectory = @"M:\tmp\gladius\textures-gc\";
 
             ExtractImages(fileNames, outputDirectory);
         }
@@ -227,61 +228,6 @@ namespace GCTextureTools
 
         }
 
-        public static void DecompressDXT1(byte[] input, int width, int height, byte[] output)
-        {
-            int offset = 0;
-            int bcw = (width + 3) / 4;
-            int bch = (height + 3) / 4;
-            int clen_last = (width + 3) % 4 + 1;
-            uint[] buffer = new uint[16];
-            uint[] colors = new uint[4];
-
-            int yblock = 0;
-
-            for (int t = 0; t < bch; t++)
-            {
-                for (int s = 0; s < bcw; s++, offset += 8)
-                {
-                    int r0, g0, b0, r1, g1, b1;
-                    int q0 = input[offset + 0] | input[offset + 1] << 8;
-                    int q1 = input[offset + 2] | input[offset + 3] << 8;
-
-                    //Rgb565(q0, out r0, out g0, out b0);
-                    //Rgb565(q1, out r1, out g1, out b1);
-
-                    Rgb565Swizzle(q0, out r0, out g0, out b0);
-                    Rgb565Swizzle(q1, out r1, out g1, out b1);
-
-
-                    colors[0] = Color(r0, g0, b0, 255);
-                    colors[1] = Color(r1, g1, b1, 255);
-                    if (q0 > q1)
-                    {
-                        colors[2] = Color((r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3, 255);
-                        colors[3] = Color((r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3, 255);
-                    }
-                    else
-                    {
-                        colors[2] = Color((r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2, 255);
-                    }
-
-                    uint d = BitConverter.ToUInt32(input, offset + 4);
-                    for (int i = 0; i < 16; i++, d >>= 2)
-                    {
-                        buffer[i] = unchecked((uint)colors[d & 3]);
-                    }
-
-                    int clen = (s < bcw - 1 ? 4 : clen_last) * 4;
-                    for (int i = 0, y = t * 4; i < 4 && y < height; i++, y++)
-                    {
-                        Buffer.BlockCopy(buffer, i * 4 * 4, output, (y * width + s * 4) * 4, clen);
-                    }
-                }
-                yblock++;
-            }
-            int ibreak = 0;
-        }
-
 
         public static void DecompressDXT1GC(byte[] input, int width, int height, byte[] output)
         {
@@ -289,7 +235,7 @@ namespace GCTextureTools
             int bcw = (width + 3) / 4;
             int bch = (height + 3) / 4;
             int clen_last = (width + 3) % 4 + 1;
-            uint[] buffer = new uint[16];
+            //uint[] buffer = new uint[16];
             uint[] colors = new uint[4];
             int yblock = 0;
             int dstIndex = 0;
@@ -302,20 +248,20 @@ namespace GCTextureTools
                 for (int x = 0; x < width; x += increment)
 
                 {
-                    DXTBlock block = DecompressBlock(input, offset, colors, buffer);
+                    DXTBlock block = DecompressBlock(input, offset, colors);
                     FillDest(tempData, ref dstIndex, (y * width + x), width, block);
                     offset += increment;
 
-                    block = DecompressBlock(input, offset, colors, buffer);
+                    block = DecompressBlock(input, offset, colors);
                     FillDest(tempData, ref dstIndex, (y * width + x + 4), width, block);
                     offset += increment;
 
 
-                    block = DecompressBlock(input, offset, colors, buffer);
+                    block = DecompressBlock(input, offset, colors);
                     FillDest(tempData, ref dstIndex, ((y + 4) * width + x), width, block);
                     offset += increment;
 
-                    block = DecompressBlock(input, offset, colors, buffer);
+                    block = DecompressBlock(input, offset, colors);
                     FillDest(tempData, ref dstIndex, ((y + 4) * width + x + 4), width, block);
                     offset += increment;
 
@@ -334,17 +280,33 @@ namespace GCTextureTools
         }
 
 
-        public static DXTBlock DecompressBlock(byte[] input, int offset, uint[] colors, uint[] buffer)
+        public static uint SwapBytes(uint x)
+        {
+            return ((x & 0x000000ff) << 24) +
+                   ((x & 0x0000ff00) << 8) +
+                   ((x & 0x00ff0000) >> 8) +
+                   ((x & 0xff000000) >> 24);
+        }
+
+
+
+        public static DXTBlock DecompressBlock(byte[] input, int offset, uint[] colors)
         {
             int r0, g0, b0, r1, g1, b1;
-            int q0 = input[offset + 0] | input[offset + 1] << 8;
-            int q1 = input[offset + 2] | input[offset + 3] << 8;
+            int r0s, g0s, b0s, r1s, g1s, b1s;
+            
+            ushort q0 = (ushort)(input[offset + 0] | input[offset + 1] << 8);
+            ushort q1 = (ushort)(input[offset + 2] | input[offset + 3] << 8);
 
-            //Rgb565(q0, out r0, out g0, out b0);
-            //Rgb565(q1, out r1, out g1, out b1);
+            q0 = Swap16(q0);
+            q1 = Swap16(q1);
 
-            Rgb565Swizzle(q0, out r0, out g0, out b0);
-            Rgb565Swizzle(q1, out r1, out g1, out b1);
+
+            Rgb565(q0, out r0, out g0, out b0);
+            Rgb565(q1, out r1, out g1, out b1);
+
+            Rgb565Swizzle(q0, out r0s, out g0s, out b0s);
+            Rgb565Swizzle(q1, out r1s, out g1s, out b1s);
 
 
             colors[0] = Color(r0, g0, b0, 255);
@@ -359,192 +321,43 @@ namespace GCTextureTools
                 colors[2] = Color((r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2, 255);
             }
 
-            uint d = BitConverter.ToUInt32(input, offset + 4);
-            for (int i = 0; i < 16; i++, d >>= 2)
-            {
-                buffer[i] = unchecked((uint)colors[d & 3]);
-            }
-
             DXTBlock block = new DXTBlock();
             for (int i = 0; i < 4; ++i)
             {
-                block.resultColours[i] = colors[i];
+                block.DecodedColours[i] = colors[i];
             }
 
-
-            for (int i = 0; i < block.lines.Length; i++)
+            uint d = BitConverter.ToUInt32(input, offset + 4);
+            for (int i = 0; i < 16; i++, d >>= 2)
             {
-                // fill in block...
-
+                block.LineIndices[i] = (uint)(d & 3);
+                block.Lines[i] = colors[block.LineIndices[i]];
             }
-            //for (int i = 0; i < buffer.Length; ++i)
-            //{
-            //    block.lines = 
-            //}
 
             return block;
         }
 
 
-        public static void Decode(int height, int width, byte[] srcInfo, byte[] dst)
-        {
-            int dstIndex = 0;
-            using (BinaryReader binReader = new BinaryReader(new MemoryStream(srcInfo)))
-            {
-                for (int y = 0; y < height; y += 8)
-                {
-                    for (int x = 0; x < width; x += 8)
-                    {
-                        DXTBlock block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest(dst, ref dstIndex, (y * width + x), width, block);
-
-                        block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest(dst, ref dstIndex, (y * width + x + 4), width, block);
-
-                        block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest(dst, ref dstIndex, ((y + 4) * width + x), width, block);
-
-                        block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest(dst, ref dstIndex, ((y + 4) * width + x + 4), width, block);
-                    }
-                }
-            }
-        }
-
-        public static void Decode2Converter(int height, int width, byte[] srcInfo, ref byte[] dst)
-        {
-            uint[] dc2dst = new uint[width * height];
-            Decode2(height, width, srcInfo, dc2dst);
-            int dstIndex = 0;
-            foreach (uint val in dc2dst)
-            {
-                byte[] bytes = BitConverter.GetBytes(val);
-                foreach (byte b in bytes)
-                {
-                    dst[dstIndex++] = b;
-                }
-            }
-        }
-
-        public static void Decode2(int height, int width, byte[] srcInfo, uint[] dst)
-        {
-            int dstIndex = 0;
-            int yblocks = 0;
-            using (BinaryReader binReader = new BinaryReader(new MemoryStream(srcInfo)))
-            {
-                for (int y = 0; y < height; y += 8)
-                {
-                    for (int x = 0; x < width; x += 8)
-                    {
-                        DXTBlock block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest2(dst, ref dstIndex, (y * width + x), width, block);
-
-                        block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest2(dst, ref dstIndex, (y * width + x + 4), width, block);
-
-                        block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest2(dst, ref dstIndex, ((y + 4) * width + x), width, block);
-
-                        block = NextBlock(binReader);
-                        DecodeDXTBlock(block);
-                        FillDest2(dst, ref dstIndex, ((y + 4) * width + x + 4), width, block);
-                    }
-                    yblocks++;
-                }
-            }
-            int ibreak = 0;
-        }
-
-
-
-        public static void FillDest(byte[] dst, ref int dstIndex, int offset, int pitch, DXTBlock src)
-        {
-            // byte to uint
-            pitch *= 4;
-            int numiter = 0;
-            int localDstIndex = dstIndex;
-            for (int y = 0; y < 4; y++)
-            {
-                int val = src.lines[y];
-                for (int x = 0; x < 4; x++)
-                {
-                    byte[] bytes = BitConverter.GetBytes(src.resultColours[(int)((val >> 6) & 3)]);
-                    for (int i = 0; i < bytes.Length; ++i)
-                    {
-                        dst[localDstIndex + i + offset + x] = bytes[i];
-                        numiter++;
-                    }
-                    val <<= 2;
-                    //dstIndex += 4;
-                }
-                //dst += pitch;
-                localDstIndex += pitch;
-            }
-            int ibreak = 0;
-        }
 
 
         public static void FillDest(uint[] dst, ref int dstIndex, int offset, int pitch, DXTBlock src)
         {
             int localDstIndex = dstIndex;
+            int numiter = 0;
             for (int y = 0; y < 4; y++)
             {
-                int val = src.lines[y];
                 for (int x = 0; x < 4; x++)
                 {
-                    dst[localDstIndex + offset + x] = src.resultColours[(int)((val >> 6) & 3)];
-                    val <<= 2;
+
+                    uint val = src.LineIndices[numiter];
+                    //dst[localDstIndex + offset + x] = src.DecodedColours[(int)((val >> 6) & 3)];
+                    dst[localDstIndex + offset + x] = src.DecodedColours[val];
+                    numiter++;
                 }
                 localDstIndex += pitch;
             }
         }
 
-
-
-        //public static void FillDest(byte[] dst, ref int dstIndex, int offset, int pitch, DXTBlock src)
-        //{
-        //    int localDstIndex = dstIndex;
-        //    for (int y = 0; y < 4; y++)
-        //    {
-        //        int val = src.lines[y];
-        //        for (int x = 0; x < 4; x++)
-        //        {
-        //            byte[] bytes = BitConverter.GetBytes(src.resultColours[(int)((val >> 6) & 3)]);
-        //            for (int i = 0; i < bytes.Length; ++i)
-        //            {
-        //                dst[dstIndex++] = bytes[i];
-        //            }
-        //            val <<= 2;
-        //        }
-        //        //dst += pitch;
-        //        localDstIndex += pitch;
-        //    }
-        //}
-
-
-        public static void FillDest2(uint[] dst, ref int dstIndex, int offset, int pitch, DXTBlock src)
-        {
-            int localDstIndex = dstIndex;
-            for (int y = 0; y < 4; y++)
-            {
-                int val = src.lines[y];
-                for (int x = 0; x < 4; x++)
-                {
-                    dst[localDstIndex + offset] = src.resultColours[(int)((val >> 6) & 3)];
-                    val <<= 2;
-                    //dstIndex += 4;
-                }
-                //dst += pitch;
-                //localDstIndex += pitch;
-            }
-        }
 
 
 
@@ -553,9 +366,15 @@ namespace GCTextureTools
             DXTBlock block = new DXTBlock();
             block.color1 = binReader.ReadUInt16();
             block.color2 = binReader.ReadUInt16();
-            for (int i = 0; i < block.lines.Length; ++i)
+
+            int index = 0;
+            for (int i = 0; i < 4; ++i)
             {
-                block.lines[i] = binReader.ReadByte();
+                byte b = binReader.ReadByte();
+                for (int x = 0; x < 4; ++x)
+                {
+                    block.Lines[index++] = (uint)(b >> x);
+                }
             }
             return block;
         }
@@ -603,50 +422,18 @@ namespace GCTextureTools
         }
 
 
-        public static void DecodeDXTBlock(DXTBlock src)
-        {
-            // S3TC Decoder (Note: GCN decodes differently from PC so we can't use native support)
-            // Needs more speed.
-            ushort c1 = Swap16(src.color1);
-            ushort c2 = Swap16(src.color2);
-            int blue1 = Convert5To8((byte)(c1 & 0x1F));
-            int blue2 = Convert5To8((byte)(c2 & 0x1F));
-            int green1 = Convert6To8((byte)((c1 >> 5) & 0x3F));
-            int green2 = Convert6To8((byte)((c2 >> 5) & 0x3F));
-            int red1 = Convert5To8((byte)((c1 >> 11) & 0x1F));
-            int red2 = Convert5To8((byte)((c2 >> 11) & 0x1F));
-            src.resultColours[0] = MakeRGBA(red1, green1, blue1, 255);
-            src.resultColours[1] = MakeRGBA(red2, green2, blue2, 255);
-            if (c1 > c2)
-            {
-                src.resultColours[2] =
-                MakeRGBA(DXTBlend(red2, red1), DXTBlend(green2, green1), DXTBlend(blue2, blue1), 255);
-                src.resultColours[3] =
-                MakeRGBA(DXTBlend(red1, red2), DXTBlend(green1, green2), DXTBlend(blue1, blue2), 255);
-            }
-            else
-            {
-                // color[3] is the same as color[2] (average of both colors), but transparent.
-                // This differs from DXT1 where color[3] is transparent black.
-                src.resultColours[2] = MakeRGBA((red1 + red2) / 2, (green1 + green2) / 2, (blue1 + blue2) / 2, 255);
-                src.resultColours[3] = MakeRGBA((red1 + red2) / 2, (green1 + green2) / 2, (blue1 + blue2) / 2, 0);
-            }
-        }
-
-
-
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void Rgb565(int c, out int r, out int g, out int b)
+        private static void Rgb565(uint c, out int r, out int g, out int b)
         {
-            r = (c & 0xf800) >> 8;
-            g = (c & 0x07e0) >> 3;
-            b = (c & 0x001f) << 3;
+            r = ((int)c & 0xf800) >> 8;
+            g = ((int)c & 0x07e0) >> 3;
+            b = ((int)c & 0x001f) << 3;
             r |= r >> 5;
             g |= g >> 6;
             b |= b >> 5;
         }
 
-        private static void Rgb565Swizzle(int c, out int r, out int g, out int b)
+        private static void Rgb565Swizzle(uint c, out int r, out int g, out int b)
         {
             b = Convert5To8((byte)(c & 0x1F));
             g = Convert6To8((byte)((c >> 5) & 0x3F));
@@ -742,11 +529,12 @@ namespace GCTextureTools
     {
         public ushort color1;
         public ushort color2;
-        public byte[] lines = new byte[4];
 
-        public uint[] resultColours = new uint[4];
+        public uint[] LineIndices = new uint[16];
+        public uint[] Lines = new uint[16];
+
+        public uint[] DecodedColours = new uint[4];
         public Color[] SourceColours = new Color[16];
-        public int[] CalculatedIndexes= new int[16];
         public ColorRgb565 CalculatedColor0 = new ColorRgb565();
         public ColorRgb565 CalculatedColor1 = new ColorRgb565();
 

@@ -277,7 +277,7 @@ namespace GCTextureTools
 			for (var i = 0; i < 16; i++)
 			{
 				var color = pixels[i];
-				resultBlock.CalculatedIndexes[i] = ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e);
+				resultBlock.Lines[i] = (uint)ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e);
 				error += e;
 			}
 			return resultBlock;
