@@ -293,7 +293,6 @@ namespace GCTextureTools
         public static DXTBlock DecompressBlock(byte[] input, int offset, uint[] colors)
         {
             int r0, g0, b0, r1, g1, b1;
-            int r0s, g0s, b0s, r1s, g1s, b1s;
             
             ushort q0 = (ushort)(input[offset + 0] | input[offset + 1] << 8);
             ushort q1 = (ushort)(input[offset + 2] | input[offset + 3] << 8);
@@ -304,10 +303,6 @@ namespace GCTextureTools
 
             Rgb565(q0, out r0, out g0, out b0);
             Rgb565(q1, out r1, out g1, out b1);
-
-            Rgb565Swizzle(q0, out r0s, out g0s, out b0s);
-            Rgb565Swizzle(q1, out r1s, out g1s, out b1s);
-
 
             colors[0] = Color(r0, g0, b0, 255);
             colors[1] = Color(r1, g1, b1, 255);
@@ -328,11 +323,22 @@ namespace GCTextureTools
             }
 
             uint d = BitConverter.ToUInt32(input, offset + 4);
-            for (int i = 0; i < 16; i++, d >>= 2)
+
+
+            for (int y = 0; y < 4; y++)
             {
-                block.LineIndices[i] = (uint)(d & 3);
+                for (int x = 3; x >= 0; --x)
+                {
+                    block.LineIndices[(y * 4) + x] = (uint)(d & 3);
+                    d >>= 2;
+                }
+            }
+
+            for (int i = 0; i < block.Lines.Length; i++)
+            {
                 block.Lines[i] = colors[block.LineIndices[i]];
             }
+
 
             return block;
         }
