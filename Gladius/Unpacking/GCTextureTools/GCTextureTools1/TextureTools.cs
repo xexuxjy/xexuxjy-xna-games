@@ -293,6 +293,9 @@ namespace GCTextureTools
             ushort q0 = (ushort)(input[offset + 0] | input[offset + 1] << 8);
             ushort q1 = (ushort)(input[offset + 2] | input[offset + 3] << 8);
 
+            bool hasAlpha = q0 < q1;
+            hasAlpha = false;
+
             q0 = Swap16(q0);
             q1 = Swap16(q1);
 
@@ -303,14 +306,15 @@ namespace GCTextureTools
             TempColors[0] = Color.FromArgb(255,r0, g0, b0);
             TempColors[1] = Color.FromArgb(255,r1, g1, b1);
 
-            if (q0 > q1)
+            if (hasAlpha)
             {
-                TempColors[2] = Color.FromArgb(255,(r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3);
-                TempColors[3] = Color.FromArgb(255,(r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3);
+                TempColors[2] = Color.FromArgb(255, (r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2);
+                TempColors[3] = Color.FromArgb(0, 0, 0, 0);
             }
             else
             {
-                TempColors[2] = Color.FromArgb(255,(r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2);
+                TempColors[2] = Color.FromArgb(255, (r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3);
+                TempColors[3] = Color.FromArgb(255, (r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3);
             }
 
             DXTBlock block = new DXTBlock();
@@ -334,7 +338,15 @@ namespace GCTextureTools
 
             for (int i = 0; i < block.SourceColours.Length; i++)
             {
-                block.SourceColours[i] = block.DecodedColours[block.LineIndices[i]];
+                if(hasAlpha && i == 3)
+                {
+                    block.SourceColours[i] = Color.FromArgb(0, 0, 0, 0);
+                }
+                else
+                {
+                    block.SourceColours[i] = block.DecodedColours[block.LineIndices[i]];
+                }
+                
             }
 
 
@@ -618,6 +630,17 @@ namespace GCTextureTools
         
         public ColorRgb565 CalculatedColor0 = new ColorRgb565();
         public ColorRgb565 CalculatedColor1 = new ColorRgb565();
+
+        public bool HasTransparentPixels()
+        {
+            for (var i = 0; i < DecodedColours.Length; i++)
+            {
+                if (DecodedColours[i].A < 255) return true;
+            }
+            return false;
+        }
+
+
 
         public bool HasAlphaOrBlack
         {

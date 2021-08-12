@@ -213,8 +213,20 @@ namespace GCTextureTools
 				var c0 = max;
 				var c1 = min;
 
-				if (c0.data < c1.data)
+				bool hasAlpha = rawBlock.HasTransparentPixels();
+				if(hasAlpha)
+                {
+					int ibreak = 0;
+                }
+
+				if (!hasAlpha && c0.data < c1.data)
 				{
+					var c = c0;
+					c0 = c1;
+					c1 = c;
+				}
+				else if(hasAlpha && c1.data < c0.data)
+                {
 					var c = c0;
 					c0 = c1;
 					c1 = c;
@@ -229,7 +241,13 @@ namespace GCTextureTools
 				{
 					var (newC0, newC1) = ColorVariationGenerator.Variate565(c0, c1, i);
 
-					if (newC0.data < newC1.data)
+					if (!hasAlpha && newC0.data < newC1.data)
+					{
+						var c = newC0;
+						newC0 = newC1;
+						newC1 = c;
+					}
+					else if (hasAlpha && newC1.data < newC0.data)
 					{
 						var c = newC0;
 						newC0 = newC1;
@@ -267,6 +285,7 @@ namespace GCTextureTools
 			resultBlock.CalculatedColor0  = color0;
 			resultBlock.CalculatedColor1 = color1;
 
+			bool hasAlpha = resultBlock.HasAlphaOrBlack;
 
 			var c0 = color0.ToColor();
 			var c1 = color1.ToColor();
@@ -277,7 +296,7 @@ namespace GCTextureTools
 			for (var i = 0; i < 16; i++)
 			{
 				var color = pixels[i];
-				resultBlock.DecodedColours[i] = Color.FromArgb(ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e));
+				resultBlock.DecodedColours[i] = Color.FromArgb(ChooseClosestColor4AlphaCutOff(colors, color, rWeight, gWeight, bWeight, 128,hasAlpha,out var e));
 				error += e;
 			}
 			return resultBlock;
@@ -340,7 +359,48 @@ namespace GCTextureTools
 		}
 
 
+		public static int ChooseClosestColor4AlphaCutOff(Color[] colors, Color color, float rWeight, float gWeight, float bWeight, int alphaCutOff, bool hasAlpha, out float error)
+		{
+			if (hasAlpha && color.A < alphaCutOff)
+			{
+				error = 0;
+				return 3;
+			}
+
+			float[] d = new float[4] {
+			Math.Abs(colors[0].R - color.R) * rWeight
+			+ Math.Abs(colors[0].G - color.G) * gWeight
+			+ Math.Abs(colors[0].B - color.B) * bWeight,
+			Math.Abs(colors[1].R - color.R) * rWeight
+			+ Math.Abs(colors[1].G - color.G) * gWeight
+			+ Math.Abs(colors[1].B - color.B) * bWeight,
+			Math.Abs(colors[2].R - color.R) * rWeight
+			+ Math.Abs(colors[2].G - color.G) * gWeight
+			+ Math.Abs(colors[2].B - color.B) * bWeight,
+
+			hasAlpha ? 999 :
+			Math.Abs(colors[3].R - color.R) * rWeight
+			+ Math.Abs(colors[3].G - color.G) * gWeight
+			+ Math.Abs(colors[3].B - color.B) * bWeight,
+		};
+
+			var b0 = d[0] > d[2] ? 1 : 0;
+			var b1 = d[1] > d[3] ? 1 : 0;
+			var b2 = d[0] > d[3] ? 1 : 0;
+			var b3 = d[1] > d[2] ? 1 : 0;
+			var nb3 = d[1] > d[2] ? 0 : 1;
+			var b4 = d[0] > d[1] ? 1 : 0;
+			var b5 = d[2] > d[3] ? 1 : 0;
+
+			var idx = (nb3 & b4) | (b2 & b5) | (((b0 & b3) | (b1 & b2)) << 1);
+
+			error = d[idx];
+			return idx;
+		}
+
 	}
+
+
 
 	public struct ColorRgb565 : IEquatable<ColorRgb565>
 	{
