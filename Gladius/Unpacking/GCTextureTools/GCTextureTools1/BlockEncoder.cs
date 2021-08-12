@@ -213,24 +213,13 @@ namespace GCTextureTools
 				var c0 = max;
 				var c1 = min;
 
-				bool hasAlpha = rawBlock.HasTransparentPixels();
-				if(hasAlpha)
-                {
-					int ibreak = 0;
-                }
-
-				if (!hasAlpha && c0.data < c1.data)
+				if (c0.data < c1.data)
 				{
 					var c = c0;
 					c0 = c1;
 					c1 = c;
 				}
-				else if(hasAlpha && c1.data < c0.data)
-                {
-					var c = c0;
-					c0 = c1;
-					c1 = c;
-				}
+
 
 				DXTBlock best = TryColors(rawBlock, c0, c1, out var bestError);
 
@@ -241,13 +230,7 @@ namespace GCTextureTools
 				{
 					var (newC0, newC1) = ColorVariationGenerator.Variate565(c0, c1, i);
 
-					if (!hasAlpha && newC0.data < newC1.data)
-					{
-						var c = newC0;
-						newC0 = newC1;
-						newC1 = c;
-					}
-					else if (hasAlpha && newC1.data < newC0.data)
+					if (newC0.data < newC1.data)
 					{
 						var c = newC0;
 						newC0 = newC1;
@@ -297,8 +280,8 @@ namespace GCTextureTools
 			{
 				var color = pixels[i];
 				//resultBlock.DecodedColours[i] = Color.FromArgb(ChooseClosestColor4AlphaCutOff(colors, color, rWeight, gWeight, bWeight, 128,hasAlpha,out var e));
-				resultBlock.LineIndices[i] = (uint)ChooseClosestColor4AlphaCutOff(colors, color, rWeight, gWeight, bWeight, 128, hasAlpha, out var e);
-				//resultBlock.CalculatedIndexes[i] = ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e);
+				//resultBlock.LineIndices[i] = (uint)ChooseClosestColor4AlphaCutOff(colors, color, rWeight, gWeight, bWeight, 128, hasAlpha, out var e);
+				resultBlock.LineIndices[i] = (uint)ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e);
 				error += e;
 			}
 			return resultBlock;
