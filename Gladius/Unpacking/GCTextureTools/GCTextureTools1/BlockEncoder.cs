@@ -296,7 +296,9 @@ namespace GCTextureTools
 			for (var i = 0; i < 16; i++)
 			{
 				var color = pixels[i];
-				resultBlock.DecodedColours[i] = Color.FromArgb(ChooseClosestColor4AlphaCutOff(colors, color, rWeight, gWeight, bWeight, 128,hasAlpha,out var e));
+				//resultBlock.DecodedColours[i] = Color.FromArgb(ChooseClosestColor4AlphaCutOff(colors, color, rWeight, gWeight, bWeight, 128,hasAlpha,out var e));
+				resultBlock.LineIndices[i] = (uint)ChooseClosestColor4AlphaCutOff(colors, color, rWeight, gWeight, bWeight, 128, hasAlpha, out var e);
+				//resultBlock.CalculatedIndexes[i] = ChooseClosestColor4(colors, color, rWeight, gWeight, bWeight, out var e);
 				error += e;
 			}
 			return resultBlock;
