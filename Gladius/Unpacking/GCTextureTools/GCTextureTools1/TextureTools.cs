@@ -526,21 +526,126 @@ namespace GCTextureTools
             new ImageExtractor().ProcessImages(sourcePath, outputDirectory);
         }
 
+        public static void EncodeFile(string originalFile,string destinationFile)
+        {
+            string imageName = Path.GetFileName(destinationFile);
+            DirectBitmap directBitmap = new DirectBitmap(originalFile);
+            int width = directBitmap.Width;
+            int height = directBitmap.Height;
+
+            List<DXTBlock> colorBlockList = new List<DXTBlock>();
+            List<DXTBlock> alphaBlockList = new List<DXTBlock>();
+            ReadBitmap(directBitmap, colorBlockList, alphaBlockList);
+
+            byte[] processResults = ProcessBlockList(colorBlockList, alphaBlockList);
+            WriteImageFile(destinationFile,imageName, width, height, processResults);
+        }
+
+
+        public static void WriteImageFile(string outputName, string imageName, int width, int height, byte[] data)
+        {
+            imageName = imageName.Replace(".png", ".tga");
+            imageName = imageName.Replace(".jpg", ".tga");
+            imageName = imageName.Replace(".gif", ".tga");
+
+            using (FileStream fs = new FileStream(outputName, FileMode.Create))
+            {
+                using (BinaryWriter binWriter = new BinaryWriter(fs))
+                {
+                    binWriter.Write(Common.pttpTag);
+                    binWriter.Write(16);
+                    binWriter.Write(3);
+                    binWriter.Write(1);
+
+                    binWriter.Write(Common.nmptTag);
+                    binWriter.Write(48);
+                    binWriter.Write(0);
+                    binWriter.Write(0);
+                    binWriter.Write(Encoding.ASCII.GetBytes(imageName));
+                    for (int i = 0; i < 32 - imageName.Length; ++i)
+                    {
+                        binWriter.Write((byte)0);
+                    }
+                    binWriter.Write(Common.pfhdTag);
+                    // section size
+                    binWriter.Write(64);
+                    // pad 1
+                    binWriter.Write(1);
+                    // num textures
+                    binWriter.Write(1);
+                    // compress type
+                    binWriter.Write((ushort)0x2200);
+                    // unknown
+                    binWriter.Write((ushort)0);
+
+                    binWriter.Write(0x80);
+
+                    binWriter.Write((ushort)width);
+                    binWriter.Write((ushort)height);
+                    // compressed size
+                    binWriter.Write(data.Length);
+
+
+                    binWriter.Write(0x50);
+                    binWriter.Write(0);
+
+                    for (int i = 0; i < 24; ++i)
+                    {
+                        binWriter.Write((byte)0);
+                    }
+
+
+
+                    binWriter.Write(Common.paddTag);
+                    binWriter.Write(16);
+                    binWriter.Write(1);
+                    binWriter.Write(1);
+
+                    binWriter.Write(Common.ptdtTag);
+                    binWriter.Write(16 + data.Length);
+                    binWriter.Write(1);
+                    binWriter.Write(1);
+                    binWriter.Write(data);
+
+                    binWriter.Write(Common.endTag);
+                    binWriter.Write(16);
+                    binWriter.Write(1);
+                    binWriter.Write(1);
+
+
+                }
+            }
+
+        }
+
+
+
         static void Main(string[] args)
         {
-            string baseInput = @"M:\GladiusISOWorkingExtracted\python-gc\gc\data\texture\"; 
-            string baseOutput = @"m:\tmp\gladius\";
+            //string baseInput = @"M:\GladiusISOWorkingExtracted\python-gc\gc\data\texture\"; 
+            //string baseOutput = @"m:\tmp\gladius\";
             
-            string sourcePath = baseInput+@"gui\leagues\";
+            //string sourcePath = baseInput+@"gui\leagues\";
 
-            string outputDirectory = baseOutput+@"textures-gc\";
-            string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
+            //string outputDirectory = baseOutput+@"textures-gc\";
+            //string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
 
-            //TestExtract(sourcePath, outputDirectory);
-            TestReencode(reencodedOutputDirectory);
+            ////TestExtract(sourcePath, outputDirectory);
+            //TestReencode(reencodedOutputDirectory);
 
 
+            if (args.Length != 2)
+            {
+                System.Console.WriteLine("texturetools <original file>  <destination file>");
+            }
+            else
+            {
+                string originalFilename = args[0];
+                string destinatioFilename = args[1];
 
+                EncodeFile(originalFilename, destinatioFilename);
+
+            }
 
             int ibreak = 0;
         }
@@ -614,6 +719,7 @@ namespace GCTextureTools
                 m_disposed = true;
             }
         }
+
 
         public int Height { get; }
         public int Width { get; }

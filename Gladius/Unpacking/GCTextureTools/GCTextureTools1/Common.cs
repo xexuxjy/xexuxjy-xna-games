@@ -49,6 +49,7 @@ namespace GCTextureTools
         public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
         public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
         public static char[] obbtTag = new char[] { 'O', 'B', 'B', 'T' };
+        public static char[] paddTag= new char[] { 'P', 'A', 'D', 'D' };
         //public static char[] endTag = new char[] { (char)0x3F,'E', 'N', 'D'};
 
 
