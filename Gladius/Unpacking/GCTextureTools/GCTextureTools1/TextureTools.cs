@@ -61,6 +61,13 @@ namespace GCTextureTools
 
     public class ImageExtractor
     {
+        public static void ClearTempColours()
+        {
+            for(int i=0;i<TempColors.Length;++i)
+            {
+                TempColors[i] = Color.FromArgb(0, 0, 0, 0);
+            }
+        }
 
         public void ExtractImages(string sourceDirectory, string targetDirectory)
         {
@@ -174,7 +181,7 @@ namespace GCTextureTools
                     }
                 }
             }
-
+            int stophere = 0;
         }
 
 
@@ -234,21 +241,23 @@ namespace GCTextureTools
             {
                 for (int x = 0; x < width; x += 8)
                 {
+                    DXTBlock block = null;
+                    DXTBlock alphaBlock = null;
 
-                    DXTBlock block = GetMergedBlocks(input, offset,alphaOffset);
-                    FillDest(tempData, ref dstIndex, (y * width + x), width, block);
+                    GetBlocks(input, offset,alphaOffset,out block,out alphaBlock);
+                    FillDest(tempData, ref dstIndex, (y * width + x), width, block,alphaBlock);
                     offset += increment;
 
-                    block = GetMergedBlocks(input, offset, alphaOffset);
-                    FillDest(tempData, ref dstIndex, (y * width + x + 4), width, block);
+                    GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
+                    FillDest(tempData, ref dstIndex, (y * width + x + 4), width, block, alphaBlock);
                     offset += increment;
 
-                    block = GetMergedBlocks(input, offset, alphaOffset);
-                    FillDest(tempData, ref dstIndex, ((y + 4) * width + x), width, block);
+                    GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
+                    FillDest(tempData, ref dstIndex, ((y + 4) * width + x), width, block, alphaBlock);
                     offset += increment;
 
-                    block = GetMergedBlocks(input, offset, alphaOffset);
-                    FillDest(tempData, ref dstIndex, ((y + 4) * width + x + 4), width, block);
+                    GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
+                    FillDest(tempData, ref dstIndex, ((y + 4) * width + x + 4), width, block, alphaBlock);
                     offset += increment;
 
                 }
@@ -266,20 +275,10 @@ namespace GCTextureTools
 
         }
 
-        public static DXTBlock GetMergedBlocks(byte[] input,int offset,int alphaOffset)
+        public static void GetBlocks(byte[] input,int offset,int alphaOffset, out DXTBlock block, out DXTBlock alphaBlock)
         {
-            DXTBlock block = DXTBlock.FromCompressed(input, offset);
-            DXTBlock alphaBlock = DXTBlock.FromCompressed(input, offset+alphaOffset);
-
-            for(int i=0;i<block.DecodedColours.Length;++i)
-            {
-                Color c = block.DecodedColours[i];
-                Color ca = alphaBlock.DecodedColours[i];
-                c = Color.FromArgb(ca.G, c.R, c.G, c.B);
-                block.DecodedColours[i] = c;
-            }
-
-            return block;
+            block = DXTBlock.FromCompressed(input, offset);
+            alphaBlock = DXTBlock.FromCompressed(input, offset+alphaOffset);
         }
 
 
@@ -295,7 +294,7 @@ namespace GCTextureTools
         public static Color[] TempColors = new Color[4];
 
 
-        public static void FillDest(uint[] dst, ref int dstIndex, int offset, int pitch, DXTBlock src)
+        public static void FillDest(uint[] dst, ref int dstIndex, int offset, int pitch, DXTBlock block,DXTBlock alphaBlock)
         {
             int localDstIndex = dstIndex;
             int numiter = 0;
@@ -304,9 +303,17 @@ namespace GCTextureTools
                 for (int x = 0; x < 4; x++)
                 {
                     int index = (y * 4) + x;
-                    int val = src[index];
-                    //dst[localDstIndex + offset + x] = src.DecodedColours[(int)((val >> 6) & 3)];
-                    dst[localDstIndex + offset + x] = (uint)src.DecodedColours[val].ToArgb();
+                    
+                    int val = block[index];
+                    Color blockColour = block.DecodedColours[val];
+
+                    int alphaVal = alphaBlock[index];
+                    Color alphaColour = alphaBlock.DecodedColours[alphaVal];
+
+                    //Color resultColor = alphaColour;
+                    Color resultColor = Color.FromArgb(alphaColour.G, blockColour.R, blockColour.G, blockColour.B);
+
+                    dst[localDstIndex + offset + x] = (uint)resultColor.ToArgb();
                     numiter++;
                 }
                 localDstIndex += pitch;
@@ -327,36 +334,6 @@ namespace GCTextureTools
         }
 
 
-
-        public static DXTBlock NextBlock(BinaryReader binReader)
-        {
-            DXTBlock block = new DXTBlock();
-            block.color1 = binReader.ReadUInt16();
-            block.color2 = binReader.ReadUInt16();
-
-            block.colorIndices = binReader.ReadUInt32();
-            return block;
-        }
-
-
-        public static int DXTBlend(int v1, int v2)
-        {
-            // 3/8 blend, which is close to 1/3
-            return ((v1 * 3 + v2 * 5) >> 3);
-        }
-
-        public static byte Convert3To8(byte v)
-        {
-            // Swizzle bits: 00000123 -> 12312312
-            return (byte)((v << 5) | (v << 2) | (v >> 1));
-        }
-
-        public static byte Convert4To8(byte v)
-        {
-            // Swizzle bits: 00001234 -> 12341234
-            return (byte)((v << 4) | v);
-        }
-
         public static byte Convert5To8(byte v)
         {
             // Swizzle bits: 00012345 -> 12345123
@@ -368,12 +345,6 @@ namespace GCTextureTools
             // Swizzle bits: 00123456 -> 12345612
             return (byte)((v << 2) | (v >> 4));
         }
-
-        public static uint MakeRGBA(int r, int g, int b, int a)
-        {
-            return (uint)((a << 24) | (b << 16) | (g << 8) | r);
-        }
-
 
         public static ushort Swap16(ushort x)
         {
@@ -417,7 +388,8 @@ namespace GCTextureTools
             for (int i = 0; i < bytes.Length; i += 4)
             {
                 //colorPixels[count++] = Color.FromArgb(255, bytes[i + 1], bytes[i + 2], bytes[i + 3]);
-                colorPixels[count++] = Color.FromArgb(255, bytes[i + 2], bytes[i + 1], bytes[i + 0]);
+                Color c = Color.FromArgb(255, bytes[i + 2], bytes[i + 1], bytes[i + 0]);
+                colorPixels[count++] = c;
             }
 
             Color[] alphaPixels = new Color[bytes.Length / 4];
@@ -426,7 +398,7 @@ namespace GCTextureTools
             {
                 // set alpha into green
                 //alphaPixels[count++] = Color.FromArgb(255, 0, bytes[i + 0], 0);
-                alphaPixels[count++] = Color.FromArgb(255, 0, bytes[i + 1], 0);
+                alphaPixels[count++] = Color.FromArgb(255, 0, bytes[i + 3], 0);
             }
 
             for (int y = 0; y < height; y += 8)
@@ -492,8 +464,10 @@ namespace GCTextureTools
 
         public static void TestReencode(string reencodePath)
         {
-            String basePath = @"F:\UnityProjects\GladiusDFGui\Assets\Resources\Textures\";
-            string filename = "endlesshorizons_tournament.png";
+            //String basePath = @"F:\UnityProjects\GladiusDFGui\Assets\Resources\Textures\";
+            //string filename = "endlesshorizons_tournament.png";
+            string basePath = @"d:\tmp\";
+            string filename = @"test256.png";
 
             System.IO.DirectoryInfo targetInfo = new DirectoryInfo(reencodePath);
             if (!targetInfo.Exists)
@@ -622,15 +596,15 @@ namespace GCTextureTools
 
         static void Main(string[] args)
         {
-            //string baseInput = @"M:\GladiusISOWorkingExtracted\python-gc\gc\data\texture\"; 
-            //string baseOutput = @"m:\tmp\gladius\";
-            
-            //string sourcePath = baseInput+@"gui\leagues\";
+            string baseInput = @"d:\GladiusISOWorkingExtracted\python-gc\gc\data\texture\"; 
+            string baseOutput = @"d:\tmp\gladius\";
 
-            //string outputDirectory = baseOutput+@"textures-gc\";
-            //string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
+            string sourcePath = baseInput+@"gui\leagues\";
 
-            ////TestExtract(sourcePath, outputDirectory);
+            string outputDirectory = baseOutput+@"textures-gc\";
+            string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
+
+            //TestExtract(sourcePath, outputDirectory);
             //TestReencode(reencodedOutputDirectory);
 
 
@@ -796,7 +770,28 @@ namespace GCTextureTools
             binWriter.Write(swappedQ0);
             binWriter.Write(swappedQ1);
 
-            binWriter.Write(colorIndices);
+            uint convertedColorIndices = 0;
+            uint d = colorIndices;
+
+            if(colorIndices != 0)
+            {
+                int ibreak = 0;
+            }
+
+            int count = 30;
+            for (int y = 3; y >= 0; y--)
+            {
+                //for (int x = 3; x >= 0; x--)
+                for (int x = 0; x < 4; x++)
+                {
+                    int val = this[(y * 4) + x];
+                    convertedColorIndices |= (uint)(val << count);
+                    count-=2;
+                }
+            }
+
+            //binWriter.Write(colorIndices);
+            binWriter.Write(convertedColorIndices);
         }
 
 
@@ -825,7 +820,7 @@ namespace GCTextureTools
             else
             {
                 ImageExtractor.TempColors[2] = Color.FromArgb(255, (r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2);
-                ImageExtractor.TempColors[3] = Color.FromArgb(255,0,0,0);
+                ImageExtractor.TempColors[3] = Color.FromArgb(0, 0, 0, 0);
             }
 
             for (int i = 0; i < 4; ++i)
@@ -835,13 +830,25 @@ namespace GCTextureTools
 
 
             uint d = BitConverter.ToUInt32(input, offset + 4);
-            block.colorIndices = d;
+            block.colorIndices = 0;
+
+            for (int y = 0; y < 4; ++y)
+            {
+                for (int x = 3; x >= 0; x--)
+                {
+                    block[(y * 4) + x] = (int)(d & 3);
+                    d >>= 2;
+                }
+            }
+
+            ImageExtractor.ClearTempColours();
 
             return block;
 
         }
 
     };
+
 
 
 }
