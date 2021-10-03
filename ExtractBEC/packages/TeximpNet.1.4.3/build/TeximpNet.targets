@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Copy/clean native dependencies only for projects that don't output a *.deps.json file (netframework projects). Netcore projects will
+       copy out the native dependencies during publish, and during development debugging/running, the binaries will be loaded from the nuget cache.
+       Optionally, the property $(ForceCopyNativeTeximp) can be set to true to always run these targets. -->
+  
+  <Target Name="CopyNativeTeximp" AfterTargets="AfterBuild" Condition="'$(ForceCopyNativeTeximp)' == 'true' OR !Exists('$(TargetDir)$(AssemblyName).deps.json')">
+    <ItemGroup>
+        <NativeTeximpLibs Include="$(MSBuildThisFileDirectory)..\runtimes\**\*.*"/>
+    </ItemGroup>  
+    <Message Text="Copying native Teximp libraries..." Importance="high" />    
+    <Copy SourceFiles="@(NativeTeximpLibs)" DestinationFolder="$(OutputPath)\runtimes\%(RecursiveDir)" />
+  </Target>
+  
+  <Target Name="CleanNativeTeximp" BeforeTargets="BeforeClean" Condition="'$(ForceCopyNativeTeximp)' == 'true' OR !Exists('$(TargetDir)$(AssemblyName).deps.json')">
+    <Message Text="Cleaning native Teximp libraries..." Importance="high" />
+    <ItemGroup>
+	      <NativeTeximpLibsToDelete Include="$(TargetDir)runtimes\**\*FreeImage*.*; $(TargetDir)runtimes\**\*nvtt*.*;" />
+    </ItemGroup>
+    <Delete Files="@(NativeTeximpLibsToDelete)" />
+  </Target>
+</Project>
