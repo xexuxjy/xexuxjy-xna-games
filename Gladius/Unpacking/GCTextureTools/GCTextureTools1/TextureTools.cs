@@ -99,12 +99,12 @@ namespace GCTextureTools
                 {
                     image.CompressedData = binReader.ReadBytes(image.Header.CompressedSize);
 
-                    int potWidth = ToNextNearest(image.Header.Width);
-                    int potHeight = ToNextNearest(image.Header.Height);
+                    int potWidth = image.Header.Width;// ToNextNearest(image.Header.Width);
+                    int potHeight = image.Header.Height;// ToNextNearest(image.Header.Height);
 
-                    image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
+                    //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
 
-                    DecompressDXT1GC(image.CompressedData, potWidth, potHeight, image.DirectBitmap.Bits);
+                    DecompressDXT1GC(image);
 
                 }
             }
@@ -223,60 +223,245 @@ namespace GCTextureTools
         }
 
 
-        public static void DecompressDXT1GC(byte[] input, int width, int height, byte[] output)
+        public static void DecompressDXT1GC(GladiusImage image)
         {
             int offset = 0;
-            int bcw = (width + 3) / 4;
-            int bch = (height + 3) / 4;
-            int clen_last = (width + 3) % 4 + 1;
-            uint[] colors = new uint[4];
-            int yblock = 0;
-            int dstIndex = 0;
-            int increment = 8;
-            uint[] tempData = new uint[width * height];
+
+            byte[] input = image.CompressedData;
+            int width = image.Header.Width;
+            int height = image.Header.Height;
+
+            int blockCountX = (width + 3) / 4;
+            int blockCountY = (height + 3) / 4;
+
+            //int clen_last = (width + 3) % 4 + 1;
+
 
             int alphaOffset = input.Length / 2 ;
 
-            for (int y = 0; y < height; y += 8)
+            int blockStorage = 0;
+            StringBuilder debugOut1 = new StringBuilder();
+            StringBuilder debugOut2 = new StringBuilder();
+
+            int lastBlockStorage = 0;
+
+            bool oddXBlocks = blockCountX % 2 == 1;
+            bool oddYBlocks = blockCountY % 2 == 1;
+
+            if (oddXBlocks)
             {
-                for (int x = 0; x < width; x += 8)
+                blockCountX += 1;
+            }
+            if (oddXBlocks)
+            {
+                blockCountY += 1;
+            }
+
+
+            DXTBlock block = null;
+            DXTBlock alphaBlock = null;
+
+
+
+            uint[] tempData = new uint[blockCountX * 4 * blockCountY * 4];
+            uint[] tempData2 = new uint[tempData.Length];
+
+            GetBlocks(input, blockStorage, alphaOffset, out block, out alphaBlock, debugOut1);
+            DXTBlock padBlock = block;
+            DXTBlock padAlphaBlock = alphaBlock;
+
+            image.DirectBitmap = new DirectBitmap(blockCountX * 4 ,blockCountY * 4);
+            byte[] output = image.DirectBitmap.Bits;
+
+
+            for (int  y = 0; y < blockCountY; y++)
+            {
+                lastBlockStorage = blockStorage;
+
+                for (int x = 0; x < blockCountX; x++)
                 {
-                    DXTBlock block = null;
-                    DXTBlock alphaBlock = null;
+                    try
+                    {
+                        try
+                        {
+                            GetBlocks(input, blockStorage, alphaOffset, out block, out alphaBlock, debugOut1);
+                        }
+                        catch (Exception e)
+                        {
+                            int ibreak = 0;
+                        }
 
-                    GetBlocks(input, offset,alphaOffset,out block,out alphaBlock);
-                    FillDest(tempData, ref dstIndex, (y * width + x), width, block,alphaBlock);
-                    offset += increment;
+                        try
+                        {
+                            FillDest2(tempData2, x, y, width, block, alphaBlock);
 
-                    GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
-                    FillDest(tempData, ref dstIndex, (y * width + x + 4), width, block, alphaBlock);
-                    offset += increment;
+                        }
+                        catch (Exception)
+                        {
+                            int ibreak = 0;
+                        }
 
-                    GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
-                    FillDest(tempData, ref dstIndex, ((y + 4) * width + x), width, block, alphaBlock);
-                    offset += increment;
+                        if (x < blockCountX - 1)
+                        {
+                            if (x % 2 == 0)
+                            {
+                                blockStorage += 8;
+                            }
+                            else
+                            {
+                                blockStorage += 24;
+                            }
+                        }
+                        else
+                        {
+                            if (oddXBlocks)
+                            {
+                                FillDest2(tempData2, x, y, width, padBlock, padAlphaBlock);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        int ibreak = 0;
+                    }
+                }
 
-                    GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
-                    FillDest(tempData, ref dstIndex, ((y + 4) * width + x + 4), width, block, alphaBlock);
-                    offset += increment;
+                if (y % 2 == 0)
+                {
+                    blockStorage = lastBlockStorage + 16;
+                    if (oddXBlocks)
+                    {
+                        blockStorage = lastBlockStorage + 8;
+                    }
 
+
+                }
+                else
+                {
+                    if (oddXBlocks)
+                    {
+
+
+                    }
+
+                    blockStorage += 8;
+                    
+                    //if (blockCountX % 2 == 0)
+                    //{
+                    //    blockStorage += 8;
+                    //}
+                    //else
+                    //{
+                    //    blockStorage += 24;
+                    //}
+
+
+
+                }
+
+
+
+                //blockStorage += blockCountX * 8;
+            }
+
+            //for (int y = 0; y < height; y += 4)
+            //{
+            //    for (int x = 0; x < width; x += 4)
+            //    {
+            //        DXTBlock block = null;
+            //        DXTBlock alphaBlock = null;
+
+            //        //GetBlocks(input, offset,alphaOffset,out block,out alphaBlock);
+            //        //FillDest(tempData2, (y * width + x), width, block,alphaBlock);
+            //        //offset += 8;
+
+            //        //GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
+            //        //FillDest(tempData, ref dstIndex, (y * width + x + 4), width, block, alphaBlock);
+            //        //offset += offsetIncrement;
+
+            //        //GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
+            //        //FillDest(tempData, ref dstIndex, ((y + 4) * width + x), width, block, alphaBlock);
+            //        //offset += offsetIncrement;
+
+            //        //GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
+            //        //FillDest(tempData, ref dstIndex, ((y + 4) * width + x + 4), width, block, alphaBlock);
+            //        //offset += offsetIncrement;
+            
+            //    }
+            //}
+
+            //offset = 0;
+
+
+            //int ystep = 8;
+            //int xstep = 8;
+
+
+            //for (int y = 0; y < height; y += 8)
+            //{
+            //    for (int x = 0; x < width; x += 8)
+            //    {
+            //        DXTBlock block = null;
+            //        DXTBlock alphaBlock = null;
+
+            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock,debugOut2);
+            //        FillDest(tempData, (y * width + x), width, block, alphaBlock);
+            //        offset += 8;
+
+            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock, debugOut2);
+            //        FillDest(tempData, (y * width + x + 4), width, block, alphaBlock);
+            //        offset += 8;
+
+            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock, debugOut2);
+            //        FillDest(tempData, ((y + 4) * width + x), width, block, alphaBlock);
+            //        offset += 8;
+
+            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock, debugOut2);
+            //        FillDest(tempData, ((y + 4) * width + x + 4), width, block, alphaBlock);
+            //        offset += 8;
+            //        debugOut2.AppendLine();
+
+            //    }
+            //}
+
+            File.WriteAllText(@"d:\tmp\gladius-textures\new-order.txt", debugOut1.ToString());
+            File.WriteAllText(@"d:\tmp\gladius-textures\old-order.txt", debugOut2.ToString());
+
+
+            for (int i = 0; i < tempData.Length; ++i)
+            {
+                if (tempData[i] != tempData2[i])
+                {
+                    int ibreak = 0;
                 }
             }
 
-            int count = 0;
-            for (int i = 0; i < tempData.Length; ++i)
+
+            try
             {
-                byte[] bytes = BitConverter.GetBytes(tempData[i]);
-                foreach (byte b in bytes)
+                int count = 0;
+                for (int i = 0; i < tempData.Length; ++i)
                 {
-                    output[count++] = b;
+                    byte[] bytes = BitConverter.GetBytes(tempData2[i]);
+                    foreach (byte b in bytes)
+                    {
+                        output[count++] = b;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                int ibreak = 0;
             }
 
         }
 
-        public static void GetBlocks(byte[] input,int offset,int alphaOffset, out DXTBlock block, out DXTBlock alphaBlock)
+        public static void GetBlocks(byte[] input,int offset,int alphaOffset, out DXTBlock block, out DXTBlock alphaBlock,StringBuilder debugOut = null)
         {
+            if (debugOut != null)
+            {
+                debugOut.AppendLine(""+offset);
+            }
             block = DXTBlock.FromCompressed(input, offset);
             alphaBlock = DXTBlock.FromCompressed(input, offset+alphaOffset);
         }
@@ -294,9 +479,9 @@ namespace GCTextureTools
         public static Color[] TempColors = new Color[4];
 
 
-        public static void FillDest(uint[] dst, ref int dstIndex, int offset, int pitch, DXTBlock block,DXTBlock alphaBlock)
+        public static void FillDest(uint[] dst, int offset, int pitch, DXTBlock block,DXTBlock alphaBlock)
         {
-            int localDstIndex = dstIndex;
+            int localDstIndex = 0;
             int numiter = 0;
             for (int y = 0; y < 4; y++)
             {
@@ -318,7 +503,36 @@ namespace GCTextureTools
                 }
                 localDstIndex += pitch;
             }
+            int ibreak = 0;
         }
+
+        public static void FillDest2(uint[] dst, int xblock,int yblock, int pitch, DXTBlock block, DXTBlock alphaBlock)
+        {
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    int index = (y * 4) + x;
+
+                    int val = block[index];
+                    Color blockColour = block.DecodedColours[val];
+
+                    int alphaVal = alphaBlock[index];
+                    Color alphaColour = alphaBlock.DecodedColours[alphaVal];
+
+                    Color resultColor = Color.FromArgb(alphaColour.G, blockColour.R, blockColour.G, blockColour.B);
+
+                    int yindex = (yblock * 4) + y;
+                    int xindex = (xblock * 4) + x;
+
+                    int destIndex = (yindex * pitch) + xindex;
+                    dst[destIndex] = (uint)resultColor.ToArgb();
+                }
+            }
+            int ibreak = 0;
+        }
+
+
 
         public static void FillDestSource(uint[] dst, ref int dstIndex, int offset, int pitch, DXTBlock src)
         {
@@ -487,10 +701,10 @@ namespace GCTextureTools
 
             DirectBitmap reencodedBitmap = new DirectBitmap(width, height);
             
-            DecompressDXT1GC(processResults, width, height, reencodedBitmap.Bits);
+            //DecompressDXT1GC(processResults, width, height, reencodedBitmap.Bits);
 
-            reencodedBitmap.Bitmap.Save(reencodePath + filename, ImageFormat.Png);
-            reencodedBitmap.Dispose();
+            //reencodedBitmap.Bitmap.Save(reencodePath + filename, ImageFormat.Png);
+            //reencodedBitmap.Dispose();
 
 
         }
@@ -596,30 +810,30 @@ namespace GCTextureTools
 
         static void Main(string[] args)
         {
-            string baseInput = @"d:\GladiusISOWorkingExtracted\python-gc\gc\data\texture\"; 
-            string baseOutput = @"d:\tmp\gladius\";
+            string baseInput = @"d:\tmp\gladius-textures\input\"; 
+            string baseOutput = @"d:\tmp\gladius-textures\";
 
-            string sourcePath = baseInput+@"gui\leagues\";
+            string sourcePath = baseInput;//baseInput+@"gui\leagues\";
 
             string outputDirectory = baseOutput+@"textures-gc\";
             string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
 
-            //TestExtract(sourcePath, outputDirectory);
+            TestExtract(sourcePath, outputDirectory);
             //TestReencode(reencodedOutputDirectory);
 
 
-            if (args.Length != 2)
-            {
-                System.Console.WriteLine("texturetools <original file>  <destination file>");
-            }
-            else
-            {
-                string originalFilename = args[0];
-                string destinatioFilename = args[1];
+            //if (args.Length != 2)
+            //{
+            //    System.Console.WriteLine("texturetools <original file>  <destination file>");
+            //}
+            //else
+            //{
+            //    string originalFilename = args[0];
+            //    string destinatioFilename = args[1];
 
-                EncodeFile(originalFilename, destinatioFilename);
+            //    EncodeFile(originalFilename, destinatioFilename);
 
-            }
+            //}
 
             int ibreak = 0;
         }
