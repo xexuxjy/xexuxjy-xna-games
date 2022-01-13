@@ -228,13 +228,12 @@ namespace GCTextureTools
             int offset = 0;
 
             byte[] input = image.CompressedData;
+
             int width = image.Header.Width;
             int height = image.Header.Height;
 
             int blockCountX = (width + 3) / 4;
             int blockCountY = (height + 3) / 4;
-
-            //int clen_last = (width + 3) % 4 + 1;
 
 
             int alphaOffset = input.Length / 2 ;
@@ -257,22 +256,24 @@ namespace GCTextureTools
                 blockCountY += 1;
             }
 
+            width = blockCountX * 4;
+            height = blockCountY * 4;
+
 
             DXTBlock block = null;
             DXTBlock alphaBlock = null;
 
 
 
-            uint[] tempData = new uint[blockCountX * 4 * blockCountY * 4];
+            uint[] tempData = new uint[width * height];
             uint[] tempData2 = new uint[tempData.Length];
 
             GetBlocks(input, blockStorage, alphaOffset, out block, out alphaBlock, debugOut1);
             DXTBlock padBlock = block;
             DXTBlock padAlphaBlock = alphaBlock;
 
-            image.DirectBitmap = new DirectBitmap(blockCountX * 4 ,blockCountY * 4);
+            image.DirectBitmap = new DirectBitmap(width,height);
             byte[] output = image.DirectBitmap.Bits;
-
 
             for (int  y = 0; y < blockCountY; y++)
             {
@@ -296,7 +297,7 @@ namespace GCTextureTools
                             FillDest2(tempData2, x, y, width, block, alphaBlock);
 
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
                             int ibreak = 0;
                         }
@@ -312,13 +313,6 @@ namespace GCTextureTools
                                 blockStorage += 24;
                             }
                         }
-                        else
-                        {
-                            if (oddXBlocks)
-                            {
-                                FillDest2(tempData2, x, y, width, padBlock, padAlphaBlock);
-                            }
-                        }
                     }
                     catch (Exception e)
                     {
@@ -326,116 +320,32 @@ namespace GCTextureTools
                     }
                 }
 
+                if (oddXBlocks)
+                {
+                    FillDest2(tempData2, blockCountX, y, width, padBlock, padAlphaBlock);
+                }
+
+
                 if (y % 2 == 0)
                 {
                     blockStorage = lastBlockStorage + 16;
-                    if (oddXBlocks)
-                    {
-                        blockStorage = lastBlockStorage + 8;
-                    }
-
-
                 }
                 else
                 {
-                    if (oddXBlocks)
-                    {
-
-
-                    }
-
                     blockStorage += 8;
-                    
-                    //if (blockCountX % 2 == 0)
-                    //{
-                    //    blockStorage += 8;
-                    //}
-                    //else
-                    //{
-                    //    blockStorage += 24;
-                    //}
-
-
-
                 }
-
-
-
-                //blockStorage += blockCountX * 8;
             }
 
-            //for (int y = 0; y < height; y += 4)
-            //{
-            //    for (int x = 0; x < width; x += 4)
-            //    {
-            //        DXTBlock block = null;
-            //        DXTBlock alphaBlock = null;
-
-            //        //GetBlocks(input, offset,alphaOffset,out block,out alphaBlock);
-            //        //FillDest(tempData2, (y * width + x), width, block,alphaBlock);
-            //        //offset += 8;
-
-            //        //GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
-            //        //FillDest(tempData, ref dstIndex, (y * width + x + 4), width, block, alphaBlock);
-            //        //offset += offsetIncrement;
-
-            //        //GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
-            //        //FillDest(tempData, ref dstIndex, ((y + 4) * width + x), width, block, alphaBlock);
-            //        //offset += offsetIncrement;
-
-            //        //GetBlocks(input, offset, alphaOffset, out block, out alphaBlock);
-            //        //FillDest(tempData, ref dstIndex, ((y + 4) * width + x + 4), width, block, alphaBlock);
-            //        //offset += offsetIncrement;
-            
-            //    }
-            //}
-
-            //offset = 0;
-
-
-            //int ystep = 8;
-            //int xstep = 8;
-
-
-            //for (int y = 0; y < height; y += 8)
-            //{
-            //    for (int x = 0; x < width; x += 8)
-            //    {
-            //        DXTBlock block = null;
-            //        DXTBlock alphaBlock = null;
-
-            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock,debugOut2);
-            //        FillDest(tempData, (y * width + x), width, block, alphaBlock);
-            //        offset += 8;
-
-            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock, debugOut2);
-            //        FillDest(tempData, (y * width + x + 4), width, block, alphaBlock);
-            //        offset += 8;
-
-            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock, debugOut2);
-            //        FillDest(tempData, ((y + 4) * width + x), width, block, alphaBlock);
-            //        offset += 8;
-
-            //        GetBlocks(input, offset, alphaOffset, out block, out alphaBlock, debugOut2);
-            //        FillDest(tempData, ((y + 4) * width + x + 4), width, block, alphaBlock);
-            //        offset += 8;
-            //        debugOut2.AppendLine();
-
-            //    }
-            //}
+            if (oddYBlocks)
+            {
+                for (int i = 0; i < blockCountX; ++i)
+                {
+                    FillDest2(tempData2, i, blockCountY, width, padBlock, padAlphaBlock);
+                }
+            }
 
             File.WriteAllText(@"d:\tmp\gladius-textures\new-order.txt", debugOut1.ToString());
             File.WriteAllText(@"d:\tmp\gladius-textures\old-order.txt", debugOut2.ToString());
-
-
-            for (int i = 0; i < tempData.Length; ++i)
-            {
-                if (tempData[i] != tempData2[i])
-                {
-                    int ibreak = 0;
-                }
-            }
-
 
             try
             {
