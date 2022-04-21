@@ -76,15 +76,32 @@ public static class Common
         return count;
     }
 
-    //public static String ToStringC(IndexedMatrix m)
-    //{
-    //    StringBuilder sb = new StringBuilder();
-    //    sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M11, m.M12, m.M13, m.M14));
-    //    sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M21, m.M22, m.M23, m.M24));
-    //    sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M31, m.M32, m.M33, m.M34));
-    //    sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000} ", m.M41, m.M42, m.M43, m.M44));
-    //    return sb.ToString();
-    //}
+    public static void ReadNullSeparatedNamesInSectionLength(BinaryReader binReader, List<String> selsNames, long sectionLength)
+    {
+        StringBuilder sb = new StringBuilder();
+        long currentPosition = binReader.BaseStream.Position;
+        long endPosition = currentPosition + sectionLength;
+
+        char b;
+        while (currentPosition < endPosition)
+        {
+            while ((b = (char)binReader.ReadByte()) != 0x00)
+            {
+                sb.Append(b);
+            }
+            if (sb.Length > 0)
+            {
+                selsNames.Add(sb.ToString());
+            }
+            sb = new StringBuilder();
+            // if next character is null as well, we're done.
+            if (binReader.PeekChar() == 0x00)
+            {
+                break;
+            }
+        }
+        binReader.BaseStream.Position = endPosition + 1;
+    }
 
 
     public static String ToStringFA(float[] fa)

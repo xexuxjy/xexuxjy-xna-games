@@ -2,59 +2,125 @@ using System.Collections.Generic;
 using System;
 //namespace Gladius
 //{
-    public enum GameState
+    public enum GameMode
     {
         None,
         Arena,
-        Overland,
-        GameOverWin,
-        GameOverLose,
+        OverlandNordagh,
+        OverlandImperia,
+        OverlandSteppes,
+        OverlandExpanse,
         Town,
         Loading,
         Menu
     };
 
-    public enum OverlandZone
-    {
-        None,
-        Nordagh,
-        Imperia,
-        Steppes,
-        Expanse
-    };
+//public class GameObjectAttributeType
+//{
+//    public string Name { get; set; }
+//    public string LongName { get; set; }
 
-    public enum GameObjectAttributeType
-    {
-        Accuracy,
-        Defense,
-        Power,
-        Constitution,
-        Health,
-        Movement,
-        CriticalChance,
-        EarthAffinity,
-        AirAffinity,
-        FireAffinity,
-        WaterAffinity,
-        LightAffinity,
-        DarkAffinity,
-        CharacterSkillPoints, // used for advancing character, buying skills etc
-        ArenaSkillPoints,     // used for limiting skills in arena combat.
-        Affinity,
-        Experience,
-        Initiative,
-        NumKills,
-        TotalDamageDone,
-        TotalDamageReceived,
-        NumberOfHits,
-        NumberOfCriticalHits,
-        NumTypes
-    }
+//    public GameObjectAttributeType(string name, string longName)
+//    {
+//        Name = name;
+//        LongName = longName;
+//    }
+//    //public static string[] names = new string[] { "LVL", "XP", "Next", "HP", "DAM", "PWR", "ACC", "DEF", "INI", "CON", "MOV", "Arm", "Wpn" };
+//    //public static string[] longNames = new string[] { "Level", "Experience Points", "Next Level Points", "Hitpoints", "damage", "power", "accuracy", "defense", "initiative", "CON", "MOV", "Arm", "Wpn" };
 
 
+//    public readonly static GameObjectAttributeType Accuracy = new GameObjectAttributeType("ACC", "accuracy");
+//    public readonly static GameObjectAttributeType Defense = new GameObjectAttributeType("DEF", "defense");
+//    public readonly static GameObjectAttributeType Power = new GameObjectAttributeType("PWR", "power");
+//    public readonly static GameObjectAttributeType Constitution = new GameObjectAttributeType("CON", "constitution");
+//    public readonly static GameObjectAttributeType Health = new GameObjectAttributeType("HP", "health");
+//    public readonly static GameObjectAttributeType Movement = new GameObjectAttributeType("MOV", "movement");
+//    public readonly static GameObjectAttributeType CriticalChance = new GameObjectAttributeType("CRT", "critical chance");
+//    public readonly static GameObjectAttributeType Affinity = new GameObjectAttributeType("AFF", "affinity");
+//    public readonly static GameObjectAttributeType DefenseAffinityChargeRate = new GameObjectAttributeType("DAF", "defense affinity charge rate");
+//    public readonly static GameObjectAttributeType OffenseAffinityChargeRate = new GameObjectAttributeType("OAF", "offense affinity charge rate");
+//    public readonly static GameObjectAttributeType ShieldEffectiveness = new GameObjectAttributeType("SHI", "shield effectiveness");
+//    public readonly static GameObjectAttributeType CharacterSkillPoints = new GameObjectAttributeType("SP", "skill points");
+//    public readonly static GameObjectAttributeType ArenaSkllPoints = new GameObjectAttributeType("ASP", "arena skill points");
+//    public readonly static GameObjectAttributeType Experience = new GameObjectAttributeType("EXP", "experience");
+//    public readonly static GameObjectAttributeType Initiative = new GameObjectAttributeType("INI", "initiative");
+//    public readonly static GameObjectAttributeType NumKills = new GameObjectAttributeType("NKI", "number of kills");
+//    public readonly static GameObjectAttributeType TotalDamageDone = new GameObjectAttributeType("TDD", "total damage done");
+//    public readonly static GameObjectAttributeType TotalDamageReceived = new GameObjectAttributeType("TDR", "total damage received");
+//    public readonly static GameObjectAttributeType NumberOfHits = new GameObjectAttributeType("NH", "number of hits");
+//    public readonly static GameObjectAttributeType NumberOfCriticalHits = new GameObjectAttributeType("NCH", "number of critical hits");
+//    public readonly static GameObjectAttributeType Level = new GameObjectAttributeType("LVL", "level");
+//    public readonly static GameObjectAttributeType Xp = new GameObjectAttributeType("XP", "experience");
+//    public readonly static GameObjectAttributeType NextXp = new GameObjectAttributeType("Next", "next expereince");
+//    public readonly static GameObjectAttributeType Damage = new GameObjectAttributeType("DAM", "damage");
+//    public readonly static GameObjectAttributeType Armour = new GameObjectAttributeType("Arm", "armour");
+//    public readonly static GameObjectAttributeType Weapon = new GameObjectAttributeType("Wpn", "weapon");
+
+//}
+
+public enum GameObjectAttributeType
+{
+    None,
+    Accuracy,
+    Defense,
+    Power,
+    Constitution,
+    Health,
+    Movement,
+    MoveRate,
+    CriticalChance,
+    Affinity,
+    DefenseAffinityChargeRate,
+    OffenseAffinityChargeRate,
+    ShieldEffectiveness,
+    CharacterSkillPoints, // used for advancing character, buying skills etc
+    ArenaSkillPoints,     // used for limiting skills in arena combat.
+    Experience,
+    Initiative,
+    NumKills,
+    TotalDamageDone,
+    TotalDamageReceived,
+    NumberOfHits,
+    NumberOfCriticalHits,
+    Level,
+    Xp,
+    NextXp,
+    Damage,
+    Armour,
+    Weapon,
+    CombatAttack,
+    CombatDefend,
+    Crowd,
+    NumTypes
+}
 
 
-    public enum GameObjectAttributeModifierDurationType
+public enum CrowdState
+{
+    None,
+    Idle,
+    ExcitedA,
+    ExcitedB,
+    BooA,
+    BooB,
+    Throw
+}
+
+
+
+public enum Affinity
+{
+    AFF_ALL = -1,
+    AFF_NONE = 0,
+    AFF_EARTH,
+    AFF_WATER,
+    AFF_DARK,
+    AFF_AIR,
+    AFF_FIRE,
+    AFF_LIGHT
+}
+
+public enum GameObjectAttributeModifierDurationType
     {
         InstantPermanent,
         InstantTemporary,
@@ -70,155 +136,16 @@ using System;
 
     public enum ItemLocation
     {
+        None,
         Weapon,	
         Armor,	
         Shield,	
         Helmet,	
         Accessory,
+        Projectile,
         NumItems
     }
 
-    public enum ActorCategory
-    {
-        Light,
-        Medium,
-        Heavy,
-        Support,
-        Arcane
-    }
-
-    public enum SkillClass
-    {
-    NONE,
-    AFFINITYBEAST,
-    AFFINITYBEASTGREATER,
-    AMAZON,
-    ARCHER,
-    BANDIT,
-    BARBARIAN,
-    BEAR,
-    BEARGREATER,
-    BERSERKER,
-    BOSS,
-    CAT,
-    CATGREATER,
-    CENTURION,
-    CHANNELER,
-    CITIZEN,
-    CYCLOPS,
-    CYCLOPSGREATER,
-    DARKCAT,
-    DARKGOD,
-    DARKLEGIONNAIRE,
-    DARKWOLF,
-    DERVISH,
-    DUMMY,
-    EIJI,
-    GALDR,
-    GALVERG,
-    GUNGNIR,
-    GUNGNIRF,
-    GWAZI,
-    INVALID,
-    LEGIONNAIRE,
-    LUDO,
-    MINOTAUR,
-    MONGREL,
-    MONGRELSHAMAN,
-    MURMILLO,
-    MUTUUS,
-    OGRE,
-    OTHER,
-    PELTAST,
-    PROP,
-    SAMNITE,
-    SATYR,
-    URLAN,
-    URSULA,
-    VALENS,
-    SCARAB,
-    SCORPION,
-    SECUTOR,
-    SUMMONER,
-    UNDEADCASTER,
-    UNDEADMELEE,
-    WOLF,
-    WOLFGREATER,
-    YETI
-
-}
-
-
-public enum ActorClass
-    {
-        AMAZON,
-        ARCHER,
-        ARCHERF,
-        BANDITA,
-        BANDITAF,
-        BANDITB,
-        BARBARIAN,
-        BARBARIANF,
-        BEAR,
-        BEARGREATER,
-        BERSERKER,
-        BERSERKERF,
-        CAT,
-        CATGREATER,
-        CENTURION,
-        CENTURIONF,
-        CHANNELERIMP,
-        CYCLOPS,
-        CYCLOPSGREATER,
-        DARKLEGIONNAIRE,
-        DERVISH,
-        DERVISHF,
-        DUMMY,
-        EIJI,
-        GALDR,
-        GALVERG,
-        GUNGNIR,
-        GUNGNIRF,
-        GWAZI,
-        LEGIONNAIRE,
-        LEGIONNAIREF,
-        LUDO,
-        MINOTAUR,
-        MONGREL,
-        MONGRELSHAMAN,
-        MURMILLO,
-        MURMILLOF,
-        MUTUUS,
-        OGRE,
-        PELTAST,
-        PELTASTF,
-        SAMNITEEXP,
-        SAMNITEEXPF,
-        SAMNITEIMP,
-        SAMNITEIMPF,
-        SAMNITESTE,
-        SAMNITESTEF,
-        SATYR,
-        URLAN,
-        URSULA,
-        VALENS,
-        SCARAB,
-        SCORPION,
-        SECUTORIMP,
-        SECUTORIMPF,
-        SECUTORSTE,
-        SECUTORSTEF,
-        SUMMONER,
-        UNDEADCASTERA,
-        UNDEADMELEEIMPA,
-        URSULACOSTUMEA,
-        URSULACOSTUMEB,
-        VALENSCOSTUMEA,
-        VALENSCOSTUMEB,
-        WOLF,
-        WOLFGREATER,
-        YETI
-    }
 
 
     public enum DamageType
@@ -246,11 +173,11 @@ public enum ActorClass
     public enum AttackResultType
     {
         None,
-        Miss,
+        Blocked,
+        Evaded,
         Hit,
         Critical,
-        Blocked,
-        Avoided
+        Weak
     }
 
     public enum SkillIconState
@@ -279,53 +206,6 @@ public enum ActorClass
     }
 
 
-    public enum AnimationEnum
-    {
-        None,
-        Idle,
-        IdleEngaged,
-        IdleWounded,
-        IdlePassive,
-        IdleDeath,
-        IdleKnockDown,
-        Death,
-        ReactVictory,
-        ReactLoss,
-        ReactHitWeakF,
-        ReactHitWeakB,
-        ReactHitWeakL,
-        ReactHitWeakR,
-        ReactHitStrongF,
-        ReactHitStrongB,
-        ReactHitStrongL,
-        ReactHitStrongR,
-        ReactKnockback,
-        ReactDowned,
-        ReactKnockdownB,
-        MoveWalk,
-        MoveRun,
-        MoveClimbHalf,
-        MoveJumpDownHalf,
-        MoveGetup,
-        Attack1,
-        Attack2,
-        Attack3,
-        Block,
-        SandToss
-    }
-
-//public enum SquareType
-//{
-//    Empty,
-//    Level1,
-//    Level2,
-//    Level3,
-//    Unaccesible,
-//    Wall,
-//    Crowd,
-//    Pillar
-//    //Mobile
-//}
 
 public enum ControlState
     {
@@ -334,38 +214,24 @@ public enum ControlState
         UsingGrid
     }
 
-    public enum ActionButton
-    {
-        Move1Up,
-        Move1Down,
-        Move1Left,
-        Move1Right,
-        Move2Up,
-        Move2Down,
-        Move2Left,
-        Move2Right,
-        ActionButton1,
-        ActionButton2,
-        ActionButton3,
-        ActionButton4
-    }
 
     public enum SchoolRank
     {
-        Bronze,
-        Silver,
-        Gold
+        Bronze=1,
+        Silver=2,
+        Gold=3
     }
 
 
     public enum GladiusCameraMode
     {
         None,
-        Normal,
+        Orbit,
+        NormalFollow,
         Manual,
         Combat,
         Overland,
-        BirdsEye,
+        Overhead,
         MovementCursor
     }
 
@@ -385,22 +251,23 @@ public enum ControlState
         SourceCone
     }
 
-    public static class StatusConditions
-    {
-        public static string[] Conditions = 
-	{
-        "statuscond_bleeding",
-        "statuscond_blind",
-        "statuscond_charmed",
-        "statuscond_confused",
-        "statuscond_doom",
-        "statuscond_feared",
-        "statuscond_frozen",
-        "statuscond_petrified",
-        "statuscond_root",
-        "statuscond_stunned"
-	};
-    }
+ //   public static class StatusConditions
+ //   {
+ //       public static string[] Conditions = 
+	//{
+ //       "berserk",
+ //       "bleeding",
+ //       "blind",
+ //       "charm",
+ //       "confusion",
+ //       "fear",
+ //       "frozen",
+ //       "petrification",
+ //       "poison",
+ //       "root",
+ //       "stun"
+ //   };
+ //   }
     
     [Flags]
     public enum ClassAttributeFlags
@@ -415,6 +282,8 @@ public enum ControlState
         Female = 128,
         Nordargh = 256,
         Imperia = 512,
+        Expanse = 1024,
+        Steppes = 2048,
         Human = 4096
     }
 

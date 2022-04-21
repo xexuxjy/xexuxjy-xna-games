@@ -484,8 +484,8 @@ namespace Assets.Editor
 
                     if (m == null)
                     {
-                        if (commonMeshData.IsTransparent || textureData1.textureName.Contains(".cc"))
-s                        {
+                        if(commonMeshData.IsTransparent || textureData1.textureName.Contains(".cc"))
+                        {
                             shader = Shader.Find("Gladius/Transparent");
                         }
                         else if (materialData.IsCubeMapReflect)
@@ -737,6 +737,56 @@ s                        {
 
                 String noExtensionName = commonModel.Name.Replace(".mdl", "");
 
+                bool isCrowdAnim = noExtensionName.StartsWith("crowd");
+                if (isCrowdAnim)
+                {
+                    //CrowdAnim crowdAnim = combinedPrefab.AddComponent<CrowdAnim>();
+//                    crowdAnim.RandomiseAnimationStart = true;
+
+                    String[] crowAnimTypes = { "booa", "boob", "btd", "exciteda", "excitedb", "idle" };
+
+                    foreach (String animType in crowAnimTypes)
+                    {
+
+
+                        DirectoryInfo di = new DirectoryInfo(@"F:\UnityProjects\GladiusDFGui\Assets\Resources\GladiusAnims\crowd\");
+                        FileInfo[] animFiles = di.GetFiles(noExtensionName + "_" + animType + ".pan.bytes", SearchOption.AllDirectories);
+                        foreach (FileInfo fileInfo in animFiles)
+                        {
+
+                            string fullName = fileInfo.FullName;
+                            string relativeName = fullName.Replace(@"F:\UnityProjects\GladiusDFGui\Assets\Resources\GladiusAnims\crowd\", "GladiusAnims/crowd/");
+
+
+                            //String crowdAnimName = "GladiusAnims /crowd/" + fileInfo.Name;
+                            string crowdAnimName = relativeName.Replace(".bytes", "");
+                            TextAsset textAsset = GladiusGlobals.LoadTextAsset(crowdAnimName);
+                            if (textAsset != null)
+                            {
+  //                              crowdAnim.AddAnimationData(textAsset);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    String objectAnimName = "GladiusAnims/objectanims/" + noExtensionName;
+
+                    TextAsset textAsset = GladiusGlobals.LoadTextAsset(objectAnimName);
+
+                    bool isSingleAnimation = textAsset != null;
+
+                    if (isSingleAnimation)
+                    {
+                        SimpleMeshHolder smh = combinedPrefab.AddComponent<SimpleMeshHolder>();
+                        smh.AnimationFile = textAsset;
+                        smh.RandomiseAnimationStart = true;
+                    }
+                    else
+                    {
+                        CharacterMeshHolder cmh = combinedPrefab.AddComponent<CharacterMeshHolder>();
+                    }
+                }
             }
 
             int everyMeshCounter = 0;
