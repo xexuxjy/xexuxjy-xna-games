@@ -1,0 +1,4 @@
+ITEMSET export Class: Galverg Galverg  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETGalverg,  1, 99,        "Dark Pillar of Hate",  "Dark Galverg's Armor", "",     "Dark Galverg's Helmet",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+

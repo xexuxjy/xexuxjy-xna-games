@@ -1,0 +1,159 @@
+////// SKILLSET export Class: UndeadMeleeExpA UndeadMelee  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "UndeadMelee Afterlife"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "UndeadMelee Attack"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "UndeadMelee Block"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "UndeadMelee ShatterSelf"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "UndeadMelee Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "UndeadMelee FleshlessTarget"     // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "UndeadMelee Combo I"             // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "UndeadMelee ScareAttack"         // JP:   4/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "UndeadMelee FearOfDeath"         // JP:  10/ 24	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "UndeadMelee Combo II"            // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "UndeadMelee GraveLaughter"       // JP:   8/ 44	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "UndeadMelee Combo III"           // JP:  22/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "UndeadMelee SicklyMarrow"        // JP:  12/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "UndeadMelee Defend I"            // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "UndeadMelee GraveRot"            // JP:  20/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "UndeadMelee RotHelmet"           // JP:  24/144	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "UndeadMelee Riposte"             // JP:  30/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "UndeadMelee RiposteSub"          // JP:   0/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "UndeadMelee RottingTouch"        // JP:  24/198	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "UndeadMelee Combo IV"            // JP:  34/232	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "UndeadMelee ScaredStiff"         // JP:  32/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "UndeadMelee Defend II"           // JP:  36/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "UndeadMelee HeavyStrike"         // JP:  40/340	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb, 27, 30, "UndeadMelee KnitBones"           // JP:  38/378	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "UndeadMelee TargetHead"          // JP:  34/412	AccMod -5
+//  Unused JP at Level 30: 18
+
+
+////// SKILLSET export Class: UndeadMeleeExpA UndeadMelee  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "UndeadMelee Afterlife"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "UndeadMelee Attack"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "UndeadMelee Block"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "UndeadMelee ShatterSelf"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "UndeadMelee Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "UndeadMelee FleshlessTarget"     // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "UndeadMelee FearOfDeath"         // JP:  10/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "UndeadMelee GraveLaughter"       // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "UndeadMelee ScareAttack"         // JP:   4/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "UndeadMelee SicklyMarrow"        // JP:  12/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "UndeadMelee Defend I"            // JP:  22/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "UndeadMelee GraveRot"            // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "UndeadMelee Riposte"             // JP:  30/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "UndeadMelee RiposteSub"          // JP:   0/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "UndeadMelee RotHelmet"           // JP:  24/134	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "UndeadMelee RottingTouch"        // JP:  24/158	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "UndeadMelee ScaredStiff"         // JP:  32/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "UndeadMelee Defend II"           // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "UndeadMelee KnitBones"           // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "UndeadMelee HeavyStrike"         // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "UndeadMelee TargetHead"          // JP:  34/338	AccMod -5
+//  Unused JP at Level 30: 92
+
+
+////// SKILLSET export Class: UndeadMeleeExpA UndeadMelee  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "UndeadMelee Afterlife"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "UndeadMelee Attack"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "UndeadMelee Block"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "UndeadMelee ShatterSelf"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "UndeadMelee Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "UndeadMelee FleshlessTarget"     // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "UndeadMelee FearOfDeath"         // JP:  10/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "UndeadMelee GraveLaughter"       // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "UndeadMelee ScareAttack"         // JP:   4/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "UndeadMelee SicklyMarrow"        // JP:  12/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "UndeadMelee Defend I"            // JP:  22/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "UndeadMelee GraveRot"            // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "UndeadMelee Riposte"             // JP:  30/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "UndeadMelee RiposteSub"          // JP:   0/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "UndeadMelee RotHelmet"           // JP:  24/134	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "UndeadMelee RottingTouch"        // JP:  24/158	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "UndeadMelee ScaredStiff"         // JP:  32/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "UndeadMelee Defend II"           // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "UndeadMelee KnitBones"           // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "UndeadMelee HeavyStrike"         // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "UndeadMelee TargetHead"          // JP:  34/338	AccMod -5
+//  Unused JP at Level 30: 92
+
+
+////// SKILLSET export Class: UndeadMeleeExpA UndeadMelee  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "UndeadMelee Afterlife"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "UndeadMelee Attack"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "UndeadMelee Block"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "UndeadMelee ShatterSelf"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "UndeadMelee Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "UndeadMelee DarkAffinity I"      // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "UndeadMelee DarkAffinity II"     // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "UndeadMelee FearOfDeath"         // JP:  10/ 24	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "UndeadMelee FleshlessTarget"     // JP:   4/ 28	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "UndeadMelee GraveLaughter"       // JP:   8/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "UndeadMelee ScareAttack"         // JP:   4/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "UndeadMelee SicklyMarrow"        // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "UndeadMelee DarkAffinity III"    // JP:  20/ 72	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  8, 30, "UndeadMelee Defend I"            // JP:  22/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "UndeadMelee GraveRot"            // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "UndeadMelee Riposte"             // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "UndeadMelee RiposteSub"          // JP:   0/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 13, 30, "UndeadMelee RotHelmet"           // JP:  24/168	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 15, 30, "UndeadMelee Defend II"           // JP:  36/204	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "UndeadMelee RottingTouch"        // JP:  24/228	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "UndeadMelee ScaredStiff"         // JP:  32/260	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 21, 30, "UndeadMelee TargetHead"          // JP:  34/294	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "UndeadMelee HeavyStrike"         // JP:  40/334	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 27, 30, "UndeadMelee KnitBones"           // JP:  38/372	AccMod 0
+//  Unused JP at Level 30: 58
+
+
+////// SKILLSET export Class: UndeadMeleeExpA UndeadMelee  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "UndeadMelee Afterlife"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "UndeadMelee Attack"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "UndeadMelee Block"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "UndeadMelee ShatterSelf"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "UndeadMelee Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "UndeadMelee FleshlessTarget"     // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "UndeadMelee FearOfDeath"         // JP:  10/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "UndeadMelee GraveLaughter"       // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "UndeadMelee ScareAttack"         // JP:   4/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "UndeadMelee SicklyMarrow"        // JP:  12/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "UndeadMelee Defend I"            // JP:  22/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "UndeadMelee GraveRot"            // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "UndeadMelee Riposte"             // JP:  30/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "UndeadMelee RiposteSub"          // JP:   0/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "UndeadMelee RotHelmet"           // JP:  24/134	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "UndeadMelee RottingTouch"        // JP:  24/158	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "UndeadMelee ScaredStiff"         // JP:  32/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "UndeadMelee Defend II"           // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "UndeadMelee KnitBones"           // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "UndeadMelee HeavyStrike"         // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "UndeadMelee TargetHead"          // JP:  34/338	AccMod -5
+//  Unused JP at Level 30: 92
+
+
+////// SKILLSET export Class: UndeadMeleeExpA UndeadMelee  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "UndeadMelee Afterlife"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "UndeadMelee Attack"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "UndeadMelee Block"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "UndeadMelee ShatterSelf"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "UndeadMelee Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "UndeadMelee FleshlessTarget"     // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "UndeadMelee FearOfDeath"         // JP:  10/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "UndeadMelee GraveLaughter"       // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "UndeadMelee ScareAttack"         // JP:   4/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "UndeadMelee SicklyMarrow"        // JP:  12/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "UndeadMelee Defend I"            // JP:  22/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "UndeadMelee GraveRot"            // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "UndeadMelee Riposte"             // JP:  30/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "UndeadMelee RiposteSub"          // JP:   0/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "UndeadMelee RotHelmet"           // JP:  24/134	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "UndeadMelee RottingTouch"        // JP:  24/158	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "UndeadMelee ScaredStiff"         // JP:  32/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "UndeadMelee Defend II"           // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "UndeadMelee KnitBones"           // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "UndeadMelee HeavyStrike"         // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "UndeadMelee TargetHead"          // JP:  34/338	AccMod -5
+//  Unused JP at Level 30: 92
+
+
+
+

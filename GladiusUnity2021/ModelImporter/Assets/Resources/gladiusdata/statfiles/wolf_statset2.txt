@@ -1,0 +1,38 @@
+// STATSET export Class: Wolf
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statsetw,         1         5         6         6         4         6         1
+MODCORESTATSCOMP:               statsetw,         2        13        14        11         9        11         1
+MODCORESTATSCOMP:               statsetw,         3        19        20        16        13        16         1
+MODCORESTATSCOMP:               statsetw,         4        25        26        22        18        21         1
+MODCORESTATSCOMP:               statsetw,         5        31        32        28        23        27         1
+MODCORESTATSCOMP:               statsetw,         6        36        37        33        29        32         1
+MODCORESTATSCOMP:               statsetw,         7        41        43        37        33        37         1
+MODCORESTATSCOMP:               statsetw,         8        47        49        43        37        42         1
+MODCORESTATSCOMP:               statsetw,         9        53        56        49        42        46         1
+MODCORESTATSCOMP:               statsetw,        10        59        62        54        47        52         1
+MODCORESTATSCOMP:               statsetw,        11        65        69        58        52        56         1
+MODCORESTATSCOMP:               statsetw,        12        71        76        63        57        60         1
+MODCORESTATSCOMP:               statsetw,        13        77        82        69        62        65         1
+MODCORESTATSCOMP:               statsetw,        14        82        87        74        66        70         1
+MODCORESTATSCOMP:               statsetw,        15        88        93        79        71        75         1
+MODCORESTATSCOMP:               statsetw,        16        93        98        83        76        79         1
+MODCORESTATSCOMP:               statsetw,        17        99       104        88        81        84         1
+MODCORESTATSCOMP:               statsetw,        18       106       110        93        86        89         1
+MODCORESTATSCOMP:               statsetw,        19       113       115        99        90        95         1
+MODCORESTATSCOMP:               statsetw,        20       120       122       104        94       101         1
+MODCORESTATSCOMP:               statsetw,        21       127       128       109        99       107         1
+MODCORESTATSCOMP:               statsetw,        22       134       134       114       104       113         1
+MODCORESTATSCOMP:               statsetw,        23       141       141       119       109       117         1
+MODCORESTATSCOMP:               statsetw,        24       148       147       123       115       121         1
+MODCORESTATSCOMP:               statsetw,        25       153       153       127       120       126         1
+MODCORESTATSCOMP:               statsetw,        26       158       158       133       125       132         1
+MODCORESTATSCOMP:               statsetw,        27       163       165       138       130       137         1
+MODCORESTATSCOMP:               statsetw,        28       170       170       144       135       142         1
+MODCORESTATSCOMP:               statsetw,        29       177       176       149       140       147         1
+MODCORESTATSCOMP:               statsetw,        30       183       182       154       146       153         1
+
+
+
+
+

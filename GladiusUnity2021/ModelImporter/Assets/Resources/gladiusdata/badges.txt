@@ -1,0 +1,636 @@
+// Copyright (c) 2003, LucasArts Entertainment Company LLC
+// Version 0.0
+
+// badges.tok
+// Saved by jsdrake
+
+// Badge: BelfortBadge
+// DisplayNameID: Badge of Belfort
+// DescriptionID: This badge is rewarded for conquering the Best of Belfort battles.
+// Arena: Belfort Arena
+// League: Best of Belfort
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"BelfortBadge"	2783	6639	6415	2249	0	"Imperia"
+
+// Badge: BelfortBeast
+// DisplayNameID: Lupus' Master badge
+// DescriptionID: This badge is needed for entry into the Imperia Untamed league of Cro Beska.
+// Arena: Belfort Arena
+// League: Challenge of Lykos
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"BelfortBeast"	3024	6640	6415	2285	0	"Imperia"
+
+// Badge: BelfortGlory
+// DisplayNameID: Glory of Imperia
+// DescriptionID: The Glory of Imperia badge is required to enter the Belfort Championship.
+// Arena: Belfort Arena
+// League: Glory of Imperia
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"BelfortGlory"	3025	6641	6415	2251	0	"Imperia"
+
+// Badge: Circle11Mordare
+// DisplayNameID: Mördare Circle 1
+// DescriptionID: Get all of the Circle of Elites Tier 1 badges to enable competition in Tier 2.
+// Arena: MÖrdare's Den
+// League: Circle of Elites Tier 1
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle11Mordare"	3602	7392	7228	3435	0	"Nordagh"
+
+// Badge: Circle1Fliuch
+// DisplayNameID: Fliuch Circle 1
+// DescriptionID: Get all of the Circle of Elites Tier 1 badges to enable competition in Tier 2.
+// Arena: The Fen
+// League: Circle of Elites Tier 1
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle1Fliuch"	3597	7392	2007	3432	0	"Nordagh"
+
+// Badge: Circle1Roanor
+// DisplayNameID: Circle Qualification
+// DescriptionID: This badge allows a school to compete in Tier 1 of the Circle of Elites.
+// Arena: The Pit
+// League: Circle of Elites Qualifier
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle1Roanor"	3599	7393	2008	3439	0	"Nordagh"
+
+// Badge: Circle1Sloan
+// DisplayNameID: Sloan Forest Circle 1
+// DescriptionID: Get all of the Circle of Elites Tier 1 badges to enable competition in Tier 2.
+// Arena: Stadium Dreas
+// League: Circle of Elites Tier 1
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle1Sloan"	3601	7392	2005	3441	0	"Nordagh"
+
+// Badge: Circle1Vargen
+// DisplayNameID: Vargen Circle 1
+// DescriptionID: Get all of the Circle of Elites Tier 1 badges to enable competition in Tier 2.
+// Arena: Fjord of the Fallen
+// League: Circle of Elites Tier 1
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle1Vargen"	3600	7392	7240	3443	0	"Nordagh"
+
+// Badge: Circle2Fliuch
+// DisplayNameID: Fliuch Circle 2
+// DescriptionID: Conquer all leagues in Tier 2 of the Circle of Elites to proceed to the Championship.
+// Arena: The Fen
+// League: Circle of Elites Tier 2
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle2Fliuch"	3637	7394	2007	3434	0	"Nordagh"
+
+// Badge: Circle2Mordare
+// DisplayNameID: Mördare Circle 2
+// DescriptionID: Conquer all leagues in Tier 2 of the Circle of Elites to proceed to the Championship.
+// Arena: MÖrdare's Den
+// League: Circle of Elites Tier 2
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle2Mordare"	3640	7394	7228	3436	0	"Nordagh"
+
+// Badge: Circle2Sloan
+// DisplayNameID: Sloan Forest Circle 2
+// DescriptionID: Conquer all leagues in Tier 2 of the Circle of Elites to proceed to the Championship.
+// Arena: Stadium Dreas
+// League: Circle of Elites Tier 2
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle2Sloan"	3638	7394	2005	3442	0	"Nordagh"
+
+// Badge: Circle2Vargen
+// DisplayNameID: Vargen Circle 2
+// DescriptionID: Conquer all leagues in Tier 2 of the Circle of Elites to proceed to the Championship.
+// Arena: Fjord of the Fallen
+// League: Circle of Elites Tier 2
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"Circle2Vargen"	3639	7394	7240	3444	0	"Nordagh"
+
+// Badge: CroBeskaBeastBadge
+// DisplayNameID: Imperia Untamed badge
+// DescriptionID: Earning the Imperia Untamed badge is necessary to enter the Mongrel Siege league.
+// Arena: Mongrel's Maw
+// League: Imperia Untamed
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"CroBeskaBeastBadge"	3098	6642	6418	2615	0	"Imperia"
+
+// Badge: DreasOpenBadge
+// DisplayNameID: Dreas Open Badge
+// DescriptionID: Stadium Dreas embodies Nordagh's connection to the wilds.  This badge is therefore necessary to compete in the Regional Championship.
+// Arena: Stadium Dreas
+// League: Dreas Open League
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"DreasOpenBadge"	3926	7395	2005	3424	0	"Nordagh"
+
+// Badge: ExpanseAnteUpByo
+// DisplayNameID: Ante Up Byo
+// DescriptionID: So you think you're big time?  Try your hand at the Cash Money Gwa League in the Scorched Oasis.
+// Arena: Palace Ibliis
+// League: Ante Up Byo
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseAnteUpByo"	3018	6870	2427	2491	0	"Expanse"
+
+// Badge: ExpanseBarnBurner
+// DisplayNameID: Barn Burner
+// DescriptionID: Continue on to the Fire Endurance Ki League in Yuset to complete the fire affinity requirements in the Affinity Phi Series.  You have also fulfilled one of the three badges that earn you the right to compete in the Expanse Regional Championship Tournament.
+// Arena: Scorched Oasis
+// League: Barn Burner
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseBarnBurner"	2969	6871	2437	2681	0	"Expanse"
+
+// Badge: ExpanseDesertStorm
+// DisplayNameID: Desert's Eye
+// DescriptionID: You have finished the preliminary air affinity requirements in the Affinity Phi Series in Altahrun.  Go there to find the dual affinity leagues.
+// Arena: Scorched Oasis
+// League: Desert's Eye
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseDesertStorm"	2959	6872	2437	2612	0	"Expanse"
+
+// Badge: ExpanseEndlessHorizons
+// DisplayNameID: Endless Horizons Badge
+// DescriptionID: Congratulations on conquering the last local tournament.  To be crowned the true master of the lands though you must complete the Expanse Regional Championship Tournmanet.
+// Arena: Scorched Oasis
+// League: Endless Horizons
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseEndlessHorizons"	3635	6873	2437	3634	0	"Expanse"
+
+// Badge: ExpanseLeviathan
+// DisplayNameID: Leviathan
+// DescriptionID: The water affinity component of the dual leagues in the Affinity Phi Series is now unlocked.  Complete the other affinity components of these leagues to enter them.
+// Arena: Scorched Oasis
+// League: Leviathan
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseLeviathan"	2954	6877	2437	2626	0	"Expanse"
+
+// Badge: ExpanseMirage
+// DisplayNameID: Mirage
+// DescriptionID: You have conquered Akar An.  Go on to the Scorched Oasis to find new fortunes.
+// Arena: Palace Ibliis
+// League: Mirage Tournament
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseMirage"	3009	6878	2427	2494	0	"Expanse"
+
+// Badge: ExpanseOpenAffinityPhi
+// DisplayNameID: Open Affinity Phi Talisman
+// DescriptionID: You have earned the right to enter the remaining leagues in Akar An.  In addition, you have obtained one of the three badges that will earn you the right to compete in the Expanse Regional Championship Tournament.
+// Arena: Palace Ibliis
+// League: Open Affinity Phi
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseOpenAffinityPhi"	3006	6882	2427	2484	0	"Expanse"
+
+// Badge: ExpanseSeriesSyo
+// DisplayNameID: Series Syo
+// DescriptionID: You have fulfilled one of the three badges that earn you the right to compete in the Expanse Regional Championship Tournament.
+// Arena: Palace Ibliis
+// League: Series Syo
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseSeriesSyo"	3008	6885	2427	2686	0	"Expanse"
+
+// Badge: ExpanseTreasureTrove
+// DisplayNameID: Treasure Trove Talisman
+// DescriptionID: You may now enter whatever leagues you wish within the Scorched Oasis.
+// Arena: Scorched Oasis
+// League: Treasure Trove
+// Encounter: 
+// Region: Expanse
+
+BADGE 	"ExpanseTreasureTrove"	3631	6890	2437	2667	0	"Expanse"
+
+// Badge: FreePeoplesBadge
+// DisplayNameID: Free Peoples Badge
+// DescriptionID: Nordagh's libertarian traditions are exemplified in the Contest of the Free Peoples.  This badge is therefore necessary for entry into the Regional Championship.
+// Arena: The Fen
+// League: Contest of the Free Peoples
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"FreePeoplesBadge"	3928	7396	2007	3411	0	"Nordagh"
+
+// Badge: ImperiaTalisman
+// DisplayNameID: Imperia Talisman
+// DescriptionID: Imperia, home of the games!  This talisman proves your worthiness to fight in Imperia.  Carry this badge with pride.
+// Arena: Pirgos Arena
+// League: Pirgos Training
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"ImperiaTalisman"	6638	7398	4455	2114	0	"Imperia"
+
+// Badge: ImperiaTalisman2
+// DisplayNameID: Imperia Talisman
+// DescriptionID: Imperia, home of the games!  This talisman proves your worthiness to fight in Imperia.  Carry this badge with pride.
+// Arena: Belfort Arena
+// League: Talisman Challenge
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"ImperiaTalisman2"	6638	7399	6415	3332	0	"Imperia"
+
+// Badge: KingdomOpenBadge
+// DisplayNameID: Kingdom Open Badge
+// DescriptionID: Nordagh's monarchy tempers its wild and freedom-loving subjects with the rule of law.  In celebration, the Kingdom Open Badge is required to enter the Regional Championship.
+// Arena: Orin's Keep
+// League: Kingdom Open
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"KingdomOpenBadge"	3927	7400	2803	3422	0	"Nordagh"
+
+// Badge: MongrelButcher
+// DisplayNameID: Mongrel Butcher badge
+// DescriptionID: Coveted among Mongrel-hating Imperials, this badge is ill-favored in Cro Beska.
+// Arena: Mongrel's Maw
+// League: Mongrel Siege
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"MongrelButcher"	6329	6643	6418	2618	0	"Imperia"
+
+// Badge: NordaghChampion
+// DisplayNameID: Nordagh Champion
+// DescriptionID: Nordagh salutes its Champion!
+// Arena: Orin's Keep
+// League: Nordagh Regional Championship
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"NordaghChampion"	5951	7401	2803	3940	0	"Nordagh"
+
+// Badge: NordaghTalisman
+// DisplayNameID: Nordagh Talisman
+// DescriptionID: This badge entitles you to compete in the games in the wild and mystical land of Nordagh.
+// Arena: The Pit
+// League: Nordagh Talisman
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"NordaghTalisman"	3445	7402	2008	3445	0	"Nordagh"
+
+// Badge: NordaghTalisman2
+// DisplayNameID: Nordagh Talisman
+// DescriptionID: This badge entitles you to compete in the games in the wild and mystical land of Nordagh.
+// Arena: The Fen
+// League: Arena Certification
+// Encounter: 
+// Region: Nordagh
+
+BADGE 	"NordaghTalisman2"	5326	7402	2007	3407	0	"Nordagh"
+
+// Badge: PirgosChannelerBadge
+// DisplayNameID: Host of the Arcane badge
+// DescriptionID: For consideration for the Pirgos Championship, a school must possess this badge.  It is also required for entry into the Magic and Mystism league of Trikata.
+// Arena: Pirgos Arena
+// League: Arcane Tempest
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"PirgosChannelerBadge"	6644	6655	4455	2541	0	"Imperia"
+
+// Badge: PirgosEndurance
+// DisplayNameID: Badge of Perpetuity
+// DescriptionID: Proof of strong endurance, this badge is necessary to enter the Onslaught in Orus.
+// Arena: Pirgos Arena
+// League: Agony of Saturno
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"PirgosEndurance"	3063	6657	4455	2180	0	"Imperia"
+
+// Badge: PirgosRanged
+// DisplayNameID: Ranged Badge of Pirgos
+// DescriptionID: Only supremacy at a distance will earn a school the Ranged Badge of Pirgos.
+// Arena: Pirgos Arena
+// League: The Shield & the Spear
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"PirgosRanged"	3023	6660	4455	2286	0	"Imperia"
+
+// Badge: PirgosTourneyBadge
+// DisplayNameID: Keys to Pirgos
+// DescriptionID: With the Keys to Pirgos your school is on its way to qualifying for the Imperial Championship.
+// Arena: Pirgos Arena
+// League: Pirgos Championship
+// Encounter: Pirgos Tournament
+// Region: Imperia
+
+BADGE 	"PirgosTourneyBadge"	3072	6661	4455	2182	2474	"Imperia"
+
+// Badge: qstUnlife
+// DisplayNameID: Talisman of Unlife
+// DescriptionID: Call the Unliving from the ground to fight by your side with this talisman.
+// Arena: Wilderness Field
+// League: 
+// Encounter: Destroy the Unliving
+// Region: Nordagh
+
+BADGE 	"qstUnlife"	5518	5519	2509	0	6411	"Nordagh"
+
+// Badge: SteppesAirHyu
+// DisplayNameID: Air Hyu
+// DescriptionID: The Air Hyu Badge enables entrance into the Desert Storm League in the Scorched Oasis
+// Arena: Ononhaar Arena
+// League: Air Hyu
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesAirHyu"	2957	6804	2336	2342	0	"Steppes"
+
+// Badge: SteppesAmazonTyu
+// DisplayNameID: Amazon Tyu Talisman
+// DescriptionID: You have completed the talisman league for the Wastes.  You may now explore the other leagues within this office.
+// Arena: Wandering Soul
+// League: Amazon Tyu
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesAmazonTyu"	3004	6805	2374	2407	0	"Steppes"
+
+// Badge: SteppesArcherNya
+// DisplayNameID: Archer Nya Talisman
+// DescriptionID: This talisman opens up the available leagues within Arena Suren.
+// Arena: Arena Suren
+// League: Archer Nya
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesArcherNya"	3510	6806	2397	2412	0	"Steppes"
+
+// Badge: SteppesBreakTheBank
+// DisplayNameID: Break the Bank
+// DescriptionID: This validates your completion of the Wastes.  You may now venture forth to Ononhaar.
+// Arena: Wandering Soul
+// League: Break the Bank
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesBreakTheBank"	3547	6807	2374	3549	0	"Steppes"
+
+// Badge: SteppesChagataiFireAir
+// DisplayNameID: Chagatai Fire & Air
+// DescriptionID: You have completed one of the four final legs of the Affinity Phi Series.  Complete the Siban, Tolui and Nogai dual affinity leagues to advance to the final league challenge.
+// Arena: Altahrun Ruins
+// League: Chagatai Fire & Air
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesChagataiFireAir"	2963	6809	2153	2299	0	"Steppes"
+
+// Badge: SteppesDarkLegion
+// DisplayNameID: Dark Legion
+// DescriptionID: You think that the dark classes are some of the most vile creatures you've fought?  Go to the Cretin League in the Wastes to introduce yourself to true horror.
+// Arena: Altahrun Ruins
+// League: Dark Legion
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesDarkLegion"	2965	6852	2153	2321	0	"Steppes"
+
+// Badge: SteppesDreamcatcher
+// DisplayNameID: Dreamcatcher
+// DescriptionID: You have successfully completed the Altahrun Ruins.  Proceed to the Wastes.
+// Arena: Altahrun Ruins
+// League: Dreamcatcher
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesDreamcatcher"	3546	6833	2153	3534	0	"Steppes"
+
+// Badge: SteppesEarthRe
+// DisplayNameID: Earth Re
+// DescriptionID: This fulfills the earth requirements in the Tolui and Nogai leagues of the Affinity Phi Series in the Altahrun Ruins.
+// Arena: Wandering Soul
+// League: Earth Re
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesEarthRe"	2955	6839	2374	2134	0	"Steppes"
+
+// Badge: SteppesFireEnduranceKi
+// DisplayNameID: Fire Endurance Ki
+// DescriptionID: You have proven your strength in fire.  You have completed the fire requirements in the Nogai and Chagatai leagues in the Afffinity Phi Series.
+// Arena: Arena Suren
+// League: Fire Endurance Ki
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesFireEnduranceKi"	2958	6840	2397	2498	0	"Steppes"
+
+// Badge: SteppesFiringRange
+// DisplayNameID: Firing Range Talisman
+// DescriptionID: You have earned the right to travel freely in Ononhaar.  Go explore the opened leagues with your talisman.
+// Arena: Ononhaar Arena
+// League: Firing Range
+// Encounter: Sylvan Skirmish
+// Region: Steppes
+
+BADGE 	"SteppesFiringRange"	3537	6841	2336	3574	8002	"Steppes"
+
+// Badge: SteppesHistoryOfTheFrontier
+// DisplayNameID: History of the Frontier
+// DescriptionID: You have obtained one of the three badges required to enter the Steppes Regional Championship Tournament.  Go seek out the other two to gain your chance to advance to the Expanse.
+// Arena: Altahrun Ruins
+// League: History of the Frontier
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesHistoryOfTheFrontier"	6849	6850	2153	3560	0	"Steppes"
+
+// Badge: SteppesInflationaryEgosSu
+// DisplayNameID: Inflationary Egos Su
+// DescriptionID: You have obtained one of the three badges required to enter the Steppes Regional Championship Tournament.  Go seek out the other two to gain your chance to advance to the Expanse.
+// Arena: Arena Suren
+// League: Inflationary Egos Su
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesInflationaryEgosSu"	6848	6847	2397	3511	0	"Steppes"
+
+// Badge: SteppesJochiAffinity
+// DisplayNameID: Jochi Affinity Talisman
+// DescriptionID: You have earned the respect of the local competitors of the Altahrun Ruins.  You may now compete freely in the leagues in this office.
+// Arena: Altahrun Ruins
+// League: Jochi  Affinity
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesJochiAffinity"	2964	6842	2153	2304	0	"Steppes"
+
+// Badge: SteppesLegacyOfSinghIisTahn
+// DisplayNameID: Legacy of Singh Iis Tahn
+// DescriptionID: Congratulations on conquering Yuset.  Continue your school's quest for glory in Altahrun.
+// Arena: Arena Suren
+// League: Legacy of Singh Iis Than
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesLegacyOfSinghIisTahn"	3536	6843	2397	2422	0	"Steppes"
+
+// Badge: SteppesLightweight
+// DisplayNameID: Lightweight
+// DescriptionID: You put on quite a display of skill conquering the light classes in this league.  Now show us your ability in handling heavy classes.  Go to Yuset to find the newly available Heavyweight League.
+// Arena: Wandering Soul
+// League: Lightweight
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesLightweight"	2995	6844	2374	2408	0	"Steppes"
+
+// Badge: SteppesNogaiEarthFire
+// DisplayNameID: Nogai Earth & Fire
+// DescriptionID: You have completed one of the four final legs of the Affinity Phi Series.  Complete the Siban, Tolui and Chagatai dual affinity leagues to advance to the final league challenge.
+// Arena: Altahrun Ruins
+// League: Nogai Fire & Earth
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesNogaiEarthFire"	2962	6845	2153	2297	0	"Steppes"
+
+// Badge: SteppesOpenGhazan
+// DisplayNameID: Open Ghazan
+// DescriptionID: You have obtained one of the three badges required to enter the Steppes Regional Championship Tournament.  Go seek out the other two to gain your chance to advance to the Expanse.
+// Arena: Ononhaar Arena
+// League: Open Ghazan
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesOpenGhazan"	6447	6846	2336	2366	0	"Steppes"
+
+// Badge: SteppesSibanAirWater
+// DisplayNameID: Siban Air & Water Badge
+// DescriptionID: You have completed one of the four final legs of the Affinity Phi Series.  Complete the Nogai, Tolui and Chagatai dual affinity leagues to advance to the final league challenge.
+// Arena: Altahrun Ruins
+// League: Siban Air & Water
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesSibanAirWater"	2960	6851	2153	2325	0	"Steppes"
+
+// Badge: SteppesSunspot
+// DisplayNameID: Sunspot Badge
+// DescriptionID: You have just obtained one of the keys to the Fire Endurance Ki League.  Complete this trial by fire to find your way to the Affinity Phi Series.
+// Arena: Ononhaar Arena
+// League: Sunspot
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesSunspot"	2956	6853	2336	2360	0	"Steppes"
+
+// Badge: SteppesToluiEarthWater
+// DisplayNameID: Tolui Earth & Water Badge
+// DescriptionID: You have completed one of the four final legs of the Affinity Phi Series.  Complete the Nogai, Siban and Chagatai dual affinity leagues to advance to the final league challenge.
+// Arena: Altahrun Ruins
+// League: Tolui Earth & Water
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesToluiEarthWater"	2961	6854	2153	2724	0	"Steppes"
+
+// Badge: SteppesUnholyAlliances
+// DisplayNameID: Unholy Alliances
+// DescriptionID: You have completed the last of the local regional tournaments.  Now you must complete the Regional Championships to move on to the Expanse.  Look for the three badges necessary to enter this Championship Tournament.
+// Arena: Ononhaar Arena
+// League: Unholy Alliances Tournament
+// Encounter: 
+// Region: Steppes
+
+BADGE 	"SteppesUnholyAlliances"	5910	6859	2336	2105	0	"Steppes"
+
+// Badge: SyrnaCatFightBadge
+// DisplayNameID: Honor of the Valkyrie
+// DescriptionID: Though named for legendary ladies of Nordagh, this badge is well sought after by many schools.  It is said that the most notorious Amazons hail from the Steppes and see the badge as a symbol of great status.
+// Arena: Theatre Antiquitis
+// League: Spirit of the Valkyrie
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"SyrnaCatFightBadge"	3076	6662	6413	2279	0	"Imperia"
+
+// Badge: SyrnaPropBadge
+// DisplayNameID: Circus Antiquitus
+// DescriptionID: To qualify for the famed Circus Inhumanus, a school must possess this badge.
+// Arena: Theatre Antiquitis
+// League: Circus Antiquitus
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"SyrnaPropBadge"	3086	6663	6413	2281	0	"Imperia"
+
+// Badge: SyrnaTribunalBadge
+// DisplayNameID: Justice of Syrna Badge
+// DescriptionID: Fires of Justice, the most fearsome of all Tribunals, requires this badge before it will consider a school for entry.
+// Arena: Theatre Antiquitis
+// League: Tribunal of Brutality
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"SyrnaTribunalBadge"	3088	6664	6413	2284	0	"Imperia"
+
+// Badge: TrikataMageBadge
+// DisplayNameID: Alchemy Imperius badge
+// DescriptionID: This badge is the highest recognition for mastery of the Arcane arts that a school can receive.
+// Arena: Bloody Halo
+// League: Magic and Mysticism
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"TrikataMageBadge"	3090	6665	5746	2195	0	"Imperia"
+
+// Badge: TrikataSurvivalBadge
+// DisplayNameID: Gift of Perseverance
+// DescriptionID: Along with the Badge of Perpetuity, this award is necessary to be considered for entry into the Onslaught.
+// Arena: Bloody Halo
+// League: Survive Trikata
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"TrikataSurvivalBadge"	3094	6666	5746	2193	0	"Imperia"
+
+// Badge: TrikataTribunalBadge
+// DisplayNameID: Hammer of Justice badge
+// DescriptionID: Before a school can qualify for the Syrna Tribunal, it must possess this badge.
+// Arena: Bloody Halo
+// League: Hammer of Justice
+// Encounter: 
+// Region: Imperia
+
+BADGE 	"TrikataTribunalBadge"	3092	6670	5746	2191	0	"Imperia"
+

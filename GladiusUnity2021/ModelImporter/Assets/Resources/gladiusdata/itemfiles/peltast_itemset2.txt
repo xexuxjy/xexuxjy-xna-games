@@ -1,0 +1,30 @@
+ITEMSET export Class: Peltast Peltast  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+
+MODITEMSCOMP:   ITEMSETxboxdemo,  5, 30,         "Air Jaculum",  "Air Shoulder Brace",   "Air Wicker Shield",     "Air Confortari",        "" // Cost: 1036
+
+ITEMSET export Class: Peltast Peltast  Region: Imperia Affinity: Air
+
+//          :      variant, Lv,Lv,              weapon,                 armor,                  shield,                         helmet                                  accessory
+MODITEMSCOMP:   ITEMSETIAOXM,  6, 6,           "Air Egchos",           "Air Shoulder Brace",   "Air Hardened Leather Shield",  "",                                     "" // Cost: 691/2402
+MODITEMSCOMP:   ITEMSETIAOXM,  7, 7,           "Air Egchos",           "Air Leg Brace",        "Air Hardened Leather Shield",  "Air Crested Coolus",                   "" // Cost: 620/3022
+MODITEMSCOMP:   ITEMSETIAOXM,  8, 8,           "Earth Keris",          "Air Leg Brace",        "Air Hardened Leather Shield",  "Air Crested Coolus",                   "" // Cost: 131/3153
+MODITEMSCOMP:   ITEMSETIAOXM,  9, 9,           "Earth Keris",          "Air Scalemail Guard",  "Air Hardened Leather Shield",  "Air Confortari",                       "" // Cost: 798/3951
+MODITEMSCOMP:   ITEMSETIAOXM, 10,10,           "Earth Keris",          "Air Steel Bracer",     "Air Lacquered Shield",         "Air Bronze Italic",                    "" // Cost: 906/4857
+MODITEMSCOMP:   ITEMSETIAOXM, 11,11,           "Air Fuscina",          "Air Steel Bracer",     "Air Lacquered Shield",         "Air Bronze Italic",                    "" // Cost: 1136/5993
+MODITEMSCOMP:   ITEMSETIAOXM, 12,12,           "Air Fuscina",          "Air Gold Bracer",      "Air Lacquered Shield",         "Air Bronze Italic",                    "" // Cost: 541/6534
+MODITEMSCOMP:   ITEMSETIAOXM, 13,13,           "Air Fuscina",          "Air The Bloody Hide",  "Air Lacquered Shield",         "Air Praetorian Italic Helmet",         "" // Cost: 1120/7654
+MODITEMSCOMP:   ITEMSETIAOXM, 14,14,           "Air Javelin",          "Air Segmented Guard",  "Air Bwaag Scaap",              "Air Praetorian Italic Helmet",         "" // Cost: 2248/9902
+
+
+ITEMSET export Class: Peltast Peltast  Region: Nordagh Affinity: Earth
+//          :      variant, Lv,Lv,              weapon,                 armor,                  shield,                         helmet                                  accessory
+MODITEMSCOMP:   ITEMSETNEOXM,  6, 6,           "Earth Spiculum",       "Earth Arm Brace",      "Earth Hardened Leather Shield","Earth Iron Coolus",                    "" // Cost: 277/1771
+MODITEMSCOMP:   ITEMSETNEOXM,  7, 7,           "Earth Ictus",          "Earth Leg Brace",      "Earth Hardened Leather Shield","Earth Iron Coolus",                    "" // Cost: 423/2194
+MODITEMSCOMP:   ITEMSETNEOXM,  8, 8,           "Earth Keris",          "Earth Leg Brace",      "Earth Hardened Leather Shield","Earth Iron Coolus",                    "" // Cost: 131/2325
+MODITEMSCOMP:   ITEMSETNEOXM,  9, 9,           "Spear",                "Earth Scalemail Guard","Earth Wooden Shield",          "Earth Confortari",                     "" // Cost: 1825/4150
+MODITEMSCOMP:   ITEMSETNEOXM, 10,10,           "Earth Fuscina",        "Earth Scalemail Guard","Earth Lacquered Shield",       "Earth Bronze Italic",                  "" // Cost: 1596/5746
+MODITEMSCOMP:   ITEMSETNEOXM, 11,11,           "Earth Hak",            "Earth Silver Bracer",  "Earth Studded Wooden Shield",  "Earth Bronze Italic",                  "" // Cost: 682/6428
+MODITEMSCOMP:   ITEMSETNEOXM, 12,12,           "Earth Hak",            "Earth Silver Bracer",  "Copper Round Shield",          "Earth Bronze Italic",                  "" // Cost: 21/6449
+MODITEMSCOMP:   ITEMSETNEOXM, 13,13,           "Earth Half Moon",      "Earth Silver Bracer",  "Copper Round Shield",          "Earth Hooked Ridge Helmet",            "" // Cost: 751/7200
+MODITEMSCOMP:   ITEMSETNEOXM, 14,14,           "Cuspis",               "Earth Silver Bracer",  "Air Bwaag Scaap",              "Earth Praetorian Italic Helmet",       "" // Cost: 252/7452

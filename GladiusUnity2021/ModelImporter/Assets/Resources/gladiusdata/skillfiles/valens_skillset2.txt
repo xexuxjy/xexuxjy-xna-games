@@ -1,0 +1,61 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Valens
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"ValensUberSet",	0,	1000,	"Valens Shield"
+MODLEVELRANGESKILL: 	"ValensUberSet",	0,	1000,	"Valens Attack"
+MODLEVELRANGESKILL: 	"ValensUberSet",	0,	1000,	"Valens Evade"
+MODLEVELRANGESKILL: 	"ValensUberSet",	0,	1000,	"Valens CastleGreyskull"
+MODLEVELRANGESKILL: 	"ValensUberSet",	1,	1000,	"Valens EarthAffinity I"
+MODLEVELRANGESKILL: 	"ValensUberSet",	2,	1000,	"Valens Combo I"
+MODLEVELRANGESKILL: 	"ValensUberSet",	2,	1000,	"Valens TargetLeg"
+MODLEVELRANGESKILL: 	"ValensUberSet",	3,	1000,	"Valens AirAffinity II"
+MODLEVELRANGESKILL: 	"ValensUberSet",	3,	1000,	"Valens MuniosSpirit"
+MODLEVELRANGESKILL: 	"ValensUberSet",	4,	1000,	"Valens Combo II"
+MODLEVELRANGESKILL: 	"ValensUberSet",	5,	1000,	"Valens WideSwing"
+
+////// SKILLSET export Class: Valens Valens  Affinity: Water
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Valens Attack"                   // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Valens CastleGreyskull"          // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Valens Evade"                    // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Valens Shield"                   // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Valens WaterAffinity I"          // JP:   4/  4x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Valens TargetLeg"                // JP:   4/  8x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Valens MuniosSpirit"             // JP:   6/ 14x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Valens Turtle I"                 // JP:   6/ 20x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Valens WaterAffinity II"         // JP:  10/ 30x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Valens WideSwing"                // JP:  10/ 40x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Valens Evade II"                 // JP:  12/ 52x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  7, 30, "Valens WaterAffinity III"        // JP:  20/ 72x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Valens TargetArm"                // JP:  18/ 90x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  11, 30, "Valens Awareness"                // JP:  22/112x
+
+//  Unused JP at Level 30: 58
+
+MODLEVELRANGESKILL:  skillsetHeroic,  0, 30, "Valens Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetHeroic,  0, 30, "Valens CastleGreyskull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  0, 30, "Valens Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  0, 30, "Valens KillTest"                 // JP:   0/  0	AccMod 100
+MODLEVELRANGESKILL:  skillsetHeroic,  0, 30, "Valens Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  1, 30, "Valens TargetLeg"                // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetHeroic,  2, 30, "Valens Combo I"                  // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  3, 30, "Valens Combo II"                 // JP:  12/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  4, 30, "Valens Evade II"                 // JP:  12/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  4, 30, "Valens Turtle I"                 // JP:   6/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  5, 30, "Valens WideSwing"                // JP:  10/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  5, 30, "Valens PeoplesHero I"            // JP:  10/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  5, 30, "Valens MuniosSpirit"             // JP:  10/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  6, 30, "Valens IndomitableWill"          // JP:  18/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  8, 30, "Valens Awareness"                // JP:  22/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic,  9, 30, "Valens Combo III"                // JP:  22/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic, 10, 30, "Valens TargetArm"                // JP:  18/130	AccMod -5
+MODLEVELRANGESKILL:  skillsetHeroic, 12, 30, "Valens ShieldHit I"              // JP:  24/154	AccMod -5
+MODLEVELRANGESKILL:  skillsetHeroic, 14, 30, "Valens Combo IV"                 // JP:  34/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic, 16, 30, "Valens Discipline"               // JP:  32/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic, 18, 30, "Valens SmackBack"                // JP:  30/250	AccMod 1
+MODLEVELRANGESKILL:  skillsetHeroic, 21, 30, "Valens DestroyHelm"              // JP:  40/290	AccMod 0
+MODLEVELRANGESKILL:  skillsetHeroic, 23, 30, "Valens TargetHead"               // JP:  34/324	AccMod -5
+MODLEVELRANGESKILL:  skillsetHeroic, 26, 30, "Valens OffBalance" 

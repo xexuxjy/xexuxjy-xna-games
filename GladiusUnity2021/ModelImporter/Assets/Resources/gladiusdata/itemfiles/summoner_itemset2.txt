@@ -1,0 +1,34 @@
+ITEMSET export Class: Summoner Summoner  Region: Imperia Affinity: Earth
+//          :   variant,        Lv,Lv,  weapon,                 armor,                          shield,         helmet                  accessory
+MODITEMSCOMP:  ITEMSETHGAir,   18,18,  "Air Magus",            "Air Cloak of the Heavens",     "",             "Air Mythic Miter",     "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGAir,   19,19,  "Air Kinetic Staff",    "Air Padded Silk Toga",         "",             "Air Crown of Air",     "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGAir,   20,99,  "Air Staff of Air",    "Air Padded Silk Toga",         "",             "Air Crown of Air",     "Heart Star" 
+
+MODITEMSCOMP:  ITEMSETHGEarth, 18,18,  "Earth Magus",          "Earth Cloak of the Heavens",   "",             "Earth Pharaoh's Miter",   "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGEarth, 19,19,  "Earth Kinetic Staff",  "Earth Padded Silk Toga",       "",             "Earth Crown of Earth",   "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGEarth, 20,99,  "Earth Earth Staff",  "Earth Padded Silk Toga",       "",             "Earth Crown of Earth",   "Heart Star"
+
+MODITEMSCOMP:  ITEMSETHGFire,  18,18,  "Fire Magus",           "Fire Cloak of the Heavens",    "",             "Holy Miter",    "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGFire,  19,19,  "Fire Kinetic Staff",   "Fire Padded Silk Toga",        "",             "Fire Crown of Fire",    "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGFire,  20,99,  "Fire Flame Staff",   "Fire Padded Silk Toga",        "",             "Fire Crown of Fire",    "Heart Star" 
+
+MODITEMSCOMP:  ITEMSETHGWater, 18,18,  "Water Magus",          "Water Cloak of the Heavens",   "",             "Water Sacred Miter",   "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGWater, 19,19,  "Water Kinetic Staff",  "Water Padded Silk Toga",       "",             "Water Crown of Water",   "Heart Star" 
+MODITEMSCOMP:  ITEMSETHGWater, 20,99,  "Water Staff of Water",  "Water Padded Silk Toga",       "",             "Water Crown of Water",   "Heart Star" 
+
+
+MODITEMSCOMP:  ITEMSETHGEndA,   18,18,  "Air Magus",            "",     "",             "Air Mythic Miter",             "" 
+MODITEMSCOMP:  ITEMSETHGEndA,   19,19,  "Air Kinetic Staff",    "",         "",             "Air Crown of Air",             "" 
+MODITEMSCOMP:  ITEMSETHGEndA,   20,99,  "Air Staff of Air",     "",         "",             "Air Crown of Air",              "" 
+
+MODITEMSCOMP:  ITEMSETHGEndE, 18,18,  "Earth Magus",            "",   "",             "Earth Pharaoh's Miter",        "" 
+MODITEMSCOMP:  ITEMSETHGEndE, 19,19,  "Earth Kinetic Staff",    "",       "",             "Earth Crown of Earth",         "" 
+MODITEMSCOMP:  ITEMSETHGEndE, 20,99,  "Earth Earth Staff",      "",       "",             "Earth Crown of Earth",           ""
+
+MODITEMSCOMP:  ITEMSETHGEndF,  18,18,  "Fire Magus",            "",    "",             "Miter",                   "" 
+MODITEMSCOMP:  ITEMSETHGEndF,  19,19,  "Fire Kinetic Staff",    "",        "",             "Fire Crown of Fire",           "" 
+MODITEMSCOMP:  ITEMSETHGEndF,  20,99,  "Fire Flame Staff",      "",        "",             "Fire Crown of Fire",             "" 
+
+MODITEMSCOMP:  ITEMSETHGEndW, 18,18,  "Water Magus",            "",   "",             "Water Sacred Miter",           "" 
+MODITEMSCOMP:  ITEMSETHGEndW, 19,19,  "Water Kinetic Staff",    "",       "",             "Water Crown of Water",         "" 
+MODITEMSCOMP:  ITEMSETHGEndW, 20,99,  "Water Staff of Water",   "",       "",             "Water Crown of Water",        "" 

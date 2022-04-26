@@ -1,0 +1,25 @@
+VERSION: 1
+
+PROP: "skelton_human01" 
+MODELS: "misc/skeleton/skeleton_human.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.38
+POS: 23.6681 22.4260 1.2379
+ROT: 0.0000 0.0000 -0.7555
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "skelton_human02" 
+MODELS: "misc/skeleton/skeleton_human.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.38
+POS: 32.1910 14.6639 1.1536
+ROT: 0.0000 0.0000 0.5883
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+ENDFILE

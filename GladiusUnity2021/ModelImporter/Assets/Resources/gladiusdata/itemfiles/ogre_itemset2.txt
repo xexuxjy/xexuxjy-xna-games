@@ -1,0 +1,22 @@
+ITEMSET export Class: Ogre Ogre  Region: Nordagh Affinity: Air
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETdemo,  1, 1,         "Air Great Axe",                      "",                  "Komo",                      "",      "Air Boar's Scalp" // Cost: 183/183
+MODITEMSCOMP:   ITEMSETdemo,  2, 2,         "Air Great Axe",                      "",                  "Komo",                      "",      "Air Boar's Scalp" // Cost: 0/183
+MODITEMSCOMP:   ITEMSETdemo,  3, 3,      "Air Sledgehammer",                      "",                  "Komo",                      "",      "Air Boar's Scalp" // Cost: 133/316
+MODITEMSCOMP:   ITEMSETdemo,  4, 4,          "Air Sledgehammer",                      "",                 "Komo",                      "",      "Air Boar's Scalp" // Cost: 204/520
+MODITEMSCOMP:   ITEMSETdemo,  5, 5,          "Air Sledgehammer",                      "",                 "Komo",                      "",      "Air Boar's Scalp" // Cost: 204/520
+MODITEMSCOMP:   ITEMSETdemo,  6, 6,              "Falchion",                      "","Air Heavy Bronze Shield","Mosaic Thracian Helmet",     "Air Boar's Scalp" // Cost: 43/785
+MODITEMSCOMP:   ITEMSETdemo,  7, 7,              "Falchion",                      "",          "Air Digladio","Mosaic Thracian Helmet",      "Air Boar's Scalp" // Cost: 54/839
+MODITEMSCOMP:   ITEMSETdemo,  8, 8,              "Falchion",                      "",          "Air Digladio",              "Shumpula",      "Air Boar's Scalp" // Cost: 352/1191
+MODITEMSCOMP:   ITEMSETdemo,  9, 9,              "Falchion",                      "","Air Shield of the Visigoth",              "Shumpula",      "Air Boar's Scalp" // Cost: 68/1259
+MODITEMSCOMP:   ITEMSETdemo, 10,10,            "Air Xiphos",                      "",      "Reinforced Targe",                   "Nex",      "Air Boar's Scalp" // Cost: 960/2219
+MODITEMSCOMP:   ITEMSETdemo, 11,11,     "Air Crescent Moon",                      "",      "Reinforced Targe",             "Carnifico",      "Air Boar's Scalp" // Cost: 977/3196
+MODITEMSCOMP:   ITEMSETdemo, 12,12,          "Air Scimitar",                      "",      "Reinforced Targe",             "Carnifico",      "Air Boar's Scalp" // Cost: 537/3733
+MODITEMSCOMP:   ITEMSETdemo, 13,13,          "Air Scimitar",                      "",      "Reinforced Targe",       "Horned Thracian",      "Air Boar's Scalp" // Cost: 571/4304
+MODITEMSCOMP:   ITEMSETdemo, 14,14,          "Air Scimitar",                      "",          "Tower Shield",       "Horned Thracian",      "Air Boar's Scalp" // Cost: 99/4403
+MODITEMSCOMP:   ITEMSETdemo, 15,15,          "Air Scimitar",                      "",          "Tower Shield",    "Fire Pondus Fabula",      "Air Boar's Scalp" // Cost: 671/5074
+MODITEMSCOMP:   ITEMSETdemo, 16,16,          "Air Chagatai",                      "",          "Tower Shield",       "The Steel Skull",      "Air Boar's Scalp" // Cost: 1437/6511
+MODITEMSCOMP:   ITEMSETdemo, 17,17,          "Air Chagatai",                      "",    "Air Lamellar Tower",   "Air Grinning Pondus",      "Air Boar's Scalp" // Cost: 887/7398
+MODITEMSCOMP:   ITEMSETdemo, 18,18,          "Water Dalima",                      "",         "Pointed Tower",   "Air Grinning Pondus",      "Air Boar's Scalp" // Cost: 952/8350
+MODITEMSCOMP:   ITEMSETdemo, 19,19,   "Air Bearded War Axe",                      "",         "Pointed Tower",   "Air Grinning Pondus",      "Air Boar's Scalp" // Cost: 2167/10517
+MODITEMSCOMP:   ITEMSETdemo, 20,99,   "Air Bearded War Axe",                      "",    "Fire Tower of Pain",    "Air Crested Pondus",      "Air Boar's Scalp" // Cost: 1049/11566

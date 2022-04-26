@@ -1,0 +1,23 @@
+////// SKILLSET export Class: Bear Bear  Affinity: Untyped
+
+
+
+//Xbox Demo skillset
+////// SKILLSET export Class: Bear Bear  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Bear Attack"                     // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Bear Evade"                      // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Bear Bulldoze I"                 // JP:   2/  2x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Bear Bite"                       // JP:   4/  6x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Bear Combo I"                    // JP:   6/ 12x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Bear Turtle I"                   // JP:   6/ 18x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Bear WintersFat"                 // JP:   6/ 24x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Combo II"                   // JP:  12/ 36x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Bear Paw I"                      // JP:  12/ 48x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  7, 30, "Bear Charge"                     // JP:  14/ 62x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  8, 30, "Bear Combo III"                  // JP:  22/ 84x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Bear Attack II"                  // JP:  18/102x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 11, 30, "Bear Hibernation"                // JP:  22/124x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 11, 30, "Bear Paw II"                     // JP:  22/146x
+
+//  Unused JP at Level 30: 92
+

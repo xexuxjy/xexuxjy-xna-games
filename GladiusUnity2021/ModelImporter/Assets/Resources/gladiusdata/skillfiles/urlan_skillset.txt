@@ -1,0 +1,356 @@
+////// SKILLSET export Class: Urlan Urlan  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Urlan Attack"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Urlan Block"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Urlan OlderBrother"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Urlan WolfForm I"                // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Wolf Attack"                
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Wolf Evade"
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Wolf Nip"                                
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Wolf ShiftReturn"                
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Urlan BearForm I"                // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Attack"                     // JP:   0/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Evade"                      // JP:   0/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Bite"                       // JP:   4/ 18	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Urlan CatForm I"                 // JP:   6/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Cat Attack"                      // JP:   0/ 22	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Cat Evade"                       // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Cat Leap"                        // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Cat ShiftReturn"                 // JP:  -2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Urlan BearForm II"               // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear Attack II"                  // JP:  18/ 58	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear Turtle I"                   // JP:  12/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear WintersFat"                 // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear Paw I"                      // JP:  10/ 86	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Urlan Combo I"                   // JP:   6/ 92	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Urlan CatForm II"                // JP:  18/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Cat Growl I"                     // JP:   8/118	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Cat Paw I"                       // JP:  18/136	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Cat PrecisionAttack"             // JP:  10/146	AccMod 20
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Cat Bite"                        // JP:   4/150	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Urlan Combo II"                  // JP:  12/162	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Urlan Combo III"                 // JP:  22/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  9, 30, "Urlan Garrison"                  // JP:  12/196	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Urlan WolfForm II"               // JP:  10/206	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Wolf LupusCall"                  // JP:   6/212	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Wolf PackMentality I"            // JP:   8/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Wolf Courage"                    // JP:   0/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Wolf TargetLeg"                  // JP:  10/230	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Urlan Lunge"                     // JP:  24/254	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Urlan CripplingBlow"             // JP:  30/284	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Urlan Riposte"                   // JP:  22/306	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Urlan RiposteSub"                // JP:   0/306	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Urlan BearForm III"              // JP:  38/344	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear Bulldoze I"                 // JP:   2/346	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear Hug"                        // JP:  20/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear Paw II"                     // JP:  24/390	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear RakingAttack"               // JP:  36/426	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 20, 30, "Urlan BreakDefense"              // JP:  34/460	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Urlan CatForm III"               // JP:  36/496	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Cat RakingAttack"                // JP:  36/532	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Cat Growl II"                    // JP:  32/564	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Cat Pounce"                      // JP:  24/588	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Cat Paw II"                      // JP:  34/622	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Urlan Combo IV"                  // JP:  34/656	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Urlan WolfForm III"              // JP:  32/688	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Wolf TargetArm"                  // JP:  24/712	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Wolf TearThroat"                 // JP:  18/730	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Wolf Snarl I"                    // JP:  20/750	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Wolf Turtle I"                   // JP:  12/762	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "Urlan DestroyHelm"               // JP:  40/802	AccMod 0
+//  Unused JP at Level 30: 20
+
+
+////// SKILLSET export Class: Urlan Urlan  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Urlan Attack"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Urlan Block"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Urlan OlderBrother"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Urlan EarthAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Urlan BearForm I"                // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Attack"                     // JP:   0/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Evade"                      // JP:   0/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Bite"                       // JP:   4/ 18	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Urlan CatForm I"                 // JP:   6/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Cat Attack"                      // JP:   0/ 22	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Cat Evade"                       // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Cat Leap"                        // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Cat ShiftReturn"                 // JP:  -2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Urlan WolfForm I"                // JP:   4/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Urlan EarthAffinity II"          // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Urlan BearForm II"               // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear Attack II"                  // JP:  18/ 72	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear Turtle I"                   // JP:  12/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear WintersFat"                 // JP:   6/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear Paw I"                      // JP:  10/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Urlan Garrison"                  // JP:  12/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Urlan CatForm II"                // JP:  18/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Cat Growl I"                     // JP:   8/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Cat Paw I"                       // JP:  18/156	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Cat PrecisionAttack"             // JP:  10/166	AccMod 20
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Cat Bite"                        // JP:   4/170	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Urlan WolfForm II"               // JP:  10/180	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf LupusCall"                  // JP:   6/186	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf PackMentality I"            // JP:   8/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf Courage"                    // JP:   0/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf TargetLeg"                  // JP:  10/204	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "Urlan EarthAffinity III"         // JP:  20/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Urlan CripplingBlow"             // JP:  30/254	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Urlan Lunge"                     // JP:  24/278	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Urlan Riposte"                   // JP:  22/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Urlan RiposteSub"                // JP:   0/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Urlan BearForm III"              // JP:  38/338	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Bear Bulldoze I"                 // JP:   2/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Bear Hug"                        // JP:  20/360	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Bear Paw II"                     // JP:  24/384	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Bear RakingAttack"               // JP:  36/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Urlan BreakDefense"              // JP:  34/454	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Urlan WolfForm III"              // JP:  32/486	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Wolf TargetArm"                  // JP:  24/510	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Wolf TearThroat"                 // JP:  18/528	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Wolf Snarl I"                    // JP:  20/548	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Wolf Turtle I"                   // JP:  12/560	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Urlan CatForm III"               // JP:  36/596	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Cat RakingAttack"                // JP:  36/632	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Cat Growl II"                    // JP:  32/664	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Cat Pounce"                      // JP:  24/688	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Cat Paw II"                      // JP:  34/722	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 26, 30, "Urlan DestroyHelm"               // JP:  40/762	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 29, 30, "Urlan EarthAffinity IV"          // JP:  36/798	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Urlan Urlan  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Urlan Attack"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Urlan Block"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Urlan OlderBrother"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Urlan WaterAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Urlan BearForm I"                // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Attack"                     // JP:   0/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Evade"                      // JP:   0/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Bite"                       // JP:   4/ 18	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Urlan CatForm I"                 // JP:   6/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Cat Attack"                      // JP:   0/ 22	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Cat Evade"                       // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Cat Leap"                        // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Cat ShiftReturn"                 // JP:  -2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Urlan WolfForm I"                // JP:   4/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Urlan Garrison"                  // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Urlan CatForm II"                // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Cat Growl I"                     // JP:   8/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Cat Paw I"                       // JP:  18/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Cat PrecisionAttack"             // JP:  10/ 90	AccMod 20
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Cat Bite"                        // JP:   4/ 94	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Urlan WaterAffinity II"          // JP:  10/104	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Urlan BearForm II"               // JP:  20/124	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Bear Attack II"                  // JP:  18/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Bear Turtle I"                   // JP:  12/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Bear WintersFat"                 // JP:   6/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Bear Paw I"                      // JP:  10/170	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Urlan WolfForm II"               // JP:  10/180	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf LupusCall"                  // JP:   6/186	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf PackMentality I"            // JP:   8/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf Courage"                    // JP:   0/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf TargetLeg"                  // JP:  10/204	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Urlan WaterAffinity III"         // JP:  20/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Urlan CripplingBlow"             // JP:  30/254	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 13, 30, "Urlan Lunge"                     // JP:  24/278	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Urlan Riposte"                   // JP:  22/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Urlan RiposteSub"                // JP:   0/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Urlan BearForm III"              // JP:  38/338	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Bear Bulldoze I"                 // JP:   2/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Bear Hug"                        // JP:  20/360	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Bear Paw II"                     // JP:  24/384	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Bear RakingAttack"               // JP:  36/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Urlan BreakDefense"              // JP:  34/454	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 21, 30, "Urlan WolfForm III"              // JP:  32/486	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 21, 30, "Wolf TargetArm"                  // JP:  24/510	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 21, 30, "Wolf TearThroat"                 // JP:  18/528	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 21, 30, "Wolf Snarl I"                    // JP:  20/548	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 21, 30, "Wolf Turtle I"                   // JP:  12/560	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Urlan CatForm III"               // JP:  36/596	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Cat RakingAttack"                // JP:  36/632	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Cat Growl II"                    // JP:  32/664	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Cat Pounce"                      // JP:  24/688	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Cat Paw II"                      // JP:  34/722	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 26, 30, "Urlan DestroyHelm"               // JP:  40/762	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 29, 30, "Urlan WaterAffinity IV"          // JP:  36/798	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Urlan Urlan  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Urlan Attack"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Urlan Block"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Urlan OlderBrother"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Urlan WolfForm I"                // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Urlan BearForm I"                // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Attack"                     // JP:   0/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Evade"                      // JP:   0/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Bite"                       // JP:   4/ 18	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Urlan CatForm I"                 // JP:   6/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Cat Attack"                      // JP:   0/ 22	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Cat Evade"                       // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Cat Leap"                        // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Cat ShiftReturn"                 // JP:  -2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Urlan BearForm II"               // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear Attack II"                  // JP:  18/ 58	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear Turtle I"                   // JP:  12/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear WintersFat"                 // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear Paw I"                      // JP:  10/ 86	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Urlan Garrison"                  // JP:  12/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Urlan CatForm II"                // JP:  18/116	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Cat Growl I"                     // JP:   8/124	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Cat Paw I"                       // JP:  18/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Cat PrecisionAttack"             // JP:  10/152	AccMod 20
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Cat Bite"                        // JP:   4/156	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Urlan WolfForm II"               // JP:  10/166	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf LupusCall"                  // JP:   6/172	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf PackMentality I"            // JP:   8/180	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf Courage"                    // JP:   0/180	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf TargetLeg"                  // JP:  10/190	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Urlan BreakDefense"              // JP:  34/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Urlan CripplingBlow"             // JP:  30/254	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 13, 30, "Urlan Lunge"                     // JP:  24/278	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Urlan Riposte"                   // JP:  22/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Urlan RiposteSub"                // JP:   0/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Urlan BearForm III"              // JP:  38/338	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Bear Bulldoze I"                 // JP:   2/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Bear Hug"                        // JP:  20/360	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Bear Paw II"                     // JP:  24/384	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Bear RakingAttack"               // JP:  36/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Urlan CatForm III"               // JP:  36/456	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Cat RakingAttack"                // JP:  36/492	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Cat Growl II"                    // JP:  32/524	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Cat Pounce"                      // JP:  24/548	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Cat Paw II"                      // JP:  34/582	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "Urlan DestroyHelm"               // JP:  40/622	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Urlan WolfForm III"              // JP:  32/654	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Wolf TargetArm"                  // JP:  24/678	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Wolf TearThroat"                 // JP:  18/696	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Wolf Snarl I"                    // JP:  20/716	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Wolf Turtle I"                   // JP:  12/728	AccMod 0
+//  Unused JP at Level 30: 94
+
+
+////// SKILLSET export Class: Urlan Urlan  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Urlan Attack"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Urlan Block"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Urlan OlderBrother"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Urlan AirAffinity I"             // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Urlan AirAffinity II"            // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Urlan BearForm I"                // JP:  10/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Attack"                     // JP:   0/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Evade"                      // JP:   0/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Bite"                       // JP:   4/ 28	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear ShiftReturn"                // JP:  -2/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Urlan CatForm I"                 // JP:   6/ 32	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Cat Attack"                      // JP:   0/ 32	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Cat Evade"                       // JP:   0/ 32	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Cat Leap"                        // JP:   0/ 32	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Cat ShiftReturn"                 // JP:  -2/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Urlan WolfForm I"                // JP:   4/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Urlan AirAffinity III"           // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Urlan Garrison"                  // JP:  12/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Urlan CatForm II"                // JP:  18/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Cat Growl I"                     // JP:   8/ 92	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Cat Paw I"                       // JP:  18/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Cat PrecisionAttack"             // JP:  10/120	AccMod 20
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Cat Bite"                        // JP:   4/124	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Urlan WolfForm II"               // JP:  10/134	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf LupusCall"                  // JP:   6/140	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf PackMentality I"            // JP:   8/148	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf Courage"                    // JP:   0/148	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf TargetLeg"                  // JP:  10/158	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Urlan BearForm II"               // JP:  20/178	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Bear Attack II"                  // JP:  18/196	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Bear Turtle I"                   // JP:  12/208	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Bear WintersFat"                 // JP:   6/214	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Bear Paw I"                      // JP:  10/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Urlan CripplingBlow"             // JP:  30/254	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 13, 30, "Urlan Lunge"                     // JP:  24/278	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Urlan Riposte"                   // JP:  22/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Urlan RiposteSub"                // JP:   0/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Urlan AirAffinity IV"            // JP:  36/336	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Urlan BearForm III"              // JP:  38/374	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Bear Bulldoze I"                 // JP:   2/376	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Bear Hug"                        // JP:  20/396	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Bear Paw II"                     // JP:  24/420	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Bear RakingAttack"               // JP:  36/456	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Urlan BreakDefense"              // JP:  34/490	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Urlan CatForm III"               // JP:  36/526	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Cat RakingAttack"                // JP:  36/562	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Cat Growl II"                    // JP:  32/594	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Cat Pounce"                      // JP:  24/618	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Cat Paw II"                      // JP:  34/652	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Urlan WolfForm III"              // JP:  32/684	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Wolf TargetArm"                  // JP:  24/708	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Wolf TearThroat"                 // JP:  18/726	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Wolf Snarl I"                    // JP:  20/746	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Wolf Turtle I"                   // JP:  12/758	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 29, 30, "Urlan DestroyHelm"               // JP:  40/798	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Urlan Urlan  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Urlan Attack"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Urlan Block"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Urlan OlderBrother"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Urlan FireAffinity I"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Urlan BearForm I"                // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Attack"                     // JP:   0/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Evade"                      // JP:   0/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Bite"                       // JP:   4/ 18	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Urlan CatForm I"                 // JP:   6/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Cat Attack"                      // JP:   0/ 22	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Cat Evade"                       // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Cat Leap"                        // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Cat ShiftReturn"                 // JP:  -2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Urlan WolfForm I"                // JP:   4/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Urlan FireAffinity II"           // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Urlan BearForm II"               // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear Attack II"                  // JP:  18/ 72	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear Turtle I"                   // JP:  12/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear WintersFat"                 // JP:   6/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear Paw I"                      // JP:  10/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Urlan Garrison"                  // JP:  12/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Urlan CatForm II"                // JP:  18/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Cat Growl I"                     // JP:   8/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Cat Paw I"                       // JP:  18/156	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Cat PrecisionAttack"             // JP:  10/166	AccMod 20
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Cat Bite"                        // JP:   4/170	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Urlan WolfForm II"               // JP:  10/180	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf LupusCall"                  // JP:   6/186	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf PackMentality I"            // JP:   8/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf Courage"                    // JP:   0/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf TargetLeg"                  // JP:  10/204	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Urlan FireAffinity III"          // JP:  20/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Urlan CripplingBlow"             // JP:  30/254	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Urlan Lunge"                     // JP:  24/278	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Urlan Riposte"                   // JP:  22/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Urlan RiposteSub"                // JP:   0/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Urlan BearForm III"              // JP:  38/338	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Bear Bulldoze I"                 // JP:   2/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Bear Hug"                        // JP:  20/360	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Bear Paw II"                     // JP:  24/384	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Bear RakingAttack"               // JP:  36/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Urlan BreakDefense"              // JP:  34/454	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Urlan WolfForm III"              // JP:  32/486	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Wolf TargetArm"                  // JP:  24/510	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Wolf TearThroat"                 // JP:  18/528	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Wolf Snarl I"                    // JP:  20/548	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Wolf Turtle I"                   // JP:  12/560	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Urlan CatForm III"               // JP:  36/596	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Cat RakingAttack"                // JP:  36/632	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Cat Growl II"                    // JP:  32/664	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Cat Pounce"                      // JP:  24/688	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Cat Paw II"                      // JP:  34/722	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 26, 30, "Urlan DestroyHelm"               // JP:  40/762	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 29, 30, "Urlan FireAffinity IV"           // JP:  36/798	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+
+

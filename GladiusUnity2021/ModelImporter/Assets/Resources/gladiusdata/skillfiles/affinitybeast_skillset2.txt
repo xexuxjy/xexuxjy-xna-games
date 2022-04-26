@@ -1,0 +1,54 @@
+////// SKILLSET export Class: BeastAir AffinityBeast  Affinity: Untyped
+
+MODLEVELRANGESKILL:  skillsetSumAir,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumAir,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumAir,  0, 30, "AffinityBeast BlastAir"          // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumAir,  0, 30, "AffinityBeast BuffInitiative"    // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumAir,  0, 30, "AffinityBeast ResistAir"         // JP:   0/  0
+
+MODLEVELRANGESKILL:  skillsetSumEarth,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumEarth,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumEarth,  0, 30, "AffinityBeast BlastEarth"        // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumEarth,  0, 30, "AffinityBeast BuffDefense"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumEarth,  0, 30, "AffinityBeast ResistEarth"       // JP:   0/  0
+
+MODLEVELRANGESKILL:  skillsetSumFire,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumFire,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumFire,  0, 30, "AffinityBeast BlastFire"         // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumFire,  0, 30, "AffinityBeast BuffPower"         // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumFire,  0, 30, "AffinityBeast ResistFire"        // JP:   0/  0
+
+MODLEVELRANGESKILL:  skillsetSumWater,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumWater,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumWater,  0, 30, "AffinityBeast BlastWater"        // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumWater,  0, 30, "AffinityBeast BuffAccuracy"      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumWater,  0, 30, "AffinityBeast ResistWater"        // JP:   0/  0
+
+
+////////////////////////// tainted affinity beasts /////
+
+MODLEVELRANGESKILL:  skillsetSumTAir,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTAir,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTAir,  0, 30, "AffinityBeast BlastAir"          // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTAir,  0, 30, "AffinityBeast DebuffInitiative"  // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTAir,  0, 30, "AffinityBeast ResistAir"         // JP:   0/  0
+
+MODLEVELRANGESKILL:  skillsetSumTEarth,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTEarth,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTEarth,  0, 30, "AffinityBeast BlastEarth"        // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTEarth,  0, 30, "AffinityBeast DebuffDefense"     // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTEarth,  0, 30, "AffinityBeast ResistEarth"       // JP:   0/  0
+
+MODLEVELRANGESKILL:  skillsetSumTFire,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTFire,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTFire,  0, 30, "AffinityBeast BlastFire"         // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTFire,  0, 30, "AffinityBeast DebuffPower"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTFire,  0, 30, "AffinityBeast ResistFire"        // JP:   0/  0
+
+MODLEVELRANGESKILL:  skillsetSumTWater,  0, 30, "AffinityBeast Attack"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTWater,  0, 30, "AffinityBeast Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTWater,  0, 30, "AffinityBeast BlastWater"        // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTWater,  0, 30, "AffinityBeast DebuffAccuracy"    // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetSumTWater,  0, 30, "AffinityBeast ResistWater"        // JP:   0/  0
+
+//  Unused JP at Level 30: 470

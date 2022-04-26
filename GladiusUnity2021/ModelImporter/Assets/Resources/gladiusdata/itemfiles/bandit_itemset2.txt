@@ -1,0 +1,3 @@
+ITEMSET export Class: BanditA Bandit  Region: Imperia Affinity: Earth
+//          :      variant,     Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETxboxdemo,  5, 5,               "Pike",           "Air Shoulder Brace",        "Air Wicker Shield",        "Air Cured Leather Hat",        "" // Cost: 169

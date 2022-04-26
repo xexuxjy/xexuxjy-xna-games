@@ -1,0 +1,85 @@
+////// SKILLSET export Class: UndeadCasterA UndeadCaster  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster SplinteringBones"    // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster DarkResistance"      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster SummonSkeleton"      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Block"               // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Attack"              // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster ComboChain II"       // JP:   6/  6
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster ComboChain III"      // JP:   4/ 10
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster ComboChain IV"       // JP:  12/ 22
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster AffNoGrow"           // JP:   8/ 30
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster AffLeach"            // JP:  10/ 40
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster AffLeachSub"         // JP:  12/ 52
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster DarkAffinity I"      // JP:  22/ 74
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster FleshlessTarget"     // JP:  18/ 92
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Combo I"             // JP:  20/112
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster DarkAffinity II"     // JP:  22/134
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Combo II"            // JP:  24/158
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Firestorm I"         // JP:  34/192
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster CovetLife"           // JP:  30/222
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster SicklyMarrow"        // JP:  32/254
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster DarkAffinity III"    // JP:  34/288
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Combo III"           // JP:  40/328
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster SummonSkeleton II"    // JP:  36/364
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Firestorm II"        // JP:  38/402
+MODLEVELRANGESKILL:  skillsetHGSaren,  19, 19, "UndeadCaster Tornado"            
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster RottingTouch"       
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Combo IV"           
+MODLEVELRANGESKILL:  skillsetHGSaren,  19, 19, "UndeadCaster Teleport"           
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Defend I"           
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster Attack II"          
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster SummonSkeleton III" 
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster KnitBones"          
+MODLEVELRANGESKILL:  skillsetHGSaren,  0, 30, "UndeadCaster GrimReaper"         
+MODLEVELRANGESKILL:  skillsetHGSaren,  19, 19, "Other HellGate"   
+
+
+////// SKILLSET export Class: UndeadCasterA UndeadCaster  Affinity: None
+MODLEVELRANGESKILL:  skillsetqstPF,  0, 30, "UndeadCaster AffLeach"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  0, 30, "UndeadCaster AffLeachSub"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  0, 30, "UndeadCaster Attack"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  0, 30, "UndeadCaster Block"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  0, 30, "UndeadCaster DarkResistance"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  0, 30, "UndeadCaster SplinteringBones"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  1, 30, "UndeadCaster FleshlessTarget"    // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  2, 30, "UndeadCaster Combo I"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  3, 30, "UndeadCaster CovetLife"          // JP:  10/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  4, 30, "UndeadCaster Combo II"           // JP:  16/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  5, 30, "UndeadCaster Firestorm I"        // JP:  10/ 48	AccMod 10
+MODLEVELRANGESKILL:  skillsetqstPF,  6, 30, "UndeadCaster SicklyMarrow"       // JP:  12/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF,  7, 30, "UndeadCaster Firestorm II"       // JP:  24/ 84	AccMod 10
+MODLEVELRANGESKILL:  skillsetqstPF,  9, 30, "UndeadCaster Combo III"          // JP:  28/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF, 11, 30, "UndeadCaster Defend I"           // JP:  32/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF, 13, 30, "UndeadCaster RottingTouch"       // JP:  24/168	AccMod -10
+MODLEVELRANGESKILL:  skillsetqstPF, 16, 30, "UndeadCaster Teleport"           // JP:  30/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF, 18, 30, "UndeadCaster Tornado"            // JP:  22/242	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF, 20, 30, "UndeadCaster Attack II"          // JP:  38/280	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF, 23, 30, "UndeadCaster Combo IV"           // JP:  42/322	AccMod 0
+MODLEVELRANGESKILL:  skillsetqstPF, 26, 30, "UndeadCaster KnitBones"          // JP:  38/360	AccMod 0
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+
+
+
+

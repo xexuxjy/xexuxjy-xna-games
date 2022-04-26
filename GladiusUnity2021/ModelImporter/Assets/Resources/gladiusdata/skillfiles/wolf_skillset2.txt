@@ -1,0 +1,63 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Wolf
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"WolfUberSet",	0,	1000,	"Wolf Attack"
+MODLEVELRANGESKILL: 	"WolfUberSet",	0,	1000,	"Wolf Evade"
+MODLEVELRANGESKILL: 	"WolfUberSet",	1,	1000,	"Wolf EarthAffinity I"
+MODLEVELRANGESKILL: 	"WolfUberSet",	2,	1000,	"Wolf Combo I"
+MODLEVELRANGESKILL: 	"WolfUberSet",	2,	1000,	"Wolf Nip"
+MODLEVELRANGESKILL: 	"WolfUberSet",	3,	1000,	"Wolf LupusCall"
+MODLEVELRANGESKILL: 	"WolfUberSet",	4,	1000,	"Wolf Combo II"
+MODLEVELRANGESKILL: 	"WolfUberSet",	4,	1000,	"Wolf PackMentality I"
+MODLEVELRANGESKILL: 	"WolfUberSet",	5,	1000,	"Wolf TargetLeg"
+
+//Xbox Demo Skillset
+
+////// SKILLSET export Class: Wolf Wolf  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Wolf Attack"                     // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Wolf Courage"                    // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Wolf Evade"                      // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Wolf ShiftReturn"                // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Wolf Combo I"                    // JP:   6/  6x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Wolf Nip"                        // JP:   4/ 10x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Wolf LupusCall"                  // JP:   6/ 16x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Wolf Combo II"                   // JP:  12/ 28x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Wolf PackMentality I"            // JP:   8/ 36x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Wolf TargetLeg"                  // JP:  10/ 46x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Wolf Turtle I"                   // JP:  12/ 58x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  8, 30, "Wolf Combo III"                  // JP:  22/ 80x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Wolf TearThroat"                 // JP:  18/ 98x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Wolf Snarl I"                    // JP:  20/118x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 11, 30, "Wolf Riposte"                    // JP:  22/140x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 12, 30, "Wolf TargetArm"                  // JP:  24/164x
+
+//  Unused JP at Level 30: 138
+
+//gimpy for training
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Wolf Attack"                     // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Wolf Courage"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Wolf Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Wolf Nip"                        // JP:   4/  4	AccMod 25
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Wolf combo I"                    // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  3, 30, "Wolf combo II"                   // JP:  12/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Wolf LupusCall"                  // JP:   6/ 28	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Wolf PackMentality I"            // JP:   8/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Wolf TargetLeg"                  // JP:  10/ 46	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Wolf combo III"                  // JP:  22/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Wolf Turtle I"                   // JP:  12/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  8, 30, "Wolf Snarl I"                    // JP:  20/100	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Wolf Evade II"                   // JP:  30/130	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 12, 30, "Wolf Riposte"                    // JP:  22/152	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 12, 30, "Wolf RiposteSub"                 // JP:   0/152	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 13, 30, "Wolf TearThroat"                 // JP:  18/170	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 15, 30, "Wolf combo IV"                   // JP:  34/204	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 17, 30, "Wolf TargetArm"                  // JP:  24/228	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 19, 30, "Wolf LupusCall II"               // JP:  32/260	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 21, 30, "Wolf PullDown"                   // JP:  34/294	AccMod 1
+MODLEVELRANGESKILL:  skillsettrain, 24, 30, "Wolf PackMentality II"           // JP:  36/330	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 26, 30, "Wolf Snarl II"                   // JP:  38/368	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 29, 30, "Wolf TearThroat II"              // JP:  40/408	AccMod -5

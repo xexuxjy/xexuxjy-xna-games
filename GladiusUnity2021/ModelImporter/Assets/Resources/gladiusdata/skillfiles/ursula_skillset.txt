@@ -1,0 +1,122 @@
+////// SKILLSET export Class: Ursula Ursula  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ursula Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ursula CastleGreyskull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ursula Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ursula KillTest"                 // JP:   0/  0	AccMod 100
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ursula Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Ursula RoundhouseKick"           // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Ursula Combo I"                  // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Ursula SiblingRivalry"           // JP:   2/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Ursula Combo II"                 // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Ursula Turtle I"                 // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Ursula Awareness"                // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Ursula BlindingFlash"            // JP:  22/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Ursula Combo III"                // JP:  22/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Ursula DirectionSpell"           // JP:  18/116	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "Ursula Combo IV"                 // JP:  34/150	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 14, 30, "Ursula DestroyHelm"              // JP:  40/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Ursula OffBalance"               // JP:  38/228	AccMod 0
+//  Unused JP at Level 30: 202
+
+
+////// SKILLSET export Class: Ursula Ursula  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ursula Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ursula CastleGreyskull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ursula Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ursula KillTest"                 // JP:   0/  0	AccMod 100
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ursula Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Ursula EarthAffinity I"          // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Ursula EarthAffinity II"         // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Ursula RoundhouseKick"           // JP:   4/ 18	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Ursula SiblingRivalry"           // JP:   2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Ursula Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Ursula Turtle I"                 // JP:  10/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Ursula DirectionSpell"           // JP:  18/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Ursula BlindingFlash"            // JP:  22/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "Ursula EarthAffinity III"        // JP:  20/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Ursula DestroyHelm"              // JP:  40/150	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Ursula EarthAffinity IV"         // JP:  36/186	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Ursula OffBalance"               // JP:  38/224	AccMod 0
+//  Unused JP at Level 30: 206
+
+
+////// SKILLSET export Class: Ursula Ursula  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ursula Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ursula CastleGreyskull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ursula Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ursula KillTest"                 // JP:   0/  0	AccMod 100
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ursula Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Ursula RoundhouseKick"           // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Ursula SiblingRivalry"           // JP:   2/  6	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Ursula WaterAffinity I"          // JP:   4/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Ursula Turtle I"                 // JP:  10/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Ursula Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Ursula WaterAffinity II"         // JP:  10/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Ursula DirectionSpell"           // JP:  18/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Ursula BlindingFlash"            // JP:  22/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "Ursula DestroyHelm"              // JP:  40/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 13, 30, "Ursula OffBalance"               // JP:  38/168	AccMod 0
+//  Unused JP at Level 30: 262
+
+
+////// SKILLSET export Class: Ursula Ursula  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ursula Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ursula CastleGreyskull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ursula Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ursula KillTest"                 // JP:   0/  0	AccMod 100
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ursula Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Ursula RoundhouseKick"           // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Ursula SiblingRivalry"           // JP:   2/  6	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Ursula DirectionSpell"           // JP:  18/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Ursula Turtle I"                 // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Ursula Awareness"                // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Ursula BlindingFlash"            // JP:  22/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Ursula OffBalance"               // JP:  38/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Ursula DestroyHelm"              // JP:  40/154	AccMod 0
+//  Unused JP at Level 30: 276
+
+
+////// SKILLSET export Class: Ursula Ursula  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ursula Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ursula CastleGreyskull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ursula Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ursula KillTest"                 // JP:   0/  0	AccMod 100
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ursula Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Ursula AirAffinity I"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Ursula AirAffinity II"           // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Ursula RoundhouseKick"           // JP:   4/ 18	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Ursula SiblingRivalry"           // JP:   2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Ursula AirAffinity III"          // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Ursula Turtle I"                 // JP:  10/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Ursula Awareness"                // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Ursula BlindingFlash"            // JP:  22/ 92	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Ursula DirectionSpell"           // JP:  18/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Ursula AirAffinity IV"           // JP:  36/146	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Ursula DestroyHelm"              // JP:  40/186	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Ursula OffBalance"               // JP:  38/224	AccMod 0
+//  Unused JP at Level 30: 206
+
+
+////// SKILLSET export Class: Ursula Ursula  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ursula Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ursula CastleGreyskull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ursula Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ursula KillTest"                 // JP:   0/  0	AccMod 100
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ursula Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Ursula FireAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Ursula FireAffinity II"          // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Ursula RoundhouseKick"           // JP:   4/ 18	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Ursula SiblingRivalry"           // JP:   2/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Ursula Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Ursula Turtle I"                 // JP:  10/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Ursula DirectionSpell"           // JP:  18/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Ursula BlindingFlash"            // JP:  22/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Ursula FireAffinity III"         // JP:  20/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Ursula DestroyHelm"              // JP:  40/150	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Ursula FireAffinity IV"          // JP:  36/186	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Ursula OffBalance"               // JP:  38/224	AccMod 0
+//  Unused JP at Level 30: 206
+
+
+
+

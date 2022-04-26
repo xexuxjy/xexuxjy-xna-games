@@ -1,0 +1,50 @@
+////// SKILLSET export Class: Boss Boss  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Boss SummonAirAffinityBeast"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Boss SummonEarthAffinityBeast"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Boss SummonFireAffinityBeast"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Boss SummonWaterAffinityBeast"   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Boss SummonAirAffinityBeast"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Boss SummonEarthAffinityBeast"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Boss SummonFireAffinityBeast"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Boss SummonWaterAffinityBeast"   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Boss SummonAirAffinityBeast"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Boss SummonEarthAffinityBeast"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Boss SummonFireAffinityBeast"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Boss SummonWaterAffinityBeast"   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Boss SummonAirAffinityBeast"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Boss SummonEarthAffinityBeast"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Boss SummonFireAffinityBeast"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Boss SummonWaterAffinityBeast"   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Boss SummonAirAffinityBeast"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Boss SummonEarthAffinityBeast"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Boss SummonFireAffinityBeast"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Boss SummonWaterAffinityBeast"   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Boss SummonAirAffinityBeast"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Boss SummonEarthAffinityBeast"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Boss SummonFireAffinityBeast"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Boss SummonWaterAffinityBeast"   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+
+

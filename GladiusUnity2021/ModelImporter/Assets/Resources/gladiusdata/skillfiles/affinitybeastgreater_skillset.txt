@@ -1,0 +1,140 @@
+////// SKILLSET export Class: BeastAirGreater AffinityBeastGreater  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater AttackAir"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater AttackEarth"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater AttackFire"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater AttackWater"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater BlastAir"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater BlastEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater BlastFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater BlastWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater Evade"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater GiantHitAir"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater GiantHitEarth"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater GiantHitFire"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater GiantHitWater"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater LowerDefense"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater ResistAir"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater ResistEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater ResistFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "AffinityBeastGreater ResistWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "AffinityBeastGreater Immunities"  // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 410
+
+
+////// SKILLSET export Class: BeastAirGreater AffinityBeastGreater  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater AttackAir"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater AttackEarth"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater AttackFire"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater AttackWater"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater BlastAir"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater BlastEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater BlastFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater BlastWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater Evade"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater GiantHitAir"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater GiantHitEarth"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater GiantHitFire"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater GiantHitWater"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater LowerDefense"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater ResistAir"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater ResistEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater ResistFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "AffinityBeastGreater ResistWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "AffinityBeastGreater Immunities"  // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 410
+
+
+////// SKILLSET export Class: BeastAirGreater AffinityBeastGreater  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater AttackAir"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater AttackEarth"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater AttackFire"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater AttackWater"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater BlastAir"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater BlastEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater BlastFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater BlastWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater Evade"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater GiantHitAir"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater GiantHitEarth"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater GiantHitFire"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater GiantHitWater"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater LowerDefense"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater ResistAir"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater ResistEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater ResistFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "AffinityBeastGreater ResistWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "AffinityBeastGreater Immunities"  // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 410
+
+
+////// SKILLSET export Class: BeastAirGreater AffinityBeastGreater  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater AttackAir"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater AttackEarth"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater AttackFire"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater AttackWater"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater BlastAir"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater BlastEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater BlastFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater BlastWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater Evade"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater GiantHitAir"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater GiantHitEarth"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater GiantHitFire"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater GiantHitWater"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater LowerDefense"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater ResistAir"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater ResistEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater ResistFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "AffinityBeastGreater ResistWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "AffinityBeastGreater Immunities"  // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 410
+
+
+////// SKILLSET export Class: BeastAirGreater AffinityBeastGreater  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater AttackAir"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater AttackEarth"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater AttackFire"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater AttackWater"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater BlastAir"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater BlastEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater BlastFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater BlastWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater Evade"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater GiantHitAir"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater GiantHitEarth"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater GiantHitFire"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater GiantHitWater"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater LowerDefense"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater ResistAir"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater ResistEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater ResistFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "AffinityBeastGreater ResistWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "AffinityBeastGreater Immunities"  // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 410
+
+
+////// SKILLSET export Class: BeastAirGreater AffinityBeastGreater  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater AttackAir"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater AttackEarth"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater AttackFire"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater AttackWater"  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater BlastAir"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater BlastEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater BlastFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater BlastWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater Evade"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater GiantHitAir"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater GiantHitEarth"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater GiantHitFire"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater GiantHitWater"  // JP:   0/  0	AccMod -30
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater LowerDefense"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater ResistAir"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater ResistEarth"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater ResistFire"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "AffinityBeastGreater ResistWater"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "AffinityBeastGreater Immunities"  // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 410
+
+
+
+

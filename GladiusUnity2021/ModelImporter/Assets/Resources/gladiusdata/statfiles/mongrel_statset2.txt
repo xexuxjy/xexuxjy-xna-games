@@ -1,0 +1,25 @@
+// STATSET export Class: Mongrel
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statsetW,         1         3         3         3         3         1     2.00
+MODCORESTATSCOMP:               statsetW,         2         5         6         6         5         4     2.00
+MODCORESTATSCOMP:               statsetW,         3         8         9         9         7         7     2.00
+MODCORESTATSCOMP:               statsetW,         4        10        12        12         9         9     2.00
+MODCORESTATSCOMP:               statsetW,         5        12        15        15        12        13     2.00
+MODCORESTATSCOMP:               statsetW,         6        14        18        17        15        16     2.00
+MODCORESTATSCOMP:               statsetW,         7        16        20        20        17        18     2.00
+MODCORESTATSCOMP:               statsetW,         8        18        22        22        19        20     2.00
+MODCORESTATSCOMP:               statsetW,         9        21        24        24        22        22     2.00
+MODCORESTATSCOMP:               statsetW,        10        24        27        26        25        25     2.00
+MODCORESTATSCOMP:               statsetW,        11        27        30        29        28        27     2.00
+MODCORESTATSCOMP:               statsetW,        12        29        33        31        30        29     2.00
+MODCORESTATSCOMP:               statsetW,        13        31        36        34        32        32     2.00
+MODCORESTATSCOMP:               statsetW,        14        34        38        36        35        35     2.00
+MODCORESTATSCOMP:               statsetW,        15        37        40        38        38        38     2.00
+MODCORESTATSCOMP:               statsetW,        16        40        42        40        41        41     2.00
+MODCORESTATSCOMP:               statsetW,        17        43        45        42        44        43     2.00
+MODCORESTATSCOMP:               statsetW,        18        46        47        45        47        46     2.00
+MODCORESTATSCOMP:               statsetW,        19        49        49        48        49        48     2.00
+MODCORESTATSCOMP:               statsetW,        20        51        52        50        51        51     2.00
+
+

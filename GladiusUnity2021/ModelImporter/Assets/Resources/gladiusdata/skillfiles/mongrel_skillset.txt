@@ -1,0 +1,160 @@
+////// SKILLSET export Class: Mongrel Mongrel  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Mongrel Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Mongrel Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Mongrel Run I"                   // JP:   2/  2	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Mongrel Combo I"                 // JP:   6/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Mongrel TorsoSmash"              // JP:   4/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Mongrel Combo II"                // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Mongrel Driven"                  // JP:   8/ 32	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Mongrel Turtle I"                // JP:   6/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Mongrel KickingAttack I"         // JP:  10/ 48	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Mongrel BackStab"                // JP:  18/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Mongrel WoundedAnimal"           // JP:  12/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Mongrel WoundedAnimalSub"        // JP:   0/ 78	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Mongrel Combo III"               // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Mongrel Evade II"                // JP:  20/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Mongrel KickingAttack II"        // JP:  24/144	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Mongrel Evade III"               // JP:  30/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Mongrel Riposte"                 // JP:  22/196	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Mongrel RiposteSub"              // JP:   0/196	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Mongrel Combo IV"                // JP:  34/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Mongrel KickingAttack III"       // JP:  34/264	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Mongrel FesteringClaws"          // JP:  38/302	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Mongrel OffBalance"              // JP:  36/338	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Mongrel Turtle II"               // JP:  32/370	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "Mongrel Scratch"                 // JP:  40/410	AccMod 1
+//  Unused JP at Level 30: 20
+
+
+////// SKILLSET export Class: Mongrel Mongrel  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Mongrel Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Mongrel Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Mongrel EarthAffinity I"         // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Mongrel Driven"                  // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Mongrel Run I"                   // JP:   2/ 14	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Mongrel EarthAffinity II"        // JP:  10/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Mongrel KickingAttack I"         // JP:  10/ 34	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Mongrel TorsoSmash"              // JP:   4/ 38	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Mongrel Turtle I"                // JP:   6/ 44	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Mongrel BackStab"                // JP:  18/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Mongrel Evade II"                // JP:  20/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Mongrel WoundedAnimal"           // JP:  12/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Mongrel WoundedAnimalSub"        // JP:   0/ 94	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Mongrel Evade III"               // JP:  30/124	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Mongrel KickingAttack II"        // JP:  24/148	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Mongrel Riposte"                 // JP:  22/170	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Mongrel RiposteSub"              // JP:   0/170	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 15, 30, "Mongrel KickingAttack III"       // JP:  34/204	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 18, 30, "Mongrel FesteringClaws"          // JP:  38/242	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 20, 30, "Mongrel OffBalance"              // JP:  36/278	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "Mongrel Turtle II"               // JP:  32/310	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 25, 30, "Mongrel Scratch"                 // JP:  40/350	AccMod 1
+//  Unused JP at Level 30: 80
+
+
+////// SKILLSET export Class: Mongrel Mongrel  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Mongrel Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Mongrel Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Mongrel Run I"                   // JP:   2/  2	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Mongrel Driven"                  // JP:   8/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Mongrel TorsoSmash"              // JP:   4/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Mongrel KickingAttack I"         // JP:  10/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Mongrel Turtle I"                // JP:   6/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Mongrel WaterAffinity I"         // JP:   4/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Mongrel BackStab"                // JP:  18/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Mongrel WoundedAnimal"           // JP:  12/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Mongrel WoundedAnimalSub"        // JP:   0/ 64	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Mongrel Evade II"                // JP:  20/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Mongrel Evade III"               // JP:  30/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Mongrel KickingAttack II"        // JP:  24/138	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Mongrel Riposte"                 // JP:  22/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Mongrel RiposteSub"              // JP:   0/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 15, 30, "Mongrel FesteringClaws"          // JP:  38/198	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Mongrel KickingAttack III"       // JP:  34/232	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Mongrel Turtle II"               // JP:  32/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Mongrel OffBalance"              // JP:  36/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Mongrel Scratch"                 // JP:  40/340	AccMod 1
+//  Unused JP at Level 30: 90
+
+
+////// SKILLSET export Class: Mongrel Mongrel  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Mongrel Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Mongrel Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Mongrel Run I"                   // JP:   2/  2	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Mongrel Driven"                  // JP:   8/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Mongrel TorsoSmash"              // JP:   4/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Mongrel KickingAttack I"         // JP:  10/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Mongrel Turtle I"                // JP:   6/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Mongrel BackStab"                // JP:  18/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Mongrel Evade II"                // JP:  20/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Mongrel WoundedAnimal"           // JP:  12/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Mongrel WoundedAnimalSub"        // JP:   0/ 80	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Mongrel Evade III"               // JP:  30/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Mongrel KickingAttack II"        // JP:  24/134	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Mongrel Riposte"                 // JP:  22/156	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Mongrel RiposteSub"              // JP:   0/156	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Mongrel KickingAttack III"       // JP:  34/190	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Mongrel FesteringClaws"          // JP:  38/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Mongrel OffBalance"              // JP:  36/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "Mongrel Scratch"                 // JP:  40/304	AccMod 1
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Mongrel Turtle II"               // JP:  32/336	AccMod 0
+//  Unused JP at Level 30: 94
+
+
+////// SKILLSET export Class: Mongrel Mongrel  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Mongrel Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Mongrel Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Mongrel AirAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Mongrel AirAffinity II"          // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Mongrel Driven"                  // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Mongrel Run I"                   // JP:   2/ 24	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Mongrel KickingAttack I"         // JP:  10/ 34	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Mongrel TorsoSmash"              // JP:   4/ 38	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Mongrel Turtle I"                // JP:   6/ 44	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Mongrel AirAffinity III"         // JP:  20/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Mongrel BackStab"                // JP:  18/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Mongrel WoundedAnimal"           // JP:  12/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Mongrel WoundedAnimalSub"        // JP:   0/ 94	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Mongrel Evade II"                // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Mongrel Evade III"               // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 13, 30, "Mongrel KickingAttack II"        // JP:  24/168	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Mongrel Riposte"                 // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Mongrel RiposteSub"              // JP:   0/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Mongrel AirAffinity IV"          // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Mongrel FesteringClaws"          // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Mongrel KickingAttack III"       // JP:  34/298	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Mongrel OffBalance"              // JP:  36/334	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Mongrel Turtle II"               // JP:  32/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 29, 30, "Mongrel Scratch"                 // JP:  40/406	AccMod 1
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Mongrel Mongrel  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Mongrel Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Mongrel Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Mongrel FireAffinity I"          // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Mongrel Driven"                  // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Mongrel Run I"                   // JP:   2/ 14	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Mongrel FireAffinity II"         // JP:  10/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Mongrel KickingAttack I"         // JP:  10/ 34	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Mongrel TorsoSmash"              // JP:   4/ 38	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Mongrel Turtle I"                // JP:   6/ 44	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Mongrel BackStab"                // JP:  18/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Mongrel Evade II"                // JP:  20/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Mongrel WoundedAnimal"           // JP:  12/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Mongrel WoundedAnimalSub"        // JP:   0/ 94	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Mongrel FireAffinity III"        // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Mongrel Evade III"               // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Mongrel KickingAttack II"        // JP:  24/168	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Mongrel Riposte"                 // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Mongrel RiposteSub"              // JP:   0/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Mongrel FesteringClaws"          // JP:  38/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Mongrel KickingAttack III"       // JP:  34/262	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Mongrel Turtle II"               // JP:  32/294	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Mongrel OffBalance"              // JP:  36/330	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 26, 30, "Mongrel Scratch"                 // JP:  40/370	AccMod 1
+//  Unused JP at Level 30: 60
+
+
+
+

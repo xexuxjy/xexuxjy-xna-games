@@ -1,0 +1,32 @@
+ITEMSET export Class: Legionnaire Legionnaire  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+
+MODITEMSCOMP:   ITEMSETxboxdemo,  5, 5,        "Earth Bazo",    "Earth Heavy Fur Skirt","Reinforced Wooden Shield",          "Worn Attic",        "" // Cost: 729
+
+MODITEMSCOMP:    DaxTest,  20, 20,        "Air Test Sword Medium", "", "Air Test Shield Medium", "", "" // Cost: Free!
+
+//For Teofil, so as to make him able to use all the job points he spent.
+
+ITEMSET export Class: Legionnaire Legionnaire  Region: Imperia Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETTrain,  1, 1,             "Broad Axe",            "Short Cape",   "Fire Beast's Shield",                      "",    "Fire Badge of Exuro" // Cost: 01129/01129...Acc/Def: 003/002
+MODITEMSCOMP:   ITEMSETTrain,  2, 2,           "Small Sword",            "Short Cape",   "Fire Beast's Shield",          "Glossy Attic",    "Fire Badge of Exuro" // Cost: 02406/03535...Acc/Def: 004/002
+MODITEMSCOMP:   ITEMSETTrain,  3, 3,           "Small Sword",      "Fire Woven Skirt","Reinforced Wooden Shield",          "Glossy Attic",    "Fire Badge of Exuro" // Cost: 01556/05091...Acc/Def: 003/004
+MODITEMSCOMP:   ITEMSETTrain,  4, 4,           "Small Sword",      "Fire Woven Skirt","Reinforced Wooden Shield",          "Glossy Attic",    "Fire Badge of Exuro" // Cost: 00000/05091...Acc/Def: 003/004
+MODITEMSCOMP:   ITEMSETTrain,  5, 5,         "Fire Crowbill",      "Fire Woven Skirt", "Fire Soldier's Scutum",      "Fire Pedes Attic",    "Fire Badge of Exuro" // Cost: 08185/13276...Acc/Def: -04/003
+MODITEMSCOMP:   ITEMSETTrain,  6, 6,             "Fire Sica",       "Fire Regal Cape",               "Hoplite",     "Fire Frons Coolus",    "Fire Badge of Exuro" // Cost: 11652/24928...Acc/Def: 003/006
+MODITEMSCOMP:   ITEMSETTrain,  7, 7,               "Gladius",       "Fire Regal Cape",               "Hoplite",    "Fire Hooked Coolus",    "Fire Badge of Exuro" // Cost: 08495/33423...Acc/Def: 003/006
+MODITEMSCOMP:   ITEMSETTrain,  8, 8,   "Fire Vermillion Axe",       "Fire Regal Cape",               "Hoplite",     "Ornamental Italic",    "Fire Badge of Exuro" // Cost: 10444/43867...Acc/Def: 000/006
+MODITEMSCOMP:   ITEMSETTrain,  9, 9,   "Fire Vermillion Axe","Fire Cured Leather Armor",               "Hoplite",     "Ornamental Italic",    "Fire Badge of Exuro" // Cost: 05648/49515...Acc/Def: 000/007
+MODITEMSCOMP:   ITEMSETTrain, 10,10,           "Fire Flyssa","Fire Cured Leather Armor",               "Hoplite",    "Fire Bronze Italic",    "Fire Badge of Exuro" // Cost: 12143/61658...Acc/Def: 003/006
+MODITEMSCOMP:   ITEMSETTrain, 11,11,         "Fire Caithain","Fire Cured Leather Armor",               "Hoplite",    "Fire Bronze Italic",    "Fire Badge of Exuro" // Cost: 03424/65082...Acc/Def: 006/005
+MODITEMSCOMP:   ITEMSETTrain, 12,12,         "Fire Caithain","Fire Cured Leather Armor",        "Nomad's Shield",    "Fire Bronze Italic",   "Fire Badge of Exuro" // Cost: 02480/67562...Acc/Def: 005/008
+MODITEMSCOMP:   ITEMSETTrain, 13,13,         "Fire Caithain","Fire Cured Leather Armor",        "Nomad's Shield",     "Fire Attic Cuspis",   "Fire Badge of Exuro" // Cost: 10890/78452...Acc/Def: 004/009
+MODITEMSCOMP:   ITEMSETTrain, 14,14,         "Fire Hook Axe","Fire Cured Leather Armor","Branded Hardwood Shield",     "Fire Attic Cuspis",   "Fire Badge of Exuro" // Cost: 07161/85613...Acc/Def: -01/009
+MODITEMSCOMP:   ITEMSETTrain, 15,15,           "Fire Pernat","Fire Cured Leather Armor","Branded Hardwood Shield",     "Fire Attic Cuspis",   "Fire Badge of Exuro" // Cost: 07612/93225...Acc/Def: -09/009
+MODITEMSCOMP:   ITEMSETTrain, 16,16,           "Fire Pernat","Fire Bronze Breastplate",                "Regius","Fire Corinthian Helmet",   "Fire Badge of Exuro" // Cost: 26224/119449...Acc/Def: -11/013
+MODITEMSCOMP:   ITEMSETTrain, 17,17,           "Fire Pernat","Fire Studded Breastplate",                "Regius","Fire Corinthian Helmet",   "Fire Badge of Exuro" // Cost: 10752/130201...Acc/Def: -11/013
+MODITEMSCOMP:   ITEMSETTrain, 18,18,    "Fire Thrusting Axe","Fire Studded Breastplate",                "Regius","Fire Crested Ornate Gallic",   "Fire Badge of Exuro" // Cost: 23769/153970...Acc/Def: -01/012
+MODITEMSCOMP:   ITEMSETTrain, 19,19,    "Fire Thrusting Axe","Fire Bronze Imperial Skirt",                "Regius",  "Fire Enforced Gallic",   "Fire Badge of Exuro" // Cost: 28685/182655...Acc/Def: -01/012
+MODITEMSCOMP:   ITEMSETTrain, 20,99,    "Fire Thrusting Axe","Fire Bronze Imperial Skirt",    "Fire Mirror Shield",  "Fire Enforced Gallic",   "Fire Badge of Exuro" // Cost: 01899/184554...Acc/Def: -03/014
+

@@ -1,0 +1,17 @@
+////// SKILLSET export Class: DarkWolf DarkWolf  Affinity: None
+MODLEVELRANGESKILL:  skillsetsummon,  0, 30, "DarkWolf Attack"                 // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetsummon,  0, 30, "DarkWolf Evade"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  2, 30, "DarkWolf Combo I"                // JP:   6/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  2, 30, "DarkWolf TargetLeg"              // JP:   4/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetsummon,  3, 30, "DarkWolf Combo II"               // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  4, 30, "DarkWolf PackMentality II"       // JP:   8/ 32	AccMod -5
+MODLEVELRANGESKILL:  skillsetsummon,  4, 30, "DarkWolf Turlte I"               // JP:   6/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  6, 30, "DarkWolf Combo III"              // JP:  22/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  7, 30, "DarkWolf Snarl I"                // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  8, 30, "DarkWolf TearThroat"             // JP:  18/ 98	AccMod -5
+MODLEVELRANGESKILL:  skillsetsummon, 10, 30, "DarkWolf TearThroat II"          // JP:  18/116	AccMod -15
+MODLEVELRANGESKILL:  skillsetsummon, 12, 30, "DarkWolf Combo IV"               // JP:  34/150	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon, 14, 30, "DarkWolf Poison"                 // JP:  38/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon, 17, 30, "DarkWolf Snarl II"               // JP:  38/226	AccMod 0
+//  Unused JP at Level 30: 204
+

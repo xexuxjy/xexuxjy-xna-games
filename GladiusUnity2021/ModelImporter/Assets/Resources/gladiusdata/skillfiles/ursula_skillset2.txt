@@ -1,0 +1,36 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Ursula
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	0,	1000,	"Ursula Shield"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	0,	1000,	"Ursula Attack"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	0,	1000,	"Ursula Evade"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	0,	1000,	"Ursula CastleGreyskull"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	1,	1000,	"Ursula AirAffinity I"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	2,	1000,	"Ursula Combo I"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	2,	1000,	"Ursula RoundhouseKick"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	3,	1000,	"Ursula AirAffinity I"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	3,	1000,	"Ursula SpellBlast"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	4,	1000,	"Ursula Combo II"
+MODLEVELRANGESKILL: 	"UrsulaUberSer",	4,	1000,	"Ursula LightBeam"
+
+////// SKILLSET export Class: Ursula Ursula  Affinity: Air
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Ursula Attack"                   // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Ursula CastleGreyskull"          // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Ursula Evade"                    // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Ursula Shield"                   // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Ursula AirAffinity I"            // JP:   4/  4x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Ursula SiblingRivalry"           // JP:   2/  6x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Ursula RoundhouseKick"           // JP:   4/ 10x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Ursula AirAffinity II"           // JP:  10/ 20x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Ursula SpellBlast"               // JP:   6/ 26x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Ursula Turtle I"                 // JP:  10/ 44x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  7, 30, "Ursula AirAffinity III"          // JP:  20/ 64x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Ursula DirectionSpell"           // JP:  18/ 82x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Ursula Awareness"                // JP:  20/102x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 11, 30, "Ursula BlindingFlash"            // JP:  22/124x
+
+//  Unused JP at Level 30: 106

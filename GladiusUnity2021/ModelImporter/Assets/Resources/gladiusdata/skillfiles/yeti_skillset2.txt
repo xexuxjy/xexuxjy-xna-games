@@ -1,0 +1,6 @@
+////// SKILLSET export Class: Yeti Yeti  Affinity: Untyped
+
+MODLEVELRANGESKILL:  skillrangedtest,  0, 30, "Yeti Block"                      // JP:   2/  2
+
+
+

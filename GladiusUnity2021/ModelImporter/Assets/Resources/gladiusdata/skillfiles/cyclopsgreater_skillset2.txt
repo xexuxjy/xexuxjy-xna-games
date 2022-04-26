@@ -1,0 +1,34 @@
+////// SKILLSET export Class: CyclopsGreater CyclopsGreater  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater Attack"           // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater Block"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater ThreateningGlare I"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater EyeBeam"          // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater HeavyHanded"      // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater SweepingAttack"   // JP:  10/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater TargetArm"        // JP:  18/ 38	AccMod -5
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater DestroyShield"    // JP:  24/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater ThreateningGlare II"  // JP:  32/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater Shockwave"        // JP:  34/128	AccMod 0
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater HeavyStrike"      // JP:  40/206	AccMod -10
+
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater SummonTAirAffinityBeast"      // JP:  40/206	AccMod -10
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater SummonTEarthAffinityBeast"      // JP:  40/206	AccMod -10
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater SummonTFireAffinityBeast"      // JP:  40/206	AccMod -10
+MODLEVELRANGESKILL:  skillsetFinal,  0, 30, "CyclopsGreater SummonTWaterAffinityBeast"      // JP:  40/206	AccMod -10
+//  Unused JP at Level 30: 264
+
+////// SKILLSET export Class: CyclopsGreater CyclopsGreater  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater Attack"           // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater Block"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater ThreateningGlare I"  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater EyeBeam"          // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater HeavyHanded"      // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater SweepingAttack"   // JP:  10/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater TargetArm"        // JP:  18/ 38	AccMod -5
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater DestroyShield"    // JP:  24/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater ThreateningGlare II"  // JP:  32/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater Shockwave"        // JP:  34/128	AccMod 0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "CyclopsGreater HeavyStrike"      // JP:  40/206	AccMod -10
+
+
+

@@ -1,0 +1,36 @@
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statue,        1         4         8         5         5         5         1
+MODCORESTATSCOMP:               statue,        2         8       10         9        11         9         1
+MODCORESTATSCOMP:               statue,        3        12        15        15        15        13         1
+MODCORESTATSCOMP:               statue,        4        16        19        21        19        17         1
+MODCORESTATSCOMP:               statue,        5        20        24        25        23        21         1
+MODCORESTATSCOMP:               statue,        6        24        29        29        29        26         1
+MODCORESTATSCOMP:               statue,        7        28        32        35        35        31         1
+MODCORESTATSCOMP:               statue,        8        32        36        39        40        36         1
+MODCORESTATSCOMP:               statue,        9        36        40        44        45        41         1
+MODCORESTATSCOMP:               statue,        10        40        43        49        50        45         1
+MODCORESTATSCOMP:               statue,        11        44        46        54        54        50         1
+MODCORESTATSCOMP:               statue,        12        48        50        60        59        56         1
+MODCORESTATSCOMP:               statue,        13        52        54        64        63        61         1
+MODCORESTATSCOMP:               statue,        14        56        58        68        68        65         1
+MODCORESTATSCOMP:               statue,        15        60        62        74        72        70         1
+MODCORESTATSCOMP:               statue,        16        64        65        79        76        76         1
+MODCORESTATSCOMP:               statue,        17        68        68        84        81        81         1
+MODCORESTATSCOMP:               statue,        18       72        71        88        85        86         1
+MODCORESTATSCOMP:               statue,        19        76        75        94        90        92         1
+MODCORESTATSCOMP:               statue,        20        80        78       100        94        98         1
+MODCORESTATSCOMP:               statue,        21        84        82       105        99       103         1
+MODCORESTATSCOMP:               statue,        22        88        84       110       105       108         1
+MODCORESTATSCOMP:               statue,        23        92        86       114       109       114         1
+MODCORESTATSCOMP:               statue,        24        96        89       120       114       119         1
+MODCORESTATSCOMP:               statue,        25        100        93       124       120       125         1
+MODCORESTATSCOMP:               statue,        26        104        97       129       125       130         1
+MODCORESTATSCOMP:               statue,        27        108       101       135       129       135         1
+MODCORESTATSCOMP:               statue,        28        113       103       140       135       139         1
+MODCORESTATSCOMP:               statue,        29       118      105       145       139       144         1
+MODCORESTATSCOMP:               statue,        30       100       110       150       143       148         1
+
+
+
+
+

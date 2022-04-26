@@ -1,0 +1,107 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Legionnaire
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	0,	1000,	"Legionnaire Shield"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	0,	1000,	"Legionnaire Attack"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	0,	1000,	"Legionnaire PracticedManeuvers"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	0,	1000,	"Legionnaire Evade"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	1,	1000,	"Legionnaire AirAffinity I"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	2,	1000,	"Legionnaire Combo I"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	2,	1000,	"Legionnaire TargetLeg"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	2,	1000,	"Legionnaire PracticedManeuvers"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	3,	1000,	"Legionnaire AirAffinity II"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	3,	1000,	"Legionnaire Turtle I"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	4,	1000,	"Legionnaire Combo II"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	4,	1000,	"Legionnaire Orders"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	5,	1000,	"Legionnaire PrecisionAttack"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	7,	1000,	"Legionnaire AirAffinity III"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	8,	1000,	"Legionnaire Combo III"
+MODLEVELRANGESKILL: 	"LegionnaireUberSet",	9,	1000,	"Legionnaire TargetArm"
+
+
+//Xbox demo skillset
+
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Legionnaire Attack"              // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Legionnaire Evade"               // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Legionnaire Shield"              // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Legionnaire Combo II"            // JP:  12/ 30
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 48
+
+// DaxTest skillset
+
+Skill 
+//MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire AirAffinity I"              // JP:   0/  0
+//MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire AirAffinity II"              // JP:   0/  0
+//MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire AirAffinity III"              // JP:   0/  0
+//MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire AirAffinity IV"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire Attack"              // JP:   0/  0
+//Legionnaire Awareness
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire Combo I"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire Combo II"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire Combo III"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire Combo IV"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire ComboChain I"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire ComboChain II"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire ComboChain III"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire ComboChain IV"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire DestroyHelm"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire DestroyShield"              // JP:   0/  0
+//Legionnaire Discipline
+//Legionnaire EarthAffinity I
+//Legionnaire EarthAffinity II
+//Legionnaire EarthAffinity III
+//Legionnaire EarthAffinity IV
+//Legionnaire Evade
+//Legionnaire Evade II
+//Legionnaire FireAffinity I
+//Legionnaire FireAffinity II
+//Legionnaire FireAffinity III
+//Legionnaire FireAffinity IV
+//Legionnaire IndomitableWill
+//Legionnaire OffBalance
+//Legionnaire Orders
+//Legionnaire PracticedManeuvers
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire PrecisionAttack"              // JP:   0/  0
+//Legionnaire Riposte
+//Legionnaire RiposteSub
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire Shield"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire TargetArm"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire TargetHead"              // JP:   0/  0
+MODLEVELRANGESKILL:  SkillSetDaxTest,  0, 30, "Legionnaire TargetLeg"              // JP:   0/  0
+//Legionnaire Turtle I
+//Legionnaire Turtle II
+//Legionnaire WaterAffinity I
+//Legionnaire WaterAffinity II
+//Legionnaire WaterAffinity III
+//Legionnaire WaterAffinity IV
+
+//gimpy for training
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Legionnaire Attack"              // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Legionnaire Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Legionnaire Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Legionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Legionnaire combo I"             // JP:   6/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Legionnaire TargetLeg"           // JP:   4/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  3, 30, "Legionnaire combo II"            // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Legionnaire Evade II"            // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Legionnaire IndomitableWill"     // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Legionnaire Orders"              // JP:   8/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Legionnaire Turtle I"            // JP:   6/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 78	AccMod 15
+MODLEVELRANGESKILL:  skillsettrain,  8, 30, "Legionnaire Awareness"           // JP:  20/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Legionnaire combo III"           // JP:  22/120	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 11, 30, "Legionnaire DestroyShield"       // JP:  24/144	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 13, 30, "Legionnaire Riposte"             // JP:  22/166	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 13, 30, "Legionnaire RiposteSub"          // JP:   0/166	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 14, 30, "Legionnaire TargetArm"           // JP:  18/184	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 16, 30, "Legionnaire combo IV"            // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 18, 30, "Legionnaire Discipline"          // JP:  32/250	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 20, 30, "Legionnaire Turtle II"           // JP:  30/280	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 23, 30, "Legionnaire DestroyHelm"         // JP:  40/320	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 25, 30, "Legionnaire TargetHead"          // JP:  34/354	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 28, 30, "Legionnaire OffBalance"          // JP:  38/392	AccMod 0
+

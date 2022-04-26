@@ -1,0 +1,578 @@
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIE,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIE,  2, 2,   "Earth Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIE,  3, 3,        "Earth Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETIE,  4, 4,           "Earth Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETIE,  5, 5,        "Earth Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETIE,  6, 6,        "Earth Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETIE,  7, 7,        "Earth Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETIE,  8, 8,        "Earth Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETIE,  9, 9,        "Earth Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETIE, 10,10,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETIE, 11,11,         "Earth Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETIE, 12,12,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIE, 13,13,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIE, 14,14,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIE, 15,15,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIE, 16,16,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIE, 17,17,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIE, 18,18,      "Earth Golden Axe",                      "",                      "",                      "",                      "" // Cost: 305
+MODITEMSCOMP:   ITEMSETIE, 19,19,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+MODITEMSCOMP:   ITEMSETIE, 20,99,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Imperia Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIW,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIW,  2, 2,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIW,  3, 3,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIW,  4, 4,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIW,  5, 5,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIW,  6, 6,           "Water Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETIW,  7, 7,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETIW,  8, 8,         "Water Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETIW,  9, 9,    "Water Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETIW, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETIW, 11,11,         "Water Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETIW, 12,12,         "Water Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETIW, 13,13,         "Water Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETIW, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIW, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIW, 16,16,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIW, 17,17,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIW, 18,18,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIW, 19,19,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIW, 20,99,           "Water Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Imperia Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETID,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETID,  2, 2,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETID,  3, 3,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETID,  4, 4,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETID,  5, 5,        "Fire Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETID,  6, 6,        "Fire Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETID,  7, 7,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETID,  8, 8,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETID,  9, 9,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETID, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETID, 11,11,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETID, 12,12,"Earth Forrester's Dagger",                      "",                      "",                      "",                      "" // Cost: 198
+MODITEMSCOMP:   ITEMSETID, 13,13,"Earth Forrester's Dagger",                      "",                      "",                      "",                      "" // Cost: 198
+MODITEMSCOMP:   ITEMSETID, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETID, 15,15,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETID, 16,16,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETID, 17,17,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETID, 18,18,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETID, 19,19,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETID, 20,99,             "Air Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Imperia Affinity: Wind
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIW,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIW,  2, 2,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIW,  3, 3,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIW,  4, 4,             "Air Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETIW,  5, 5,             "Air Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETIW,  6, 6,             "Air Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETIW,  7, 7,           "Air Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETIW,  8, 8,           "Air Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETIW,  9, 9,            "Air Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETIW, 10,10,            "Air Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETIW, 11,11,            "Air Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETIW, 12,12,            "Air Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETIW, 13,13,            "Air Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETIW, 14,14,      "Air Throwing Axe",                      "",                      "",                      "",                      "" // Cost: 230
+MODITEMSCOMP:   ITEMSETIW, 15,15,       "Air Falx Supina",                      "",                      "",                      "",                      "" // Cost: 251
+MODITEMSCOMP:   ITEMSETIW, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETIW, 17,17,  "Air The Bonesplitter",                      "",                      "",                      "",                      "" // Cost: 285
+MODITEMSCOMP:   ITEMSETIW, 18,18,  "Air The Bonesplitter",                      "",                      "",                      "",                      "" // Cost: 285
+MODITEMSCOMP:   ITEMSETIW, 19,19,  "Earth Ceremonial Axe",                      "",                      "",                      "",                      "" // Cost: 323
+MODITEMSCOMP:   ITEMSETIW, 20,99,             "Air Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Imperia Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIF,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIF,  2, 2,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIF,  3, 3,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETIF,  4, 4,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETIF,  5, 5,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETIF,  6, 6,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETIF,  7, 7,          "Fire Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETIF,  8, 8,          "Fire Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETIF,  9, 9,          "Fire Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETIF, 10,10,          "Fire Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETIF, 11,11,          "Fire Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETIF, 12,12,      "Fire Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIF, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETIF, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIF, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIF, 16,16,            "Fire Croag",                      "",                      "",                      "",                      "" // Cost: 271
+MODITEMSCOMP:   ITEMSETIF, 17,17,            "Fire Croag",                      "",                      "",                      "",                      "" // Cost: 271
+MODITEMSCOMP:   ITEMSETIF, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETIF, 19,19,  "Earth Ceremonial Axe",                      "",                      "",                      "",                      "" // Cost: 323
+MODITEMSCOMP:   ITEMSETIF, 20,99,            "Fire Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Imperia Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIL,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETIL,  2, 2,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL,  3, 3,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL,  4, 4,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL,  5, 5,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL,  6, 6,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL,  7, 7,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL,  8, 8,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL,  9, 9,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL, 10,10,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETIL, 11,11,         "Earth Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETIL, 12,12,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIL, 13,13,     "Earth Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETIL, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIL, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETIL, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETIL, 17,17,  "Air The Bonesplitter",                      "",                      "",                      "",                      "" // Cost: 285
+MODITEMSCOMP:   ITEMSETIL, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETIL, 19,19,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETIL, 20,99,           "Water Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Nordagh Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNE,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNE,  2, 2,   "Earth Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETNE,  3, 3,        "Earth Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNE,  4, 4,        "Earth Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNE,  5, 5,        "Earth Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNE,  6, 6,        "Earth Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNE,  7, 7,         "Earth Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETNE,  8, 8,        "Earth Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETNE,  9, 9,        "Earth Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETNE, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETNE, 11,11,         "Earth Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETNE, 12,12,         "Earth Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETNE, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETNE, 14,14,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETNE, 15,15,          "Earth Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNE, 16,16,          "Earth Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNE, 17,17,          "Earth Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNE, 18,18,          "Earth Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNE, 19,19,          "Earth Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNE, 20,99,          "Earth Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Nordagh Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNW,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  2, 2,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  3, 3,        "Water Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNW,  4, 4,           "Water Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETNW,  5, 5,           "Water Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETNW,  6, 6,           "Water Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETNW,  7, 7,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETNW,  8, 8,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETNW,  9, 9,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETNW, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETNW, 11,11,         "Water Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETNW, 12,12,         "Water Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETNW, 13,13,         "Water Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETNW, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETNW, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETNW, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETNW, 17,17,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETNW, 18,18,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETNW, 19,19,  "Earth Ceremonial Axe",                      "",                      "",                      "",                      "" // Cost: 323
+MODITEMSCOMP:   ITEMSETNW, 20,99,  "Earth Ceremonial Axe",                      "",                      "",                      "",                      "" // Cost: 323
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Nordagh Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETND,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETND,  2, 2,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETND,  3, 3,           "Main Gauche",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETND,  4, 4,           "Main Gauche",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETND,  5, 5,           "Main Gauche",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETND,  6, 6,           "Main Gauche",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETND,  7, 7,           "Main Gauche",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETND,  8, 8,        "Water Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETND,  9, 9,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETND, 10,10,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETND, 11,11,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETND, 12,12,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETND, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETND, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETND, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETND, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETND, 17,17,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETND, 18,18,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETND, 19,19,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETND, 20,99,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Nordagh Affinity: Wind
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNW,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  2, 2,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  3, 3,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  4, 4,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  5, 5,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  6, 6,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  7, 7,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  8, 8,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW,  9, 9,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNW, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETNW, 11,11,           "Air Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETNW, 12,12,       "Air Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETNW, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETNW, 14,14,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETNW, 15,15,            "Air Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNW, 16,16,            "Air Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNW, 17,17,            "Air Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETNW, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETNW, 19,19,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETNW, 20,99,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Nordagh Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNF,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNF,  2, 2,    "Fire Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETNF,  3, 3,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNF,  4, 4,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNF,  5, 5,        "Fire Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETNF,  6, 6,        "Fire Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETNF,  7, 7,          "Fire Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETNF,  8, 8,          "Fire Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETNF,  9, 9,           "Fire Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETNF, 10,10,           "Fire Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETNF, 11,11,           "Fire Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETNF, 12,12,           "Fire Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETNF, 13,13,           "Fire Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETNF, 14,14,           "Fire Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETNF, 15,15,           "Fire Sickle",                      "",                      "",                      "",                      "" // Cost: 147
+MODITEMSCOMP:   ITEMSETNF, 16,16,            "Fire Croag",                      "",                      "",                      "",                      "" // Cost: 271
+MODITEMSCOMP:   ITEMSETNF, 17,17,            "Fire Croag",                      "",                      "",                      "",                      "" // Cost: 271
+MODITEMSCOMP:   ITEMSETNF, 18,18,            "Fire Croag",                      "",                      "",                      "",                      "" // Cost: 271
+MODITEMSCOMP:   ITEMSETNF, 19,19,  "Earth Ceremonial Axe",                      "",                      "",                      "",                      "" // Cost: 323
+MODITEMSCOMP:   ITEMSETNF, 20,99,            "Fire Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Nordagh Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNL,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNL,  2, 2,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETNL,  3, 3,           "Main Gauche",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETNL,  4, 4,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETNL,  5, 5,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETNL,  6, 6,       "Water Stone Axe",                      "",                      "",                      "",                      "" // Cost: 96
+MODITEMSCOMP:   ITEMSETNL,  7, 7,           "Air Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETNL,  8, 8,         "Water Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETNL,  9, 9,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETNL, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETNL, 11,11,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETNL, 12,12,       "Air Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETNL, 13,13,       "Air Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETNL, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETNL, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETNL, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETNL, 17,17,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETNL, 18,18,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETNL, 19,19,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETNL, 20,99,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Steppes Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSE,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETSE,  2, 2,   "Earth Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSE,  3, 3,        "Earth Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETSE,  4, 4,        "Earth Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETSE,  5, 5,       "Earth Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSE,  6, 6,       "Earth Stone Axe",                      "",                      "",                      "",                      "" // Cost: 96
+MODITEMSCOMP:   ITEMSETSE,  7, 7,       "Earth Stone Axe",                      "",                      "",                      "",                      "" // Cost: 96
+MODITEMSCOMP:   ITEMSETSE,  8, 8,       "Earth Stone Axe",                      "",                      "",                      "",                      "" // Cost: 96
+MODITEMSCOMP:   ITEMSETSE,  9, 9,       "Earth Stone Axe",                      "",                      "",                      "",                      "" // Cost: 96
+MODITEMSCOMP:   ITEMSETSE, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETSE, 11,11,         "Earth Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETSE, 12,12,         "Earth Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETSE, 13,13,         "Earth Chopper",                      "",                      "",                      "",                      "" // Cost: 181
+MODITEMSCOMP:   ITEMSETSE, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETSE, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETSE, 16,16,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETSE, 17,17,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETSE, 18,18,      "Earth Golden Axe",                      "",                      "",                      "",                      "" // Cost: 305
+MODITEMSCOMP:   ITEMSETSE, 19,19,      "Earth Golden Axe",                      "",                      "",                      "",                      "" // Cost: 305
+MODITEMSCOMP:   ITEMSETSE, 20,99,      "Earth Golden Axe",                      "",                      "",                      "",                      "" // Cost: 305
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Steppes Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSW,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETSW,  2, 2,   "Water Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  3, 3,   "Water Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  4, 4,   "Water Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  5, 5,       "Water Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSW,  6, 6,           "Water Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETSW,  7, 7,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETSW,  8, 8,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETSW,  9, 9,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETSW, 10,10,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETSW, 11,11,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETSW, 12,12,         "Water Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETSW, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 14,14,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 15,15,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 16,16,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 17,17,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 18,18,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 19,19,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 20,99,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Steppes Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSD,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETSD,  2, 2,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSD,  3, 3,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSD,  4, 4,               "Securis",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSD,  5, 5,       "Water Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSD,  6, 6,       "Water Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSD,  7, 7,       "Water Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSD,  8, 8,        "Earth Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETSD,  9, 9,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETSD, 10,10,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETSD, 11,11,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETSD, 12,12,"Earth Forrester's Dagger",                      "",                      "",                      "",                      "" // Cost: 198
+MODITEMSCOMP:   ITEMSETSD, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSD, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETSD, 15,15,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETSD, 16,16,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETSD, 17,17,  "Air The Bonesplitter",                      "",                      "",                      "",                      "" // Cost: 285
+MODITEMSCOMP:   ITEMSETSD, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETSD, 19,19,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+MODITEMSCOMP:   ITEMSETSD, 20,99,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Steppes Affinity: Wind
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSW,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETSW,  2, 2,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  3, 3,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  4, 4,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  5, 5,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  6, 6,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  7, 7,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  8, 8,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW,  9, 9,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW, 10,10,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW, 11,11,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW, 12,12,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSW, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 14,14,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSW, 15,15,       "Air Falx Supina",                      "",                      "",                      "",                      "" // Cost: 251
+MODITEMSCOMP:   ITEMSETSW, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETSW, 17,17,  "Air The Bonesplitter",                      "",                      "",                      "",                      "" // Cost: 285
+MODITEMSCOMP:   ITEMSETSW, 18,18,  "Air The Bonesplitter",                      "",                      "",                      "",                      "" // Cost: 285
+MODITEMSCOMP:   ITEMSETSW, 19,19,  "Earth Ceremonial Axe",                      "",                      "",                      "",                      "" // Cost: 323
+MODITEMSCOMP:   ITEMSETSW, 20,99,             "Air Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Steppes Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSF,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETSF,  2, 2,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETSF,  3, 3,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETSF,  4, 4,            "Fire Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSF,  5, 5,        "Fire Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSF,  6, 6,        "Fire Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSF,  7, 7,        "Fire Full Moon",                      "",                      "",                      "",                      "" // Cost: 82
+MODITEMSCOMP:   ITEMSETSF,  8, 8,         "Fire Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETSF,  9, 9,         "Fire Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETSF, 10,10,         "Fire Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETSF, 11,11,         "Fire Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETSF, 12,12,      "Fire Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETSF, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETSF, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETSF, 15,15,      "Fire Falx Supina",                      "",                      "",                      "",                      "" // Cost: 251
+MODITEMSCOMP:   ITEMSETSF, 16,16,            "Fire Croag",                      "",                      "",                      "",                      "" // Cost: 271
+MODITEMSCOMP:   ITEMSETSF, 17,17,            "Fire Croag",                      "",                      "",                      "",                      "" // Cost: 271
+MODITEMSCOMP:   ITEMSETSF, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETSF, 19,19,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+MODITEMSCOMP:   ITEMSETSF, 20,99,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Steppes Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSL,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETSL,  2, 2,            "Parazonium",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSL,  3, 3,            "Parazonium",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETSL,  4, 4,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL,  5, 5,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL,  6, 6,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL,  7, 7,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL,  8, 8,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL,  9, 9,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL, 10,10,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL, 11,11,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL, 12,12,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL, 13,13,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL, 14,14,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETSL, 15,15,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETSL, 16,16,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETSL, 17,17,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETSL, 18,18,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETSL, 19,19,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+MODITEMSCOMP:   ITEMSETSL, 20,99,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Expanse Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEE,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEE,  2, 2,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEE,  3, 3,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEE,  4, 4,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEE,  5, 5,        "Earth Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETEE,  6, 6,           "Earth Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETEE,  7, 7,           "Earth Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETEE,  8, 8,           "Earth Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETEE,  9, 9,    "Earth Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEE, 10,10,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETEE, 11,11,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETEE, 12,12,"Earth Forrester's Dagger",                      "",                      "",                      "",                      "" // Cost: 198
+MODITEMSCOMP:   ITEMSETEE, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETEE, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETEE, 15,15,          "Earth Inhero",                      "",                      "",                      "",                      "" // Cost: 247
+MODITEMSCOMP:   ITEMSETEE, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETEE, 17,17,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETEE, 18,18,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETEE, 19,19,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETEE, 20,99,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Expanse Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEW,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEW,  2, 2,   "Water Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETEW,  3, 3,        "Water Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETEW,  4, 4,           "Water Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETEW,  5, 5,           "Water Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETEW,  6, 6,           "Water Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETEW,  7, 7,           "Water Ascia",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETEW,  8, 8,        "Water Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETEW,  9, 9,        "Water Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETEW, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETEW, 11,11,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETEW, 12,12,     "Water Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETEW, 13,13,     "Water Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETEW, 14,14,     "Water Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETEW, 15,15,     "Water Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETEW, 16,16,     "Water Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETEW, 17,17,     "Water Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETEW, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETEW, 19,19,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+MODITEMSCOMP:   ITEMSETEW, 20,99,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Expanse Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETED,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETED,  2, 2,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETED,  3, 3,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETED,  4, 4,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETED,  5, 5,        "Earth Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETED,  6, 6,         "Air Stone Axe",                      "",                      "",                      "",                      "" // Cost: 96
+MODITEMSCOMP:   ITEMSETED,  7, 7,          "Fire Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETED,  8, 8,           "Air Dolabra",                      "",                      "",                      "",                      "" // Cost: 129
+MODITEMSCOMP:   ITEMSETED,  9, 9,             "Scramasax",                      "",                      "",                      "",                      "" // Cost: 142
+MODITEMSCOMP:   ITEMSETED, 10,10,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETED, 11,11,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETED, 12,12,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETED, 13,13,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETED, 14,14,     "Earth Miner's Axe",                      "",                      "",                      "",                      "" // Cost: 162
+MODITEMSCOMP:   ITEMSETED, 15,15,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETED, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETED, 17,17,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETED, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETED, 19,19,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETED, 20,99,           "Earth Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Expanse Affinity: Wind
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEW,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEW,  2, 2,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETEW,  3, 3,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETEW,  4, 4,     "Air Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETEW,  5, 5,          "Air Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETEW,  6, 6,             "Air Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETEW,  7, 7,             "Air Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETEW,  8, 8,             "Air Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETEW,  9, 9,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 10,10,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 11,11,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 12,12,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 13,13,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 14,14,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 15,15,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 16,16,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 17,17,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 18,18,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 19,19,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+MODITEMSCOMP:   ITEMSETEW, 20,99,      "Air Hunter's Axe",                      "",                      "",                      "",                      "" // Cost: 145
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Expanse Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEF,  1, 1,               "Hatchet",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEF,  2, 2,    "Fire Light Hatchet",                      "",                      "",                      "",                      "" // Cost: 32
+MODITEMSCOMP:   ITEMSETEF,  3, 3,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETEF,  4, 4,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETEF,  5, 5,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETEF,  6, 6,         "Fire Hand Axe",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETEF,  7, 7,          "Fire Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETEF,  8, 8,         "Fire Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETEF,  9, 9,         "Fire Acinaces",                      "",                      "",                      "",                      "" // Cost: 131
+MODITEMSCOMP:   ITEMSETEF, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETEF, 11,11,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETEF, 12,12,      "Fire Rounded Axe",                      "",                      "",                      "",                      "" // Cost: 195
+MODITEMSCOMP:   ITEMSETEF, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETEF, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETEF, 15,15,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETEF, 16,16,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETEF, 17,17,       "Water Leviathan",                      "",                      "",                      "",                      "" // Cost: 288
+MODITEMSCOMP:   ITEMSETEF, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETEF, 19,19,"Earth Jagged Stone Axe",                      "",                      "",                      "",                      "" // Cost: 2165
+MODITEMSCOMP:   ITEMSETEF, 20,99,            "Fire Harpe",                      "",                      "",                      "",                      "" // Cost: 348
+
+
+ITEMSET export Class: BerserkerEnraged BerserkerEnraged  Region: Expanse Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEL,  1, 1,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEL,  2, 2,                "Dagger",                      "",                      "",                      "",                      "" // Cost: 16
+MODITEMSCOMP:   ITEMSETEL,  3, 3,           "Main Gauche",                      "",                      "",                      "",                      "" // Cost: 48
+MODITEMSCOMP:   ITEMSETEL,  4, 4,                  "Kard",                      "",                      "",                      "",                      "" // Cost: 64
+MODITEMSCOMP:   ITEMSETEL,  5, 5,        "Water Lignator",                      "",                      "",                      "",                      "" // Cost: 80
+MODITEMSCOMP:   ITEMSETEL,  6, 6,            "Fire Pugio",                      "",                      "",                      "",                      "" // Cost: 98
+MODITEMSCOMP:   ITEMSETEL,  7, 7,         "Earth Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETEL,  8, 8,         "Earth Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETEL,  9, 9,         "Earth Pickaxe",                      "",                      "",                      "",                      "" // Cost: 113
+MODITEMSCOMP:   ITEMSETEL, 10,10,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETEL, 11,11,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETEL, 12,12,        "Earth Bone Axe",                      "",                      "",                      "",                      "" // Cost: 163
+MODITEMSCOMP:   ITEMSETEL, 13,13,      "Water Poison Axe",                      "",                      "",                      "",                      "" // Cost: 221
+MODITEMSCOMP:   ITEMSETEL, 14,14,             "Cleopatra",                      "",                      "",                      "",                      "" // Cost: 223
+MODITEMSCOMP:   ITEMSETEL, 15,15,        "Bladed War Axe",                      "",                      "",                      "",                      "" // Cost: 239
+MODITEMSCOMP:   ITEMSETEL, 16,16,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETEL, 17,17,               "Cleaver",                      "",                      "",                      "",                      "" // Cost: 256
+MODITEMSCOMP:   ITEMSETEL, 18,18,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETEL, 19,19,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+MODITEMSCOMP:   ITEMSETEL, 20,99,             "Slate Axe",                      "",                      "",                      "",                      "" // Cost: 2016
+
+
+
+

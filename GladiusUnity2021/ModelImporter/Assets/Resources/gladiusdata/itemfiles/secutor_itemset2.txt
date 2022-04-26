@@ -1,0 +1,16 @@
+ITEMSET export Class: SecutorImp Secutor  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+
+MODITEMSCOMP:   ITEMSETxboxdemo,  5, 30,        "Fire Full Moon",  "Fire Shoulder Brace","Fire WickerShield","Mosaic Thracian Helmet",     "" // Cost: 547
+
+ITEMSET export Class: SecutorImp Secutor  Region: Steppes Affinity: Fire
+//          :      variant, Lv,Lv,            weapon,                   armor,                  shield,                         helmet                          accessory
+MODITEMSCOMP:   ITEMSETSFOXM,  6, 6,         "Fire Stone Axe",         "Fire Arm Brace",       "Fire Hardened Leather Shield", "Bronze Rimmed Thracian",       "" // Cost: 266/922
+MODITEMSCOMP:   ITEMSETSFOXM,  7, 7,         "Fire Pickaxe",           "Fire Arm Brace",       "Fire Hardened Leather Shield", "Bronze Rimmed Thracian",       "" // Cost: 112/1034
+MODITEMSCOMP:   ITEMSETSFOXM,  8, 8,         "Fire Dolabra",           "Fire Arm Brace",       "Fire Bamboo Shield",           "Shumpula",                     "" // Cost: 15/1049
+MODITEMSCOMP:   ITEMSETSFOXM,  9, 9,         "Fire Sickle",            "Fire Scalemail Guard", "Fire Bamboo Shield",           "Shumpula",                     "" // Cost: 402/1451
+MODITEMSCOMP:   ITEMSETSFOXM, 10,10,         "Fire Sickle",            "Fire Scalemail Guard", "Fire Lacquered Shield",        "Nex",                          "" // Cost: 19/1470
+MODITEMSCOMP:   ITEMSETSFOXM, 11,11,         "Fire Chopper",           "Fire Scalemail Guard", "Fire Studded Wooden Shield",   "Carnifico",                    "" // Cost: 23/1493
+MODITEMSCOMP:   ITEMSETSFOXM, 12,12,         "Fire Rounded Axe",       "Fire Scalemail Guard", "Copper Round Shield",          "Casus",                        "" // Cost: 220/1713
+MODITEMSCOMP:   ITEMSETSFOXM, 13,13,         "Fire Rounded Axe",       "Fire The Bloody Hide", "Fire Bronze shield",           "Horned Thracian",              "" // Cost: 1401/3114
+MODITEMSCOMP:   ITEMSETSFOXM, 14,14,         "Liberation",             "Fire The Bloody Hide", "Air Bwaag Scaap",              "Horned Thracian",              "" // Cost: 251/3365

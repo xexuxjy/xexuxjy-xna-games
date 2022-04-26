@@ -1,0 +1,80 @@
+VERSION: 1
+
+PROP: "propskeleton_animal_big_01" 
+MODELS: "misc/skeleton/skeleton_human.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.38
+POS: 35.3104 23.8091 1.1442
+ROT: 0.0000 0.0000 1.0378
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "skeleton_human_01" 
+MODELS: "misc/skeleton/skeleton_animal_Large.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.24
+POS: 39.6483 16.3753 1.1442
+ROT: 0.0000 0.0000 -0.6850
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "skeleton_human_02" 
+MODELS: "misc/skeleton/skeleton_human.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.38
+POS: 24.3319 18.3822 1.1442
+ROT: 0.0000 0.0000 0.7306
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "propskeleton_animal_big_02" 
+MODELS: "misc/skeleton/propskeleton_animal_big01.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.24
+POS: 46.3323 13.6209 1.2025
+ROT: 0.0000 0.0000 -0.6613
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "propskeleton_animal_big_03" 
+MODELS: "misc/skeleton/propskeleton_animal_big01.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.24
+POS: 10.7590 15.8173 1.5011
+ROT: 0.0000 0.0000 -1.0003
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "skeleton_human_03" 
+MODELS: "misc/skeleton/skeleton_human.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.38
+POS: 6.3315 20.6141 2.5068
+ROT: 0.0000 0.0000 0.2087
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "skeleton_human_04" 
+MODELS: "misc/skeleton/skeleton_human.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.38
+POS: 27.6236 26.0498 1.2211
+ROT: 0.0000 0.0000 -1.2120
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+ENDFILE

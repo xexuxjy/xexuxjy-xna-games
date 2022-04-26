@@ -1,0 +1,55 @@
+// STATSET export Class: DarkGod
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+
+
+MODCORESTATSCOMP:               darkknightweak,        10        70        75        80        65        80         1
+MODCORESTATSCOMP:               darkknightweak,        11        77        82        86        71        86         1
+MODCORESTATSCOMP:               darkknightweak,        12        84        89       92        77        92         1
+MODCORESTATSCOMP:               darkknightweak,        13        91        96        98        83        98         1
+MODCORESTATSCOMP:               darkknightweak,        14        98       113       104        89       104         1
+MODCORESTATSCOMP:               darkknightweak,        15       105       110       110        95       110         1
+MODCORESTATSCOMP:               darkknightweak,        16       112       117       116       101       116         1
+MODCORESTATSCOMP:               darkknightweak,        17       119       124       122       107       122         1
+MODCORESTATSCOMP:               darkknightweak,        18       126       131       128       113       128         1
+MODCORESTATSCOMP:               darkknightweak,        19       133       138       134       119       134         1
+MODCORESTATSCOMP:               darkknightweak,        20       140       145       140       125       140         1
+MODCORESTATSCOMP:               darkknightweak,        21       147       152       146       131       146         1
+MODCORESTATSCOMP:               darkknightweak,        22       154       159       152       137       152         1
+MODCORESTATSCOMP:               darkknightweak,        23       161       166       158       143       158         1
+MODCORESTATSCOMP:               darkknightweak,        24       168       173       164       149       164         1
+MODCORESTATSCOMP:               darkknightweak,        25       175       180       170       155       170         1
+MODCORESTATSCOMP:               darkknightweak,        26       182       187       176       161       176         1
+MODCORESTATSCOMP:               darkknightweak,        27       189       194       182       167       182         1
+MODCORESTATSCOMP:               darkknightweak,        28       196       201       188       173       188         1
+MODCORESTATSCOMP:               darkknightweak,        29       203       208       194       179       194         1
+MODCORESTATSCOMP:               darkknightweak,        30       210       215       200       185       200         1
+
+
+MODCORESTATSCOMP:               dragon,        10        90        97        80        65        80         1
+MODCORESTATSCOMP:               dragon,        11        96       103        86        71        86         1
+MODCORESTATSCOMP:               dragon,        12       102       108        91        92        90         1
+MODCORESTATSCOMP:               dragon,        13       107       114        98        83        98         1
+MODCORESTATSCOMP:               dragon,        14       114       121       104        89       104         1
+MODCORESTATSCOMP:               dragon,        15       119       127       110        95       110         1
+MODCORESTATSCOMP:               dragon,        16       125       134       116       101       116         1
+MODCORESTATSCOMP:               dragon,        17       130       139       122       107       122         1
+MODCORESTATSCOMP:               dragon,        18       136       144       128       113       128         1
+MODCORESTATSCOMP:               dragon,        19       143       150       134       119       134         1
+MODCORESTATSCOMP:               dragon,        20       149       156       140       125       140         1
+MODCORESTATSCOMP:               dragon,        21       154       161       146       131       146         1
+MODCORESTATSCOMP:               dragon,        22       159       167       152       137       152         1
+MODCORESTATSCOMP:               dragon,        23       166       172       158       143       158         1
+MODCORESTATSCOMP:               dragon,        24       173       178       164       149       164         1
+MODCORESTATSCOMP:               dragon,        25       176       184       170       155       170         1
+MODCORESTATSCOMP:               dragon,        26       183       191       176       161       176         1
+MODCORESTATSCOMP:               dragon,        27       190       197       182       167       182         1
+MODCORESTATSCOMP:               dragon,        28       196       204       188       173       188         1
+MODCORESTATSCOMP:               dragon,        29       203       211       194       179       194         1
+MODCORESTATSCOMP:               dragon,        30       210       218       200       185       200         1
+
+
+
+
+
+

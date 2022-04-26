@@ -1,0 +1,34 @@
+VERSION: 1
+
+PROP: "propwagon_01" 
+MODELS: "misc/wagon/propwagon_01.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 1.91
+POS: 22.3052 26.1410 1.3902
+ROT: 0.0000 0.0000 0.0000
+ATTRIBUTES: 0
+PROP_END
+
+PROP: "propbranch_dead_large01" 
+MODELS: "misc/treebranch_dead/propbranch_dead_large.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.66
+POS: 34.0166 21.6289 1.1442
+ROT: 0.0000 0.0000 -1.0363
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "propRockGroupStandable01" 
+MODELS: "misc/rocks/propRockGroupStandable.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.54
+POS: 28.0026 20.1912 1.1442
+ROT: 0.0000 0.0000 1.0362
+ATTRIBUTES: 0
+PROP_END
+
+ENDFILE

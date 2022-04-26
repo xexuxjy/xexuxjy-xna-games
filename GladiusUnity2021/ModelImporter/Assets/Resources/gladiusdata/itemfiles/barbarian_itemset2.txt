@@ -1,0 +1,4 @@
+ITEMSET export Class: Barbarian Barbarian  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+
+MODITEMSCOMP:   ITEMSETxboxdemo,  5, 5,       "Water Flamberge",     "Earth Jackal Pelt",        "","Earth Wood Armored Hat",               "" // Cost: 1262

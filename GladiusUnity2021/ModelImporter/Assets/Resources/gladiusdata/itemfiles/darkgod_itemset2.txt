@@ -1,0 +1,5 @@
+////// blah blah
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:    darkknight,  1, 99,       "Dark Eleventh Hour",                      "",                      "",                      "",                      "" 
+
+

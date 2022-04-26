@@ -1,0 +1,4067 @@
+//Saved School
+NAME:	"Daxterius Maximus"
+HERO:	"Ursula"
+GOLD:	9999
+
+
+
+/////////////////////// WEAPONS
+INVENTORY:	"Air Black Bow"
+INVENTORY:	"Earth Test Bow"
+INVENTORY:	"Fire Test Bow"
+INVENTORY:	"Water Test Bow"
+INVENTORY:	"Air Test Carafe"
+INVENTORY:	"Earth Test Carafe"
+INVENTORY:	"Fire Test Carafe"
+INVENTORY:	"Water Test Carafe"
+INVENTORY:	"Air Test Javelin"
+INVENTORY:	"Earth Test Javelin"
+INVENTORY:	"Fire Test Javelin"
+INVENTORY:	"Water Test Javelin"
+INVENTORY:	"Air Test Staff"
+INVENTORY:	"Earth Test Staff"
+INVENTORY:	"Fire Test Staff"
+INVENTORY:	"Water Test Staff"
+INVENTORY:	"Air Test Sword Heavy"
+INVENTORY:	"Earth Test Sword Heavy"
+INVENTORY:	"Fire Test Sword Heavy"
+INVENTORY:	"Water Test Sword Heavy"
+INVENTORY:	"Air Test Sword Medium"
+INVENTORY:	"Earth Test Sword Medium"
+INVENTORY:	"Fire Test Sword Medium"
+INVENTORY:	"Water Test Sword Medium"
+INVENTORY:	"Air Test Sword Light"
+INVENTORY:	"Earth Test Sword Light"
+INVENTORY:	"Fire Test Sword Light"
+INVENTORY:	"Water Test Sword Light"
+INVENTORY:	"Air Test Twohanded"
+INVENTORY:	"Earth Test Twohanded"
+INVENTORY:	"Fire Test Twohanded"
+INVENTORY:	"Water Test Twohanded"
+
+/////////////////////// ARMOR
+INVENTORY:	"Air Test Armor Arcane"
+INVENTORY:	"Earth Test Armor Arcane"
+INVENTORY:	"Fire Test Armor Arcane"
+INVENTORY:	"Water Test Armor Arcane"
+INVENTORY:	"Air Test Armor Amazon"  
+INVENTORY:	"Earth Test Armor Amazon"
+INVENTORY:	"Fire Test Armor Amazon" 
+INVENTORY:	"Water Test Armor Amazon"
+INVENTORY:	"Air Test Armor Barbarian"  
+INVENTORY:	"Earth Test Armor Barbarian"
+INVENTORY:	"Fire Test Armor Barbarian" 
+INVENTORY:	"Water Test Armor Barbarian"
+INVENTORY:	"Air Test Armor Heavy"  
+INVENTORY:	"Earth Test Armor Heavy"
+INVENTORY:	"Fire Test Armor Heavy" 
+INVENTORY:	"Water Test Armor Heavy"
+INVENTORY:	"Air Test Armor Light"  
+INVENTORY:	"Earth Test Armor Light"
+INVENTORY:	"Fire Test Armor Light" 
+INVENTORY:	"Water Test Armor Light"
+INVENTORY:	"Air Test Armor Medium"  
+INVENTORY:	"Earth Test Armor Medium"
+INVENTORY:	"Fire Test Armor Medium" 
+INVENTORY:	"Water Test Armor Medium"
+INVENTORY:	"Air Test Armor Mongrel"  
+INVENTORY:	"Earth Test Armor Mongrel"
+INVENTORY:	"Fire Test Armor Mongrel" 
+INVENTORY:	"Water Test Armor Mongrel"
+
+
+
+//////////////////////// HELMETS
+INVENTORY:	"Air Test Helmet A"
+INVENTORY:	"Earth Test Helmet A"
+INVENTORY:	"Fire Test Helmet A"
+INVENTORY:	"Water Test Helmet A"
+INVENTORY:	"Air Test Helmet B"
+INVENTORY:	"Earth Test Helmet B"
+INVENTORY:	"Fire Test Helmet B"
+INVENTORY:	"Water Test Helmet B"
+INVENTORY:	"Air Test Helmet C"
+INVENTORY:	"Earth Test Helmet C"
+INVENTORY:	"Fire Test Helmet C"
+INVENTORY:	"Water Test Helmet C"
+INVENTORY:	"Air Test Helmet D"
+INVENTORY:	"Earth Test Helmet D"
+INVENTORY:	"Fire Test Helmet D"
+INVENTORY:	"Water Test Helmet D"
+INVENTORY:	"Air Test Helmet E"
+INVENTORY:	"Earth Test Helmet E"
+INVENTORY:	"Fire Test Helmet E"
+INVENTORY:	"Water Test Helmet E"
+INVENTORY:	"Air Test Helmet F"
+INVENTORY:	"Earth Test Helmet F"
+INVENTORY:	"Fire Test Helmet F"
+INVENTORY:	"Water Test Helmet F"
+INVENTORY:	"Air Test Helmet Dervish"
+INVENTORY:	"Earth Test Helmet Dervish"
+INVENTORY:	"Fire Test Helmet Dervish"
+INVENTORY:	"Water Test Helmet Dervish"
+INVENTORY:	"Air Test Helmet Gungnir"
+INVENTORY:	"Earth Test Helmet Gungnir"
+INVENTORY:	"Fire Test Helmet Gungnir"
+INVENTORY:	"Water Test Helmet Gungnir"
+INVENTORY:	"Air Test Helmet Minotaur"
+INVENTORY:	"Earth Test Helmet Minotaur"
+INVENTORY:	"Fire Test Helmet Minotaur"
+INVENTORY:	"Water Test Helmet Minotaur"
+INVENTORY:	"Air Test Helmet Mongrel"
+INVENTORY:	"Earth Test Helmet Mongrel"
+INVENTORY:	"Fire Test Helmet Mongrel"
+INVENTORY:	"Water Test Helmet Mongrel"
+INVENTORY:	"Air Test Helmet Murmillo"
+INVENTORY:	"Earth Test Helmet Murmillo"
+INVENTORY:	"Fire Test Helmet Murmillo"
+INVENTORY:	"Water Test Helmet Murmillo"
+
+///////////////////////// SHIELDS
+INVENTORY:	"Air Test Shield Medium"  
+INVENTORY:	"Earth Test Shield Medium"
+INVENTORY:	"Fire Test Shield Medium" 
+INVENTORY:	"Water Test Shield Medium"
+INVENTORY:	"Air Test Shield Unbreak"  
+INVENTORY:	"Earth Test Shield Unbreak"
+INVENTORY:	"Fire Test Shield Unbreak" 
+INVENTORY:	"Water Test Shield Unbreak"
+INVENTORY:	"Air Test Shield Light"  
+INVENTORY:	"Earth Test Shield Light"
+INVENTORY:	"Fire Test Shield Light" 
+INVENTORY:	"Water Test Shield Light"
+INVENTORY:	"Air Test Shield Heavy"  
+INVENTORY:	"Earth Test Shield Heavy"
+INVENTORY:	"Fire Test Shield Heavy" 
+INVENTORY:	"Water Test Shield Heavy"
+INVENTORY:	"Air Test Shield Murmillo"  
+INVENTORY:	"Earth Test Shield Murmillo"
+INVENTORY:	"Fire Test Shield Murmillo" 
+INVENTORY:	"Water Test Shield Murmillo"
+
+
+
+
+
+
+
+///////////////////////////////////    Characters
+CREATEUNIT:		"Amazon1", "Amazon"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	283
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Amazonian Bow", "", "", "", ""
+
+	// defense skills
+	SKILL: "Amazon Evade"
+
+	// basic skills
+	SKILL: "Amazon Attack"
+	SKILL: "Amazon Punch"
+	SKILL: "Amazon Knee"
+	SKILL: "Amazon Sparks"
+	SKILL: "Amazon Poison II"
+	SKILL: "Amazon Volley"
+	SKILL: "Amazon FlipKick"
+	SKILL: "Amazon Poison I"
+
+	// innate skills
+	SKILL: "Amazon Evade II"
+
+	// other skills
+	SKILL: "Amazon Daze"
+	SKILL: "Amazon AirAffinity I"
+	SKILL: "Amazon EarthAffinity I"
+	SKILL: "Amazon FireAffinity I"
+	SKILL: "Amazon WaterAffinity I"
+	SKILL: "Amazon Combo I"
+	SKILL: "Amazon Slow"
+	SKILL: "Amazon AirAffinity II"
+	SKILL: "Amazon EarthAffinity II"
+	SKILL: "Amazon FireAffinity II"
+	SKILL: "Amazon WaterAffinity II"
+	SKILL: "Amazon Combo II"
+	SKILL: "Amazon Flirt"
+	SKILL: "Amazon AirAffinity III"
+	SKILL: "Amazon EarthAffinity III"
+	SKILL: "Amazon FireAffinity III"
+	SKILL: "Amazon WaterAffinity III"
+	SKILL: "Amazon ColdShoulder"
+	SKILL: "Amazon Combo III"
+	SKILL: "Amazon Cover"
+	SKILL: "Amazon Wink"
+	SKILL: "Amazon Beguile"
+	SKILL: "Amazon Blind"
+	SKILL: "Amazon Combo IV"
+	SKILL: "Amazon AirAffinity IV"
+	SKILL: "Amazon EarthAffinity IV"
+	SKILL: "Amazon FireAffinity IV"
+	SKILL: "Amazon WaterAffinity IV"
+	SKILL: "Amazon Charm"
+	SKILL: "Amazon HellGate"
+
+
+CREATEUNIT:		"Archer1", "Archer"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	313
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Black Bow", "", "", "", ""
+
+	// defense skills
+	SKILL: "Archer Evade"
+
+	// basic skills
+	SKILL: "Archer Attack"
+	SKILL: "Archer Rapidshot I"
+	SKILL: "Archer BowAttack"
+	SKILL: "Archer ExplodingArrow"
+	SKILL: "Archer LongShot I"
+	SKILL: "Archer JoltArrow"
+	SKILL: "Archer PointBlankCantMiss"
+	SKILL: "Archer LongShot II"
+	SKILL: "Archer PoisonArrow"
+	SKILL: "Archer IndirectFire"
+	SKILL: "Archer PointBlankPowered"
+	SKILL: "Archer Spray"
+	SKILL: "Archer LongShot III"
+	SKILL: "Archer LongShot IV"
+	SKILL: "Archer Spray II"
+
+	// innate skills
+
+	// other skills
+	SKILL: "Archer AirAffinity I"
+	SKILL: "Archer EarthAffinity I"
+	SKILL: "Archer FireAffinity I"
+	SKILL: "Archer WaterAffinity I"
+	SKILL: "Archer Combo I"
+	SKILL: "Archer AirAffinity II"
+	SKILL: "Archer EarthAffinity II"
+	SKILL: "Archer FireAffinity II"
+	SKILL: "Archer WaterAffinity II"
+	SKILL: "Archer WhistlingArrow"
+	SKILL: "Archer Combo II"
+	SKILL: "Archer AirAffinity III"
+	SKILL: "Archer EarthAffinity III"
+	SKILL: "Archer FireAffinity III"
+	SKILL: "Archer WaterAffinity III"
+	SKILL: "Archer Combo III"
+	SKILL: "Archer Cover"
+	SKILL: "Archer Combo IV"
+	SKILL: "Archer AirAffinity IV"
+	SKILL: "Archer EarthAffinity IV"
+	SKILL: "Archer FireAffinity IV"
+	SKILL: "Archer WaterAffinity IV"
+	SKILL: "Archer HellGate"
+
+
+CREATEUNIT:		"ArcherF1", "ArcherF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	313
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Black Bow", "", "", "", ""
+
+	// defense skills
+	SKILL: "Archer Evade"
+
+	// basic skills
+	SKILL: "Archer Attack"
+	SKILL: "Archer Rapidshot I"
+	SKILL: "Archer BowAttack"
+	SKILL: "Archer ExplodingArrow"
+	SKILL: "Archer LongShot I"
+	SKILL: "Archer JoltArrow"
+	SKILL: "Archer PointBlankCantMiss"
+	SKILL: "Archer LongShot II"
+	SKILL: "Archer PoisonArrow"
+	SKILL: "Archer IndirectFire"
+	SKILL: "Archer PointBlankPowered"
+	SKILL: "Archer Spray"
+	SKILL: "Archer LongShot III"
+	SKILL: "Archer LongShot IV"
+	SKILL: "Archer Spray II"
+
+	// innate skills
+
+	// other skills
+	SKILL: "Archer AirAffinity I"
+	SKILL: "Archer EarthAffinity I"
+	SKILL: "Archer FireAffinity I"
+	SKILL: "Archer WaterAffinity I"
+	SKILL: "Archer Combo I"
+	SKILL: "Archer AirAffinity II"
+	SKILL: "Archer EarthAffinity II"
+	SKILL: "Archer FireAffinity II"
+	SKILL: "Archer WaterAffinity II"
+	SKILL: "Archer WhistlingArrow"
+	SKILL: "Archer Combo II"
+	SKILL: "Archer AirAffinity III"
+	SKILL: "Archer EarthAffinity III"
+	SKILL: "Archer FireAffinity III"
+	SKILL: "Archer WaterAffinity III"
+	SKILL: "Archer Combo III"
+	SKILL: "Archer Cover"
+	SKILL: "Archer Combo IV"
+	SKILL: "Archer AirAffinity IV"
+	SKILL: "Archer EarthAffinity IV"
+	SKILL: "Archer FireAffinity IV"
+	SKILL: "Archer WaterAffinity IV"
+	SKILL: "Archer HellGate"
+
+
+CREATEUNIT:		"BanditA1", "BanditA"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	315
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Bandit Evade"
+
+	// basic skills
+	SKILL: "Bandit Attack"
+	SKILL: "Bandit Run I"
+	SKILL: "Bandit Trip"
+	SKILL: "Bandit PierceDefense"
+	SKILL: "Bandit Run II"
+	SKILL: "Bandit VigorTheft"
+	SKILL: "Bandit Slice"
+
+	// innate skills
+	SKILL: "Bandit Courage"
+	SKILL: "Bandit Backstab"
+	SKILL: "Bandit Evade II"
+	SKILL: "Bandit Riposte"
+	SKILL: "Bandit Evade III"
+	SKILL: "Bandit Awareness"
+
+	// other skills
+	SKILL: "Bandit Shield"
+	SKILL: "Bandit Incapacitate I"
+	SKILL: "Bandit AirAffinity I"
+	SKILL: "Bandit EarthAffinity I"
+	SKILL: "Bandit FireAffinity I"
+	SKILL: "Bandit WaterAffinity I"
+	SKILL: "Bandit Combo I"
+	SKILL: "Bandit AirAffinity II"
+	SKILL: "Bandit EarthAffinity II"
+	SKILL: "Bandit FireAffinity II"
+	SKILL: "Bandit WaterAffinity II"
+	SKILL: "Bandit Combo II"
+	SKILL: "Bandit Turtle I"
+	SKILL: "Bandit AirAffinity III"
+	SKILL: "Bandit EarthAffinity III"
+	SKILL: "Bandit FireAffinity III"
+	SKILL: "Bandit WaterAffinity III"
+	SKILL: "Bandit Combo III"
+	SKILL: "Bandit RiposteSub"
+	SKILL: "Bandit Combo IV"
+	SKILL: "Bandit AirAffinity IV"
+	SKILL: "Bandit EarthAffinity IV"
+	SKILL: "Bandit FireAffinity IV"
+	SKILL: "Bandit Incapacitate II"
+	SKILL: "Bandit WaterAffinity IV"
+	SKILL: "Bandit HellGate"
+
+
+CREATEUNIT:		"BanditAF1", "BanditAF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	315
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Bandit Evade"
+
+	// basic skills
+	SKILL: "Bandit Attack"
+	SKILL: "Bandit Run I"
+	SKILL: "Bandit Trip"
+	SKILL: "Bandit PierceDefense"
+	SKILL: "Bandit Run II"
+	SKILL: "Bandit VigorTheft"
+	SKILL: "Bandit Slice"
+
+	// innate skills
+	SKILL: "Bandit Courage"
+	SKILL: "Bandit Backstab"
+	SKILL: "Bandit Evade II"
+	SKILL: "Bandit Riposte"
+	SKILL: "Bandit Evade III"
+	SKILL: "Bandit Awareness"
+
+	// other skills
+	SKILL: "Bandit Shield"
+	SKILL: "Bandit Incapacitate I"
+	SKILL: "Bandit AirAffinity I"
+	SKILL: "Bandit EarthAffinity I"
+	SKILL: "Bandit FireAffinity I"
+	SKILL: "Bandit WaterAffinity I"
+	SKILL: "Bandit Combo I"
+	SKILL: "Bandit AirAffinity II"
+	SKILL: "Bandit EarthAffinity II"
+	SKILL: "Bandit FireAffinity II"
+	SKILL: "Bandit WaterAffinity II"
+	SKILL: "Bandit Combo II"
+	SKILL: "Bandit Turtle I"
+	SKILL: "Bandit AirAffinity III"
+	SKILL: "Bandit EarthAffinity III"
+	SKILL: "Bandit FireAffinity III"
+	SKILL: "Bandit WaterAffinity III"
+	SKILL: "Bandit Combo III"
+	SKILL: "Bandit RiposteSub"
+	SKILL: "Bandit Combo IV"
+	SKILL: "Bandit AirAffinity IV"
+	SKILL: "Bandit EarthAffinity IV"
+	SKILL: "Bandit FireAffinity IV"
+	SKILL: "Bandit Incapacitate II"
+	SKILL: "Bandit WaterAffinity IV"
+	SKILL: "Bandit HellGate"
+
+
+CREATEUNIT:		"BanditB1", "BanditB"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	315
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Bandit Evade"
+
+	// basic skills
+	SKILL: "Bandit Attack"
+	SKILL: "Bandit Run I"
+	SKILL: "Bandit Trip"
+	SKILL: "Bandit PierceDefense"
+	SKILL: "Bandit Run II"
+	SKILL: "Bandit VigorTheft"
+	SKILL: "Bandit Slice"
+
+	// innate skills
+	SKILL: "Bandit Courage"
+	SKILL: "Bandit Backstab"
+	SKILL: "Bandit Evade II"
+	SKILL: "Bandit Riposte"
+	SKILL: "Bandit Evade III"
+	SKILL: "Bandit Awareness"
+
+	// other skills
+	SKILL: "Bandit Shield"
+	SKILL: "Bandit Incapacitate I"
+	SKILL: "Bandit AirAffinity I"
+	SKILL: "Bandit EarthAffinity I"
+	SKILL: "Bandit FireAffinity I"
+	SKILL: "Bandit WaterAffinity I"
+	SKILL: "Bandit Combo I"
+	SKILL: "Bandit AirAffinity II"
+	SKILL: "Bandit EarthAffinity II"
+	SKILL: "Bandit FireAffinity II"
+	SKILL: "Bandit WaterAffinity II"
+	SKILL: "Bandit Combo II"
+	SKILL: "Bandit Turtle I"
+	SKILL: "Bandit AirAffinity III"
+	SKILL: "Bandit EarthAffinity III"
+	SKILL: "Bandit FireAffinity III"
+	SKILL: "Bandit WaterAffinity III"
+	SKILL: "Bandit Combo III"
+	SKILL: "Bandit RiposteSub"
+	SKILL: "Bandit Combo IV"
+	SKILL: "Bandit AirAffinity IV"
+	SKILL: "Bandit EarthAffinity IV"
+	SKILL: "Bandit FireAffinity IV"
+	SKILL: "Bandit Incapacitate II"
+	SKILL: "Bandit WaterAffinity IV"
+	SKILL: "Bandit HellGate"
+
+
+CREATEUNIT:		"Barbarian1", "Barbarian"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	345
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test TwoHanded", "", "", "", ""
+
+	// defense skills
+	SKILL: "Barbarian Block"
+	SKILL: "Wolf Evade"
+	SKILL: "Bear Evade"
+
+	// basic skills
+	SKILL: "Barbarian Attack"
+	SKILL: "Wolf Attack"
+	SKILL: "Bear Attack"
+	SKILL: "Bear Bite"
+	SKILL: "Barbarian Run I"
+	SKILL: "Wolf Nip"
+	SKILL: "WolfGreater TargetLeg"
+	SKILL: "Wolf TearThroat"
+	SKILL: "Barbarian DestroyHelm"
+	SKILL: "Barbarian CripplingBlow"
+	SKILL: "Barbarian BreakDefense"
+	SKILL: "Barbarian DestroyShield"
+	SKILL: "Barbarian TargetLeg"
+
+	// innate skills
+	SKILL: "WolfGreater Courage"
+	SKILL: "Wolf PackMentality I"
+	SKILL: "Barbarian TotemoftheBear"
+	SKILL: "Wolf Riposte"
+	SKILL: "Barbarian TotemoftheFalcon"
+
+	// other skills
+	SKILL: "Barbarian WolfForm I"
+	SKILL: "Wolf ShiftReturn"
+	SKILL: "Barbarian AirAffinity I"
+	SKILL: "Barbarian EarthAffinity I"
+	SKILL: "Barbarian FireAffinity I"
+	SKILL: "Barbarian WaterAffinity I"
+	SKILL: "Barbarian Combo I"
+	SKILL: "Barbarian Defend"
+	SKILL: "Barbarian BearForm I"
+	SKILL: "Bear ShiftReturn"
+	SKILL: "Barbarian AirAffinity II"
+	SKILL: "Barbarian EarthAffinity II"
+	SKILL: "Barbarian FireAffinity II"
+	SKILL: "Barbarian WaterAffinity II"
+	SKILL: "Barbarian Combo II"
+	SKILL: "Barbarian WolfForm II"
+	SKILL: "WolfGreater LupusCall I"
+	SKILL: "Barbarian AirAffinity III"
+	SKILL: "Barbarian BearForm II"
+	SKILL: "Barbarian EarthAffinity III"
+	SKILL: "Barbarian FireAffinity III"
+	SKILL: "Barbarian WaterAffinity III"
+	SKILL: "Barbarian Combo III"
+	SKILL: "Barbarian WolfForm III"
+	SKILL: "Wolf Snarl I"
+	SKILL: "Wolf Turtle I"
+	SKILL: "Wolf RiposteSub"
+	SKILL: "Barbarian BearForm III"
+	SKILL: "Barbarian Combo IV"
+	SKILL: "Barbarian AirAffinity IV"
+	SKILL: "Barbarian EarthAffinity IV"
+	SKILL: "Barbarian FireAffinity IV"
+	SKILL: "Barbarian WaterAffinity IV"
+	SKILL: "Barbarian HellGate"
+
+CREATEUNIT:		"BarbarianF1", "BarbarianF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	345
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test TwoHanded", "", "", "", ""
+
+	// defense skills
+	SKILL: "Barbarian Block"
+	SKILL: "Wolf Evade"
+	SKILL: "Bear Evade"
+
+	// basic skills
+	SKILL: "Barbarian Attack"
+	SKILL: "Wolf Attack"
+	SKILL: "Bear Attack"
+	SKILL: "Bear Bite"
+	SKILL: "Barbarian Run I"
+	SKILL: "Wolf Nip"
+	SKILL: "WolfGreater TargetLeg"
+	SKILL: "Wolf TearThroat"
+	SKILL: "Barbarian DestroyHelm"
+	SKILL: "Barbarian CripplingBlow"
+	SKILL: "Barbarian BreakDefense"
+	SKILL: "Barbarian DestroyShield"
+	SKILL: "Barbarian TargetLeg"
+
+	// innate skills
+	SKILL: "WolfGreater Courage"
+	SKILL: "Wolf PackMentality I"
+	SKILL: "Barbarian TotemoftheBear"
+	SKILL: "Wolf Riposte"
+	SKILL: "Barbarian TotemoftheFalcon"
+
+	// other skills
+	SKILL: "Barbarian WolfForm I"
+	SKILL: "Wolf ShiftReturn"
+	SKILL: "Barbarian AirAffinity I"
+	SKILL: "Barbarian EarthAffinity I"
+	SKILL: "Barbarian FireAffinity I"
+	SKILL: "Barbarian WaterAffinity I"
+	SKILL: "Barbarian Combo I"
+	SKILL: "Barbarian Defend"
+	SKILL: "Barbarian BearForm I"
+	SKILL: "Bear ShiftReturn"
+	SKILL: "Barbarian AirAffinity II"
+	SKILL: "Barbarian EarthAffinity II"
+	SKILL: "Barbarian FireAffinity II"
+	SKILL: "Barbarian WaterAffinity II"
+	SKILL: "Barbarian Combo II"
+	SKILL: "Barbarian WolfForm II"
+	SKILL: "WolfGreater LupusCall I"
+	SKILL: "Barbarian AirAffinity III"
+	SKILL: "Barbarian BearForm II"
+	SKILL: "Barbarian EarthAffinity III"
+	SKILL: "Barbarian FireAffinity III"
+	SKILL: "Barbarian WaterAffinity III"
+	SKILL: "Barbarian Combo III"
+	SKILL: "Barbarian WolfForm III"
+	SKILL: "Wolf Snarl I"
+	SKILL: "Wolf Turtle I"
+	SKILL: "Wolf RiposteSub"
+	SKILL: "Barbarian BearForm III"
+	SKILL: "Barbarian Combo IV"
+	SKILL: "Barbarian AirAffinity IV"
+	SKILL: "Barbarian EarthAffinity IV"
+	SKILL: "Barbarian FireAffinity IV"
+	SKILL: "Barbarian WaterAffinity IV"
+	SKILL: "Barbarian HellGate"
+
+CREATEUNIT:		"Bear1", "Bear"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	547
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Bear Evade"
+
+	// basic skills
+	SKILL: "Bear Attack"
+	SKILL: "Bear Bite"
+	SKILL: "Bear Paw I"
+	SKILL: "Bear Attack II"
+	SKILL: "Bear Hug"
+	SKILL: "Bear Paw II"
+	SKILL: "Bear Hug II"
+	SKILL: "Bear RakingAttack"
+	SKILL: "Bear Bulldoze II"
+	SKILL: "Bear Attack III"
+
+	// innate skills
+	SKILL: "Bear WintersFat"
+	SKILL: "Bear RagingBear"
+
+	// other skills
+	SKILL: "Bear ShiftReturn"
+	SKILL: "Bear Bulldoze I"
+	SKILL: "Bear EarthAffinity I"
+	SKILL: "Bear Combo I"
+	SKILL: "Bear EarthAffinity II"
+	SKILL: "Bear Combo II"
+	SKILL: "Bear Turtle I"
+	SKILL: "Bear Charge"
+	SKILL: "Bear EarthAffinity III"
+	SKILL: "Bear Combo III"
+	SKILL: "Bear Hibernation"
+	SKILL: "Bear RagingBearSub"
+	SKILL: "Bear Combo IV"
+	SKILL: "Bear EarthAffinity IV"
+	SKILL: "Bear HellGate"
+
+
+CREATEUNIT:		"BearGreater1", "BearGreater"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	731
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "BearGreater Evade"
+
+	// basic skills
+	SKILL: "BearGreater Attack"
+	SKILL: "BearGreater Bite"
+	SKILL: "BearGreater BearPaw I"
+	SKILL: "BearGreater BearPaw II"
+	SKILL: "BearGreater GreaterAttack II"
+	SKILL: "BearGreater RakingAttack"
+	SKILL: "BearGreater GreaterAttack III"
+
+	// innate skills
+	SKILL: "BearGreater ThickSkull"
+	SKILL: "BearGreater BackAtcha"
+
+	// other skills
+	SKILL: "BearGreater EarthAffinity I"
+	SKILL: "BearGreater Combo I"
+	SKILL: "BearGreater Combo II"
+	SKILL: "BearGreater Turtle I"
+	SKILL: "BearGreater Combo III"
+	SKILL: "BearGreater Hibernation"
+	SKILL: "BearGreater Combo IV"
+
+CREATEUNIT:		"Berserker1", "Berserker"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	281
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Berserker Evade"
+
+	// basic skills
+	SKILL: "Berserker Attack"
+	SKILL: "Berserker TargetLeg"
+	SKILL: "Berserker AxeThrow"
+	SKILL: "Berserker MadRage"
+	SKILL: "Berserker DestroyHelm"
+	SKILL: "Berserker GougingFury"
+	SKILL: "Berserker DestroyShield"
+	SKILL: "Berserker ComboChain III"
+
+	// innate skills
+	SKILL: "Berserker Adrenaline"
+	SKILL: "Berserker Riposte"
+	SKILL: "Berserker IndomitableWill"
+
+	// other skills
+	SKILL: "Berserker ShiftReturn"
+	SKILL: "Berserker Howl I"
+	SKILL: "Berserker AirAffinity I"
+	SKILL: "Berserker EarthAffinity I"
+	SKILL: "Berserker FireAffinity I"
+	SKILL: "Berserker WaterAffinity I"
+	SKILL: "Berserker Combo I"
+	SKILL: "Berserker Rage I"
+	SKILL: "Berserker Howl II"
+	SKILL: "Berserker AirAffinity II"
+	SKILL: "Berserker EarthAffinity II"
+	SKILL: "Berserker FireAffinity II"
+	SKILL: "Berserker WaterAffinity II"
+	SKILL: "Berserker Combo II"
+	SKILL: "Berserker Howl III"
+	SKILL: "Berserker Turtle I"
+	SKILL: "Berserker AirAffinity III"
+	SKILL: "Berserker EarthAffinity III"
+	SKILL: "Berserker FireAffinity III"
+	SKILL: "Berserker Rage II"
+	SKILL: "Berserker WaterAffinity III"
+	SKILL: "Berserker Combo III"
+	SKILL: "Berserker RiposteSub"
+	SKILL: "Berserker Howl IV"
+	SKILL: "Berserker Combo IV"
+	SKILL: "Berserker AirAffinity IV"
+	SKILL: "Berserker EarthAffinity IV"
+	SKILL: "Berserker FireAffinity IV"
+	SKILL: "Berserker Rage III"
+	SKILL: "Berserker WaterAffinity IV"
+	SKILL: "Berserker HellGate"
+
+
+CREATEUNIT:		"BerserkerF1", "BerserkerF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	281
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Berserker Evade"
+
+	// basic skills
+	SKILL: "Berserker Attack"
+	SKILL: "Berserker TargetLeg"
+	SKILL: "Berserker AxeThrow"
+	SKILL: "Berserker MadRage"
+	SKILL: "Berserker DestroyHelm"
+	SKILL: "Berserker GougingFury"
+	SKILL: "Berserker DestroyShield"
+	SKILL: "Berserker ComboChain III"
+
+	// innate skills
+	SKILL: "Berserker Adrenaline"
+	SKILL: "Berserker Riposte"
+	SKILL: "Berserker IndomitableWill"
+
+	// other skills
+	SKILL: "Berserker ShiftReturn"
+	SKILL: "Berserker Howl I"
+	SKILL: "Berserker AirAffinity I"
+	SKILL: "Berserker EarthAffinity I"
+	SKILL: "Berserker FireAffinity I"
+	SKILL: "Berserker WaterAffinity I"
+	SKILL: "Berserker Combo I"
+	SKILL: "Berserker Rage I"
+	SKILL: "Berserker Howl II"
+	SKILL: "Berserker AirAffinity II"
+	SKILL: "Berserker EarthAffinity II"
+	SKILL: "Berserker FireAffinity II"
+	SKILL: "Berserker WaterAffinity II"
+	SKILL: "Berserker Combo II"
+	SKILL: "Berserker Howl III"
+	SKILL: "Berserker Turtle I"
+	SKILL: "Berserker AirAffinity III"
+	SKILL: "Berserker EarthAffinity III"
+	SKILL: "Berserker FireAffinity III"
+	SKILL: "Berserker Rage II"
+	SKILL: "Berserker WaterAffinity III"
+	SKILL: "Berserker Combo III"
+	SKILL: "Berserker RiposteSub"
+	SKILL: "Berserker Howl IV"
+	SKILL: "Berserker Combo IV"
+	SKILL: "Berserker AirAffinity IV"
+	SKILL: "Berserker EarthAffinity IV"
+	SKILL: "Berserker FireAffinity IV"
+	SKILL: "Berserker Rage III"
+	SKILL: "Berserker WaterAffinity IV"
+	SKILL: "Berserker HellGate"
+
+
+CREATEUNIT:		"Cat1", "Cat"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	507
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Cat Evade"
+
+	// basic skills
+	SKILL: "Cat Attack"
+	SKILL: "Cat Bite"
+	SKILL: "Cat Run I"
+	SKILL: "Cat PrecisionAttack"
+	SKILL: "Cat Paw I"
+	SKILL: "Cat Pounce"
+	SKILL: "Cat Paw II"
+	SKILL: "Cat RakingAttack"
+	SKILL: "Cat Scratch"
+
+	// innate skills
+	SKILL: "Cat Leap"
+	SKILL: "Cat Evade II"
+	SKILL: "Cat Riposte"
+	SKILL: "Cat Reflexes"
+
+	// other skills
+	SKILL: "Cat AirAffinity I"
+	SKILL: "CatGreater AirAffinity I"
+	SKILL: "Cat Combo I"
+	SKILL: "Cat Growl I"
+	SKILL: "Cat AirAffinity II"
+	SKILL: "CatGreater AirAffinity II"
+	SKILL: "Cat Combo II"
+	SKILL: "Cat Turtle"
+	SKILL: "Cat AirAffinity III"
+	SKILL: "Cat Combo III"
+	SKILL: "Cat RiposteSub"
+	SKILL: "Cat Turtle II"
+	SKILL: "Cat Growl II"
+	SKILL: "Cat AirAffinity IV"
+	SKILL: "Cat Combo IV"
+	SKILL: "Cat HellGate"
+
+
+CREATEUNIT:		"CatGreater1", "CatGreater"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	599
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "CatGreater Evade"
+
+	// basic skills
+	SKILL: "CatGreater Attack"
+	SKILL: "CatGreater PrecisionAttack"
+	SKILL: "CatGreater Paw I"
+	SKILL: "CatGreater Paw II"
+	SKILL: "CatGreater RakingAttack"
+	SKILL: "CatGreater Scratch"
+
+	// innate skills
+	SKILL: "CatGreater Awareness"
+	SKILL: "CatGreater Riposte"
+	SKILL: "CatGreater Reflexes"
+
+	// other skills
+	SKILL: "CatGreater Teleport"
+	SKILL: "CatGreater AffinityDrain"
+	SKILL: "CatGreater Combo I"
+	SKILL: "CatGreater Growl"
+	SKILL: "CatGreater Combo II"
+	SKILL: "CatGreater Turtle"
+	SKILL: "CatGreater Combo III"
+	SKILL: "CatGreater RiposteSub"
+	SKILL: "CatGreater Turtle II"
+	SKILL: "CatGreater Growl II"
+	SKILL: "CatGreater Combo IV"
+	SKILL: "CatGreater AirAffinity I"
+	SKILL: "CatGreater AirAffinity II"
+	SKILL: "CatGreater AirAffinity III"
+
+
+
+CREATEUNIT:		"Centurion1", "Centurion"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	277
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Centurion Block"
+
+	// basic skills
+	SKILL: "Centurion Attack"
+	SKILL: "Centurion TargetLeg"
+	SKILL: "Centurion Roam"
+	SKILL: "Centurion TargetArm"
+	SKILL: "Centurion TargetHead"
+	SKILL: "Centurion DestroyHelm"
+
+	// innate skills
+	SKILL: "Centurion CoordinatedAttack"
+	SKILL: "Centurion Garrison"
+	SKILL: "Centurion Shield II"
+	SKILL: "Centurion IndomitableWill"
+
+	// other skills
+	SKILL: "Centurion Shield"
+	SKILL: "Centurion Motivate"
+	SKILL: "Centurion AirAffinity I"
+	SKILL: "Centurion EarthAffinity I"
+	SKILL: "Centurion FireAffinity I"
+	SKILL: "Centurion WaterAffinity I"
+	SKILL: "Centurion Combo I"
+	SKILL: "Centurion Defend"
+	SKILL: "Centurion Reprimand"
+	SKILL: "Centurion AirAffinity II"
+	SKILL: "Centurion EarthAffinity II"
+	SKILL: "Centurion FireAffinity II"
+	SKILL: "Centurion WaterAffinity II"
+	SKILL: "Centurion Combo II"
+	SKILL: "Centurion AirAffinity III"
+	SKILL: "Centurion EarthAffinity III"
+	SKILL: "Centurion FireAffinity III"
+	SKILL: "Centurion WaterAffinity III"
+	SKILL: "Centurion Combo III"
+	SKILL: "Centurion Impel"
+	SKILL: "Centurion Spur"
+	SKILL: "Centurion Rally"
+	SKILL: "Centurion Combo IV"
+	SKILL: "Centurion ComboChain IV"
+	SKILL: "Centurion AirAffinity IV"
+	SKILL: "Centurion EarthAffinity IV"
+	SKILL: "Centurion FireAffinity IV"
+	SKILL: "Centurion WaterAffinity IV"
+	SKILL: "Centurion ImmediateResponse"
+	SKILL: "Centurion HellGate"
+
+
+CREATEUNIT:		"CenturionF1", "CenturionF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	277
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Centurion Block"
+
+	// basic skills
+	SKILL: "Centurion Attack"
+	SKILL: "Centurion TargetLeg"
+	SKILL: "Centurion Roam"
+	SKILL: "Centurion TargetArm"
+	SKILL: "Centurion TargetHead"
+	SKILL: "Centurion DestroyHelm"
+
+	// innate skills
+	SKILL: "Centurion CoordinatedAttack"
+	SKILL: "Centurion Garrison"
+	SKILL: "Centurion Shield II"
+	SKILL: "Centurion IndomitableWill"
+
+	// other skills
+	SKILL: "Centurion Shield"
+	SKILL: "Centurion Motivate"
+	SKILL: "Centurion AirAffinity I"
+	SKILL: "Centurion EarthAffinity I"
+	SKILL: "Centurion FireAffinity I"
+	SKILL: "Centurion WaterAffinity I"
+	SKILL: "Centurion Combo I"
+	SKILL: "Centurion Defend"
+	SKILL: "Centurion Reprimand"
+	SKILL: "Centurion AirAffinity II"
+	SKILL: "Centurion EarthAffinity II"
+	SKILL: "Centurion FireAffinity II"
+	SKILL: "Centurion WaterAffinity II"
+	SKILL: "Centurion Combo II"
+	SKILL: "Centurion AirAffinity III"
+	SKILL: "Centurion EarthAffinity III"
+	SKILL: "Centurion FireAffinity III"
+	SKILL: "Centurion WaterAffinity III"
+	SKILL: "Centurion Combo III"
+	SKILL: "Centurion Impel"
+	SKILL: "Centurion Spur"
+	SKILL: "Centurion Rally"
+	SKILL: "Centurion Combo IV"
+	SKILL: "Centurion ComboChain IV"
+	SKILL: "Centurion AirAffinity IV"
+	SKILL: "Centurion EarthAffinity IV"
+	SKILL: "Centurion FireAffinity IV"
+	SKILL: "Centurion WaterAffinity IV"
+	SKILL: "Centurion ImmediateResponse"
+	SKILL: "Centurion HellGate"
+
+
+CREATEUNIT:		"ChannelerExp1", "ChannelerImp"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	261
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Staff", "", "", "", ""
+
+	// defense skills
+	SKILL: "Channeler Evade"
+
+	// basic skills
+	SKILL: "Channeler Attack"
+
+	// innate skills
+	SKILL: "Channeler AffNoGrow"
+
+	// other skills
+	SKILL: "Channeler FireStorm I"
+	SKILL: "Channeler FreezeEnemy I"
+	SKILL: "Channeler FireStorm III"
+	SKILL: "Channeler FreezeEnemy II"
+	SKILL: "Channeler FireStorm II"
+	SKILL: "Channeler FreezeEnemy III"
+	SKILL: "Channeler WindStep I"
+	SKILL: "Channeler AirAffinity I"
+	SKILL: "Channeler EarthAffinity I"
+	SKILL: "Channeler FireAffinity I"
+	SKILL: "Channeler WaterAffinity I"
+	SKILL: "Channeler Combo I"
+	SKILL: "Channeler Regrowth I"
+	SKILL: "Channeler AirAffinity II"
+	SKILL: "Channeler EarthAffinity II"
+	SKILL: "Channeler FireAffinity II"
+	SKILL: "Channeler Tornado"
+	SKILL: "Channeler WaterAffinity II"
+	SKILL: "Channeler Combo II"
+	SKILL: "Channeler Regrowth II"
+	SKILL: "Channeler Teleport"
+	SKILL: "Channeler AirAffinity III"
+	SKILL: "Channeler EarthAffinity III"
+	SKILL: "Channeler FireAffinity III"
+	SKILL: "Channeler WaterAffinity III"
+	SKILL: "Channeler WindStep II"
+	SKILL: "Channeler Combo III"
+	SKILL: "Channeler DrainAffinity"
+	SKILL: "Channeler Regrowth III"
+	SKILL: "Channeler Combo IV"
+	SKILL: "Channeler TransferAffinity"
+	SKILL: "Channeler AirAffinity IV"
+	SKILL: "Channeler EarthAffinity IV"
+	SKILL: "Channeler FireAffinity IV"
+	SKILL: "Channeler WaterAffinity IV"
+	SKILL: "Channeler BoostAffinity"
+	SKILL: "Channeler FireBomb"
+	SKILL: "Channeler StiffWind"
+	SKILL: "Channeler HellGate"
+
+
+CREATEUNIT:		"ChannelerImp1", "ChannelerImp"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	261
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Staff", "", "", "", ""
+
+	// defense skills
+	SKILL: "Channeler Evade"
+
+	// basic skills
+	SKILL: "Channeler Attack"
+
+	// innate skills
+	SKILL: "Channeler AffNoGrow"
+
+	// other skills
+	SKILL: "Channeler FireStorm I"
+	SKILL: "Channeler FreezeEnemy I"
+	SKILL: "Channeler FireStorm III"
+	SKILL: "Channeler FreezeEnemy II"
+	SKILL: "Channeler FireStorm II"
+	SKILL: "Channeler FreezeEnemy III"
+	SKILL: "Channeler WindStep I"
+	SKILL: "Channeler AirAffinity I"
+	SKILL: "Channeler EarthAffinity I"
+	SKILL: "Channeler FireAffinity I"
+	SKILL: "Channeler WaterAffinity I"
+	SKILL: "Channeler Combo I"
+	SKILL: "Channeler Regrowth I"
+	SKILL: "Channeler AirAffinity II"
+	SKILL: "Channeler EarthAffinity II"
+	SKILL: "Channeler FireAffinity II"
+	SKILL: "Channeler Tornado"
+	SKILL: "Channeler WaterAffinity II"
+	SKILL: "Channeler Combo II"
+	SKILL: "Channeler Regrowth II"
+	SKILL: "Channeler Teleport"
+	SKILL: "Channeler AirAffinity III"
+	SKILL: "Channeler EarthAffinity III"
+	SKILL: "Channeler FireAffinity III"
+	SKILL: "Channeler WaterAffinity III"
+	SKILL: "Channeler WindStep II"
+	SKILL: "Channeler Combo III"
+	SKILL: "Channeler DrainAffinity"
+	SKILL: "Channeler Regrowth III"
+	SKILL: "Channeler Combo IV"
+	SKILL: "Channeler TransferAffinity"
+	SKILL: "Channeler AirAffinity IV"
+	SKILL: "Channeler EarthAffinity IV"
+	SKILL: "Channeler FireAffinity IV"
+	SKILL: "Channeler WaterAffinity IV"
+	SKILL: "Channeler BoostAffinity"
+	SKILL: "Channeler FireBomb"
+	SKILL: "Channeler StiffWind"
+	SKILL: "Channeler HellGate"
+
+
+CREATEUNIT:		"Cyclops1", "Cyclops"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	365
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Cyclops Block"
+
+	// basic skills
+	SKILL: "Cyclops Attack"
+	SKILL: "Cyclops EyeBeam"
+	SKILL: "Cyclops Punch"
+	SKILL: "Cyclops SweepingAttack"
+	SKILL: "Cyclops OverheadSmash"
+	SKILL: "Cyclops TargetArm"
+	SKILL: "Cyclops DestroyShield"
+	SKILL: "Cyclops TargetHead"
+	SKILL: "Cyclops HeavyStrike"
+
+	// innate skills
+	SKILL: "Cyclops HeavyHanded"
+
+	// other skills
+	SKILL: "Cyclops ThreateningGlare I"
+	SKILL: "Cyclops Bulldoze I"
+	SKILL: "Cyclops AirAffinity I"
+	SKILL: "Cyclops EarthAffinity I"
+	SKILL: "Cyclops FireAffinity I"
+	SKILL: "Cyclops WaterAffinity I"
+	SKILL: "Cyclops Combo I"
+	SKILL: "Cyclops AirAffinity II"
+	SKILL: "Cyclops EarthAffinity II"
+	SKILL: "Cyclops FireAffinity II"
+	SKILL: "Cyclops WaterAffinity II"
+	SKILL: "Cyclops Combo II"
+	SKILL: "Cyclops EarthAffinity III"
+	SKILL: "Cyclops FireAffinity III"
+	SKILL: "Cyclops Turtle I"
+	SKILL: "Cyclops WaterAffinity III"
+	SKILL: "Cyclops Combo III"
+	SKILL: "Cyclops Focus"
+	SKILL: "Cyclops Turtle II"
+	SKILL: "Cyclops ThreateningGlare II"
+	SKILL: "Cyclops Combo IV"
+	SKILL: "Cyclops EarthAffinity IV"
+	SKILL: "Cyclops FireAffinity IV"
+	SKILL: "Cyclops Turtle III"
+	SKILL: "Cyclops WaterAffinity IV"
+	SKILL: "Cyclops PenetratingStare"
+	SKILL: "Cyclops HellGate"
+
+
+CREATEUNIT:		"CyclopsGreater1", "CyclopsGreater"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	523
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "CyclopsGreater Block"
+
+	// basic skills
+	SKILL: "CyclopsGreater Attack"
+	SKILL: "CyclopsGreater EyeBeam"
+	SKILL: "CyclopsGreater SweepingAttack"
+	SKILL: "CyclopsGreater TargetArm"
+	SKILL: "CyclopsGreater DestroyShield"
+	SKILL: "CyclopsGreater Shockwave"
+	SKILL: "CyclopsGreater HeavyStrike"
+	SKILL: "CyclopsGreater OverheadSmash"
+
+	// innate skills
+	SKILL: "CyclopsGreater HeavyHanded"
+
+	// other skills
+	SKILL: "CyclopsGreater SummonAirAffinityBeast"
+	SKILL: "CyclopsGreater SummoneEarthAffinityBeast"
+	SKILL: "CyclopsGreater SummoneFireAffinityBeast"
+	SKILL: "CyclopsGreater SummonWaterAffinityBeast"
+	SKILL: "CyclopsGreater ThreateningGlare I"
+	SKILL: "CyclopsGreater DarkAffinity I"
+	SKILL: "CyclopsGreater DarkAffinity II"
+	SKILL: "CyclopsGreater DarkAffinity III"
+	SKILL: "CyclopsGreater Turtle I"
+	SKILL: "CyclopsGreater Turtle II"
+	SKILL: "CyclopsGreater ThreateningGlare II"
+	SKILL: "CyclopsGreater Turtle III"
+	SKILL: "CyclopsGreater PenetratingStare"
+
+
+
+
+
+///////////////////////////////////    Characters
+
+CREATEUNIT:		"DarkLegionnaire1", "DarkLegionnaire"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	561
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "DarkLegionnaire Block"
+
+	// basic skills
+	SKILL: "DarkLegionnaire Attack"
+	SKILL: "DarkLegionnaire TargetLeg"
+	SKILL: "DarkLegionnaire PrecisionAttack"
+	SKILL: "DarkLegionnaire DestroyShield"
+	SKILL: "DarkLegionnaire TargetHead"
+	SKILL: "DarkLegionnaire DestroyHelm"
+
+	// innate skills
+	SKILL: "DarkLegionnaire PracticedManeuvers"
+	SKILL: "DarkLegionnaire Orders"
+	SKILL: "DarkLegionnaire Evade II"
+	SKILL: "DarkLegionnaire Awareness"
+	SKILL: "DarkLegionnaire Riposte"
+	SKILL: "DarkLegionnaire Discipline"
+	SKILL: "DarkLegionnaire IndomitableWill"
+	SKILL: "DarkLegionnaire OffBalance"
+
+	// other skills
+	SKILL: "DarkLegionnaire Shield"
+	SKILL: "DarkLegionnaire DarkAffinity I"
+	SKILL: "DarkLegionnaire Combo I"
+	SKILL: "DarkLegionnaire Turtle I"
+	SKILL: "DarkLegionnaire Turtle II"
+	SKILL: "DarkLegionnaire DarkAffinity II"
+	SKILL: "DarkLegionnaire Combo II"
+	SKILL: "DarkLegionnaire DarkAffinity III"
+	SKILL: "DarkLegionnaire Combo III"
+	SKILL: "DarkLegionnaire RiposteSub"
+	SKILL: "DarkLegionnaire Combo IV"
+
+
+
+CREATEUNIT:		"Dervish1", "Dervish"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	333
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Dervish Evade"
+
+	// basic skills
+	SKILL: "Dervish Attack"
+	SKILL: "Dervish SurpriseAttack"
+	SKILL: "Dervish BloodLetter I"
+	SKILL: "Dervish Run I"
+	SKILL: "Dervish BloodLetter II"
+	SKILL: "Dervish DustDevil II"
+	SKILL: "Dervish BoneSpray"
+	SKILL: "Dervish Slice"
+
+	// innate skills
+	SKILL: "Dervish Adreniline"
+	SKILL: "Dervish Evade II"
+	SKILL: "Dervish AirImmunity"
+	SKILL: "Dervish LightningReflexes"
+	SKILL: "Dervish DesertVeil"
+	SKILL: "Dervish OffBalance"
+
+	// other skills
+	SKILL: "Dervish DustDevil"
+	SKILL: "Dervish AirAffinity I"
+	SKILL: "Dervish EarthAffinity I"
+	SKILL: "Dervish FireAffinity I"
+	SKILL: "Dervish WaterAffinity I"
+	SKILL: "Dervish Combo I"
+	SKILL: "Dervish AirAffinity II"
+	SKILL: "Dervish EarthAffinity II"
+	SKILL: "Dervish FireAffinity II"
+	SKILL: "Dervish WaterAffinity II"
+	SKILL: "Dervish Combo II"
+	SKILL: "Dervish Whirlwind I"
+	SKILL: "Dervish AirAffinity III"
+	SKILL: "Dervish EarthAffinity III"
+	SKILL: "Dervish FireAffinity III"
+	SKILL: "Dervish WaterAffinity III"
+	SKILL: "Dervish Combo III"
+	SKILL: "Dervish Combo IV"
+	SKILL: "Dervish EarthAffinity IV"
+	SKILL: "Dervish FireAffinity IV"
+	SKILL: "Dervish Whirlwind II"
+	SKILL: "Dervish WindMovement"
+	SKILL: "Dervish HellGate"
+
+
+CREATEUNIT:		"DervishF1", "DervishF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	333
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Dervish Evade"
+
+	// basic skills
+	SKILL: "Dervish Attack"
+	SKILL: "Dervish SurpriseAttack"
+	SKILL: "Dervish BloodLetter I"
+	SKILL: "Dervish Run I"
+	SKILL: "Dervish BloodLetter II"
+	SKILL: "Dervish DustDevil II"
+	SKILL: "Dervish BoneSpray"
+	SKILL: "Dervish Slice"
+
+	// innate skills
+	SKILL: "Dervish Adreniline"
+	SKILL: "Dervish Evade II"
+	SKILL: "Dervish AirImmunity"
+	SKILL: "Dervish LightningReflexes"
+	SKILL: "Dervish DesertVeil"
+	SKILL: "Dervish OffBalance"
+
+	// other skills
+	SKILL: "Dervish DustDevil"
+	SKILL: "Dervish AirAffinity I"
+	SKILL: "Dervish EarthAffinity I"
+	SKILL: "Dervish FireAffinity I"
+	SKILL: "Dervish WaterAffinity I"
+	SKILL: "Dervish Combo I"
+	SKILL: "Dervish AirAffinity II"
+	SKILL: "Dervish EarthAffinity II"
+	SKILL: "Dervish FireAffinity II"
+	SKILL: "Dervish WaterAffinity II"
+	SKILL: "Dervish Combo II"
+	SKILL: "Dervish Whirlwind I"
+	SKILL: "Dervish AirAffinity III"
+	SKILL: "Dervish EarthAffinity III"
+	SKILL: "Dervish FireAffinity III"
+	SKILL: "Dervish WaterAffinity III"
+	SKILL: "Dervish Combo III"
+	SKILL: "Dervish Combo IV"
+	SKILL: "Dervish EarthAffinity IV"
+	SKILL: "Dervish FireAffinity IV"
+	SKILL: "Dervish Whirlwind II"
+	SKILL: "Dervish WindMovement"
+	SKILL: "Dervish HellGate"
+
+
+CREATEUNIT:		"Eiji", "Eiji"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	431
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Black Bow", "", "", "", ""
+
+	// defense skills
+	SKILL: "Eiji Evade"
+
+	// basic skills
+	SKILL: "Eiji Attack"
+	SKILL: "Eiji Punch"
+	SKILL: "Eiji LongShot I"
+	SKILL: "Eiji AcidArrow"
+	SKILL: "Eiji Knee"
+	SKILL: "Eiji FlashArrow"
+	SKILL: "Eiji Sparks"
+	SKILL: "Eiji LongShot II"
+	SKILL: "Eiji NerveArrow"
+	SKILL: "Eiji Volley"
+	SKILL: "Eiji RazorArrow"
+	SKILL: "Eiji LongShot III"
+
+	// innate skills
+	SKILL: "Eiji Evade II"
+
+	// other skills
+	SKILL: "Eiji Daze"
+	SKILL: "Eiji Wink"
+	SKILL: "Eiji AirAffinity I"
+	SKILL: "Eiji EarthAffinity I"
+	SKILL: "Eiji FireAffinity I"
+	SKILL: "Eiji WaterAffinity I"
+	SKILL: "Eiji Combo I"
+	SKILL: "Eiji AirAffinity II"
+	SKILL: "Eiji EarthAffinity II"
+	SKILL: "Eiji FireAffinity II"
+	SKILL: "Eiji Combo II"
+	SKILL: "Eiji EarthAffinity III"
+	SKILL: "Eiji FireAffinity III"
+	SKILL: "Eiji Combo III"
+	SKILL: "Eiji Cover"
+	SKILL: "Eiji Blind"
+	SKILL: "Eiji Combo IV"
+	SKILL: "Eiji EarthAffinity IV"
+	SKILL: "Eiji FireAffinity IV"
+	SKILL: "Eiji Charm"
+	SKILL: "Eiji HellGate"
+
+
+
+CREATEUNIT:		"Galdr1", "Galdr"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	391
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Galdr Evade"
+
+	// basic skills
+	SKILL: "Galdr Attack"
+	SKILL: "Galdr CryOfRage"
+	SKILL: "Galdr ShriekoftheGaldr I"
+	SKILL: "Galdr ShriekoftheGaldr II"
+	SKILL: "Galdr ShriekoftheGaldr III"
+
+	// innate skills
+
+	// other skills
+	SKILL: "Galdr CryOfSacrifice"
+	SKILL: "Galdr Song:FuryofNorth"
+	SKILL: "Galdr Song:RageofAlderes I"
+	SKILL: "Galdr CryOfCommand"
+	SKILL: "Galdr Song:BattleMarch"
+	SKILL: "Galdr Song:Fear"
+	SKILL: "Galdr CryOfAwakening"
+	SKILL: "Galdr ShriekOfDisruption"
+	SKILL: "Galdr Song:ChantofClarity I"
+	SKILL: "Galdr Song:EternalDusk"
+	SKILL: "Galdr Song:RageofAlderes II"
+	SKILL: "Galdr Song:ChantofClarity II"
+
+
+
+CREATEUNIT:		"Galverg1", "Galverg"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	635
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Galverg Block"
+
+	// basic skills
+	SKILL: "Galverg Attack"
+	SKILL: "Galverg Run I"
+	SKILL: "Galverg PrecisionAttack"
+	SKILL: "Galverg Uppercut"
+	SKILL: "Galverg WideSwing"
+	SKILL: "Galverg DestroyShield"
+	SKILL: "Galverg Run II"
+	SKILL: "Galverg CripplingBlow"
+	SKILL: "Galverg Shockwave"
+	SKILL: "Galverg HeavyStrike"
+	SKILL: "Galverg DestroyHelm"
+
+	// innate skills
+	SKILL: "Galverg Riposte"
+
+	// other skills
+	SKILL: "Galverg BackAtchaSub"
+	SKILL: "Galverg DarkAffinity I"
+	SKILL: "Galverg DarkAffinity II"
+	SKILL: "Galverg DarkAffinity III"
+	SKILL: "Galverg RiposteSub"
+
+
+
+CREATEUNIT:		"Gungnir1", "Gungnir"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Javelin", "", "", "", ""
+
+	// defense skills
+	SKILL: "Gungnir Evade"
+	SKILL: "Bear Evade"
+
+	// basic skills
+	SKILL: "Gungnir Attack"
+	SKILL: "Gungnir DistanceThrow I"
+	SKILL: "Gungnir ExplodingJavelin"
+	SKILL: "Gungnir TargetShield"
+	SKILL: "Bear Attack"
+	SKILL: "Bear Bite"
+	SKILL: "Gungnir TargetArm"
+	SKILL: "Gungnir DistanceThrow II"
+	SKILL: "Gungnir TargetLeg"
+	SKILL: "Gungnir DistanceThrow III"
+	SKILL: "Gungnir UnstoppableThrow"
+	SKILL: "Gungnir PointBlankCantMiss"
+	SKILL: "Gungnir TargetFoot"
+	SKILL: "Gungnir PoinBlankPowered"
+	SKILL: "Gungnir DistanceThrow IV"
+
+	// innate skills
+	SKILL: "Gungnir Awareness"
+
+	// other skills
+	SKILL: "Gungnir AirAffinity I"
+	SKILL: "Gungnir EarthAffinity I"
+	SKILL: "Gungnir FireAffinity I"
+	SKILL: "Gungnir WaterAffinity I"
+	SKILL: "Gungnir Combo I"
+	SKILL: "Gungnir BearForm I"
+	SKILL: "Bear ShiftReturn"
+	SKILL: "Gungnir AirAffinity II"
+	SKILL: "Gungnir EarthAffinity II"
+	SKILL: "Gungnir FireAffinity II"
+	SKILL: "Gungnir WaterAffinity II"
+	SKILL: "Gungnir Combo II"
+	SKILL: "Gungnir AirAffinity III"
+	SKILL: "Gungnir EarthAffinity III"
+	SKILL: "Gungnir FireAffinity III"
+	SKILL: "Gungnir WaterAffinity III"
+	SKILL: "Gungnir Combo III"
+	SKILL: "Gungnir Cover"
+	SKILL: "Gungnir Combo IV"
+	SKILL: "Gungnir AirAffinity IV"
+	SKILL: "Gungnir BearForm II"
+	SKILL: "Gungnir EarthAffinity IV"
+	SKILL: "Gungnir FireAffinity IV"
+	SKILL: "Gungnir WaterAffinity IV"
+	SKILL: "Gungnir HellGate"
+
+
+CREATEUNIT:		"GungnirF1", "GungnirF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Javelin", "", "", "", ""
+
+	// defense skills
+	SKILL: "Gungnir Evade"
+	SKILL: "Bear Evade"
+
+	// basic skills
+	SKILL: "Gungnir Attack"
+	SKILL: "Gungnir DistanceThrow I"
+	SKILL: "Gungnir ExplodingJavelin"
+	SKILL: "Gungnir TargetShield"
+	SKILL: "Bear Attack"
+	SKILL: "Bear Bite"
+	SKILL: "Gungnir TargetArm"
+	SKILL: "Gungnir DistanceThrow II"
+	SKILL: "Gungnir TargetLeg"
+	SKILL: "Gungnir DistanceThrow III"
+	SKILL: "Gungnir UnstoppableThrow"
+	SKILL: "Gungnir PointBlankCantMiss"
+	SKILL: "Gungnir TargetFoot"
+	SKILL: "Gungnir PoinBlankPowered"
+	SKILL: "Gungnir DistanceThrow IV"
+
+	// innate skills
+	SKILL: "Gungnir Awareness"
+
+	// other skills
+	SKILL: "Gungnir AirAffinity I"
+	SKILL: "Gungnir EarthAffinity I"
+	SKILL: "Gungnir FireAffinity I"
+	SKILL: "Gungnir WaterAffinity I"
+	SKILL: "Gungnir Combo I"
+	SKILL: "Gungnir BearForm I"
+	SKILL: "Bear ShiftReturn"
+	SKILL: "Gungnir AirAffinity II"
+	SKILL: "Gungnir EarthAffinity II"
+	SKILL: "Gungnir FireAffinity II"
+	SKILL: "Gungnir WaterAffinity II"
+	SKILL: "Gungnir Combo II"
+	SKILL: "Gungnir AirAffinity III"
+	SKILL: "Gungnir EarthAffinity III"
+	SKILL: "Gungnir FireAffinity III"
+	SKILL: "Gungnir WaterAffinity III"
+	SKILL: "Gungnir Combo III"
+	SKILL: "Gungnir Cover"
+	SKILL: "Gungnir Combo IV"
+	SKILL: "Gungnir AirAffinity IV"
+	SKILL: "Gungnir BearForm II"
+	SKILL: "Gungnir EarthAffinity IV"
+	SKILL: "Gungnir FireAffinity IV"
+	SKILL: "Gungnir WaterAffinity IV"
+	SKILL: "Gungnir HellGate"
+
+
+CREATEUNIT:		"Gwazi1", "Gwazi"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	413
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Gwazi Evade"
+
+	// basic skills
+	SKILL: "Gwazi Attack"
+	SKILL: "Gwazi BackAttack"
+	SKILL: "Gwazi InfallibleAim"
+	SKILL: "Gwazi Run I"
+	SKILL: "Gwazi WeaponThrow"
+	SKILL: "Gwazi Trip"
+	SKILL: "Gwazi DestroyShield"
+	SKILL: "Gwazi ShieldBypass"
+	SKILL: "Gwazi TargetHead"
+	SKILL: "Gwazi Slice"
+
+	// innate skills
+	SKILL: "Gwazi Wiseguy"
+	SKILL: "Gwazi Smartass"
+	SKILL: "Gwazi Evade II"
+
+	// other skills
+	SKILL: "Gwazi Shield"
+	SKILL: "Gwazi SandToss"
+	SKILL: "Gwazi AirAffinity I"
+	SKILL: "Gwazi EarthAffinity I"
+	SKILL: "Gwazi FireAffinity I"
+	SKILL: "Gwazi WaterAffinity I"
+	SKILL: "Gwazi Combo I"
+	SKILL: "Gwazi Turtle I"
+	SKILL: "Gwazi AirAffinity II"
+	SKILL: "Gwazi EarthAffinity II"
+	SKILL: "Gwazi FireAffinity II"
+	SKILL: "Gwazi WaterAffinity II"
+	SKILL: "Gwazi Combo II"
+	SKILL: "Gwazi AirAffinity III"
+	SKILL: "Gwazi EarthAffinity III"
+	SKILL: "Gwazi FireAffinity III"
+	SKILL: "Gwazi WaterAffinity III"
+	SKILL: "Gwazi Combo III"
+	SKILL: "Gwazi Combo IV"
+	SKILL: "Gwazi AirAffinity IV"
+	SKILL: "Gwazi EarthAffinity IV"
+	SKILL: "Gwazi FireAffinity IV"
+	SKILL: "Gwazi WaterAffinity IV"
+
+
+
+CREATEUNIT:		"Legionnaire1", "Legionnaire"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Fire Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Legionnaire Evade"
+
+	// basic skills
+	SKILL: "Legionnaire Attack"
+	SKILL: "Legionnaire TargetLeg"
+	SKILL: "Legionnaire PrecisionAttack"
+	SKILL: "Legionnaire TargetArm"
+	SKILL: "Legionnaire DestroyShield"
+	SKILL: "Legionnaire TargetHead"
+	SKILL: "Legionnaire DestroyHelm"
+
+	// innate skills
+	SKILL: "Legionnaire PracticedManeuvers"
+	SKILL: "Legionnaire Orders"
+	SKILL: "Legionnaire Evade II"
+	SKILL: "Legionnaire Awareness"
+	SKILL: "Legionnaire Riposte"
+	SKILL: "Legionnaire Discipline"
+	SKILL: "Legionnaire IndomitableWill"
+	SKILL: "Legionnaire OffBalance"
+
+	// other skills
+	SKILL: "Legionnaire Shield"
+	SKILL: "Legionnaire AirAffinity I"
+	SKILL: "Legionnaire EarthAffinity I"
+	SKILL: "Legionnaire FireAffinity I"
+	SKILL: "Legionnaire WaterAffinity I"
+	SKILL: "Legionnaire Combo I"
+	SKILL: "Legionnaire Turtle I"
+	SKILL: "Legionnaire AirAffinity II"
+	SKILL: "Legionnaire EarthAffinity II"
+	SKILL: "Legionnaire FireAffinity II"
+	SKILL: "Legionnaire WaterAffinity II"
+	SKILL: "Legionnaire Combo II"
+	SKILL: "Legionnaire AirAffinity III"
+	SKILL: "Legionnaire EarthAffinity III"
+	SKILL: "Legionnaire FireAffinity III"
+	SKILL: "Legionnaire WaterAffinity III"
+	SKILL: "Legionnaire Combo III"
+	SKILL: "Legionnaire RiposteSub"
+	SKILL: "Legionnaire Turtle II"
+	SKILL: "Legionnaire Combo IV"
+	SKILL: "Legionnaire AirAffinity IV"
+	SKILL: "Legionnaire EarthAffinity IV"
+	SKILL: "Legionnaire FireAffinity IV"
+	SKILL: "Legionnaire WaterAffinity IV"
+	SKILL: "Legionnaire HellGate"
+
+
+CREATEUNIT:		"LegionnaireF1", "LegionnaireF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Legionnaire Evade"
+
+	// basic skills
+	SKILL: "Legionnaire Attack"
+	SKILL: "Legionnaire TargetLeg"
+	SKILL: "Legionnaire PrecisionAttack"
+	SKILL: "Legionnaire TargetArm"
+	SKILL: "Legionnaire DestroyShield"
+	SKILL: "Legionnaire TargetHead"
+	SKILL: "Legionnaire DestroyHelm"
+
+	// innate skills
+	SKILL: "Legionnaire PracticedManeuvers"
+	SKILL: "Legionnaire Orders"
+	SKILL: "Legionnaire Evade II"
+	SKILL: "Legionnaire Awareness"
+	SKILL: "Legionnaire Riposte"
+	SKILL: "Legionnaire Discipline"
+	SKILL: "Legionnaire IndomitableWill"
+	SKILL: "Legionnaire OffBalance"
+
+	// other skills
+	SKILL: "Legionnaire Shield"
+	SKILL: "Legionnaire AirAffinity I"
+	SKILL: "Legionnaire EarthAffinity I"
+	SKILL: "Legionnaire FireAffinity I"
+	SKILL: "Legionnaire WaterAffinity I"
+	SKILL: "Legionnaire Combo I"
+	SKILL: "Legionnaire Turtle I"
+	SKILL: "Legionnaire AirAffinity II"
+	SKILL: "Legionnaire EarthAffinity II"
+	SKILL: "Legionnaire FireAffinity II"
+	SKILL: "Legionnaire WaterAffinity II"
+	SKILL: "Legionnaire Combo II"
+	SKILL: "Legionnaire AirAffinity III"
+	SKILL: "Legionnaire EarthAffinity III"
+	SKILL: "Legionnaire FireAffinity III"
+	SKILL: "Legionnaire WaterAffinity III"
+	SKILL: "Legionnaire Combo III"
+	SKILL: "Legionnaire RiposteSub"
+	SKILL: "Legionnaire Turtle II"
+	SKILL: "Legionnaire Combo IV"
+	SKILL: "Legionnaire AirAffinity IV"
+	SKILL: "Legionnaire EarthAffinity IV"
+	SKILL: "Legionnaire FireAffinity IV"
+	SKILL: "Legionnaire WaterAffinity IV"
+	SKILL: "Legionnaire HellGate"
+
+CREATEUNIT:		"Ludo", "Ludo"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	301
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Ludo Evade"
+
+	// basic skills
+	SKILL: "Ludo Attack"
+	SKILL: "Ludo TargetLeg"
+	SKILL: "Ludo Upperhand"
+	SKILL: "Ludo TargetArm"
+	SKILL: "Ludo DestroyShield"
+	SKILL: "Ludo TargetHead"
+	SKILL: "Ludo UpwardSlash"
+
+	// innate skills
+	SKILL: "Ludo Evade II"
+	SKILL: "Ludo Awareness"
+	SKILL: "Ludo PeoplesHero I"
+	SKILL: "Ludo Riposte"
+	SKILL: "Ludo Discipline"
+	SKILL: "Ludo IndomitableWill"
+	SKILL: "Ludo OffBalance"
+
+	// other skills
+	SKILL: "Ludo Shield"
+	SKILL: "Ludo AirAffinity I"
+	SKILL: "Ludo EarthAffinity I"
+	SKILL: "Ludo FireAffinity I"
+	SKILL: "Ludo WaterAffinity I"
+	SKILL: "Ludo Combo I"
+	SKILL: "Ludo Turtle I"
+	SKILL: "Ludo AirAffinity II"
+	SKILL: "Ludo EarthAffinity II"
+	SKILL: "Ludo FireAffinity II"
+	SKILL: "Ludo WaterAffinity II"
+	SKILL: "Ludo Combo II"
+	SKILL: "Ludo AirAffinity III"
+	SKILL: "Ludo EarthAffinity III"
+	SKILL: "Ludo FireAffinity III"
+	SKILL: "Ludo WaterAffinity III"
+	SKILL: "Ludo Combo III"
+	SKILL: "Ludo RiposteSub"
+	SKILL: "Ludo Turtle II"
+	SKILL: "Ludo Combo IV"
+	SKILL: "Ludo AirAffinity IV"
+	SKILL: "Ludo EarthAffinity IV"
+	SKILL: "Ludo FireAffinity IV"
+	SKILL: "Ludo WaterAffinity IV"
+
+
+
+///////////////////////////////////    Characters
+
+
+
+CREATEUNIT:		"Minotaur1", "Minotaur"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	281
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Minotaur Block"
+
+	// basic skills
+	SKILL: "Minotaur Attack"
+	SKILL: "Minotaur Run I"
+	SKILL: "Minotaur PowerStrike"
+	SKILL: "Minotaur Gore"
+	SKILL: "Minotaur Trample"
+	SKILL: "Minotaur DestroyHelm"
+	SKILL: "Minotaur HeavyStrike"
+	SKILL: "Minotaur CowTip"
+
+	// innate skills
+	SKILL: "Minotaur BullheadedResolve"
+	SKILL: "Minotaur LabyrinthSenses"
+	SKILL: "Minotaur Riposte"
+	SKILL: "Minotaur IndomitableWill"
+	SKILL: "Minotaur SuperCritical"
+
+	// other skills
+	SKILL: "Minotaur AgoraphobiaSub"
+	SKILL: "Minotaur Agoraphobia"
+	SKILL: "Minotaur Maze"
+	SKILL: "Minotaur AirAffinity I"
+	SKILL: "Minotaur EarthAffinity I"
+	SKILL: "Minotaur FireAffinity I"
+	SKILL: "Minotaur WaterAffinity I"
+	SKILL: "Minotaur Combo I"
+	SKILL: "Minotaur AirAffinity II"
+	SKILL: "Minotaur EarthAffinity II"
+	SKILL: "Minotaur FireAffinity II"
+	SKILL: "Minotaur WaterAffinity II"
+	SKILL: "Minotaur Combo II"
+	SKILL: "Minotaur AirAffinity III"
+	SKILL: "Minotaur Defend I"
+	SKILL: "Minotaur EarthAffinity III"
+	SKILL: "Minotaur FireAffinity III"
+	SKILL: "Minotaur WaterAffinity III"
+	SKILL: "Minotaur Combo III"
+	SKILL: "Minotaur Stampede"
+	SKILL: "Minotaur RiposteSub"
+	SKILL: "Minotaur Combo IV"
+	SKILL: "Minotaur AirAffinity IV"
+	SKILL: "Minotaur EarthAffinity IV"
+	SKILL: "Minotaur FireAffinity IV"
+	SKILL: "Minotaur WaterAffinity IV"
+	SKILL: "Minotaur Moo"
+	SKILL: "Minotaur HellGate"
+
+
+CREATEUNIT:		"Mongrel1", "Mongrel"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	467
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Mongrel Evade"
+
+	// basic skills
+	SKILL: "Mongrel Attack"
+	SKILL: "Mongrel Run I"
+	SKILL: "Mongrel TorsoSmash"
+	SKILL: "Mongrel KickingAttack I"
+	SKILL: "Mongrel KickingAttack II"
+	SKILL: "Mongrel KickingAttack III"
+	SKILL: "Mongrel Scratch"
+
+	// innate skills
+	SKILL: "Mongrel Driven"
+	SKILL: "Mongrel WoundedAnimal"
+	SKILL: "Mongrel BackStab"
+	SKILL: "Mongrel Evade II"
+	SKILL: "Mongrel Riposte"
+	SKILL: "Mongrel Evade III"
+	SKILL: "Mongrel OffBalance"
+	SKILL: "Mongrel FesteringClaws"
+
+	// other skills
+	SKILL: "Mongrel WoundedAnimalSub"
+	SKILL: "Mongrel AirAffinity I"
+	SKILL: "Mongrel EarthAffinity I"
+	SKILL: "Mongrel FireAffinity I"
+	SKILL: "Mongrel WaterAffinity I"
+	SKILL: "Mongrel Combo I"
+	SKILL: "Mongrel Turtle I"
+	SKILL: "Mongrel AirAffinity II"
+	SKILL: "Mongrel EarthAffinity II"
+	SKILL: "Mongrel FireAffinity II"
+	SKILL: "Mongrel Combo II"
+	SKILL: "Mongrel AirAffinity III"
+	SKILL: "Mongrel FireAffinity III"
+	SKILL: "Mongrel Combo III"
+	SKILL: "Mongrel RiposteSub"
+	SKILL: "Mongrel Turtle II"
+	SKILL: "Mongrel Combo IV"
+	SKILL: "Mongrel AirAffinity IV"
+	SKILL: "Mongrel HellGate"
+
+
+CREATEUNIT:		"MongrelShaman1", "MongrelShaman"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	303
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Staff", "", "", "", ""
+
+	// defense skills
+	SKILL: "MongrelShaman Evade"
+
+	// basic skills
+	SKILL: "MongrelShaman Attack"
+	SKILL: "MongrelShaman FungusAmongUs"
+	SKILL: "MongrelShaman Run I"
+	SKILL: "MongrelShaman KickingAttack"
+	SKILL: "MongrelShaman KickingAttack II"
+	SKILL: "MongrelShaman KickingAttack III"
+	SKILL: "MongrelShaman Scratch"
+
+	// innate skills
+	SKILL: "MongrelShaman PoisonResistance"
+	SKILL: "MongrelShaman Driven"
+	SKILL: "MongrelShaman Evade II"
+	SKILL: "MongrelShaman FesteringClaws"
+	SKILL: "MongrelShaman Evade III"
+	SKILL: "MongrelShaman AffDraw"
+
+	// other skills
+	SKILL: "MongrelShaman Drowsy"
+	SKILL: "MongrelShaman AirAffinity I"
+	SKILL: "MongrelShaman EarthAffinity I"
+	SKILL: "MongrelShaman FireAffinity I"
+	SKILL: "MongrelShaman WaterAffinity I"
+	SKILL: "MongrelShaman Combo I"
+	SKILL: "MongrelShaman AirAffinity II"
+	SKILL: "MongrelShaman EarthAffinity II"
+	SKILL: "MongrelShaman FireAffinity II"
+	SKILL: "MongrelShaman WaterAffinity II"
+	SKILL: "MongrelShaman Combo II"
+	SKILL: "MongrelShaman FreezeEnemy I"
+	SKILL: "MongrelShaman AirAffinity III"
+	SKILL: "MongrelShaman EarthAffinity III"
+	SKILL: "MongrelShaman FireAffinity III"
+	SKILL: "MongrelShaman WaterAffinity III"
+	SKILL: "MongrelShaman Combo III"
+	SKILL: "MongrelShaman Turtle I"
+	SKILL: "MongrelShaman FeverishMind"
+	SKILL: "MongrelShaman Combo IV"
+	SKILL: "MongrelShaman AirAffinity IV"
+	SKILL: "MongrelShaman EarthAffinity IV"
+	SKILL: "MongrelShaman FireAffinity IV"
+	SKILL: "MongrelShaman Turtle II"
+	SKILL: "MongrelShaman WaterAffinity IV"
+	SKILL: "MongrelShaman HellGate"
+
+
+CREATEUNIT:		"Murmillo1", "Murmillo"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	285
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Murmillo Block"
+
+	// basic skills
+	SKILL: "Murmillo Attack"
+	SKILL: "Murmillo ThrowShield I"
+	SKILL: "Murmillo GutBasher"
+	SKILL: "Murmillo ShieldSmash I"
+	SKILL: "Murmillo ThrowShield II"
+	SKILL: "Murmillo BullRush"
+	SKILL: "Murmillo ShieldRam"
+	SKILL: "Murmillo ThrowShield III"
+	SKILL: "Murmillo HeavyStrike"
+
+	// innate skills
+	SKILL: "Murmillo ArrowGuard"
+	SKILL: "Murmillo ShieldMastery"
+	SKILL: "Murmillo AdvancedBlock"
+	SKILL: "Murmillo ShieldCounter"
+	SKILL: "Murmillo FriendlyInterference"
+	SKILL: "Murmillo OffBalance"
+	SKILL: "Murmillo Humiliate"
+
+	// other skills
+	SKILL: "Murmillo Shield"
+	SKILL: "Murmillo AirAffinity I"
+	SKILL: "Murmillo EarthAffinity I"
+	SKILL: "Murmillo FireAffinity I"
+	SKILL: "Murmillo WaterAffinity I"
+	SKILL: "Murmillo Combo I"
+	SKILL: "Murmillo Turtle I"
+	SKILL: "Murmillo AirAffinity II"
+	SKILL: "Murmillo EarthAffinity II"
+	SKILL: "Murmillo FireAffinity II"
+	SKILL: "Murmillo WaterAffinity II"
+	SKILL: "Murmillo Combo II"
+	SKILL: "Murmillo AirAffinity III"
+	SKILL: "Murmillo EarthAffinity III"
+	SKILL: "Murmillo FireAffinity III"
+	SKILL: "Murmillo WaterAffinity III"
+	SKILL: "Murmillo Combo III"
+	SKILL: "Murmillo ShieldCounterSub"
+	SKILL: "Murmillo Turtle II"
+	SKILL: "Murmillo Combo IV"
+	SKILL: "Murmillo AirAffinity IV"
+	SKILL: "Murmillo EarthAffinity IV"
+	SKILL: "Murmillo FireAffinity IV"
+	SKILL: "Murmillo WaterAffinity IV"
+	SKILL: "Murmillo HellGate"
+
+
+CREATEUNIT:		"MurmilloF1", "MurmilloF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	285
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Murmillo Block"
+
+	// basic skills
+	SKILL: "Murmillo Attack"
+	SKILL: "Murmillo ThrowShield I"
+	SKILL: "Murmillo GutBasher"
+	SKILL: "Murmillo ShieldSmash I"
+	SKILL: "Murmillo ThrowShield II"
+	SKILL: "Murmillo BullRush"
+	SKILL: "Murmillo ShieldRam"
+	SKILL: "Murmillo ThrowShield III"
+	SKILL: "Murmillo HeavyStrike"
+
+	// innate skills
+	SKILL: "Murmillo ArrowGuard"
+	SKILL: "Murmillo ShieldMastery"
+	SKILL: "Murmillo AdvancedBlock"
+	SKILL: "Murmillo ShieldCounter"
+	SKILL: "Murmillo FriendlyInterference"
+	SKILL: "Murmillo OffBalance"
+	SKILL: "Murmillo Humiliate"
+
+	// other skills
+	SKILL: "Murmillo Shield"
+	SKILL: "Murmillo AirAffinity I"
+	SKILL: "Murmillo EarthAffinity I"
+	SKILL: "Murmillo FireAffinity I"
+	SKILL: "Murmillo WaterAffinity I"
+	SKILL: "Murmillo Combo I"
+	SKILL: "Murmillo Turtle I"
+	SKILL: "Murmillo AirAffinity II"
+	SKILL: "Murmillo EarthAffinity II"
+	SKILL: "Murmillo FireAffinity II"
+	SKILL: "Murmillo WaterAffinity II"
+	SKILL: "Murmillo Combo II"
+	SKILL: "Murmillo AirAffinity III"
+	SKILL: "Murmillo EarthAffinity III"
+	SKILL: "Murmillo FireAffinity III"
+	SKILL: "Murmillo WaterAffinity III"
+	SKILL: "Murmillo Combo III"
+	SKILL: "Murmillo ShieldCounterSub"
+	SKILL: "Murmillo Turtle II"
+	SKILL: "Murmillo Combo IV"
+	SKILL: "Murmillo AirAffinity IV"
+	SKILL: "Murmillo EarthAffinity IV"
+	SKILL: "Murmillo FireAffinity IV"
+	SKILL: "Murmillo WaterAffinity IV"
+	SKILL: "Murmillo HellGate"
+
+
+CREATEUNIT:		"Mutuus1", "Mutuus"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	575
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Mutuus Evade"
+
+	// basic skills
+	SKILL: "Mutuus Attack"
+	SKILL: "Mutuus Impale"
+	SKILL: "Mutuus SacrificeAlly"
+	SKILL: "Mutuus Roam"
+	SKILL: "Mutuus Run I"
+	SKILL: "Mutuus CripplingBlow"
+	SKILL: "Mutuus Run II"
+	SKILL: "Mutuus HeavyStrike"
+
+	// innate skills
+	SKILL: "Mutuus AlliedAssault"
+	SKILL: "Mutuus Garrison"
+	SKILL: "Mutuus Awareness"
+	SKILL: "Mutuus IndomitableWill"
+
+	// other skills
+	SKILL: "Mutuus Shield"
+	SKILL: "Mutuus Turtle I"
+	SKILL: "Mutuus DarkAffinity I"
+	SKILL: "Mutuus Combo I"
+	SKILL: "Mutuus DarkAffinity II"
+	SKILL: "Mutuus Combo II"
+	SKILL: "Mutuus DarkAffinity III"
+	SKILL: "Mutuus Combo III"
+	SKILL: "Mutuus Turtle II"
+	SKILL: "Mutuus Combo IV"
+	SKILL: "Mutuus ImmediateResponse"
+
+
+
+CREATEUNIT:		"Ogre1", "Ogre"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	343
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Ogre Block"
+
+	// basic skills
+	SKILL: "Ogre Attack"
+	SKILL: "Ogre ChargingAttack"
+	SKILL: "Ogre Run I"
+	SKILL: "Ogre WideSwing"
+	SKILL: "Ogre Uppercut"
+	SKILL: "Ogre DestroyShield"
+	SKILL: "Ogre DestroyHelm"
+
+	// innate skills
+	SKILL: "Ogre DeliberateNature"
+	SKILL: "Ogre IndomitableWill"
+	SKILL: "Ogre BackAtcha"
+	SKILL: "Ogre Awareness"
+
+	// other skills
+	SKILL: "Ogre BackAtchaSub"
+	SKILL: "Ogre Purge"
+	SKILL: "Ogre AirAffinity I"
+	SKILL: "Ogre EarthAffinity I"
+	SKILL: "Ogre FireAffinity I"
+	SKILL: "Ogre WaterAffinity I"
+	SKILL: "Ogre Combo I"
+	SKILL: "Ogre Defend I"
+	SKILL: "Ogre AirAffinity II"
+	SKILL: "Ogre FireAffinity II"
+	SKILL: "Ogre WaterAffinity II"
+	SKILL: "Ogre Combo II"
+	SKILL: "Ogre AirAffinity III"
+	SKILL: "Ogre FearsomeFunk"
+	SKILL: "Ogre FireAffinity III"
+	SKILL: "Ogre WaterAffinity III"
+	SKILL: "Ogre Combo III"
+	SKILL: "Ogre LecherousGrin"
+	SKILL: "Ogre Stench"
+	SKILL: "Ogre Defend II"
+	SKILL: "Ogre Combo IV"
+	SKILL: "Ogre AirAffinity IV"
+	SKILL: "Ogre FireAffinity IV"
+	SKILL: "Ogre WaterAffinity IV"
+	SKILL: "Ogre HellGate"
+
+
+
+CREATEUNIT:		"Peltast1", "Peltast"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	305
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Javelin", "", "", "", ""
+
+	// defense skills
+	SKILL: "Peltast Evade"
+
+	// basic skills
+	SKILL: "Peltast Attack"
+	SKILL: "Peltast DistanceThrow I"
+	SKILL: "Peltast ExplodingJavelin"
+	SKILL: "Peltast TargetShield"
+	SKILL: "Peltast Run I"
+	SKILL: "Peltast TargetArm"
+	SKILL: "Peltast DistanceThrow II"
+	SKILL: "Peltast TargetLeg"
+	SKILL: "Peltast DistanceThrow III"
+	SKILL: "Peltast UnstoppableThrow"
+	SKILL: "Peltast IndirectFire"
+	SKILL: "Peltast PointBlankCantMiss"
+	SKILL: "Peltast TargetFoot"
+	SKILL: "Peltast PointBlankPowered"
+	SKILL: "Peltast DistanceThrow IV"
+
+	// innate skills
+	SKILL: "Peltast Awareness"
+
+	// other skills
+	SKILL: "Peltast AirAffinity I"
+	SKILL: "Peltast EarthAffinity I"
+	SKILL: "Peltast FireAffinity I"
+	SKILL: "Peltast WaterAffinity I"
+	SKILL: "Peltast Combo I"
+	SKILL: "Peltast Turtle I"
+	SKILL: "Peltast AirAffinity II"
+	SKILL: "Peltast EarthAffinity II"
+	SKILL: "Peltast FireAffinity II"
+	SKILL: "Peltast WaterAffinity II"
+	SKILL: "Peltast Combo II"
+	SKILL: "Peltast AirAffinity III"
+	SKILL: "Peltast EarthAffinity III"
+	SKILL: "Peltast FireAffinity III"
+	SKILL: "Peltast WaterAffinity III"
+	SKILL: "Peltast Combo III"
+	SKILL: "Peltast Cover"
+	SKILL: "Peltast Combo IV"
+	SKILL: "Peltast AirAffinity IV"
+	SKILL: "Peltast EarthAffinity IV"
+	SKILL: "Peltast FireAffinity IV"
+	SKILL: "Peltast WaterAffinity IV"
+	SKILL: "Peltast HellGate"
+
+
+CREATEUNIT:		"PeltastF1", "PeltastF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	305
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Javelin", "", "", "", ""
+
+	// defense skills
+	SKILL: "Peltast Evade"
+
+	// basic skills
+	SKILL: "Peltast Attack"
+	SKILL: "Peltast DistanceThrow I"
+	SKILL: "Peltast ExplodingJavelin"
+	SKILL: "Peltast TargetShield"
+	SKILL: "Peltast Run I"
+	SKILL: "Peltast TargetArm"
+	SKILL: "Peltast DistanceThrow II"
+	SKILL: "Peltast TargetLeg"
+	SKILL: "Peltast DistanceThrow III"
+	SKILL: "Peltast UnstoppableThrow"
+	SKILL: "Peltast IndirectFire"
+	SKILL: "Peltast PointBlankCantMiss"
+	SKILL: "Peltast TargetFoot"
+	SKILL: "Peltast PointBlankPowered"
+	SKILL: "Peltast DistanceThrow IV"
+
+	// innate skills
+	SKILL: "Peltast Awareness"
+
+	// other skills
+	SKILL: "Peltast AirAffinity I"
+	SKILL: "Peltast EarthAffinity I"
+	SKILL: "Peltast FireAffinity I"
+	SKILL: "Peltast WaterAffinity I"
+	SKILL: "Peltast Combo I"
+	SKILL: "Peltast Turtle I"
+	SKILL: "Peltast AirAffinity II"
+	SKILL: "Peltast EarthAffinity II"
+	SKILL: "Peltast FireAffinity II"
+	SKILL: "Peltast WaterAffinity II"
+	SKILL: "Peltast Combo II"
+	SKILL: "Peltast AirAffinity III"
+	SKILL: "Peltast EarthAffinity III"
+	SKILL: "Peltast FireAffinity III"
+	SKILL: "Peltast WaterAffinity III"
+	SKILL: "Peltast Combo III"
+	SKILL: "Peltast Cover"
+	SKILL: "Peltast Combo IV"
+	SKILL: "Peltast AirAffinity IV"
+	SKILL: "Peltast EarthAffinity IV"
+	SKILL: "Peltast FireAffinity IV"
+	SKILL: "Peltast WaterAffinity IV"
+	SKILL: "Peltast HellGate"
+
+
+CREATEUNIT:		"SamniteExp1", "SamniteExp"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Samnite Block"
+
+	// basic skills
+	SKILL: "Samnite Attack"
+	SKILL: "Samnite Overrun"
+	SKILL: "Samnite Bulldoze II"
+	SKILL: "Samnite ForwardThrust"
+	SKILL: "Samnite Blindspot"
+	SKILL: "Samnite SweepingAttack"
+	SKILL: "Samnite Run I"
+	SKILL: "Samnite ClearArea II"
+	SKILL: "Samnite HeavyStrike"
+	SKILL: "Samnite Squat"
+
+	// innate skills
+	SKILL: "Samnite Block II"
+	SKILL: "Samnite IndomitableWill"
+	SKILL: "Samnite OffBalance"
+
+	// other skills
+	SKILL: "Samnite Shield"
+	SKILL: "Samnite Bulldoze I"
+	SKILL: "Samnite AirAffinity I"
+	SKILL: "Samnite EarthAffinity I"
+	SKILL: "Samnite FireAffinity I"
+	SKILL: "Samnite WaterAffinity I"
+	SKILL: "Samnite Combo I"
+	SKILL: "Samnite Defend I"
+	SKILL: "Samnite AirAffinity II"
+	SKILL: "Samnite EarthAffinity II"
+	SKILL: "Samnite FireAffinity II"
+	SKILL: "Samnite WaterAffinity II"
+	SKILL: "Samnite Combo II"
+	SKILL: "Samnite AirAffinity III"
+	SKILL: "Samnite EarthAffinity III"
+	SKILL: "Samnite FireAffinity III"
+	SKILL: "Samnite WaterAffinity III"
+	SKILL: "Samnite Combo III"
+	SKILL: "Samnite ClearArea I"
+	SKILL: "Samnite Turtle I"
+	SKILL: "Samnite Combo IV"
+	SKILL: "Samnite AirAffinity IV"
+	SKILL: "Samnite EarthAffinity IV"
+	SKILL: "Samnite FireAffinity IV"
+	SKILL: "Samnite WaterAffinity IV"
+	SKILL: "Samnite HellGate"
+
+
+CREATEUNIT:		"SamniteExpF1", "SamniteExpF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Samnite Block"
+
+	// basic skills
+	SKILL: "Samnite Attack"
+	SKILL: "Samnite Overrun"
+	SKILL: "Samnite Bulldoze II"
+	SKILL: "Samnite ForwardThrust"
+	SKILL: "Samnite Blindspot"
+	SKILL: "Samnite SweepingAttack"
+	SKILL: "Samnite Run I"
+	SKILL: "Samnite ClearArea II"
+	SKILL: "Samnite HeavyStrike"
+	SKILL: "Samnite Squat"
+
+	// innate skills
+	SKILL: "Samnite Block II"
+	SKILL: "Samnite IndomitableWill"
+	SKILL: "Samnite OffBalance"
+
+	// other skills
+	SKILL: "Samnite Shield"
+	SKILL: "Samnite Bulldoze I"
+	SKILL: "Samnite AirAffinity I"
+	SKILL: "Samnite EarthAffinity I"
+	SKILL: "Samnite FireAffinity I"
+	SKILL: "Samnite WaterAffinity I"
+	SKILL: "Samnite Combo I"
+	SKILL: "Samnite Defend I"
+	SKILL: "Samnite AirAffinity II"
+	SKILL: "Samnite EarthAffinity II"
+	SKILL: "Samnite FireAffinity II"
+	SKILL: "Samnite WaterAffinity II"
+	SKILL: "Samnite Combo II"
+	SKILL: "Samnite AirAffinity III"
+	SKILL: "Samnite EarthAffinity III"
+	SKILL: "Samnite FireAffinity III"
+	SKILL: "Samnite WaterAffinity III"
+	SKILL: "Samnite Combo III"
+	SKILL: "Samnite ClearArea I"
+	SKILL: "Samnite Turtle I"
+	SKILL: "Samnite Combo IV"
+	SKILL: "Samnite AirAffinity IV"
+	SKILL: "Samnite EarthAffinity IV"
+	SKILL: "Samnite FireAffinity IV"
+	SKILL: "Samnite WaterAffinity IV"
+	SKILL: "Samnite HellGate"
+
+
+CREATEUNIT:		"SamniteImp1", "SamniteImp"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Samnite Block"
+
+	// basic skills
+	SKILL: "Samnite Attack"
+	SKILL: "Samnite Overrun"
+	SKILL: "Samnite Bulldoze II"
+	SKILL: "Samnite ForwardThrust"
+	SKILL: "Samnite Blindspot"
+	SKILL: "Samnite SweepingAttack"
+	SKILL: "Samnite Run I"
+	SKILL: "Samnite ClearArea II"
+	SKILL: "Samnite HeavyStrike"
+	SKILL: "Samnite Squat"
+
+	// innate skills
+	SKILL: "Samnite Block II"
+	SKILL: "Samnite IndomitableWill"
+	SKILL: "Samnite OffBalance"
+
+	// other skills
+	SKILL: "Samnite Shield"
+	SKILL: "Samnite Bulldoze I"
+	SKILL: "Samnite AirAffinity I"
+	SKILL: "Samnite EarthAffinity I"
+	SKILL: "Samnite FireAffinity I"
+	SKILL: "Samnite WaterAffinity I"
+	SKILL: "Samnite Combo I"
+	SKILL: "Samnite Defend I"
+	SKILL: "Samnite AirAffinity II"
+	SKILL: "Samnite EarthAffinity II"
+	SKILL: "Samnite FireAffinity II"
+	SKILL: "Samnite WaterAffinity II"
+	SKILL: "Samnite Combo II"
+	SKILL: "Samnite AirAffinity III"
+	SKILL: "Samnite EarthAffinity III"
+	SKILL: "Samnite FireAffinity III"
+	SKILL: "Samnite WaterAffinity III"
+	SKILL: "Samnite Combo III"
+	SKILL: "Samnite ClearArea I"
+	SKILL: "Samnite Turtle I"
+	SKILL: "Samnite Combo IV"
+	SKILL: "Samnite AirAffinity IV"
+	SKILL: "Samnite EarthAffinity IV"
+	SKILL: "Samnite FireAffinity IV"
+	SKILL: "Samnite WaterAffinity IV"
+	SKILL: "Samnite HellGate"
+
+
+CREATEUNIT:		"SamniteImpF1", "SamniteImpF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Samnite Block"
+
+	// basic skills
+	SKILL: "Samnite Attack"
+	SKILL: "Samnite Overrun"
+	SKILL: "Samnite Bulldoze II"
+	SKILL: "Samnite ForwardThrust"
+	SKILL: "Samnite Blindspot"
+	SKILL: "Samnite SweepingAttack"
+	SKILL: "Samnite Run I"
+	SKILL: "Samnite ClearArea II"
+	SKILL: "Samnite HeavyStrike"
+	SKILL: "Samnite Squat"
+
+	// innate skills
+	SKILL: "Samnite Block II"
+	SKILL: "Samnite IndomitableWill"
+	SKILL: "Samnite OffBalance"
+
+	// other skills
+	SKILL: "Samnite Shield"
+	SKILL: "Samnite Bulldoze I"
+	SKILL: "Samnite AirAffinity I"
+	SKILL: "Samnite EarthAffinity I"
+	SKILL: "Samnite FireAffinity I"
+	SKILL: "Samnite WaterAffinity I"
+	SKILL: "Samnite Combo I"
+	SKILL: "Samnite Defend I"
+	SKILL: "Samnite AirAffinity II"
+	SKILL: "Samnite EarthAffinity II"
+	SKILL: "Samnite FireAffinity II"
+	SKILL: "Samnite WaterAffinity II"
+	SKILL: "Samnite Combo II"
+	SKILL: "Samnite AirAffinity III"
+	SKILL: "Samnite EarthAffinity III"
+	SKILL: "Samnite FireAffinity III"
+	SKILL: "Samnite WaterAffinity III"
+	SKILL: "Samnite Combo III"
+	SKILL: "Samnite ClearArea I"
+	SKILL: "Samnite Turtle I"
+	SKILL: "Samnite Combo IV"
+	SKILL: "Samnite AirAffinity IV"
+	SKILL: "Samnite EarthAffinity IV"
+	SKILL: "Samnite FireAffinity IV"
+	SKILL: "Samnite WaterAffinity IV"
+	SKILL: "Samnite HellGate"
+
+
+CREATEUNIT:		"SamniteSte1", "SamniteSte"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Samnite Block"
+
+	// basic skills
+	SKILL: "Samnite Attack"
+	SKILL: "Samnite Overrun"
+	SKILL: "Samnite Bulldoze II"
+	SKILL: "Samnite ForwardThrust"
+	SKILL: "Samnite Blindspot"
+	SKILL: "Samnite SweepingAttack"
+	SKILL: "Samnite Run I"
+	SKILL: "Samnite ClearArea II"
+	SKILL: "Samnite HeavyStrike"
+	SKILL: "Samnite Squat"
+
+	// innate skills
+	SKILL: "Samnite Block II"
+	SKILL: "Samnite IndomitableWill"
+	SKILL: "Samnite OffBalance"
+
+	// other skills
+	SKILL: "Samnite Shield"
+	SKILL: "Samnite Bulldoze I"
+	SKILL: "Samnite AirAffinity I"
+	SKILL: "Samnite EarthAffinity I"
+	SKILL: "Samnite FireAffinity I"
+	SKILL: "Samnite WaterAffinity I"
+	SKILL: "Samnite Combo I"
+	SKILL: "Samnite Defend I"
+	SKILL: "Samnite AirAffinity II"
+	SKILL: "Samnite EarthAffinity II"
+	SKILL: "Samnite FireAffinity II"
+	SKILL: "Samnite WaterAffinity II"
+	SKILL: "Samnite Combo II"
+	SKILL: "Samnite AirAffinity III"
+	SKILL: "Samnite EarthAffinity III"
+	SKILL: "Samnite FireAffinity III"
+	SKILL: "Samnite WaterAffinity III"
+	SKILL: "Samnite Combo III"
+	SKILL: "Samnite ClearArea I"
+	SKILL: "Samnite Turtle I"
+	SKILL: "Samnite Combo IV"
+	SKILL: "Samnite AirAffinity IV"
+	SKILL: "Samnite EarthAffinity IV"
+	SKILL: "Samnite FireAffinity IV"
+	SKILL: "Samnite WaterAffinity IV"
+	SKILL: "Samnite HellGate"
+
+
+CREATEUNIT:		"SamniteSteF1", "SamniteSteF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Samnite Block"
+
+	// basic skills
+	SKILL: "Samnite Attack"
+	SKILL: "Samnite Overrun"
+	SKILL: "Samnite Bulldoze II"
+	SKILL: "Samnite ForwardThrust"
+	SKILL: "Samnite Blindspot"
+	SKILL: "Samnite SweepingAttack"
+	SKILL: "Samnite Run I"
+	SKILL: "Samnite ClearArea II"
+	SKILL: "Samnite HeavyStrike"
+	SKILL: "Samnite Squat"
+
+	// innate skills
+	SKILL: "Samnite Block II"
+	SKILL: "Samnite IndomitableWill"
+	SKILL: "Samnite OffBalance"
+
+	// other skills
+	SKILL: "Samnite Shield"
+	SKILL: "Samnite Bulldoze I"
+	SKILL: "Samnite AirAffinity I"
+	SKILL: "Samnite EarthAffinity I"
+	SKILL: "Samnite FireAffinity I"
+	SKILL: "Samnite WaterAffinity I"
+	SKILL: "Samnite Combo I"
+	SKILL: "Samnite Defend I"
+	SKILL: "Samnite AirAffinity II"
+	SKILL: "Samnite EarthAffinity II"
+	SKILL: "Samnite FireAffinity II"
+	SKILL: "Samnite WaterAffinity II"
+	SKILL: "Samnite Combo II"
+	SKILL: "Samnite AirAffinity III"
+	SKILL: "Samnite EarthAffinity III"
+	SKILL: "Samnite FireAffinity III"
+	SKILL: "Samnite WaterAffinity III"
+	SKILL: "Samnite Combo III"
+	SKILL: "Samnite ClearArea I"
+	SKILL: "Samnite Turtle I"
+	SKILL: "Samnite Combo IV"
+	SKILL: "Samnite AirAffinity IV"
+	SKILL: "Samnite EarthAffinity IV"
+	SKILL: "Samnite FireAffinity IV"
+	SKILL: "Samnite WaterAffinity IV"
+	SKILL: "Samnite HellGate"
+
+
+CREATEUNIT:		"Satyr1", "Satyr"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	319
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Satyr Evade"
+
+	// basic skills
+	SKILL: "Satyr Attack"
+	SKILL: "Satyr Run I"
+	SKILL: "Satyr FlammableBreath"
+	SKILL: "Satyr JugBonk"
+	SKILL: "Satyr JugThrow"
+	SKILL: "Satyr FlammableBreath II"
+	SKILL: "Satyr FlammableBreath III"
+
+	// innate skills
+	SKILL: "Satyr Wiseguy"
+	SKILL: "Satyr Evade II"
+	SKILL: "Satyr Smartass"
+	SKILL: "Satyr Evade III"
+
+	// other skills
+	SKILL: "Satyr MerryJig"
+	SKILL: "Satyr AirAffinity I"
+	SKILL: "Satyr EarthAffinity I"
+	SKILL: "Satyr FireAffinity I"
+	SKILL: "Satyr WaterAffinity I"
+	SKILL: "Satyr Combo I"
+	SKILL: "Satyr CrowdPleaser"
+	SKILL: "Satyr AirAffinity II"
+	SKILL: "Satyr EarthAffinity II"
+	SKILL: "Satyr FireAffinity II"
+	SKILL: "Satyr WaterAffinity II"
+	SKILL: "Satyr Turtle I"
+	SKILL: "Satyr AirAffinity III"
+	SKILL: "Satyr EarthAffinity III"
+	SKILL: "Satyr FireAffinity III"
+	SKILL: "Satyr WaterAffinity III"
+	SKILL: "Satyr Combo III"
+	SKILL: "Satyr HairOfTheDog"
+	SKILL: "Satyr InvigoratingSpirits"
+	SKILL: "Satyr Combo IV"
+	SKILL: "Satyr AirAffinity IV"
+	SKILL: "Satyr CrowdPleaser II"
+	SKILL: "Satyr EarthAffinity IV"
+	SKILL: "Satyr FireAffinity IV"
+	SKILL: "Satyr WaterAffinity IV"
+	SKILL: "Satyr Turtle II"
+	SKILL: "Satyr HellGate"
+
+
+
+
+
+///////////////////////////////////    Characters
+
+
+CREATEUNIT:		"Urlan", "Urlan"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	8619
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Urlan Block"
+	SKILL: "Wolf Evade"
+	SKILL: "Cat Evade"
+	SKILL: "Bear Evade"
+
+	// basic skills
+	SKILL: "Urlan Attack"
+	SKILL: "Wolf Attack"
+	SKILL: "Wolf Nip"
+	SKILL: "Cat Attack"
+	SKILL: "Bear Attack"
+	SKILL: "Bear Bite"
+	SKILL: "Wolf TargetLeg"
+	SKILL: "Cat Paw I"
+	SKILL: "Cat PrecisionAttack"
+	SKILL: "Cat Bite"
+	SKILL: "Bear Attack II"
+	SKILL: "Bear Paw I"
+	SKILL: "Urlan Lunge"
+	SKILL: "Urlan CripplingBlow"
+	SKILL: "Wolf TargetArm"
+	SKILL: "Wolf TearThroat"
+	SKILL: "Urlan BreakDefense"
+	SKILL: "Cat RakingAttack"
+	SKILL: "Cat Pounce"
+	SKILL: "Cat Paw II"
+	SKILL: "Bear Hug"
+	SKILL: "Bear Paw II"
+	SKILL: "Bear RakingAttack"
+	SKILL: "Urlan DestroyHelm"
+	SKILL: "Urlan HellGate"
+
+	// innate skills
+	SKILL: "Urlan OlderBrother"
+	SKILL: "Cat Leap"
+	SKILL: "Wolf PackMentality I"
+	SKILL: "Wolf Courage"
+	SKILL: "Urlan Garrison"
+	SKILL: "Bear WintersFat"
+	SKILL: "Urlan Riposte"
+
+	// other skills
+	SKILL: "Urlan AirAffinity I"
+	SKILL: "Urlan EarthAffinity I"
+	SKILL: "Urlan FireAffinity I"
+	SKILL: "Urlan WaterAffinity I"
+	SKILL: "Urlan WolfForm I"
+	SKILL: "Wolf ShiftReturn"
+	SKILL: "Urlan CatForm I"
+	SKILL: "Cat ShiftReturn"
+	SKILL: "Urlan Combo I"
+	SKILL: "Urlan AirAffinity II"
+	SKILL: "Urlan BearForm I"
+	SKILL: "Bear ShiftReturn"
+	SKILL: "Urlan EarthAffinity II"
+	SKILL: "Urlan FireAffinity II"
+	SKILL: "Urlan WaterAffinity II"
+	SKILL: "Urlan WolfForm II"
+	SKILL: "Wolf LupusCall"
+	SKILL: "Urlan Combo II"
+	SKILL: "Urlan CatForm II"
+	SKILL: "Cat Growl I"
+	SKILL: "Urlan AirAffinity III"
+	SKILL: "Urlan BearForm II"
+	SKILL: "Bear Turtle I"
+	SKILL: "Urlan EarthAffinity III"
+	SKILL: "Urlan FireAffinity III"
+	SKILL: "Urlan WaterAffinity III"
+	SKILL: "Urlan Combo III"
+	SKILL: "Urlan RiposteSub"
+	SKILL: "Urlan WolfForm III"
+	SKILL: "Wolf Snarl I"
+	SKILL: "Wolf Turtle I"
+	SKILL: "Urlan Combo IV"
+	SKILL: "Urlan AirAffinity IV"
+	SKILL: "Urlan CatForm III"
+	SKILL: "Cat Growl II"
+	SKILL: "Urlan EarthAffinity IV"
+	SKILL: "Urlan FireAffinity IV"
+	SKILL: "Urlan WaterAffinity IV"
+	SKILL: "Urlan BearForm III"
+	SKILL: "Bear Bulldoze I"
+
+
+
+CREATEUNIT:		"Ursula", "Ursula"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+	// defense skills
+	SKILL: "Ursula Evade"
+
+	// basic skills
+	SKILL: "Ursula Attack"
+//	SKILL: "Ursula KillTest"
+	SKILL: "Ursula RoundhouseKick"
+	SKILL: "Ursula SpellBlast"
+	SKILL: "Ursula DirectionSpell"
+	SKILL: "Ursula MeteorStorm"
+	SKILL: "Ursula HeavenlySpear"
+	SKILL: "Ursula DestroyHelm"
+	SKILL: "Ursula HellGate"
+
+	// innate skills
+	SKILL: "Ursula DervishFaith"
+	SKILL: "Ursula SiblingRivalry"
+	SKILL: "Ursula LightGuard"
+	SKILL: "Ursula Awareness"
+	SKILL: "Ursula HealingLight"
+	SKILL: "Ursula OffBalance"
+
+	// other skills
+	SKILL: "Ursula Shield"
+	SKILL: "Ursula CastleGreyskull"
+	SKILL: "Ursula AirAffinity I"
+	SKILL: "Ursula EarthAffinity I"
+	SKILL: "Ursula FireAffinity I"
+	SKILL: "Ursula WaterAffinity I"
+	SKILL: "Ursula Combo I"
+	SKILL: "Ursula LightBeam"
+	SKILL: "Ursula AirAffinity II"
+	SKILL: "Ursula EarthAffinity II"
+	SKILL: "Ursula FireAffinity II"
+	SKILL: "Ursula Turtle I"
+	SKILL: "Ursula WaterAffinity II"
+	SKILL: "Ursula Combo II"
+	SKILL: "Ursula AirAffinity III"
+	SKILL: "Ursula EarthAffinity III"
+	SKILL: "Ursula FireAffinity III"
+	SKILL: "Ursula WaterAffinity III"
+	SKILL: "Ursula BlindingFlash"
+	SKILL: "Ursula Combo III"
+	SKILL: "Ursula IcarusWings"
+	SKILL: "Ursula Combo IV"
+	SKILL: "Ursula AirAffinity IV"
+	SKILL: "Ursula EarthAffinity IV"
+	SKILL: "Ursula FireAffinity IV"
+	SKILL: "Ursula SummonLightShield"
+	SKILL: "Ursula WaterAffinity IV"
+
+
+
+CREATEUNIT:		"Valens", "Valens"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	313
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Valens Evade"
+
+	// basic skills
+	SKILL: "Valens Attack"
+//	SKILL: "Valens KillTest"
+	SKILL: "Valens TargetLeg"
+	SKILL: "Valens WideSwing"
+	SKILL: "Valens TargetArm"
+	SKILL: "Valens ShieldHit I"
+	SKILL: "Valens TargetHead"
+	SKILL: "Valens DestroyHelm"
+	SKILL: "Valens HellGate"
+
+	// innate skills
+	SKILL: "Valens DervishFaith"
+	SKILL: "Valens MuniosSpirit"
+	SKILL: "Valens Evade II"
+	SKILL: "Valens PeoplesHero I"
+	SKILL: "Valens Awareness"
+	SKILL: "Valens Discipline"
+	SKILL: "Valens IndomitableWill"
+	SKILL: "Valens OffBalance"
+
+	// other skills
+	SKILL: "Valens Shield"
+	SKILL: "Valens CastleGreyskull"
+	SKILL: "Valens AirAffinity I"
+	SKILL: "Valens EarthAffinity I"
+	SKILL: "Valens FireAffinity I"
+	SKILL: "Valens WaterAffinity I"
+	SKILL: "Valens Combo I"
+	SKILL: "Valens MuniosSpiritSub"
+	SKILL: "Valens Turtle I"
+	SKILL: "Valens AirAffinity II"
+	SKILL: "Valens EarthAffinity II"
+	SKILL: "Valens FireAffinity II"
+	SKILL: "Valens WaterAffinity II"
+	SKILL: "Valens Combo II"
+	SKILL: "Valens AirAffinity III"
+	SKILL: "Valens EarthAffinity III"
+	SKILL: "Valens FireAffinity III"
+	SKILL: "Valens WaterAffinity III"
+	SKILL: "Valens Combo III"
+	SKILL: "Valens Combo IV"
+	SKILL: "Valens AirAffinity IV"
+	SKILL: "Valens EarthAffinity IV"
+	SKILL: "Valens FireAffinity IV"
+	SKILL: "Valens WaterAffinity IV"
+
+
+
+CREATEUNIT:		"Scarab1", "Scarab"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	539
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Scarab Evade"
+
+	// basic skills
+	SKILL: "Scarab Attack"
+	SKILL: "Scarab FierySpittle"
+	SKILL: "Scarab StinkBug"
+	SKILL: "Scarab CarapaceRam"
+	SKILL: "Scarab MandibleSwipe"
+	SKILL: "Scarab Contamination"
+	SKILL: "Scarab Tunnel"
+	SKILL: "Scarab PoisonSpittle"
+	SKILL: "Scarab CripplingBlow"
+	SKILL: "Scarab HeavyStrike"
+	SKILL: "Scarab HellGate"
+
+	// innate skills
+	SKILL: "Scarab GasImmunity"
+	SKILL: "Scarab WeatheredChitin"
+	SKILL: "Scarab FireAffinitybonus"
+	SKILL: "Scarab WeatheredChitin II"
+	SKILL: "Scarab Riposte"
+
+	// other skills
+	SKILL: "Scarab FireAffinity I"
+	SKILL: "Scarab FireAffinity II"
+	SKILL: "Scarab FireAffinity III"
+	SKILL: "Scarab FireAffinity IV"
+	SKILL: "Scarab Burrow"
+	SKILL: "Scarab Combo I"
+	SKILL: "Scarab Defend I"
+	SKILL: "Scarab Combo II"
+	SKILL: "Scarab Combo III"
+	SKILL: "Scarab Combo IV"
+	SKILL: "Scarab Defend II"
+	SKILL: "Scarab RIposteSub"
+
+
+
+CREATEUNIT:		"Scorpion1", "Scorpion"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	293
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Scorpion Evade"
+
+	// basic skills
+	SKILL: "Scorpion Attack"
+	SKILL: "Scorpion PincherAttacks"
+	SKILL: "Scorpion Envenom"
+	SKILL: "Scorpion Run I"
+	SKILL: "Scorpion PoisonFlick"
+	SKILL: "Scorpion Run II"
+	SKILL: "Scorpion ShieldSnip"
+	SKILL: "Scorpion TailWhirl"
+	SKILL: "Scorpion TailWhip"
+	SKILL: "Scorpion PrecisionAttack"
+	SKILL: "Scorpion HellGate"
+
+	// innate skills
+	SKILL: "Scorpion FireResistance"
+	SKILL: "Scorpion WeatheredChitin"
+	SKILL: "Scorpion PoisonResistance"
+	SKILL: "Scorpion Riposte"
+	SKILL: "Scorpion Awareness"
+	SKILL: "Scorpion Evade II"
+
+	// other skills
+	SKILL: "Scorpion WaterAffinity I"
+	SKILL: "Scorpion Combo I"
+	SKILL: "Scorpion Defend I"
+	SKILL: "Scorpion WaterAffinity II"
+	SKILL: "Scorpion Combo II"
+	SKILL: "Scorpion WaterAffinity III"
+	SKILL: "Scorpion Combo III"
+	SKILL: "Scorpion Defend II"
+	SKILL: "Scorpion Combo IV"
+	SKILL: "Scorpion WaterAffinity IV"
+
+
+
+CREATEUNIT:		"SecutorImp1", "SecutorImp"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Secutor Evade"
+
+	// basic skills
+	SKILL: "Secutor Attack"
+	SKILL: "Secutor Run I"
+	SKILL: "Secutor BackAttack"
+	SKILL: "Secutor Trip"
+	SKILL: "Secutor RemoveShield"
+	SKILL: "Secutor ShieldBypass"
+	SKILL: "Secutor TargetHead"
+	SKILL: "Secutor Run II"
+	SKILL: "Secutor Slice"
+	SKILL: "Secutor HellGate"
+	SKILL: "Secutor AttackSpear"
+
+	// innate skills
+	SKILL: "Secutor Wiseguy"
+	SKILL: "Secutor BackStab"
+	SKILL: "Secutor Smartass"
+	SKILL: "Secutor Evade III"
+	SKILL: "Secutor OffBalance"
+
+	// other skills
+	SKILL: "Secutor Shield"
+	SKILL: "Secutor SandToss"
+	SKILL: "Secutor AirAffinity I"
+	SKILL: "Secutor EarthAffinity I"
+	SKILL: "Secutor FireAffinity I"
+	SKILL: "Secutor WaterAffinity I"
+	SKILL: "Secutor Combo I"
+	SKILL: "Secutor AirAffinity II"
+	SKILL: "Secutor EarthAffinity II"
+	SKILL: "Secutor FireAffinity II"
+	SKILL: "Secutor WaterAffinity II"
+	SKILL: "Secutor Combo II"
+	SKILL: "Secutor Turtle I"
+	SKILL: "Secutor AirAffinity III"
+	SKILL: "Secutor EarthAffinity III"
+	SKILL: "Secutor FireAffinity III"
+	SKILL: "Secutor WaterAffinity III"
+	SKILL: "Secutor Combo III"
+	SKILL: "Secutor Combo IV"
+	SKILL: "Secutor AirAffinity IV"
+	SKILL: "Secutor EarthAffinity IV"
+	SKILL: "Secutor FireAffinity IV"
+	SKILL: "Secutor WaterAffinity IV"
+
+
+
+CREATEUNIT:		"SecutorImpF1", "SecutorImpF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Secutor Evade"
+
+	// basic skills
+	SKILL: "Secutor Attack"
+	SKILL: "Secutor Run I"
+	SKILL: "Secutor BackAttack"
+	SKILL: "Secutor Trip"
+	SKILL: "Secutor RemoveShield"
+	SKILL: "Secutor ShieldBypass"
+	SKILL: "Secutor TargetHead"
+	SKILL: "Secutor Run II"
+	SKILL: "Secutor Slice"
+	SKILL: "Secutor HellGate"
+	SKILL: "Secutor AttackSpear"
+
+	// innate skills
+	SKILL: "Secutor Wiseguy"
+	SKILL: "Secutor BackStab"
+	SKILL: "Secutor Smartass"
+	SKILL: "Secutor Evade III"
+	SKILL: "Secutor OffBalance"
+
+	// other skills
+	SKILL: "Secutor Shield"
+	SKILL: "Secutor SandToss"
+	SKILL: "Secutor AirAffinity I"
+	SKILL: "Secutor EarthAffinity I"
+	SKILL: "Secutor FireAffinity I"
+	SKILL: "Secutor WaterAffinity I"
+	SKILL: "Secutor Combo I"
+	SKILL: "Secutor AirAffinity II"
+	SKILL: "Secutor EarthAffinity II"
+	SKILL: "Secutor FireAffinity II"
+	SKILL: "Secutor WaterAffinity II"
+	SKILL: "Secutor Combo II"
+	SKILL: "Secutor Turtle I"
+	SKILL: "Secutor AirAffinity III"
+	SKILL: "Secutor EarthAffinity III"
+	SKILL: "Secutor FireAffinity III"
+	SKILL: "Secutor WaterAffinity III"
+	SKILL: "Secutor Combo III"
+	SKILL: "Secutor Combo IV"
+	SKILL: "Secutor AirAffinity IV"
+	SKILL: "Secutor EarthAffinity IV"
+	SKILL: "Secutor FireAffinity IV"
+	SKILL: "Secutor WaterAffinity IV"
+
+
+
+CREATEUNIT:		"SecutoSte1", "SecutorSte"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Light", "", "", "", ""
+
+	// defense skills
+	SKILL: "Secutor Evade"
+
+	// basic skills
+	SKILL: "Secutor Attack"
+	SKILL: "Secutor Run I"
+	SKILL: "Secutor BackAttack"
+	SKILL: "Secutor Trip"
+	SKILL: "Secutor RemoveShield"
+	SKILL: "Secutor ShieldBypass"
+	SKILL: "Secutor TargetHead"
+	SKILL: "Secutor Run II"
+	SKILL: "Secutor Slice"
+	SKILL: "Secutor HellGate"
+	SKILL: "Secutor AttackSpear"
+
+	// innate skills
+	SKILL: "Secutor Wiseguy"
+	SKILL: "Secutor BackStab"
+	SKILL: "Secutor Smartass"
+	SKILL: "Secutor Evade III"
+	SKILL: "Secutor OffBalance"
+
+	// other skills
+	SKILL: "Secutor Shield"
+	SKILL: "Secutor SandToss"
+	SKILL: "Secutor AirAffinity I"
+	SKILL: "Secutor EarthAffinity I"
+	SKILL: "Secutor FireAffinity I"
+	SKILL: "Secutor WaterAffinity I"
+	SKILL: "Secutor Combo I"
+	SKILL: "Secutor AirAffinity II"
+	SKILL: "Secutor EarthAffinity II"
+	SKILL: "Secutor FireAffinity II"
+	SKILL: "Secutor WaterAffinity II"
+	SKILL: "Secutor Combo II"
+	SKILL: "Secutor Turtle I"
+	SKILL: "Secutor AirAffinity III"
+	SKILL: "Secutor EarthAffinity III"
+	SKILL: "Secutor FireAffinity III"
+	SKILL: "Secutor WaterAffinity III"
+	SKILL: "Secutor Combo III"
+	SKILL: "Secutor Combo IV"
+	SKILL: "Secutor AirAffinity IV"
+	SKILL: "Secutor EarthAffinity IV"
+	SKILL: "Secutor FireAffinity IV"
+	SKILL: "Secutor WaterAffinity IV"
+
+
+
+CREATEUNIT:		"SecutoSteF1", "SecutorSteF"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Secutor Evade"
+
+	// basic skills
+	SKILL: "Secutor Attack"
+	SKILL: "Secutor Run I"
+	SKILL: "Secutor BackAttack"
+	SKILL: "Secutor Trip"
+	SKILL: "Secutor RemoveShield"
+	SKILL: "Secutor ShieldBypass"
+	SKILL: "Secutor TargetHead"
+	SKILL: "Secutor Run II"
+	SKILL: "Secutor Slice"
+	SKILL: "Secutor HellGate"
+	SKILL: "Secutor AttackSpear"
+
+	// innate skills
+	SKILL: "Secutor Wiseguy"
+	SKILL: "Secutor BackStab"
+	SKILL: "Secutor Smartass"
+	SKILL: "Secutor Evade III"
+	SKILL: "Secutor OffBalance"
+
+	// other skills
+	SKILL: "Secutor Shield"
+	SKILL: "Secutor SandToss"
+	SKILL: "Secutor AirAffinity I"
+	SKILL: "Secutor EarthAffinity I"
+	SKILL: "Secutor FireAffinity I"
+	SKILL: "Secutor WaterAffinity I"
+	SKILL: "Secutor Combo I"
+	SKILL: "Secutor AirAffinity II"
+	SKILL: "Secutor EarthAffinity II"
+	SKILL: "Secutor FireAffinity II"
+	SKILL: "Secutor WaterAffinity II"
+	SKILL: "Secutor Combo II"
+	SKILL: "Secutor Turtle I"
+	SKILL: "Secutor AirAffinity III"
+	SKILL: "Secutor EarthAffinity III"
+	SKILL: "Secutor FireAffinity III"
+	SKILL: "Secutor WaterAffinity III"
+	SKILL: "Secutor Combo III"
+	SKILL: "Secutor Combo IV"
+	SKILL: "Secutor AirAffinity IV"
+	SKILL: "Secutor EarthAffinity IV"
+	SKILL: "Secutor FireAffinity IV"
+	SKILL: "Secutor WaterAffinity IV"
+
+
+
+CREATEUNIT:		"Summoner1", "Summoner"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	263
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Staff", "", "", "", ""
+
+	// defense skills
+	SKILL: "Summoner Evade"
+
+	// basic skills
+	SKILL: "Summoner Attack"
+	SKILL: "Summoner Attack II"
+	SKILL: "Summoner HellGate"
+
+	// innate skills
+	SKILL: "Summoner AffNoGrow"
+
+	// other skills
+	SKILL: "Summoner SummonSkeleton I"
+	SKILL: "Summoner SummonAirBeast"
+	SKILL: "Summoner AirAffinity I"
+	SKILL: "Summoner EarthAffinity I"
+	SKILL: "Summoner FireAffinity I"
+	SKILL: "Summoner SummonEarthBeast"
+	SKILL: "Summoner WaterAffinity I"
+	SKILL: "Summoner SummonFireBeast"
+	SKILL: "Summoner SummonWaterBeast"
+	SKILL: "Summoner AirAffinity II"
+	SKILL: "Summoner EarthAffinity II"
+	SKILL: "Summoner FireAffinity II"
+	SKILL: "Summoner Incapacitate"
+	SKILL: "Summoner WaterAffinity II"
+	SKILL: "Summoner Tornado"
+	SKILL: "Summoner Turtle I"
+	SKILL: "Summoner AirAffinity III"
+	SKILL: "Summoner EarthAffinity III"
+	SKILL: "Summoner FireAffinity III"
+	SKILL: "Summoner SummonSkeleton II"
+	SKILL: "Summoner WaterAffinity III"
+	SKILL: "Summoner FireAffinity IV"
+	SKILL: "Summoner SummonLich I"
+	SKILL: "Summoner SummonTaintedAirBeast"
+	SKILL: "Summoner SummonTaintedEarthBeast"
+	SKILL: "Summoner SummonTaintedFireBeast"
+	SKILL: "Summoner AirAffinity IV"
+	SKILL: "Summoner EarthAffinity IV"
+	SKILL: "Summoner SummonTaintedWaterBeast"
+	SKILL: "Summoner WaterAffinity IV"
+	SKILL: "Summoner Turtle II"
+	SKILL: "Summoner SummonLich II"
+	SKILL: "Summoner SummonAffinityPower"
+	SKILL: "Summoner Combo I"
+	SKILL: "Summoner Combo II"
+	SKILL: "Summoner Combo III"
+	SKILL: "Summoner Combo IV"
+
+
+
+CREATEUNIT:		"UndeadCasterA1", "UndeadCasterA"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	487
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Dark Test Staff", "", "", "", ""
+
+	// defense skills
+	SKILL: "UndeadCaster Block"
+
+	// basic skills
+	SKILL: "UndeadCaster Attack"
+	SKILL: "UndeadCaster AffLeach"
+	SKILL: "UndeadCaster AffLeachSub"
+	SKILL: "UndeadCaster HellGate"
+
+	// innate skills
+	SKILL: "UndeadCaster DarkResistance"
+	SKILL: "UndeadCaster FleshlessTarget"
+	SKILL: "UndeadCaster SicklyMarrow"
+	SKILL: "UndeadCaster KnitBones"
+	SKILL: "UndeadCaster AffNoGrow"
+
+	// other skills
+	SKILL: "UndeadCaster SplinteringBones"
+	SKILL: "UndeadCaster Firestorm I"
+	SKILL: "UndeadCaster CovetLife"
+	SKILL: "UndeadCaster Firestorm II"
+	SKILL: "UndeadCaster RottingTouch"
+	SKILL: "UndeadCaster Attack II"
+	SKILL: "UndeadCaster SummonSkeleton"
+	SKILL: "UndeadCaster DarkAffinity I"
+	SKILL: "UndeadCaster Combo I"
+	SKILL: "UndeadCaster DarkAffinity II"
+	SKILL: "UndeadCaster Combo II"
+	SKILL: "UndeadCaster SummonSkeleton II"
+	SKILL: "UndeadCaster DarkAffinity III"
+	SKILL: "UndeadCaster Combo III"
+	SKILL: "UndeadCaster Tornado"
+	SKILL: "UndeadCaster Teleport"
+	SKILL: "UndeadCaster Defend I"
+	SKILL: "UndeadCaster Combo IV"
+	SKILL: "UndeadCaster SummonSkeleton III"
+	SKILL: "UndeadCaster GrimReaper"
+
+
+
+CREATEUNIT:		"UndeadMeleeImpA1", "UndeadMeleeImpA"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	437
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "UndeadMelee Block"
+
+	// basic skills
+	SKILL: "UndeadMelee Attack"
+	SKILL: "UndeadMelee TargetHead"
+	SKILL: "UndeadMelee HeavyStrike"
+	SKILL: "UndeadMelee ShatterSelf"
+	SKILL: "UndeadMelee ScareAttack"
+	SKILL: "UndeadMelee FearOfDeath"
+	SKILL: "UndeadMelee RotHelmet"
+	SKILL: "UndeadMelee HellGate"
+
+	// innate skills
+	SKILL: "UndeadMelee SicklyMarrow"
+	SKILL: "UndeadMelee Riposte"
+	SKILL: "UndeadMelee KnitBones"
+	SKILL: "UndeadMelee Afterlife"
+	SKILL: "UndeadMelee AfterLifeAmendment"
+	SKILL: "UndeadMelee GraveRot"
+
+	// other skills
+	SKILL: "UndeadMelee Shield"
+	SKILL: "UndeadMelee RottingTouch"
+	SKILL: "UndeadMelee DarkAffinity I"
+	SKILL: "UndeadMelee Combo I"
+	SKILL: "UndeadMelee GraveLaughter"
+	SKILL: "UndeadMelee DarkAffinity II"
+	SKILL: "UndeadMelee Combo II"
+	SKILL: "UndeadMelee DarkAffinity III"
+	SKILL: "UndeadMelee Combo III"
+	SKILL: "UndeadMelee Defend I"
+	SKILL: "UndeadMelee RiposteSub"
+	SKILL: "UndeadMelee Combo IV"
+	SKILL: "UndeadMelee Defend II"
+	SKILL: "UndeadMelee ScaredStiff"
+
+
+
+CREATEUNIT:		"UrsulaA", "UrsulaCostumeA"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Ursula Evade"
+
+	// basic skills
+	SKILL: "Ursula Attack"
+//	SKILL: "Ursula KillTest"
+	SKILL: "Ursula RoundhouseKick"
+	SKILL: "Ursula SpellBlast"
+	SKILL: "Ursula DirectionSpell"
+	SKILL: "Ursula MeteorStorm"
+	SKILL: "Ursula HeavenlySpear"
+	SKILL: "Ursula DestroyHelm"
+	SKILL: "Ursula HellGate"
+
+	// innate skills
+	SKILL: "Ursula DervishFaith"
+	SKILL: "Ursula SiblingRivalry"
+	SKILL: "Ursula LightGuard"
+	SKILL: "Ursula Awareness"
+	SKILL: "Ursula HealingLight"
+	SKILL: "Ursula OffBalance"
+
+	// other skills
+	SKILL: "Ursula Shield"
+	SKILL: "Ursula CastleGreyskull"
+	SKILL: "Ursula AirAffinity I"
+	SKILL: "Ursula EarthAffinity I"
+	SKILL: "Ursula FireAffinity I"
+	SKILL: "Ursula WaterAffinity I"
+	SKILL: "Ursula Combo I"
+	SKILL: "Ursula LightBeam"
+	SKILL: "Ursula AirAffinity II"
+	SKILL: "Ursula EarthAffinity II"
+	SKILL: "Ursula FireAffinity II"
+	SKILL: "Ursula Turtle I"
+	SKILL: "Ursula WaterAffinity II"
+	SKILL: "Ursula Combo II"
+	SKILL: "Ursula AirAffinity III"
+	SKILL: "Ursula EarthAffinity III"
+	SKILL: "Ursula FireAffinity III"
+	SKILL: "Ursula WaterAffinity III"
+	SKILL: "Ursula BlindingFlash"
+	SKILL: "Ursula Combo III"
+	SKILL: "Ursula IcarusWings"
+	SKILL: "Ursula Combo IV"
+	SKILL: "Ursula AirAffinity IV"
+	SKILL: "Ursula EarthAffinity IV"
+	SKILL: "Ursula FireAffinity IV"
+	SKILL: "Ursula SummonLightShield"
+	SKILL: "Ursula WaterAffinity IV"
+
+
+
+CREATEUNIT:		"UrsulaB", "UrsulaCostumeB"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	309
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Ursula Evade"
+
+	// basic skills
+	SKILL: "Ursula Attack"
+//	SKILL: "Ursula KillTest"
+	SKILL: "Ursula RoundhouseKick"
+	SKILL: "Ursula SpellBlast"
+	SKILL: "Ursula DirectionSpell"
+	SKILL: "Ursula MeteorStorm"
+	SKILL: "Ursula HeavenlySpear"
+	SKILL: "Ursula DestroyHelm"
+	SKILL: "Ursula HellGate"
+
+	// innate skills
+	SKILL: "Ursula DervishFaith"
+	SKILL: "Ursula SiblingRivalry"
+	SKILL: "Ursula LightGuard"
+	SKILL: "Ursula Awareness"
+	SKILL: "Ursula HealingLight"
+	SKILL: "Ursula OffBalance"
+
+	// other skills
+	SKILL: "Ursula Shield"
+	SKILL: "Ursula CastleGreyskull"
+	SKILL: "Ursula AirAffinity I"
+	SKILL: "Ursula EarthAffinity I"
+	SKILL: "Ursula FireAffinity I"
+	SKILL: "Ursula WaterAffinity I"
+	SKILL: "Ursula Combo I"
+	SKILL: "Ursula LightBeam"
+	SKILL: "Ursula AirAffinity II"
+	SKILL: "Ursula EarthAffinity II"
+	SKILL: "Ursula FireAffinity II"
+	SKILL: "Ursula Turtle I"
+	SKILL: "Ursula WaterAffinity II"
+	SKILL: "Ursula Combo II"
+	SKILL: "Ursula AirAffinity III"
+	SKILL: "Ursula EarthAffinity III"
+	SKILL: "Ursula FireAffinity III"
+	SKILL: "Ursula WaterAffinity III"
+	SKILL: "Ursula BlindingFlash"
+	SKILL: "Ursula Combo III"
+	SKILL: "Ursula IcarusWings"
+	SKILL: "Ursula Combo IV"
+	SKILL: "Ursula AirAffinity IV"
+	SKILL: "Ursula EarthAffinity IV"
+	SKILL: "Ursula FireAffinity IV"
+	SKILL: "Ursula SummonLightShield"
+	SKILL: "Ursula WaterAffinity IV"
+
+
+
+CREATEUNIT:		"ValensCostumeA", "ValensCostumeA"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	313
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Valens Evade"
+
+	// basic skills
+	SKILL: "Valens Attack"
+//	SKILL: "Valens KillTest"
+	SKILL: "Valens TargetLeg"
+	SKILL: "Valens WideSwing"
+	SKILL: "Valens TargetArm"
+	SKILL: "Valens ShieldHit I"
+	SKILL: "Valens TargetHead"
+	SKILL: "Valens DestroyHelm"
+	SKILL: "Valens HellGate"
+
+	// innate skills
+	SKILL: "Valens DervishFaith"
+	SKILL: "Valens MuniosSpirit"
+	SKILL: "Valens Evade II"
+	SKILL: "Valens PeoplesHero I"
+	SKILL: "Valens Awareness"
+	SKILL: "Valens Discipline"
+	SKILL: "Valens IndomitableWill"
+	SKILL: "Valens OffBalance"
+
+	// other skills
+	SKILL: "Valens Shield"
+	SKILL: "Valens CastleGreyskull"
+	SKILL: "Valens AirAffinity I"
+	SKILL: "Valens EarthAffinity I"
+	SKILL: "Valens FireAffinity I"
+	SKILL: "Valens WaterAffinity I"
+	SKILL: "Valens Combo I"
+	SKILL: "Valens MuniosSpiritSub"
+	SKILL: "Valens Turtle I"
+	SKILL: "Valens AirAffinity II"
+	SKILL: "Valens EarthAffinity II"
+	SKILL: "Valens FireAffinity II"
+	SKILL: "Valens WaterAffinity II"
+	SKILL: "Valens Combo II"
+	SKILL: "Valens AirAffinity III"
+	SKILL: "Valens EarthAffinity III"
+	SKILL: "Valens FireAffinity III"
+	SKILL: "Valens WaterAffinity III"
+	SKILL: "Valens Combo III"
+	SKILL: "Valens Combo IV"
+	SKILL: "Valens AirAffinity IV"
+	SKILL: "Valens EarthAffinity IV"
+	SKILL: "Valens FireAffinity IV"
+	SKILL: "Valens WaterAffinity IV"
+
+
+
+CREATEUNIT:		"ValensCostumeB", "ValensCostumeB"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	313
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Medium", "", "", "", ""
+
+	// defense skills
+	SKILL: "Valens Evade"
+
+	// basic skills
+	SKILL: "Valens Attack"
+//	SKILL: "Valens KillTest"
+	SKILL: "Valens TargetLeg"
+	SKILL: "Valens WideSwing"
+	SKILL: "Valens TargetArm"
+	SKILL: "Valens ShieldHit I"
+	SKILL: "Valens TargetHead"
+	SKILL: "Valens DestroyHelm"
+	SKILL: "Valens HellGate"
+
+	// innate skills
+	SKILL: "Valens DervishFaith"
+	SKILL: "Valens MuniosSpirit"
+	SKILL: "Valens Evade II"
+	SKILL: "Valens PeoplesHero I"
+	SKILL: "Valens Awareness"
+	SKILL: "Valens Discipline"
+	SKILL: "Valens IndomitableWill"
+	SKILL: "Valens OffBalance"
+
+	// other skills
+	SKILL: "Valens Shield"
+	SKILL: "Valens CastleGreyskull"
+	SKILL: "Valens AirAffinity I"
+	SKILL: "Valens EarthAffinity I"
+	SKILL: "Valens FireAffinity I"
+	SKILL: "Valens WaterAffinity I"
+	SKILL: "Valens Combo I"
+	SKILL: "Valens MuniosSpiritSub"
+	SKILL: "Valens Turtle I"
+	SKILL: "Valens AirAffinity II"
+	SKILL: "Valens EarthAffinity II"
+	SKILL: "Valens FireAffinity II"
+	SKILL: "Valens WaterAffinity II"
+	SKILL: "Valens Combo II"
+	SKILL: "Valens AirAffinity III"
+	SKILL: "Valens EarthAffinity III"
+	SKILL: "Valens FireAffinity III"
+	SKILL: "Valens WaterAffinity III"
+	SKILL: "Valens Combo III"
+	SKILL: "Valens Combo IV"
+	SKILL: "Valens AirAffinity IV"
+	SKILL: "Valens EarthAffinity IV"
+	SKILL: "Valens FireAffinity IV"
+	SKILL: "Valens WaterAffinity IV"
+
+
+
+CREATEUNIT:		"Wolf1", "Wolf"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	541
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "Wolf Evade"
+
+	// basic skills
+	SKILL: "Wolf Attack"
+	SKILL: "Wolf Nip"
+	SKILL: "Wolf EarthAffinity II"
+	SKILL: "Wolf TargetLeg"
+	SKILL: "Wolf EarthAffinity III"
+	SKILL: "Wolf TearThroat"
+	SKILL: "Wolf TargetArm"
+	SKILL: "Wolf EarthAffinity IV"
+	SKILL: "Wolf PullDown"
+	SKILL: "Wolf TearThroat II"
+	SKILL: "Wolf HellGate"
+
+	// innate skills
+	SKILL: "Wolf Courage"
+	SKILL: "Wolf PackMentality I"
+	SKILL: "Wolf Riposte"
+	SKILL: "Wolf Evade II"
+	SKILL: "Wolf PackMentality II"
+
+	// other skills
+	SKILL: "Wolf EarthAffinity I"
+	SKILL: "Wolf ShiftReturn"
+	SKILL: "Wolf Combo I"
+	SKILL: "Wolf LupusCall"
+	SKILL: "Wolf Combo II"
+	SKILL: "Wolf Turtle I"
+	SKILL: "Wolf Snarl I"
+	SKILL: "Wolf Combo III"
+	SKILL: "Wolf RiposteSub"
+	SKILL: "Wolf LupusCall II"
+	SKILL: "Wolf Combo IV"
+	SKILL: "Wolf Snarl II"
+
+
+
+CREATEUNIT:		"WolfGreater1", "WolfGreater"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	643
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"", "", "", "", ""
+
+	// defense skills
+	SKILL: "WolfGreater Evade"
+
+	// basic skills
+	SKILL: "WolfGreater Attack"
+	SKILL: "WolfGreater Nip"
+	SKILL: "WolfGreater TargetLeg"
+	SKILL: "WolfGreater TearThroat I"
+	SKILL: "WolfGreater TearThroat II"
+	SKILL: "WolfGreater TargetArm"
+
+	// innate skills
+	SKILL: "WolfGreater Courage"
+	SKILL: "WolfGreater PackMentality I"
+	SKILL: "WolfGreater Evade II"
+	SKILL: "WolfGreater PackMentality II"
+
+	// other skills
+	SKILL: "WolfGreater EarthAffinity I"
+	SKILL: "WolfGreater Combo I"
+	SKILL: "WolfGreater LupusCall I"
+	SKILL: "WolfGreater LupusCall II"
+	SKILL: "WolfGreater EarthAffinity II"
+	SKILL: "WolfGreater Combo II"
+	SKILL: "WolfGreater Turtle I"
+	SKILL: "WolfGreater EarthAffinity III"
+	SKILL: "WolfGreater Snarl I"
+	SKILL: "WolfGreater Snarl II"
+	SKILL: "WolfGreater Combo III"
+	SKILL: "WolfGreater Combo IV"
+	SKILL: "WolfGreater EarthAffinity IV"
+
+
+
+CREATEUNIT:		"Yeti1", "Yeti"		// Name, class
+	LEVEL:		20
+	EXPERIENCE:	0
+	JOBPOINTS:	311
+
+	//            	CON, PWR, ACC, DEF, INT, MOVE
+	CORESTATSCOMP2:	 68,  72,  98, 104, 102, 102
+
+					//	weapon,	armor,	shield,	helmet,	accessory
+	ITEMSCOMP:			"Air Test Sword Heavy", "", "", "", ""
+
+	// defense skills
+	SKILL: "Yeti Block"
+
+	// basic skills
+	SKILL: "Yeti Attack"
+	SKILL: "Yeti Run I"
+	SKILL: "Yeti HeavyPaw"
+	SKILL: "Yeti NumbingBlows"
+	SKILL: "Yeti FierceBackhand"
+	SKILL: "Yeti HeavyStrike"
+	SKILL: "Yeti HellGate"
+
+	// innate skills
+	SKILL: "Yeti DeliberateNature"
+	SKILL: "Yeti ThickenedPelt"
+	SKILL: "Yeti IndomitableWill"
+
+	// other skills
+	SKILL: "Yeti AgoraphobiaSub"
+	SKILL: "Yeti Agoraphobia"
+	SKILL: "Yeti CryofAnger"
+	SKILL: "Yeti AirAffinity I"
+	SKILL: "Yeti EarthAffinity I"
+	SKILL: "Yeti FireAffinity I"
+	SKILL: "Yeti WaterAffinity I"
+	SKILL: "Yeti Combo I"
+	SKILL: "Yeti Defend"
+	SKILL: "Yeti AirAffinity II"
+	SKILL: "Yeti EarthAffinity II"
+	SKILL: "Yeti FireAffinity II"
+	SKILL: "Yeti WaterAffinity II"
+	SKILL: "Yeti Combo II"
+	SKILL: "Yeti AirAffinity III"
+	SKILL: "Yeti EarthAffinity III"
+	SKILL: "Yeti FireAffinity III"
+	SKILL: "Yeti WaterAffinity III"
+	SKILL: "Yeti Combo III"
+	SKILL: "Yeti FearsomeYell"
+	SKILL: "Yeti IcicleBreath"
+	SKILL: "Yeti Hibernation"
+	SKILL: "Yeti Defend II"
+	SKILL: "Yeti Combo IV"
+	SKILL: "Yeti AirAffinity IV"
+	SKILL: "Yeti EarthAffinity IV"
+	SKILL: "Yeti FireAffinity IV"
+	SKILL: "Yeti WaterAffinity IV"
+	SKILL: "Yeti YowlofPain"
+
+
+

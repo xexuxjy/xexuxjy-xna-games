@@ -1,0 +1,166 @@
+////// SKILLSET export Class: Legionnaire Legionnaire  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Legionnaire Attack"              // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Legionnaire Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Legionnaire Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Legionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Legionnaire Combo I"             // JP:   6/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Legionnaire TargetLeg"           // JP:   4/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Legionnaire Combo II"            // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Legionnaire Evade II"            // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Legionnaire IndomitableWill"     // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Legionnaire Orders"              // JP:   8/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Legionnaire Turtle I"            // JP:   6/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 78	AccMod 15
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Legionnaire Awareness"           // JP:  20/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Legionnaire Combo III"           // JP:  22/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Legionnaire DestroyShield"       // JP:  24/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Legionnaire Riposte"             // JP:  22/166	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Legionnaire RiposteSub"          // JP:   0/166	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 14, 30, "Legionnaire TargetArm"           // JP:  18/184	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 16, 30, "Legionnaire Combo IV"            // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 18, 30, "Legionnaire Discipline"          // JP:  32/250	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 20, 30, "Legionnaire Turtle II"           // JP:  30/280	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 23, 30, "Legionnaire DestroyHelm"         // JP:  40/320	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 25, 30, "Legionnaire TargetHead"          // JP:  34/354	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 28, 30, "Legionnaire OffBalance"          // JP:  38/392	AccMod 0
+//  Unused JP at Level 30: 38
+
+
+////// SKILLSET export Class: Legionnaire Legionnaire  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Legionnaire Attack"              // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Legionnaire Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Legionnaire Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Legionnaire EarthAffinity I"     // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Legionnaire EarthAffinity II"    // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Legionnaire Orders"              // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Legionnaire PracticedManeuvers"  // JP:   2/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Legionnaire Evade II"            // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Legionnaire TargetLeg"           // JP:   4/ 40	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Legionnaire Awareness"           // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Legionnaire Turtle I"            // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Legionnaire DestroyShield"       // JP:  24/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Legionnaire EarthAffinity III"   // JP:  20/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Legionnaire IndomitableWill"     // JP:  18/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Legionnaire Riposte"             // JP:  22/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Legionnaire RiposteSub"          // JP:   0/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Legionnaire TargetArm"           // JP:  18/178	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 16, 30, "Legionnaire DestroyHelm"         // JP:  40/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 18, 30, "Legionnaire Discipline"          // JP:  32/250	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 20, 30, "Legionnaire Turtle II"           // JP:  30/280	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 23, 30, "Legionnaire EarthAffinity IV"    // JP:  36/316	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 25, 30, "Legionnaire OffBalance"          // JP:  38/354	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 28, 30, "Legionnaire TargetHead"          // JP:  34/388	AccMod -5
+//  Unused JP at Level 30: 42
+
+
+////// SKILLSET export Class: Legionnaire Legionnaire  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Legionnaire Attack"              // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Legionnaire Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Legionnaire Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Legionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Legionnaire Evade II"            // JP:  12/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Legionnaire Orders"              // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Legionnaire IndomitableWill"     // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Legionnaire TargetLeg"           // JP:   4/ 54	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Legionnaire Turtle I"            // JP:   6/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Legionnaire WaterAffinity I"     // JP:   4/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Legionnaire Awareness"           // JP:  20/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Legionnaire WaterAffinity II"    // JP:  10/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Legionnaire TargetArm"           // JP:  18/112	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Legionnaire DestroyShield"       // JP:  24/136	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Legionnaire Riposte"             // JP:  22/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Legionnaire RiposteSub"          // JP:   0/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Legionnaire Discipline"          // JP:  32/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 16, 30, "Legionnaire Turtle II"           // JP:  30/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 18, 30, "Legionnaire WaterAffinity III"   // JP:  20/240	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 20, 30, "Legionnaire DestroyHelm"         // JP:  40/280	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 23, 30, "Legionnaire OffBalance"          // JP:  38/318	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 25, 30, "Legionnaire TargetHead"          // JP:  34/352	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 28, 30, "Legionnaire WaterAffinity IV"    // JP:  36/388	AccMod 0
+//  Unused JP at Level 30: 42
+
+
+////// SKILLSET export Class: Legionnaire Legionnaire  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Legionnaire Attack"              // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Legionnaire Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Legionnaire Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Legionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Legionnaire Evade II"            // JP:  12/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Legionnaire Orders"              // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Legionnaire IndomitableWill"     // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Legionnaire TargetLeg"           // JP:   4/ 54	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Legionnaire Turtle I"            // JP:   6/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Legionnaire Awareness"           // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  8, 30, "Legionnaire TargetArm"           // JP:  18/ 98	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 10, 30, "Legionnaire DestroyShield"       // JP:  24/122	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Legionnaire Riposte"             // JP:  22/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Legionnaire RiposteSub"          // JP:   0/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 13, 30, "Legionnaire Turtle II"           // JP:  30/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 16, 30, "Legionnaire DestroyHelm"         // JP:  40/214	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 18, 30, "Legionnaire Discipline"          // JP:  32/246	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 20, 30, "Legionnaire TargetHead"          // JP:  34/280	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 23, 30, "Legionnaire OffBalance"          // JP:  38/318	AccMod 0
+//  Unused JP at Level 30: 112
+
+
+////// SKILLSET export Class: Legionnaire Legionnaire  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Legionnaire Attack"              // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Legionnaire Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Legionnaire Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Legionnaire AirAffinity I"       // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Legionnaire AirAffinity II"      // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Legionnaire Orders"              // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Legionnaire PracticedManeuvers"  // JP:   2/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Legionnaire Evade II"            // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Legionnaire TargetLeg"           // JP:   4/ 40	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Legionnaire AirAffinity III"     // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Legionnaire Turtle I"            // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Legionnaire Awareness"           // JP:  20/ 96	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Legionnaire IndomitableWill"     // JP:  18/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Legionnaire DestroyShield"       // JP:  24/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Legionnaire Riposte"             // JP:  22/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Legionnaire RiposteSub"          // JP:   0/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Legionnaire TargetArm"           // JP:  18/178	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 16, 30, "Legionnaire AirAffinity IV"      // JP:  36/214	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 18, 30, "Legionnaire Discipline"          // JP:  32/246	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 20, 30, "Legionnaire TargetHead"          // JP:  34/280	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Legionnaire Turtle II"           // JP:  30/310	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 25, 30, "Legionnaire DestroyHelm"         // JP:  40/350	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 28, 30, "Legionnaire OffBalance"          // JP:  38/388	AccMod 0
+//  Unused JP at Level 30: 42
+
+
+////// SKILLSET export Class: Legionnaire Legionnaire  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Legionnaire Attack"              // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Legionnaire Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Legionnaire Shield"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Legionnaire FireAffinity I"      // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Legionnaire FireAffinity II"     // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Legionnaire Orders"              // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Legionnaire PracticedManeuvers"  // JP:   2/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Legionnaire Evade II"            // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Legionnaire TargetLeg"           // JP:   4/ 40	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Legionnaire PrecisionAttack"     // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Legionnaire Awareness"           // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Legionnaire Turtle I"            // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Legionnaire DestroyShield"       // JP:  24/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "Legionnaire FireAffinity III"    // JP:  20/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Legionnaire IndomitableWill"     // JP:  18/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Legionnaire Riposte"             // JP:  22/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Legionnaire RiposteSub"          // JP:   0/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Legionnaire TargetArm"           // JP:  18/178	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 16, 30, "Legionnaire DestroyHelm"         // JP:  40/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 18, 30, "Legionnaire Discipline"          // JP:  32/250	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 20, 30, "Legionnaire Turtle II"           // JP:  30/280	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 23, 30, "Legionnaire FireAffinity IV"     // JP:  36/316	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 25, 30, "Legionnaire OffBalance"          // JP:  38/354	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 28, 30, "Legionnaire TargetHead"          // JP:  34/388	AccMod -5
+//  Unused JP at Level 30: 42
+
+
+
+

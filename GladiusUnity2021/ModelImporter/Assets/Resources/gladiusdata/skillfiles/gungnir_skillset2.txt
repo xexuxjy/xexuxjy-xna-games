@@ -1,0 +1,36 @@
+////// SKILLSET export Class: Gungnir Gungnir  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Gungnir Attack"                  // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Gungnir DistanceThrow I"         // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Gungnir Combo I"                 // JP:   6/  6
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Gungnir ExplodingJavelin"        // JP:   4/ 10
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Gungnir TargetShield"            // JP:   6/ 16
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Gungnir BearForm I"              // JP:   8/ 24
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Attack"                     // JP:   0/ 24
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Evade"                      // JP:   0/ 24
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Gungnir Combo II"                // JP:  12/ 36
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Bite"                       // JP:   4/ 40
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Bulldoze I"                 // JP:   2/ 42
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Combo I"                    // JP:   6/ 48
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Combo II"                   // JP:  12/ 60
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear RagingBearSub"              // JP:   0/ 60
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear Turtle I"                   // JP:   6/ 66
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Bear WintersFat"                 // JP:   6/ 72
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Gungnir TargetArm"               // JP:  10/ 82
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Bear Paw I"                      // JP:  12/ 94
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Gungnir DistanceThrow II"        // JP:  12/106
+MODLEVELRANGESKILL:  skillsetxboxdemo,  7, 30, "Bear Charge"                     // JP:  14/120
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Bear Attack II"                  // JP:  18/138
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Bear Combo III"                  // JP:  22/160
+MODLEVELRANGESKILL:  skillsetxboxdemo, 11, 30, "Bear Hibernation"                // JP:  22/182
+MODLEVELRANGESKILL:  skillsetxboxdemo, 12, 30, "Gungnir TargetLeg"               // JP:  18/200
+MODLEVELRANGESKILL:  skillsetxboxdemo, 14, 30, "Bear Hug"                        // JP:  24/224
+MODLEVELRANGESKILL:  skillsetxboxdemo, 15, 30, "Gungnir DistanceThrow III"       // JP:  20/244
+MODLEVELRANGESKILL:  skillsetxboxdemo, 17, 30, "Bear Hug II"                     // JP:  30/274
+MODLEVELRANGESKILL:  skillsetxboxdemo, 19, 30, "Bear Paw II"                     // JP:  22/296
+MODLEVELRANGESKILL:  skillsetxboxdemo, 20, 30, "Gungnir Combo III"               // JP:  22/318
+MODLEVELRANGESKILL:  skillsetxboxdemo, 22, 30, "Bear RagingBear"                 // JP:  30/348
+MODLEVELRANGESKILL:  skillsetxboxdemo, 24, 30, "Gungnir Cover"                   // JP:  22/370
+MODLEVELRANGESKILL:  skillsetxboxdemo, 25, 30, "Gungnir UnstoppableThrow"        // JP:  24/394
+MODLEVELRANGESKILL:  skillsetxboxdemo, 27, 30, "Gungnir PointBlankCantMiss"      // JP:  30/424
+MODLEVELRANGESKILL:  skillsetxboxdemo, 30, 30, "Bear Attack III"                 // JP:  40/464
+//  Unused JP at Level 30: 6

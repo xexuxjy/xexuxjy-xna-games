@@ -1,0 +1,291 @@
+////// SKILLSET export Class: Barbarian Barbarian  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Barbarian Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Barbarian Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Barbarian TargetLeg"             // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Barbarian BearForm I"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Barbarian WolfForm I"            // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Wolf Attack"                     // JP:   0/ 16	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Wolf Evade"                      // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Wolf Courage"                    // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Wolf ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Barbarian Combo I"               // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Barbarian BearForm II"           // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear Attack II"                  // JP:  18/ 58	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear Turtle I"                   // JP:  12/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear WintersFat"                 // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Bear Paw I"                      // JP:  10/ 86	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Barbarian Combo II"              // JP:  12/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Barbarian Defend"                // JP:   6/104	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Barbarian Run I"                 // JP:  10/114	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Barbarian WolfForm II"           // JP:  12/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Wolf Nip"                        // JP:   4/130	AccMod 25
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Wolf PackMentality I"            // JP:   8/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Wolf TargetLeg"                  // JP:  10/148	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Wolf LupusCall"                  // JP:   6/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Barbarian TotemoftheBear"        // JP:  18/172	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Barbarian BearForm III"          // JP:  30/202	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Bear Bulldoze I"                 // JP:   2/204	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Bear Paw II"                     // JP:  24/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Bear Hug"                        // JP:  20/248	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Bear RakingAttack"               // JP:  36/284	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "Barbarian Combo III"             // JP:  22/306	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Barbarian DestroyHelm"           // JP:  24/330	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Barbarian WolfForm III"          // JP:  22/352	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Wolf Snarl I"                    // JP:  20/372	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Wolf TearThroat"                 // JP:  18/390	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Wolf Turtle I"                   // JP:  12/402	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Wolf TargetArm"                  // JP:  24/426	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Barbarian BreakDefense"          // JP:  34/460	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Barbarian Combo IV"              // JP:  34/494	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Barbarian CripplingBlow"         // JP:  32/526	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Barbarian DestroyShield"         // JP:  40/566	AccMod 10
+MODLEVELRANGESKILL:  skillsetcomb, 27, 30, "Barbarian TotemoftheFalcon"      // JP:  38/604	AccMod 0
+//  Unused JP at Level 30: 56
+
+
+////// SKILLSET export Class: Barbarian Barbarian  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Barbarian Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Barbarian Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Barbarian EarthAffinity I"       // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Barbarian BearForm I"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Barbarian WolfForm I"            // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Wolf Attack"                     // JP:   0/ 16	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Wolf Evade"                      // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Wolf Courage"                    // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Wolf ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Barbarian Defend"                // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Barbarian TargetLeg"             // JP:   4/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Barbarian EarthAffinity II"      // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Barbarian BearForm II"           // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear Attack II"                  // JP:  18/ 72	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear Turtle I"                   // JP:  12/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear WintersFat"                 // JP:   6/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Bear Paw I"                      // JP:  10/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Barbarian Run I"                 // JP:  10/110	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Barbarian EarthAffinity III"     // JP:  20/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Barbarian WolfForm II"           // JP:  12/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf Nip"                        // JP:   4/146	AccMod 25
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf PackMentality I"            // JP:   8/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf TargetLeg"                  // JP:  10/164	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Wolf LupusCall"                  // JP:   6/170	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "Barbarian TotemoftheBear"        // JP:  18/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Barbarian BearForm III"          // JP:  30/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Bear Bulldoze I"                 // JP:   2/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Bear Paw II"                     // JP:  24/244	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Bear Hug"                        // JP:  20/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Bear RakingAttack"               // JP:  36/300	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Barbarian DestroyHelm"           // JP:  24/324	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Barbarian WolfForm III"          // JP:  22/346	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Wolf Snarl I"                    // JP:  20/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Wolf TearThroat"                 // JP:  18/384	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Wolf Turtle I"                   // JP:  12/396	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Wolf TargetArm"                  // JP:  24/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Barbarian BreakDefense"          // JP:  34/454	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Barbarian CripplingBlow"         // JP:  32/486	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Barbarian EarthAffinity IV"      // JP:  36/522	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Barbarian DestroyShield"         // JP:  40/562	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffE, 26, 30, "Barbarian TotemoftheFalcon"      // JP:  38/600	AccMod 0
+//  Unused JP at Level 30: 60
+
+
+////// SKILLSET export Class: Barbarian Barbarian  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Barbarian Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Barbarian Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Barbarian TargetLeg"             // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Barbarian BearForm I"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Barbarian WolfForm I"            // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Wolf Attack"                     // JP:   0/ 16	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Wolf Evade"                      // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Wolf Courage"                    // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Wolf ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Barbarian Defend"                // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Barbarian WaterAffinity I"       // JP:   4/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Barbarian Run I"                 // JP:  10/ 34	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Barbarian BearForm II"           // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Bear Attack II"                  // JP:  18/ 72	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Bear Turtle I"                   // JP:  12/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Bear WintersFat"                 // JP:   6/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Bear Paw I"                      // JP:  10/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Barbarian WaterAffinity II"      // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Barbarian TotemoftheBear"        // JP:  18/128	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Barbarian WolfForm II"           // JP:  12/140	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf Nip"                        // JP:   4/144	AccMod 25
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf PackMentality I"            // JP:   8/152	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf TargetLeg"                  // JP:  10/162	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Wolf LupusCall"                  // JP:   6/168	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Barbarian WaterAffinity III"     // JP:  20/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Barbarian BearForm III"          // JP:  30/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Bear Bulldoze I"                 // JP:   2/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Bear Paw II"                     // JP:  24/244	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Bear Hug"                        // JP:  20/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Bear RakingAttack"               // JP:  36/300	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 13, 30, "Barbarian DestroyHelm"           // JP:  24/324	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Barbarian WolfForm III"          // JP:  22/346	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Wolf Snarl I"                    // JP:  20/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Wolf TearThroat"                 // JP:  18/384	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Wolf Turtle I"                   // JP:  12/396	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Wolf TargetArm"                  // JP:  24/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Barbarian BreakDefense"          // JP:  34/454	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Barbarian CripplingBlow"         // JP:  32/486	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 21, 30, "Barbarian TotemoftheFalcon"      // JP:  38/524	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Barbarian DestroyShield"         // JP:  40/564	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffW, 26, 30, "Barbarian WaterAffinity IV"      // JP:  36/600	AccMod 0
+//  Unused JP at Level 30: 60
+
+
+////// SKILLSET export Class: Barbarian Barbarian  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Barbarian Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Barbarian Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Barbarian TargetLeg"             // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Barbarian BearForm I"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Barbarian WolfForm I"            // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Wolf Attack"                     // JP:   0/ 16	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Wolf Evade"                      // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Wolf Courage"                    // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Wolf ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Barbarian Defend"                // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Barbarian BearForm II"           // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear Attack II"                  // JP:  18/ 58	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear Turtle I"                   // JP:  12/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear WintersFat"                 // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Bear Paw I"                      // JP:  10/ 86	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Barbarian Run I"                 // JP:  10/ 96	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Barbarian TotemoftheBear"        // JP:  18/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Barbarian WolfForm II"           // JP:  12/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf Nip"                        // JP:   4/130	AccMod 25
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf PackMentality I"            // JP:   8/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf TargetLeg"                  // JP:  10/148	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Wolf LupusCall"                  // JP:   6/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Barbarian BearForm III"          // JP:  30/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Bear Bulldoze I"                 // JP:   2/186	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Bear Paw II"                     // JP:  24/210	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Bear Hug"                        // JP:  20/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Bear RakingAttack"               // JP:  36/266	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Barbarian BreakDefense"          // JP:  34/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 13, 30, "Barbarian DestroyHelm"           // JP:  24/324	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Barbarian WolfForm III"          // JP:  22/346	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Wolf Snarl I"                    // JP:  20/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Wolf TearThroat"                 // JP:  18/384	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Wolf Turtle I"                   // JP:  12/396	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Wolf TargetArm"                  // JP:  24/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Barbarian CripplingBlow"         // JP:  32/452	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Barbarian DestroyShield"         // JP:  40/492	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "Barbarian TotemoftheFalcon"      // JP:  38/530	AccMod 0
+//  Unused JP at Level 30: 130
+
+
+////// SKILLSET export Class: Barbarian Barbarian  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Barbarian Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Barbarian Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Barbarian AirAffinity I"         // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Barbarian AirAffinity II"        // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Barbarian BearForm I"            // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Attack"                     // JP:   0/ 22	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Evade"                      // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Bite"                       // JP:   4/ 26	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear ShiftReturn"                // JP:  -2/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Barbarian WolfForm I"            // JP:   2/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Wolf Attack"                     // JP:   0/ 26	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Wolf Evade"                      // JP:   0/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Wolf Courage"                    // JP:   0/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Wolf ShiftReturn"                // JP:  -2/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Barbarian Defend"                // JP:   6/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Barbarian Run I"                 // JP:  10/ 40	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Barbarian TargetLeg"             // JP:   4/ 44	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Barbarian AirAffinity III"       // JP:  20/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Barbarian BearForm II"           // JP:  20/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Bear Attack II"                  // JP:  18/102	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Bear Turtle I"                   // JP:  12/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Bear WintersFat"                 // JP:   6/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Bear Paw I"                      // JP:  10/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Barbarian WolfForm II"           // JP:  12/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf Nip"                        // JP:   4/146	AccMod 25
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf PackMentality I"            // JP:   8/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf TargetLeg"                  // JP:  10/164	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Wolf LupusCall"                  // JP:   6/170	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Barbarian TotemoftheBear"        // JP:  18/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Barbarian BearForm III"          // JP:  30/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Bear Bulldoze I"                 // JP:   2/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Bear Paw II"                     // JP:  24/244	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Bear Hug"                        // JP:  20/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Bear RakingAttack"               // JP:  36/300	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 13, 30, "Barbarian DestroyHelm"           // JP:  24/324	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Barbarian WolfForm III"          // JP:  22/346	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Wolf Snarl I"                    // JP:  20/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Wolf TearThroat"                 // JP:  18/384	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Wolf Turtle I"                   // JP:  12/396	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Wolf TargetArm"                  // JP:  24/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Barbarian AirAffinity IV"        // JP:  36/456	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Barbarian BreakDefense"          // JP:  34/490	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 21, 30, "Barbarian CripplingBlow"         // JP:  32/522	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Barbarian DestroyShield"         // JP:  40/562	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Barbarian TotemoftheFalcon"      // JP:  38/600	AccMod 0
+//  Unused JP at Level 30: 60
+
+
+////// SKILLSET export Class: Barbarian Barbarian  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Barbarian Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Barbarian Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Barbarian FireAffinity I"        // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Barbarian BearForm I"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Barbarian WolfForm I"            // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Wolf Attack"                     // JP:   0/ 16	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Wolf Evade"                      // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Wolf Courage"                    // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Wolf ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Barbarian Defend"                // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Barbarian TargetLeg"             // JP:   4/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Barbarian FireAffinity II"       // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Barbarian BearForm II"           // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear Attack II"                  // JP:  18/ 72	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear Turtle I"                   // JP:  12/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear WintersFat"                 // JP:   6/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Bear Paw I"                      // JP:  10/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Barbarian Run I"                 // JP:  10/110	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Barbarian FireAffinity III"      // JP:  20/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Barbarian WolfForm II"           // JP:  12/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf Nip"                        // JP:   4/146	AccMod 25
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf PackMentality I"            // JP:   8/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf TargetLeg"                  // JP:  10/164	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Wolf LupusCall"                  // JP:   6/170	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Barbarian TotemoftheBear"        // JP:  18/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Barbarian BearForm III"          // JP:  30/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Bear Bulldoze I"                 // JP:   2/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Bear Paw II"                     // JP:  24/244	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Bear Hug"                        // JP:  20/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Bear RakingAttack"               // JP:  36/300	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Barbarian DestroyHelm"           // JP:  24/324	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Barbarian WolfForm III"          // JP:  22/346	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Wolf Snarl I"                    // JP:  20/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Wolf TearThroat"                 // JP:  18/384	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Wolf Turtle I"                   // JP:  12/396	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Wolf TargetArm"                  // JP:  24/420	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Barbarian BreakDefense"          // JP:  34/454	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Barbarian CripplingBlow"         // JP:  32/486	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Barbarian TotemoftheFalcon"      // JP:  38/524	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Barbarian DestroyShield"         // JP:  40/564	AccMod 10
+//  Unused JP at Level 30: 96
+
+
+
+

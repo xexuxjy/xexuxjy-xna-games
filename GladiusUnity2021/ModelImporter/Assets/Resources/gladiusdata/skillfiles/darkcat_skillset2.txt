@@ -1,0 +1,23 @@
+////// SKILLSET export Class: DarkCat DarkCat  Affinity: None
+MODLEVELRANGESKILL:  skillsetsummon,  0, 30, "DarkCat Attack"                  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetsummon,  0, 30, "DarkCat Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  2, 30, "DarkCat Combo I"                 // JP:   4/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  2, 30, "DarkCat Paralyze"                // JP:   6/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  3, 30, "DarkCat Combo II"                // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  4, 30, "DarkCat Combo III"               // JP:  16/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  5, 30, "DarkCat Evade II"                // JP:  12/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  6, 30, "DarkCat Growl I"                 // JP:   8/ 58	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  6, 30, "DarkCat Paw I"                   // JP:  10/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  7, 30, "DarkCat PrecisionAttack"         // JP:  10/ 78	AccMod 15
+MODLEVELRANGESKILL:  skillsetsummon,  7, 30, "DarkCat Turtle I"                // JP:   6/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  8, 30, "DarkCat Turtle II"               // JP:   6/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  9, 30, "DarkCat Riposte"                 // JP:  22/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon,  9, 30, "DarkCat RiposteSub"              // JP:   0/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon, 11, 30, "DarkCat Combo IV"                // JP:  26/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon, 13, 30, "DarkCat Paw II"                  // JP:  34/172	AccMod -2
+MODLEVELRANGESKILL:  skillsetsummon, 16, 30, "DarkCat RakingAttack"            // JP:  36/208	AccMod -5
+MODLEVELRANGESKILL:  skillsetsummon, 18, 30, "DarkCat Reflexes"                // JP:  38/246	AccMod 0
+MODLEVELRANGESKILL:  skillsetsummon, 21, 30, "DarkCat Scratch"                 // JP:  40/286	AccMod 1
+//  Unused JP at Level 30: 144
+
+

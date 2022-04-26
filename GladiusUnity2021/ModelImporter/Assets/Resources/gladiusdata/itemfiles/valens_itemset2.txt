@@ -1,0 +1,3 @@
+ITEMSET export Class: Valens Valens  Region: Imperia Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:    valensadvanced,  1, 90,               "Munio's Sword",            "Munio's Armor",                      "Munio's Shield",                      "Munio's Shield",                      "" // 

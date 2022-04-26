@@ -1,0 +1,12 @@
+
+ITEMSET export Class: Murmillo Murmillo  Region: Imperia Affinity: Water
+//          :      variant, Lv,Lv,      weapon,                         armor,                                  shield,                         helmet                          accessory
+MODITEMSCOMP:   ITEMSETIWOXM,  6, 6,   "Water Crowbill",               "Water Regal Cape",                     "Hoplite",                      "Copper Campana",               "" // Cost: 264/926
+MODITEMSCOMP:   ITEMSETIWOXM,  7, 7,   "Water Crowbill",               "Water Regal Cape",                     "Throwing Hoplite",             "Copper Campana",               "" // Cost: 111/1037
+MODITEMSCOMP:   ITEMSETIWOXM,  8, 8,   "Water Crowbill",               "Water Heavy Leather Armor",            "Water Spiked Round Shield",    "Polished Campana",             "" // Cost: 932/1969
+MODITEMSCOMP:   ITEMSETIWOXM,  9, 9,   "Water Weighted Mallet",        "Water Cured Leather Armor",            "Water The Cat's Claw",         "Polished Campana",             "" // Cost: 1779/3748
+MODITEMSCOMP:   ITEMSETIWOXM, 10,10,   "Water Flyssa",                 "Water Reinforced Leather Armor",       "Steel Guard Shield",           "Earth Iron Campana",           "" // Cost: 1904/5652
+MODITEMSCOMP:   ITEMSETIWOXM, 11,11,   "Water Caithain",               "Water Reinforced Leather Armor",       "Air Teres Moles",              "Earth Iron Campana",           "" // Cost: 1418/7070
+MODITEMSCOMP:   ITEMSETIWOXM, 12,12,   "Water Slayer",                 "Water Latticed Skirt",                 "Nomad's Shield",               "Water Maritus",                "" // Cost: 42/7112
+MODITEMSCOMP:   ITEMSETIWOXM, 13,13,   "Water Mainz",                  "Water Latticed Skirt",                 "Water Razor Shield",           "Water Maritus",                "" // Cost: 2279/9391
+MODITEMSCOMP:   ITEMSETIWOXM, 14,14,   "Water The Crusher",            "Water Lorica Segmentus",               "Water Razor Shield",           "Water Jeweled Campana",        "" // Cost: 633/10024

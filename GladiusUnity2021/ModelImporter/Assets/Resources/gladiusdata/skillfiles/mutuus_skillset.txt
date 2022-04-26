@@ -1,0 +1,141 @@
+////// SKILLSET export Class: Mutuus Mutuus  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Mutuus Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Mutuus Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Mutuus Impale"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Mutuus Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Mutuus SacrificeAlly"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Mutuus AlliedAssault"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Mutuus Turtle I"                 // JP:   2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Mutuus Combo I"                  // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Mutuus Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Mutuus Combo II"                 // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Mutuus Garrison"                 // JP:  12/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Mutuus Roam"                     // JP:   6/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Mutuus Run I"                    // JP:   8/ 78	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Mutuus Combo III"                // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  9, 30, "Mutuus WideSwing"                // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Mutuus IndomitableWill"          // JP:  18/128	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "Mutuus CripplingBlow"            // JP:  30/158	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 14, 30, "Mutuus Run II"                   // JP:  32/190	AccMod -20
+MODLEVELRANGESKILL:  skillsetcomb, 16, 30, "Mutuus Turtle II"                // JP:  22/212	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 18, 30, "Mutuus Combo IV"                 // JP:  34/246	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 21, 30, "Mutuus HeavyStrike"              // JP:  40/286	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb, 23, 30, "Mutuus ImmediateResponse"        // JP:  38/324	AccMod 0
+//  Unused JP at Level 30: 106
+
+
+////// SKILLSET export Class: Mutuus Mutuus  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Mutuus Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Mutuus Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Mutuus Impale"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Mutuus Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Mutuus SacrificeAlly"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Mutuus AlliedAssault"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Mutuus Turtle I"                 // JP:   2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Mutuus Roam"                     // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Mutuus Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Mutuus Garrison"                 // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Mutuus IndomitableWill"          // JP:  18/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Mutuus Run I"                    // JP:   8/ 78	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Mutuus Turtle II"                // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "Mutuus WideSwing"                // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Mutuus CripplingBlow"            // JP:  30/140	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Mutuus Run II"                   // JP:  32/172	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffE, 16, 30, "Mutuus HeavyStrike"              // JP:  40/212	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 18, 30, "Mutuus ImmediateResponse"        // JP:  38/250	AccMod 0
+//  Unused JP at Level 30: 180
+
+
+////// SKILLSET export Class: Mutuus Mutuus  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Mutuus Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Mutuus Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Mutuus Impale"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Mutuus Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Mutuus SacrificeAlly"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Mutuus AlliedAssault"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Mutuus Turtle I"                 // JP:   2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Mutuus Roam"                     // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Mutuus Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Mutuus Garrison"                 // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Mutuus IndomitableWill"          // JP:  18/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Mutuus Run I"                    // JP:   8/ 78	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Mutuus Turtle II"                // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Mutuus WideSwing"                // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Mutuus CripplingBlow"            // JP:  30/140	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 13, 30, "Mutuus Run II"                   // JP:  32/172	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffW, 16, 30, "Mutuus HeavyStrike"              // JP:  40/212	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 18, 30, "Mutuus ImmediateResponse"        // JP:  38/250	AccMod 0
+//  Unused JP at Level 30: 180
+
+
+////// SKILLSET export Class: Mutuus Mutuus  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Mutuus Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Mutuus Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Mutuus Impale"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Mutuus Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Mutuus DarkAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Mutuus AlliedAssault"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Mutuus Turtle I"                 // JP:   2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Mutuus DarkAffinity II"          // JP:  10/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Mutuus Garrison"                 // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Mutuus SacrificeAlly"            // JP:   4/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Mutuus Roam"                     // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Mutuus Run I"                    // JP:   8/ 54	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Mutuus WideSwing"                // JP:  10/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Mutuus Awareness"                // JP:  20/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Mutuus CripplingBlow"            // JP:  30/114	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Mutuus DarkAffinity III"         // JP:  20/134	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Mutuus IndomitableWill"          // JP:  18/152	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 13, 30, "Mutuus Turtle II"                // JP:  22/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 16, 30, "Mutuus HeavyStrike"              // JP:  40/214	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 18, 30, "Mutuus Run II"                   // JP:  32/246	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffD, 21, 30, "Mutuus ImmediateResponse"        // JP:  38/284	AccMod 0
+//  Unused JP at Level 30: 146
+
+
+////// SKILLSET export Class: Mutuus Mutuus  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Mutuus Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Mutuus Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Mutuus Impale"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Mutuus Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Mutuus SacrificeAlly"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Mutuus AlliedAssault"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Mutuus Turtle I"                 // JP:   2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Mutuus Roam"                     // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Mutuus Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Mutuus Garrison"                 // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Mutuus IndomitableWill"          // JP:  18/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Mutuus Run I"                    // JP:   8/ 78	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Mutuus Turtle II"                // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Mutuus WideSwing"                // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Mutuus CripplingBlow"            // JP:  30/140	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 13, 30, "Mutuus Run II"                   // JP:  32/172	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffA, 16, 30, "Mutuus HeavyStrike"              // JP:  40/212	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 18, 30, "Mutuus ImmediateResponse"        // JP:  38/250	AccMod 0
+//  Unused JP at Level 30: 180
+
+
+////// SKILLSET export Class: Mutuus Mutuus  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Mutuus Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Mutuus Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Mutuus Impale"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Mutuus Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Mutuus SacrificeAlly"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Mutuus AlliedAssault"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Mutuus Turtle I"                 // JP:   2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Mutuus Roam"                     // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Mutuus Awareness"                // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Mutuus Garrison"                 // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Mutuus IndomitableWill"          // JP:  18/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Mutuus Run I"                    // JP:   8/ 78	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Mutuus Turtle II"                // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Mutuus WideSwing"                // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Mutuus CripplingBlow"            // JP:  30/140	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Mutuus Run II"                   // JP:  32/172	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffF, 16, 30, "Mutuus HeavyStrike"              // JP:  40/212	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 18, 30, "Mutuus ImmediateResponse"        // JP:  38/250	AccMod 0
+//  Unused JP at Level 30: 180
+
+
+
+

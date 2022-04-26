@@ -1,0 +1,189 @@
+//JSD 8/8/03 Added SummonAffinityPower so the summoners can get affinity and subsequently summon
+
+////// SKILLSET export Class: Summoner Summoner  Affinity: Dark
+MODLEVELRANGESKILL:  SummonerDarkFocus,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerDarkFocus,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerDarkFocus,  0, 30, "Summoner SummonSkeleton I"       // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerDarkFocus,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerDarkFocus,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerDarkFocus,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerDarkFocus,  9, 30, "Summoner Turtle I"               // JP:  18/ 94
+MODLEVELRANGESKILL:  SummonerDarkFocus, 10, 30, "Summoner SummonSkeleton II"      // JP:  20/114
+MODLEVELRANGESKILL:  SummonerDarkFocus, 11, 30, "Summoner SummonLich I"           // JP:  22/136
+MODLEVELRANGESKILL:  SummonerDarkFocus, 12, 30, "Summoner Attack II"              // JP:  24/160
+MODLEVELRANGESKILL:  SummonerDarkFocus, 16, 30, "Summoner SummonTaintedAirBeast"  // JP:  32/258
+MODLEVELRANGESKILL:  SummonerDarkFocus, 16, 30, "Summoner SummonTaintedEarthBeast"  // JP:  32/258
+MODLEVELRANGESKILL:  SummonerDarkFocus, 16, 30, "Summoner SummonTaintedFireBeast"  // JP:  32/258
+MODLEVELRANGESKILL:  SummonerDarkFocus, 16, 30, "Summoner SummonTaintedWaterBeast"  // JP:  32/258
+MODLEVELRANGESKILL:  SummonerDarkFocus, 21, 30, "Summoner SummonLich II"          // JP:  40/332
+MODLEVELRANGESKILL:  SummonerDarkFocus, 26, 30, "Summoner Turtle II"              // JP:  38/406
+
+////// SKILLSET export Class: Summoner Summoner  Affinity: Earth
+MODLEVELRANGESKILL:  SummonerEarthFocus,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerEarthFocus,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerEarthFocus,  0, 30, "Summoner SummonSkeleton I"       // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerEarthFocus,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerEarthFocus,  1, 30, "Summoner EarthAffinity I"        // JP:   4/  4
+MODLEVELRANGESKILL:  SummonerEarthFocus,  2, 30, "Summoner SummonEarthBeast"       // JP:   4/ 10
+MODLEVELRANGESKILL:  SummonerEarthFocus,  3, 30, "Summoner EarthAffinity II"       // JP:  10/ 20
+MODLEVELRANGESKILL:  SummonerEarthFocus,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerEarthFocus,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerEarthFocus,  7, 30, "Summoner EarthAffinity III"      // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerEarthFocus,  9, 30, "Summoner Turtle I"               // JP:  18/ 94
+MODLEVELRANGESKILL:  SummonerEarthFocus, 10, 30, "Summoner SummonSkeleton II"      // JP:  20/114
+MODLEVELRANGESKILL:  SummonerEarthFocus, 11, 30, "Summoner SummonLich I"           // JP:  22/136
+MODLEVELRANGESKILL:  SummonerEarthFocus, 12, 30, "Summoner Attack II"              // JP:  24/160
+MODLEVELRANGESKILL:  SummonerEarthFocus, 14, 30, "Summoner EarthAffinity IV"       // JP:  36/196
+MODLEVELRANGESKILL:  SummonerEarthFocus, 16, 30, "Summoner SummonTaintedEarthBeast"  // JP:  32/258
+MODLEVELRANGESKILL:  SummonerEarthFocus, 21, 30, "Summoner SummonLich II"          // JP:  40/332
+MODLEVELRANGESKILL:  SummonerEarthFocus, 26, 30, "Summoner Turtle II"              // JP:  38/406
+
+////// SKILLSET export Class: Summoner Summoner  Affinity: Water
+MODLEVELRANGESKILL:  SummonerWaterFocus,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerWaterFocus,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerWaterFocus,  0, 30, "Summoner SummonSkeleton I"       // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerWaterFocus,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerWaterFocus,  1, 30, "Summoner WaterAffinity I"        // JP:   4/  6
+MODLEVELRANGESKILL:  SummonerWaterFocus,  3, 30, "Summoner WaterAffinity II"       // JP:  10/ 26
+MODLEVELRANGESKILL:  SummonerWaterFocus,  4, 30, "Summoner SummonWaterBeast"       // JP:   8/ 34
+MODLEVELRANGESKILL:  SummonerWaterFocus,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerWaterFocus,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerWaterFocus,  7, 30, "Summoner WaterAffinity III"      // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerWaterFocus,  9, 30, "Summoner Turtle I"               // JP:  18/ 94
+MODLEVELRANGESKILL:  SummonerWaterFocus, 10, 30, "Summoner SummonSkeleton II"      // JP:  20/114
+MODLEVELRANGESKILL:  SummonerWaterFocus, 11, 30, "Summoner SummonLich I"           // JP:  22/136
+MODLEVELRANGESKILL:  SummonerWaterFocus, 12, 30, "Summoner Attack II"              // JP:  24/160
+MODLEVELRANGESKILL:  SummonerWaterFocus, 14, 30, "Summoner WaterAffinity IV"       // JP:  36/196
+MODLEVELRANGESKILL:  SummonerWaterFocus, 21, 30, "Summoner SummonLich II"          // JP:  40/332
+MODLEVELRANGESKILL:  SummonerWaterFocus, 24, 30, "Summoner SummonTaintedWaterBeast"  // JP:  36/368
+MODLEVELRANGESKILL:  SummonerWaterFocus, 26, 30, "Summoner Turtle II"              // JP:  38/406
+
+////// SKILLSET export Class: Summoner Summoner  Affinity: Air
+MODLEVELRANGESKILL:  SummonerAirFocus,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerAirFocus,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerAirFocus,  0, 30, "Summoner SummonSkeleton I"       // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerAirFocus,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerAirFocus,  1, 30, "Summoner AirAffinity I"          // JP:   4/  4
+MODLEVELRANGESKILL:  SummonerAirFocus,  1, 30, "Summoner SummonAirBeast"         // JP:   2/  6
+MODLEVELRANGESKILL:  SummonerAirFocus,  3, 30, "Summoner AirAffinity II"         // JP:  10/ 20
+MODLEVELRANGESKILL:  SummonerAirFocus,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerAirFocus,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerAirFocus,  7, 30, "Summoner AirAffinity III"        // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerAirFocus,  9, 30, "Summoner Turtle I"               // JP:  18/ 94
+MODLEVELRANGESKILL:  SummonerAirFocus, 10, 30, "Summoner SummonSkeleton II"      // JP:  20/114
+MODLEVELRANGESKILL:  SummonerAirFocus, 11, 30, "Summoner SummonLich I"           // JP:  22/136
+MODLEVELRANGESKILL:  SummonerAirFocus, 12, 30, "Summoner Attack II"              // JP:  24/160
+MODLEVELRANGESKILL:  SummonerAirFocus, 14, 30, "Summoner AirAffinity IV"         // JP:  36/196
+MODLEVELRANGESKILL:  SummonerAirFocus, 15, 30, "Summoner SummonTaintedAirBeast"  // JP:  30/226
+MODLEVELRANGESKILL:  SummonerAirFocus, 21, 30, "Summoner SummonLich II"          // JP:  40/332
+MODLEVELRANGESKILL:  SummonerAirFocus, 26, 30, "Summoner Turtle II"              // JP:  38/406
+
+////// SKILLSET export Class: Summoner Summoner  Affinity: Fire
+MODLEVELRANGESKILL:  SummonerFireFocus,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerFireFocus,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerFireFocus,  0, 30, "Summoner SummonSkeleton I"       // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerFireFocus,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerFireFocus,  1, 30, "Summoner FireAffinity I"         // JP:   4/  4
+MODLEVELRANGESKILL:  SummonerFireFocus,  3, 30, "Summoner FireAffinity II"        // JP:  10/ 20
+MODLEVELRANGESKILL:  SummonerFireFocus,  3, 30, "Summoner SummonFireBeast"        // JP:   6/ 26
+//MODLEVELRANGESKILL:  SummonerFireFocus,  4, 30, "Summoner SummonWaterBeast"       // JP:   8/ 34
+MODLEVELRANGESKILL:  SummonerFireFocus,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerFireFocus,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerFireFocus,  7, 30, "Summoner FireAffinity III"       // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerFireFocus,  7, 30, "Summoner FireAffinity IV"        // JP:  22/ 98
+MODLEVELRANGESKILL:  SummonerFireFocus,  9, 30, "Summoner Turtle I"               // JP:  18/116
+MODLEVELRANGESKILL:  SummonerFireFocus, 10, 30, "Summoner SummonSkeleton II"      // JP:  20/136
+MODLEVELRANGESKILL:  SummonerFireFocus, 11, 30, "Summoner SummonLich I"           // JP:  22/158
+MODLEVELRANGESKILL:  SummonerFireFocus, 12, 30, "Summoner Attack II"              // JP:  24/182
+MODLEVELRANGESKILL:  SummonerFireFocus, 18, 30, "Summoner SummonTaintedFireBeast"  // JP:  34/278
+MODLEVELRANGESKILL:  SummonerFireFocus, 20, 30, "Summoner SummonLich II"          // JP:  40/318
+MODLEVELRANGESKILL:  SummonerFireFocus, 25, 30, "Summoner Turtle II"              // JP:  38/392
+
+
+
+MODLEVELRANGESKILL:  SummonerHGAir,     18, 30, "Summoner SummonAffinityPower"
+MODLEVELRANGESKILL:  SummonerHGAir,     18, 30, "Summoner SummonTaintedAirBeast"
+MODLEVELRANGESKILL:  SummonerHGAir,  0, 30, "Summoner Attack"                 
+MODLEVELRANGESKILL:  SummonerHGAir,  0, 30, "Summoner Evade"                  
+
+MODLEVELRANGESKILL:  SummonerHGEarth,     18, 30, "Summoner SummonAffinityPower"
+MODLEVELRANGESKILL:  SummonerHGEarth,   18, 30, "Summoner SummonTaintedEarthBeast"
+MODLEVELRANGESKILL:  SummonerHGEarth,  0, 30, "Summoner Attack"                 
+MODLEVELRANGESKILL:  SummonerHGEarth,  0, 30, "Summoner Evade"                  
+              
+MODLEVELRANGESKILL:  SummonerHGFire,     18, 30, "Summoner SummonAffinityPower"
+MODLEVELRANGESKILL:  SummonerHGFire,    18, 30, "Summoner SummonTaintedFireBeast"
+MODLEVELRANGESKILL:  SummonerHGFire,  0, 30, "Summoner Attack"                 
+MODLEVELRANGESKILL:  SummonerHGFire,  0, 30, "Summoner Evade"                  
+  
+MODLEVELRANGESKILL:  SummonerHGWater,  18, 30, "Summoner SummonAffinityPower"
+MODLEVELRANGESKILL:  SummonerHGWater,  18, 30, "Summoner SummonTaintedWaterBeast"
+MODLEVELRANGESKILL:  SummonerHGWater,  0, 30, "Summoner Attack"                
+MODLEVELRANGESKILL:  SummonerHGWater,  0, 30, "Summoner Evade"    
+
+//JSD 8/8/03 Added SummonAffinityPower so the summoners can get affinity and subsequently summon
+////// SKILLSET For qstPirgosFather  export Class: Summoner Summoner  Affinity: Air
+MODLEVELRANGESKILL:  SummonerqstPFA,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFA,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFA,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerqstPFA,  1, 30, "Summoner AirAffinity I"          // JP:   4/  4
+MODLEVELRANGESKILL:  SummonerqstPFA,  1, 30, "Summoner SummonAirBeast"         // JP:   2/  6
+MODLEVELRANGESKILL:  SummonerqstPFA,  3, 30, "Summoner AirAffinity II"         // JP:  10/ 20
+MODLEVELRANGESKILL:  SummonerqstPFA,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerqstPFA,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerqstPFA,  7, 30, "Summoner AirAffinity III"        // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerqstPFA,  9, 30, "Summoner Turtle I"               // JP:  18/ 94
+MODLEVELRANGESKILL:  SummonerqstPFA, 12, 30, "Summoner Attack II"              // JP:  24/160
+MODLEVELRANGESKILL:  SummonerqstPFA, 14, 30, "Summoner AirAffinity IV"         // JP:  36/196
+MODLEVELRANGESKILL:  SummonerqstPFA, 15, 30, "Summoner SummonTaintedAirBeast"  // JP:  30/226
+MODLEVELRANGESKILL:  SummonerqstPFA, 26, 30, "Summoner Turtle II"                  
+
+////// SKILLSET For qstPirgosFather  export Class: Summoner Summoner  Affinity: Earth
+MODLEVELRANGESKILL:  SummonerqstPFE,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFE,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFF,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerqstPFE,  1, 30, "Summoner EarthAffinity I"        // JP:   4/  4
+MODLEVELRANGESKILL:  SummonerqstPFE,  2, 30, "Summoner SummonEarthBeast"       // JP:   4/ 10
+MODLEVELRANGESKILL:  SummonerqstPFE,  3, 30, "Summoner EarthAffinity II"       // JP:  10/ 20
+MODLEVELRANGESKILL:  SummonerqstPFE,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerqstPFE,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerqstPFE,  7, 30, "Summoner EarthAffinity III"      // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerqstPFE,  9, 30, "Summoner Turtle I"               // JP:  18/ 94
+MODLEVELRANGESKILL:  SummonerqstPFE, 12, 30, "Summoner Attack II"              // JP:  24/160
+MODLEVELRANGESKILL:  SummonerqstPFE, 14, 30, "Summoner EarthAffinity IV"       // JP:  36/196
+MODLEVELRANGESKILL:  SummonerqstPFE, 16, 30, "Summoner SummonTaintedEarthBeast"  // JP:  32/258
+MODLEVELRANGESKILL:  SummonerqstPFE, 26, 30, "Summoner Turtle II"              // JP:  38/406
+
+////// SKILLSET For qstPirgosFather  export Class: Summoner Summoner  Affinity: Fire
+MODLEVELRANGESKILL:  SummonerqstPFF,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFF,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFF,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerqstPFF,  1, 30, "Summoner FireAffinity I"         // JP:   4/  4
+MODLEVELRANGESKILL:  SummonerqstPFF,  3, 30, "Summoner FireAffinity II"        // JP:  10/ 20
+MODLEVELRANGESKILL:  SummonerqstPFF,  3, 30, "Summoner SummonFireBeast"        // JP:   6/ 26
+MODLEVELRANGESKILL:  SummonerqstPFF,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerqstPFF,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerqstPFF,  7, 30, "Summoner FireAffinity III"       // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerqstPFF,  7, 30, "Summoner FireAffinity IV"        // JP:  22/ 98
+MODLEVELRANGESKILL:  SummonerqstPFF,  9, 30, "Summoner Turtle I"               // JP:  18/116
+MODLEVELRANGESKILL:  SummonerqstPFF, 12, 30, "Summoner Attack II"              // JP:  24/182
+MODLEVELRANGESKILL:  SummonerqstPFF, 18, 30, "Summoner SummonTaintedFireBeast"  // JP:  34/278
+MODLEVELRANGESKILL:  SummonerqstPFF, 25, 30, "Summoner Turtle II"              // JP:  38/392
+
+////// SKILLSET For qstPirgosFather  export Class: Summoner Summoner  Affinity: Water
+MODLEVELRANGESKILL:  SummonerqstPFW,  0, 30, "Summoner Attack"                 // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFW,  0, 30, "Summoner Evade"                  // JP:   0/  0
+MODLEVELRANGESKILL:  SummonerqstPFW,  0, 30, "Summoner SummonAffinityPower"    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  SummonerqstPFW,  1, 30, "Summoner WaterAffinity I"        // JP:   4/  6
+MODLEVELRANGESKILL:  SummonerqstPFW,  3, 30, "Summoner WaterAffinity II"       // JP:  10/ 26
+MODLEVELRANGESKILL:  SummonerqstPFW,  4, 30, "Summoner SummonWaterBeast"       // JP:   8/ 34
+MODLEVELRANGESKILL:  SummonerqstPFW,  5, 30, "Summoner Incapacitate"           // JP:  10/ 44
+MODLEVELRANGESKILL:  SummonerqstPFW,  6, 30, "Summoner Tornado"                // JP:  12/ 56
+MODLEVELRANGESKILL:  SummonerqstPFW,  7, 30, "Summoner WaterAffinity III"      // JP:  20/ 76
+MODLEVELRANGESKILL:  SummonerqstPFW,  9, 30, "Summoner Turtle I"               // JP:  18/ 94
+MODLEVELRANGESKILL:  SummonerqstPFW, 12, 30, "Summoner Attack II"              // JP:  24/160
+MODLEVELRANGESKILL:  SummonerqstPFW, 14, 30, "Summoner WaterAffinity IV"       // JP:  36/196
+MODLEVELRANGESKILL:  SummonerqstPFW, 24, 30, "Summoner SummonTaintedWaterBeast"  // JP:  36/368
+MODLEVELRANGESKILL:  SummonerqstPFW, 26, 30, "Summoner Turtle II"              // JP:  38/406
+           
+

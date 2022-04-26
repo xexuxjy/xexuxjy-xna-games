@@ -1,0 +1,6 @@
+//   LevelLow, Level High, Weapon,, armor, shield, helmet
+//SKELETON
+
+ITEMSCOMP:	1,	100,	"Fire Dolabra",	"Earth Chainmail Guard",	"Earth Embossed Leather Shield",	"Earth Light Heavy Pondus"
+
+

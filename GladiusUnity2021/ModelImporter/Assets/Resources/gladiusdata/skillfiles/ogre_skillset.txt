@@ -1,0 +1,154 @@
+////// SKILLSET export Class: Ogre Ogre  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ogre Attack"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ogre Block"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ogre Purge"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Ogre ChargingAttack"             // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Ogre Combo I"                    // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Ogre Combo II"                   // JP:  12/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Ogre Defend I"                   // JP:   8/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Ogre Run I"                      // JP:   6/ 36	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Ogre DeliberateNature"           // JP:  12/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Ogre Combo III"                  // JP:  22/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Ogre WideSwing"                  // JP:  10/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Ogre FearsomeFunk"               // JP:  20/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Ogre DestroyShield"              // JP:  24/124	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Ogre IndomitableWill"            // JP:  18/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "Ogre Uppercut"                   // JP:  18/160	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb, 14, 30, "Ogre LecherousGrin"              // JP:  22/182	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 16, 30, "Ogre Awareness"                  // JP:  34/216	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 18, 30, "Ogre Combo IV"                   // JP:  34/250	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 20, 30, "Ogre Stench"                     // JP:  30/280	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 23, 30, "Ogre BackAtcha"                  // JP:  38/318	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 25, 30, "Ogre Defend II"                  // JP:  32/350	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 28, 30, "Ogre DestroyHelm"                // JP:  40/390	AccMod 0
+//  Unused JP at Level 30: 40
+
+
+////// SKILLSET export Class: Ogre Ogre  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ogre Attack"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ogre Block"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ogre Purge"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Ogre ChargingAttack"             // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Ogre Defend I"                   // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Ogre DeliberateNature"           // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Ogre EarthAffinity I"            // JP:   4/ 28	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Ogre EarthAffinity II"           // JP:  10/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Ogre Run I"                      // JP:   6/ 44	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Ogre WideSwing"                  // JP:  10/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Ogre DestroyShield"              // JP:  24/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Ogre EarthAffinity III"          // JP:  20/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Ogre Defend II"                  // JP:  32/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Ogre FearsomeFunk"               // JP:  20/150	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Ogre IndomitableWill"            // JP:  18/168	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Ogre LecherousGrin"              // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 16, 30, "Ogre Stench"                     // JP:  30/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 18, 30, "Ogre Uppercut"                   // JP:  18/238	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE, 20, 30, "Ogre Awareness"                  // JP:  34/272	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "Ogre BackAtcha"                  // JP:  38/310	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 25, 30, "Ogre DestroyHelm"                // JP:  40/350	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 28, 30, "Ogre EarthAffinity IV"           // JP:  36/386	AccMod 0
+//  Unused JP at Level 30: 44
+
+
+////// SKILLSET export Class: Ogre Ogre  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ogre Attack"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ogre Block"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ogre Purge"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Ogre ChargingAttack"             // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Ogre Defend I"                   // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Ogre DeliberateNature"           // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Ogre Run I"                      // JP:   6/ 30	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Ogre WaterAffinity I"            // JP:   4/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Ogre FearsomeFunk"               // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Ogre WaterAffinity II"           // JP:  10/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Ogre IndomitableWill"            // JP:  18/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Ogre Uppercut"                   // JP:  18/100	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Ogre WideSwing"                  // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "Ogre WaterAffinity III"          // JP:  20/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Ogre DestroyShield"              // JP:  24/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Ogre Awareness"                  // JP:  34/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 16, 30, "Ogre Defend II"                  // JP:  32/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 18, 30, "Ogre LecherousGrin"              // JP:  22/242	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 20, 30, "Ogre BackAtcha"                  // JP:  38/280	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Ogre Stench"                     // JP:  30/310	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 25, 30, "Ogre DestroyHelm"                // JP:  40/350	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 28, 30, "Ogre WaterAffinity IV"           // JP:  36/386	AccMod 0
+//  Unused JP at Level 30: 44
+
+
+////// SKILLSET export Class: Ogre Ogre  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ogre Attack"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ogre Block"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ogre Purge"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Ogre ChargingAttack"             // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Ogre Defend I"                   // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Ogre DeliberateNature"           // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Ogre Run I"                      // JP:   6/ 30	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Ogre WideSwing"                  // JP:  10/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Ogre DestroyShield"              // JP:  24/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Ogre FearsomeFunk"               // JP:  20/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Ogre IndomitableWill"            // JP:  18/102	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 10, 30, "Ogre LecherousGrin"              // JP:  22/124	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Ogre Uppercut"                   // JP:  18/142	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD, 13, 30, "Ogre Defend II"                  // JP:  32/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 15, 30, "Ogre Stench"                     // JP:  30/204	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 18, 30, "Ogre Awareness"                  // JP:  34/238	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 20, 30, "Ogre BackAtcha"                  // JP:  38/276	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 23, 30, "Ogre DestroyHelm"                // JP:  40/316	AccMod 0
+//  Unused JP at Level 30: 114
+
+
+////// SKILLSET export Class: Ogre Ogre  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ogre Attack"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ogre Block"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ogre Purge"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Ogre AirAffinity I"              // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Ogre AirAffinity II"             // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Ogre ChargingAttack"             // JP:   4/ 18	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Ogre Run I"                      // JP:   6/ 24	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Ogre Defend I"                   // JP:   8/ 32	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Ogre AirAffinity III"            // JP:  20/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Ogre DeliberateNature"           // JP:  12/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Ogre FearsomeFunk"               // JP:  20/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Ogre WideSwing"                  // JP:  10/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Ogre IndomitableWill"            // JP:  18/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "Ogre Uppercut"                   // JP:  18/130	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Ogre DestroyShield"              // JP:  24/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Ogre AirAffinity IV"             // JP:  36/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 16, 30, "Ogre LecherousGrin"              // JP:  22/212	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 18, 30, "Ogre Awareness"                  // JP:  34/246	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 20, 30, "Ogre Defend II"                  // JP:  32/278	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Ogre Stench"                     // JP:  30/308	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 25, 30, "Ogre BackAtcha"                  // JP:  38/346	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 28, 30, "Ogre DestroyHelm"                // JP:  40/386	AccMod 0
+//  Unused JP at Level 30: 44
+
+
+////// SKILLSET export Class: Ogre Ogre  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ogre Attack"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ogre Block"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ogre Purge"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Ogre ChargingAttack"             // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Ogre Defend I"                   // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Ogre DeliberateNature"           // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Ogre FireAffinity I"             // JP:   4/ 28	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Ogre FireAffinity II"            // JP:  10/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Ogre Run I"                      // JP:   6/ 44	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Ogre WideSwing"                  // JP:  10/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Ogre DestroyShield"              // JP:  24/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Ogre FearsomeFunk"               // JP:  20/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "Ogre Defend II"                  // JP:  32/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Ogre FireAffinity III"           // JP:  20/150	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Ogre IndomitableWill"            // JP:  18/168	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Ogre LecherousGrin"              // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 16, 30, "Ogre Stench"                     // JP:  30/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 18, 30, "Ogre Uppercut"                   // JP:  18/238	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF, 20, 30, "Ogre Awareness"                  // JP:  34/272	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "Ogre BackAtcha"                  // JP:  38/310	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 25, 30, "Ogre DestroyHelm"                // JP:  40/350	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 28, 30, "Ogre FireAffinity IV"            // JP:  36/386	AccMod 0
+//  Unused JP at Level 30: 44
+
+
+
+

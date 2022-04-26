@@ -1,0 +1,2815 @@
+// Copyright (c) 2003, LucasArts Entertainment Company LLC
+// Version 0.0
+
+// prizes.tok
+// Saved by cskilbeck
+
+PRIZE 	"AheadOfThePackPro"
+PRIZECASH	3200 6400
+PRIZEEXP	0 5
+PRIZEITEM	"Water Cor"	0
+PRIZEITEM	"Air Barricade Shield"	0
+PRIZEITEM	"Fire Iron Helm"	0
+PRIZEITEM	"Earth Bronze Breastplate"	0
+
+PRIZE 	"AheadOfThePackUrsula"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+PRIZEITEM	"Pike"	0
+PRIZEITEM	"Earth Bone Club"	0
+PRIZEITEM	"Earth Wolfskin"	0
+PRIZEITEM	"Earth Wolf Cowl"	0
+
+PRIZE 	"AheadOfThePackValens"
+PRIZECASH	1600 3200
+PRIZEEXP	0 5
+PRIZEITEM	"Water Egchos"	0
+PRIZEITEM	"Fire Bamboo Shield"	0
+PRIZEITEM	"Earth Confortari"	0
+PRIZEITEM	"Air Hooded Wrap"	0
+
+PRIZE 	"ArenaCertification"
+PRIZECASH	100 200
+PRIZEEXP	60 5
+PRIZEBADGE	"NordaghTalisman2"
+
+PRIZE 	"Average Prize"
+PRIZECASH	200 100
+PRIZEEXP	123 5
+PRIZEITEM	"Earth Weighted Mallet"	0
+PRIZEITEM	"Desert Viper"	0
+
+PRIZE 	"Basic Prize"
+PRIZECASH	100 420
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Tekuja Sword"	0
+PRIZEITEM	"Heirloom Pendant"	0
+
+PRIZE 	"BelfortAverage"
+PRIZECASH	5000 25
+PRIZEEXP	0 5
+PRIZEITEM	"Air Crowbill"	1
+PRIZEITEM	"Earth Crowbill"	1
+PRIZEITEM	"Fire Crowbill"	1
+PRIZEITEM	"Water Crowbill"	1
+
+PRIZE 	"BelfortAwesomeValens"
+PRIZECASH	5000 50
+PRIZEEXP	0 5
+PRIZEITEM	"Air Umbo"	1
+PRIZEITEM	"Earth Umbo"	1
+PRIZEITEM	"Fire Umbo"	1
+PRIZEITEM	"Water Umbo"	1
+
+PRIZE 	"BelfortBasicUrsula"
+PRIZECASH	500 250
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Dolabra"	1
+PRIZEITEM	"Fire Soldier's Scutum"	1
+PRIZEITEM	"Hoplite"	1
+
+PRIZE 	"BelfortBasicValens"
+PRIZECASH	1000 30
+PRIZEEXP	0 5
+PRIZEITEM	"Machera"	1
+PRIZEITEM	"Estoc"	1
+
+PRIZE 	"BelfortBeast"
+PRIZECASH	250 50
+PRIZEEXP	0 5
+PRIZEITEM	"Air Reinforced Leather Armor"	1
+PRIZEITEM	"Fire Reinforced Leather Armor"	1
+PRIZEITEM	"Earth Reinforced Leather Armor"	1
+PRIZEBADGE	"BelfortBeast"
+
+PRIZE 	"BelfortBeastMastery"
+PRIZECASH	500 250
+PRIZEEXP	0 5
+PRIZEITEM	"Collar of Force"	1
+PRIZEITEM	"Guard's Band"	1
+
+PRIZE 	"BelfortCash0"
+PRIZECASH	100 50
+PRIZEEXP	0 5
+
+PRIZE 	"BelfortCash03"
+PRIZECASH	2000 500
+PRIZEEXP	0 5
+
+PRIZE 	"BelfortCash1"
+PRIZECASH	500 250
+PRIZEEXP	0 5
+
+PRIZE 	"BelfortCash2"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+
+PRIZE 	"BelfortEndurancePRO"
+PRIZECASH	500 500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Studded Pondus"	1
+PRIZEITEM	"Earth Studded Pondus"	1
+PRIZEITEM	"Fire Studded Pondus"	1
+PRIZEITEM	"Water Studded Pondus"	1
+
+PRIZE 	"BelfortGloryPrizeValens"
+PRIZECASH	2500 150
+PRIZEEXP	0 5
+PRIZEITEM	"Air Pedes Attic"	1
+PRIZEITEM	"Earth Pedes Attic"	1
+PRIZEITEM	"Fire Pedes Attic"	1
+PRIZEITEM	"Water Pedes Attic"	1
+PRIZEBADGE	"BelfortGlory"
+
+PRIZE 	"BelfortTourneyPrize"
+PRIZECASH	1000 700
+PRIZEEXP	0 5
+PRIZEITEM	"Air Shield of the Visigoth"	1
+PRIZEITEM	"Earth Shield of the Visigoth"	1
+PRIZEITEM	"Fire Shield of the Visigoth"	1
+PRIZEITEM	"Water Shield of the Visigoth"	1
+
+PRIZE 	"BestOfBelfortUrsula"
+PRIZECASH	2000 200
+PRIZEEXP	0 5
+PRIZEITEM	"Air Sica"	1
+PRIZEITEM	"Fire Sica"	1
+PRIZEITEM	"Regal Cape"	0
+PRIZEITEM	"Air Comptus"	1
+PRIZEBADGE	"BelfortBadge"
+
+PRIZE 	"BestofBelfortValens"
+PRIZECASH	1500 250
+PRIZEEXP	0 5
+PRIZEITEM	"Air Metal Suit"	1
+PRIZEITEM	"Fire Metal Suit"	1
+PRIZEITEM	"Earth Metal Suit"	1
+PRIZEITEM	"Water Regal Cape"	0
+PRIZEBADGE	"BelfortBadge"
+
+PRIZE 	"CalthaRegional01"
+PRIZECASH	5000 2500
+PRIZEEXP	5 5
+
+PRIZE 	"Charlie Smith"
+PRIZEEXP	0 5
+PRIZEITEM	"Coral"	0
+PRIZEITEM	"Plea for Strength"	0
+PRIZEITEM	"Earth Heavy Fur Skirt"	0
+PRIZEITEM	"Dark Dragon Sword"	0
+
+PRIZE 	"Circle1FliuchPro"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Cor"	0
+PRIZEITEM	"Earth Boandey"	0
+PRIZEBADGE	"Circle1Fliuch"
+
+PRIZE 	"Circle1FliuchUrsula"
+PRIZECASH	100 300
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Jaculum"	0
+PRIZEITEM	"Earth Wicker Shield"	0
+PRIZEBADGE	"Circle1Fliuch"
+
+PRIZE 	"Circle1FliuchValens"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Dolabra"	0
+PRIZEITEM	"Ivory Mallet"	0
+PRIZEITEM	"Water Spiked Round Shield"	0
+PRIZEBADGE	"Circle1Fliuch"
+
+PRIZE 	"Circle1MordarePro"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Diamond Tipped Broadsword"	0
+PRIZEITEM	"Earth Boandey"	0
+PRIZEITEM	"Fire Iron Helm"	0
+PRIZEBADGE	"Circle11Mordare"
+
+PRIZE 	"Circle1MordareUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Jackal Pelt"	0
+PRIZEITEM	"Framea"	0
+PRIZEITEM	"Fire Confortari"	0
+PRIZEITEM	"Reinforced Wooden Shield"	0
+PRIZEBADGE	"Circle11Mordare"
+
+PRIZE 	"Circle1MordareValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Francisca"	0
+PRIZEITEM	"Gladius"	0
+PRIZEITEM	"Earth Heavy Bronze Shield"	0
+PRIZEITEM	"Water Confortari"	0
+PRIZEBADGE	"Circle11Mordare"
+
+PRIZE 	"Circle1SloanPro"
+PRIZECASH	4000 8000
+PRIZEBADGE	"Circle1Sloan"
+
+PRIZE 	"Circle1SloanUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle1Sloan"
+
+PRIZE 	"Circle1SloanValens"
+PRIZECASH	2000 4000
+PRIZEBADGE	"Circle1Sloan"
+
+PRIZE 	"Circle1VargenPro"
+PRIZECASH	4000 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Altan"	0
+PRIZEITEM	"Fire Tower of Pain"	0
+PRIZEITEM	"Water Heavy Helm"	0
+PRIZEITEM	"Earth Petrified Wood Plate"	0
+PRIZEBADGE	"Circle1Vargen"
+
+PRIZE 	"Circle1VargenUrsula"
+PRIZECASH	400 800
+PRIZEEXP	0 5
+PRIZEITEM	"Air Dabus"	0
+PRIZEITEM	"Earth Jaculum"	0
+PRIZEITEM	"Fire Cured Leather Shield"	0
+PRIZEITEM	"Water Dark Band"	0
+PRIZEBADGE	"Circle1Vargen"
+
+PRIZE 	"Circle1VargenValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Carnificina"	0
+PRIZEITEM	"Fire Lacquered Shield"	0
+PRIZEITEM	"Bronze Rimmed Thracian"	0
+PRIZEITEM	"Air Braced Armor"	0
+PRIZEBADGE	"Circle1Vargen"
+
+PRIZE 	"Circle2Fliuch"
+PRIZECASH	500 500
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle2Fliuch"
+
+PRIZE 	"Circle2FliuchPro"
+PRIZECASH	3000 3000
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle2Fliuch"
+
+PRIZE 	"Circle2FliuchValens"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle2Fliuch"
+
+PRIZE 	"Circle2Mordare"
+PRIZECASH	500 500
+PRIZEEXP	0 5
+
+PRIZE 	"Circle2MordarePro"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Altan"	0
+PRIZEITEM	"Pointed Tower"	0
+PRIZEITEM	"Fire Heavy Helm"	0
+PRIZEITEM	"Earth Bear Skeleton"	0
+PRIZEBADGE	"Circle2Mordare"
+
+PRIZE 	"Circle2MordareUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEITEM	"Reinforced Wooden Shield"	0
+PRIZEITEM	"Pike"	0
+PRIZEITEM	"Earth Fur Hat"	0
+PRIZEITEM	"Soldier's Armband"	0
+PRIZEBADGE	"Circle2Mordare"
+
+PRIZE 	"Circle2MordareValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Hak"	0
+PRIZEITEM	"Fire Wooden Shield"	0
+PRIZEITEM	"Earth Confortari"	0
+PRIZEITEM	"Air Heavy Leather Armor"	0
+PRIZEBADGE	"Circle2Mordare"
+
+PRIZE 	"Circle2SloanPro"
+PRIZECASH	4000 8000
+PRIZEBADGE	"Circle2Sloan"
+
+PRIZE 	"Circle2SloanUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle2Sloan"
+
+PRIZE 	"Circle2SloanValens"
+PRIZECASH	2000 4000
+PRIZEBADGE	"Circle2Sloan"
+
+PRIZE 	"Circle2VargenPro"
+PRIZECASH	4000 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Earth Staff"	0
+PRIZEITEM	"Earth Boandey"	0
+PRIZEITEM	"Earth Crested Ornate Gallic"	0
+PRIZEITEM	"Earth Falarica"	0
+PRIZEBADGE	"Circle2Vargen"
+
+PRIZE 	"Circle2VargenUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEITEM	"Kard"	0
+PRIZEITEM	"Reinforced Wooden Shield"	0
+PRIZEITEM	"Fire Horned Band"	0
+PRIZEITEM	"Water Leather Cape"	0
+PRIZEBADGE	"Circle2Vargen"
+
+PRIZE 	"Circle2VargenValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Heavy Spear"	0
+PRIZEITEM	"Fire Wooden Shield"	0
+PRIZEITEM	"Earth Wood Armored Hat"	0
+PRIZEITEM	"Water Ringmail Guard"	0
+PRIZEBADGE	"Circle2Vargen"
+
+PRIZE 	"CircleChampionshipUrsula"
+PRIZECASH	2000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Eow"	0
+PRIZEITEM	"Gebo"	0
+PRIZEITEM	"Ingwaz"	0
+PRIZEITEM	"Uruz"	0
+
+PRIZE 	"CircleChampionshipValens"
+PRIZECASH	4000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Eow"	0
+PRIZEITEM	"Gebo"	0
+PRIZEITEM	"Ingwaz"	0
+PRIZEITEM	"Uruz"	0
+
+PRIZE 	"CircleQualifier"
+PRIZECASH	100 100
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle1Roanor"
+
+PRIZE 	"CircleQualifierPro"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle1Roanor"
+
+PRIZE 	"CircleQualifierValens"
+PRIZECASH	500 500
+PRIZEEXP	0 5
+PRIZEBADGE	"Circle1Roanor"
+
+PRIZE 	"CircleTier1Event"
+PRIZECASH	300 300
+PRIZEEXP	0 5
+
+PRIZE 	"CircleTier1EventExp"
+PRIZECASH	300 300
+PRIZEEXP	50 5
+
+PRIZE 	"CircleTier1EventPro"
+PRIZECASH	3000 3000
+PRIZEEXP	0 5
+
+PRIZE 	"CircleTier1EventProExp"
+PRIZECASH	3000 3000
+PRIZEEXP	400 5
+
+PRIZE 	"CircleTier1EventValens"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+
+PRIZE 	"CircleTier1EventValensExp"
+PRIZECASH	1000 1000
+PRIZEEXP	150 5
+
+PRIZE 	"CircleTier2Event"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+
+PRIZE 	"CircleTier2EventPro"
+PRIZECASH	4000 4000
+PRIZEEXP	0 5
+
+PRIZE 	"CircleTier2EventProExp"
+PRIZECASH	4000 4000
+PRIZEEXP	400 5
+
+PRIZE 	"CircleTier2EventUrsula"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+
+PRIZE 	"CircleTier2EventUrsulaExp"
+PRIZECASH	300 600
+PRIZEEXP	100 5
+
+PRIZE 	"CircleTier2EventValens"
+PRIZECASH	1200 1200
+PRIZEEXP	0 5
+
+PRIZE 	"CircleTier2EventValensExp"
+PRIZECASH	1200 1200
+PRIZEEXP	160 5
+
+PRIZE 	"ContestOfFreeUrsula"
+PRIZECASH	200 500
+PRIZEEXP	0 5
+PRIZEITEM	"Reinforced Wooden Shield"	0
+PRIZEITEM	"Air Fur Hat"	0
+PRIZEITEM	"Air Jackal Pelt"	0
+PRIZEITEM	"Small Sword"	0
+PRIZEBADGE	"FreePeoplesBadge"
+
+PRIZE 	"CroBeskaBeastPrize"
+PRIZECASH	800 300
+PRIZEEXP	0 5
+PRIZEITEM	"Collar of Force"	0
+PRIZEBADGE	"CroBeskaBeastBadge"
+
+PRIZE 	"CyclopsUrsula"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Spine Staff"	0
+PRIZEITEM	"Slate Axe"	0
+PRIZEITEM	"Air Gungnir"	0
+PRIZEITEM	"Earth Piercing Hammer"	0
+
+PRIZE 	"DeadUrsula"
+PRIZECASH	500 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Quaddara"	0
+PRIZEITEM	"Earth Death's Head Skull Cap"	0
+PRIZEITEM	"Hooded Cloak"	0
+PRIZEITEM	"Earth Cudgel"	0
+
+PRIZE 	"DragonheartOpenPro"
+PRIZECASH	5000 7000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Caladcholg"	0
+PRIZEITEM	"Earth Boandey"	0
+
+PRIZE 	"DragonheartOpenUrsula"
+PRIZECASH	800 1600
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Crowbill"	0
+PRIZEITEM	"Fire Plated Band"	0
+PRIZEITEM	"Fire Jackal Pelt"	0
+PRIZEITEM	"Fire Kenaz"	0
+
+PRIZE 	"DragonheartOpenValens"
+PRIZECASH	3000 5000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Mug"	0
+PRIZEITEM	"Air Spiked Round Shield"	0
+PRIZEITEM	"Earth Wood Armored Hat"	0
+PRIZEITEM	"Water Heavy Leather Armor"	0
+
+PRIZE 	"DrakeDefaultCash"
+PRIZECASH	100 200
+PRIZEEXP	0 5
+
+PRIZE 	"DreasOpenUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEITEM	"Reinforced Wooden Shield"	0
+PRIZEITEM	"Fire Jaculum"	0
+PRIZEITEM	"Earth Horned Band"	0
+PRIZEITEM	"Water Full Moon"	0
+PRIZEBADGE	"DreasOpenBadge"
+
+PRIZE 	"DreasOpenValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Egchos"	0
+PRIZEITEM	"Air Hardened Leather Shield"	0
+PRIZEITEM	"Earth Wood Armored Hat"	0
+PRIZEITEM	"Water Heavy Leather Armor"	0
+PRIZEBADGE	"DreasOpenBadge"
+
+PRIZE 	"DuelFinal"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Flamberge"	0
+PRIZEITEM	"Fire Fur Hat"	0
+
+PRIZE 	"DuelValens"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Ictus"	0
+PRIZEITEM	"Fire Shield of the Visigoth"	0
+PRIZEITEM	"Air Brass Coolus"	0
+PRIZEITEM	"Water Heavy Leather Armor"	0
+
+PRIZE 	"ExpanseAnteUp_Completion"
+PRIZECASH	10000 20000
+PRIZEEXP	0 5
+PRIZEBADGE	"ExpanseAnteUpByo"
+
+PRIZE 	"ExpanseAnteUp_Mastery"
+PRIZECASH	5000 15000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Asa"	0
+PRIZEITEM	"Fire Zulf-I-Khar"	0
+PRIZEITEM	"Fire Royal Sikke"	0
+PRIZEITEM	"Fire Mighty Gear"	0
+
+PRIZE 	"ExpanseAnteUpByo1000"
+PRIZECASH	2000 4500
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseAnteUpByo10000"
+PRIZECASH	20000 20000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseAnteUpByo20000"
+PRIZECASH	25000 25000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseAnteUpByo4000"
+PRIZECASH	5000 4000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseAnteUpByo6000"
+PRIZECASH	8000 8000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseAnteUpByo8000"
+PRIZECASH	10000 10000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseAridExtraDryPyo"
+PRIZECASH	300 800
+PRIZEEXP	0 5
+PRIZEITEM	"Air Braced Armor"	0
+PRIZEITEM	"Air Wool Sikke"	0
+
+PRIZE 	"ExpanseBarebones"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseBarnBurner_Completion"
+PRIZECASH	3000 13000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Hooked Ridge Helmet"	0
+PRIZEITEM	"Leather Bikini"	0
+PRIZEITEM	"Fire Bazo"	0
+PRIZEITEM	"Medal of Stature"	0
+PRIZEBADGE	"ExpanseBarnBurner"
+
+PRIZE 	"ExpanseBarnBurner_Mastery"
+PRIZECASH	2000 7500
+PRIZEEXP	1500 5
+PRIZEITEM	"Fire Ruby Earrings"	0
+PRIZEITEM	"Fire Naboot"	0
+
+PRIZE 	"ExpanseBerserkerShi"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Liberation"	0
+
+PRIZE 	"ExpanseBulkOfHulk"
+PRIZECASH	35000 25000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseBurningFlame"
+PRIZECASH	400 750
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Naboot"	0
+PRIZEITEM	"Fire Light Wrap"	0
+
+PRIZE 	"ExpanseCashMoney"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseCashMoneyGwa_Generic"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseCyclopsZu"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Turtlebone Armor Shell"	0
+
+PRIZE 	"ExpanseDervishRo"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Veiled Sikke"	0
+
+PRIZE 	"ExpanseDesertCats"
+PRIZECASH	500 0
+PRIZEEXP	0 5
+PRIZEITEM	"Ornamental Collar"	0
+
+PRIZE 	"ExpanseDesertHeat"
+PRIZECASH	350 650
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Naboot"	0
+
+PRIZE 	"ExpanseDesertOpen"
+PRIZECASH	1000 3500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Flowing Chainmail"	0
+PRIZEITEM	"Air Bottle"	0
+PRIZEITEM	"Air Shamshir"	0
+PRIZEITEM	"Air Wool Sikke"	0
+
+PRIZE 	"ExpanseDesertStorm_Completion"
+PRIZECASH	2500 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Bottle"	0
+PRIZEITEM	"Air Braced Armor"	0
+PRIZEBADGE	"ExpanseDesertStorm"
+
+PRIZE 	"ExpanseDesertStorm_Mastery"
+PRIZECASH	2500 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Sapara"	0
+PRIZEITEM	"Air Crown of Air"	0
+
+PRIZE 	"ExpanseDesertWitches"
+PRIZECASH	1500 0
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseEndlessHorizons"
+PRIZECASH	6000 24000
+PRIZEEXP	0 5
+PRIZEBADGE	"ExpanseEndlessHorizons"
+
+PRIZE 	"ExpanseEnduranceRe"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+PRIZEBADGE	"ExpanseEnduranceRe"
+
+PRIZE 	"ExpanseEnterTheDarknessTsu"
+PRIZECASH	900 550
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseHighFlying"
+PRIZECASH	400 800
+PRIZEEXP	0 5
+PRIZEITEM	"Air Asaya"	0
+
+PRIZE 	"ExpanseInsectZe"
+PRIZECASH	2000 15000
+PRIZEEXP	1800 5
+PRIZEITEM	"Moonstone"	0
+PRIZEITEM	"Quartz"	0
+
+PRIZE 	"ExpanseLeakyFaucetJi"
+PRIZECASH	350 550
+PRIZEEXP	0 5
+PRIZEITEM	"Water Herebra"	0
+
+PRIZE 	"ExpanseLeviathan_Completion"
+PRIZECASH	5000 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Dalima"	0
+PRIZEITEM	"Water Poison Barbed Shield"	0
+PRIZEITEM	"Water Jeweled Diadem"	0
+PRIZEITEM	"Water Turtlebone Armor Shell"	0
+PRIZEBADGE	"ExpanseLeviathan"
+
+PRIZE 	"ExpanseLeviathan_Generic"
+PRIZECASH	2000 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Dalima"	1
+PRIZEITEM	"Water Veiled Sikke"	1
+PRIZEITEM	"Water Herebra"	1
+PRIZEITEM	"Water Soul's Diadem"	1
+
+PRIZE 	"ExpanseLeviathan_Mastery"
+PRIZECASH	3000 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Dahshat"	0
+PRIZEITEM	"Water Leviathan"	0
+PRIZEITEM	"Water Bladed Pendulum"	0
+PRIZEITEM	"Water Twin Vipers"	0
+
+PRIZE 	"ExpanseLightweights"
+PRIZECASH	20000 10000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseLightweightsTsu"
+PRIZECASH	0 18000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Eye of the Cyclops"	0
+PRIZEITEM	"Air The Bloody Hide"	0
+PRIZEITEM	"Earth Golden Axe"	0
+PRIZEITEM	"Desert Viper"	0
+
+PRIZE 	"ExpanseLightweightsTsu_Generic"
+PRIZECASH	700 0
+PRIZEEXP	0 5
+PRIZEITEM	"Liberation"	0
+PRIZEITEM	"Fire Pondus Fabula"	0
+PRIZEITEM	"Air Silver Bracer"	0
+
+PRIZE 	"ExpanseLiquidSwords"
+PRIZECASH	30000 20000
+PRIZEEXP	0 5
+
+PRIZE 	"ExpanseMirage"
+PRIZECASH	1500 15000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Sapara"	0
+PRIZEITEM	"Shank"	0
+PRIZEITEM	"Water Oiled Pelt"	0
+PRIZEITEM	"Fire Shisa Vika"	0
+PRIZEBADGE	"ExpanseMirage"
+
+PRIZE 	"ExpanseMysticalKo_Completion"
+PRIZECASH	0 13000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Elephant Axe"	0
+PRIZEITEM	"Earth Sinan"	0
+PRIZEITEM	"Earth Desert Turban"	0
+PRIZEITEM	"Fire Soul's Diadem"	0
+PRIZEBADGE	"ExpanseMysticalKo"
+
+PRIZE 	"ExpanseMysticalKo_Mastery"
+PRIZECASH	0 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Asa"	0
+PRIZEITEM	"Water Wizard's Cloak"	0
+PRIZEITEM	"Scarab Beetle"	0
+
+PRIZE 	"ExpanseOpenAffinityPhi_Completion"
+PRIZECASH	0 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Acinaces"	0
+PRIZEITEM	"Fire Samaam"	0
+PRIZEITEM	"Shumpula"	0
+PRIZEITEM	"Earth Bronze Winged Shield"	0
+PRIZEBADGE	"ExpanseOpenAffinityPhi"
+
+PRIZE 	"ExpanseOpenAffinityPhi_Mastery"
+PRIZECASH	0 12000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Hoeroa"	0
+PRIZEITEM	"Fire Zulf-I-Khar"	0
+PRIZEITEM	"Air Silver Bracer"	0
+PRIZEITEM	"Earth Emerald"	0
+
+PRIZE 	"ExpanseOpenBarnBurner"
+PRIZECASH	700 1200
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Bronze Gear"	0
+PRIZEITEM	"Fire Lorica Segmentata"	0
+
+PRIZE 	"ExpanseOpenKo"
+PRIZECASH	300 950
+PRIZEEXP	0 5
+PRIZEITEM	"Air Heavy Robes"	0
+PRIZEITEM	"Short Del"	0
+PRIZEITEM	"Shoum"	0
+PRIZEITEM	"Crystal Ball"	0
+
+PRIZE 	"ExpansePhoenixFlames"
+PRIZEITEM	"Scarab Beetle"	0
+
+PRIZE 	"ExpanseProCitizenByu1"
+PRIZECASH	2000 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Wing of Safat"	0
+
+PRIZE 	"ExpanseProCitizenByu2"
+PRIZECASH	1700 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Snakeskin Bow"	0
+
+PRIZE 	"ExpanseProCitizenByu3"
+PRIZECASH	1500 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Collar of Spite"	0
+
+PRIZE 	"ExpanseProCitizenByu4"
+PRIZECASH	10000 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Robe of Rebirth"	0
+
+PRIZE 	"ExpanseRedEyeNya"
+PRIZECASH	750 1250
+PRIZEEXP	0 5
+PRIZEITEM	"Quadrelle"	0
+
+PRIZE 	"ExpanseSamniteTsu"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Vicious Blade"	0
+
+PRIZE 	"ExpanseSandstormPya"
+PRIZECASH	1500 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Twin Vipers"	0
+
+PRIZE 	"ExpanseSeriesSyo"
+PRIZECASH	0 30000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Partisan"	0
+PRIZEITEM	"Quadrelle"	0
+PRIZEITEM	"Diamond Shield"	0
+PRIZEITEM	"Earth Body Wrap"	0
+PRIZEBADGE	"ExpanseSeriesSyo"
+
+PRIZE 	"ExpanseSsimasRevenge"
+PRIZECASH	350 3000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Ruby Earrings"	0
+
+PRIZE 	"ExpanseSummonerKwa"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Eye of the Gods"	0
+
+PRIZE 	"ExpanseSummonersEndurance"
+PRIZECASH	0 20000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Kinetic Staff"	0
+PRIZEITEM	"Air Talon of Safat"	0
+
+PRIZE 	"ExpanseThrone_Completion"
+PRIZECASH	50000 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Kheten"	0
+PRIZEITEM	"The Steel Skull"	0
+PRIZEITEM	"Fire Mighty Gear"	0
+PRIZEITEM	"Earth Sphinx Feather"	0
+
+PRIZE 	"ExpanseThrone_Generic"
+PRIZECASH	5000 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Goupillon"	1
+PRIZEITEM	"Golden Diadem"	1
+PRIZEITEM	"Water Studded Breastplate"	1
+
+PRIZE 	"ExpanseToastedRoaches"
+PRIZECASH	650 1250
+PRIZEEXP	0 5
+PRIZEITEM	"Quartz"	0
+
+PRIZE 	"ExpanseTreasureTrove_Completion"
+PRIZECASH	1500 0
+PRIZEEXP	0 5
+PRIZEBADGE	"ExpanseTreasureTrove"
+
+PRIZE 	"ExpanseTreasureTrove_Generic"
+PRIZECASH	0 0
+PRIZEEXP	1200 5
+
+PRIZE 	"ExpanseTreasureTrove_Mastery"
+PRIZECASH	1000 0
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Shisa Vika"	0
+
+PRIZE 	"ExpanseUndeadCasterWo"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Dark Interment Robes"	0
+
+PRIZE 	"FenAmateurFatCash"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+
+PRIZE 	"FenProBasicCash"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+
+PRIZE 	"FenProFatCash"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+
+PRIZE 	"FenSemiProBasicCash"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+
+PRIZE 	"FenSemiProFatCash"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+
+PRIZE 	"FightTheBearPro"
+PRIZECASH	4000 8000
+PRIZEITEM	"Fire Croag"	0
+PRIZEITEM	"Earth Boandey"	0
+PRIZEITEM	"Battle Collar"	0
+PRIZEITEM	"Earth Bear Skeleton"	0
+
+PRIZE 	"FightTheBearUrsula"
+PRIZECASH	350 700
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Wolf Cowl"	0
+PRIZEITEM	"Battle Collar"	0
+PRIZEITEM	"Water Crook"	0
+PRIZEITEM	"Fire Beast's Shield"	0
+
+PRIZE 	"FightTheBearValens"
+PRIZECASH	2000 4000
+PRIZEITEM	"Air Francisca"	0
+PRIZEITEM	"Reinforced Targe"	0
+PRIZEITEM	"Chain Collar"	0
+PRIZEITEM	"Earth Arm Brace"	0
+
+PRIZE 	"FliuchTournamentUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Maul"	0
+PRIZEITEM	"Fire Cured Leather Shield"	0
+PRIZEITEM	"Sowilo"	0
+
+PRIZE 	"FliuchTournamentValens"
+PRIZECASH	1000 3000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Fuscina"	0
+PRIZEITEM	"Air Heavy Bronze Shield"	0
+PRIZEITEM	"Earth Ring of Fangs"	0
+PRIZEITEM	"Lauguz"	0
+
+PRIZE 	"FreePeoplesPro"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Caladcholg"	0
+
+PRIZE 	"FreePeoplesValens"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Horn Hammer"	0
+PRIZEITEM	"Air Night's Guardian"	0
+PRIZEITEM	"Earth Ring of Fangs"	0
+PRIZEITEM	"Air Heavy Leather Armor"	0
+PRIZEBADGE	"FreePeoplesBadge"
+
+PRIZE 	"GalvergPrize"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Dark Dark Gear"	0
+PRIZEITEM	"Dark The Carnivore Dark"	0
+PRIZEITEM	"Dark Crown of Darkness"	0
+PRIZEITEM	"Dark Death's Head"	0
+
+PRIZE 	"HighTourney"
+PRIZECASH	50000 1000
+PRIZEEXP	5 5
+PRIZEITEM	"Water Tidal Guard"	0
+PRIZEITEM	"Earth Boar's Head"	0
+PRIZEITEM	"Heavy Scutum"	0
+PRIZEITEM	"Air Ramshead Bow"	0
+
+PRIZE 	"HordesPro"
+PRIZECASH	4000 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Caladcholg"	0
+PRIZEITEM	"Fire Croag"	0
+PRIZEITEM	"Earth Falarica"	0
+PRIZEITEM	"Air Horse Hide"	0
+
+PRIZE 	"HordesUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Fur Hat"	0
+PRIZEITEM	"Water Lignator"	0
+PRIZEITEM	"Water Wolfskin"	0
+PRIZEITEM	"Water Flamberge"	0
+
+PRIZE 	"HordesValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Horn Hammer"	0
+PRIZEITEM	"Warlord's Shield"	0
+PRIZEITEM	"Air Bronze Italic"	0
+PRIZEITEM	"Fire Leg Brace"	0
+
+PRIZE 	"ImperiaChampionshipUrsula"
+PRIZECASH	5000 500
+PRIZEEXP	5 5
+PRIZEITEM	"Air The Crusher"	1
+PRIZEITEM	"Earth The Crusher"	1
+PRIZEITEM	"Fire The Crusher"	1
+PRIZEITEM	"Water The Crusher"	1
+
+PRIZE 	"ImperiaChampionshipValens"
+PRIZECASH	5000 500
+PRIZEEXP	5 5
+PRIZEITEM	"Gladius"	0
+PRIZEITEM	"Earth Regal Cape"	0
+
+PRIZE 	"ImperiaCroDervish01"
+PRIZECASH	1000 0
+PRIZEEXP	0 5
+PRIZEITEM	"Double Scramasax"	0
+
+PRIZE 	"ImperiaCroDervish02"
+PRIZECASH	1000 150
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Woodsman Set"	0
+
+PRIZE 	"ImperiaCroDervish03"
+PRIZECASH	1000 150
+PRIZEEXP	0 5
+PRIZEITEM	"Air Dual Pugio"	0
+
+PRIZE 	"ImperiaCroDervish04"
+PRIZECASH	1000 150
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Cote Fez"	0
+
+PRIZE 	"ImperiaCroDervishUrsula"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Water Poison Axe"	0
+PRIZEITEM	"Water Studded Wooden Shield"	0
+
+PRIZE 	"ImperiaCroDervishValens"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Water Poison Axe"	0
+PRIZEITEM	"Water Studded Wooden Shield"	0
+
+PRIZE 	"ImperiaCroMasteryUrsula"
+PRIZECASH	800 150
+PRIZEEXP	0 8
+PRIZEITEM	"Satyr's Scalp"	1
+PRIZEITEM	"Carnifico"	1
+PRIZEITEM	"Ogre's Scalp"	1
+
+PRIZE 	"ImperiaCroMasteryValens"
+PRIZECASH	800 150
+PRIZEEXP	0 8
+PRIZEITEM	"Fire Plated Circlet"	1
+PRIZEITEM	"Canvas Robe"	1
+PRIZEITEM	"Water Praecido"	1
+
+PRIZE 	"ImperiaCroMongrelButcher"
+PRIZECASH	4500 500
+PRIZEBADGE	"MongrelButcher"
+
+PRIZE 	"ImperiaCroMongrelUrsula"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Rabbit Pelt"	0
+PRIZEITEM	"Earth Bone Club"	0
+
+PRIZE 	"ImperiaCroMongrelValens"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Dried Bones"	0
+PRIZEITEM	"Earth Wooden Bludgeon"	0
+
+PRIZE 	"ImperiaCroMurmilloUrsula"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Copper Campana"	0
+PRIZEITEM	"Earth Razor Shield"	0
+
+PRIZE 	"ImperiaCroMurmilloValens"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Throwing Hoplite"	0
+PRIZEITEM	"Copper Campana"	0
+
+PRIZE 	"ImperiaCroSamniteUrsula"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Air Heavy Spear"	0
+PRIZEITEM	"Earth Digladio"	0
+
+PRIZE 	"ImperiaCroSamniteValens"
+PRIZECASH	800 150
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Metal Suit"	0
+PRIZEITEM	"Fire Scutum"	0
+
+PRIZE 	"ImperiaCroSeigeUrsula"
+PRIZECASH	9500 900
+PRIZEEXP	500 10
+
+PRIZE 	"ImperiaCroSiegeValens"
+PRIZECASH	5500 900
+PRIZEEXP	0 10
+
+PRIZE 	"ImperiaCroTourney"
+PRIZECASH	1000 500
+PRIZEEXP	0 6
+PRIZEITEM	"Stone Club"	0
+PRIZEITEM	"Fire Tortoise's Scalp"	0
+
+PRIZE 	"ImperiaEXP"
+PRIZEEXP	0 5
+
+PRIZE 	"ImperiaOrusMonster"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Cyclops Eye"	1
+PRIZEITEM	"Galdr's Scalp"	1
+PRIZEITEM	"Wunjo"	1
+
+PRIZE 	"ImperiaOrusOnslaught"
+PRIZECASH	1500 0
+PRIZEEXP	0 5
+PRIZEITEM	"Air Silver Bow"	1
+PRIZEITEM	"Earth Silver Bow"	1
+PRIZEITEM	"Fire Silver Bow"	1
+PRIZEITEM	"Water Silver Bow"	1
+
+PRIZE 	"ImperiaTalismanValens"
+PRIZECASH	100 200
+PRIZEEXP	0 5
+PRIZEBADGE	"ImperiaTalisman"
+
+PRIZE 	"Keep1Pro"
+PRIZECASH	600 1200
+PRIZEEXP	0 5
+
+PRIZE 	"Keep1Ursula"
+PRIZECASH	150 300
+PRIZEEXP	0 5
+
+PRIZE 	"Keep1Valens"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+
+PRIZE 	"Keep2Pro"
+PRIZECASH	1200 2400
+PRIZEEXP	0 5
+
+PRIZE 	"Keep2Ursula"
+PRIZECASH	200 400
+PRIZEEXP	0 5
+
+PRIZE 	"Keep3Pro"
+PRIZECASH	2400 4800
+PRIZEEXP	0 5
+
+PRIZE 	"Keep3Ursula"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+
+PRIZE 	"KingdomOpenUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Spiculum"	0
+PRIZEITEM	"Earth Patched Cape"	0
+PRIZEITEM	"Fire Death's Head Skull Cap"	0
+PRIZEITEM	"Water Wicker Shield"	0
+PRIZEBADGE	"KingdomOpenBadge"
+
+PRIZE 	"KingdomOpenValens"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Light Pick"	0
+PRIZEITEM	"Reinforced Targe"	0
+PRIZEITEM	"Air Confortari"	0
+PRIZEITEM	"Fire Cured Leather Armor"	0
+PRIZEBADGE	"KingdomOpenBadge"
+
+PRIZE 	"LastOneStandingPro"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Altan"	0
+
+PRIZE 	"LastOneStandingUrsula"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+PRIZEITEM	"Air Praecido"	0
+PRIZEITEM	"Reinforced Wooden Shield"	0
+PRIZEITEM	"Air Jackal Pelt"	0
+
+PRIZE 	"LastOneStandingValens"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Flamberge"	0
+PRIZEITEM	"Iron Targe"	0
+PRIZEITEM	"Earth Heavy Fur Skirt"	0
+
+PRIZE 	"LightningCircuitPro"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Bladed Guard"	0
+
+PRIZE 	"LightningCircuitUrsula"
+PRIZECASH	200 500
+PRIZEEXP	0 5
+PRIZEITEM	"Iron Buckler"	0
+PRIZEITEM	"Fire Hand Axe"	0
+PRIZEITEM	"Water Patched Cape"	0
+PRIZEITEM	"Air Spiculum"	0
+
+PRIZE 	"LightningCircuitValens"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Wooden Shield"	0
+PRIZEITEM	"Air Fur Hat"	0
+PRIZEITEM	"Fire Mountain Lion Hide"	0
+PRIZEITEM	"Earth Berkana"	0
+
+PRIZE 	"LudoPrize"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Phalanx"	0
+PRIZEITEM	"Clypeus"	0
+
+PRIZE 	"ManAndBeastPro"
+PRIZECASH	4000 8000
+PRIZEITEM	"Earth Altan"	0
+PRIZEITEM	"Air Barricade Shield"	0
+PRIZEITEM	"Water Pointed Helm"	0
+PRIZEITEM	"Fire Bear Pelt"	0
+
+PRIZE 	"ManAndBeastUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Wolfskin"	0
+PRIZEITEM	"Earth Cured Leather Shield"	0
+PRIZEITEM	"Pike"	0
+PRIZEITEM	"Collar of Force"	0
+
+PRIZE 	"ManAndBeastValens"
+PRIZECASH	2000 4000
+PRIZEITEM	"Fire Pole Axe"	0
+PRIZEITEM	"Air Wooden Shield"	0
+PRIZEITEM	"Earth Ring of Fangs"	0
+PRIZEITEM	"Water Mountain Lion Hide"	0
+
+PRIZE 	"MiddleAmateurBasicCash"
+PRIZECASH	200 300
+PRIZEEXP	0 5
+
+PRIZE 	"MiddleAmateurBasicExp"
+PRIZECASH	100 200
+PRIZEEXP	40 5
+
+PRIZE 	"MiddleProBasicCash"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+
+PRIZE 	"MiddleProBasicExp"
+PRIZECASH	1000 2000
+PRIZEEXP	300 5
+
+PRIZE 	"MiddleProFatCash"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+
+PRIZE 	"MiddleSemiProBasicCash"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+
+PRIZE 	"MiddleSemiProBasicExp"
+PRIZECASH	500 1000
+PRIZEEXP	200 5
+
+PRIZE 	"MileHighPro"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Caladcholg"	0
+PRIZEITEM	"Bronze Horned Helm"	0
+PRIZEITEM	"Air Bear Pelt"	0
+PRIZEITEM	"Amber Gemstone"	0
+
+PRIZE 	"MileHighUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Mannaz"	0
+PRIZEITEM	"Fire Wolfskin"	0
+PRIZEITEM	"Air Fur Hat"	0
+PRIZEITEM	"Earth Jaculum"	0
+
+PRIZE 	"MileHighValens"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Francisca"	0
+PRIZEITEM	"Reinforced Targe"	0
+PRIZEITEM	"Earth Wood Armored Hat"	0
+PRIZEITEM	"Water Mountain Lion Hide"	0
+
+PRIZE 	"MordarePot1"
+PRIZECASH	200 400
+PRIZEEXP	0 5
+
+PRIZE 	"MordarePot2"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+
+PRIZE 	"MordarePot3"
+PRIZECASH	2000 5000
+PRIZEEXP	0 5
+
+PRIZE 	"MordareTournamentUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Shoulder Brace"	0
+PRIZEITEM	"Air Cured Leather Shield"	0
+PRIZEITEM	"Framea"	0
+PRIZEITEM	"Earth Attic Durus"	0
+
+PRIZE 	"MordareTournamentValens"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Doloire"	0
+PRIZEITEM	"Throwing Hoplite"	0
+PRIZEITEM	"Earth Ring of Fangs"	0
+PRIZEITEM	"Leather Armor"	0
+
+PRIZE 	"MysteriousTabletPrize"
+PRIZECASH	5000 0
+PRIZEEXP	0 5
+
+PRIZE 	"NoPrize"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+
+PRIZE 	"NordaghDoneUrsula"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Flamberge"	0
+PRIZEITEM	"Fire Fur Hat"	0
+PRIZEITEM	"Earth Wolf Cowl"	0
+PRIZEITEM	"Air Wolfskin"	0
+PRIZEBADGE	"NordaghChampion"
+
+PRIZE 	"NordaghDoneValens"
+PRIZECASH	4000 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Bone Axe"	0
+PRIZEITEM	"Reinforced Targe"	0
+PRIZEITEM	"Earth Iron Campana"	0
+PRIZEITEM	"War Hammer"	0
+PRIZEBADGE	"NordaghChampion"
+
+PRIZE 	"NordaghTalisman"
+PRIZECASH	100 200
+PRIZEEXP	0 5
+PRIZEBADGE	"NordaghTalisman"
+
+PRIZE 	"NorthernPridePro"
+PRIZECASH	2400 4800
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Caladcholg"	0
+PRIZEITEM	"Spangenhelm"	0
+PRIZEITEM	"Earth Horse Hide"	0
+PRIZEITEM	"Earth Bear Cowl"	0
+
+PRIZE 	"NorthernPrideUrsula"
+PRIZECASH	600 1200
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Jaculum"	0
+PRIZEITEM	"Earth Wolf Cowl"	0
+PRIZEITEM	"Earth Jackal Pelt"	0
+PRIZEITEM	"Earth Berkana"	0
+
+PRIZE 	"NorthernPrideValens"
+PRIZECASH	1200 2400
+PRIZEEXP	0 5
+PRIZEITEM	"Hercules Club"	0
+PRIZEITEM	"Earth Mountain Lion Hide"	0
+PRIZEITEM	"Earth Ring of Fangs"	0
+PRIZEITEM	"Ansuz"	0
+
+PRIZE 	"OneAgainstManyPro"
+PRIZECASH	1000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Black Bow"	0
+PRIZEITEM	"Bronze Horned Helm"	0
+PRIZEITEM	"Water Belted Wrap"	0
+PRIZEITEM	"Tiewaz"	0
+
+PRIZE 	"OneAgainstManyUrsula"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Mallet"	0
+PRIZEITEM	"Earth Jackal Pelt"	0
+PRIZEITEM	"Earth Ring of Fangs"	0
+
+PRIZE 	"OneAgainstManyValens"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Gladius"	0
+PRIZEITEM	"Hoplite"	0
+PRIZEITEM	"Earth Ring of Fangs"	0
+PRIZEITEM	"Leather Garb"	0
+
+PRIZE 	"OrinTournamentUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEITEM	"Water Lignator"	0
+PRIZEITEM	"Fire Fur Hat"	0
+PRIZEITEM	"Earth Shoulder Brace"	0
+PRIZEITEM	"Leather Armband"	0
+
+PRIZE 	"OrusBasicUrsula"
+PRIZECASH	5000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Hercules Club"	1
+PRIZEITEM	"Fire Digladio"	1
+PRIZEITEM	"Diadem"	1
+PRIZEITEM	"Air Brace Plate"	1
+
+PRIZE 	"OrusBasicValens"
+PRIZECASH	2500 500
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Praecido"	1
+PRIZEITEM	"Fire Pedes Attic"	1
+
+PRIZE 	"OrusCash01"
+PRIZECASH	5000 500
+PRIZEEXP	0 5
+
+PRIZE 	"OrusCash02"
+PRIZECASH	5000 700
+PRIZEEXP	0 5
+
+PRIZE 	"OrusTourneyPrize"
+PRIZECASH	3000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Claw Hammer"	1
+
+PRIZE 	"PirgosAveragePrizeUrsula"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Hoplite"	1
+PRIZEITEM	"Air Soldier's Scutum"	1
+PRIZEITEM	"Air Brace Plate"	1
+PRIZEITEM	"Water Soldier's Scutum"	1
+
+PRIZE 	"PirgosAverageValens"
+PRIZECASH	1000 150
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Wooden Bludgeon"	1
+PRIZEITEM	"Securis"	1
+
+PRIZE 	"PirgosBasicUrsula"
+PRIZECASH	500 125
+PRIZEEXP	0 5
+PRIZEITEM	"Air Brass Coolus"	1
+PRIZEITEM	"Air Brass Coolus"	1
+PRIZEITEM	"Parazonium"	1
+PRIZEITEM	"Glossy Attic"	1
+
+PRIZE 	"PirgosBasicValens"
+PRIZECASH	500 250
+PRIZEEXP	0 5
+PRIZEITEM	"Glossy Attic"	1
+PRIZEITEM	"Securis"	1
+PRIZEITEM	"Parazonium"	1
+
+PRIZE 	"PirgosCash01"
+PRIZECASH	500 50
+PRIZEEXP	0 5
+
+PRIZE 	"PirgosCash02"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+
+PRIZE 	"PirgosCash03"
+PRIZECASH	5000 2500
+PRIZEEXP	0 5
+
+PRIZE 	"PirgosChannelerPrize"
+PRIZECASH	3000 0
+PRIZEEXP	0 5
+PRIZEBADGE	"PirgosChannelerBadge"
+
+PRIZE 	"PirgosClassicLeaguePrizeUrsula"
+PRIZECASH	2000 550
+PRIZEEXP	0 5
+PRIZEITEM	"Air Comptus"	1
+PRIZEITEM	"Earth Comptus"	1
+PRIZEITEM	"Air Comptus"	1
+PRIZEITEM	"Water Comptus"	1
+
+PRIZE 	"PirgosClassicLeaguePrizeValens"
+PRIZECASH	1500 250
+PRIZEEXP	0 5
+PRIZEITEM	"Water Plated Circlet"	0
+
+PRIZE 	"PirgosEnduranceUrsulaOnly"
+PRIZECASH	2000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Water Egchos"	1
+PRIZEITEM	"Fire Egchos"	1
+PRIZEITEM	"Earth Egchos"	1
+PRIZEITEM	"Air Egchos"	1
+PRIZEBADGE	"PirgosEndurance"
+
+PRIZE 	"PirgosRanged01"
+PRIZECASH	5000 300
+PRIZEEXP	0 5
+PRIZEITEM	"Eow"	0
+
+PRIZE 	"PirgosRanged02"
+PRIZECASH	5000 305
+PRIZEEXP	0 5
+PRIZEITEM	"Air Elongated Arm Guard"	1
+PRIZEITEM	"Earth Elongated Arm Guard"	1
+PRIZEITEM	"Fire Elongated Arm Guard"	1
+PRIZEITEM	"Water Elongated Arm Guard"	1
+
+PRIZE 	"PirgosRanged03"
+PRIZECASH	5000 400
+PRIZEEXP	0 5
+PRIZEITEM	"Air Feathered Pike"	1
+PRIZEITEM	"Air Feathered Pike"	1
+
+PRIZE 	"PirgosRanged04"
+PRIZECASH	5000 450
+PRIZEEXP	0 5
+PRIZEITEM	"Air Winged Infantry Helm"	1
+PRIZEITEM	"Air Winged Infantry Helm"	1
+
+PRIZE 	"PirgosRanged05"
+PRIZECASH	6000 350
+PRIZEEXP	0 5
+PRIZEITEM	"Air Imperial Breastplate"	1
+PRIZEITEM	"Air Imperial Breastplate"	1
+
+PRIZE 	"PirgosRanged06"
+PRIZECASH	2500 450
+PRIZEEXP	0 5
+PRIZEITEM	"Jet"	0
+PRIZEITEM	"Medal of Rank"	0
+PRIZEITEM	"Air Winged Infantry Helm"	0
+
+PRIZE 	"PirgosRangedPrizePRO"
+PRIZECASH	20000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Half Moon"	1
+PRIZEITEM	"Earth Falarica"	1
+PRIZEITEM	"Fire Falarica"	1
+PRIZEITEM	"Water Falarica"	1
+PRIZEBADGE	"PirgosRanged"
+
+PRIZE 	"PirgosSeriesPrizeValensOnly"
+PRIZECASH	2000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Wooden Bludgeon"	1
+PRIZEITEM	"Earth Wooden Bludgeon"	1
+PRIZEITEM	"Earth Chainmail Guard"	1
+PRIZEITEM	"Earth Chainmail Guard"	1
+PRIZEBADGE	"PirgosEndurance"
+
+PRIZE 	"PirgosTourneyPrize"
+PRIZECASH	3000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Bronze Plate"	1
+PRIZEITEM	"Earth Heavy Bronze Shield"	1
+PRIZEITEM	"Air Heavy Bronze Shield"	1
+PRIZEITEM	"Water Heavy Bronze Shield"	1
+PRIZEBADGE	"PirgosTourneyBadge"
+
+PRIZE 	"PirgosTraining"
+PRIZECASH	100 200
+PRIZEEXP	60 5
+PRIZEBADGE	"ImperiaTalisman2"
+
+PRIZE 	"Pit Pot 1"
+PRIZECASH	100 200
+PRIZEEXP	0 5
+
+PRIZE 	"Pit Pot 2"
+PRIZECASH	200 400
+PRIZEEXP	0 5
+
+PRIZE 	"Pit Pot 3"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+
+PRIZE 	"qstBear"
+PRIZECASH	1000 236
+
+PRIZE 	"qstBeastKiller"
+PRIZECASH	2500 0
+PRIZEEXP	0 5
+
+PRIZE 	"qstBeastKillerBattle"
+PRIZECASH	2000 0
+PRIZEEXP	40 5
+PRIZEITEM	"Fire The Cat's Claw"	0
+PRIZEITEM	"Cat's Eye"	0
+PRIZEITEM	"Fire Dragon Hide"	0
+
+PRIZE 	"qstDecay"
+PRIZECASH	300 200
+PRIZEEXP	0 5
+PRIZEITEM	"Water Flamberge"	0
+PRIZEITEM	"Earth Tschehouta"	0
+PRIZEITEM	"Signet of the Valkyrie"	0
+
+PRIZE 	"qstDecayBattle"
+PRIZECASH	237 82
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Quarterstaff"	0
+PRIZEITEM	"Fire Contubernium"	0
+PRIZEITEM	"Rabbit Pelt"	0
+PRIZEITEM	"Galdr's Scalp"	0
+
+PRIZE 	"qstDervishChallengeMidclass"
+PRIZECASH	400 400
+PRIZEEXP	0 5
+PRIZEITEM	"Air Tekuja Sikke"	0
+PRIZEITEM	"Myth of the Sands"	0
+
+PRIZE 	"qstDervishChallengeOverclass"
+PRIZECASH	600 600
+PRIZEEXP	0 5
+PRIZEITEM	"Water Venemous Pair"	0
+PRIZEITEM	"Lace Anklet"	0
+
+PRIZE 	"qstDervishChallengeUnderclass"
+PRIZECASH	200 200
+PRIZEEXP	0 5
+PRIZEITEM	"Air Royal Garb"	0
+PRIZEITEM	"Mark of Rank"	0
+
+PRIZE 	"qstHellGateBattle"
+PRIZEEXP	200 1000
+PRIZEITEM	"Groucho Nose"	0
+PRIZEITEM	"Arrow Thru Head"	0
+PRIZEITEM	"Jester"	0
+PRIZEITEM	"Unofan"	0
+
+PRIZE 	"qstInvasion1"
+PRIZECASH	2500 0
+PRIZEEXP	0 0
+
+PRIZE 	"qstInvasion1Battle_Am"
+PRIZECASH	400 87
+PRIZEITEM	"Flask"	0
+PRIZEITEM	"Fire Flaming Skull Cap"	0
+PRIZEITEM	"Bull Ring"	0
+
+PRIZE 	"qstInvasion1Battle_Pro"
+PRIZECASH	2000 321
+PRIZEITEM	"Earth Columnar Hammer"	0
+PRIZEITEM	"Earth Pitcher"	0
+PRIZEITEM	"What it Takes"	0
+PRIZEITEM	"Earth Stone Nosering"	0
+
+PRIZE 	"qstInvasion1Battle_SP"
+PRIZECASH	1000 167
+PRIZEITEM	"Air Bottle"	0
+PRIZEITEM	"Earth Claymore"	0
+PRIZEITEM	"Earth Iron Spiked Minotaur Helm"	0
+
+PRIZE 	"qstInvasion2"
+PRIZECASH	4250 0
+
+PRIZE 	"qstInvasion2Battle"
+PRIZECASH	10000 212
+PRIZEITEM	"Earth Serrated Bone Club"	0
+PRIZEITEM	"Earth Declamatio"	0
+PRIZEITEM	"Fire Carafe"	0
+PRIZEITEM	"Fire Cycloptic Corinthian"	0
+
+PRIZE 	"qstLoyalist"
+PRIZECASH	10000 3333
+PRIZEEXP	0 5
+PRIZEITEM	"Rhinoceros Spangenhelm"	0
+
+PRIZE 	"qstLoyalistBattle"
+PRIZECASH	1000 3000
+PRIZEEXP	0 5
+PRIZEITEM	"qstLoyalist Prize"	0
+
+PRIZE 	"qstMysteriousPlane"
+PRIZEEXP	300 0
+PRIZEITEM	"The Promise Stone"	0
+
+PRIZE 	"qstMysteriousTablet"
+PRIZECASH	5000 0
+PRIZEEXP	0 5
+
+PRIZE 	"qstPirgosFather"
+PRIZEEXP	0 5
+PRIZEITEM	"Water Veneficus"	0
+PRIZEITEM	"Holy Miter"	0
+
+PRIZE 	"qstPirgosFatherBattle"
+PRIZEEXP	0 5
+PRIZEITEM	"Dark Crown of Darkness"	0
+PRIZEITEM	"Dark Death's Head"	0
+
+PRIZE 	"qstPriam"
+PRIZEEXP	0 5
+PRIZEITEM	"Air Teres Moles"	0
+PRIZEITEM	"Earth Iron Campana"	0
+PRIZEITEM	"Water Ring of Maritimus"	0
+PRIZEITEM	"Water Latticed Skirt"	0
+
+PRIZE 	"qstPriamBattle"
+PRIZEEXP	0 5
+PRIZEITEM	"Water Blade of Tides"	0
+
+PRIZE 	"qstRingersU_Battle"
+PRIZECASH	400 100
+PRIZEITEM	"Horned Thracian"	0
+PRIZEITEM	"Liberation"	0
+PRIZEITEM	"Fire Platemail Bikini"	0
+
+PRIZE 	"qstRingersV_Battle"
+PRIZECASH	400 100
+PRIZEITEM	"Horned Thracian"	0
+PRIZEITEM	"Liberation"	0
+PRIZEITEM	"Air Throwing Axe"	0
+
+PRIZE 	"qstSarenenutetBattle"
+PRIZEITEM	"Mysterious Tablet 2"	0
+
+PRIZE 	"qstUnlifeBattle"
+PRIZEEXP	0 5
+PRIZEBADGE	"qstUnlife"
+
+PRIZE 	"qstWumpus"
+PRIZECASH	500 12
+PRIZEITEM	"Dark Death's Head"	0
+
+PRIZE 	"qstWumpus_Battle"
+PRIZEITEM	"yeti head"	0
+
+PRIZE 	"RedemptionPrize"
+PRIZECASH	200 200
+PRIZEEXP	0 5
+PRIZEITEM	"Main Gauche"	0
+
+PRIZE 	"RedemptionPro"
+PRIZECASH	1000 3000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Croag"	0
+
+PRIZE 	"RedemptionValens"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Sickle"	0
+PRIZEITEM	"Air Francisca"	0
+PRIZEITEM	"Fire Stone Axe"	0
+PRIZEITEM	"Water Leg Brace"	0
+
+PRIZE 	"RoanorTournamentUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Uruz"	0
+PRIZEITEM	"Shielded Ridge Helmet"	0
+
+PRIZE 	"RoanorTournamentValens"
+PRIZECASH	2000 3000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Bazo"	0
+PRIZEITEM	"Fire Digladio"	0
+PRIZEITEM	"Earth Wing Hat"	0
+PRIZEITEM	"Air Braced Armor"	0
+
+PRIZE 	"SloanPot1"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+
+PRIZE 	"SloanPot2"
+PRIZECASH	600 1200
+PRIZEEXP	0 5
+
+PRIZE 	"SloanPot3"
+PRIZECASH	2000 5000
+PRIZEEXP	0 5
+
+PRIZE 	"SloanTournamentUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesAirheads"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Horned Shell"	0
+
+PRIZE 	"SteppesAirHyu"
+PRIZEEXP	0 5
+PRIZEBADGE	"SteppesAirHyu"
+
+PRIZE 	"SteppesAirHyu_Generic"
+PRIZECASH	500 700
+PRIZEEXP	0 5
+PRIZEITEM	"Air Rising Sun"	1
+PRIZEITEM	"Air Clawed Cap"	1
+PRIZEITEM	"Algiz"	1
+PRIZEITEM	"Warlord's Shield"	1
+
+PRIZE 	"SteppesAllHisChildrenGa"
+PRIZECASH	250 1750
+PRIZEEXP	0 5
+PRIZEITEM	"Horse Tooth"	0
+
+PRIZE 	"SteppesAmazonTyu_Completion"
+PRIZECASH	0 9500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Platemail Bikini"	0
+PRIZEITEM	"Fire Vermillion Bracelet"	0
+PRIZEBADGE	"SteppesAmazonTyu"
+
+PRIZE 	"SteppesAmazonTyu_Generic"
+PRIZECASH	3500 500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Rounded Axe"	1
+PRIZEITEM	"Fire Lacquered Shield"	1
+PRIZEITEM	"Air Strength Armor"	1
+PRIZEITEM	"Silken Anklet"	1
+
+PRIZE 	"SteppesAmazonTyu_Mastery"
+PRIZECASH	0 8500
+PRIZEEXP	0 5
+PRIZEITEM	"Steppes Bracelet"	0
+PRIZEITEM	"Air Amazonian Headband"	0
+PRIZEITEM	"Water Snakeskin Bow"	0
+
+PRIZE 	"SteppesArcherNya"
+PRIZECASH	100 900
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Flaming Bow"	0
+PRIZEITEM	"Tono"	0
+PRIZEBADGE	"SteppesArcherNya"
+
+PRIZE 	"SteppesArchersKe"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"War Hero"	0
+
+PRIZE 	"SteppesBattleForHabaasRiver"
+PRIZECASH	700 3300
+PRIZEEXP	0 5
+PRIZEITEM	"Water Scalemail Guard"	0
+PRIZEITEM	"Fire Silk Cap"	0
+PRIZEITEM	"Warlord's Shield"	0
+
+PRIZE 	"SteppesBattleForVolcanoAduro"
+PRIZECASH	350 5500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Xan"	0
+PRIZEITEM	"Fire Snakeskin Armband"	0
+PRIZEITEM	"Earth Horned Shield"	0
+
+PRIZE 	"SteppesBattleOverUltasanGorge"
+PRIZECASH	400 4600
+PRIZEEXP	0 5
+PRIZEITEM	"Water Full Del"	0
+PRIZEITEM	"Fire Recurve Bow"	0
+PRIZEITEM	"Earth Silk Cap"	0
+
+PRIZE 	"SteppesBeastsContrastZa"
+PRIZECASH	250 4900
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Dragon's Choker"	0
+
+PRIZE 	"SteppesBeastZa"
+PRIZECASH	250 2500
+PRIZEEXP	0 5
+PRIZEITEM	"Leather Collar"	0
+PRIZEITEM	"Jade"	0
+PRIZEITEM	"Silken Collar"	0
+
+PRIZE 	"SteppesBeastZa_Generic"
+PRIZECASH	100 400
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesBeastZa_Mastery"
+PRIZECASH	0 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Dragon's Choker"	0
+PRIZEITEM	"Amethyst"	0
+
+PRIZE 	"SteppesBlackhole"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Vicious Blade"	0
+PRIZEITEM	"Dark Horn Hammer Dark"	0
+
+PRIZE 	"SteppesBladesInSpades"
+PRIZECASH	300 200
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Full Moon"	0
+
+PRIZE 	"SteppesBreakTheBank"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Thief's Armband"	0
+PRIZEBADGE	"SteppesBreakTheBank"
+
+PRIZE 	"SteppesCatFightPya"
+PRIZECASH	300 200
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesCatFightSho"
+PRIZECASH	0 15000
+PRIZEEXP	0 5
+PRIZEITEM	"Moon Charm"	0
+PRIZEITEM	"Fire Sequined Robe"	0
+PRIZEITEM	"Air Slayer"	0
+PRIZEITEM	"Earth Hardened Leather Shield"	0
+
+PRIZE 	"SteppesChagataiFireAir"
+PRIZECASH	0 4400
+PRIZEEXP	0 5
+PRIZEITEM	"Air Winged Campana"	0
+PRIZEITEM	"Fire Assegai"	0
+PRIZEITEM	"Pointed Tower"	0
+PRIZEBADGE	"SteppesChagataiFireAir"
+
+PRIZE 	"SteppesChagataiFireAir_Generic"
+PRIZECASH	400 3600
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Slayer"	0
+PRIZEITEM	"Air Clawed Cap"	0
+PRIZEITEM	"Fire Scalemail Guard"	0
+PRIZEITEM	"Necklace of Vigilance"	0
+
+PRIZE 	"SteppesChagataiFireAir_Mastery"
+PRIZECASH	0 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Chagatai"	0
+PRIZEITEM	"Fire Flame Staff"	0
+PRIZEITEM	"Fire Griffin Pelt"	0
+
+PRIZE 	"SteppesChulunnyOpen"
+PRIZECASH	150 350
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesCircusProsZe_Mastery"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Air Bronze Nosering"	0
+PRIZEITEM	"Water Steel Collar"	0
+
+PRIZE 	"SteppesCircusProsZe1"
+PRIZECASH	750 0
+PRIZEEXP	0 5
+PRIZEITEM	"Cleaver"	0
+
+PRIZE 	"SteppesCircusProsZe2"
+PRIZECASH	750 0
+PRIZEEXP	0 5
+PRIZEITEM	"Air Throwing Axe"	0
+
+PRIZE 	"SteppesCircusProsZe3"
+PRIZECASH	750 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Tsunami"	0
+
+PRIZE 	"SteppesCircusProsZe4"
+PRIZECASH	750 0
+PRIZEEXP	0 5
+PRIZEITEM	"Air Asaya"	0
+
+PRIZE 	"SteppesCretin"
+PRIZECASH	0 25000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Zatoichi"	0
+PRIZEITEM	"Water Venomous Pair"	0
+PRIZEITEM	"Dark The Carnivore Dark"	0
+PRIZEITEM	"Batenkh's Bane"	0
+
+PRIZE 	"SteppesDarkLegion"
+PRIZEEXP	0 5
+PRIZEITEM	"Dark The Carnivore Dark"	0
+PRIZEITEM	"Dark Casus Dark"	0
+PRIZEITEM	"Earth Studded Scalemail Guard"	0
+PRIZEBADGE	"SteppesDarkLegion"
+
+PRIZE 	"SteppesDesertWanderers"
+PRIZECASH	700 0
+PRIZEEXP	0 5
+PRIZEITEM	"Air Mask of the Eagle"	0
+
+PRIZE 	"SteppesDreamcatcher_Completion"
+PRIZECASH	600 5000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Xan"	0
+PRIZEITEM	"Nomad's Shield"	0
+PRIZEITEM	"Garuda Feather"	0
+PRIZEITEM	"Air Wing Hat"	0
+PRIZEBADGE	"SteppesDreamcatcher"
+
+PRIZE 	"SteppesDreamcatcher_Generic"
+PRIZECASH	500 3500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Mongile"	1
+PRIZEITEM	"Fire Slayer"	1
+PRIZEITEM	"Ivory Studded Leather"	1
+PRIZEITEM	"Air Steel Decorated Iron Plate"	1
+
+PRIZE 	"SteppesEarth_Completion"
+PRIZECASH	0 9000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Bamboo Armor"	0
+PRIZEITEM	"Earth Mongile"	0
+PRIZEITEM	"Earth The Cat's Claw"	0
+PRIZEITEM	"Ornamental Italic"	0
+PRIZEBADGE	"SteppesEarthRe"
+
+PRIZE 	"SteppesEarth_Generic"
+PRIZECASH	650 3200
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Recurve Bow"	1
+PRIZEITEM	"Earth Weighted Mallet"	1
+PRIZEITEM	"Earth Wicker Shield"	1
+PRIZEITEM	"Earth Bamboo Armor"	1
+
+PRIZE 	"SteppesEarth_Mastery"
+PRIZECASH	0 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Chopper"	0
+PRIZEITEM	"Earth Chagatai"	0
+PRIZEITEM	"Earth Wing Hat"	0
+PRIZEITEM	"Patched Leather Cap"	0
+
+PRIZE 	"SteppesEarthsCore"
+PRIZECASH	500 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Mongile"	0
+PRIZEITEM	"Patched Leather Cap"	0
+
+PRIZE 	"SteppesExpanseAllianceRo"
+PRIZECASH	250 2500
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesFemmeFataleZo_Completion"
+PRIZECASH	0 9000
+PRIZEEXP	0 5
+PRIZEITEM	"Shank"	0
+PRIZEITEM	"Air Lamellar Shell"	0
+PRIZEITEM	"Fire Finned Ferinus Helmet"	0
+
+PRIZE 	"SteppesFemmeFataleZo_Generic"
+PRIZECASH	700 4200
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Guardian's Mallet"	1
+PRIZEITEM	"Pointed Tower"	1
+PRIZEITEM	"Fire Grinning Pondus"	1
+PRIZEITEM	"Water Sequined Robe"	1
+
+PRIZE 	"SteppesFemmeFataleZo_Mastery"
+PRIZECASH	0 12000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Kuzhuk"	0
+PRIZEITEM	"Earth Dual Crested Corinthian"	0
+
+PRIZE 	"SteppesFireEnduranceKi"
+PRIZECASH	500 5500
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Flaming Bow"	0
+PRIZEITEM	"Fire Flaming Skull Cap"	0
+PRIZEBADGE	"SteppesFireEnduranceKi"
+
+PRIZE 	"SteppesFiringRange"
+PRIZECASH	0 12000
+PRIZEEXP	0 5
+PRIZEITEM	"Archer's Belt"	0
+PRIZEITEM	"Patched Leather Cap"	0
+PRIZEITEM	"Earth Recurve Bow"	0
+PRIZEITEM	"Fire Flaming Bow"	0
+PRIZEBADGE	"SteppesFiringRange"
+
+PRIZE 	"SteppesFlamingArrowheads"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Flaming Bow"	0
+PRIZEITEM	"Air Half Moon"	0
+
+PRIZE 	"SteppesHeavyweight"
+PRIZECASH	200 4800
+PRIZEEXP	0 5
+PRIZEITEM	"Air Crescent Moon"	0
+PRIZEITEM	"Fire Horned Shield"	0
+PRIZEITEM	"Horned Thracian"	0
+PRIZEITEM	"Dervish's Scalp"	0
+
+PRIZE 	"SteppesHeavyweight_Mastery"
+PRIZECASH	0 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Steel Decorated Iron Plate"	0
+PRIZEITEM	"Ring of the Brave"	0
+PRIZEITEM	"Ivory Mallet"	0
+
+PRIZE 	"SteppesHistoryOfTheFrontier"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Flaming Skull Cap"	0
+PRIZEITEM	"Blindman's Eye"	0
+PRIZEBADGE	"SteppesHistoryOfTheFrontier"
+
+PRIZE 	"SteppesHomebase"
+PRIZECASH	600 0
+PRIZEEXP	0 5
+PRIZEITEM	"Shank"	0
+
+PRIZE 	"SteppesImperiaArchersHyo"
+PRIZECASH	1200 600
+PRIZEEXP	0 5
+PRIZEITEM	"Ansuz"	0
+
+PRIZE 	"SteppesImperialRo"
+PRIZECASH	500 0
+PRIZEEXP	0 5
+PRIZEITEM	"Soldier's Skirt"	0
+
+PRIZE 	"SteppesInflationaryEgosSu"
+PRIZECASH	0 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Lion's Pride"	0
+PRIZEITEM	"Air The Cat's Claw"	0
+PRIZEBADGE	"SteppesInflationaryEgosSu"
+
+PRIZE 	"SteppesInflationaryEgosSu_Generic"
+PRIZECASH	200 800
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesInflationaryEgosSu_Master"
+PRIZECASH	0 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Ode to Aeris"	0
+PRIZEITEM	"Ring of the Brave"	0
+PRIZEITEM	"Casus"	0
+
+PRIZE 	"SteppesJochiOpenAffinity"
+PRIZECASH	250 6750
+PRIZEEXP	0 5
+PRIZEITEM	"Dark Death's Head"	0
+PRIZEITEM	"Dark Horn Hammer Dark"	0
+PRIZEBADGE	"SteppesJochiAffinity"
+
+PRIZE 	"SteppesKingOfTheHillKe_Completion"
+PRIZECASH	5000 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Sligi"	0
+PRIZEITEM	"Earth Weighted Mallet"	0
+PRIZEITEM	"Water Beast's Shield"	0
+PRIZEITEM	"Worn Attic"	0
+
+PRIZE 	"SteppesKingOfTheHillKe_Generic"
+PRIZECASH	2500 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Plombee"	1
+PRIZEITEM	"Fire Rounded Axe"	1
+PRIZEITEM	"Earth The Cat's Claw"	1
+PRIZEITEM	"Air Double Leather"	1
+
+PRIZE 	"SteppesKingOfTheHillKe_Mastery"
+PRIZECASH	3000 7000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Chopper"	0
+PRIZEITEM	"Earth Attic Cuspis"	0
+PRIZEITEM	"Ivory Studded Leather"	0
+
+PRIZE 	"SteppesLadiesOfImperia"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesLegacyOfSinghIisTahn"
+PRIZECASH	500 9500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Half Moon"	0
+PRIZEITEM	"Fire Silk Cap"	0
+PRIZEITEM	"Ingwaz"	0
+PRIZEITEM	"Earth Dadao"	0
+PRIZEBADGE	"SteppesLegacyOfSinghIisTahn"
+
+PRIZE 	"SteppesLightweight_Completion"
+PRIZECASH	0 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Chopper"	0
+PRIZEITEM	"Water Hardened Leather Shield"	0
+PRIZEITEM	"Casus"	0
+PRIZEITEM	"Air Feathered Armband"	0
+PRIZEBADGE	"SteppesLightweight"
+
+PRIZE 	"SteppesLightweight_Generic"
+PRIZECASH	550 3500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Naginata"	1
+PRIZEITEM	"Earth Rounded Axe"	1
+PRIZEITEM	"Fire Lacquered Shield"	1
+PRIZEITEM	"Water Scalemail Guard"	1
+
+PRIZE 	"SteppesMagnaSteppes_Completion"
+PRIZECASH	45000 5000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Chopper"	0
+PRIZEITEM	"Earth The Cat's Claw"	0
+PRIZEITEM	"Air Griffin Pelt"	0
+PRIZEITEM	"Fire Scarlet Anklet"	0
+
+PRIZE 	"SteppesMagnaSteppes_Generic"
+PRIZECASH	5000 0
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Mongile"	1
+PRIZEITEM	"Earth Slayer"	1
+PRIZEITEM	"Nomad's Shield"	1
+PRIZEITEM	"Casus"	1
+
+PRIZE 	"SteppesMasterMarksmen"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Sniper's Bow"	0
+
+PRIZE 	"SteppesMinionsOfTheDarkGod_Generic"
+PRIZECASH	350 3000
+PRIZEEXP	0 5
+PRIZEITEM	"Fang"	0
+PRIZEITEM	"Water Sligi"	0
+PRIZEITEM	"Earth Rounded Axe"	0
+PRIZEITEM	"Fire Flaming Bow"	0
+
+PRIZE 	"SteppesMinionsOfTheDarkGod_Mastery"
+PRIZECASH	0 13000
+PRIZEEXP	0 5
+PRIZEITEM	"Warlord's Shield"	0
+PRIZEITEM	"Casus"	0
+PRIZEITEM	"Fire Phoenix Feather"	0
+
+PRIZE 	"SteppesMonsterMayhem"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Horned Shield"	0
+PRIZEITEM	"Water Strength Armor"	0
+
+PRIZE 	"SteppesMountainRangers"
+PRIZECASH	550 0
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Bear Cowl"	0
+
+PRIZE 	"SteppesMovingMountains"
+PRIZECASH	950 1300
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Crescent Moon"	0
+PRIZEITEM	"Horned Thracian"	0
+
+PRIZE 	"SteppesMysticalZo_Completion"
+PRIZECASH	0 8800
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Flaming Skull Cap"	0
+PRIZEITEM	"Water Warrior Del"	0
+PRIZEITEM	"Traveler's Verse"	0
+
+PRIZE 	"SteppesMysticalZo_Generic"
+PRIZECASH	300 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Sequined Robe"	1
+PRIZEITEM	"Moon Charm"	1
+PRIZEITEM	"Earth Petrified Bludgeon"	1
+PRIZEITEM	"Lucky Charm"	1
+
+PRIZE 	"SteppesMysticalZo_Mastery"
+PRIZECASH	0 11500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Staff of Air"	0
+PRIZEITEM	"Fire Strength of the Fire"	0
+PRIZEITEM	"Water Warrior Del"	0
+
+PRIZE 	"SteppesNogaiEarthFire_Completion"
+PRIZECASH	0 15000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Tou-Fung"	0
+PRIZEITEM	"Fire Rigid Fez"	0
+PRIZEITEM	"Earth Desert Turban"	0
+PRIZEITEM	"Earth Bamboo Armor"	0
+PRIZEBADGE	"SteppesNogaiEarthFire"
+
+PRIZE 	"SteppesNogaiEarthFire_Mastery"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Pierced Blade"	0
+PRIZEITEM	"Batenkh's Bane"	0
+
+PRIZE 	"SteppesNomadShu"
+PRIZECASH	0 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Axes Conseco"	0
+PRIZEITEM	"Air Night's Guardian"	0
+PRIZEITEM	"Water Soul's Diadem"	0
+
+PRIZE 	"SteppesNordaghAllianceHi"
+PRIZECASH	600 4500
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Tschehouta"	0
+
+PRIZE 	"SteppesNordaghGungnirJu"
+PRIZECASH	1500 800
+PRIZEEXP	0 5
+PRIZEITEM	"Master's Belt"	0
+
+PRIZE 	"SteppesOgotaiOpen"
+PRIZECASH	150 100
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesOpenGhazan_Beasts"
+PRIZECASH	300 800
+PRIZEEXP	0 5
+PRIZEITEM	"Air Wind Collar"	0
+
+PRIZE 	"SteppesOpenGhazan_Complete"
+PRIZECASH	0 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Plombee"	0
+PRIZEITEM	"Fire Slayer"	0
+PRIZEITEM	"Earth Lacquered Shield"	0
+PRIZEITEM	"Air Scalemail Guard"	0
+PRIZEBADGE	"SteppesOpenGhazan"
+
+PRIZE 	"SteppesOpenGhazan_Heavyweight"
+PRIZECASH	500 750
+PRIZEEXP	0 5
+PRIZEITEM	"Air Horned Shell"	0
+
+PRIZE 	"SteppesOpenGhazan_Lightweight"
+PRIZECASH	350 850
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Snakeskin Armband"	0
+
+PRIZE 	"SteppesOpenGhazan_Mastery"
+PRIZECASH	0 15000
+PRIZEEXP	0 5
+PRIZEITEM	"Nomad's Shield"	0
+PRIZEITEM	"Ornamental Italic"	0
+PRIZEITEM	"Fire Silk Del"	0
+PRIZEITEM	"Air Ring of Aeris"	0
+
+PRIZE 	"SteppesOpenGhazan_Middleweight"
+PRIZECASH	400 650
+PRIZEEXP	0 5
+PRIZEITEM	"Earth The Crusher"	0
+
+PRIZE 	"SteppesOpenGhazan_Mystics"
+PRIZECASH	400 610
+PRIZEEXP	0 5
+PRIZEITEM	"Moon Charm"	0
+
+PRIZE 	"SteppesOpenSeasonBya"
+PRIZECASH	300 3700
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Armored Suit"	0
+PRIZEITEM	"Fire Tou-Fung"	0
+
+PRIZE 	"SteppesOpenShootingRange"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Snakeskin Bow"	0
+
+PRIZE 	"SteppesRepelTheYetis"
+PRIZECASH	200 5800
+PRIZEEXP	0 5
+PRIZEITEM	"Water Poison Axe"	0
+PRIZEITEM	"Water Silk Fez"	0
+PRIZEITEM	"Jade"	0
+PRIZEITEM	"Water Hardened Leather Shield"	0
+
+PRIZE 	"SteppesRywigoBu"
+PRIZECASH	500 4500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Archer's Crown"	0
+PRIZEITEM	"Air Rider's Belt"	0
+
+PRIZE 	"SteppesRywigoBu_Generic"
+PRIZECASH	500 2500
+PRIZEEXP	0 5
+
+PRIZE 	"SteppesRywigoBu_Mastery"
+PRIZECASH	0 10000
+PRIZEEXP	0 5
+PRIZEITEM	"Eiji's Bow"	0
+PRIZEITEM	"Sniper's Bow"	0
+PRIZEITEM	"Fire Stained Fur Hat"	0
+PRIZEITEM	"Air Braided Metal Bikini"	0
+
+PRIZE 	"SteppesSibanAirWater_Completion"
+PRIZECASH	0 9500
+PRIZEEXP	0 5
+PRIZEITEM	"Water Dadao"	0
+PRIZEITEM	"Ornamental Italic"	0
+PRIZEITEM	"Water Suit of Flight"	0
+PRIZEITEM	"Ingwaz"	0
+PRIZEBADGE	"SteppesSibanAirWater"
+
+PRIZE 	"SteppesSibanAirWater_Generic"
+PRIZECASH	450 3700
+PRIZEEXP	0 5
+PRIZEITEM	"Air Clawed Cap"	1
+PRIZEITEM	"Water Hardened Leather Shield"	1
+PRIZEITEM	"Earth Desert Turban"	1
+PRIZEITEM	"Air Recurve Bow"	1
+
+PRIZE 	"SteppesSibanAirWater_Mastery"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Water Andimaru"	0
+PRIZEITEM	"Air Lamellar Shell"	0
+
+PRIZE 	"SteppesSsimasToysGwa"
+PRIZECASH	0 5000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Steel Decorated Iron Plate"	0
+PRIZEITEM	"Casus"	0
+
+PRIZE 	"SteppesSummonTheSamnites"
+PRIZECASH	1000 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Horned Shell"	0
+
+PRIZE 	"SteppesSunspot_Completion"
+PRIZECASH	0 13000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Mongile"	0
+PRIZEITEM	"Fire Plombee"	0
+PRIZEITEM	"Fire Wing Hat"	0
+PRIZEBADGE	"SteppesSunspot"
+
+PRIZE 	"SteppesSunspot_Generic"
+PRIZECASH	750 1300
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Rigid Fez"	1
+PRIZEITEM	"Fire Strength of the Fire"	1
+PRIZEITEM	"Fire Flaming Bow"	1
+PRIZEITEM	"Fire Scimitar"	0
+
+PRIZE 	"SteppesSunspot_Mastery"
+PRIZECASH	0 15000
+PRIZEEXP	0 5
+PRIZEITEM	"Pointed Tower"	0
+PRIZEITEM	"Fire Finned Ferinus Helmet"	0
+PRIZEITEM	"Fire Dragon Robe"	0
+PRIZEITEM	"Fire Dragon's Choker"	0
+
+PRIZE 	"SteppesToluiEarthWater_Completion"
+PRIZECASH	0 9000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Desert Turban"	0
+PRIZEITEM	"Earth Acid Guard"	0
+PRIZEITEM	"Water Coral Shield"	0
+PRIZEBADGE	"SteppesToluiEarthWater"
+
+PRIZE 	"SteppesToluiEarthWater_Generic"
+PRIZECASH	600 4800
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Pitcher"	1
+PRIZEITEM	"Earth Bamboo Armor"	1
+PRIZEITEM	"Water Phoenix Scalp"	1
+PRIZEITEM	"Water Tsunami"	1
+
+PRIZE 	"SteppesToluiEarthWater_Mastery"
+PRIZECASH	0 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Venomous Pair"	0
+PRIZEITEM	"Water Coral Shield"	0
+PRIZEITEM	"Earth The Carnivore"	0
+PRIZEITEM	"Water Warrior Del"	0
+
+PRIZE 	"SteppesUnholyAlliances"
+PRIZECASH	0 15000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Fur Lined Shield"	0
+PRIZEITEM	"Earth Horned Shell"	0
+PRIZEITEM	"Fire Slayer"	0
+PRIZEITEM	"Water Recurve Bow"	0
+PRIZEBADGE	"SteppesUnholyAlliances"
+
+PRIZE 	"SyrnaAffinityPrize"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Xiphos"	0
+PRIZEITEM	"Earth Shield of the Visigoth"	0
+PRIZEITEM	"Fire Praetorian Italic Helmet"	0
+PRIZEITEM	"Water Shield of the Visigoth"	0
+
+PRIZE 	"SyrnaAirPrize"
+PRIZECASH	0 500
+PRIZEEXP	0 5
+PRIZEITEM	"Air Rigid Circlet"	0
+PRIZEITEM	"Air Teres Moles"	1
+
+PRIZE 	"SyrnaAveragePrize"
+PRIZECASH	1000 100
+PRIZEEXP	0 5
+PRIZEITEM	"Falchion"	1
+PRIZEITEM	"Fire Contubernium"	1
+PRIZEITEM	"Earth Arm Brace"	1
+
+PRIZE 	"SyrnaAwesomePrize"
+PRIZECASH	1500 200
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Razor Shield"	1
+PRIZEITEM	"Air Razor Shield"	1
+PRIZEITEM	"Stone Club"	1
+PRIZEITEM	"Horn Guard Helmet"	1
+
+PRIZE 	"SyrnaBasicPrize"
+PRIZECASH	1000 300
+PRIZEEXP	0 5
+PRIZEITEM	"Cotton Toga"	1
+PRIZEITEM	"Water Metal Suit"	1
+PRIZEITEM	"Contus"	1
+PRIZEITEM	"Glossy Attic"	1
+
+PRIZE 	"SyrnaBellatusHeavy"
+PRIZECASH	500 200
+PRIZEEXP	0 5
+PRIZEITEM	"Water Heavy Chain Gorget"	1
+PRIZEITEM	"Fire Scutum"	1
+PRIZEITEM	"Falchion"	1
+
+PRIZE 	"SyrnaBellatusHeavyUrsula"
+PRIZECASH	500 300
+PRIZEEXP	0 5
+PRIZEITEM	"Spatha"	1
+PRIZEITEM	"Earth Digladio"	1
+PRIZEITEM	"Air Bronze Layered Shell"	1
+
+PRIZE 	"SyrnaBellatusLight"
+PRIZECASH	500 200
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Lignator"	1
+PRIZEITEM	"Earth Umbo"	1
+PRIZEITEM	"Air Bronze Bracer"	1
+
+PRIZE 	"SyrnaBellatusLightUrsula"
+PRIZECASH	500 300
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Pugio"	1
+PRIZEITEM	"Earth Leg Brace"	1
+PRIZEITEM	"Scramasax"	1
+
+PRIZE 	"SyrnaBellatusMedium"
+PRIZECASH	500 200
+PRIZEEXP	0 5
+PRIZEITEM	"Air Praecido"	1
+PRIZEITEM	"Earth Praecido"	1
+PRIZEITEM	"Fire Praecido"	1
+PRIZEITEM	"Water Praecido"	1
+
+PRIZE 	"SyrnaBellatusMediumUrsula"
+PRIZECASH	500 300
+PRIZEEXP	0 5
+PRIZEITEM	"Carnificina"	1
+PRIZEITEM	"Hoplite"	1
+PRIZEITEM	"Water Regal Cape"	1
+
+PRIZE 	"SyrnaCash0"
+PRIZECASH	1500 150
+PRIZEEXP	0 5
+
+PRIZE 	"SyrnaCash01"
+PRIZECASH	3000 250
+PRIZEEXP	0 5
+
+PRIZE 	"SyrnaCash02"
+PRIZECASH	5000 50
+PRIZEEXP	0 5
+
+PRIZE 	"SyrnaCatFightPrize"
+PRIZECASH	6000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Leather Bikini"	0
+PRIZEITEM	"Amazon's Bracelet"	0
+PRIZEBADGE	"SyrnaCatFightBadge"
+
+PRIZE 	"SyrnaEarthPrize"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Woven Turban"	1
+PRIZEITEM	"Earth Miner's Axe"	1
+PRIZEITEM	"Earth Robustus Gustos"	1
+
+PRIZE 	"SyrnaFirePrize"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Tortoise's Scalp"	1
+PRIZEITEM	"Fire Corinthian Helmet"	1
+PRIZEITEM	"Fire Sica"	1
+PRIZEITEM	"Fire Contubernium"	1
+
+PRIZE 	"SyrnaPropPrize"
+PRIZECASH	1300 450
+PRIZEEXP	0 5
+PRIZEBADGE	"SyrnaPropBadge"
+
+PRIZE 	"SyrnaSecutorPRO"
+PRIZECASH	3000 750
+PRIZEEXP	0 5
+PRIZEITEM	"Cleaver"	1
+PRIZEITEM	"Charioteer's Shield"	1
+PRIZEITEM	"Charioteer's Shield"	1
+PRIZEITEM	"Water Decorated Pondus"	1
+
+PRIZE 	"SyrnaSecutorSemi"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Leg Brace"	1
+PRIZEITEM	"Scramasax"	1
+PRIZEITEM	"Bronze Rimmed Thracian"	1
+PRIZEITEM	"Earth Pugio"	1
+
+PRIZE 	"SyrnaTourneyPrize"
+PRIZECASH	5000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Aquamarine"	1
+PRIZEITEM	"Water Aquamarine"	1
+
+PRIZE 	"SyrnaTourneyUrsula"
+PRIZECASH	5000 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Spatha"	1
+PRIZEITEM	"Anklet of Will"	1
+PRIZEITEM	"Water Aquamarine Shard"	1
+PRIZEITEM	"Water Badge of Maritimus"	1
+
+PRIZE 	"SyrnaTribunalPrize"
+PRIZECASH	2000 200
+PRIZEEXP	0 5
+PRIZEITEM	"Water Ascia"	1
+PRIZEITEM	"Earth Umbo"	1
+PRIZEITEM	"Fire Regal Cape"	1
+PRIZEBADGE	"SyrnaTribunalBadge"
+
+PRIZE 	"SyrnaWaterPrize"
+PRIZECASH	1000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Water Curtus Saxum"	1
+PRIZEITEM	"Water Maritus"	1
+PRIZEITEM	"Water Aquamarine Pendant"	1
+PRIZEITEM	"Water Fisherman's Belt"	1
+
+PRIZE 	"TestOfTheTribesUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Lignator"	0
+PRIZEITEM	"Kard"	0
+PRIZEITEM	"Algiz"	0
+PRIZEITEM	"Ingwaz"	0
+
+PRIZE 	"TestOfTheTribesValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Francisca"	0
+PRIZEITEM	"Earth Sickle"	0
+PRIZEITEM	"Wunjo"	0
+PRIZEITEM	"Uruz"	0
+
+PRIZE 	"TheWyrdPro"
+PRIZECASH	3000 6000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Cor"	0
+PRIZEITEM	"Water Bronze Breastplate"	0
+
+PRIZE 	"TheWyrdUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Chain Collar"	0
+PRIZEITEM	"Soldier's Scalp"	0
+PRIZEITEM	"Owl Beak"	0
+PRIZEITEM	"Earth Flask"	0
+
+PRIZE 	"TheWyrdValens"
+PRIZECASH	2000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Mug"	0
+PRIZEITEM	"Stone Club"	0
+PRIZEITEM	"Air Leather Cloak"	0
+PRIZEITEM	"Rabbit Pelt"	0
+
+PRIZE 	"TitansValens"
+PRIZECASH	0 0
+PRIZEEXP	0 5
+PRIZEITEM	"Air Feathered Pike"	0
+PRIZEITEM	"Earth Arcane Mallet"	0
+PRIZEITEM	"Fire Andimaru"	0
+PRIZEITEM	"Water Brimmed Corinthian Helmet"	0
+
+PRIZE 	"ToTheWolvesPro"
+PRIZECASH	4000 8000
+PRIZEITEM	"Earth Guardian's Mallet"	0
+PRIZEITEM	"Air Spiked Helm"	0
+PRIZEITEM	"Water Horse Hide"	0
+PRIZEITEM	"Collar of Spite"	0
+
+PRIZE 	"ToTheWolvesUrsula"
+PRIZECASH	400 800
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Bone Club"	0
+PRIZEITEM	"Iron Choker"	0
+PRIZEITEM	"Collared Cloak"	0
+PRIZEITEM	"Earth Woven Collar"	0
+
+PRIZE 	"ToTheWolvesValens"
+PRIZECASH	2000 4000
+PRIZEITEM	"Earth Horn Hammer"	0
+PRIZEITEM	"Water Spiked Round Shield"	0
+PRIZEITEM	"Fire Confortari"	0
+PRIZEITEM	"Iron Choker"	0
+
+PRIZE 	"Trainee Prize"
+PRIZECASH	0 100
+PRIZEEXP	0 5
+PRIZEITEM	"Water Flamberge"	0
+PRIZEITEM	"Iron Targe"	0
+
+PRIZE 	"TrialOfTheEldersPro"
+PRIZECASH	4000 8000
+PRIZEEXP	0 5
+PRIZEITEM	"Air Horse Leg"	0
+PRIZEITEM	"Crocodile Tooth"	0
+PRIZEITEM	"Air Eagle Beak"	0
+PRIZEITEM	"Horse Tooth"	0
+
+PRIZE 	"TrialOfTheEldersUrsula"
+PRIZECASH	500 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Water Dabus"	0
+PRIZEITEM	"Bear Tooth"	0
+PRIZEITEM	"Air Wolfskin"	0
+PRIZEITEM	"Earth Wicker Shield"	0
+
+PRIZE 	"TrialOfTheEldersValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Boar Tooth"	0
+PRIZEITEM	"Stone Club"	0
+PRIZEITEM	"Hercules Club"	0
+PRIZEITEM	"Lion Tooth"	0
+
+PRIZE 	"TrikataCash0"
+PRIZECASH	500 250
+PRIZEEXP	0 5
+
+PRIZE 	"TrikataCash01"
+PRIZECASH	1500 300
+PRIZEEXP	0 5
+
+PRIZE 	"TrikataCash02"
+PRIZECASH	2000 500
+PRIZEEXP	0 5
+
+PRIZE 	"TrikataMagePrize"
+PRIZECASH	2000 0
+PRIZEEXP	0 5
+PRIZEITEM	"Shoum"	1
+PRIZEITEM	"Earth Cudgel"	1
+PRIZEITEM	"Air Fine Silk Toga"	0
+PRIZEBADGE	"TrikataMageBadge"
+
+PRIZE 	"TrikataMagic01"
+PRIZECASH	3000 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Lucky Charm"	0
+
+PRIZE 	"TrikataMagic02"
+PRIZECASH	3000 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Heart Star"	0
+
+PRIZE 	"TrikataMagic03"
+PRIZECASH	3000 1000
+PRIZEEXP	0 5
+PRIZEITEM	"Aquamarine Shard"	1
+PRIZEITEM	"Water Aquamarine Shard"	1
+
+PRIZE 	"TrikataMagic04"
+PRIZECASH	3000 2000
+PRIZEEXP	0 5
+PRIZEITEM	"Sceptrum"	0
+
+PRIZE 	"TrikataSurvivalPrize"
+PRIZECASH	2000 500
+PRIZEEXP	0 5
+PRIZEITEM	"Eow"	1
+PRIZEBADGE	"TrikataSurvivalBadge"
+
+PRIZE 	"TrikataTribunalPrize"
+PRIZECASH	1000 300
+PRIZEEXP	0 5
+PRIZEITEM	"Falchion"	1
+PRIZEITEM	"Throwing Hoplite"	1
+PRIZEITEM	"Fire Contubernium"	1
+PRIZEBADGE	"TrikataTribunalBadge"
+
+PRIZE 	"VargenPot1Ursula"
+PRIZECASH	250 500
+PRIZEEXP	0 5
+
+PRIZE 	"VargenPot2Ursula"
+PRIZECASH	300 600
+PRIZEEXP	0 5
+
+PRIZE 	"VargenPot3Ursula"
+PRIZECASH	400 800
+PRIZEEXP	0 5
+
+PRIZE 	"VargenTournamentUrsula"
+PRIZECASH	750 1500
+PRIZEEXP	0 5
+PRIZEITEM	"Earth Light Wrap"	0
+PRIZEITEM	"Reinforced Wooden Shield"	0
+PRIZEITEM	"Iron Pendant"	0
+PRIZEITEM	"Eow"	0
+
+PRIZE 	"VargenTournamentValens"
+PRIZECASH	2000 4000
+PRIZEEXP	0 5
+PRIZEITEM	"Fire Sickle"	0
+PRIZEITEM	"Reinforced Targe"	0
+PRIZEITEM	"Fire Confortari"	0
+PRIZEITEM	"Fire Cured Leather Armor"	0
+

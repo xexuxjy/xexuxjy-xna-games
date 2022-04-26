@@ -1,0 +1,3 @@
+ITEMSET export Class: UndeadCasterA UndeadCaster  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSarenDead, 20,99,           "Dark Death's Head",     "Dark Interment Robes",                      "",            "Dark Crown of Darkness",   "Dark Voodoo Doll" 

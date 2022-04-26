@@ -1,0 +1,27 @@
+
+
+// Derived from skillsetaffA with Dark subbed for Air [WOLF]5Aug03
+MODLEVELRANGESKILL:  skillsetcustomaffD,  0, 30, "Ludo Attack"                     // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcustomaffD,  0, 30, "Ludo Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  0, 30, "Ludo Shield"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  1, 30, "Ludo DarkAffinity I"              // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  2, 30, "Ludo DarkAffinity II"             // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  3, 30, "Ludo Evade II"                   // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  4, 30, "Ludo IndomitableWill"            // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  5, 30, "Ludo Orders"                     // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  5, 30, "Ludo TargetLeg"                  // JP:   4/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetcustomaffD,  6, 30, "Ludo DarkAffinity III"            // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  7, 30, "Ludo Turtle I"                   // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  8, 30, "Ludo Awareness"                  // JP:  20/ 96	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD,  9, 30, "Ludo TargetArm"                  // JP:  18/114	AccMod -5
+MODLEVELRANGESKILL:  skillsetcustomaffD, 10, 30, "Ludo Upperhand"                  // JP:  10/124	AccMod -10
+MODLEVELRANGESKILL:  skillsetcustomaffD, 12, 30, "Ludo DarkAffinity IV"             // JP:  36/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 14, 30, "Ludo DestroyShield"              // JP:  24/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 16, 30, "Ludo Discipline"                 // JP:  32/216	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 18, 30, "Ludo PeoplesHero I"              // JP:  22/238	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 19, 30, "Ludo Riposte"                    // JP:  22/260	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 19, 30, "Ludo RiposteSub"                 // JP:   0/260	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 21, 30, "Ludo TargetHead"                 // JP:  34/294	AccMod -5
+MODLEVELRANGESKILL:  skillsetcustomaffD, 23, 30, "Ludo Turtle II"                  // JP:  30/324	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 26, 30, "Ludo OffBalance"                 // JP:  38/362	AccMod 0
+MODLEVELRANGESKILL:  skillsetcustomaffD, 29, 30, "Ludo UpwardSlash"                // JP:  40/402	AccMod 0

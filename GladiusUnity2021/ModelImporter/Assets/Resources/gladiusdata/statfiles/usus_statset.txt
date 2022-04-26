@@ -1,0 +1,25 @@
+// STATSET export Class: Usus
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset0,         1         2         2         2         2         2     2.00
+MODCORESTATSCOMP:               statset0,         2         4         4         4         4         4     2.00
+MODCORESTATSCOMP:               statset0,         3         6         6         6         6         6     2.00
+MODCORESTATSCOMP:               statset0,         4         8         8         8         8         8     2.00
+MODCORESTATSCOMP:               statset0,         5        10        10        10        10        10     2.00
+MODCORESTATSCOMP:               statset0,         6        12        12        12        12        12     2.00
+MODCORESTATSCOMP:               statset0,         7        14        14        14        14        14     2.00
+MODCORESTATSCOMP:               statset0,         8        16        16        16        16        16     2.00
+MODCORESTATSCOMP:               statset0,         9        18        18        18        18        18     2.00
+MODCORESTATSCOMP:               statset0,        10        20        20        20        20        20     2.00
+MODCORESTATSCOMP:               statset0,        11        22        22        22        22        22     2.00
+MODCORESTATSCOMP:               statset0,        12        24        24        24        24        24     2.00
+MODCORESTATSCOMP:               statset0,        13        26        26        26        26        26     2.00
+MODCORESTATSCOMP:               statset0,        14        28        28        28        28        28     2.00
+MODCORESTATSCOMP:               statset0,        15        30        30        30        30        30     2.00
+MODCORESTATSCOMP:               statset0,        16        32        32        32        32        32     2.00
+MODCORESTATSCOMP:               statset0,        17        34        34        34        34        34     2.00
+MODCORESTATSCOMP:               statset0,        18        36        36        36        36        36     2.00
+MODCORESTATSCOMP:               statset0,        19        38        38        38        38        38     2.00
+MODCORESTATSCOMP:               statset0,        20        40        40        40        40        40     2.00
+
+

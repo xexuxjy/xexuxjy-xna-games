@@ -1,0 +1,147 @@
+////// SKILLSET export Class: DarkLegionnaire DarkLegionnaire  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkLegionnaire Attack"          // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkLegionnaire Block"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkLegionnaire Shield"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "DarkLegionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "DarkLegionnaire Combo I"         // JP:   6/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "DarkLegionnaire TargetLeg"       // JP:   4/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "DarkLegionnaire Combo II"        // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "DarkLegionnaire Evade II"        // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "DarkLegionnaire IndomitableWill"  // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "DarkLegionnaire Orders"          // JP:   8/ 62	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "DarkLegionnaire Turtle I"        // JP:   6/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "DarkLegionnaire PrecisionAttack"  // JP:  10/ 78	AccMod 15
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "DarkLegionnaire Awareness"       // JP:  20/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "DarkLegionnaire Combo III"       // JP:  22/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "DarkLegionnaire DestroyShield"   // JP:  24/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "DarkLegionnaire Riposte"         // JP:  22/166	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "DarkLegionnaire RiposteSub"      // JP:   0/166	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "DarkLegionnaire Combo IV"        // JP:  34/200	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "DarkLegionnaire Discipline"      // JP:  32/232	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "DarkLegionnaire Turtle II"       // JP:  30/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "DarkLegionnaire DestroyHelm"     // JP:  40/302	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "DarkLegionnaire OffBalance"      // JP:  38/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 27, 30, "DarkLegionnaire TargetHead"      // JP:  34/374	AccMod -5
+//  Unused JP at Level 30: 56
+
+
+////// SKILLSET export Class: DarkLegionnaire DarkLegionnaire  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkLegionnaire Attack"          // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkLegionnaire Block"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkLegionnaire Shield"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "DarkLegionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "DarkLegionnaire Evade II"        // JP:  12/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "DarkLegionnaire Orders"          // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "DarkLegionnaire IndomitableWill"  // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "DarkLegionnaire PrecisionAttack"  // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "DarkLegionnaire TargetLeg"       // JP:   4/ 54	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "DarkLegionnaire Turtle I"        // JP:   6/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "DarkLegionnaire Awareness"       // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "DarkLegionnaire DestroyShield"   // JP:  24/104	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "DarkLegionnaire Riposte"         // JP:  22/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "DarkLegionnaire RiposteSub"      // JP:   0/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "DarkLegionnaire Discipline"      // JP:  32/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "DarkLegionnaire Turtle II"       // JP:  30/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "DarkLegionnaire DestroyHelm"     // JP:  40/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "DarkLegionnaire TargetHead"      // JP:  34/262	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "DarkLegionnaire OffBalance"      // JP:  38/300	AccMod 0
+//  Unused JP at Level 30: 130
+
+
+////// SKILLSET export Class: DarkLegionnaire DarkLegionnaire  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkLegionnaire Attack"          // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkLegionnaire Block"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkLegionnaire Shield"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "DarkLegionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "DarkLegionnaire Evade II"        // JP:  12/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "DarkLegionnaire Orders"          // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "DarkLegionnaire IndomitableWill"  // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "DarkLegionnaire PrecisionAttack"  // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "DarkLegionnaire TargetLeg"       // JP:   4/ 54	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "DarkLegionnaire Turtle I"        // JP:   6/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "DarkLegionnaire Awareness"       // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "DarkLegionnaire DestroyShield"   // JP:  24/104	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "DarkLegionnaire Riposte"         // JP:  22/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "DarkLegionnaire RiposteSub"      // JP:   0/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "DarkLegionnaire Discipline"      // JP:  32/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "DarkLegionnaire Turtle II"       // JP:  30/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "DarkLegionnaire DestroyHelm"     // JP:  40/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "DarkLegionnaire TargetHead"      // JP:  34/262	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "DarkLegionnaire OffBalance"      // JP:  38/300	AccMod 0
+//  Unused JP at Level 30: 130
+
+
+////// SKILLSET export Class: DarkLegionnaire DarkLegionnaire  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkLegionnaire Attack"          // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkLegionnaire Block"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkLegionnaire Shield"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "DarkLegionnaire DarkAffinity I"  // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "DarkLegionnaire DarkAffinity II"  // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "DarkLegionnaire Orders"          // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "DarkLegionnaire PracticedManeuvers"  // JP:   2/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "DarkLegionnaire Evade II"        // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "DarkLegionnaire TargetLeg"       // JP:   4/ 40	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "DarkLegionnaire PrecisionAttack"  // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "DarkLegionnaire Awareness"       // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "DarkLegionnaire Turtle I"        // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  8, 30, "DarkLegionnaire DarkAffinity III"  // JP:  20/ 96	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "DarkLegionnaire IndomitableWill"  // JP:  18/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "DarkLegionnaire DestroyShield"   // JP:  24/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "DarkLegionnaire Riposte"         // JP:  22/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "DarkLegionnaire RiposteSub"      // JP:   0/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "DarkLegionnaire Turtle II"       // JP:  30/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "DarkLegionnaire DestroyHelm"     // JP:  40/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "DarkLegionnaire Discipline"      // JP:  32/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "DarkLegionnaire OffBalance"      // JP:  38/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "DarkLegionnaire TargetHead"      // JP:  34/334	AccMod -5
+//  Unused JP at Level 30: 96
+
+
+////// SKILLSET export Class: DarkLegionnaire DarkLegionnaire  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkLegionnaire Attack"          // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkLegionnaire Block"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkLegionnaire Shield"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "DarkLegionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "DarkLegionnaire Evade II"        // JP:  12/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "DarkLegionnaire Orders"          // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "DarkLegionnaire IndomitableWill"  // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "DarkLegionnaire PrecisionAttack"  // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "DarkLegionnaire TargetLeg"       // JP:   4/ 54	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "DarkLegionnaire Turtle I"        // JP:   6/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "DarkLegionnaire Awareness"       // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "DarkLegionnaire DestroyShield"   // JP:  24/104	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "DarkLegionnaire Riposte"         // JP:  22/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "DarkLegionnaire RiposteSub"      // JP:   0/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "DarkLegionnaire Discipline"      // JP:  32/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "DarkLegionnaire Turtle II"       // JP:  30/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "DarkLegionnaire DestroyHelm"     // JP:  40/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "DarkLegionnaire TargetHead"      // JP:  34/262	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "DarkLegionnaire OffBalance"      // JP:  38/300	AccMod 0
+//  Unused JP at Level 30: 130
+
+
+////// SKILLSET export Class: DarkLegionnaire DarkLegionnaire  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkLegionnaire Attack"          // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkLegionnaire Block"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkLegionnaire Shield"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "DarkLegionnaire PracticedManeuvers"  // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "DarkLegionnaire Evade II"        // JP:  12/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "DarkLegionnaire Orders"          // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "DarkLegionnaire IndomitableWill"  // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "DarkLegionnaire PrecisionAttack"  // JP:  10/ 50	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "DarkLegionnaire TargetLeg"       // JP:   4/ 54	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "DarkLegionnaire Turtle I"        // JP:   6/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "DarkLegionnaire Awareness"       // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "DarkLegionnaire DestroyShield"   // JP:  24/104	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "DarkLegionnaire Riposte"         // JP:  22/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "DarkLegionnaire RiposteSub"      // JP:   0/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "DarkLegionnaire Discipline"      // JP:  32/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "DarkLegionnaire Turtle II"       // JP:  30/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "DarkLegionnaire DestroyHelm"     // JP:  40/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "DarkLegionnaire TargetHead"      // JP:  34/262	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "DarkLegionnaire OffBalance"      // JP:  38/300	AccMod 0
+//  Unused JP at Level 30: 130
+
+
+
+

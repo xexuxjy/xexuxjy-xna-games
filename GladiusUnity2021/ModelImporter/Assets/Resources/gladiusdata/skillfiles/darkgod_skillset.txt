@@ -1,0 +1,140 @@
+////// SKILLSET export Class: DarkGod DarkGod  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodDragon Bite"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodDragon BreathFace"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodDragon Breathknights"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodDragon BreathShiva"       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodDragon FireBreath"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodDragon Invulnerability"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodDragon KnockBack"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodFace SummonCat"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodFace SummonWolf"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodKnight Attack"            // JP:   0/  0	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodKnight Block"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodKnight Wideswing"         // JP:   0/  0	AccMod -20
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodShiva Attack"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodShiva BackAtcha"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodShiva Block"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodShiva Charm"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodShiva Immunity"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "DarkGodShiva Nimble"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "DarkGod Immunities"              // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 565
+
+
+////// SKILLSET export Class: DarkGod DarkGod  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodDragon Bite"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodDragon BreathFace"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodDragon Breathknights"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodDragon BreathShiva"       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodDragon FireBreath"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodDragon Invulnerability"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodDragon KnockBack"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodFace SummonCat"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodFace SummonWolf"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodKnight Attack"            // JP:   0/  0	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodKnight Block"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodKnight Wideswing"         // JP:   0/  0	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodShiva Attack"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodShiva BackAtcha"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodShiva Block"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodShiva Charm"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodShiva Immunity"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "DarkGodShiva Nimble"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "DarkGod Immunities"              // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 565
+
+
+////// SKILLSET export Class: DarkGod DarkGod  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodDragon Bite"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodDragon BreathFace"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodDragon Breathknights"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodDragon BreathShiva"       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodDragon FireBreath"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodDragon Invulnerability"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodDragon KnockBack"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodFace SummonCat"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodFace SummonWolf"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodKnight Attack"            // JP:   0/  0	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodKnight Block"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodKnight Wideswing"         // JP:   0/  0	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodShiva Attack"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodShiva BackAtcha"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodShiva Block"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodShiva Charm"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodShiva Immunity"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "DarkGodShiva Nimble"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "DarkGod Immunities"              // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 565
+
+
+////// SKILLSET export Class: DarkGod DarkGod  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodDragon Bite"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodDragon BreathFace"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodDragon Breathknights"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodDragon BreathShiva"       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodDragon FireBreath"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodDragon Invulnerability"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodDragon KnockBack"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodFace SummonCat"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodFace SummonWolf"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodKnight Attack"            // JP:   0/  0	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodKnight Block"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodKnight Wideswing"         // JP:   0/  0	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodShiva Attack"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodShiva BackAtcha"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodShiva Block"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodShiva Charm"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodShiva Immunity"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "DarkGodShiva Nimble"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "DarkGod Immunities"              // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 565
+
+
+////// SKILLSET export Class: DarkGod DarkGod  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodDragon Bite"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodDragon BreathFace"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodDragon Breathknights"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodDragon BreathShiva"       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodDragon FireBreath"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodDragon Invulnerability"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodDragon KnockBack"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodFace SummonCat"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodFace SummonWolf"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodKnight Attack"            // JP:   0/  0	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodKnight Block"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodKnight Wideswing"         // JP:   0/  0	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodShiva Attack"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodShiva BackAtcha"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodShiva Block"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodShiva Charm"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodShiva Immunity"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "DarkGodShiva Nimble"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "DarkGod Immunities"              // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 565
+
+
+////// SKILLSET export Class: DarkGod DarkGod  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodDragon Bite"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodDragon BreathFace"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodDragon Breathknights"     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodDragon BreathShiva"       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodDragon FireBreath"        // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodDragon Invulnerability"   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodDragon KnockBack"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodFace SummonCat"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodFace SummonWolf"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodKnight Attack"            // JP:   0/  0	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodKnight Block"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodKnight Wideswing"         // JP:   0/  0	AccMod -20
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodShiva Attack"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodShiva BackAtcha"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodShiva Block"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodShiva Charm"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodShiva Immunity"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "DarkGodShiva Nimble"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "DarkGod Immunities"              // JP:  20/ 20	AccMod 0
+//  Unused JP at Level 30: 565
+
+
+
+

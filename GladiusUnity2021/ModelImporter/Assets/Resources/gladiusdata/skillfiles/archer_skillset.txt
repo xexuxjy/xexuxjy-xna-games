@@ -1,0 +1,154 @@
+////// SKILLSET export Class: Archer Archer  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Archer Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Archer Attack"                   // JP:   4/  4	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Archer BowAttack"                // JP:   4/  8	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Archer Combo I"                  // JP:   6/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Archer ExplodingArrow"           // JP:   4/ 18	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Archer LongShot I"               // JP:   6/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Archer Combo II"                 // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Archer Rapidshot I"              // JP:   2/ 38	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Archer JoltArrow"                // JP:  12/ 50	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Archer LongShot II"              // JP:  20/ 70	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Archer WhistlingArrow"           // JP:  10/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Archer PointBlankCantMiss"       // JP:  18/ 98	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Archer Combo III"                // JP:  22/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Archer Cover"                    // JP:  24/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Archer IndirectFire"             // JP:  30/174	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Archer PoisonArrow"              // JP:  22/196	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Archer Combo IV"                 // JP:  34/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Archer PointBlankPowered"        // JP:  32/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Archer LongShot III"             // JP:  36/298	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Archer LongShot IV"              // JP:  38/336	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Archer Spray"                    // JP:  34/370	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "Archer Spray II"                 // JP:  40/410	AccMod 0
+//  Unused JP at Level 30: 20
+
+
+////// SKILLSET export Class: Archer Archer  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Archer Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Archer Attack"                   // JP:   4/  4	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Archer BowAttack"                // JP:   4/  8	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Archer EarthAffinity I"          // JP:   4/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Archer Rapidshot I"              // JP:   2/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Archer EarthAffinity II"         // JP:  10/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Archer ExplodingArrow"           // JP:   4/ 28	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Archer JoltArrow"                // JP:  12/ 40	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Archer LongShot I"               // JP:   6/ 46	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Archer Cover"                    // JP:  24/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Archer WhistlingArrow"           // JP:  10/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Archer EarthAffinity III"        // JP:  20/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Archer IndirectFire"             // JP:  30/130	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Archer LongShot II"              // JP:  20/150	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Archer PointBlankCantMiss"       // JP:  18/168	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Archer PoisonArrow"              // JP:  22/190	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Archer EarthAffinity IV"         // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Archer LongShot III"             // JP:  36/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Archer PointBlankPowered"        // JP:  32/294	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Archer LongShot IV"              // JP:  38/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 26, 30, "Archer Spray"                    // JP:  34/366	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 29, 30, "Archer Spray II"                 // JP:  40/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Archer Archer  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Archer Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Archer Attack"                   // JP:   4/  4	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Archer BowAttack"                // JP:   4/  8	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Archer ExplodingArrow"           // JP:   4/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Archer Rapidshot I"              // JP:   2/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Archer LongShot I"               // JP:   6/ 20	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Archer WaterAffinity I"          // JP:   4/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Archer JoltArrow"                // JP:  12/ 36	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Archer PointBlankCantMiss"       // JP:  18/ 54	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Archer WaterAffinity II"         // JP:  10/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Archer LongShot II"              // JP:  20/ 84	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Archer WhistlingArrow"           // JP:  10/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Archer WaterAffinity III"        // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Archer Cover"                    // JP:  24/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Archer PoisonArrow"              // JP:  22/160	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Archer IndirectFire"             // JP:  30/190	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Archer LongShot III"             // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Archer LongShot IV"              // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Archer PointBlankPowered"        // JP:  32/296	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Archer Spray"                    // JP:  34/330	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 26, 30, "Archer Spray II"                 // JP:  40/370	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 29, 30, "Archer WaterAffinity IV"         // JP:  36/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Archer Archer  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Archer Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Archer Attack"                   // JP:   4/  4	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Archer BowAttack"                // JP:   4/  8	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Archer ExplodingArrow"           // JP:   4/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Archer Rapidshot I"              // JP:   2/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Archer LongShot I"               // JP:   6/ 20	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Archer JoltArrow"                // JP:  12/ 32	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Archer LongShot II"              // JP:  20/ 52	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Archer PointBlankCantMiss"       // JP:  18/ 70	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Archer WhistlingArrow"           // JP:  10/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Archer Cover"                    // JP:  24/104	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 10, 30, "Archer PoisonArrow"              // JP:  22/126	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Archer IndirectFire"             // JP:  30/156	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Archer PointBlankPowered"        // JP:  32/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Archer LongShot III"             // JP:  36/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Archer LongShot IV"              // JP:  38/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "Archer Spray"                    // JP:  34/296	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Archer Spray II"                 // JP:  40/336	AccMod 0
+//  Unused JP at Level 30: 94
+
+
+////// SKILLSET export Class: Archer Archer  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Archer Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Archer AirAffinity I"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Archer AirAffinity II"           // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Archer Attack"                   // JP:   4/ 18	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Archer BowAttack"                // JP:   4/ 22	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Archer Rapidshot I"              // JP:   2/ 24	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Archer ExplodingArrow"           // JP:   4/ 28	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Archer JoltArrow"                // JP:  12/ 40	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Archer LongShot I"               // JP:   6/ 46	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Archer AirAffinity III"          // JP:  20/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Archer PointBlankCantMiss"       // JP:  18/ 84	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Archer WhistlingArrow"           // JP:  10/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Archer LongShot II"              // JP:  20/114	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Archer Cover"                    // JP:  24/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Archer PoisonArrow"              // JP:  22/160	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Archer IndirectFire"             // JP:  30/190	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Archer AirAffinity IV"           // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Archer LongShot III"             // JP:  36/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 21, 30, "Archer PointBlankPowered"        // JP:  32/294	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Archer LongShot IV"              // JP:  38/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Archer Spray"                    // JP:  34/366	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 29, 30, "Archer Spray II"                 // JP:  40/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Archer Archer  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Archer Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Archer Attack"                   // JP:   4/  4	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Archer BowAttack"                // JP:   4/  8	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Archer ExplodingArrow"           // JP:   4/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Archer Rapidshot I"              // JP:   2/ 14	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Archer FireAffinity I"           // JP:   4/ 18	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Archer LongShot I"               // JP:   6/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Archer FireAffinity II"          // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Archer FireAffinity III"         // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Archer JoltArrow"                // JP:  12/ 66	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Archer PointBlankCantMiss"       // JP:  18/ 84	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Archer WhistlingArrow"           // JP:  10/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Archer LongShot II"              // JP:  20/114	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Archer Cover"                    // JP:  24/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Archer PoisonArrow"              // JP:  22/160	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Archer IndirectFire"             // JP:  30/190	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Archer FireAffinity IV"          // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Archer LongShot III"             // JP:  36/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Archer PointBlankPowered"        // JP:  32/294	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Archer LongShot IV"              // JP:  38/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 26, 30, "Archer Spray"                    // JP:  34/366	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 29, 30, "Archer Spray II"                 // JP:  40/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+
+

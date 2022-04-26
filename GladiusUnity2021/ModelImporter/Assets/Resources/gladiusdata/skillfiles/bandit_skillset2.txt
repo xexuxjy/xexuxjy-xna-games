@@ -1,0 +1,54 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Bandit
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"BanditUberSet",	0,	1000,	"Bandit Attack"
+MODLEVELRANGESKILL: 	"BanditUberSet",	0,	1000,	"Bandit Evade"
+MODLEVELRANGESKILL: 	"BanditUberSet",	0,	1000,	"Bandit ShieldBlock"
+MODLEVELRANGESKILL: 	"BanditUberSet",	1,	1000,	"Bandit AirAffinity I"
+MODLEVELRANGESKILL: 	"BanditUberSet",	2,	1000,	"Bandit Combo I"
+MODLEVELRANGESKILL: 	"BanditUberSet",	3,	1000,	"Bandit AirAffinity II"
+MODLEVELRANGESKILL: 	"BanditUberSet",	3,	1000,	"Bandit Incapacitate"
+MODLEVELRANGESKILL: 	"BanditUberSet",	4,	1000,	"Bandit Combo II"
+MODLEVELRANGESKILL: 	"BanditUberSet",	4,	1000,	"Bandit Courage"
+MODLEVELRANGESKILL: 	"BanditUberSet",	5,	1000,	"Bandit Backstab"
+
+//Xbox Demo skillset
+
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Bandit Attack"                   // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Bandit Evade"                    // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Bandit Incapacitate"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Bandit Run I"                    // JP:   6/ 18
+
+//gimpy for training
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Bandit Attack"                   // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Bandit AttackSpear"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Bandit Evade"                    // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Bandit Shield"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Bandit Incapacitate I"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Bandit Backstab"                 // JP:  10/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  3, 30, "Bandit combo I"                  // JP:   6/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  3, 30, "Bandit Courage"                  // JP:   8/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Bandit combo II"                 // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Bandit Run I"                    // JP:   6/ 42	AccMod -10
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Bandit Turtle I"                 // JP:  12/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Bandit combo III"                // JP:  22/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  8, 30, "Bandit Evade II"                 // JP:  20/ 96	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  9, 30, "Bandit Trip"                     // JP:  18/114	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 11, 30, "Bandit Evade III"                // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 13, 30, "Bandit PierceDefense"            // JP:  24/168	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 14, 30, "Bandit Riposte"                  // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 14, 30, "Bandit RiposteSub"               // JP:   0/190	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 17, 30, "Bandit Awareness"                // JP:  38/228	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 19, 30, "Bandit combo IV"                 // JP:  34/262	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 21, 30, "Bandit Run II"                   // JP:  32/294	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 24, 30, "Bandit Incapacitate II"          // JP:  36/330	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 26, 30, "Bandit Slice"                    // JP:  40/370	AccMod 1
+MODLEVELRANGESKILL:  skillsettrain, 29, 30, "Bandit VigorTheft"               // JP:  34/404	AccMod -5
+
+
+
+
