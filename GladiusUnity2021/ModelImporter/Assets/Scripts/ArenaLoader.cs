@@ -25,7 +25,7 @@ public static class GridFileManager
         return gridFile;
     }
 
-    private static GridFile ReadFile(String gridFileName,TextAsset textAsset)
+    public static GridFile ReadFile(String gridFileName,TextAsset textAsset)
     {
         int rowLength = Arena.ArenaSize;
         uint[] arenaGrid = new uint[rowLength*rowLength];
