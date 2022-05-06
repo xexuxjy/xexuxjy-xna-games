@@ -42,17 +42,24 @@ public class DebugGrid : MonoBehaviour
                 text.transform.localPosition = Vector3.zero;
                 text.transform.localRotation = Quaternion.identity;
 
-                TextMeshPro tmp = text.AddComponent<TextMeshPro>();
-                tmp.text = "" + j + "," + i;
-                tmp.alignment = TextAlignmentOptions.Center;
-                tmp.fontSize = 36f;
+                TextMesh tm = text.AddComponent<TextMesh>();
+                tm.text = "" + j + "," + i;
+                tm.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                tm.color = (currentMaterial == black) ? Color.white : Color.black;
+                tm.fontSize = 20;
+                tm.alignment = TextAlignment.Center;
 
-                tmp.textContainer.width = 10f;
-                tmp.textContainer.height = 10f;
+                //TextMeshPro tmp = text.AddComponent<TextMeshPro>();
+                //tmp.text = "" + j + "," + i;
+                //tmp.alignment = TextAlignmentOptions.Center;
+                //tmp.fontSize = 36f;
 
-                text.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                //tmp.textContainer.width = 10f;
+                //tmp.textContainer.height = 10f;
 
-                tmp.color = (currentMaterial == black) ? Color.white: Color.black;
+                //text.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+                //tmp.color = (currentMaterial == black) ? Color.white: Color.black;
 
 
                 //RectTransform rt = quad.GetComponent<RectTransform>();
