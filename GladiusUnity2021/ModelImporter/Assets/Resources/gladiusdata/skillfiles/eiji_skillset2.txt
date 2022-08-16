@@ -1,0 +1,17 @@
+
+
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Eiji Attack"                     // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Eiji Daze"                       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Eiji Evade"                      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Eiji Combo I"                    // JP:   6/  6
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Eiji Punch"                      // JP:   4/ 14
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Eiji LongShot I"                 // JP:   6/ 20
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Eiji AcidArrow"                  // JP:   8/ 28
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Eiji Combo II"                   // JP:  12/ 40
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Eiji Knee"                       // JP:  10/ 50
+MODLEVELRANGESKILL:  skillsetxboxdemo,  7, 30, "Eiji FlashArrow"                 // JP:  14/ 64
+MODLEVELRANGESKILL:  skillsetxboxdemo,  8, 30, "Eiji Combo III"                  // JP:  22/ 86
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Eiji Sparks"                     // JP:  18/104
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Eiji LongShot II"                // JP:  20/124
+MODLEVELRANGESKILL:  skillsetxboxdemo, 11, 30, "Eiji NerveArrow"                 // JP:  22/146
+MODLEVELRANGESKILL:  skillsetxboxdemo, 12, 30, "Eiji Cover"                      // JP:  24/170

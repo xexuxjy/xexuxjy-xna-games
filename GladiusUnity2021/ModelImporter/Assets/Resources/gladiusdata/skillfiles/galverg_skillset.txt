@@ -1,0 +1,119 @@
+////// SKILLSET export Class: Galverg Galverg  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Galverg Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Galverg Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Galverg PrecisionAttack"         // JP:   8/  8	AccMod 15
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Galverg Run I"                   // JP:   6/ 14	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Galverg Uppercut"                // JP:  10/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Galverg DestroyShield"           // JP:  24/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Galverg Riposte"                 // JP:  20/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Galverg RiposteSub"              // JP:   0/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Galverg CripplingBlow"           // JP:  32/100	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Galverg Run II"                  // JP:  30/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "Galverg WideSwing"               // JP:  18/148	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 14, 30, "Galverg BackAtcha"               // JP:  36/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 16, 30, "Galverg Shockwave"               // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Galverg DestroyHelm"             // JP:  40/258	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Galverg HeavyStrike"             // JP:  38/296	AccMod -10
+//  Unused JP at Level 30: 134
+
+
+////// SKILLSET export Class: Galverg Galverg  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Galverg Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Galverg Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Galverg PrecisionAttack"         // JP:   8/  8	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Galverg Run I"                   // JP:   6/ 14	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Galverg Uppercut"                // JP:  10/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Galverg DestroyShield"           // JP:  24/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Galverg Riposte"                 // JP:  20/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Galverg RiposteSub"              // JP:   0/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Galverg CripplingBlow"           // JP:  32/100	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Galverg Run II"                  // JP:  30/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Galverg WideSwing"               // JP:  18/148	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Galverg BackAtcha"               // JP:  36/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 16, 30, "Galverg Shockwave"               // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Galverg DestroyHelm"             // JP:  40/258	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "Galverg HeavyStrike"             // JP:  38/296	AccMod -10
+//  Unused JP at Level 30: 134
+
+
+////// SKILLSET export Class: Galverg Galverg  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Galverg Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Galverg Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Galverg PrecisionAttack"         // JP:   8/  8	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Galverg Run I"                   // JP:   6/ 14	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Galverg Uppercut"                // JP:  10/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Galverg DestroyShield"           // JP:  24/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Galverg Riposte"                 // JP:  20/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Galverg RiposteSub"              // JP:   0/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Galverg CripplingBlow"           // JP:  32/100	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "Galverg Run II"                  // JP:  30/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Galverg WideSwing"               // JP:  18/148	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Galverg BackAtcha"               // JP:  36/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 16, 30, "Galverg Shockwave"               // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Galverg DestroyHelm"             // JP:  40/258	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Galverg HeavyStrike"             // JP:  38/296	AccMod -10
+//  Unused JP at Level 30: 134
+
+
+////// SKILLSET export Class: Galverg Galverg  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Galverg Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Galverg Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Galverg DarkAffinity I"          // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Galverg DarkAffinity II"         // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Galverg PrecisionAttack"         // JP:   8/ 22	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Galverg Run I"                   // JP:   6/ 28	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Galverg Uppercut"                // JP:  10/ 38	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Galverg CripplingBlow"           // JP:  32/ 70	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  8, 30, "Galverg DarkAffinity III"        // JP:  20/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Galverg DestroyShield"           // JP:  24/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Galverg Riposte"                 // JP:  20/134	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Galverg RiposteSub"              // JP:   0/134	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Galverg WideSwing"               // JP:  18/152	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Galverg BackAtcha"               // JP:  36/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 16, 30, "Galverg Run II"                  // JP:  30/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Galverg DestroyHelm"             // JP:  40/258	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 21, 30, "Galverg Shockwave"               // JP:  34/292	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Galverg HeavyStrike"             // JP:  38/330	AccMod -10
+//  Unused JP at Level 30: 100
+
+
+////// SKILLSET export Class: Galverg Galverg  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Galverg Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Galverg Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Galverg PrecisionAttack"         // JP:   8/  8	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Galverg Run I"                   // JP:   6/ 14	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Galverg Uppercut"                // JP:  10/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Galverg DestroyShield"           // JP:  24/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Galverg Riposte"                 // JP:  20/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Galverg RiposteSub"              // JP:   0/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Galverg CripplingBlow"           // JP:  32/100	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "Galverg Run II"                  // JP:  30/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Galverg WideSwing"               // JP:  18/148	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Galverg BackAtcha"               // JP:  36/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 16, 30, "Galverg Shockwave"               // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Galverg DestroyHelm"             // JP:  40/258	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Galverg HeavyStrike"             // JP:  38/296	AccMod -10
+//  Unused JP at Level 30: 134
+
+
+////// SKILLSET export Class: Galverg Galverg  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Galverg Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Galverg Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Galverg PrecisionAttack"         // JP:   8/  8	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Galverg Run I"                   // JP:   6/ 14	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Galverg Uppercut"                // JP:  10/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Galverg DestroyShield"           // JP:  24/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Galverg Riposte"                 // JP:  20/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Galverg RiposteSub"              // JP:   0/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Galverg CripplingBlow"           // JP:  32/100	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "Galverg Run II"                  // JP:  30/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Galverg WideSwing"               // JP:  18/148	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Galverg BackAtcha"               // JP:  36/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 16, 30, "Galverg Shockwave"               // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Galverg DestroyHelm"             // JP:  40/258	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "Galverg HeavyStrike"             // JP:  38/296	AccMod -10
+//  Unused JP at Level 30: 134
+
+
+
+

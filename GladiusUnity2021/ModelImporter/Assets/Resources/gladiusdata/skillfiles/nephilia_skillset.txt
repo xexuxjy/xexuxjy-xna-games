@@ -1,0 +1,26 @@
+////// SKILLSET export Class: Nephilia Nephilia  Affinity: Untyped
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Nephilia Nephilia  Affinity: Earth
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Nephilia Nephilia  Affinity: Water
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Nephilia Nephilia  Affinity: Dark
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Nephilia Nephilia  Affinity: Air
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Nephilia Nephilia  Affinity: Fire
+//  Unused JP at Level 30: 470
+
+
+
+

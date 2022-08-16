@@ -1,0 +1,37 @@
+// STATSET export Class: Centurion
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statsetw,         1         5         3         3         4         4         1
+MODCORESTATSCOMP:               statsetw,         2        11        13        10         8         9         1
+MODCORESTATSCOMP:               statsetw,         3        16        18        15        12        14         1
+MODCORESTATSCOMP:               statsetw,         4        22        23        20        17        20         1
+MODCORESTATSCOMP:               statsetw,         5        27        29        26        22        25         1
+MODCORESTATSCOMP:               statsetw,         6        33        34        31        27        31         1
+MODCORESTATSCOMP:               statsetw,         7        38        39        37        32        36         1
+MODCORESTATSCOMP:               statsetw,         8        43        44        42        38        40         1
+MODCORESTATSCOMP:               statsetw,         9        48        50        47        43        45         1
+MODCORESTATSCOMP:               statsetw,        10        53        55        52        47        51         1
+MODCORESTATSCOMP:               statsetw,        11        58        59        56        51        56         1
+MODCORESTATSCOMP:               statsetw,        12        64        64        61        55        60         1
+MODCORESTATSCOMP:               statsetw,        13        69        69        66        61        64         1
+MODCORESTATSCOMP:               statsetw,        14        73        74        72        65        68         1
+MODCORESTATSCOMP:               statsetw,        15        78        78        77        70        73         1
+MODCORESTATSCOMP:               statsetw,        16        83        83        82        76        78         1
+MODCORESTATSCOMP:               statsetw,        17        89        87        88        80        83         1
+MODCORESTATSCOMP:               statsetw,        18        95        92        93        85        88         1
+MODCORESTATSCOMP:               statsetw,        19       100        97        97        89        93         1
+MODCORESTATSCOMP:               statsetw,        20       104       102       101        94        98         1
+MODCORESTATSCOMP:               statsetw,        21       109       108       107        99       104         1
+MODCORESTATSCOMP:               statsetw,        22       113       114       111       104       110         1
+MODCORESTATSCOMP:               statsetw,        23       118       119       116       108       116         1
+MODCORESTATSCOMP:               statsetw,        24       122       124       120       113       121         1
+MODCORESTATSCOMP:               statsetw,        25       127       129       126       118       126         1
+MODCORESTATSCOMP:               statsetw,        26       131       133       130       122       131         1
+MODCORESTATSCOMP:               statsetw,        27       136       139       135       127       137         1
+MODCORESTATSCOMP:               statsetw,        28       141       144       141       133       142         1
+MODCORESTATSCOMP:               statsetw,        29       147       148       146       137       147         1
+MODCORESTATSCOMP:               statsetw,        30       151       153       151       143       153         1
+
+
+
+

@@ -1,0 +1,20 @@
+MODITEMSCOMP:   ITEMSETGuard,  1, 1,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 01223/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  2, 2,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  3, 3,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  4, 4,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  5, 5,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  6, 6,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  7, 7,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  8, 8,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard,  9, 9,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 10,10,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 11,11,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 12,12,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 13,13,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 14,14,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 15,15,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 16,16,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 17,17,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 18,18,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 19,19,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01
+MODITEMSCOMP:   ITEMSETGuard, 20,99,                 "Hatchet",                      "",                      "",                      "",                      "" // Cost: 00000/01223...Acc/Def: 000/-01

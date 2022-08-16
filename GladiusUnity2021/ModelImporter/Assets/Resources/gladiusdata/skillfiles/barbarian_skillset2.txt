@@ -1,0 +1,75 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Barbarian
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	0,	1000,	"Barbarian Attack"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	0,	1000,	"Barbarian Block"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	1,	1000,	"Barbarian AirAffinity I"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	1,	1000,	"Barbarian WolfForm I"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	2,	1000,	"Barbarian Combo I"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	2,	1000,	"Barbarian TargetLeg"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	3,	1000,	"Barbarian AirAffinity II"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	3,	1000,	"Barbarian Defend"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	4,	1000,	"Barbarian Combo II"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	4,	1000,	"Barbarian BearForm I"
+MODLEVELRANGESKILL: 	"BarbarianUberSet",	5,	1000,	"Barbarian Run"
+
+// Xbox Demo Skillset
+
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Barbarian Attack"                // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Barbarian Block"                 // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Barbarian WolfForm I"            // JP:   2/  2
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Wolf Attack"                     // JP:   0/  2
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Wolf Evade"                      // JP:   0/  2
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Barbarian TargetLeg"             // JP:   4/ 12
+
+//gimpy for training
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Barbarian Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Barbarian Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Barbarian TargetLeg"             // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Barbarian BearForm I"            // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Barbarian WolfForm I"            // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Wolf Attack"                     // JP:   0/ 16	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Wolf Evade"                      // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Wolf Courage"                    // JP:   0/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Wolf ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  3, 30, "Barbarian combo I"               // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Barbarian BearForm II"           // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Bear Attack II"                  // JP:  18/ 58	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Bear Turtle I"                   // JP:  12/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Bear WintersFat"                 // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Bear Paw I"                      // JP:  10/ 86	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Barbarian combo II"              // JP:  12/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Barbarian Defend"                // JP:   6/104	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Barbarian Run I"                 // JP:  10/114	AccMod -10
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Barbarian WolfForm II"           // JP:  12/126	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Wolf Nip"                        // JP:   4/130	AccMod 25
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Wolf PackMentality I"            // JP:   8/138	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Wolf TargetLeg"                  // JP:  10/148	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Wolf LupusCall"                  // JP:   6/154	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  8, 30, "Barbarian TotemoftheBear"        // JP:  18/172	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Barbarian BearForm III"          // JP:  30/202	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Bear Bulldoze I"                 // JP:   2/204	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Bear Paw II"                     // JP:  24/228	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Bear Hug"                        // JP:  20/248	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Bear RakingAttack"               // JP:  36/284	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 12, 30, "Barbarian combo III"             // JP:  22/306	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 13, 30, "Barbarian DestroyHelm"           // JP:  24/330	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 15, 30, "Barbarian WolfForm III"          // JP:  22/352	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 15, 30, "Wolf Snarl I"                    // JP:  20/372	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 15, 30, "Wolf TearThroat"                 // JP:  18/390	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 15, 30, "Wolf Turtle I"                   // JP:  12/402	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 15, 30, "Wolf TargetArm"                  // JP:  24/426	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 17, 30, "Barbarian BreakDefense"          // JP:  34/460	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 19, 30, "Barbarian combo IV"              // JP:  34/494	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 22, 30, "Barbarian CripplingBlow"         // JP:  32/526	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 24, 30, "Barbarian DestroyShield"         // JP:  40/566	AccMod 10
+MODLEVELRANGESKILL:  skillsettrain, 27, 30, "Barbarian TotemoftheFalcon"      // JP:  38/604	AccMod 0
+

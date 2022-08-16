@@ -1,0 +1,3 @@
+ITEMSET 
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:    Urlanweak,  1, 1,       "Air Great Axe",           "Lamb's Hide",                      "",        "",                      "" // Cost: 00368/00368...Acc/Def: 002/001

@@ -1,0 +1,25 @@
+////// SKILLSET export Class: Boss Boss  Affinity: Untyped
+//  Unused JP at Level 30: 470
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "Boss SummonWaterAffinityBeast"                      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "Boss SummonFireAffinityBeast" 
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "Boss SummonEarthAffinityBeast" 
+MODLEVELRANGESKILL:  skillsetBoss,  0, 30, "Boss SummonAirAffinityBeast" 
+
+////// SKILLSET export Class: Boss Boss  Affinity: Earth
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Water
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Air
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Boss Boss  Affinity: Fire
+//  Unused JP at Level 30: 470
+
+
+
+

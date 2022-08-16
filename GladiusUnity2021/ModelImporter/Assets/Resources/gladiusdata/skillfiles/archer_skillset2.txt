@@ -1,0 +1,22 @@
+/////// XBOX demo skillset
+////// SKILLSET export Class: Archer Archer  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Archer Evade"                    // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Archer Rapidshot I"              // JP:   2/  2x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Archer Attack"                   // JP:   4/  6x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Archer BowAttack"                // JP:   4/ 10x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Archer Combo I"                  // JP:   6/ 16x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Archer ExplodingArrow"           // JP:   4/ 20x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Archer PoisonArrow"              // JP:   4/ 24x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Archer Spray"                    // JP:   4/ 28x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Archer Spray II"                 // JP:   4/ 32x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Archer LongShot I"               // JP:   6/ 38x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Archer Combo II"                 // JP:  12/ 50x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Archer JoltArrow"                // JP:  12/ 70x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  8, 30, "Archer Combo III"                // JP:  22/ 92x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Archer PointBlankCantMiss"       // JP:  18/110x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Archer IndirectFire"             // JP:  20/130x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Archer LongShot II"              // JP:  20/150x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 12, 30, "Archer Cover"                    // JP:  24/174x
+
+//  Unused JP at Level 30: 154
+

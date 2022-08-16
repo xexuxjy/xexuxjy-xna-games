@@ -1,0 +1,674 @@
+ITEMSET export Class: OgreGreater OgreGreater  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIE,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIE, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Imperia Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIW,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIW, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Imperia Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETID,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETID, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Imperia Affinity: Air
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIA,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIA, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Imperia Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIF,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIF, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Imperia Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIL,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIL, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Imperia Affinity: Unknown
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETIU,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETIU, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Nordagh Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNE,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNE, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Nordagh Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNW,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNW, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Nordagh Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETND,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETND, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Nordagh Affinity: Air
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNA,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNA, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Nordagh Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNF,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNF, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Nordagh Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNL,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNL, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Nordagh Affinity: Unknown
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETNU,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETNU, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Steppes Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSE,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSE, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Steppes Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSW,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSW, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Steppes Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSD,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSD, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Steppes Affinity: Air
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSA,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSA, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Steppes Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSF,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSF, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Steppes Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSL,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSL, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Steppes Affinity: Unknown
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSU,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETSU, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Expanse Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEE,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEE, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Expanse Affinity: Water
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEW,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEW, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Expanse Affinity: Dark
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETED,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETED, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Expanse Affinity: Air
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEA,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEA, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Expanse Affinity: Fire
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEF,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEF, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Expanse Affinity: Light
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEL,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEL, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+ITEMSET export Class: OgreGreater OgreGreater  Region: Expanse Affinity: Unknown
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETEU,  1, 1,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  2, 2,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  3, 3,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  4, 4,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  5, 5,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  6, 6,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  7, 7,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  8, 8,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU,  9, 9,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 10,10,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 11,11,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 12,12,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 13,13,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 14,14,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 15,15,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 16,16,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 17,17,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 18,18,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 19,19,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+MODITEMSCOMP:   ITEMSETEU, 20,99,                      "",                      "",                      "",                      "",                      "" // Cost: 00000/00000...Acc/Def: 000/000
+
+
+
+

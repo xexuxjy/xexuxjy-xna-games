@@ -1,0 +1,18 @@
+////// SKILLSET export Class: SecutorImp Secutor  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Secutor Attack"                  // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Secutor Evade"                   // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Secutor Shield"                  // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Secutor SandToss"                // JP:   2/  2x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Secutor Combo I"                 // JP:   6/  8x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Secutor BackAttack"              // JP:   6/ 14x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Secutor Run I"                   // JP:   6/ 20x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Secutor Turtle I"                // JP:   6/ 26x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Secutor Combo II"                // JP:  12/ 38x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Secutor Wiseguy"                 // JP:   8/ 46x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Secutor BackStab"                // JP:  10/ 56x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  8, 30, "Secutor Combo III"               // JP:  22/ 78x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Secutor Trip"                    // JP:  18/ 96x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Secutor Evade II"                // JP:  20/116x
+
+
+//  Unused JP at Level 30: 142

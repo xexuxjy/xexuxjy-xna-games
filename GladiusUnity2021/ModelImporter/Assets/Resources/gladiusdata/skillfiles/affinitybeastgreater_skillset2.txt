@@ -1,0 +1,41 @@
+
+MODLEVELRANGESKILL:  skillsetgreaterair,  0, 30, "AffinityBeastGreater AttackAir"           // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterair,  0, 30, "AffinityBeastGreater BlastAir"            // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterair,  0, 30, "AffinityBeastGreater Evade"               // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterair,  0, 30, "AffinityBeastGreater ResistAir"           // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterair,  0, 30, "AffinityBeastGreater GiantHitAir"         // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterair,  0, 30, "AffinityBeastGreater LowerDefense"        // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterair,  0, 30, "AffinityBeastGreater Immunities"          // JP:   0/  0
+//  Unused JP at Level 30: 470
+
+
+MODLEVELRANGESKILL:  skillsetgreaterearth,  0, 30, "AffinityBeastGreater AttackEarth"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterearth,  0, 30, "AffinityBeastGreater BlastEarth"        // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterearth,  0, 30, "AffinityBeastGreater Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterearth,  0, 30, "AffinityBeastGreater ResistEarth"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterearth,  0, 30, "AffinityBeastGreater GiantHitEarth"     // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterearth,  0, 30, "AffinityBeastGreater LowerDefense"      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterearth,  0, 30, "AffinityBeastGreater Immunities"        // JP:   0/  0
+//  Unused JP at Level 30: 470
+
+
+MODLEVELRANGESKILL:  skillsetgreaterfire,  0, 30, "AffinityBeastGreater AttackFire"         // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterfire,  0, 30, "AffinityBeastGreater BlastFire"          // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterfire,  0, 30, "AffinityBeastGreater Evade"              // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterfire,  0, 30, "AffinityBeastGreater GiantHitFire"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterfire,  0, 30, "AffinityBeastGreater ResistFire"         // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterfire,  0, 30, "AffinityBeastGreater LowerDefense"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterfire,  0, 30, "AffinityBeastGreater Immunities"         // JP:   0/  0
+//  Unused JP at Level 30: 470
+
+
+
+MODLEVELRANGESKILL:  skillsetgreaterwater,  0, 30, "AffinityBeastGreater AttackWater"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterwater,  0, 30, "AffinityBeastGreater BlastWater"        // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterwater,  0, 30, "AffinityBeastGreater Evade"             // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterwater,  0, 30, "AffinityBeastGreater ResistWater"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterwater,  0, 30, "AffinityBeastGreater GiantHitWater"     // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterwater,  0, 30, "AffinityBeastGreater LowerDefense"      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetgreaterwater,  0, 30, "AffinityBeastGreater Immunities"        // JP:   0/  0
+//  Unused JP at Level 30: 470
+

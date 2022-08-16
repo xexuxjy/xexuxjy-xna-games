@@ -1,0 +1,10 @@
+ITEMSET 
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:    ludoweak,  1, 1,             "Machera",            "Short Cape",                      "",                      "",                      "Fire Badge of Exuro" 
+
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:    ludoDARK,  1, 99,             "Dark Dark Blade",            "Dark Ludo CS armor DARK",                      "Dark Dark Ludo Shield",                      "Dark Dark Cowl",                      "Dark Badge of Mortuus" 
+
+
+
+

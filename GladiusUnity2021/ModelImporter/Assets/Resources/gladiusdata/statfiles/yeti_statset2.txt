@@ -1,0 +1,27 @@
+// STATSET export Class: Yeti
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     		Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statsetrangedtest,         1        105         4         2         3         2     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         2        100         8         5         5         5     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         3        105        12         8         7         7     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         4        120        16        10         9         9     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         5        125        20        12        12        11     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         6        130        24        14        14        13     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         7        135        28        16        17        16     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         8        140        32        19        20        18     2.00
+MODCORESTATSCOMP:               statsetrangedtest,         9        145        36        22        22        20     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        10        150        40        25        25        22     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        11        155        44        28        28        24     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        12        160        48        30        30        27     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        13        165        52        32        32        29     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        14        170        56        34        34        32     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        15        175        60        36        36        35     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        16        180        64        38        38        38     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        17        185        68        40        40        41     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        18        190        72        43        42        43     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        19        195        76        45        45        46     2.00
+MODCORESTATSCOMP:               statsetrangedtest,        20        200        80        48        48        49     2.00
+
+
+MODCORESTATSCOMP:               statsetsum,        1        95        93        98        91        91         1
+

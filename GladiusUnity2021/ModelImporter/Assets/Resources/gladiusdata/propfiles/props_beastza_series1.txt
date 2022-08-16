@@ -1,0 +1,47 @@
+VERSION: 1
+
+PROP: "propskeleton_animal_big01" 
+MODELS: "misc/skeleton/propskeleton_animal_big01.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.24
+POS: 37.4187 25.8360 1.1712
+ROT: 0.0000 0.0000 1.0378
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "skelton_human01" 
+MODELS: "misc/skeleton/skeleton_human.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.38
+POS: 39.6483 16.3753 1.1442
+ROT: 0.0000 0.0000 -0.6850
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "propbranch_dead_large01" 
+MODELS: "misc/treebranch_dead/propbranch_dead_large.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.66
+POS: 34.0000 22.0000 1.1442
+ROT: 0.0000 0.0000 -0.6599
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "propStonesGroup01" 
+MODELS: "misc/rocks/propStonesGroup01.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.17
+POS: 44.0000 20.0000 1.1442
+ROT: 0.0000 0.0000 0.0000
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+ENDFILE

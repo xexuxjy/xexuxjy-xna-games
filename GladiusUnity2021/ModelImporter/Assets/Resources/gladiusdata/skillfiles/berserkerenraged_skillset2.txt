@@ -1,0 +1,22 @@
+////// SKILLSET export Class: BerserkerEnraged BerserkerEnraged  Affinity: Untyped
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: BerserkerEnraged BerserkerEnraged  Affinity: Earth
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: BerserkerEnraged BerserkerEnraged  Affinity: Water
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: BerserkerEnraged BerserkerEnraged  Affinity: Wind
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: BerserkerEnraged BerserkerEnraged  Affinity: Fire
+//  Unused JP at Level 30: 470
+
+
+
+

@@ -1,0 +1,57 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Centurion
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"CenturionUberSet",	0,	1000,	"Centurion Attack"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	0,	1000,	"Centurion Block"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	0,	1000,	"Centurion Shield"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	1,	1000,	"Centurion AirAffinity I"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	2,	1000,	"Centurion Combo I"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	3,	1000,	"Centurion AirAffinity II"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	3,	1000,	"Centurion Defend"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	4,	1000,	"Centurion Combo II"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	5,	1000,	"Centurion Roam"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	5,	1000,	"Centurion Reprimand"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	7,	1000,	"Centurion AirAffinity III"
+MODLEVELRANGESKILL: 	"CenturionUberSet",	9,	1000,	"Centurion Combo III"
+
+
+//Xbox Demo Skillset
+
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Centurion Attack"                // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Centurion Shield"                // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Centurion Block"                 // JP:   2/  2
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Centurion Motivate"              // JP:   6/  8
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Centurion EarthAffinity I"       // JP:   4/ 12
+
+//gimpy for training
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Centurion Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Centurion AttackSpear"           // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Centurion Block"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Centurion Shield"                // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Centurion Motivate"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Centurion TargetLeg"             // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Centurion combo I"               // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  3, 30, "Centurion combo II"              // JP:  12/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Centurion CoordinatedAttack"     // JP:   8/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Centurion Defend"                // JP:   6/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Centurion Garrison"              // JP:  12/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Centurion combo III"             // JP:  22/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Centurion Reprimand"             // JP:   8/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  8, 30, "Centurion Impel"                 // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  9, 30, "Centurion Roam"                  // JP:  10/110	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Centurion IndomitableWill"       // JP:  18/128	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 12, 30, "Centurion Rally"                 // JP:  32/160	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 14, 30, "Centurion Shield II"             // JP:  20/180	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 15, 30, "Centurion Spur"                  // JP:  24/204	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 17, 30, "Centurion TargetArm"             // JP:  18/222	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 19, 30, "Centurion combo IV"              // JP:  34/256	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 21, 30, "Centurion ImmediateResponse"     // JP:  38/294	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 24, 30, "Centurion DestroyHelm"           // JP:  40/334	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 26, 30, "Centurion TargetHead"            // JP:  34/368	AccMod -5
+
+
+

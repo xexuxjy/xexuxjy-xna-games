@@ -1,0 +1,22 @@
+////// SKILLSET export Class: Usus Usus  Affinity: Untyped
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Usus Usus  Affinity: Earth
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Usus Usus  Affinity: Water
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Usus Usus  Affinity: Wind
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: Usus Usus  Affinity: Fire
+//  Unused JP at Level 30: 470
+
+
+
+

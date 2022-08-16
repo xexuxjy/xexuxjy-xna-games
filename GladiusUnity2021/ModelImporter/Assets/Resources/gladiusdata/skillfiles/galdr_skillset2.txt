@@ -1,0 +1,23 @@
+////// SKILLSET export Class: Galdr Galdr  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetsigi,  0, 30, "Galdr Attack"                    // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetsigi,  0, 30, "Galdr Evade"                     // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetsigi,  0, 30, "Galdr Song:RageofAlderes I"      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetsigi,  1, 30, "Galdr CryOfCommand"              // JP:   2/  2
+MODLEVELRANGESKILL:  skillsetsigi,  1, 30, "Galdr Song:FuryofNorth"          // JP:   2/  6
+MODLEVELRANGESKILL:  skillsetsigi,  2, 30, "Galdr CryOfRage"                 // JP:   4/ 10
+MODLEVELRANGESKILL:  skillsetsigi,  3, 30, "Galdr EarthAffinity II"          // JP:  10/ 20
+MODLEVELRANGESKILL:  skillsetsigi,  3, 30, "Galdr ShriekoftheGaldr I"        // JP:   6/ 26
+MODLEVELRANGESKILL:  skillsetsigi,  4, 30, "Galdr Song:BattleMarch"          // JP:   8/ 34
+MODLEVELRANGESKILL:  skillsetsigi,  6, 30, "Galdr Song:Fear"                 // JP:  12/ 46
+MODLEVELRANGESKILL:  skillsetsigi,  7, 30, "Galdr EarthAffinity III"         // JP:  20/ 66
+MODLEVELRANGESKILL:  skillsetsigi,  9, 30, "Galdr CryOfAwakening"            // JP:  18/ 84
+MODLEVELRANGESKILL:  skillsetsigi, 10, 30, "Galdr ShriekoftheGaldr II"       // JP:  20/104
+MODLEVELRANGESKILL:  skillsetsigi, 11, 30, "Galdr ShriekOfDisruption"        // JP:  22/126
+MODLEVELRANGESKILL:  skillsetsigi, 12, 30, "Galdr Song:ChantofClarity I"     // JP:  24/150
+MODLEVELRANGESKILL:  skillsetsigi, 14, 30, "Galdr EarthAffinity IV"          // JP:  36/186
+MODLEVELRANGESKILL:  skillsetsigi, 16, 30, "Galdr Song:EternalDusk"          // JP:  32/218
+MODLEVELRANGESKILL:  skillsetsigi, 18, 30, "Galdr Song:RageofAlderes II"     // JP:  36/254
+MODLEVELRANGESKILL:  skillsetsigi, 19, 30, "Galdr Song:ChantofClarity II"    // JP:  38/292
+MODLEVELRANGESKILL:  skillsetsigi, 21, 30, "Galdr ShriekoftheGaldr III"      // JP:  40/332
+//  Unused JP at Level 30: 138
+

@@ -1,0 +1,81 @@
+Copyright (c) 2001, LucasArts Entertainment Company LLC
+VERSION 0.2
+
+
+//red graphics - new color R183 G101 B68	= 0x60B76544
+//target lock (yellow) - new color R205 G174 B104 = 0x60CDAE68
+//movement path (light blue)- new color R164 G197 B134 = 0x60A4C586
+//extended movement path (dark blue)- new color R142 G174 B113 = 0x608EAE71
+
+
+// GRIDSTYLE:     [style] [shape] [color] [tex]
+// GRIDCOLOR:     [style] [color]
+
+
+// grid styles for when a nonbasic skill is selected as active 
+
+GRIDSTYLE:	"nonbasic range grid",			"", 	0x40DCDCDC, "mapgrid/range.tga"
+GRIDSTYLE:	"nonbasic areaofeffect grid",		"", 	0x60DC974E, "mapgrid/mapgrid_cursor.tga"
+GRIDSTYLE:	"nonbasic targetable grid",		"",	0xC8B64A27, "mapgrid/targetable.tga"
+GRIDSTYLE:	"nonbasic areaofeffect units",		"",	0xFFDC974E, "mapgrid/mapgrid_cursor.tga"
+
+
+// grid styles for the cursor square when an attackable unit is being targetted
+
+GRIDSTYLE:	"cursor unit direct target",		"square", 	0xFFDCDCDC, "mapgrid/mapgrid_cursor.tga"
+GRIDSTYLE:	"cursor unit moveto target",		"square", 	0xFFDCDCDC, "mapgrid/mapgrid_cursor.tga"
+
+
+// if we have a choice of attacking multiple units or moveing to an empty square, use this to show them
+
+GRIDSTYLE:	"unit decision target",				"square", 	0x00b76544, ""
+GRIDSTYLE:	"move decision target",				"square", 	0xb0a4c586, ""
+
+
+// grid styles for the target square when an empty grid square is being targetted
+
+//GRIDSTYLE:	"move target normal",					"square", 	0xb0a4c586, "mapgrid/move_icon.tga"
+//GRIDSTYLE:	"move target long",					"square", 	0xb0648546, "mapgrid/move_icon.tga"
+//GRIDSTYLE:	"move target decision",					"square", 	0xb0cdae68, "mapgrid/move_icon.tga"
+
+
+// show all available attackable units. Either immediately attackable, or moveto attackable
+
+GRIDSTYLE:	"all direct attack targets",	"square", 	0xC8B64A27, "mapgrid/targetable.tga"
+GRIDSTYLE:	"all moveto attack targets",	"square", 	0xc8B64A27, "mapgrid/targetable.tga"
+
+
+// Cursor
+GRIDSTYLE:	"cursor",		"square", 	0xFFDCDCDC, "mapgrid/mapgrid_cursor.tga"
+
+
+// colors of path.
+
+// When choosing orders:
+GRIDCOLOR:	"attack", 0xFFDCDCDC
+GRIDCOLOR:	"short move", 0xFFDCDCDC
+GRIDCOLOR:	"long move", 0x40DCDCDC
+GRIDCOLOR:	"decision move", 0xFFDCDCDC
+
+
+// For already determined paths (AI and previous players)
+GRIDCOLOR:	"path Player-1 light", 0xee555555
+GRIDCOLOR:	"path Player-1 dark", 0xee222222
+GRIDCOLOR:	"path Player1 light", 0xee91A5E6
+GRIDCOLOR:	"path Player1 dark", 0xee485273
+GRIDCOLOR:	"path Player2 light", 0xeeC64756
+GRIDCOLOR:	"path Player2 dark", 0xee732932
+GRIDCOLOR:	"path Player3 light", 0xee7AE17C
+GRIDCOLOR:	"path Player3 dark", 0xee3D703D
+GRIDCOLOR:	"path Player4 light", 0xeef09851
+GRIDCOLOR:	"path Player4 dark", 0xee784C29
+
+
+TEAMCOLOR: -1, 0xffd0d0d0
+TEAMCOLOR: 0, 0xff91A5E6
+TEAMCOLOR: 1, 0xffC64756
+TEAMCOLOR: 2, 0xff7AE17C
+TEAMCOLOR: 3, 0xfff09851
+	
+	
+	

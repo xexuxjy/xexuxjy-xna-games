@@ -1,0 +1,13 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Citizen
+// Saved by ALX
+// On 7/2/2003
+
+////// SKILLSET export Class: Citizen Citizen  Affinity: Untyped
+MODLEVELRANGESKILL:  qstInvasion,  0, 30, "Citizen Attack"                // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  qstInvasion,  0, 30, "Citizen Evade"                 // JP:   0/  0	AccMod 0
+
+
+MODLEVELRANGESKILL:  qstKrumpe,  0, 30, "Citizen Evade"                 // JP:   0/  0	AccMod 0

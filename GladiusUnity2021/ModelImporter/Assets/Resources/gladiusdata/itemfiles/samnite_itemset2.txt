@@ -1,0 +1,12 @@
+ITEMSET export Class: SamniteExp Samnite  Region: Steppes Affinity: Earth
+
+//          :      variant, Lv,Lv,              weapon,                 armor,                                  shield,                         helmet                          accessory
+MODITEMSCOMP:   ITEMSETSEOXM,  6, 6,           "Earth Yatagan",        "Earth Bronze Layered Shell",           "Earth Heavy Bronze Shield",    "Bronze Rimmed Thracian",       "" // Cost: 306/1159
+MODITEMSCOMP:   ITEMSETSEOXM,  7, 7,           "Earth Yatagan",        "Earth Nickel Plated Cuirass",          "Earth Heavy Bronze Shield",    "Bronze Rimmed Thracian",       "" // Cost: 2024/3183
+MODITEMSCOMP:   ITEMSETSEOXM,  8, 8,           "Ivory Mallet",         "Earth Nickel Plated Cuirass",          "Earth Heavy Bronze Shield",    "Shumpula",                     "" // Cost: 709/3892
+MODITEMSCOMP:   ITEMSETSEOXM,  9, 9,           "Ivory Mallet",         "Earth Steel Decorated Iron Plate",     "Earth Shield of the Visigoth", "Shumpula",                     "" // Cost: 1666/5558
+MODITEMSCOMP:   ITEMSETSEOXM, 10,10,           "Earth Xiphos",         "Earth Steel Decorated Iron Plate",     "Reinforced Targe",             "Nex",                          "" // Cost: 960/6518
+MODITEMSCOMP:   ITEMSETSEOXM, 11,11,           "Earth Crescent Moon",  "Earth Armored Suit",                   "Diamond Shield",               "Carnifico",                    "" // Cost: 3010/9528
+MODITEMSCOMP:   ITEMSETSEOXM, 12,12,           "Earth Scimitar",       "Earth Armored Suit",                   "Diamond Shield",               "Casus",                        "" // Cost: 1151/10679
+MODITEMSCOMP:   ITEMSETSEOXM, 13,13,           "Earth Goupillon",      "Earth Armored Suit",                   "Diamond Shield",               "Horned Thracian",              "" // Cost: 669/11348
+MODITEMSCOMP:   ITEMSETSEOXM, 14,14,           "Earth Elephant Axe",   "Earth Mighty Gear",                    "Tower Shield",                 "Horned Thracian",              "" // Cost: 4065/15413

@@ -1,0 +1,26 @@
+////// SKILLSET export Class: OgreGreater OgreGreater  Affinity: Untyped
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: OgreGreater OgreGreater  Affinity: Earth
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: OgreGreater OgreGreater  Affinity: Water
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: OgreGreater OgreGreater  Affinity: Dark
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: OgreGreater OgreGreater  Affinity: Air
+//  Unused JP at Level 30: 470
+
+
+////// SKILLSET export Class: OgreGreater OgreGreater  Affinity: Fire
+//  Unused JP at Level 30: 470
+
+
+
+

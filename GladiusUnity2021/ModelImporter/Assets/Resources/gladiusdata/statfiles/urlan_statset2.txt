@@ -1,0 +1,25 @@
+// STATSET export Class: Urlan
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statsetw,         1         4         6         6         4         5         1
+MODCORESTATSCOMP:               statsetw,         2         8         9        11         9        10         1
+MODCORESTATSCOMP:               statsetw,         3        13        14        16        14        14         1
+MODCORESTATSCOMP:               statsetw,         4        18        16        21        20        19         1
+MODCORESTATSCOMP:               statsetw,         5        23        18        27        24        25         1
+MODCORESTATSCOMP:               statsetw,         6        27        22        31        30        30         1
+MODCORESTATSCOMP:               statsetw,         7        31        26        36        35        35         1
+MODCORESTATSCOMP:               statsetw,         8        34        28        40        39        40         1
+MODCORESTATSCOMP:               statsetw,         9        38        33        45        45        44         1
+MODCORESTATSCOMP:               statsetw,        10        41        38        50        50        50         1
+MODCORESTATSCOMP:               statsetw,        11        44        42        56        55        55         1
+MODCORESTATSCOMP:               statsetw,        12        47        45        62        59        59         1
+MODCORESTATSCOMP:               statsetw,        13        51        49        67        65        65         1
+MODCORESTATSCOMP:               statsetw,        14        56        52        71        70        70         1
+MODCORESTATSCOMP:               statsetw,        15        59        54        77        76        76         1
+MODCORESTATSCOMP:               statsetw,        16        62        57        83        80        82         1
+MODCORESTATSCOMP:               statsetw,        17        65        61        88        85        88         1
+MODCORESTATSCOMP:               statsetw,        18        68        65        92        90        93         1
+MODCORESTATSCOMP:               statsetw,        19        70        68        97        95        98         1
+MODCORESTATSCOMP:               statsetw,        20        75        73       102       100       104         1
+
+MODCORESTATSCOMP:               statsetWeak,         1         2         6         5         5         6         1

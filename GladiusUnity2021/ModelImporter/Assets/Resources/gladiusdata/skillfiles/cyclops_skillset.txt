@@ -1,0 +1,160 @@
+////// SKILLSET export Class: Cyclops Cyclops  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Cyclops Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Cyclops Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Cyclops ThreateningGlare I"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Cyclops Bulldoze I"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Cyclops Combo I"                 // JP:   6/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Cyclops EyeBeam"                 // JP:   4/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Cyclops Combo II"                // JP:  12/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Cyclops HeavyHanded"             // JP:   6/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Cyclops Punch"                   // JP:   8/ 38	AccMod 15
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Cyclops OverheadSmash"           // JP:  12/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Cyclops SweepingAttack"          // JP:  10/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Cyclops Combo III"               // JP:  22/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Cyclops TargetArm"               // JP:  18/100	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Cyclops DestroyShield"           // JP:  24/124	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Cyclops Turtle I"                // JP:  20/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Cyclops Focus"                   // JP:  22/166	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Cyclops Combo IV"                // JP:  34/200	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Cyclops TargetHead"              // JP:  34/234	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Cyclops Turtle II"               // JP:  30/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Cyclops HeavyStrike"             // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Cyclops ThreateningGlare II"     // JP:  32/336	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 27, 30, "Cyclops PenetratingStare"        // JP:  38/374	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "Cyclops Turtle III"              // JP:  36/410	AccMod 0
+//  Unused JP at Level 30: 20
+
+
+////// SKILLSET export Class: Cyclops Cyclops  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Cyclops Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Cyclops Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Cyclops ThreateningGlare I"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Cyclops Bulldoze I"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Cyclops EarthAffinity I"         // JP:   4/  6	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Cyclops EyeBeam"                 // JP:   4/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Cyclops EarthAffinity II"        // JP:  10/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Cyclops EarthAffinity III"       // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Cyclops HeavyHanded"             // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Cyclops Punch"                   // JP:   8/ 54	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Cyclops OverheadSmash"           // JP:  12/ 66	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Cyclops SweepingAttack"          // JP:  10/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Cyclops DestroyShield"           // JP:  24/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Cyclops Focus"                   // JP:  22/122	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Cyclops TargetArm"               // JP:  18/140	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Cyclops Turtle I"                // JP:  20/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Cyclops Turtle II"               // JP:  30/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Cyclops EarthAffinity IV"        // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Cyclops PenetratingStare"        // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "Cyclops HeavyStrike"             // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Cyclops TargetHead"              // JP:  34/338	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 26, 30, "Cyclops ThreateningGlare II"     // JP:  32/370	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 29, 30, "Cyclops Turtle III"              // JP:  36/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Cyclops Cyclops  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Cyclops Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Cyclops Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Cyclops ThreateningGlare I"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Cyclops Bulldoze I"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Cyclops EyeBeam"                 // JP:   4/  6	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Cyclops HeavyHanded"             // JP:   6/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Cyclops OverheadSmash"           // JP:  12/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Cyclops Punch"                   // JP:   8/ 32	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Cyclops WaterAffinity I"         // JP:   4/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Cyclops SweepingAttack"          // JP:  10/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Cyclops DestroyShield"           // JP:  24/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Cyclops WaterAffinity II"        // JP:  10/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Cyclops TargetArm"               // JP:  18/ 98	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "Cyclops Focus"                   // JP:  22/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Cyclops Turtle I"                // JP:  20/140	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Cyclops WaterAffinity III"       // JP:  20/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Cyclops Turtle II"               // JP:  30/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Cyclops HeavyStrike"             // JP:  40/230	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Cyclops TargetHead"              // JP:  34/264	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Cyclops PenetratingStare"        // JP:  38/302	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Cyclops ThreateningGlare II"     // JP:  32/334	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 26, 30, "Cyclops Turtle III"              // JP:  36/370	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 29, 30, "Cyclops WaterAffinity IV"        // JP:  36/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Cyclops Cyclops  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Cyclops Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Cyclops Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Cyclops ThreateningGlare I"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Cyclops Bulldoze I"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Cyclops EyeBeam"                 // JP:   4/  6	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Cyclops HeavyHanded"             // JP:   6/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Cyclops OverheadSmash"           // JP:  12/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Cyclops Punch"                   // JP:   8/ 32	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Cyclops Focus"                   // JP:  22/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Cyclops SweepingAttack"          // JP:  10/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Cyclops TargetArm"               // JP:  18/ 82	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Cyclops DestroyShield"           // JP:  24/106	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 10, 30, "Cyclops Turtle I"                // JP:  20/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Cyclops TargetHead"              // JP:  34/160	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Cyclops Turtle II"               // JP:  30/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Cyclops HeavyStrike"             // JP:  40/230	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Cyclops ThreateningGlare II"     // JP:  32/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "Cyclops PenetratingStare"        // JP:  38/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Cyclops Turtle III"              // JP:  36/336	AccMod 0
+//  Unused JP at Level 30: 94
+
+
+////// SKILLSET export Class: Cyclops Cyclops  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Cyclops Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Cyclops Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Cyclops ThreateningGlare I"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Cyclops AirAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Cyclops AirAffinity II"          // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Cyclops Bulldoze I"              // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Cyclops EyeBeam"                 // JP:   4/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Cyclops AirAffinity III"         // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Cyclops HeavyHanded"             // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Cyclops Punch"                   // JP:   8/ 54	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Cyclops OverheadSmash"           // JP:  12/ 66	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Cyclops SweepingAttack"          // JP:  10/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Cyclops DestroyShield"           // JP:  24/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "Cyclops Focus"                   // JP:  22/122	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Cyclops TargetArm"               // JP:  18/140	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Cyclops Turtle I"                // JP:  20/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Cyclops Turtle II"               // JP:  30/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Cyclops AirAffinity IV"          // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Cyclops PenetratingStare"        // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Cyclops HeavyStrike"             // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Cyclops TargetHead"              // JP:  34/338	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Cyclops ThreateningGlare II"     // JP:  32/370	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 29, 30, "Cyclops Turtle III"              // JP:  36/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Cyclops Cyclops  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Cyclops Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Cyclops Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Cyclops ThreateningGlare I"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Cyclops Bulldoze I"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Cyclops EyeBeam"                 // JP:   4/  6	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Cyclops FireAffinity I"          // JP:   4/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Cyclops FireAffinity II"         // JP:  10/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Cyclops FireAffinity III"        // JP:  20/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Cyclops HeavyHanded"             // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Cyclops Punch"                   // JP:   8/ 54	AccMod 15
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Cyclops OverheadSmash"           // JP:  12/ 66	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Cyclops SweepingAttack"          // JP:  10/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Cyclops DestroyShield"           // JP:  24/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "Cyclops Focus"                   // JP:  22/122	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Cyclops TargetArm"               // JP:  18/140	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Cyclops Turtle I"                // JP:  20/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Cyclops Turtle II"               // JP:  30/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Cyclops FireAffinity IV"         // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Cyclops PenetratingStare"        // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "Cyclops HeavyStrike"             // JP:  40/304	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Cyclops TargetHead"              // JP:  34/338	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 26, 30, "Cyclops ThreateningGlare II"     // JP:  32/370	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 29, 30, "Cyclops Turtle III"              // JP:  36/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+
+

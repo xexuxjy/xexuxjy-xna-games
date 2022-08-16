@@ -1,0 +1,693 @@
+//Saved School
+NAME:"Daxterius Maximus"
+HERO:"Ursula"
+GOLD:999999
+
+///////////////////////////////////    Characters
+
+
+CREATEUNIT:"Leg1", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Gladius", "Air Test Armor Medium", "Air Test Shield Medium", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg10", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "Air Test Armor Medium", "", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg11", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "Air Test Armor Medium", "", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg2", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Gladius", "Air Test Armor Medium", "", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg3", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "Air Test Armor Medium", "", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg4", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg5", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg6", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg7", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg8", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+
+CREATEUNIT:"Leg9", "Legionnaire"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Test Sword Medium", "", "Air Test Shield Medium", "", ""
+
+// defense skills
+SKILL: "Legionnaire Evade"
+
+// basic skills
+SKILL: "Legionnaire Attack"
+SKILL: "Legionnaire TargetLeg"
+SKILL: "Legionnaire PrecisionAttack"
+SKILL: "Legionnaire TargetArm"
+SKILL: "Legionnaire DestroyShield"
+SKILL: "Legionnaire TargetHead"
+SKILL: "Legionnaire DestroyHelm"
+
+// innate skills
+SKILL: "Legionnaire PracticedManeuvers"
+SKILL: "Legionnaire Orders"
+SKILL: "Legionnaire Evade II"
+SKILL: "Legionnaire Awareness"
+SKILL: "Legionnaire Riposte"
+SKILL: "Legionnaire Discipline"
+SKILL: "Legionnaire IndomitableWill"
+SKILL: "Legionnaire OffBalance"
+
+// other skills
+SKILL: "Legionnaire Shield"
+SKILL: "Legionnaire RiposteSub"
+SKILL: "Legionnaire AirAffinity I"
+SKILL: "Legionnaire EarthAffinity I"
+SKILL: "Legionnaire FireAffinity I"
+SKILL: "Legionnaire WaterAffinity I"
+SKILL: "Legionnaire Combo I"
+SKILL: "Legionnaire Turtle I"
+SKILL: "Legionnaire AirAffinity II"
+SKILL: "Legionnaire EarthAffinity II"
+SKILL: "Legionnaire FireAffinity II"
+SKILL: "Legionnaire WaterAffinity II"
+SKILL: "Legionnaire Combo II"
+SKILL: "Legionnaire AirAffinity III"
+SKILL: "Legionnaire EarthAffinity III"
+SKILL: "Legionnaire FireAffinity III"
+SKILL: "Legionnaire WaterAffinity III"
+SKILL: "Legionnaire Combo III"
+SKILL: "Legionnaire Turtle II"
+SKILL: "Legionnaire Combo IV"
+SKILL: "Legionnaire AirAffinity IV"
+SKILL: "Legionnaire EarthAffinity IV"
+SKILL: "Legionnaire FireAffinity IV"
+SKILL: "Legionnaire WaterAffinity IV"
+
+
+CREATEUNIT:"Dummy1", "PropPracticePost"// Name, class
+LEVEL:15
+EXPERIENCE:0
+JOBPOINTS:289
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2: 60,  60, 75, 68, 67, 2.00
+
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"", "", "", "", ""
+
+// defense skills
+SKILL: "Pass"
+
+

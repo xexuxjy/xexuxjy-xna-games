@@ -1,0 +1,13 @@
+VERSION: 1
+
+PROP: "propskullsand" 
+MODELS: "misc/skeleton/propskullsand.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.26
+POS: 20.1813 33.7624 0.1304
+ROT: 0.0000 0.0000 -1.2937
+ATTRIBUTES: 0
+PROP_END
+
+ENDFILE

@@ -1,0 +1,68 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Samnite
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"SamniteUberSet",	0,	1000,	"Samnite Attack"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	0,	1000,	"Samnite Shield"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	1,	1000,	"Samnite AirAffinity I"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	1,	1000,	"Samnite Block"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	2,	1000,	"Samnite Combo I"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	2,	1000,	"Samnite Bulldoze I"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	3,	1000,	"Samnite AirAffinity II"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	3,	1000,	"Samnite Overrun"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	4,	1000,	"Samnite Combo II"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	5,	1000,	"Samnite ForwardThrust"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	7,	1000,	"Samnite AirAffinity III"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	8,	1000,	"Samnite Combo III"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	8,	1000,	"Samnite Rush"
+MODLEVELRANGESKILL: 	"SamniteUberSet",	10,	1000,	"Samnite Bulldoze II"
+
+//Xbox Demo skillset
+
+////// SKILLSET export Class: SamniteExp Samnite  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Samnite Attack"                  // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Samnite Shield"                  // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Samnite Block"                   // JP:   2/  2x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Samnite Bulldoze I"              // JP:   2/  4x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Samnite EarthAffinity I"         // JP:   4/  8x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Samnite Overrun"                 // JP:   4/ 12x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Samnite Defend I"                // JP:   6/ 18x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Samnite EarthAffinity II"        // JP:  10/ 28x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Samnite Run I"                   // JP:   6/ 34x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Samnite Bulldoze II"             // JP:   8/ 42x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Samnite ForwardThrust"           // JP:   8/ 50x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  7, 30, "Samnite EarthAffinity III"       // JP:  20/ 70x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Samnite Blindspot"               // JP:  18/ 88x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Samnite SweepingAttack"          // JP:  20/108x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 12, 30, "Samnite ClearArea I"             // JP:  24/132x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Samnite Block II"                   // JP:   2/  2x
+
+//  Unused JP at Level 30: 124
+
+//gimpy for training
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Samnite Attack"                  // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Samnite Block"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  0, 30, "Samnite Shield"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Samnite Bulldoze I"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  2, 30, "Samnite Block II"                // JP:  12/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  3, 30, "Samnite Bulldoze II"             // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  4, 30, "Samnite Blindspot"               // JP:  18/ 40	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Samnite combo I"                 // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  5, 30, "Samnite Defend I"                // JP:   6/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Samnite combo II"                // JP:  12/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  6, 30, "Samnite Overrun"                 // JP:   4/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain,  7, 30, "Samnite ForwardThrust"           // JP:  10/ 78	AccMod -10
+MODLEVELRANGESKILL:  skillsettrain,  8, 30, "Samnite combo III"               // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 10, 30, "Samnite ClearArea I"             // JP:  24/124	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 11, 30, "Samnite IndomitableWill"         // JP:  18/142	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 13, 30, "Samnite Run I"                   // JP:  22/164	AccMod -10
+MODLEVELRANGESKILL:  skillsettrain, 14, 30, "Samnite SweepingAttack"          // JP:  20/184	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 16, 30, "Samnite ClearArea II"            // JP:  34/218	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 18, 30, "Samnite Squat"                   // JP:  32/250	AccMod -5
+MODLEVELRANGESKILL:  skillsettrain, 20, 30, "Samnite Turtle I"                // JP:  30/280	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 23, 30, "Samnite combo IV"                // JP:  34/314	AccMod 0
+MODLEVELRANGESKILL:  skillsettrain, 25, 30, "Samnite HeavyStrike"             // JP:  40/354	AccMod -10
+MODLEVELRANGESKILL:  skillsettrain, 28, 30, "Samnite OffBalance"              // JP:  38/392	AccMod 0

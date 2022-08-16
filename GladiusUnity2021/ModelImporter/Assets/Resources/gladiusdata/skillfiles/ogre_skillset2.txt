@@ -1,0 +1,25 @@
+////// SKILLSET export Class: Ogre Ogre  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetdemo,  0, 30, "Ogre Attack"                     // JP:   0/  0
+//MODLEVELRANGESKILL:  skillsetdemo,  0, 30, "Ogre BackAtchaSub"               // JP:   0/  0
+//MODLEVELRANGESKILL:  skillsetdemo,  0, 30, "Ogre Heavyweight"                // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetdemo,  0, 30, "Ogre Purge"                      // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetdemo,  1, 30, "Ogre Block"                      // JP:   2/  2
+//MODLEVELRANGESKILL:  skillsetdemo,  2, 30, "Ogre ChargingAttack"             // JP:   4/  6
+MODLEVELRANGESKILL:  skillsetdemo,  2, 30, "Ogre Combo I"                    // JP:   6/ 12
+MODLEVELRANGESKILL:  skillsetdemo,  3, 30, "Ogre DeliberateNature"           // JP:   6/ 18
+MODLEVELRANGESKILL:  skillsetdemo,  3, 30, "Ogre Run I"                      // JP:   6/ 24
+MODLEVELRANGESKILL:  skillsetdemo,  4, 30, "Ogre Combo II"                   // JP:  12/ 36
+//MODLEVELRANGESKILL:  skillsetdemo,  4, 30, "Ogre Defend I"                   // JP:   8/ 44
+MODLEVELRANGESKILL:  skillsetdemo,  5, 30, "Ogre WideSwing"                  // JP:  10/ 54
+MODLEVELRANGESKILL:  skillsetdemo,  8, 30, "Ogre Combo III"                  // JP:  22/ 76
+MODLEVELRANGESKILL:  skillsetdemo, 11, 30, "Ogre LecherousGrin"              // JP:  22/ 98
+MODLEVELRANGESKILL:  skillsetdemo, 12, 30, "Ogre DestroyShield"              // JP:  24/122
+MODLEVELRANGESKILL:  skillsetdemo, 12, 30, "Ogre FearsomeFunk"               // JP:  24/146
+MODLEVELRANGESKILL:  skillsetdemo, 13, 30, "Ogre Combo IV"                   // JP:  34/180
+MODLEVELRANGESKILL:  skillsetdemo, 15, 30, "Ogre Uppercut"                   // JP:  30/210
+MODLEVELRANGESKILL:  skillsetdemo, 16, 30, "Ogre Defend II"                  // JP:  32/242
+MODLEVELRANGESKILL:  skillsetdemo, 17, 30, "Ogre Stench"                     // JP:  32/274
+MODLEVELRANGESKILL:  skillsetdemo, 20, 30, "Ogre DefensiveShot"              // JP:  34/308
+MODLEVELRANGESKILL:  skillsetdemo, 22, 30, "Ogre DestroyHelm"                // JP:  40/348
+MODLEVELRANGESKILL:  skillsetdemo, 25, 30, "Ogre IndomitableWill"            // JP:  36/384
+//  Unused JP at Level 30: 86

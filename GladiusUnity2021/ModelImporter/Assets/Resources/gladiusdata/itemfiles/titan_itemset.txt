@@ -1,0 +1,7 @@
+//   LevelLow, Level High, Weapon,, armor, shield, helmet
+//TITAN
+
+ITEMSCOMP:	1,	100,	"Water Titan Spear",	"",	"",	""
+
+
+

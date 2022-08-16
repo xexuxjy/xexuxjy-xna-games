@@ -1,0 +1,166 @@
+////// SKILLSET export Class: SecutorImp Secutor  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Secutor Attack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Secutor AttackSpear"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Secutor Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Secutor Shield"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Secutor Run I"                   // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Secutor BackAttack"              // JP:   6/ 10	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Secutor SandToss"                // JP:   2/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Secutor BackStab"                // JP:  10/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Secutor Combo I"                 // JP:   6/ 28	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Secutor Combo II"                // JP:  12/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Secutor Turtle I"                // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Secutor Trip"                    // JP:  18/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 14, "Secutor Wiseguy"                 // JP:   8/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Secutor Combo III"               // JP:  22/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Secutor Evade II"                // JP:  20/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Secutor RemoveShield"            // JP:  24/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Secutor Evade III"               // JP:  30/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Secutor Smartass"                // JP:  22/196	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Secutor Combo IV"                // JP:  34/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Secutor ShieldBypass"            // JP:  32/262	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Secutor OffBalance"              // JP:  38/300	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Secutor Run II"                  // JP:  36/336	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Secutor TargetHead"              // JP:  34/370	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "Secutor Slice"                   // JP:  40/410	AccMod 5
+//  Unused JP at Level 30: 20
+
+
+////// SKILLSET export Class: SecutorImp Secutor  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Secutor Attack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Secutor AttackSpear"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Secutor Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Secutor Shield"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Secutor EarthAffinity I"         // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Secutor BackAttack"              // JP:   6/ 10	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Secutor Run I"                   // JP:   4/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Secutor BackStab"                // JP:  10/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Secutor EarthAffinity II"        // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Secutor SandToss"                // JP:   2/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Secutor Trip"                    // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Secutor Turtle I"                // JP:  12/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 13, "Secutor Wiseguy"                 // JP:   8/ 74	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Secutor EarthAffinity III"       // JP:  20/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "Secutor Evade II"                // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Secutor Evade III"               // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Secutor RemoveShield"            // JP:  24/168	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Secutor Smartass"                // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Secutor EarthAffinity IV"        // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Secutor OffBalance"              // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "Secutor Run II"                  // JP:  36/300	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Secutor ShieldBypass"            // JP:  32/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 26, 30, "Secutor TargetHead"              // JP:  34/366	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 29, 30, "Secutor Slice"                   // JP:  40/406	AccMod 5
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: SecutorImp Secutor  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Secutor Attack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Secutor AttackSpear"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Secutor Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Secutor Shield"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Secutor Run I"                   // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Secutor BackAttack"              // JP:   6/ 10	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Secutor SandToss"                // JP:   2/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Secutor BackStab"                // JP:  10/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Secutor Trip"                    // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Secutor Turtle I"                // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Secutor WaterAffinity I"         // JP:   4/ 56	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Secutor WaterAffinity II"        // JP:  10/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 13, "Secutor Wiseguy"                 // JP:   8/ 74	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Secutor Evade II"                // JP:  20/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Secutor WaterAffinity III"       // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Secutor Evade III"               // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 13, 30, "Secutor RemoveShield"            // JP:  24/168	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Secutor Smartass"                // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Secutor OffBalance"              // JP:  38/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Secutor Run II"                  // JP:  36/264	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Secutor ShieldBypass"            // JP:  32/296	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Secutor Slice"                   // JP:  40/336	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW, 26, 30, "Secutor TargetHead"              // JP:  34/370	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 29, 30, "Secutor WaterAffinity IV"        // JP:  36/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: SecutorImp Secutor  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Secutor Attack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Secutor AttackSpear"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Secutor Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Secutor Shield"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Secutor Run I"                   // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Secutor BackAttack"              // JP:   6/ 10	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Secutor SandToss"                // JP:   2/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Secutor BackStab"                // JP:  10/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Secutor Trip"                    // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Secutor Turtle I"                // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 11, "Secutor Wiseguy"                 // JP:   8/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Secutor Evade II"                // JP:  20/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Secutor Evade III"               // JP:  30/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Secutor RemoveShield"            // JP:  24/134	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Secutor Smartass"                // JP:  22/156	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Secutor ShieldBypass"            // JP:  32/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Secutor OffBalance"              // JP:  38/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Secutor Run II"                  // JP:  36/262	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "Secutor Slice"                   // JP:  40/302	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Secutor TargetHead"              // JP:  34/336	AccMod -5
+//  Unused JP at Level 30: 94
+
+
+////// SKILLSET export Class: SecutorImp Secutor  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Secutor Attack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Secutor AttackSpear"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Secutor Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Secutor Shield"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Secutor AirAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Secutor AirAffinity II"          // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Secutor BackAttack"              // JP:   6/ 20	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Secutor Run I"                   // JP:   4/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Secutor BackStab"                // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Secutor SandToss"                // JP:   2/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Secutor Trip"                    // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Secutor Turtle I"                // JP:  12/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 13, "Secutor Wiseguy"                 // JP:   8/ 74	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Secutor AirAffinity III"         // JP:  20/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Secutor Evade II"                // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Secutor Evade III"               // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 13, 30, "Secutor RemoveShield"            // JP:  24/168	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Secutor Smartass"                // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Secutor AirAffinity IV"          // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Secutor OffBalance"              // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Secutor Run II"                  // JP:  36/300	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Secutor ShieldBypass"            // JP:  32/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Secutor TargetHead"              // JP:  34/366	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 29, 30, "Secutor Slice"                   // JP:  40/406	AccMod 5
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: SecutorImp Secutor  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Secutor Attack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Secutor AttackSpear"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Secutor Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Secutor Shield"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Secutor FireAffinity I"          // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Secutor BackAttack"              // JP:   6/ 10	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Secutor Run I"                   // JP:   4/ 14	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Secutor BackStab"                // JP:  10/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Secutor FireAffinity II"         // JP:  10/ 34	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Secutor SandToss"                // JP:   2/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Secutor Trip"                    // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Secutor Turtle I"                // JP:  12/ 66	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 13, "Secutor Wiseguy"                 // JP:   8/ 74	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Secutor Evade II"                // JP:  20/ 94	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Secutor FireAffinity III"        // JP:  20/114	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Secutor Evade III"               // JP:  30/144	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Secutor RemoveShield"            // JP:  24/168	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Secutor Smartass"                // JP:  22/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Secutor FireAffinity IV"         // JP:  36/226	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Secutor OffBalance"              // JP:  38/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "Secutor Run II"                  // JP:  36/300	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Secutor ShieldBypass"            // JP:  32/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 26, 30, "Secutor TargetHead"              // JP:  34/366	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 29, 30, "Secutor Slice"                   // JP:  40/406	AccMod 5
+//  Unused JP at Level 30: 24
+
+
+
+

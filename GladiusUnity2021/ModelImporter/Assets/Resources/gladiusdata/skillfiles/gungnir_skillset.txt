@@ -1,0 +1,202 @@
+////// SKILLSET export Class: Gungnir Gungnir  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Gungnir Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Gungnir DistanceThrow I"         // JP:   0/  0	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Gungnir Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Gungnir ExplodingJavelin"        // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Gungnir BearForm I"              // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Gungnir Combo I"                 // JP:   6/ 20	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Gungnir TargetShield"            // JP:   6/ 26	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Gungnir Combo II"                // JP:  12/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Gungnir DistanceThrow II"        // JP:  12/ 50	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Gungnir Combo III"               // JP:  22/ 72	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Gungnir TargetArm"               // JP:  10/ 82	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Gungnir DistanceThrow III"       // JP:  20/102	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Gungnir Cover"                   // JP:  22/124	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Gungnir TargetLeg"               // JP:  18/142	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 13, 30, "Gungnir Combo IV"                // JP:  34/176	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 15, 30, "Gungnir UnstoppableThrow"        // JP:  24/200	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Gungnir BearForm II"             // JP:  36/236	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear Attack II"                  // JP:  18/254	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear Turtle I"                   // JP:  12/266	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear WintersFat"                 // JP:   6/272	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 17, 30, "Bear Paw I"                      // JP:  10/282	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 20, 30, "Gungnir Awareness"               // JP:  38/320	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 22, 30, "Gungnir PoinBlankPowered"        // JP:  34/354	AccMod 5
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Gungnir PointBlankCantMiss"      // JP:  32/386	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Gungnir TargetFoot"              // JP:  32/418	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "Gungnir DistanceThrow IV"        // JP:  40/458	AccMod -10
+//  Unused JP at Level 30: 20
+
+
+////// SKILLSET export Class: Gungnir Gungnir  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Gungnir Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Gungnir DistanceThrow I"         // JP:   0/  0	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Gungnir Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Gungnir EarthAffinity I"         // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Gungnir BearForm I"              // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Gungnir DistanceThrow II"        // JP:  12/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Gungnir EarthAffinity II"        // JP:  10/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Gungnir ExplodingJavelin"        // JP:   4/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Gungnir TargetArm"               // JP:  10/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Gungnir TargetShield"            // JP:   6/ 56	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Gungnir Cover"                   // JP:  22/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Gungnir DistanceThrow III"       // JP:  20/ 98	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "Gungnir TargetLeg"               // JP:  18/116	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Gungnir EarthAffinity III"       // JP:  20/136	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Gungnir UnstoppableThrow"        // JP:  24/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 14, 30, "Gungnir PointBlankCantMiss"      // JP:  32/192	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Gungnir Awareness"               // JP:  38/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Gungnir BearForm II"             // JP:  36/266	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Bear Attack II"                  // JP:  18/284	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Bear Turtle I"                   // JP:  12/296	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Bear WintersFat"                 // JP:   6/302	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Bear Paw I"                      // JP:  10/312	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "Gungnir DistanceThrow IV"        // JP:  40/352	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Gungnir EarthAffinity IV"        // JP:  36/388	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 27, 30, "Gungnir PoinBlankPowered"        // JP:  34/422	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffE, 29, 30, "Gungnir TargetFoot"              // JP:  32/454	AccMod -5
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Gungnir Gungnir  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Gungnir Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Gungnir DistanceThrow I"         // JP:   0/  0	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Gungnir Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Gungnir ExplodingJavelin"        // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Gungnir BearForm I"              // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Gungnir DistanceThrow II"        // JP:  12/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Gungnir TargetArm"               // JP:  10/ 36	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Gungnir TargetShield"            // JP:   6/ 42	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Gungnir WaterAffinity I"         // JP:   4/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Gungnir WaterAffinity II"        // JP:  10/ 56	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Gungnir Cover"                   // JP:  22/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Gungnir DistanceThrow III"       // JP:  20/ 98	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Gungnir TargetLeg"               // JP:  18/116	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Gungnir UnstoppableThrow"        // JP:  24/140	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Gungnir WaterAffinity III"       // JP:  20/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Gungnir PointBlankCantMiss"      // JP:  32/192	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Gungnir Awareness"               // JP:  38/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Gungnir BearForm II"             // JP:  36/266	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Bear Attack II"                  // JP:  18/284	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Bear Turtle I"                   // JP:  12/296	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Bear WintersFat"                 // JP:   6/302	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Bear Paw I"                      // JP:  10/312	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Gungnir DistanceThrow IV"        // JP:  40/352	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Gungnir PoinBlankPowered"        // JP:  34/386	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffW, 26, 30, "Gungnir TargetFoot"              // JP:  32/418	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 29, 30, "Gungnir WaterAffinity IV"        // JP:  36/454	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Gungnir Gungnir  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Gungnir Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Gungnir DistanceThrow I"         // JP:   0/  0	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Gungnir Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Gungnir ExplodingJavelin"        // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Gungnir BearForm I"              // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Gungnir DistanceThrow II"        // JP:  12/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Gungnir TargetArm"               // JP:  10/ 36	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Gungnir TargetShield"            // JP:   6/ 42	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Gungnir Cover"                   // JP:  22/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Gungnir DistanceThrow III"       // JP:  20/ 84	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  8, 30, "Gungnir TargetLeg"               // JP:  18/102	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 10, 30, "Gungnir UnstoppableThrow"        // JP:  24/126	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Gungnir BearForm II"             // JP:  36/162	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Bear Attack II"                  // JP:  18/180	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Bear Turtle I"                   // JP:  12/192	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Bear WintersFat"                 // JP:   6/198	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Bear Paw I"                      // JP:  10/208	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 15, 30, "Gungnir Awareness"               // JP:  38/246	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Gungnir PoinBlankPowered"        // JP:  34/280	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Gungnir PointBlankCantMiss"      // JP:  32/312	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 22, 30, "Gungnir DistanceThrow IV"        // JP:  40/352	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Gungnir TargetFoot"              // JP:  32/384	AccMod -5
+//  Unused JP at Level 30: 94
+
+
+////// SKILLSET export Class: Gungnir Gungnir  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Gungnir Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Gungnir DistanceThrow I"         // JP:   0/  0	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Gungnir Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Gungnir AirAffinity I"           // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Gungnir AirAffinity II"          // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Gungnir BearForm I"              // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Attack"                     // JP:   0/ 22	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Evade"                      // JP:   0/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear Bite"                       // JP:   4/ 26	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Bear ShiftReturn"                // JP:  -2/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Gungnir DistanceThrow II"        // JP:  12/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Gungnir ExplodingJavelin"        // JP:   4/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Gungnir TargetArm"               // JP:  10/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Gungnir TargetShield"            // JP:   6/ 56	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Gungnir AirAffinity III"         // JP:  20/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Gungnir Cover"                   // JP:  22/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Gungnir TargetLeg"               // JP:  18/116	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Gungnir DistanceThrow III"       // JP:  20/136	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Gungnir UnstoppableThrow"        // JP:  24/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Gungnir PointBlankCantMiss"      // JP:  32/192	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Gungnir AirAffinity IV"          // JP:  36/228	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Gungnir Awareness"               // JP:  38/266	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Gungnir BearForm II"             // JP:  36/302	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Bear Attack II"                  // JP:  18/320	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Bear Turtle I"                   // JP:  12/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Bear WintersFat"                 // JP:   6/338	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Bear Paw I"                      // JP:  10/348	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Gungnir DistanceThrow IV"        // JP:  40/388	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 27, 30, "Gungnir PoinBlankPowered"        // JP:  34/422	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffA, 29, 30, "Gungnir TargetFoot"              // JP:  32/454	AccMod -5
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Gungnir Gungnir  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Gungnir Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Gungnir DistanceThrow I"         // JP:   0/  0	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Gungnir Evade"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Gungnir ExplodingJavelin"        // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Gungnir BearForm I"              // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Attack"                     // JP:   0/ 12	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Evade"                      // JP:   0/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear Bite"                       // JP:   4/ 16	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Bear ShiftReturn"                // JP:  -2/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Gungnir DistanceThrow II"        // JP:  12/ 26	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Gungnir FireAffinity I"          // JP:   4/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Gungnir FireAffinity II"         // JP:  10/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Gungnir TargetArm"               // JP:  10/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Gungnir TargetShield"            // JP:   6/ 56	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Gungnir Cover"                   // JP:  22/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Gungnir DistanceThrow III"       // JP:  20/ 98	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Gungnir TargetLeg"               // JP:  18/116	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Gungnir FireAffinity III"        // JP:  20/136	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Gungnir UnstoppableThrow"        // JP:  24/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 14, 30, "Gungnir PointBlankCantMiss"      // JP:  32/192	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Gungnir Awareness"               // JP:  38/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Gungnir BearForm II"             // JP:  36/266	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Bear Attack II"                  // JP:  18/284	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Bear Turtle I"                   // JP:  12/296	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Bear WintersFat"                 // JP:   6/302	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Bear Paw I"                      // JP:  10/312	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "Gungnir DistanceThrow IV"        // JP:  40/352	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Gungnir FireAffinity IV"         // JP:  36/388	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 27, 30, "Gungnir PoinBlankPowered"        // JP:  34/422	AccMod 5
+MODLEVELRANGESKILL:  skillsetaffF, 29, 30, "Gungnir TargetFoot"              // JP:  32/454	AccMod -5
+//  Unused JP at Level 30: 24
+
+
+
+

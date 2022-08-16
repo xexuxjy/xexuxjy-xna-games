@@ -15,7 +15,7 @@ using System.Net.WebSockets;
 public class Arena : MonoBehaviour
 {
     public const int ArenaSize = 32;
-    public const float ArenaMeshScalar = 2f;
+    public float BlockSize = 2f;
 
     private int m_propLayer = 0;
     private int m_floorLayer = 0;
@@ -27,7 +27,10 @@ public class Arena : MonoBehaviour
 
     private void Awake()
     {
+        GridOffset = new Vector3(-BlockSize / 2f, 0, -BlockSize / 2f);
+
         m_groundLayerMask = 1 << LayerMask.NameToLayer("GROUND");
+
         if (m_pathFinder == null)
         {
             m_pathFinder = new ArenaPathFinder();
@@ -245,11 +248,11 @@ public class Arena : MonoBehaviour
 
         Vector3 result = new Vector3(p.X, 0, p.Y);
 
-        result *= ArenaMeshScalar;
+        result *= BlockSize;
         result.y = groundHeight;
 
         // place it in the middle of the square.
-        result += new Vector3(ArenaMeshScalar / 2.0f, 0, ArenaMeshScalar / 2.0f);
+        result += new Vector3(BlockSize / 2.0f, 0, BlockSize / 2.0f);
 
         // adjust it to where the areana is placed?
         result += transform.position;
@@ -272,7 +275,7 @@ public class Arena : MonoBehaviour
             localPos -= GridOffset;
 
             inbounds = true;
-            int halfExtent = (int)(ArenaSize * ArenaMeshScalar / 2);
+            int halfExtent = (int)(ArenaSize * BlockSize / 2);
 
             float xlerp = Mathf.InverseLerp(-halfExtent, halfExtent, localPos.x);
             float zlerp = Mathf.InverseLerp(-halfExtent, halfExtent, localPos.z);

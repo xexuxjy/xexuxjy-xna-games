@@ -1,0 +1,38 @@
+////// SKILLSET export Class: CitizenExp Citizen  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Citizen Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Citizen Evade"                   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 295
+
+
+////// SKILLSET export Class: CitizenExp Citizen  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Citizen Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Citizen Evade"                   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 295
+
+
+////// SKILLSET export Class: CitizenExp Citizen  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Citizen Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Citizen Evade"                   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 295
+
+
+////// SKILLSET export Class: CitizenExp Citizen  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Citizen Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Citizen Evade"                   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 295
+
+
+////// SKILLSET export Class: CitizenExp Citizen  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Citizen Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Citizen Evade"                   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 295
+
+
+////// SKILLSET export Class: CitizenExp Citizen  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Citizen Attack"                  // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Citizen Evade"                   // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 295
+
+
+
+

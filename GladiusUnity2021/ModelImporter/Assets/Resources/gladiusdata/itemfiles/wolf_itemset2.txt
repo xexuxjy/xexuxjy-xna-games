@@ -1,0 +1,11 @@
+ITEMSET export Class: Wolf Wolf  Region: Steppes Affinity: Earth
+//          :      variant, Lv,Lv,                     weapon,                  armor,                   shield,                  helmet           accessory
+MODITEMSCOMP:   ITEMSETSEOXM,  6, 6,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM,  7, 7,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM,  8, 8,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM,  9, 9,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM, 10,10,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM, 11,11,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM, 12,12,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM, 13,13,                  "",                      "",                      "",                      "",              "" // Cost: 0/64
+MODITEMSCOMP:   ITEMSETSEOXM, 14,14,                  "",                      "",                      "",                      "",              "" // Cost: 0/64

@@ -1,0 +1,6472 @@
+"// ClassDefs.tok
+// Saved by derekf
+
+//NUMCLASSDEFS: 128
+
+CREATECLASS: Amazon
+
+DISPLAYNAMEID: 4458
+DESCRIPTIONID: 7733
+
+UNITSETNAME: Amazon
+SKILLUSENAME: Amazon
+VOICELINEPREFIX: AZN
+SOUNDTABLENAME: Amazon
+MESH: Amazon
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.92, 1.064, 1.064, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Steppes
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Bow, Plain
+ITEMCAT: weapon, <Any>, Amazon
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, <Any>, Amazon
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Amazon
+ITEMCAT: helmet, HelmetA, Diadem
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Bracelet, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 0, 1
+
+CREATECLASS: Archer
+
+DISPLAYNAMEID: 4459
+DESCRIPTIONID: 7734
+
+UNITSETNAME: Archer
+SKILLUSENAME: Archer
+VOICELINEPREFIX: ACH
+SOUNDTABLENAME: Archer
+MESH: Archer
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.82, 1, 1, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Steppes
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Bow, Plain
+ITEMCAT: weapon, Bow, Archer
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Archer
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Belt, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 0, 1
+
+CREATECLASS: ArcherF
+
+DISPLAYNAMEID: 4459
+DESCRIPTIONID: 7737
+
+UNITSETNAME: Archer
+SKILLUSENAME: Archer
+VOICELINEPREFIX: ACF
+SOUNDTABLENAME: Archer
+MESH: ArcherF
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.71, 0.925, 0.925, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Steppes
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Bow, Plain
+ITEMCAT: weapon, Bow, Archer
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Archer
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Belt, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 0, 1
+
+CREATECLASS: BanditA
+
+DISPLAYNAMEID: 4460
+DESCRIPTIONID: 7735
+
+UNITSETNAME: Bandit
+SKILLUSENAME: Bandit
+VOICELINEPREFIX: BND
+SOUNDTABLENAME: SecutorImp
+MESH: banditA
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, <Any>, Bandit
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+ITEMCAT: armor, Armor, Bandit
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Bandit
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+ITEMCAT: shield, Shield, Bandit
+
+////  ACCESSORIES
+ITEMCAT: accessory, Armband, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: BanditAF
+
+DISPLAYNAMEID: 4460
+DESCRIPTIONID: 7735
+
+UNITSETNAME: Bandit
+SKILLUSENAME: Bandit
+VOICELINEPREFIX: BNF
+SOUNDTABLENAME: SecutorImp
+MESH: banditAF
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 0.925, 0.925, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, <Any>, Bandit
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+ITEMCAT: armor, Armor, Bandit
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Bandit
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+ITEMCAT: shield, Shield, Bandit
+
+////  ACCESSORIES
+ITEMCAT: accessory, Armband, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: BanditB
+
+DISPLAYNAMEID: 4460
+DESCRIPTIONID: 7754
+
+UNITSETNAME: Bandit
+SKILLUSENAME: Bandit
+VOICELINEPREFIX: BND
+SOUNDTABLENAME: SecutorImp
+MESH: banditB
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, <Any>, Bandit
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+ITEMCAT: armor, Armor, Bandit
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Bandit
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+ITEMCAT: shield, Shield, Bandit
+
+////  ACCESSORIES
+ITEMCAT: accessory, Armband, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: BanditBF
+
+DISPLAYNAMEID: 4460
+DESCRIPTIONID: 7755
+
+UNITSETNAME: Bandit
+SKILLUSENAME: Bandit
+VOICELINEPREFIX: BNF
+SOUNDTABLENAME: SecutorImp
+MESH: banditBF
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 0.925, 0.925, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, <Any>, Bandit
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+ITEMCAT: armor, Armor, Bandit
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Bandit
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+ITEMCAT: shield, Shield, Bandit
+
+////  ACCESSORIES
+ITEMCAT: accessory, Armband, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: Barbarian
+
+DISPLAYNAMEID: 4461
+DESCRIPTIONID: 7738
+
+UNITSETNAME: Barbarian
+SKILLUSENAME: Barbarian
+VOICELINEPREFIX: BAR
+SOUNDTABLENAME: Barbarian
+MESH: Barbarian
+CLASSICON: Barbarian
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1.05, 0.9, 1.15, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, TwoHanded
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, Hammer, TwoHanded
+ITEMCAT: weapon, <Any>, Barbarian
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Barbarian
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: BarbarianF
+
+DISPLAYNAMEID: 4461
+DESCRIPTIONID: 7739
+
+UNITSETNAME: Barbarian
+SKILLUSENAME: Barbarian
+VOICELINEPREFIX: BRF
+SOUNDTABLENAME: Barbarian
+MESH: barbarianf
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 0.75, 1.064, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, TwoHanded
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, Hammer, TwoHanded
+ITEMCAT: weapon, <Any>, Barbarian
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Barbarian
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Bear
+
+DISPLAYNAMEID: 4462
+DESCRIPTIONID: 8168
+
+UNITSETNAME: Bear
+SKILLUSENAME: Bear
+VOICELINEPREFIX: BAR
+SOUNDTABLENAME: Bear
+MESH: bear
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: Nordagh
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: Short
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Medium
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Collar, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 2, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 2, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: BearGreater
+
+DISPLAYNAMEID: 4463
+DESCRIPTIONID: 7740
+
+UNITSETNAME: BearGreater
+SKILLUSENAME: BearGreater
+VOICELINEPREFIX: BRG
+SOUNDTABLENAME: BearGreater
+MESH: bearGreater
+
+GRIDSIZE: 2
+XPAWARD: 30, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: Nordagh
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 0, 0, 20
+
+CREATECLASS: BeastAir
+
+DISPLAYNAMEID: 7878
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastAir
+MESH: affinityAir
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Air
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityAir_teleport
+FX: continuous alive, affinityAir_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: BeastAirGreater
+
+DISPLAYNAMEID: 7879
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastAirGreater
+MESH: affinityAirGreater
+HEADICON: beastAir
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Air
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityAirGreater_teleport
+FX: continuous alive, affinityAirGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 0, 0, 0
+LEVELSTATAWARDS: 7, 7, 0, 0, 0, 0
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: BeastDarkAir
+
+DISPLAYNAMEID: 7880
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastDarkAir
+MESH: darkAffinityAir
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Air
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityAir_teleport
+FX: continuous alive, darkAffinityAir_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 10, 20, 10, 10, 1
+
+CREATECLASS: BeastDarkAirGreater
+
+DISPLAYNAMEID: 7881
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastDarkAirGreater
+MESH: darkAffinityAirGreater
+HEADICON: beastDarkAir
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Air
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityAirGreater_teleport
+FX: continuous alive, darkaffinityAirGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: BeastDarkEarth
+
+DISPLAYNAMEID: 7882
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastDarkEarth
+MESH: darkAffinityEarth
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityEarth_teleport
+FX: continuous alive, darkaffinityEarth_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: BeastDarkEarthGreater
+
+DISPLAYNAMEID: 7883
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastDarkEarthGreater
+MESH: darkAffinityEarthGreater
+HEADICON: beastDarkEarth
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityEarthGreater_teleport
+FX: continuous alive, darkaffinityEarthGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: BeastDarkFire
+
+DISPLAYNAMEID: 7884
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastDarkFire
+MESH: darkAffinityFire
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Fire
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityFire_teleport
+FX: continuous alive, darkaffinityFire_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: BeastDarkFireGreater
+
+DISPLAYNAMEID: 7885
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastDarkFireGreater
+MESH: darkAffinityFireGreater
+HEADICON: beastDarkFire
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Fire
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityFireGreater_teleport
+FX: continuous alive, darkaffinityFireGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: BeastDarkWater
+
+DISPLAYNAMEID: 7886
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastDarkWater
+MESH: darkAffinityWater
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Water
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityWater_teleport
+FX: continuous alive, darkaffinityWater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: BeastDarkWaterGreater
+
+DISPLAYNAMEID: 7887
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastDarkWaterGreater
+MESH: darkAffinityWaterGreater
+HEADICON: beastDarkWater
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Water
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityWaterGreater_teleport
+FX: continuous alive, darkaffinityWaterGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: BeastEarth
+
+DISPLAYNAMEID: 7888
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastEarth
+MESH: affinityEarth
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityEarth_teleport
+FX: continuous alive, affinityEarth_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: BeastEarthGreater
+
+DISPLAYNAMEID: 7889
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastEarthGreater
+MESH: affinityEarthGreater
+HEADICON: beastEarth
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityEarthGreater_teleport
+FX: continuous alive, affinityEarthGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: BeastFire
+
+DISPLAYNAMEID: 7890
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastFire
+MESH: affinityFire
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Fire
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityFire_teleport
+FX: continuous alive, affinityFire_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: BeastFireGreater
+
+DISPLAYNAMEID: 7891
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastFireGreater
+MESH: affinityFireGreater
+HEADICON: beastFire
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Fire
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityFireGreater_teleport
+FX: continuous alive, affinityFireGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: BeastWater
+
+DISPLAYNAMEID: 7892
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeast
+SKILLUSENAME: AffinityBeast
+SOUNDTABLENAME: BeastWater
+MESH: affinityWater
+HEADICON: beastWater
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Water
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityWater_teleport
+FX: continuous alive, affinityWater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: BeastWaterGreater
+
+DISPLAYNAMEID: 7893
+DESCRIPTIONID: 0
+
+UNITSETNAME: AffinityBeastGreater
+SKILLUSENAME: AffinityBeastGreater
+SOUNDTABLENAME: BeastWaterGreater
+MESH: affinityWaterGreater
+HEADICON: beastWater
+
+GRIDSIZE: 3
+XPAWARD: 75, 1.52
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Water
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: deathinstantdisappear
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, affinityWaterGreater_teleport
+FX: continuous alive, affinityWaterGreater_ambientEffects
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: Berserker
+
+DISPLAYNAMEID: 4464
+DESCRIPTIONID: 7741
+
+UNITSETNAME: Berserker
+SKILLUSENAME: Berserker
+VOICELINEPREFIX: BSK
+SOUNDTABLENAME: Berserker
+MESH: berserker
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 1.15, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, <Any>, Berserker
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 20, 1
+
+CREATECLASS: BerserkerEnraged
+
+DISPLAYNAMEID: 4464
+DESCRIPTIONID: 7742
+
+UNITSETNAME: Berserker
+SKILLUSENAME: Berserker
+VOICELINEPREFIX: BSK
+SOUNDTABLENAME: Berserker
+MESH: berserkerRage
+HEADICON: berserker
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1.15, 1.15, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, <Any>, Berserker
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: BerserkerEnragedF
+
+DISPLAYNAMEID: 4464
+DESCRIPTIONID: 7743
+
+UNITSETNAME: Berserker
+SKILLUSENAME: Berserker
+VOICELINEPREFIX: BSF
+SOUNDTABLENAME: Berserker
+MESH: berserkerRageF
+HEADICON: berserkerF
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1.1, 1.064, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, <Any>, Berserker
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: BerserkerF
+
+DISPLAYNAMEID: 4464
+DESCRIPTIONID: 7744
+
+UNITSETNAME: Berserker
+SKILLUSENAME: Berserker
+VOICELINEPREFIX: BSF
+SOUNDTABLENAME: Berserker
+MESH: berserkerF
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 1, 0.925, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, <Any>, Berserker
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 20, 1
+
+CREATECLASS: Boss
+
+DISPLAYNAMEID: 0
+DESCRIPTIONID: 0
+
+UNITSETNAME: Boss
+SKILLUSENAME: Boss
+HEADICON: NONE
+
+ITEMSIZES: 1, 1, 1, 
+
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: Cat
+
+DISPLAYNAMEID: 4465
+DESCRIPTIONID: 7745
+
+UNITSETNAME: Cat
+SKILLUSENAME: Cat
+VOICELINEPREFIX: CAT
+SOUNDTABLENAME: Cat
+MESH: cat
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Air
+ATTRIBUTE: Beast
+ATTRIBUTE: Steppes
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: Short
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Light
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Collar, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 20, 1
+
+CREATECLASS: CatGreater
+
+DISPLAYNAMEID: 4466
+DESCRIPTIONID: 7746
+
+UNITSETNAME: CatGreater
+SKILLUSENAME: CatGreater
+VOICELINEPREFIX: CTG
+SOUNDTABLENAME: CatGreater
+MESH: catGreater
+
+GRIDSIZE: 2
+XPAWARD: 30, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Air
+ATTRIBUTE: Beast
+ATTRIBUTE: Steppes
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Collar, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: Centurion
+
+DISPLAYNAMEID: 4467
+DESCRIPTIONID: 7747
+
+UNITSETNAME: Centurion
+SKILLUSENAME: Centurion
+VOICELINEPREFIX: CNT
+SOUNDTABLENAME: Centurion
+MESH: centurion
+CLASSICON: Centurion
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1.1, 1.15, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Hammer, Heavy
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, <Any>, Centurion
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Centurion
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Centurion
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Centurion
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: CenturionF
+
+DISPLAYNAMEID: 4467
+DESCRIPTIONID: 7748
+
+UNITSETNAME: Centurion
+SKILLUSENAME: Centurion
+VOICELINEPREFIX: CNF
+SOUNDTABLENAME: Centurion
+MESH: centurionf
+CLASSICON: Centurion
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 0.85, 1.064, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Hammer, Heavy
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, <Any>, Centurion
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Centurion
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Centurion
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Centurion
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: ChannelerExp
+
+DISPLAYNAMEID: 4468
+DESCRIPTIONID: 7749
+
+UNITSETNAME: Channeler
+SKILLUSENAME: Channeler
+VOICELINEPREFIX: CHE
+SOUNDTABLENAME: ChannelerExp
+MESH: channelerExp
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 0.855, 0.855, 
+
+ATTRIBUTE: Arcane
+ATTRIBUTE: Expanse
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Staff, Plain
+ITEMCAT: weapon, <Any>, Channeler
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Arcane
+ITEMCAT: armor, <Any>, Channeler
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Channeler
+ITEMCAT: helmet, HelmetA, Diadem
+ITEMCAT: helmet, HelmetB, Arcane
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Charm, Plain
+FX: react block, channeler_hitReact
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: ChannelerImp
+
+DISPLAYNAMEID: 4468
+DESCRIPTIONID: 7750
+
+UNITSETNAME: Channeler
+SKILLUSENAME: Channeler
+VOICELINEPREFIX: CHI
+SOUNDTABLENAME: ChannelerExp
+MESH: channelerImp
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 0.855, 0.855, 
+
+ATTRIBUTE: Arcane
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Staff, Plain
+ITEMCAT: weapon, <Any>, Channeler
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Arcane
+ITEMCAT: armor, <Any>, Channeler
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Channeler
+ITEMCAT: helmet, HelmetA, Diadem
+ITEMCAT: helmet, HelmetB, Arcane
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Charm, Plain
+FX: react hit, channeler_hitReact
+FX: react weak, channeler_hitReact
+FX: react crit, channeler_hitReact
+FX: react block, channeler_hitReact
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: CitizenExp
+
+DISPLAYNAMEID: 4469
+DESCRIPTIONID: 8165
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: SDE
+SOUNDTABLENAME: CitizenSte
+MESH: citizenExp
+
+GRIDSIZE: 1
+XPAWARD: 10, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Expanse
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 10, 10
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: CitizenExpF
+
+DISPLAYNAMEID: 4469
+DESCRIPTIONID: 8165
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: CHE
+SOUNDTABLENAME: CitizenSte
+MESH: citizenExpF
+
+GRIDSIZE: 1
+XPAWARD: 10, 1.44
+ITEMSIZES: 0.925, 0.925, 0.925, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Expanse
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: CitizenImp
+
+DISPLAYNAMEID: 7875
+DESCRIPTIONID: 8162
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: SDI
+SOUNDTABLENAME: CitizenSte
+MESH: citizenImp
+
+GRIDSIZE: 1
+XPAWARD: 10, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: CitizenImpF
+
+DISPLAYNAMEID: 7875
+DESCRIPTIONID: 8162
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: LGF
+SOUNDTABLENAME: CitizenSte
+MESH: citizenImpF
+
+GRIDSIZE: 1
+XPAWARD: 10, 1.44
+ITEMSIZES: 0.925, 0.925, 0.925, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: CitizenNor
+
+DISPLAYNAMEID: 7876
+DESCRIPTIONID: 8163
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: SDN
+SOUNDTABLENAME: CitizenSte
+MESH: citizenNor
+
+GRIDSIZE: 1
+XPAWARD: 10, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: CitizenNorF
+
+DISPLAYNAMEID: 7876
+DESCRIPTIONID: 8163
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: GNF
+SOUNDTABLENAME: CitizenSte
+MESH: citizenNorF
+
+GRIDSIZE: 1
+XPAWARD: 10, 1.44
+ITEMSIZES: 0.925, 0.925, 0.925, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: CitizenSte
+
+DISPLAYNAMEID: 7877
+DESCRIPTIONID: 8164
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: SDS
+SOUNDTABLENAME: CitizenSte
+MESH: citizenSte
+
+GRIDSIZE: 1
+XPAWARD: 10, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Steppes
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: CitizenSteF
+
+DISPLAYNAMEID: 7877
+DESCRIPTIONID: 8164
+
+UNITSETNAME: Citizen
+SKILLUSENAME: Citizen
+VOICELINEPREFIX: XSF
+SOUNDTABLENAME: CitizenSte
+MESH: citizenSteF
+
+XPAWARD: 10, 1.44
+ITEMSIZES: 0.925, 0.925, 0.925, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Steppes
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Civilian
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: Cyclops
+
+DISPLAYNAMEID: 4470
+DESCRIPTIONID: 7751
+
+UNITSETNAME: Cyclops
+SKILLUSENAME: Cyclops
+VOICELINEPREFIX: CYC
+SOUNDTABLENAME: Cyclops
+MESH: cyclops
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+
+////  WEAPONS
+ITEMCAT: weapon, Club, Plain
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Cyclops
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Cyclops
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Eye, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: CyclopsGreater
+
+DISPLAYNAMEID: 4471
+DESCRIPTIONID: 7752
+
+UNITSETNAME: CyclopsGreater
+SKILLUSENAME: CyclopsGreater
+VOICELINEPREFIX: CYC
+SOUNDTABLENAME: CyclopsGreater
+MESH: cyclopsGreater
+
+GRIDSIZE: 2
+XPAWARD: 60, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Male
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: deathinstantdisappear
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, CyclopsLesser
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: death disappear, cyclopsGreater_Teleport
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 20, 10, 10, 20
+
+CREATECLASS: DarkCat
+
+DISPLAYNAMEID: 7756
+DESCRIPTIONID: 7753
+
+UNITSETNAME: DarkCat
+SKILLUSENAME: DarkCat
+VOICELINEPREFIX: CTG
+SOUNDTABLENAME: CatGreater
+MESH: darkGodCat
+
+GRIDSIZE: 1
+XPAWARD: 30, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: Short
+ATTRIBUTE: alwaysfaceondefend
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGod_hitBloodM
+FX: react weak, darkGod_hitBloodL
+FX: react crit, darkGod_hitBloodC
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: DarkGod
+
+DISPLAYNAMEID: 6125
+DESCRIPTIONID: 6126
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodDragon
+MESH: DarkGod
+
+XPAWARD: 75, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 20, 20, 20, 20
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 20, 20, 20, 5, 20, 1
+
+CREATECLASS: DarkGodDragon
+
+DISPLAYNAMEID: 0
+DESCRIPTIONID: 0
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodDragon
+MESH: darkGodDragon4
+HEADICON: darkGod
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGodDragon_hitM
+FX: react weak, darkGod_hitBloodL
+FX: react crit, darkGod_hitBloodC
+FX: continuous alive, darkGod_DragonAmbient
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 10, 10, 10, 10
+
+CREATECLASS: DarkGodDragon1
+
+DISPLAYNAMEID: 0
+DESCRIPTIONID: 0
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodDragon
+MESH: darkGodDragon
+HEADICON: darkGod
+
+GRIDSIZE: 2
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGodDragon_hitM
+FX: react weak, darkGod_hitBloodL
+FX: react crit, darkGodDragon_hitC
+FX: continuous alive, darkGod_DragonAmbient
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 10, 10, 10, 10
+
+CREATECLASS: DarkGodDragon2
+
+DISPLAYNAMEID: 0
+DESCRIPTIONID: 0
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodDragon
+MESH: darkGodDragon2
+HEADICON: darkGod
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGodDragon_hitM
+FX: react weak, darkGodShiva_hitL
+FX: react crit, darkGodDragon_hitC
+FX: continuous alive, darkGod_DragonAmbient
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 10, 10, 10, 10
+
+CREATECLASS: DarkGodDragon3
+
+DISPLAYNAMEID: 0
+DESCRIPTIONID: 0
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodDragon
+MESH: darkGodDragon3
+HEADICON: darkGod
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGodDragon_hitM
+FX: react weak, darkGod_hitBloodL
+FX: react crit, darkGodDragon_hitC
+FX: continuous alive, darkGod_DragonAmbient
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 10, 10, 10, 10
+
+CREATECLASS: DarkGodFace
+
+DISPLAYNAMEID: 7218
+DESCRIPTIONID: 0
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodFace
+MESH: darkGodFace
+HEADICON: darkGod
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntfaceonattack
+ATTRIBUTE: doesntfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: deathremainonfield
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGod_hitBloodM
+FX: react weak, darkGod_hitBloodL
+FX: react crit, darkGod_hitBloodC
+FX: continuous alive, darkGod_FaceAmbient
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 10, 10, 10, 10
+
+CREATECLASS: DarkGodKnight
+
+DISPLAYNAMEID: 6083
+DESCRIPTIONID: 0
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodKnight
+MESH: darkGodKnight
+HEADICON: darkGod
+
+GRIDSIZE: 1
+XPAWARD: 50, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntfaceonattack
+ATTRIBUTE: doesntfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: deathremainonfield
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Druid
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGod_hitBloodM
+FX: react weak, darkGod_hitBloodL
+FX: react crit, darkGod_hitBloodC
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 10, 10, 10, 10
+
+CREATECLASS: DarkGodShiva
+
+DISPLAYNAMEID: 6082
+DESCRIPTIONID: 0
+
+UNITSETNAME: DarkGod
+SKILLUSENAME: DarkGod
+SOUNDTABLENAME: DarkGodShiva
+MESH: darkGodShiva
+HEADICON: darkGod
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntfaceonattack
+ATTRIBUTE: doesntfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: deathremainonfield
+ATTRIBUTE: simpleanims
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGodShiva_hitM
+FX: react weak, darkGodShiva_hitL
+FX: react crit, darkGodShiva_hitC
+FX: continuous alive, darkGod_ShivaAmbient
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 10, 10, 10, 10
+
+CREATECLASS: DarkLegionnaire
+
+DISPLAYNAMEID: 8112
+DESCRIPTIONID: 7757
+
+UNITSETNAME: DarkLegionnaire
+SKILLUSENAME: DarkLegionnaire
+VOICELINEPREFIX: DLG
+SOUNDTABLENAME: Legionnaire
+MESH: legionnaireDark
+HEADICON: darklegionnaire
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, DarkLegion
+ITEMCAT: weapon, <Any>, Legionnaire
+
+////  ARMORS
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, DarkLegion
+
+////  HELMETS
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, <Any>, DarkLegion
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, DarkLegion
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: DarkWolf
+
+DISPLAYNAMEID: 7759
+DESCRIPTIONID: 7758
+
+UNITSETNAME: DarkWolf
+SKILLUSENAME: DarkWolf
+VOICELINEPREFIX: WFG
+SOUNDTABLENAME: WolfGreater
+MESH: darkGodDog
+
+GRIDSIZE: 1
+XPAWARD: 30, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Dark
+ATTRIBUTE: Beast
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: Short
+ATTRIBUTE: alwaysfaceondefend
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, darkGod_hitBloodM
+FX: react weak, darkGod_hitBloodL
+FX: react crit, darkGod_hitBloodC
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: Dervish
+
+DISPLAYNAMEID: 4473
+DESCRIPTIONID: 7760
+
+UNITSETNAME: Dervish
+SKILLUSENAME: Dervish
+VOICELINEPREFIX: DVM
+SOUNDTABLENAME: Dervish
+MESH: dervish
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 0.9, 0.9, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Expanse
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Dervish
+ITEMCAT: weapon, Sword, Dervish
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Dervish
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Dervish
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Anklet, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 20, 1
+
+CREATECLASS: DervishF
+
+DISPLAYNAMEID: 4473
+DESCRIPTIONID: 7761
+
+UNITSETNAME: Dervish
+SKILLUSENAME: Dervish
+VOICELINEPREFIX: DVF
+SOUNDTABLENAME: Dervish
+MESH: dervishf
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 0.855, 0.855, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Expanse
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Dervish
+ITEMCAT: weapon, Sword, Dervish
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Dervish
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Dervish
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Anklet, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 20, 1
+
+CREATECLASS: Eiji
+
+DISPLAYNAMEID: 4459
+DESCRIPTIONID: 7762
+
+UNITSETNAME: Eiji
+SKILLUSENAME: Eiji
+VOICELINEPREFIX: EIJ
+SOUNDTABLENAME: Eiji
+MESH: eiji
+DERIVATIONCLASSNAME: Archer
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.83, 1, 1, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Steppes
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Bow, Plain
+ITEMCAT: weapon, <Any>, Archer
+ITEMCAT: weapon, <Any>, Eiji
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Eiji
+ITEMCAT: helmet, <Any>, Archer
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Belt, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 7, 10, 1
+
+CREATECLASS: Galdr
+
+DISPLAYNAMEID: 4475
+DESCRIPTIONID: 7764
+
+UNITSETNAME: Galdr
+SKILLUSENAME: Galdr
+VOICELINEPREFIX: GDR
+SOUNDTABLENAME: Galdr
+MESH: galdrF
+CLASSICON: galdr
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Arcane
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Light
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Galdr
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 10, 0, 1
+
+CREATECLASS: Galverg
+
+DISPLAYNAMEID: 4476
+DESCRIPTIONID: 7765
+
+UNITSETNAME: Galverg
+SKILLUSENAME: Galverg
+VOICELINEPREFIX: GVG
+SOUNDTABLENAME: Galverg
+MESH: galverg
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: alwaysfaceondefend
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Galverg
+
+////  ARMORS
+ITEMCAT: armor, Armor, Galverg
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Galverg
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Galverg
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Gungnir
+
+DISPLAYNAMEID: 4477
+DESCRIPTIONID: 7766
+
+UNITSETNAME: Gungnir
+SKILLUSENAME: Gungnir
+VOICELINEPREFIX: GGN
+SOUNDTABLENAME: Peltast
+MESH: peltastNor
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 0.9, 0.9, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Javelin, Plain
+ITEMCAT: weapon, <Any>, Gungnir
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+ITEMCAT: armor, Armor, Gungnir
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Gungnir
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Gungnir
+ITEMCAT: shield, Shield, Peltast
+
+////  ACCESSORIES
+ITEMCAT: accessory, Necklace, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 0, 1
+
+CREATECLASS: GungnirF
+
+DISPLAYNAMEID: 4478
+DESCRIPTIONID: 7768
+
+UNITSETNAME: Gungnir
+SKILLUSENAME: Gungnir
+VOICELINEPREFIX: GNF
+SOUNDTABLENAME: Peltast
+MESH: peltastNorF
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.8, 0.75, 0.855, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Javelin, Plain
+ITEMCAT: weapon, <Any>, Gungnir
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+ITEMCAT: armor, Armor, Gungnir
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Gungnir
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Gungnir
+ITEMCAT: shield, Shield, Peltast
+
+////  ACCESSORIES
+ITEMCAT: accessory, Necklace, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: Gwazi
+
+DISPLAYNAMEID: 7915
+DESCRIPTIONID: 7769
+
+UNITSETNAME: Gwazi
+SKILLUSENAME: Gwazi
+VOICELINEPREFIX: GZI
+SOUNDTABLENAME: Gwazi
+MESH: gwazi
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Expanse
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, <Any>, Gwazi
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+ITEMCAT: armor, Armor, Gwazi
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Gwazi
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetF, Gladiatorial
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+ITEMCAT: shield, Shield, Gwazi
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 7, 30, 1
+
+CREATECLASS: Legionnaire
+
+DISPLAYNAMEID: 4480
+DESCRIPTIONID: 7770
+
+UNITSETNAME: Legionnaire
+SKILLUSENAME: Legionnaire
+VOICELINEPREFIX: LEG
+SOUNDTABLENAME: Legionnaire
+MESH: Legionnaire
+CLASSICON: Legionnaire
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: LegionnaireF
+
+DISPLAYNAMEID: 4480
+DESCRIPTIONID: 7771
+
+UNITSETNAME: Legionnaire
+SKILLUSENAME: Legionnaire
+VOICELINEPREFIX: LGF
+SOUNDTABLENAME: Legionnaire
+MESH: legionnaireF
+CLASSICON: Legionnaire
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.8, 0.9, 0.925, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Ludo
+
+DISPLAYNAMEID: 3192
+DESCRIPTIONID: 7772
+
+UNITSETNAME: Ludo
+SKILLUSENAME: Ludo
+VOICELINEPREFIX: LUD
+SOUNDTABLENAME: Ludo
+MESH: ludo
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Ludo
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Ludo
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Ludo
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, HelmetE, Military
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Ludo
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: LudoDark
+
+DISPLAYNAMEID: 4472
+DESCRIPTIONID: 8176
+
+UNITSETNAME: Ludo
+SKILLUSENAME: Ludo
+VOICELINEPREFIX: ELD
+SOUNDTABLENAME: Ludo
+MESH: ludoDark
+HEADICON: ludo
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+ATTRIBUTE: deathremainonfield
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: Minotaur
+
+DISPLAYNAMEID: 4481
+DESCRIPTIONID: 7773
+
+UNITSETNAME: Minotaur
+SKILLUSENAME: Minotaur
+VOICELINEPREFIX: MIN
+SOUNDTABLENAME: Minotaur
+MESH: minotaur
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, TwoHanded
+ITEMCAT: weapon, Hammer, TwoHanded
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, <Any>, Minotaur
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Minotaur
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Bullring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 10, 0, 0, 1
+
+CREATECLASS: Mongrel
+
+DISPLAYNAMEID: 4482
+DESCRIPTIONID: 7774
+
+UNITSETNAME: Mongrel
+SKILLUSENAME: Mongrel
+VOICELINEPREFIX: MGR
+SOUNDTABLENAME: Mongrel
+MESH: mongrel
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+
+////  WEAPONS
+ITEMCAT: weapon, Club, Mongrel
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Mongrel
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Mongrel
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Mongrel
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Scalp, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 10, 20, 1
+
+CREATECLASS: MongrelShaman
+
+DISPLAYNAMEID: 4483
+DESCRIPTIONID: 7775
+
+UNITSETNAME: MongrelShaman
+SKILLUSENAME: MongrelShaman
+VOICELINEPREFIX: MGS
+SOUNDTABLENAME: Mongrel
+MESH: mongrelShaman
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1.1, 0.9, 0.9, 
+
+ATTRIBUTE: Arcane
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+
+////  WEAPONS
+ITEMCAT: weapon, Club, Plain
+ITEMCAT: weapon, Staff, Plain
+ITEMCAT: weapon, <Any>, Mongrel
+ITEMCAT: weapon, <Any>, MongrelShaman
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Arcane
+ITEMCAT: armor, Armor, Mongrel
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, MongrelShaman
+ITEMCAT: helmet, HelmetA, Diadem
+ITEMCAT: helmet, HelmetB, Arcane
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Scalp, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: Murmillo
+
+DISPLAYNAMEID: 4484
+DESCRIPTIONID: 7776
+
+UNITSETNAME: Murmillo
+SKILLUSENAME: Murmillo
+VOICELINEPREFIX: MUR
+SOUNDTABLENAME: Murmillo
+MESH: Murmillo
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Murmillo
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Murmillo
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Murmillo
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Murmillo
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: MurmilloF
+
+DISPLAYNAMEID: 4485
+DESCRIPTIONID: 7777
+
+UNITSETNAME: Murmillo
+SKILLUSENAME: Murmillo
+VOICELINEPREFIX: MMF
+SOUNDTABLENAME: Murmillo
+MESH: murmillof
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 0.925, 0.925, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Murmillo
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Murmillo
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Murmillo
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Murmillo
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Mutuus
+
+DISPLAYNAMEID: 4486
+DESCRIPTIONID: 7777
+
+UNITSETNAME: Mutuus
+SKILLUSENAME: Mutuus
+VOICELINEPREFIX: YMU
+SOUNDTABLENAME: Mutuus
+MESH: mutuusSenate
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, <Any>, Mutuus
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: MutuusDark
+
+DISPLAYNAMEID: 6328
+DESCRIPTIONID: 8115
+
+UNITSETNAME: Mutuus
+SKILLUSENAME: Mutuus
+SOUNDTABLENAME: Mutuus
+MESH: MutuusDark
+HEADICON: mutuus
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+ATTRIBUTE: deathremainonfield
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Mutuus
+
+////  ARMORS
+ITEMCAT: armor, <Any>, Mutuus
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Mutuus
+
+////  SHIELDS
+ITEMCAT: shield, <Any>, Mutuus
+
+////  ACCESSORIES
+ITEMCAT: accessory, <Any>, Mutuus
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: MutuusSenate
+
+DISPLAYNAMEID: 0
+DESCRIPTIONID: 0
+
+UNITSETNAME: Mutuus
+SKILLUSENAME: Mutuus
+SOUNDTABLENAME: Mutuus
+MESH: MutuusSenate
+
+GRIDSIZE: 1
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: Nephilia
+
+DISPLAYNAMEID: 4487
+DESCRIPTIONID: 7779
+
+UNITSETNAME: Nephilia
+SKILLUSENAME: Nephilia
+MESH: nephilia
+
+GRIDSIZE: 1
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: Ogre
+
+DISPLAYNAMEID: 4488
+DESCRIPTIONID: 7780
+
+UNITSETNAME: Ogre
+SKILLUSENAME: Ogre
+VOICELINEPREFIX: OGR
+SOUNDTABLENAME: Ogre
+MESH: ogre
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1.4, 1.35, 1.25, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Hammer, Heavy
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, <Any>, Ogre
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Ogre
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Ogre
+
+////  ACCESSORIES
+ITEMCAT: accessory, Scalp, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Orin
+
+DISPLAYNAMEID: 3734
+DESCRIPTIONID: 0
+
+MESH: Orin
+HEADICON: NONE
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 1
+
+CREATECLASS: Peltast
+
+DISPLAYNAMEID: 4490
+DESCRIPTIONID: 7781
+
+UNITSETNAME: Peltast
+SKILLUSENAME: Peltast
+VOICELINEPREFIX: PLT
+SOUNDTABLENAME: Peltast
+MESH: peltast
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.92, 0.85, 0.9, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Javelin, Plain
+ITEMCAT: weapon, <Any>, Peltast
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Peltast
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Peltast
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Peltast
+
+////  ACCESSORIES
+ITEMCAT: accessory, Necklace, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 0, 1
+
+CREATECLASS: PeltastF
+
+DISPLAYNAMEID: 4490
+DESCRIPTIONID: 7781
+
+UNITSETNAME: Peltast
+SKILLUSENAME: Peltast
+VOICELINEPREFIX: PLF
+SOUNDTABLENAME: Peltast
+MESH: peltastF
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.73, 0.77, 0.925, 
+
+ATTRIBUTE: Support
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Javelin, Plain
+ITEMCAT: weapon, <Any>, Peltast
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Peltast
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Peltast
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Peltast
+
+////  ACCESSORIES
+ITEMCAT: accessory, Necklace, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 0, 1
+
+CREATECLASS: PropBarrel
+
+DISPLAYNAMEID: 4491
+DESCRIPTIONID: 0
+
+UNITSETNAME: Prop
+SKILLUSENAME: Prop
+SOUNDTABLENAME: PropBarrel
+MESH: propbarrel
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntfaceonattack
+ATTRIBUTE: doesntfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: deathremainonfield
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, barrel_hit
+FX: react weak, barrel_hit
+FX: react crit, barrel_hit
+FX: react block, barrel_hit
+FX: react die, barrel_break
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 0, 0, 0
+
+CREATECLASS: PropPracticePost
+
+DISPLAYNAMEID: 6501
+DESCRIPTIONID: 0
+
+UNITSETNAME: Prop
+SKILLUSENAME: Prop
+MESH: proppracticepost
+
+GRIDSIZE: 1
+XPAWARD: 0, 0
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntfaceonattack
+ATTRIBUTE: doesntfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: deathremainonfield
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, practicepost_hit
+FX: react weak, practicepost_hit
+FX: react crit, practicepost_hit
+FX: react block, practicepost_hit
+FX: react die, practicepost_hit
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 99, 0, 0, 0, 0, 0
+
+CREATECLASS: PropStatue
+
+DISPLAYNAMEID: 4492
+DESCRIPTIONID: 0
+
+UNITSETNAME: Prop
+SKILLUSENAME: Prop
+SOUNDTABLENAME: PropStatue
+MESH: propstatuefire
+
+GRIDSIZE: 1
+XPAWARD: 0, 0
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Fire
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+FX: react block, template_hitBluntM
+FX: react die, template_PetrifyThaw.emt
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 5, 5, 0, 0, 0, 0
+LEVELSTATAWARDS: 5, 5, 0, 0, 0, 0
+LEVELSTATAWARDS: 5, 5, 0, 0, 0, 0
+LEVELSTATAWARDS: 1, 1, 0, 0, 0, 0
+LEVELSTATAWARDS: 5, 5, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 0, 99, 0, 0
+
+CREATECLASS: PropTombstone
+
+DISPLAYNAMEID: 6407
+DESCRIPTIONID: 0
+
+UNITSETNAME: Prop
+SKILLUSENAME: Prop
+SOUNDTABLENAME: PropTombstone
+MESH: PropTombstone
+
+GRIDSIZE: 1
+XPAWARD: 0, 0
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntfaceonattack
+ATTRIBUTE: doesntfaceondefend
+ATTRIBUTE: doesntmove
+ATTRIBUTE: deathremainonfield
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+FX: react block, template_hitBluntM
+FX: react die, template_PetrifyThaw.emt
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: SamniteExp
+
+DISPLAYNAMEID: 4493
+DESCRIPTIONID: 7782
+
+UNITSETNAME: Samnite
+SKILLUSENAME: Samnite
+VOICELINEPREFIX: SEM
+SOUNDTABLENAME: SamniteExp
+MESH: SamniteExp
+CLASSICON: Samnite
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1.4, 1.6, 1.25, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Expanse
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, <Any>, Samnite
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Samnite
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Samnite
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Samnite
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: SamniteExpF
+
+DISPLAYNAMEID: 4493
+DESCRIPTIONID: 7782
+
+UNITSETNAME: Samnite
+SKILLUSENAME: Samnite
+VOICELINEPREFIX: SEF
+SOUNDTABLENAME: SamniteExp
+MESH: SamniteExpF
+CLASSICON: Samnite
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.89, 1.064, 1.064, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Expanse
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, <Any>, Samnite
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Samnite
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Samnite
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Samnite
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: SamniteImp
+
+DISPLAYNAMEID: 4493
+DESCRIPTIONID: 7782
+
+UNITSETNAME: Samnite
+SKILLUSENAME: Samnite
+VOICELINEPREFIX: SIM
+SOUNDTABLENAME: SamniteExp
+MESH: SamniteImp
+CLASSICON: Samnite
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1.4, 1.25, 1.25, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, <Any>, Samnite
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Samnite
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Samnite
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Samnite
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: SamniteImpF
+
+DISPLAYNAMEID: 4493
+DESCRIPTIONID: 7782
+
+UNITSETNAME: Samnite
+SKILLUSENAME: Samnite
+VOICELINEPREFIX: SIF
+SOUNDTABLENAME: SamniteExp
+MESH: SamniteImpF
+CLASSICON: Samnite
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.92, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, <Any>, Samnite
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Samnite
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Samnite
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Samnite
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: SamniteSte
+
+DISPLAYNAMEID: 4493
+DESCRIPTIONID: 7782
+
+UNITSETNAME: Samnite
+SKILLUSENAME: Samnite
+VOICELINEPREFIX: SSM
+SOUNDTABLENAME: SamniteExp
+MESH: SamniteSte
+CLASSICON: Samnite
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1.4, 1.25, 1.25, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Steppes
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, <Any>, Samnite
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Samnite
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Samnite
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Samnite
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: SamniteSteF
+
+DISPLAYNAMEID: 4493
+DESCRIPTIONID: 7782
+
+UNITSETNAME: Samnite
+SKILLUSENAME: Samnite
+VOICELINEPREFIX: SSF
+SOUNDTABLENAME: SamniteExp
+MESH: SamniteSteF
+CLASSICON: Samnite
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.89, 1.064, 1.064, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Steppes
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Heavy
+ITEMCAT: weapon, Spear, Heavy
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, <Any>, Samnite
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Heavy
+ITEMCAT: armor, Armor, Samnite
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Samnite
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Heavy
+ITEMCAT: shield, Shield, Samnite
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Satyr
+
+DISPLAYNAMEID: 4494
+DESCRIPTIONID: 7783
+
+UNITSETNAME: Satyr
+SKILLUSENAME: Satyr
+VOICELINEPREFIX: SAY
+SOUNDTABLENAME: Satyr
+MESH: Satyr
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 0.9, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+
+////  WEAPONS
+ITEMCAT: weapon, <Any>, Satyr
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Poem, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 5, 5, 20, 1
+
+CREATECLASS: Scarab
+
+DISPLAYNAMEID: 4495
+DESCRIPTIONID: 7784
+
+UNITSETNAME: Scarab
+SKILLUSENAME: Scarab
+VOICELINEPREFIX: SCB
+SOUNDTABLENAME: Scarab
+MESH: Scarab
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Fire
+ATTRIBUTE: Beast
+ATTRIBUTE: Expanse
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: Short
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Medium
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Jewel, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: Scorpion
+
+DISPLAYNAMEID: 4496
+DESCRIPTIONID: 7785
+
+UNITSETNAME: Scorpion
+SKILLUSENAME: Scorpion
+VOICELINEPREFIX: SRP
+SOUNDTABLENAME: Scorpion
+MESH: scorpion
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Water
+ATTRIBUTE: Beast
+ATTRIBUTE: Expanse
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: Short
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Medium
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Jewel, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 0, 1
+
+CREATECLASS: SecutorImp
+
+DISPLAYNAMEID: 4479
+DESCRIPTIONID: 7786
+
+UNITSETNAME: Secutor
+SKILLUSENAME: Secutor
+VOICELINEPREFIX: XIM
+SOUNDTABLENAME: SecutorImp
+MESH: SecutorImp
+CLASSICON: Secutor
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 1.1, 0.95, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: SecutorImpF
+
+DISPLAYNAMEID: 4479
+DESCRIPTIONID: 7786
+
+UNITSETNAME: Secutor
+SKILLUSENAME: Secutor
+VOICELINEPREFIX: XIF
+SOUNDTABLENAME: SecutorImp
+MESH: SecutorImpF
+CLASSICON: Secutor
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 0.95, 0.855, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Imperia
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: SecutorSte
+
+DISPLAYNAMEID: 4479
+DESCRIPTIONID: 7786
+
+UNITSETNAME: Secutor
+SKILLUSENAME: Secutor
+VOICELINEPREFIX: XSM
+SOUNDTABLENAME: SecutorImp
+MESH: SecutorSte
+CLASSICON: Secutor
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 1.1, 0.9, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Steppes
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: SecutorSteF
+
+DISPLAYNAMEID: 4479
+DESCRIPTIONID: 7786
+
+UNITSETNAME: Secutor
+SKILLUSENAME: Secutor
+VOICELINEPREFIX: XSF
+SOUNDTABLENAME: SecutorImp
+MESH: SecutorSteF
+CLASSICON: Secutor
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 0.95, 0.855, 
+
+ATTRIBUTE: Light
+ATTRIBUTE: Steppes
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Light
+ITEMCAT: weapon, Sword, Light
+ITEMCAT: weapon, Spear, Light
+ITEMCAT: weapon, <Any>, Secutor
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Light
+ITEMCAT: armor, Armor, Secutor
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Secutor
+ITEMCAT: helmet, HelmetF, Gladiatorial
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Light
+ITEMCAT: shield, Shield, Secutor
+
+////  ACCESSORIES
+ITEMCAT: accessory, Ring, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 10, 5, 20, 1
+
+CREATECLASS: Summoner
+
+DISPLAYNAMEID: 4497
+DESCRIPTIONID: 7787
+
+UNITSETNAME: Summoner
+SKILLUSENAME: Summoner
+VOICELINEPREFIX: SUM
+SOUNDTABLENAME: Summoner
+MESH: Summoner
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.87, 0.9, 0.9, 
+
+ATTRIBUTE: Arcane
+ATTRIBUTE: Expanse
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Staff, Plain
+ITEMCAT: weapon, <Any>, Summoner
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Arcane
+ITEMCAT: armor, Armor, Summoner
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Summoner
+ITEMCAT: helmet, HelmetA, Diadem
+ITEMCAT: helmet, HelmetB, Arcane
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Charm, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: TitanAir
+
+DISPLAYNAMEID: 7789
+DESCRIPTIONID: 7788
+
+UNITSETNAME: Boss
+SKILLUSENAME: Boss
+VOICELINEPREFIX: GDS
+MESH: titan
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: continuous alive, titanAir_ambientAir
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: TitanEarth
+
+DISPLAYNAMEID: 7790
+DESCRIPTIONID: 7791
+
+UNITSETNAME: Boss
+SKILLUSENAME: Boss
+VOICELINEPREFIX: GDS
+MESH: TitanEarth
+
+GRIDSIZE: 1
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: continuous alive, titanEarth_ambientAir
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: TitanFire
+
+DISPLAYNAMEID: 7792
+DESCRIPTIONID: 7791
+
+UNITSETNAME: Boss
+SKILLUSENAME: Boss
+VOICELINEPREFIX: GDS
+MESH: TitanFire
+
+GRIDSIZE: 1
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: continuous alive, titanFire_ambientEffects
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: TitanWater
+
+DISPLAYNAMEID: 7793
+DESCRIPTIONID: 7791
+
+UNITSETNAME: Boss
+SKILLUSENAME: Boss
+VOICELINEPREFIX: GDS
+MESH: TitanWater
+
+GRIDSIZE: 1
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+ATTRIBUTE: doesntmove
+ATTRIBUTE: simpleanims
+ATTRIBUTE: noreacts
+ATTRIBUTE: noidles
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+FX: continuous alive, titanWater_ambientEffects
+
+LEVELUPXPNEEDED: 0, 0, 0, 0, 0
+LEVELUPJPGIVEN: 0, 0, 0, 0, 0
+
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 0, 0, 0, 0, 0, 0
+
+CREATECLASS: UndeadCasterA
+
+DISPLAYNAMEID: 4498
+DESCRIPTIONID: 7800
+
+UNITSETNAME: UndeadCaster
+SKILLUSENAME: UndeadCaster
+VOICELINEPREFIX: UDC
+SOUNDTABLENAME: UndeadCasterA
+MESH: skeletonSpl1
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 0.9, 0.9, 
+
+ATTRIBUTE: Arcane
+ATTRIBUTE: Imperia
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Cultist
+ITEMCAT: weapon, Staff, Plain
+ITEMCAT: weapon, <Any>, UndeadCaster
+
+////  ARMORS
+ITEMCAT: armor, Armor, Arcane
+ITEMCAT: armor, Armor, UndeadCaster
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, UndeadCaster
+ITEMCAT: helmet, <Any>, Summoner
+ITEMCAT: helmet, <Any>, Channeler
+ITEMCAT: helmet, Helmet, Plain
+ITEMCAT: helmet, HelmetA, Diadem
+ITEMCAT: helmet, HelmetB, Arcane
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Charm, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: UndeadCasterB
+
+DISPLAYNAMEID: 4499
+DESCRIPTIONID: 7800
+
+UNITSETNAME: UndeadCaster
+SKILLUSENAME: UndeadCaster
+VOICELINEPREFIX: UDC
+SOUNDTABLENAME: UndeadCasterA
+MESH: skeletonSpl2
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.9, 0.9, 0.9, 
+
+ATTRIBUTE: Arcane
+ATTRIBUTE: Expanse
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Cultist
+ITEMCAT: weapon, Staff, Plain
+ITEMCAT: weapon, <Any>, UndeadCaster
+
+////  ARMORS
+ITEMCAT: armor, Armor, Arcane
+ITEMCAT: armor, Armor, UndeadCaster
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, UndeadCaster
+ITEMCAT: helmet, <Any>, Summoner
+ITEMCAT: helmet, <Any>, Channeler
+ITEMCAT: helmet, Helmet, Plain
+ITEMCAT: helmet, HelmetA, Diadem
+ITEMCAT: helmet, HelmetB, Arcane
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Charm, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 2, 2, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 2, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeExpA
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonExp1
+HEADICON: undeadMeleeExp
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Expanse
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeExpB
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonExp2
+HEADICON: undeadMeleeExp
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Expanse
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeImpA
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonImp1
+HEADICON: undeadMeleeImp
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeImpB
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonImp2
+HEADICON: undeadMeleeImp
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeNorA
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonNor1
+HEADICON: undeadMeleeNor
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, <Any>, Legionnaire
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeNorB
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonNor2
+HEADICON: undeadMeleeNor
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, <Any>, Legionnaire
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeSteA
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonSte1
+HEADICON: undeadMeleeSte
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Steppes
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, Helmet, Plain
+ITEMCAT: helmet, <Any>, Legionnaire
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: UndeadMeleeSteB
+
+DISPLAYNAMEID: 4500
+DESCRIPTIONID: 7801
+
+UNITSETNAME: UndeadMelee
+SKILLUSENAME: UndeadMelee
+VOICELINEPREFIX: UDM
+SOUNDTABLENAME: UndeadMeleeExpA
+MESH: skeletonSte2
+HEADICON: undeadMeleeSte
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.95, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Steppes
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Undead
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Undead
+
+////  HELMETS
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, <Any>, Undead
+ITEMCAT: helmet, Helmet, Plain
+ITEMCAT: helmet, <Any>, Legionnaire
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Undead
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+FX: react hit, template_hitBluntM
+FX: react weak, template_hitBluntM
+FX: react crit, template_hitBluntM
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Urlan
+
+DISPLAYNAMEID: 3672
+DESCRIPTIONID: 1
+
+UNITSETNAME: Urlan
+SKILLUSENAME: Urlan
+VOICELINEPREFIX: URL
+SOUNDTABLENAME: Urlan
+MESH: urlan
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.85, 0.9, 1.15, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, TwoHanded
+ITEMCAT: weapon, Hammer, TwoHanded
+ITEMCAT: weapon, Sword, TwoHanded
+ITEMCAT: weapon, <Any>, Barbarian
+ITEMCAT: weapon, <Any>, Urlan
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+ITEMCAT: armor, Armor, Urlan
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Urlan
+ITEMCAT: helmet, <Any>, Barbarian
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 0, 0, 0, 1
+
+CREATECLASS: Ursula
+
+DISPLAYNAMEID: 4501
+DESCRIPTIONID: 7797
+
+UNITSETNAME: Ursula
+SKILLUSENAME: Ursula
+VOICELINEPREFIX: URS
+SOUNDTABLENAME: Ursula
+MESH: ursula
+CLASSICON: Ursula
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 0.925, 0.925, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Ursula
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+ITEMCAT: armor, Armor, Ursula
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Ursula
+ITEMCAT: helmet, <Any>, Barbarian
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Ursula
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 5, 5, 5, 1
+
+CREATECLASS: UrsulaCostumeA
+
+DISPLAYNAMEID: 4501
+DESCRIPTIONID: 7797
+
+UNITSETNAME: Ursula
+SKILLUSENAME: Ursula
+VOICELINEPREFIX: URS
+SOUNDTABLENAME: Ursula
+MESH: ursulaSummer
+HEADICON: ursula
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 0.925, 0.925, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Ursula
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+ITEMCAT: armor, Armor, Ursula
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Ursula
+ITEMCAT: helmet, <Any>, Barbarian
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Ursula
+
+////  ACCESSORIES
+ITEMCAT: accessory, Runestone, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 5, 5, 5, 1
+
+CREATECLASS: UrsulaCostumeB
+
+DISPLAYNAMEID: 4501
+DESCRIPTIONID: 7797
+
+UNITSETNAME: Ursula
+SKILLUSENAME: Ursula
+VOICELINEPREFIX: URS
+SOUNDTABLENAME: Ursula
+MESH: ursulaAdvanced
+HEADICON: ursula
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.79, 0.925, 0.925, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Female
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Ursula
+ITEMCAT: weapon, <Any>, Valkyrie
+
+////  ARMORS
+ITEMCAT: armor, Armor, Barbarian
+ITEMCAT: armor, Armor, Ursula
+ITEMCAT: armor, Armor, Valkyrie
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Ursula
+ITEMCAT: helmet, <Any>, Barbarian
+ITEMCAT: helmet, HelmetC, Hat
+ITEMCAT: helmet, HelmetD, Helm
+ITEMCAT: helmet, <Any>, Valkyrie
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Ursula
+ITEMCAT: shield, Shield, Valkyrie
+
+////  ACCESSORIES
+ITEMCAT: accessory, Feather, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 5, 5, 5, 1
+
+CREATECLASS: Usus
+
+DISPLAYNAMEID: 3310
+DESCRIPTIONID: 8161
+
+UNITSETNAME: Usus
+SKILLUSENAME: Usus
+VOICELINEPREFIX: USS
+SOUNDTABLENAME: Usus
+MESH: Usus
+
+GRIDSIZE: 1
+XPAWARD: 1, 1
+ITEMSIZES: 1, 1, 1, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 20, 20, 20, 20
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 0, 40, 40, 30, 1
+
+CREATECLASS: Valens
+
+DISPLAYNAMEID: 4501
+DESCRIPTIONID: 7799
+
+UNITSETNAME: Valens
+SKILLUSENAME: Valens
+VOICELINEPREFIX: VAL
+SOUNDTABLENAME: Valens
+MESH: valens
+CLASSICON: Valens
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.88, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Valens
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Valens
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Valens
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Valens
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 3, 5, 5, 5, 1
+
+CREATECLASS: ValensCostumeA
+
+DISPLAYNAMEID: 4501
+DESCRIPTIONID: 7799
+
+UNITSETNAME: Valens
+SKILLUSENAME: Valens
+VOICELINEPREFIX: VAL
+SOUNDTABLENAME: Valens
+MESH: valensSummer
+HEADICON: valens
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.88, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Valens
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Valens
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Valens
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Valens
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 5, 5, 5, 1
+
+CREATECLASS: ValensCostumeB
+
+DISPLAYNAMEID: 4501
+DESCRIPTIONID: 7799
+
+UNITSETNAME: Valens
+SKILLUSENAME: Valens
+VOICELINEPREFIX: VAL
+SOUNDTABLENAME: Valens
+MESH: valensAdvanced
+HEADICON: valens
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.88, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Valens
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Valens
+ITEMCAT: armor, Armor, Legionnaire
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Valens
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Valens
+ITEMCAT: shield, Shield, Legionnaire
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 5, 5, 5, 1
+
+CREATECLASS: ValensNoAmulet
+
+DISPLAYNAMEID: 7732
+DESCRIPTIONID: 7799
+
+UNITSETNAME: Valens
+SKILLUSENAME: Valens
+VOICELINEPREFIX: VAL
+SOUNDTABLENAME: Valens
+MESH: valensNoAmulet
+HEADICON: valens
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 0.88, 1, 1, 
+
+ATTRIBUTE: Medium
+ATTRIBUTE: Imperia
+ATTRIBUTE: Male
+ATTRIBUTE: Human
+
+////  WEAPONS
+ITEMCAT: weapon, Axe, Medium
+ITEMCAT: weapon, Hammer, Medium
+ITEMCAT: weapon, Sword, Medium
+ITEMCAT: weapon, <Any>, Legionnaire
+ITEMCAT: weapon, <Any>, Valens
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+ITEMCAT: armor, Armor, Medium
+ITEMCAT: armor, Armor, Legionnaire
+ITEMCAT: armor, Armor, Valens
+
+////  HELMETS
+ITEMCAT: helmet, <Any>, Valens
+ITEMCAT: helmet, <Any>, Legionnaire
+ITEMCAT: helmet, HelmetE, Military
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+ITEMCAT: shield, Shield, Medium
+ITEMCAT: shield, Shield, Legionnaire
+ITEMCAT: shield, Shield, Valens
+
+////  ACCESSORIES
+ITEMCAT: accessory, Medal, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 0, 1, 1, 2, 1, 2
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 5, 5, 5, 1
+
+CREATECLASS: Wolf
+
+DISPLAYNAMEID: 4502
+DESCRIPTIONID: 7796
+
+UNITSETNAME: Wolf
+SKILLUSENAME: Wolf
+VOICELINEPREFIX: WLF
+SOUNDTABLENAME: Wolf
+MESH: wolf
+CLASSICON: wolf
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: Nordagh
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: Short
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Light
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Collar, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 5, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 5, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 0, 0, 10, 1
+
+CREATECLASS: WolfGreater
+
+DISPLAYNAMEID: 4503
+DESCRIPTIONID: 7795
+
+UNITSETNAME: WolfGreater
+SKILLUSENAME: WolfGreater
+VOICELINEPREFIX: WFG
+SOUNDTABLENAME: WolfGreater
+MESH: WolfGreater
+CLASSICON: wolf
+
+GRIDSIZE: 2
+XPAWARD: 30, 1.44
+ITEMSIZES: 1, 1, 1, 
+
+AFFINITY: Earth
+ATTRIBUTE: Beast
+ATTRIBUTE: Nordagh
+ATTRIBUTE: NoKnockdown
+ATTRIBUTE: NoKnockback
+
+////  ROCKSCISSORSPAPER
+ROCKSCISSORSPAPER: Plain
+
+////  WEAPONS
+
+////  ARMORS
+
+////  HELMETS
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Collar, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 7, 7, 0, 1, 0, 1
+LEVELSTATAWARDS: 6, 6, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 10, 10, 0, 0, 0, 20
+
+CREATECLASS: Yeti
+
+DISPLAYNAMEID: 3671
+DESCRIPTIONID: 7794
+
+UNITSETNAME: Yeti
+SKILLUSENAME: Yeti
+VOICELINEPREFIX: YET
+SOUNDTABLENAME: Yeti
+MESH: Yeti
+
+GRIDSIZE: 1
+XPAWARD: 15, 1.44
+ITEMSIZES: 1, 1, 1.15, 
+
+ATTRIBUTE: Heavy
+ATTRIBUTE: Nordagh
+ATTRIBUTE: Male
+
+////  WEAPONS
+ITEMCAT: weapon, Club, Plain
+ITEMCAT: weapon, <Any>, Yeti
+ITEMCAT: weapon, Hammer, TwoHanded
+ITEMCAT: weapon, Sword, Cultist
+
+////  ARMORS
+
+////  HELMETS
+ITEMCAT: helmet, Helmet, Plain
+
+////  SHIELDS
+
+////  ACCESSORIES
+ITEMCAT: accessory, Tooth, Plain
+
+LEVELUPXPNEEDED: 850, 1981, 3484, 5484, 1.52
+LEVELUPJPGIVEN: 5, 10, 10, 15, 15
+
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 4, 4, 0, 1, 0, 1
+LEVELSTATAWARDS: 0, 0, 0, 0, 0, 0
+LEVELZEROSTATS: 1, 1, 3, 0, 0, 1
+
+"

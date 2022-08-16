@@ -1,0 +1,13 @@
+
+ITEMSET export Class: Eiji Eiji  Region: Steppes Affinity: Air
+
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+MODITEMSCOMP:   ITEMSETSAOXM,  0, 6,      "Air Hunter's Bow",                      "",                      "",       "",      "" // Cost: 0/1054
+MODITEMSCOMP:   ITEMSETSAOXM,  7, 7,      "Air Hunter's Bow",                      "",                      "",   "",      "" // Cost: 990/2044
+MODITEMSCOMP:   ITEMSETSAOXM,  8, 8,      "Air Hunter's Bow",                      "",                      "",   "",      "" // Cost: 0/2044
+MODITEMSCOMP:   ITEMSETSAOXM,  9, 9,      "Air Hunter's Bow",                      "",                      "", "",      "" // Cost: 398/2442
+MODITEMSCOMP:   ITEMSETSAOXM, 10,10,      "Air Silver Bow",                      "",                      "",          "",      "" // Cost: 446/2888
+MODITEMSCOMP:   ITEMSETSAOXM, 11,11,      "Fire Flaming Bow",                      "",                      "",          "",      "" // Cost: 0/2888
+MODITEMSCOMP:   ITEMSETSAOXM, 12,12,      "Fire Flaming Bow",                      "",                      "",   "",      "" // Cost: 1781/4669
+MODITEMSCOMP:   ITEMSETSAOXM, 13,13,      "Air Recurve Bow",                      "",                      "",           "",      "" // Cost: 572/5241
+MODITEMSCOMP:   ITEMSETSAOXM, 14,30,      "Water Coral Bow",                      "",                      "",           "",      "" // Cost: 0/5241

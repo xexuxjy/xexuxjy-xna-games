@@ -1,0 +1,89 @@
+////// SKILLSET export Class: BearGreater BearGreater  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "BearGreater Attack"              // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "BearGreater Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "BearGreater ThickSkull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "BearGreater Bite"                // JP:   4/  4	AccMod -15
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "BearGreater Paw I"               // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "BearGreater GreaterAttack II"    // JP:  18/ 32	AccMod 1
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "BearGreater Paw II"              // JP:  14/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "BearGreater BackAtcha"           // JP:  38/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "BearGreater GreaterAttack III"   // JP:  40/124	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "BearGreater RakingAttack"        // JP:  36/160	AccMod -5
+//  Unused JP at Level 30: 270
+
+
+////// SKILLSET export Class: BearGreater BearGreater  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "BearGreater Attack"              // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "BearGreater Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "BearGreater ThickSkull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "BearGreater Bite"                // JP:   4/  4	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "BearGreater EarthAffinity I"     // JP:   4/  8	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "BearGreater EarthAffinity II"    // JP:  10/ 18	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "BearGreater EarthAffinity III"   // JP:  20/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "BearGreater Paw I"               // JP:  10/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "BearGreater GreaterAttack II"    // JP:  18/ 66	AccMod 1
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "BearGreater Paw II"              // JP:  14/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "BearGreater BackAtcha"           // JP:  38/118	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "BearGreater GreaterAttack III"   // JP:  40/158	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 15, 30, "BearGreater RakingAttack"        // JP:  36/194	AccMod -5
+//  Unused JP at Level 30: 236
+
+
+////// SKILLSET export Class: BearGreater BearGreater  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "BearGreater Attack"              // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "BearGreater Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "BearGreater ThickSkull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "BearGreater Bite"                // JP:   4/  4	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "BearGreater Paw I"               // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "BearGreater GreaterAttack II"    // JP:  18/ 32	AccMod 1
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "BearGreater Paw II"              // JP:  14/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "BearGreater BackAtcha"           // JP:  38/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "BearGreater GreaterAttack III"   // JP:  40/124	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "BearGreater RakingAttack"        // JP:  36/160	AccMod -5
+//  Unused JP at Level 30: 270
+
+
+////// SKILLSET export Class: BearGreater BearGreater  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "BearGreater Attack"              // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "BearGreater Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "BearGreater ThickSkull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "BearGreater Bite"                // JP:   4/  4	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "BearGreater Paw I"               // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "BearGreater GreaterAttack II"    // JP:  18/ 32	AccMod 1
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "BearGreater Paw II"              // JP:  14/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "BearGreater BackAtcha"           // JP:  38/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 10, 30, "BearGreater GreaterAttack III"   // JP:  40/124	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "BearGreater RakingAttack"        // JP:  36/160	AccMod -5
+//  Unused JP at Level 30: 270
+
+
+////// SKILLSET export Class: BearGreater BearGreater  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "BearGreater Attack"              // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "BearGreater Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "BearGreater ThickSkull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "BearGreater Bite"                // JP:   4/  4	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "BearGreater Paw I"               // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "BearGreater GreaterAttack II"    // JP:  18/ 32	AccMod 1
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "BearGreater Paw II"              // JP:  14/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "BearGreater BackAtcha"           // JP:  38/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "BearGreater GreaterAttack III"   // JP:  40/124	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "BearGreater RakingAttack"        // JP:  36/160	AccMod -5
+//  Unused JP at Level 30: 270
+
+
+////// SKILLSET export Class: BearGreater BearGreater  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "BearGreater Attack"              // JP:   0/  0	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "BearGreater Evade"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "BearGreater ThickSkull"          // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "BearGreater Bite"                // JP:   4/  4	AccMod -15
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "BearGreater Paw I"               // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "BearGreater GreaterAttack II"    // JP:  18/ 32	AccMod 1
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "BearGreater Paw II"              // JP:  14/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "BearGreater BackAtcha"           // JP:  38/ 84	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "BearGreater GreaterAttack III"   // JP:  40/124	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "BearGreater RakingAttack"        // JP:  36/160	AccMod -5
+//  Unused JP at Level 30: 270
+
+
+
+

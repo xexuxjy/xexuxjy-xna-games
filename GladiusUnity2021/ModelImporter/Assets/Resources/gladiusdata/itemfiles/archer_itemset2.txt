@@ -1,0 +1,36 @@
+
+ITEMSET export Class: Archer Archer  Region: Steppes Affinity: Fire
+//          :      variant, Lv,Lv,         weapon,                   armor,        shield,         helmet                          accessory
+MODITEMSCOMP:   ITEMSETSFOXM,  0, 6,      "Fire Hunter's Bow",      "",           "",             "Leather Hat",                  "" // Cost: 269/834
+MODITEMSCOMP:   ITEMSETSFOXM,  7, 7,      "Fire Hunter's Bow",      "",           "",             "Leather Hat",                  "" // Cost: 0/834
+MODITEMSCOMP:   ITEMSETSFOXM,  8, 8,      "Fire Hunter's Bow",      "",           "",             "Earth Wood Armored Hat",       "" // Cost: 359/1193
+MODITEMSCOMP:   ITEMSETSFOXM,  9, 9,      "Fire Hunter's Bow",      "",           "",             "Fire Confortari",              "" // Cost: 0/1193
+MODITEMSCOMP:   ITEMSETSFOXM, 10,10,      "Fire Silver Bow",        "",           "",             "Fire Confortari",              "" // Cost: 1580/2773
+MODITEMSCOMP:   ITEMSETSFOXM, 11,11,      "Fire Flaming Bow",       "",           "",             "Fire Hooked Ridge Helmet",     "" // Cost: 1252/4025
+MODITEMSCOMP:   ITEMSETSFOXM, 12,12,      "Fire Flaming Bow",       "",           "",             "Fire Hooked Ridge Helmet",     "" // Cost: 529/4554
+MODITEMSCOMP:   ITEMSETSFOXM, 13,13,      "Fire Recurve Bow",       "",           "",             "Fire Hooked Ridge Helmet",     "" // Cost: 0/4554
+MODITEMSCOMP:   ITEMSETSFOXM, 14,30,      "Fire Recurve Bow",       "",           "",             "Fire Hooked Ridge Helmet",     "" // Cost: 0/4554
+
+
+MODITEMSCOMP:   ITEMSETSniper, 10,10,      "Air Silver Bow",       "",           "",             "",     "Master's Belt" 
+MODITEMSCOMP:   ITEMSETOnslaught,  1, 1,                   "Bow",                      "",                      "",         "Fire Fur Band",                      "Master's Belt" // Cost: 00156/00156...Acc/Def: 002/000
+MODITEMSCOMP:   ITEMSETOnslaught,  2, 2,                   "Bow",                      "",                      "",         "Fire Fur Band",     "Master's Belt" // Cost: 00705/00861...Acc/Def: 002/000
+MODITEMSCOMP:   ITEMSETOnslaught,  3, 3,             "Short Bow",                      "",                      "",         "Fire Fur Band",     "Master's Belt" // Cost: 00336/01197...Acc/Def: 002/000
+MODITEMSCOMP:   ITEMSETOnslaught,  4, 4,             "Short Bow",                      "",                      "",         "Fire Fur Band",     "Master's Belt" // Cost: 00000/01197...Acc/Def: 002/000
+MODITEMSCOMP:   ITEMSETOnslaught,  5, 5,             "Short Bow",                      "",                      "",         "Fire Fur Band",     "Master's Belt" // Cost: 00000/01197...Acc/Def: 002/000
+MODITEMSCOMP:   ITEMSETOnslaught,  6, 6,             "Short Bow",                      "",                      "",         "Fire Wing Hat",     "Master's Belt" // Cost: 00269/01466...Acc/Def: 001/001
+MODITEMSCOMP:   ITEMSETonslaught,  7, 7,     "Fire Hunter's Bow",                      "",                      "",         "Fire Wing Hat",     "Master's Belt" // Cost: 00677/02143...Acc/Def: 001/001
+MODITEMSCOMP:   ITEMSETOnslaught,  8, 8,     "Fire Hunter's Bow",                      "",                      "",         "Fire Wing Hat",     "Master's Belt" // Cost: 00000/02143...Acc/Def: 001/001
+MODITEMSCOMP:   ITEMSETOnslaught,  9, 9,     "Fire Hunter's Bow",                      "",                      "",       "Fire Confortari",     "Master's Belt" // Cost: 00397/02540...Acc/Def: 000/001
+MODITEMSCOMP:   ITEMSETOnslaught, 10,10,       "Fire Silver Bow",                      "",                      "",       "Fire Confortari",     "Master's Belt" // Cost: 01136/03676...Acc/Def: 012/001
+MODITEMSCOMP:   ITEMSETOnslaught, 11,11,       "Fire Silver Bow",                      "",                      "","Fire Hooked Ridge Helmet",     "Master's Belt" // Cost: 00494/04170...Acc/Def: 012/005
+MODITEMSCOMP:   ITEMSETOnslaught, 12,12,      "Fire Flaming Bow",                      "",                      "",   "Patched Leather Cap",     "Master's Belt" // Cost: 01778/05948...Acc/Def: 000/004
+MODITEMSCOMP:   ITEMSETOnslaught, 13,13,      "Fire Flaming Bow",                      "",                      "",   "Patched Leather Cap",     "Master's Belt" // Cost: 00000/05948...Acc/Def: 000/004
+MODITEMSCOMP:   ITEMSETOnslaught, 14,14,      "Fire Flaming Bow",                      "",                      "",           "Leather Cap",     "Master's Belt" // Cost: 00571/06519...Acc/Def: 000/004
+MODITEMSCOMP:   ITEMSETOnslaught, 15,15,      "Fire Flaming Bow",                      "",                      "",           "Leather Cap",     "Master's Belt" // Cost: 00000/06519...Acc/Def: 000/004
+MODITEMSCOMP:   ITEMSETOnslaught, 16,16,    "Fire Snakeskin Bow",                      "",                      "",             "Steel Cap",     "Master's Belt" // Cost: 02501/09020...Acc/Def: 004/007
+MODITEMSCOMP:   ITEMSETOnslaught, 17,17,    "Fire Snakeskin Bow",                      "",                      "",             "Steel Cap",     "Master's Belt" // Cost: 00000/09020...Acc/Def: 004/007
+MODITEMSCOMP:   ITEMSETOnslaught, 18,18,    "Fire Snakeskin Bow",                      "",                      "",             "Steel Cap",     "Master's Belt" // Cost: 00000/09020...Acc/Def: 004/007
+MODITEMSCOMP:   ITEMSETOnslaught, 19,19,    "Fire Snakeskin Bow",                      "",                      "",             "Steel Cap",     "Master's Belt" // Cost: 00000/09020...Acc/Def: 004/007
+MODITEMSCOMP:   ITEMSETOnslaught, 20,99,    "Fire Snakeskin Bow",                      "",                      "",           "Spangenhelm",     "Master's Belt" // Cost: 00883/09903...Acc/Def: 004/009
+

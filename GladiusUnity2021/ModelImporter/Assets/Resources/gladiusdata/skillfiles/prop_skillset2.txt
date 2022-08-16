@@ -1,0 +1,57 @@
+
+MODLEVELRANGESKILL: explodingbarrel, 0, 1000, "Prop ExplodingBarrel"
+MODLEVELRANGESKILL: explodingbarrel, 1, 30, "Prop Immunities"
+
+//These skills are to be tagged with Statues
+
+MODLEVELRANGESKILL: prop_bleeding, 1, 30, "Prop Bleeding"
+MODLEVELRANGESKILL: prop_bleeding, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_bleeding, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_blind, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_blind, 1, 30, "Prop Blind"
+MODLEVELRANGESKILL: prop_blind, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_blind, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_confusion, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_confusion, 1, 30, "Prop Confusion"
+MODLEVELRANGESKILL: prop_confusion, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_confusion, 1, 30, "Prop Immunities"
+
+//MODLEVELRANGESKILL: prop_fear, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_fear, 1, 30, "Prop Fear"
+MODLEVELRANGESKILL: prop_fear, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_fear, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_fire, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_fire, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_fire, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_frozen, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_frozen, 1, 30, "Prop Frozen"
+MODLEVELRANGESKILL: prop_frozen, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_frozen, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_knockback, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_knockback, 1, 30, "Prop KnockBack"
+MODLEVELRANGESKILL: prop_knockback, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_knockback, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_randomteleport, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_randomteleport, 1, 30, "Prop RandomTeleport"
+MODLEVELRANGESKILL: prop_randomteleport, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_randomteleport, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_practicepost, 1, 30, "Prop Unbreakable"
+MODLEVELRANGESKILL: prop_practicepost, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_tombstone, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: prop_tombstone, 1, 30, "Prop SummoningTomb"
+MODLEVELRANGESKILL: prop_tombstone, 1, 30, "Prop Immunities"
+
+//Anomolous name or no, please leave this skillset in the game
+MODLEVELRANGESKILL: statue, 1, 30, "Prop FireBreath"
+MODLEVELRANGESKILL: statue, 1, 30, "Prop Immunities"
+
+MODLEVELRANGESKILL: prop_BarrelNorm, 1, 30, "Prop Immunities"
+

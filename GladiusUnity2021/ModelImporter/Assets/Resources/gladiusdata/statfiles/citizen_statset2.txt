@@ -1,0 +1,34 @@
+// STATSET export Class: Citizen
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,                Level   Constit     Power  Accuracy   Defense   Initive     Move
+
+MODCORESTATSCOMP:               statsetAcrisius,        1       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        2       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        3       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        4       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        5       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        6       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        7       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        8       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        9       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        10       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        11       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        12       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        13       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        14       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        15       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        16       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        17       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        18       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        19       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        20       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        21       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        22       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        23       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        24       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        25       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        26       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        27       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        28       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        29       154       153       153       148       149         1
+MODCORESTATSCOMP:               statsetAcrisius,        30       154       153       153       148       149         1

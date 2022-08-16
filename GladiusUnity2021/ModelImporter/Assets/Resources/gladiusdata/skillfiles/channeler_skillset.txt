@@ -1,0 +1,165 @@
+////// SKILLSET export Class: ChannelerExp Channeler  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Channeler Attack"                // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Channeler Evade"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Channeler Tornado"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Channeler TransferAffinity"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Channeler FireBomb"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Channeler Combo I"               // JP:   8/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Channeler FireStorm I"           // JP:   6/ 16	AccMod 10
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Channeler FreezeEnemy I"         // JP:   8/ 24	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Channeler Combo II"              // JP:  16/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Channeler FireStorm III"         // JP:  14/ 54	AccMod 10
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Channeler Regrowth I"            // JP:  10/ 64	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  7, 30, "Channeler Regrowth II"           // JP:  16/ 80	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Channeler Teleport"              // JP:  18/ 98	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  9, 30, "Channeler WindStep I"            // JP:  12/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 11, 30, "Channeler Combo III"             // JP:  28/138	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "Channeler DrainAffinity"         // JP:  22/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 14, 30, "Channeler FreezeEnemy II"        // JP:  28/188	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb, 16, 30, "Channeler WindStep II"           // JP:  24/212	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 18, 30, "Channeler BoostAffinity"         // JP:  38/250	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 21, 30, "Channeler Combo IV"              // JP:  42/292	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Channeler FireStorm II"          // JP:  36/328	AccMod 10
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Channeler Regrowth III"          // JP:  36/364	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 28, 30, "Channeler StiffWind"             // JP:  36/400	AccMod 0
+//  Unused JP at Level 30: 30
+
+
+////// SKILLSET export Class: ChannelerExp Channeler  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Channeler Attack"                // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Channeler Evade"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Channeler Tornado"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Channeler TransferAffinity"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Channeler EarthAffinity I"       // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Channeler EarthAffinity II"      // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Channeler FireBomb"              // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Channeler FireStorm I"           // JP:   6/ 22	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Channeler FireStorm III"         // JP:  14/ 36	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Channeler FreezeEnemy I"         // JP:   8/ 44	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Channeler Regrowth I"            // JP:  10/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Channeler Regrowth II"           // JP:  16/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Channeler WindStep I"            // JP:  12/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Channeler Teleport"              // JP:  18/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Channeler DrainAffinity"         // JP:  22/122	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 11, 30, "Channeler EarthAffinity III"     // JP:  20/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Channeler FreezeEnemy II"        // JP:  28/170	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 15, 30, "Channeler WindStep II"           // JP:  24/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Channeler BoostAffinity"         // JP:  38/232	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 20, 30, "Channeler EarthAffinity IV"      // JP:  36/268	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 22, 30, "Channeler FireStorm II"          // JP:  36/304	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffE, 24, 30, "Channeler Regrowth III"          // JP:  36/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 27, 30, "Channeler StiffWind"             // JP:  36/376	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 30, 30, "Channeler FreezeEnemy III"       // JP:  46/422	AccMod -10
+//  Unused JP at Level 30: 8
+
+
+////// SKILLSET export Class: ChannelerExp Channeler  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Channeler Attack"                // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Channeler Evade"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Channeler Tornado"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Channeler TransferAffinity"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Channeler FireBomb"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Channeler FireStorm I"           // JP:   6/  8	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Channeler WaterAffinity I"       // JP:   4/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Channeler FreezeEnemy I"         // JP:   8/ 20	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Channeler FireStorm III"         // JP:  14/ 34	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Channeler Regrowth I"            // JP:  10/ 44	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Channeler WaterAffinity II"      // JP:  10/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Channeler Regrowth II"           // JP:  16/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  7, 30, "Channeler WindStep I"            // JP:  12/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Channeler Teleport"              // JP:  18/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "Channeler DrainAffinity"         // JP:  22/122	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 11, 30, "Channeler WaterAffinity III"     // JP:  20/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 13, 30, "Channeler FreezeEnemy II"        // JP:  28/170	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW, 15, 30, "Channeler WindStep II"           // JP:  24/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Channeler BoostAffinity"         // JP:  38/232	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 20, 30, "Channeler FireStorm II"          // JP:  36/268	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffW, 22, 30, "Channeler Regrowth III"          // JP:  36/304	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Channeler StiffWind"             // JP:  36/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 27, 30, "Channeler WaterAffinity IV"      // JP:  36/376	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 30, 30, "Channeler FreezeEnemy III"       // JP:  46/422	AccMod -10
+//  Unused JP at Level 30: 8
+
+
+////// SKILLSET export Class: ChannelerExp Channeler  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Channeler Attack"                // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Channeler Evade"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Channeler Tornado"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Channeler TransferAffinity"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Channeler FireBomb"              // JP:   2/  2	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Channeler FireStorm I"           // JP:   6/  8	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Channeler FireStorm III"         // JP:  14/ 22	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Channeler FreezeEnemy I"         // JP:   8/ 30	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Channeler Regrowth I"            // JP:  10/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Channeler WindStep I"            // JP:  12/ 52	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  6, 30, "Channeler Regrowth II"           // JP:  16/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  8, 30, "Channeler DrainAffinity"         // JP:  22/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Channeler Teleport"              // JP:  18/108	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Channeler FireStorm II"          // JP:  36/144	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffD, 13, 30, "Channeler FreezeEnemy II"        // JP:  28/172	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 15, 30, "Channeler WindStep II"           // JP:  24/196	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 17, 30, "Channeler BoostAffinity"         // JP:  38/234	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 20, 30, "Channeler FreezeEnemy III"       // JP:  46/280	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD, 23, 30, "Channeler Regrowth III"          // JP:  36/316	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 25, 30, "Channeler StiffWind"             // JP:  36/352	AccMod 0
+//  Unused JP at Level 30: 78
+
+
+////// SKILLSET export Class: ChannelerExp Channeler  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Channeler Attack"                // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Channeler Evade"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Channeler Tornado"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Channeler TransferAffinity"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Channeler AirAffinity I"         // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Channeler AirAffinity II"        // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Channeler FireBomb"              // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Channeler FireStorm I"           // JP:   6/ 22	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Channeler FireStorm III"         // JP:  14/ 36	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Channeler FreezeEnemy I"         // JP:   8/ 44	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Channeler Regrowth I"            // JP:  10/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Channeler Regrowth II"           // JP:  16/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Channeler WindStep I"            // JP:  12/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Channeler Teleport"              // JP:  18/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "Channeler AirAffinity III"       // JP:  20/120	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 11, 30, "Channeler DrainAffinity"         // JP:  22/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 13, 30, "Channeler FreezeEnemy II"        // JP:  28/170	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 15, 30, "Channeler WindStep II"           // JP:  24/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 17, 30, "Channeler AirAffinity IV"        // JP:  36/230	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 20, 30, "Channeler BoostAffinity"         // JP:  38/268	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 22, 30, "Channeler FireStorm II"          // JP:  36/304	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffA, 24, 30, "Channeler Regrowth III"          // JP:  36/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 27, 30, "Channeler StiffWind"             // JP:  36/376	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 30, 30, "Channeler FreezeEnemy III"       // JP:  46/422	AccMod -10
+//  Unused JP at Level 30: 8
+
+
+////// SKILLSET export Class: ChannelerExp Channeler  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Channeler Attack"                // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Channeler Evade"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Channeler Tornado"               // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Channeler TransferAffinity"      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Channeler FireAffinity I"        // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Channeler FireAffinity II"       // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Channeler FireBomb"              // JP:   2/ 16	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Channeler FireStorm I"           // JP:   6/ 22	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Channeler FireStorm III"         // JP:  14/ 36	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Channeler FreezeEnemy I"         // JP:   8/ 44	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Channeler Regrowth I"            // JP:  10/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Channeler Regrowth II"           // JP:  16/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Channeler WindStep I"            // JP:  12/ 82	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Channeler Teleport"              // JP:  18/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "Channeler DrainAffinity"         // JP:  22/122	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 11, 30, "Channeler FireAffinity III"      // JP:  20/142	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Channeler FreezeEnemy II"        // JP:  28/170	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 15, 30, "Channeler WindStep II"           // JP:  24/194	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Channeler BoostAffinity"         // JP:  38/232	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 20, 30, "Channeler FireAffinity IV"       // JP:  36/268	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 22, 30, "Channeler FireStorm II"          // JP:  36/304	AccMod 10
+MODLEVELRANGESKILL:  skillsetaffF, 24, 30, "Channeler Regrowth III"          // JP:  36/340	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 27, 30, "Channeler StiffWind"             // JP:  36/376	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 30, 30, "Channeler FreezeEnemy III"       // JP:  46/422	AccMod -10
+//  Unused JP at Level 30: 8
+
+
+
+

@@ -1,0 +1,137 @@
+// STATSET export Class: Boss
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset0,         1         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         2         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         3         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         4         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         5         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         6         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         7         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         8         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,         9         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        10         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        11         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        12         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        13         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        14         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        15         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        16         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        17         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        18         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        19         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        20         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        21         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        22         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        23         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        24         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        25         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        26         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        27         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        28         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        29         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset0,        30         0         0         0         0         0         0
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset1,         1         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         2         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         3         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         4         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         5         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         6         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         7         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         8         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,         9         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        10         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        11         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        12         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        13         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        14         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        15         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        16         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        17         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        18         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        19         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        20         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        21         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        22         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        23         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        24         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        25         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        26         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        27         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        28         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        29         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset1,        30         0         0         0         0         0         0
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset2,         1         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         2         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         3         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         4         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         5         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         6         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         7         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         8         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,         9         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        10         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        11         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        12         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        13         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        14         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        15         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        16         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        17         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        18         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        19         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        20         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        21         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        22         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        23         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        24         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        25         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        26         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        27         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        28         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        29         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset2,        30         0         0         0         0         0         0
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset3,         1         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         2         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         3         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         4         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         5         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         6         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         7         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         8         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,         9         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        10         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        11         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        12         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        13         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        14         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        15         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        16         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        17         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        18         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        19         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        20         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        21         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        22         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        23         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        24         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        25         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        26         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        27         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        28         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        29         0         0         0         0         0         0
+MODCORESTATSCOMP:               statset3,        30         0         0         0         0         0         0
+
+

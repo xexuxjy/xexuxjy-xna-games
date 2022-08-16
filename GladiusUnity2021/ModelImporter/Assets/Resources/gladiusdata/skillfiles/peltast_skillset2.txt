@@ -1,0 +1,40 @@
+Copyright (c) 2002, LucasArts Entertainment Company LLC
+Version 0.0
+
+// Peltast
+// Saved by dgazaway
+// On 12/20/2002
+
+MODLEVELRANGESKILL: 	"PeltastUberSet",	0,	1000,	"Peltast DistanceThrow I"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	0,	1000,	"Peltast Attack"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	0,	1000,	"Peltast Evade"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	0,	1000,	"Peltast FlamingJavelin"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	1,	1000,	"Peltast AirAffinity I"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	2,	1000,	"Peltast Combo I"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	3,	1000,	"Peltast Turtle I"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	4,	1000,	"Peltast Combo II"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	4,	1000,	"Peltast Run I"
+MODLEVELRANGESKILL: 	"PeltastUberSet",	5,	1000,	"Peltast TargetArm"
+
+///Xbox Demo Skillset
+
+////// SKILLSET export Class: Peltast Peltast  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Peltast Attack"                  // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Peltast DistanceThrow I"         // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Peltast Evade"                   // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Peltast Combo I"                 // JP:   6/  6x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Peltast ExplodingJavelin"        // JP:   4/ 10x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Peltast TargetShield"            // JP:   6/ 16x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Peltast Turtle I"                // JP:   6/ 22x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Peltast Combo II"                // JP:  12/ 34x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Peltast Run I"                   // JP:   8/ 42x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Peltast TargetArm"               // JP:  10/ 52x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Peltast DistanceThrow II"        // JP:  12/ 64x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  8, 30, "Peltast Combo III"               // JP:  22/ 86x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  9, 30, "Peltast TargetLeg"               // JP:  18/104x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  10, 30, "Peltast DistanceThrow III"       // JP:  20/124x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  10, 30, "Peltast IndirectFire"            // JP:  20/144x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  11, 30, "Peltast Cover"                   // JP:  22/166x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  12, 30, "Peltast UnstoppableThrow"        // JP:  24/190x
+
+//  Unused JP at Level 30: 68

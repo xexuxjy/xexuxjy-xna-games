@@ -1,0 +1,24 @@
+
+////// SKILLSET export Class: Murmillo Murmillo  Affinity: Water
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Murmillo Attack"                 // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Murmillo Shield"                 // JP:   0/  0x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  0, 30, "Murmillo ShieldCounterSub"       // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Murmillo Block"                  // JP:   2/  2x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  1, 30, "Murmillo WaterAffinity I"        // JP:   4/  6x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Murmillo ThrowShield I"          // JP:   4/ 10x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Murmillo ThrowShield II"         // JP:   4/ 14x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Murmillo ArrowGuard"             // JP:   6/ 20x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Murmillo Turtle I"               // JP:   6/ 26x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  3, 30, "Murmillo WaterAffinity II"       // JP:  10/ 36x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  4, 30, "Murmillo ShieldMastery"          // JP:   8/ 44x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  5, 30, "Murmillo GutBasher"              // JP:  10/ 54x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  6, 30, "Murmillo ShieldSmash I"          // JP:  12/ 66x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  7, 30, "Murmillo WaterAffinity III"      // JP:  20/ 86x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Murmillo AdvancedBlock"          // JP:  20/106x
+//MODLEVELRANGESKILL:  skillsetxboxdemo, 10, 30, "Murmillo BullRush"               // JP:  20/126x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 11, 30, "Murmillo ShieldCounter"          // JP:  22/148x
+MODLEVELRANGESKILL:  skillsetxboxdemo, 12, 30, "Murmillo ShieldRam"              // JP:  24/172x
+MODLEVELRANGESKILL:  skillsetxboxdemo,  2, 30, "Murmillo ThrowShield III"         // JP:   4/ 14x
+
+//  Unused JP at Level 30: 114
+

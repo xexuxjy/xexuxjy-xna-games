@@ -1,0 +1,166 @@
+////// SKILLSET export Class: Ludo Ludo  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ludo Attack"                     // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ludo Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Ludo Shield"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  1, 30, "Ludo TargetLeg"                  // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb,  2, 30, "Ludo Combo I"                    // JP:   6/ 10	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  3, 30, "Ludo Combo II"                   // JP:  12/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Ludo Evade II"                   // JP:   8/ 30	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  4, 30, "Ludo Orders"                     // JP:   6/ 36	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  5, 30, "Ludo IndomitableWill"            // JP:  18/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Ludo Turtle I"                   // JP:   6/ 60	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  6, 30, "Ludo Upperhand"                  // JP:  10/ 70	AccMod -10
+MODLEVELRANGESKILL:  skillsetcomb,  8, 30, "Ludo Awareness"                  // JP:  20/ 90	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  9, 30, "Ludo Combo III"                  // JP:  22/112	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 10, 30, "Ludo TargetArm"                  // JP:  18/130	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 12, 30, "Ludo DestroyShield"              // JP:  24/154	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 14, 30, "Ludo Combo IV"                   // JP:  34/188	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 16, 30, "Ludo Discipline"                 // JP:  32/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 18, 30, "Ludo PeoplesHero I"              // JP:  22/242	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Ludo Riposte"                    // JP:  22/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 19, 30, "Ludo RiposteSub"                 // JP:   0/264	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 21, 30, "Ludo Turtle II"                  // JP:  30/294	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 24, 30, "Ludo OffBalance"                 // JP:  38/332	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb, 26, 30, "Ludo TargetHead"                 // JP:  34/366	AccMod -5
+MODLEVELRANGESKILL:  skillsetcomb, 29, 30, "Ludo UpwardSlash"                // JP:  40/406	AccMod 0
+//  Unused JP at Level 30: 24
+
+
+////// SKILLSET export Class: Ludo Ludo  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ludo Attack"                     // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ludo Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Ludo Shield"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  1, 30, "Ludo EarthAffinity I"            // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  2, 30, "Ludo EarthAffinity II"           // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  3, 30, "Ludo Evade II"                   // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  4, 30, "Ludo IndomitableWill"            // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Ludo Orders"                     // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  5, 30, "Ludo TargetLeg"                  // JP:   4/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE,  6, 30, "Ludo Awareness"                  // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  7, 30, "Ludo Turtle I"                   // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  8, 30, "Ludo DestroyShield"              // JP:  24/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  9, 30, "Ludo Upperhand"                  // JP:  10/110	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffE, 10, 30, "Ludo EarthAffinity III"          // JP:  20/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 12, 30, "Ludo PeoplesHero I"              // JP:  22/152	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Ludo Riposte"                    // JP:  22/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 13, 30, "Ludo RiposteSub"                 // JP:   0/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 15, 30, "Ludo TargetArm"                  // JP:  18/192	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 17, 30, "Ludo Discipline"                 // JP:  32/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 19, 30, "Ludo EarthAffinity IV"           // JP:  36/260	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 21, 30, "Ludo TargetHead"                 // JP:  34/294	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffE, 23, 30, "Ludo Turtle II"                  // JP:  30/324	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 26, 30, "Ludo OffBalance"                 // JP:  38/362	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE, 29, 30, "Ludo UpwardSlash"                // JP:  40/402	AccMod 0
+//  Unused JP at Level 30: 28
+
+
+////// SKILLSET export Class: Ludo Ludo  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ludo Attack"                     // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ludo Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Ludo Shield"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  1, 30, "Ludo TargetLeg"                  // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW,  2, 30, "Ludo Evade II"                   // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Ludo Orders"                     // JP:   6/ 18	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  3, 30, "Ludo Turtle I"                   // JP:   6/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Ludo Upperhand"                  // JP:  10/ 34	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffW,  4, 30, "Ludo WaterAffinity I"            // JP:   4/ 38	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  5, 30, "Ludo WaterAffinity II"           // JP:  10/ 48	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  6, 30, "Ludo Awareness"                  // JP:  20/ 68	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  8, 30, "Ludo DestroyShield"              // JP:  24/ 92	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  9, 30, "Ludo IndomitableWill"            // JP:  18/110	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 10, 30, "Ludo TargetArm"                  // JP:  18/128	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 12, 30, "Ludo Discipline"                 // JP:  32/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 14, 30, "Ludo PeoplesHero I"              // JP:  22/182	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 15, 30, "Ludo Riposte"                    // JP:  22/204	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 15, 30, "Ludo RiposteSub"                 // JP:   0/204	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 17, 30, "Ludo Turtle II"                  // JP:  30/234	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 19, 30, "Ludo WaterAffinity III"          // JP:  20/254	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 21, 30, "Ludo OffBalance"                 // JP:  38/292	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 24, 30, "Ludo TargetHead"                 // JP:  34/326	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffW, 26, 30, "Ludo UpwardSlash"                // JP:  40/366	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW, 29, 30, "Ludo WaterAffinity IV"           // JP:  36/402	AccMod 0
+//  Unused JP at Level 30: 28
+
+
+////// SKILLSET export Class: Ludo Ludo  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ludo Attack"                     // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ludo Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Ludo Shield"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  1, 30, "Ludo TargetLeg"                  // JP:   4/  4	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD,  2, 30, "Ludo Evade II"                   // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Ludo Orders"                     // JP:   6/ 18	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  3, 30, "Ludo Turtle I"                   // JP:   6/ 24	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  4, 30, "Ludo Upperhand"                  // JP:  10/ 34	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffD,  5, 30, "Ludo Awareness"                  // JP:  20/ 54	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  7, 30, "Ludo DestroyShield"              // JP:  24/ 78	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  8, 30, "Ludo IndomitableWill"            // JP:  18/ 96	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  9, 30, "Ludo TargetArm"                  // JP:  18/114	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 11, 30, "Ludo PeoplesHero I"              // JP:  22/136	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Ludo Riposte"                    // JP:  22/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 12, 30, "Ludo RiposteSub"                 // JP:   0/158	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 14, 30, "Ludo Discipline"                 // JP:  32/190	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 16, 30, "Ludo Turtle II"                  // JP:  30/220	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 19, 30, "Ludo OffBalance"                 // JP:  38/258	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD, 21, 30, "Ludo TargetHead"                 // JP:  34/292	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffD, 24, 30, "Ludo UpwardSlash"                // JP:  40/332	AccMod 0
+//  Unused JP at Level 30: 98
+
+
+////// SKILLSET export Class: Ludo Ludo  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ludo Attack"                     // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ludo Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Ludo Shield"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  1, 30, "Ludo AirAffinity I"              // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  2, 30, "Ludo AirAffinity II"             // JP:  10/ 14	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  3, 30, "Ludo Evade II"                   // JP:   8/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  4, 30, "Ludo IndomitableWill"            // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Ludo Orders"                     // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  5, 30, "Ludo TargetLeg"                  // JP:   4/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA,  6, 30, "Ludo AirAffinity III"            // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  7, 30, "Ludo Turtle I"                   // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  8, 30, "Ludo Awareness"                  // JP:  20/ 96	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  9, 30, "Ludo TargetArm"                  // JP:  18/114	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 10, 30, "Ludo Upperhand"                  // JP:  10/124	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffA, 12, 30, "Ludo AirAffinity IV"             // JP:  36/160	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 14, 30, "Ludo DestroyShield"              // JP:  24/184	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 16, 30, "Ludo Discipline"                 // JP:  32/216	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 18, 30, "Ludo PeoplesHero I"              // JP:  22/238	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Ludo Riposte"                    // JP:  22/260	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 19, 30, "Ludo RiposteSub"                 // JP:   0/260	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 21, 30, "Ludo TargetHead"                 // JP:  34/294	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffA, 23, 30, "Ludo Turtle II"                  // JP:  30/324	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 26, 30, "Ludo OffBalance"                 // JP:  38/362	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA, 29, 30, "Ludo UpwardSlash"                // JP:  40/402	AccMod 0
+//  Unused JP at Level 30: 28
+
+
+////// SKILLSET export Class: Ludo Ludo  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ludo Attack"                     // JP:   0/  0	AccMod -2
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ludo Evade"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Ludo Shield"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  1, 30, "Ludo FireAffinity I"             // JP:   4/  4	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  2, 30, "Ludo Evade II"                   // JP:   8/ 12	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  3, 30, "Ludo FireAffinity II"            // JP:  10/ 22	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  4, 30, "Ludo IndomitableWill"            // JP:  18/ 40	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Ludo Orders"                     // JP:   6/ 46	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  5, 30, "Ludo TargetLeg"                  // JP:   4/ 50	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF,  6, 30, "Ludo Awareness"                  // JP:  20/ 70	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  7, 30, "Ludo Turtle I"                   // JP:   6/ 76	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  8, 30, "Ludo DestroyShield"              // JP:  24/100	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  9, 30, "Ludo Upperhand"                  // JP:  10/110	AccMod -10
+MODLEVELRANGESKILL:  skillsetaffF, 10, 30, "Ludo FireAffinity III"           // JP:  20/130	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 12, 30, "Ludo PeoplesHero I"              // JP:  22/152	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Ludo Riposte"                    // JP:  22/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 13, 30, "Ludo RiposteSub"                 // JP:   0/174	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 15, 30, "Ludo TargetArm"                  // JP:  18/192	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 17, 30, "Ludo Discipline"                 // JP:  32/224	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 19, 30, "Ludo FireAffinity IV"            // JP:  36/260	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 21, 30, "Ludo TargetHead"                 // JP:  34/294	AccMod -5
+MODLEVELRANGESKILL:  skillsetaffF, 23, 30, "Ludo Turtle II"                  // JP:  30/324	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 26, 30, "Ludo OffBalance"                 // JP:  38/362	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF, 29, 30, "Ludo UpwardSlash"                // JP:  40/402	AccMod 0
+//  Unused JP at Level 30: 28
+
+
+
+

@@ -1,0 +1,4 @@
+ITEMSET export Class: Centurion Centurion  Region: Imperia Affinity: Earth
+//          :      variant, Lv,Lv,                  weapon,                   armor,                  shield,                  helmet               accessory
+
+MODITEMSCOMP:   ITEMSETxboxdemo,  5, 5,      "Earth Stone Maul",     "Water Lorica Segmentata",    "Water Scutum",     "Worn Attic",      "" // Cost: 1347

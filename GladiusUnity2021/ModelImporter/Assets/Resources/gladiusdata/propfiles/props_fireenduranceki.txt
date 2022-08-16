@@ -1,0 +1,24 @@
+VERSION: 1
+
+PROP: "skelton_animal_large01" 
+MODELS: "misc/skeleton/propskeleton_animal_big01.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 0.24
+POS: 37.5416 13.5478 1.1442
+ROT: 0.0000 0.0000 0.8128
+ATTRIBUTES: 1
+ATTRIBUTE: "No_Modify_Heights"
+PROP_END
+
+PROP: "wagon_02" 
+MODELS: "misc/wagon/wagon_02.mdl" 
+LIGHTING: ON
+SHADOW: OFF
+HEIGHTS: 2.07
+POS: 23.2448 41.6215 2.6398
+ROT: 0.0000 0.0000 -3.2514
+ATTRIBUTES: 0
+PROP_END
+
+ENDFILE

@@ -1,0 +1,205 @@
+// STATSET export Class: AffinityBeastGreater
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset0,         1        19        17        26        15        16        20
+MODCORESTATSCOMP:               statset0,         2        27        25        31        20        23        20
+MODCORESTATSCOMP:               statset0,         3        34        32        36        25        30        20
+MODCORESTATSCOMP:               statset0,         4        42        40        41        31        37        20
+MODCORESTATSCOMP:               statset0,         5        50        49        45        37        44        20
+MODCORESTATSCOMP:               statset0,         6        58        58        51        43        50        20
+MODCORESTATSCOMP:               statset0,         7        67        66        55        48        57        20
+MODCORESTATSCOMP:               statset0,         8        75        73        59        53        64        20
+MODCORESTATSCOMP:               statset0,         9        83        81        64        57        70        20
+MODCORESTATSCOMP:               statset0,        10        91        90        70        62        77        20
+MODCORESTATSCOMP:               statset0,        11        98        98        74        68        84        20
+MODCORESTATSCOMP:               statset0,        12       105       106        80        74        91        20
+MODCORESTATSCOMP:               statset0,        13       112       115        84        79        98        20
+MODCORESTATSCOMP:               statset0,        14       121       123        89        83       104        20
+MODCORESTATSCOMP:               statset0,        15       129       130        94        88       111        20
+MODCORESTATSCOMP:               statset0,        16       136       138       100        94       118        20
+MODCORESTATSCOMP:               statset0,        17       145       145       105        98       124        20
+MODCORESTATSCOMP:               statset0,        18       153       153       110       103       130        20
+MODCORESTATSCOMP:               statset0,        19       162       161       116       108       137        20
+MODCORESTATSCOMP:               statset0,        20       169       170       121       113       144        20
+MODCORESTATSCOMP:               statset0,        21       178       178       125       117       150        20
+MODCORESTATSCOMP:               statset0,        22       187       185       129       122       156        20
+MODCORESTATSCOMP:               statset0,        23       195       194       134       126       163        20
+MODCORESTATSCOMP:               statset0,        24       203       202       140       132       169        20
+MODCORESTATSCOMP:               statset0,        25       212       210       145       136       176        20
+MODCORESTATSCOMP:               statset0,        26       220       217       151       142       182        20
+MODCORESTATSCOMP:               statset0,        27       228       225       156       148       189        20
+MODCORESTATSCOMP:               statset0,        28       236       233       161       153       195        20
+MODCORESTATSCOMP:               statset0,        29       245       240       166       158       201        20
+MODCORESTATSCOMP:               statset0,        30       254       249       171       164       208        20
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset1,         1        19        17        24        15        17        20
+MODCORESTATSCOMP:               statset1,         2        27        26        28        19        24        20
+MODCORESTATSCOMP:               statset1,         3        35        33        33        24        31        20
+MODCORESTATSCOMP:               statset1,         4        44        40        37        29        37        20
+MODCORESTATSCOMP:               statset1,         5        52        48        43        33        43        20
+MODCORESTATSCOMP:               statset1,         6        59        56        47        38        50        20
+MODCORESTATSCOMP:               statset1,         7        68        64        52        43        57        20
+MODCORESTATSCOMP:               statset1,         8        76        72        58        47        63        20
+MODCORESTATSCOMP:               statset1,         9        83        79        63        51        69        20
+MODCORESTATSCOMP:               statset1,        10        92        87        67        56        75        20
+MODCORESTATSCOMP:               statset1,        11       100        94        73        60        82        20
+MODCORESTATSCOMP:               statset1,        12       108       102        79        65        88        20
+MODCORESTATSCOMP:               statset1,        13       116       110        84        71        95        20
+MODCORESTATSCOMP:               statset1,        14       124       119        90        77       102        20
+MODCORESTATSCOMP:               statset1,        15       132       127        94        81       108        20
+MODCORESTATSCOMP:               statset1,        16       140       135       100        86       115        20
+MODCORESTATSCOMP:               statset1,        17       148       142       106        91       121        20
+MODCORESTATSCOMP:               statset1,        18       156       150       111        96       128        20
+MODCORESTATSCOMP:               statset1,        19       163       158       116       101       134        20
+MODCORESTATSCOMP:               statset1,        20       171       167       121       106       140        20
+MODCORESTATSCOMP:               statset1,        21       180       176       126       112       147        20
+MODCORESTATSCOMP:               statset1,        22       188       183       132       116       154        20
+MODCORESTATSCOMP:               statset1,        23       196       192       137       122       161        20
+MODCORESTATSCOMP:               statset1,        24       204       201       142       128       167        20
+MODCORESTATSCOMP:               statset1,        25       213       209       148       133       174        20
+MODCORESTATSCOMP:               statset1,        26       220       217       154       138       180        20
+MODCORESTATSCOMP:               statset1,        27       229       225       159       142       187        20
+MODCORESTATSCOMP:               statset1,        28       237       233       163       147       194        20
+MODCORESTATSCOMP:               statset1,        29       245       242       167       153       200        20
+MODCORESTATSCOMP:               statset1,        30       254       249       172       159       206        20
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset2,         1        19        17        24        15        17        20
+MODCORESTATSCOMP:               statset2,         2        28        26        29        21        24        20
+MODCORESTATSCOMP:               statset2,         3        36        33        34        25        30        20
+MODCORESTATSCOMP:               statset2,         4        43        41        39        31        37        20
+MODCORESTATSCOMP:               statset2,         5        51        48        44        36        44        20
+MODCORESTATSCOMP:               statset2,         6        58        55        49        42        50        20
+MODCORESTATSCOMP:               statset2,         7        66        62        53        47        57        20
+MODCORESTATSCOMP:               statset2,         8        74        70        58        53        64        20
+MODCORESTATSCOMP:               statset2,         9        82        79        63        58        70        20
+MODCORESTATSCOMP:               statset2,        10        89        86        69        63        77        20
+MODCORESTATSCOMP:               statset2,        11        97        94        74        69        84        20
+MODCORESTATSCOMP:               statset2,        12       105       103        80        74        90        20
+MODCORESTATSCOMP:               statset2,        13       113       112        86        79        97        20
+MODCORESTATSCOMP:               statset2,        14       120       121        92        84       103        20
+MODCORESTATSCOMP:               statset2,        15       128       128        97        88       110        20
+MODCORESTATSCOMP:               statset2,        16       135       135       102        93       117        20
+MODCORESTATSCOMP:               statset2,        17       144       143       108        98       124        20
+MODCORESTATSCOMP:               statset2,        18       151       151       114       103       131        20
+MODCORESTATSCOMP:               statset2,        19       159       160       119       108       138        20
+MODCORESTATSCOMP:               statset2,        20       166       167       125       114       144        20
+MODCORESTATSCOMP:               statset2,        21       174       175       130       119       151        20
+MODCORESTATSCOMP:               statset2,        22       181       183       135       124       158        20
+MODCORESTATSCOMP:               statset2,        23       188       190       139       129       165        20
+MODCORESTATSCOMP:               statset2,        24       195       199       144       134       172        20
+MODCORESTATSCOMP:               statset2,        25       203       207       148       140       179        20
+MODCORESTATSCOMP:               statset2,        26       212       214       154       145       186        20
+MODCORESTATSCOMP:               statset2,        27       221       222       158       149       193        20
+MODCORESTATSCOMP:               statset2,        28       229       229       164       153       200        20
+MODCORESTATSCOMP:               statset2,        29       238       236       169       157       207        20
+MODCORESTATSCOMP:               statset2,        30       246       244       173       162       214        20
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset3,         1        19        18        24        16        16        20
+MODCORESTATSCOMP:               statset3,         2        27        26        29        21        22        20
+MODCORESTATSCOMP:               statset3,         3        34        34        34        27        28        20
+MODCORESTATSCOMP:               statset3,         4        42        42        40        32        34        20
+MODCORESTATSCOMP:               statset3,         5        50        50        46        37        40        20
+MODCORESTATSCOMP:               statset3,         6        59        57        52        42        46        20
+MODCORESTATSCOMP:               statset3,         7        66        66        56        47        52        20
+MODCORESTATSCOMP:               statset3,         8        74        73        60        52        59        20
+MODCORESTATSCOMP:               statset3,         9        82        81        66        57        65        20
+MODCORESTATSCOMP:               statset3,        10        91        89        70        62        71        20
+MODCORESTATSCOMP:               statset3,        11        98        97        75        66        77        20
+MODCORESTATSCOMP:               statset3,        12       106       105        80        71        83        20
+MODCORESTATSCOMP:               statset3,        13       114       113        86        76        90        20
+MODCORESTATSCOMP:               statset3,        14       121       122        92        81        97        20
+MODCORESTATSCOMP:               statset3,        15       128       129        96        87       103        20
+MODCORESTATSCOMP:               statset3,        16       136       137       100        92       109        20
+MODCORESTATSCOMP:               statset3,        17       143       145       104        96       115        20
+MODCORESTATSCOMP:               statset3,        18       150       154       109       101       122        20
+MODCORESTATSCOMP:               statset3,        19       158       161       115       106       129        20
+MODCORESTATSCOMP:               statset3,        20       166       170       120       111       136        20
+MODCORESTATSCOMP:               statset3,        21       173       177       126       116       142        20
+MODCORESTATSCOMP:               statset3,        22       182       184       132       121       149        20
+MODCORESTATSCOMP:               statset3,        23       189       191       137       127       155        20
+MODCORESTATSCOMP:               statset3,        24       198       198       142       133       161        20
+MODCORESTATSCOMP:               statset3,        25       205       207       147       137       168        20
+MODCORESTATSCOMP:               statset3,        26       214       215       151       142       174        20
+MODCORESTATSCOMP:               statset3,        27       222       224       157       148       181        20
+MODCORESTATSCOMP:               statset3,        28       230       231       161       153       187        20
+MODCORESTATSCOMP:               statset3,        29       239       239       166       158       193        20
+MODCORESTATSCOMP:               statset3,        30       247       247       171       163       199        20
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset4,         1        17        17        24        14        16        20
+MODCORESTATSCOMP:               statset4,         2        24        24        28        18        22        20
+MODCORESTATSCOMP:               statset4,         3        31        31        32        22        28        20
+MODCORESTATSCOMP:               statset4,         4        38        38        36        26        34        20
+MODCORESTATSCOMP:               statset4,         5        45        45        40        30        40        20
+MODCORESTATSCOMP:               statset4,         6        52        52        44        34        46        20
+MODCORESTATSCOMP:               statset4,         7        59        59        48        38        52        20
+MODCORESTATSCOMP:               statset4,         8        66        66        52        42        58        20
+MODCORESTATSCOMP:               statset4,         9        73        73        56        46        64        20
+MODCORESTATSCOMP:               statset4,        10        80        80        60        50        70        20
+MODCORESTATSCOMP:               statset4,        11        87        87        64        54        76        20
+MODCORESTATSCOMP:               statset4,        12        94        94        68        58        82        20
+MODCORESTATSCOMP:               statset4,        13       101       101        72        62        88        20
+MODCORESTATSCOMP:               statset4,        14       108       108        76        66        94        20
+MODCORESTATSCOMP:               statset4,        15       115       115        80        70       100        20
+MODCORESTATSCOMP:               statset4,        16       122       122        84        74       106        20
+MODCORESTATSCOMP:               statset4,        17       129       129        88        78       112        20
+MODCORESTATSCOMP:               statset4,        18       136       136        92        82       118        20
+MODCORESTATSCOMP:               statset4,        19       143       143        96        86       124        20
+MODCORESTATSCOMP:               statset4,        20       150       150       100        90       130        20
+MODCORESTATSCOMP:               statset4,        21       157       157       104        94       136        20
+MODCORESTATSCOMP:               statset4,        22       164       164       108        98       142        20
+MODCORESTATSCOMP:               statset4,        23       171       171       112       102       148        20
+MODCORESTATSCOMP:               statset4,        24       178       178       116       106       154        20
+MODCORESTATSCOMP:               statset4,        25       185       185       120       110       160        20
+MODCORESTATSCOMP:               statset4,        26       192       192       124       114       166        20
+MODCORESTATSCOMP:               statset4,        27       199       199       128       118       172        20
+MODCORESTATSCOMP:               statset4,        28       206       206       132       122       178        20
+MODCORESTATSCOMP:               statset4,        29       213       213       136       126       184        20
+MODCORESTATSCOMP:               statset4,        30       220       220       140       130       190        20
+
+
+// Level Power/Acc/Defense/Initiative/Constitution/MoveRate
+//                              variant,     Level   Constit     Power  Accuracy   Defense   Initive     Move
+MODCORESTATSCOMP:               statset5,         1        19        19        26        16        17        20
+MODCORESTATSCOMP:               statset5,         2        28        28        32        22        24        20
+MODCORESTATSCOMP:               statset5,         3        37        37        38        28        31        20
+MODCORESTATSCOMP:               statset5,         4        46        46        44        34        38        20
+MODCORESTATSCOMP:               statset5,         5        55        55        50        40        45        20
+MODCORESTATSCOMP:               statset5,         6        64        64        56        46        52        20
+MODCORESTATSCOMP:               statset5,         7        73        73        62        52        59        20
+MODCORESTATSCOMP:               statset5,         8        82        82        68        58        66        20
+MODCORESTATSCOMP:               statset5,         9        91        91        74        64        73        20
+MODCORESTATSCOMP:               statset5,        10       100       100        80        70        80        20
+MODCORESTATSCOMP:               statset5,        11       109       109        86        76        87        20
+MODCORESTATSCOMP:               statset5,        12       118       118        92        82        94        20
+MODCORESTATSCOMP:               statset5,        13       127       127        98        88       101        20
+MODCORESTATSCOMP:               statset5,        14       136       136       104        94       108        20
+MODCORESTATSCOMP:               statset5,        15       145       145       110       100       115        20
+MODCORESTATSCOMP:               statset5,        16       154       154       116       106       122        20
+MODCORESTATSCOMP:               statset5,        17       163       163       122       112       129        20
+MODCORESTATSCOMP:               statset5,        18       172       172       128       118       136        20
+MODCORESTATSCOMP:               statset5,        19       181       181       134       124       143        20
+MODCORESTATSCOMP:               statset5,        20       190       190       140       130       150        20
+MODCORESTATSCOMP:               statset5,        21       199       199       146       136       157        20
+MODCORESTATSCOMP:               statset5,        22       208       208       152       142       164        20
+MODCORESTATSCOMP:               statset5,        23       217       217       158       148       171        20
+MODCORESTATSCOMP:               statset5,        24       226       226       164       154       178        20
+MODCORESTATSCOMP:               statset5,        25       235       235       170       160       185        20
+MODCORESTATSCOMP:               statset5,        26       244       244       176       166       192        20
+MODCORESTATSCOMP:               statset5,        27       253       253       182       172       199        20
+MODCORESTATSCOMP:               statset5,        28       262       262       188       178       206        20
+MODCORESTATSCOMP:               statset5,        29       271       271       194       184       213        20
+MODCORESTATSCOMP:               statset5,        30       280       280       200       190       220        20
+
+

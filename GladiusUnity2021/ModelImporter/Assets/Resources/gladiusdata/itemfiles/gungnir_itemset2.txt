@@ -1,0 +1,12 @@
+
+ITEMSET export Class: Gungnir Gungnir  Region: Nordagh Affinity: Earth
+//          :      variant, Lv,Lv,      weapon,                 armor,                          shield,                                 helmet                          accessory
+MODITEMSCOMP:   ITEMSETNEOXM,  6, 6,   "Earth Egchos",         "Earth Wolfskin",               "Earth Hardened Leather Shield",        "Earth Fur Hat",                "" // Cost: 1968/4946
+MODITEMSCOMP:   ITEMSETNEOXM,  7, 7,   "Earth Ictus",          "Earth Mountain Lion Hide",     "Earth Hardened Leather Shield",        "Earth Ring of Fangs",          "" // Cost: 1801/6747
+MODITEMSCOMP:   ITEMSETNEOXM,  8, 8,   "Earth Sinan",          "Earth Mountain Lion Hide",     "Earth Bamboo Shield",                  "Earth Wood Armored Hat",       "" // Cost: 359/7106
+MODITEMSCOMP:   ITEMSETNEOXM,  9, 9,   "Spear",                "Leather Garb",                 "Earth Wooden Shield",                  "Earth Confortari",             "" // Cost: 2935/10041
+MODITEMSCOMP:   ITEMSETNEOXM, 10,10,   "Earth Hak",            "Leather Garb",                 "Earth Lacquered Shield",               "Earth Confortari",             "" // Cost: 465/10506
+MODITEMSCOMP:   ITEMSETNEOXM, 11,11,   "Earth Fuscina",        "Earth Double Leather",         "Earth Studded Wooden Shield",          "Earth Hooked Ridge Helmet",    "" // Cost: 682/11188
+MODITEMSCOMP:   ITEMSETNEOXM, 12,12,   "Earth Mongile",        "Earth Double Leather",         "Copper Round Shield",                  "Earth Hooked Ridge Helmet",    "" // Cost: 2576/13764
+MODITEMSCOMP:   ITEMSETNEOXM, 13,13,   "Earth Half Moon",      "Earth Double Leather",         "Earth Bronze Shield",                  "Earth Hooked Ridge Helmet",    "" // Cost: 243/14007
+MODITEMSCOMP:   ITEMSETNEOXM, 14,14,   "Cuspis",               "Water Oiled Pelt",             "Earth Bronze Winged Shield",           "Earth Hooked Ridge Helmet",    "" // Cost: 3031/17038

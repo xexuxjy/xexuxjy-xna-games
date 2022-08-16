@@ -1,0 +1,73 @@
+
+NAME:"Orin's School"
+HERO:"Ursula"
+GOLD:2500
+
+CREATEUNIT:"Urlan", "Urlan"// Name, class
+LEVEL:1
+EXPERIENCE:450
+       JOBPOINTS:5
+        CUSTOMIZE:      1, ""
+
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2:4,   6,   10,  10,   10,   1
+        
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Air Great Axe", "Lamb's Hide", "", "",""
+
+// defense skills
+SKILL: "Urlan Block"
+
+// basic skills
+SKILL: "Urlan Attack"
+SKILL: "Urlan Lunge"
+
+SKILL: "Urlan WolfForm I"
+SKILL: "Urlan CripplingBlow"
+
+// innate skills
+SKILL: "Urlan OlderBrother"
+
+//SKILL: "Urlan ComboChain I"
+//SKILL: "Urlan ComboChain II"
+//SKILL: "Urlan ComboChain III"
+
+SKILL: "Urlan Combo I"
+SKILL: "Urlan Combo II"
+SKILL: "Urlan Combo III"
+
+
+// affinity skills
+SKILL: "Urlan AirAffinity I"
+SKILL: "Urlan AirAffinity II"
+SKILL: "Urlan AirAffinity III"
+SKILL: "Urlan AirAffinity IV"
+
+
+CREATEUNIT:"Ursula", "Ursula"// Name, class
+LEVEL:1
+EXPERIENCE:0
+JOBPOINTS:5
+        CUSTOMIZE:      1, ""
+
+//            CON, PWR, ACC, DEF, INT, MOVE
+CORESTATSCOMP2:5, 5, 10, 11, 10,  1
+//weapon,armor,shield,helmet,accessory
+ITEMSCOMP:"Machera", "Lamb's Hide", "", "",""
+
+// defense skills
+SKILL: "Ursula Evade"
+SKILL: "Ursula Shield"
+
+// basic skills
+SKILL: "Ursula Attack"
+SKILL: "Ursula CastleGreyskull"
+SKILL: "Ursula SiblingRivalry"
+        
+
+// innate skills
+
+// affinity skills
+
+

@@ -1,0 +1,9 @@
+////// SKILLSET export Class: Mongrel Mongrel  Affinity: Untyped
+MODLEVELRANGESKILL:  skillsetPS2Demo,  0, 30, "Mongrel Attack"                  // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetPS2Demo,  0, 30, "Mongrel Evade"                   // JP:   0/  0
+MODLEVELRANGESKILL:  skillsetPS2Demo,  1, 30, "Mongrel Run I"                   // JP:   2/  2
+MODLEVELRANGESKILL:  skillsetPS2Demo,  2, 30, "Mongrel TorsoSmash"              // JP:   4/ 12
+MODLEVELRANGESKILL:  skillsetPS2Demo,  4, 30, "Mongrel Combo II"                // JP:  12/ 30
+MODLEVELRANGESKILL:  skillsetPS2Demo,  4, 30, "Mongrel Driven"                  // JP:   8/ 38
+MODLEVELRANGESKILL:  skillsetPS2Demo,  4, 30, "Mongrel KickingAttack I"         // JP:  10/ 58
+

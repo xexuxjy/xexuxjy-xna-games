@@ -1,0 +1,104 @@
+////// SKILLSET export Class: PropBarrel Prop  Affinity: None
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop Bleeding"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop Blind"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop Confusion"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop ExplodingBarrel"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop ExplodingBarrelSub"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop Fear"                       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop FireBreath"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop Frozen"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop KnockBack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop Poison"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop RandomTeleport"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop SummoningTomb"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetcomb,  0, 30, "Prop Unbreakable"                // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: PropBarrel Prop  Affinity: Earth
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop Bleeding"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop Blind"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop Confusion"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop ExplodingBarrel"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop ExplodingBarrelSub"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop Fear"                       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop FireBreath"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop Frozen"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop KnockBack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop Poison"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop RandomTeleport"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop SummoningTomb"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffE,  0, 30, "Prop Unbreakable"                // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: PropBarrel Prop  Affinity: Water
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop Bleeding"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop Blind"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop Confusion"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop ExplodingBarrel"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop ExplodingBarrelSub"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop Fear"                       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop FireBreath"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop Frozen"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop KnockBack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop Poison"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop RandomTeleport"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop SummoningTomb"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffW,  0, 30, "Prop Unbreakable"                // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: PropBarrel Prop  Affinity: Dark
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop Bleeding"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop Blind"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop Confusion"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop ExplodingBarrel"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop ExplodingBarrelSub"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop Fear"                       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop FireBreath"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop Frozen"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop KnockBack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop Poison"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop RandomTeleport"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop SummoningTomb"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffD,  0, 30, "Prop Unbreakable"                // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: PropBarrel Prop  Affinity: Air
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop Bleeding"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop Blind"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop Confusion"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop ExplodingBarrel"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop ExplodingBarrelSub"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop Fear"                       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop FireBreath"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop Frozen"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop KnockBack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop Poison"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop RandomTeleport"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop SummoningTomb"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffA,  0, 30, "Prop Unbreakable"                // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+////// SKILLSET export Class: PropBarrel Prop  Affinity: Fire
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop Bleeding"                   // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop Blind"                      // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop Confusion"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop ExplodingBarrel"            // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop ExplodingBarrelSub"         // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop Fear"                       // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop FireBreath"                 // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop Frozen"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop KnockBack"                  // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop Poison"                     // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop RandomTeleport"             // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop SummoningTomb"              // JP:   0/  0	AccMod 0
+MODLEVELRANGESKILL:  skillsetaffF,  0, 30, "Prop Unbreakable"                // JP:   0/  0	AccMod 0
+//  Unused JP at Level 30: 0
+
+
+
+
