@@ -53,6 +53,7 @@ namespace ExtractBEC
         public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
         public static char[] obbtTag = new char[] { 'O', 'B', 'B', 'T' };
         public static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
+        public static char[] dtntTag = new char[] { 'D', 'T', 'N', 'T' };
 
 
         public static void ReadNullSeparatedNames(BinaryReader binReader, List<String> names)
@@ -95,6 +96,66 @@ namespace ExtractBEC
                 sb.Append(b);
             }
             return sb.ToString();
+        }
+
+
+        public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
+        {
+            bool found = false;
+            byte b = (byte)' ';
+            int lastFoundIndex = 0;
+            long currentPosition = binReader.BaseStream.Position;
+            try
+            {
+                while (binReader.BaseStream.Position < binReader.BaseStream.Length)
+                {
+                    b = binReader.ReadByte();
+                    if (b == charsToFind[lastFoundIndex])
+                    {
+                        lastFoundIndex++;
+                        if (lastFoundIndex == charsToFind.Length)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        lastFoundIndex = 0;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            if (!found && resetPositionIfNotFound)
+            {
+                binReader.BaseStream.Position = currentPosition;
+            }
+
+
+            return found;
+
+        }
+
+
+        public static int CountCharsInStream(BinaryReader binReader, char[] charsToFind)
+        {
+            int count = 0;
+            try
+            {
+                while (binReader.BaseStream.Position < binReader.BaseStream.Length)
+                {
+                    if (FindCharsInStream(binReader, charsToFind,false))
+                    {
+                        count++;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return count;
         }
 
 
@@ -156,6 +217,14 @@ namespace ExtractBEC
             }
         }
 
+        public enum Platform
+        {
+            GC,
+            PS2Preview,
+            PS2Review,
+            XBOX
+        }
+
 
         public class BaseChunk
         {
@@ -188,7 +257,7 @@ namespace ExtractBEC
             }
 
 
-            public static BaseChunk FromStreamMaster(string name, BinaryReader binReader)
+            public static BaseChunk FromStreamMaster(string name, BinaryReader binReader,Platform platform = Platform.GC)
             {
                 char[] type = binReader.ReadChars(4);
                 uint size = binReader.ReadUInt32();
@@ -224,7 +293,14 @@ namespace ExtractBEC
                 }
                 if (CompareSignature(CommonModelImporter.pfhdTag, type))
                 {
-                    return PFHDChunk.FromStream(name, binReader);
+                    if(platform == Platform.PS2Preview || platform == Platform.PS2Review)
+                    {
+                        return PS2PFHDChunk.FromStream(name, binReader,platform);
+                    }
+                    else 
+                    {
+                        return PFHDChunk.FromStream(name, binReader);
+                    }
                 }
                 if (CompareSignature(CommonModelImporter.ptdtTag, type))
                 {
@@ -268,11 +344,17 @@ namespace ExtractBEC
 
         public class NMPTChunk : BaseChunk
         {
+            public List<string> TextureNames = new List<string>();
             public static BaseChunk FromStream(string name, BinaryReader binReader)
             {
                 NMPTChunk chunk = new NMPTChunk();
                 chunk.BaseFromStream(binReader);
-                string textureName = CommonModelImporter.ReadString(binReader);
+
+                for(int i=0;i<chunk.NumElements;++i)
+                {
+                    string textureName = CommonModelImporter.ReadString(binReader);
+                    chunk.TextureNames.Add(textureName);
+                }
                 chunk.MoveToEnd(binReader);
                 return chunk;
 
