@@ -172,7 +172,7 @@ public class GridFile
 
 	public int getValue(int row, int column)
 	{
-		return m_gridData[(row * ArenaSize) + column];
+		return m_gridData[getIndex(row,column)];
 	}
 
 	public Color getColor(int row, int column)
@@ -215,9 +215,20 @@ public class GridFile
 		return Color.black;
 	}
 
+	public int getIndex(int row,int column)
+	{
+		row = ArenaSize - row - 1;
+		//column = ArenaSize - column - 1;
+		
+		return (column*ArenaSize) + row;
+		
+		//return (row * ArenaSize) + column;
+	}
+		
+	
 	public void setValue(int row, int column, int value)
 	{
-		m_gridData[(row * ArenaSize) + column] = value;
+		m_gridData[getIndex(row,column)] = value;
 		setDirty(true);
 	}
 
