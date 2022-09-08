@@ -84,7 +84,7 @@ namespace GCTextureTools
         }
 
 
-        public void ReadPTDTSection(BinaryReader binReader, List<GladiusImage> imageList)
+        public void ReadPTDTSection(BinaryReader binReader, List<GladiusImage> imageList,StreamWriter errorStream)
         {
             if (Common.FindCharsInStream(binReader, Common.ptdtTag))
             {
@@ -104,7 +104,7 @@ namespace GCTextureTools
 
                     //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
 
-                    DecompressDXT1GC(image);
+                    DecompressDXT1GC(image,errorStream);
 
                 }
             }
@@ -159,7 +159,7 @@ namespace GCTextureTools
 
                                 ReadHeaderSection(binReader, imageList, textureNameList);
                                 binReader.BaseStream.Position = 0;
-                                ReadPTDTSection(binReader, imageList);
+                                ReadPTDTSection(binReader, imageList,errorStream);
 
                                 foreach (GladiusImage gi in imageList)
                                 {
@@ -223,7 +223,7 @@ namespace GCTextureTools
         }
 
 
-        public static void DecompressDXT1GC(GladiusImage image)
+        public static void DecompressDXT1GC(GladiusImage image,StreamWriter errorStream)
         {
             int offset = 0;
 
@@ -294,7 +294,7 @@ namespace GCTextureTools
 
                         try
                         {
-                            FillDest2(tempData2, x, y, width, block, alphaBlock);
+                            FillDest2(tempData2, x, y, width, block, alphaBlock,errorStream);
 
                         }
                         catch (Exception e)
@@ -322,7 +322,7 @@ namespace GCTextureTools
 
                 if (oddXBlocks)
                 {
-                    FillDest2(tempData2, blockCountX, y, width, padBlock, padAlphaBlock);
+                    FillDest2(tempData2, blockCountX, y, width, padBlock, padAlphaBlock,errorStream);
                 }
 
 
@@ -340,12 +340,12 @@ namespace GCTextureTools
             {
                 for (int i = 0; i < blockCountX; ++i)
                 {
-                    FillDest2(tempData2, i, blockCountY, width, padBlock, padAlphaBlock);
+                    FillDest2(tempData2, i, blockCountY, width, padBlock, padAlphaBlock,errorStream);
                 }
             }
 
-            File.WriteAllText(@"d:\tmp\gladius-textures\new-order.txt", debugOut1.ToString());
-            File.WriteAllText(@"d:\tmp\gladius-textures\old-order.txt", debugOut2.ToString());
+            //File.WriteAllText(@"d:\tmp\gladius-textures\new-order.txt", debugOut1.ToString());
+            //File.WriteAllText(@"d:\tmp\gladius-textures\old-order.txt", debugOut2.ToString());
 
             try
             {
@@ -373,7 +373,8 @@ namespace GCTextureTools
                 debugOut.AppendLine(""+offset);
             }
             block = DXTBlock.FromCompressed(input, offset);
-            alphaBlock = DXTBlock.FromCompressed(input, offset+alphaOffset);
+            alphaBlock = null;
+            //alphaBlock = DXTBlock.FromCompressed(input, offset+alphaOffset);
         }
 
 
@@ -402,8 +403,12 @@ namespace GCTextureTools
                     int val = block[index];
                     Color blockColour = block.DecodedColours[val];
 
-                    int alphaVal = alphaBlock[index];
-                    Color alphaColour = alphaBlock.DecodedColours[alphaVal];
+                    Color alphaColour = Color.White;
+                    if(alphaBlock != null)
+                    {
+                        int alphaVal = alphaBlock[index];
+                        alphaColour = alphaBlock.DecodedColours[alphaVal];
+                    }
 
                     //Color resultColor = alphaColour;
                     Color resultColor = Color.FromArgb(alphaColour.G, blockColour.R, blockColour.G, blockColour.B);
@@ -416,7 +421,7 @@ namespace GCTextureTools
             int ibreak = 0;
         }
 
-        public static void FillDest2(uint[] dst, int xblock,int yblock, int pitch, DXTBlock block, DXTBlock alphaBlock)
+        public static void FillDest2(uint[] dst, int xblock,int yblock, int pitch, DXTBlock block, DXTBlock alphaBlock,StreamWriter errorStream)
         {
             for (int y = 0; y < 4; y++)
             {
@@ -427,16 +432,22 @@ namespace GCTextureTools
                     int val = block[index];
                     Color blockColour = block.DecodedColours[val];
 
-                    int alphaVal = alphaBlock[index];
-                    Color alphaColour = alphaBlock.DecodedColours[alphaVal];
+                    Color alphaColour = Color.White;
+                    if(alphaBlock != null)
+                    {
+                        int alphaVal = alphaBlock[index];
+                        alphaColour = alphaBlock.DecodedColours[alphaVal];
+                    }
 
-                    Color resultColor = Color.FromArgb(alphaColour.G, blockColour.R, blockColour.G, blockColour.B);
+                        Color resultColor = Color.FromArgb(alphaColour.G, blockColour.R, blockColour.G, blockColour.B);
 
                     int yindex = (yblock * 4) + y;
                     int xindex = (xblock * 4) + x;
 
                     int destIndex = (yindex * pitch) + xindex;
                     dst[destIndex] = (uint)resultColor.ToArgb();
+                    errorStream.WriteLine($"Filling (di,i,x,y) : {destIndex},{index},{x}, {y} with {resultColor}");
+
                 }
             }
             int ibreak = 0;
@@ -720,12 +731,12 @@ namespace GCTextureTools
 
         static void Main(string[] args)
         {
-            string baseInput = @"d:\tmp\gladius-textures\input\"; 
-            string baseOutput = @"d:\tmp\gladius-textures\";
+            string baseInput = @"f:\tmp\image\input\"; 
+            string baseOutput = @"f:\tmp\image\output\";
 
             string sourcePath = baseInput;//baseInput+@"gui\leagues\";
 
-            string outputDirectory = baseOutput+@"textures-gc\";
+            string outputDirectory = baseOutput;
             string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
 
             TestExtract(sourcePath, outputDirectory);
