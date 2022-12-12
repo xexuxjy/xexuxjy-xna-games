@@ -706,25 +706,12 @@ namespace ModelNamer
 
         static int Main(string[] args)
         {
-            //TargaHeader.LoadBECFile();
-            //new ImageExtractor().ListImageData();
-            //new ImageExtractor().DumpSectionLengths();
-            //new ImageExtractor().DumpHeaderInfo();
             List<string> fileNames = new List<string>();
-            //fileNames.AddRange(Directory.GetFiles(@"D:\gladius-extract-all-systems\ps2\pak", "*.r2t"));
+            String sourcePath = @"F:\Gladius\PS2-texture-extraction\preview\pttp\";
+            fileNames.AddRange(Directory.GetFiles(sourcePath, "*11577*"));
 
-            String sourcePath = @"D:\gladius-extracted-archive\ps2-decompressed\PTTP\";
-            fileNames.AddRange(Directory.GetFiles(sourcePath, "*"));
 
-            //fileNames.Add(sourcePath + "File_023484");
-            //fileNames.Add(sourcePath + "File_023911");
-            //fileNames.Add(sourcePath + "File_000024");
-            //fileNames.Add(sourcePath + "File_001178");
-            //fileNames.Add(sourcePath + "File_006095"); // thepit textures - small
-            //fileNames.Add(sourcePath + "File_020217"); // thepit textures - large
-
-            String outputDirectory = @"D:\gladius-extracted-archive\ps2-decompressed\texture-output-large\";
-            outputDirectory = @"D:\gladius-extracted-archive\gc-compressed\textures\";
+            String outputDirectory = @"F:\Gladius\PS2-texture-extraction\preview\pttp-converted\";
 
             new ImageExtractor().ExtractImages(fileNames,outputDirectory);
             return 0;
