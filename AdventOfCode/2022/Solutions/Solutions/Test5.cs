@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class Test5 : BaseTest
 {
-    public static void RunTest()
+    public override void RunTest()
     {
         Stack<string> test = new Stack<string>();
         test.Push("Mark");

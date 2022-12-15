@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public class Test1 : BaseTest
 {
-    public static void RunTest()
+    public override void RunTest()
     {
         string filename = InputPath +" puzzle-1-input.txt";
         List<Elf> elves = new List<Elf>();

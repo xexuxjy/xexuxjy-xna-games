@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class Test4 : BaseTest
 {
-    public static void RunTest()
+    public override void RunTest()
     {
 
        string filename = InputPath +"puzzle-4-input.txt";

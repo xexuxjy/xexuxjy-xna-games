@@ -3,7 +3,7 @@
 
     static void Main()
     {
-        Test5.RunTest();
+        new Test9().RunTest();
     }
 
 }

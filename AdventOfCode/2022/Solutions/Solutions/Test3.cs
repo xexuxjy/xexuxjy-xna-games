@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public class Test3 : BaseTest
 {
     public static char INVALID_CHAR = '*';
-    public static void RunTest()
+    public override void RunTest()
     {
         string filename = InputPath + "puzzle-3-input.txt";
 

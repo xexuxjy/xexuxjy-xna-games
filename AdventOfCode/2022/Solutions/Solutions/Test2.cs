@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 public class Test2 : BaseTest
 {
-    public static void RunTest()
+    public override void RunTest()
     {
         bool strategy = true;
 
