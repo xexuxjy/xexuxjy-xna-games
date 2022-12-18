@@ -8,10 +8,8 @@ public class Test12 : BaseTest, IMapData
     public int m_width;
     public int m_height;
 
-    Vector2 m_startPoint = new Vector2();
+    List<Vector2> m_startPoints = new List<Vector2>();
     Vector2 m_endPoint = new Vector2();
-
-    public Route m_route;
 
     public AStar m_aStar;
 
@@ -32,9 +30,9 @@ public class Test12 : BaseTest, IMapData
         {
             for (int x = 0; x < m_dataFileContents[y].Length; x++)
             {
-                if (m_dataFileContents[y][x] == 'S')
+                if (m_dataFileContents[y][x] == 'S' || m_dataFileContents[y][x] == 'a')
                 {
-                    m_startPoint = new Vector2(x, y);
+                    m_startPoints.Add(new Vector2(x, y));
                 }
                 if (m_dataFileContents[y][x] == 'E')
                 {
@@ -44,54 +42,33 @@ public class Test12 : BaseTest, IMapData
             }
         }
 
-        m_aStar = new AStar();
-        m_aStar.Initialize(this);
+        int shortestPath = int.MaxValue;
+        List<Vector2> shortestResults = null;
 
-
-        m_route = new Route(m_startPoint, m_width, m_height);
-
-
-        while (m_route.CurrentPosition != m_endPoint)
+        foreach (Vector2 startPoint in m_startPoints)
         {
-            char currentHeight = HeightAtPoint(m_route.CurrentPosition);
-            bool managedToMove = false;
-            foreach (Vector2 direction in directions)
+            m_aStar = new AStar();
+            m_aStar.Initialize(this);
+            List<Vector2> results = new List<Vector2>();
+            if (m_aStar.FindPath(startPoint, m_endPoint, results))
             {
-                Vector2 possibleMove = m_route.CurrentPosition + direction;
-                if (InBounds(possibleMove))
+
+                if (results.Count < shortestPath)
                 {
-                    // don't go somewhere we've already been.
-                    if (!m_route.Visited(possibleMove))
-                    {
-                        char targetHeight = HeightAtPoint(possibleMove);
-                        if (CanMove(currentHeight, targetHeight))
-                        {
-                            m_route.AddMove(possibleMove, direction);
-                            managedToMove = true;
-                            // found a move
-                            break;
-                        }
-                    }
+                    shortestPath = results.Count;
+                    shortestResults = results;
                 }
             }
-            if (!managedToMove)
-            {
-                // oops - backtrack?
-                int ibreak = 0;
-                m_route.BackTrack();
-            }
-
         }
+
         // we win!
         int ibreak2 = 0;
-        m_debugInfo.Add(DrawRoute());
+        m_debugInfo.Add(DrawRoute(shortestResults));
 
         WriteDebugInfo();
     }
 
-
-
-    public string DrawRoute()
+    public string DrawRoute(List<Vector2> points)
     {
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < m_height; ++y)
@@ -104,17 +81,12 @@ public class Test12 : BaseTest, IMapData
                 {
                     c = 'E';
                 }
-                //else if (v == m_startPoint)
-                //{
-                //    c = 'S';
-                //}
                 else
                 {
-                    int index = m_route.Locations.IndexOf(v);
-                    if (index != -1)
+                    int index = points.IndexOf(v);
+                    if (index != -1 && index > 0)
                     {
-                        //Vector2 move = m_route.Moves[index-1];
-                        Vector2 move = m_route.GetDirection(v);
+                        Vector2 move = v - points[index - 1];
                         if (move == new Vector2(-1, 0))
                         {
                             c = '<';
@@ -132,7 +104,6 @@ public class Test12 : BaseTest, IMapData
                             c = 'v';
                         }
                     }
-
                 }
                 sb.Append(c);
             }
@@ -171,7 +142,7 @@ public class Test12 : BaseTest, IMapData
         }
         if (c == 'E')
         {
-            return 'Z';
+            return 'z';
         }
         return c;
     }
@@ -200,79 +171,13 @@ public class Test12 : BaseTest, IMapData
 
     public float DistanceToTarget(Vector2 v)
     {
-        throw new NotImplementedException();
+        float distanceX = Math.Abs(v.X - GetTargetPosition().X);
+        float distanceY = Math.Abs(v.Y - GetTargetPosition().Y);
+
+        return distanceX + distanceY;
     }
 
 
 }
 
 
-
-public class Route
-{
-    public Vector2 CurrentPosition
-    { get; private set; }
-
-    private int m_width;
-    private int m_height;
-
-    bool[] m_visited;
-    private List<Vector2> m_locations = new List<Vector2>();
-    private List<Vector2> m_moves = new List<Vector2>();
-    private Dictionary<Vector2, Vector2> m_moveDictionary = new Dictionary<Vector2, Vector2>();
-
-    public List<Vector2> Moves
-    { get { return m_moves; } }
-
-    public List<Vector2> Locations
-    { get { return m_locations; } }
-
-
-    public Route(Vector2 startPoint, int width, int height)
-    {
-        CurrentPosition = startPoint;
-        m_width = width;
-        m_height = height;
-        m_visited = new bool[m_height * m_width];
-        SetVisited(startPoint, true);
-        m_locations.Add(startPoint);
-    }
-
-    public Vector2 GetDirection(Vector2 position)
-    {
-        if (m_moveDictionary.ContainsKey(position))
-        {
-            return m_moveDictionary[position];
-        }
-        return Vector2.Zero;
-    }
-
-    public bool Visited(Vector2 v)
-    {
-        return m_visited[(int)((v.Y * m_width) + v.X)];
-    }
-
-    public void SetVisited(Vector2 v, bool val)
-    {
-        m_visited[(int)((v.Y * m_width) + v.X)] = val;
-    }
-
-
-    public void AddMove(Vector2 v, Vector2 direction)
-    {
-        m_moveDictionary[CurrentPosition] = direction;
-        Debug.Assert(!m_locations.Contains(v));
-        m_locations.Add(v);
-        m_moves.Add(direction);
-
-        SetVisited(v, true);
-        CurrentPosition = v;
-    }
-
-    public void BackTrack()
-    {
-        m_locations.RemoveAt(m_locations.Count - 1);
-        m_moves.RemoveAt(m_moves.Count - 1);
-        CurrentPosition = m_locations.Last();
-    }
-}
