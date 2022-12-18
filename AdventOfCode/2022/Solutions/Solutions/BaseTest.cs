@@ -9,13 +9,30 @@ public abstract class BaseTest
     public static string InputPath = @"D:\GitHub\xexuxjy\AdventOfCode\2022\Solutions\Data\";
 
     protected List<string> m_dataFileContents = new List<string>();
+    protected List<string> m_debugInfo = new List<string>(); 
 
-    public int TestNum
+    public int TestID
     {get; set;}
 
     public String Filename
     {
-        get{return InputPath+"puzzle-"+TestNum+"-input.txt"; }
+        get{return InputPath+"puzzle-"+TestID+"-input.txt"; }
+    }
+
+    public String DebugFilename
+    {
+        get{return InputPath+"puzzle-"+TestID+"-debug.txt"; }
+    }
+
+    public void WriteDebugInfo()
+    {
+        using (StreamWriter sw = new StreamWriter(new FileStream(DebugFilename, FileMode.Create)))
+        {
+            foreach(string line in m_debugInfo)
+            {
+                sw.WriteLine(line);
+            }
+        }
     }
 
     public void ReadDataFile()

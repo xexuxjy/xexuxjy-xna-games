@@ -10,7 +10,7 @@ public class Test9 : BaseTest
 
     public override void RunTest()
     {
-        TestNum = 9;
+        TestID = 9;
         ReadDataFile();
 
 
@@ -45,7 +45,7 @@ public class Test9 : BaseTest
 
     public void WriteDebug()
     {
-        using (StreamWriter sw = new StreamWriter(new FileStream(InputPath + "puzzle-" + TestNum + "-debug.txt", FileMode.Create)))
+        using (StreamWriter sw = new StreamWriter(new FileStream(InputPath + "puzzle-" + TestID + "-debug.txt", FileMode.Create)))
         {
             sw.WriteLine(m_debugStringBuilder.ToString());
         }
