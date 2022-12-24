@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +15,17 @@ public abstract class BaseTest
     public int TestID
     {get; set;}
 
+    public bool IsTestInput
+    {get;set; }
+
     public String Filename
     {
-        get{return InputPath+"puzzle-"+TestID+"-input.txt"; }
+        get{return InputPath+"puzzle-"+TestID+"-"+(IsTestInput?"test-":"")+"input.txt"; }
     }
 
     public String DebugFilename
     {
-        get{return InputPath+"puzzle-"+TestID+"-debug.txt"; }
+        get{return InputPath+"puzzle-"+TestID+"-"+(IsTestInput?"test-":"")+"debug.txt"; }
     }
 
     public void WriteDebugInfo()
