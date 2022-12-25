@@ -1,13 +1,14 @@
+Finished sim with 92 steps.
   4444445555
   9999990000
   4567890123
 0 ......+...
-1 ..........
-2 ......o...
-3 .....ooo..
-4 ....#ooo##
-5 ...o#ooo#.
-6 ..###ooo#.
-7 ....oooo#.
-8 .o.ooooo#.
-9 #########.
+1 .....ooo..
+2 ....ooooo.
+3 ...ooooooo
+4 ..oo#ooo##
+5 .ooo#ooo#o
+6 oo###ooo#o
+7 ooo.oooo#o
+8 oooooooo#o
+9 #########o
