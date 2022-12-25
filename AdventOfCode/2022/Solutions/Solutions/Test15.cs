@@ -7,6 +7,7 @@ public class Test15 : BaseTest
 {
     Dictionary<LongVector2, LongVector2> SensorBeaconMap = new Dictionary<LongVector2, LongVector2>();
     HashSet<LongVector2> CoverageMap = new HashSet<LongVector2>();
+    List<LongBounds> AllLongBounds = new List<LongBounds>();
 
     long m_minx = long.MaxValue;
     long m_miny = long.MaxValue;
@@ -18,7 +19,8 @@ public class Test15 : BaseTest
     public override void RunTest()
     {
         TestID = 15;
-        IsTestInput = false;
+        IsTestInput = true;
+        IsPart2 = true;
 
         if (IsTestInput)
         {
@@ -36,22 +38,37 @@ public class Test15 : BaseTest
             string[] tokens = line.Split(':');
             LongVector2 sensor = GetLongVector2(tokens[0]);
             LongVector2 beacon = GetLongVector2(tokens[1]);
-            if(SensorBeaconMap.Values.Contains(beacon))
+            if (SensorBeaconMap.Values.Contains(beacon))
             {
-                long ibreak =0;
+                long ibreak = 0;
             }
             SensorBeaconMap[sensor] = beacon;
         }
 
+        BuildBounds();
+        if(IsPart2)
+        {
+            DoPart2();
+        }
+        else
+        {
+            DoPart1();
+        }
+
+        int c = CountBeaconsInRow((int)ChosenLine);
+        if (IsTestInput)
+        {
+            DrawDebug();
+        }
+
+        WriteDebugInfo();
+    }
+
+    public void DoPart1()
+    {
         long count = 0;
         foreach (LongVector2 sensor in SensorBeaconMap.Keys)
         {
-            //if(sensor != new LongVector2(8,7))
-            //{
-            //    continue;
-            //}
-
-
             System.Console.WriteLine("Checking sensor " + sensor + "  count = " + (count++));
 
             long distance = sensor.ManhattanDistance(SensorBeaconMap[sensor]);
@@ -86,54 +103,84 @@ public class Test15 : BaseTest
                     }
                 }
             }
+
         }
 
-        BuildBounds();
 
         m_debugInfo.Add(String.Format("Line {0} has {1} blank spaces", ChosenLine, CountRow(ChosenLine)));
-        int c =CountBeaconsInRow((int)ChosenLine);
-        if (IsTestInput)
+
+    }
+    public void DoPart2()
+    {   
+        int min = 0;
+        int max = IsTestInput?20:4000000;
+
+        int foundx = -1;
+        int foundy = -1;
+
+        for(int y=min;y<=max;++y)
         {
-            DrawDebug();
+            for(int x=min;x<=max;++x)
+            {
+                if(x== 11 && y==14)
+                {
+                    int ibreak2 = 0;
+                }
+
+                bool included = false;
+                foreach(var alb in AllLongBounds)
+                {
+                    if(alb.Contains(x,y))
+                    {
+                        included = true;
+                        break;
+                    }
+                }
+                if(included == false)
+                {
+                    foundx = x;
+                    foundy= y;
+                    int ibreak = 0;
+                }
+            }
         }
 
-        WriteDebugInfo();
     }
+
 
     public void BuildBounds()
     {
         foreach (var v in SensorBeaconMap.Keys)
         {
             LongVector2 destination = SensorBeaconMap[v];
-            long distance = v.ManhattanDistance(destination);
+            long x;
+            long y;
+            v.ManhattanDistance(destination,out x,out y);
+            long distance = x+y;
+
             // need to add / sub distance from position
 
-            m_minx = (long)Math.Min(m_minx, v.X-distance);
-            m_miny = (long)Math.Min(m_miny, v.Y-distance);
+            m_minx = (long)Math.Min(m_minx, v.X - distance);
+            m_miny = (long)Math.Min(m_miny, v.Y - distance);
 
-            m_maxx = (long)Math.Max(m_maxx, v.X+distance);
-            m_maxy = (long)Math.Max(m_maxy, v.Y+distance);
+            m_maxx = (long)Math.Max(m_maxx, v.X + distance);
+            m_maxy = (long)Math.Max(m_maxy, v.Y + distance);
+
+            LongBounds lb = new LongBounds(v, x,y);
+            AllLongBounds.Add(lb);
+
         }
-
-        //foreach (var v in SensorBeaconMap.Values)
-        //{
-        //    m_minx = (long)Math.Min(m_minx, v.X);
-        //    m_miny = (long)Math.Min(m_miny, v.Y);
-
-        //    m_maxx = (long)Math.Max(m_maxx, v.X);
-        //    m_maxy = (long)Math.Max(m_maxy, v.Y);
-        //}
 
     }
 
     public int CountBeaconsInRow(int row)
     {
         HashSet<LongVector2> hash = new HashSet<LongVector2>();
-        foreach(LongVector2 v in SensorBeaconMap.Values)
+        foreach (LongVector2 v in SensorBeaconMap.Values)
         {
             hash.Add(v);
         }
-        return hash.Count(x=>x.Y == row);
+        return hash.Count(x => x.Y == row);
     }
 
     public long CountRow(long row)
@@ -276,8 +323,4 @@ public class Test15 : BaseTest
 
         return '.';
     }
-
-
-
-
 }

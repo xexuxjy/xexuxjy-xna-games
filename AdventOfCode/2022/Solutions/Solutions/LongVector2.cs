@@ -49,21 +49,14 @@ public struct LongVector2
         long distanceX = Math.Abs(X - v.X);
         long distanceY = Math.Abs(Y - v.Y);
 
-        //long test = distanceX + distanceY;
-
-        //long distanceX2 = Math.Abs(v.X - X);
-        //long distanceY2 = Math.Abs(v.Y - Y);
-
-        //long test2 = distanceX + distanceY;
-
-        //if(test2 != test)
-        //{
-        //    int ibreak =0;
-        //}
-
-
         return distanceX + distanceY;
 
+    }
+
+    public void ManhattanDistance(LongVector2 v,out long distanceX,out long distanceY)
+    {
+        distanceX = Math.Abs(X - v.X);
+        distanceY = Math.Abs(Y - v.Y);
     }
 
 

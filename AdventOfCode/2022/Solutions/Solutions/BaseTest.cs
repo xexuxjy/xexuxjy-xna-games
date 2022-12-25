@@ -18,6 +18,9 @@ public abstract class BaseTest
     public bool IsTestInput
     {get;set; }
 
+    public bool IsPart2
+    {get;set; }
+
     public String Filename
     {
         get{return InputPath+"puzzle-"+TestID+"-"+(IsTestInput?"test-":"")+"input.txt"; }
