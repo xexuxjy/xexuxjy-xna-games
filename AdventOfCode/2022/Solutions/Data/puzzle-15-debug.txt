@@ -1,1 +1,2 @@
-Line 2000000 has 5878678 blank spaces
+Found gap at 2949122,3041245  = 11796491041245
+Elapsed Time : 8987.8768

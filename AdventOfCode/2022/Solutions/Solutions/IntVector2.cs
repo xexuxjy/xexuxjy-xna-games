@@ -44,6 +44,23 @@ public struct IntVector2
         return vector;
     }
 
+    public static IntVector2 operator /(IntVector2 value1, int value)
+    {
+        IntVector2 vector;
+        vector.X = value1.X /value;
+        vector.Y = value1.Y /value;
+        return vector;
+    }
+
+    public static IntVector2 operator *(IntVector2 value1, int value)
+    {
+        IntVector2 vector;
+        vector.X = value1.X *value;
+        vector.Y = value1.Y *value;
+        return vector;
+    }
+
+
     public int ManhattanDistance(IntVector2 v)
     {
         int distanceX = Math.Abs(X - v.X);

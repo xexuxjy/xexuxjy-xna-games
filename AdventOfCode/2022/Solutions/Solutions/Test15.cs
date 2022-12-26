@@ -18,8 +18,10 @@ public class Test15 : BaseTest
 
     public override void RunTest()
     {
+        DateTime startTime = DateTime.Now;
+
         TestID = 15;
-        IsTestInput = true;
+        IsTestInput = false;
         IsPart2 = true;
 
         if (IsTestInput)
@@ -46,7 +48,7 @@ public class Test15 : BaseTest
         }
 
         BuildBounds();
-        if(IsPart2)
+        if (IsPart2)
         {
             DoPart2();
         }
@@ -60,6 +62,9 @@ public class Test15 : BaseTest
         {
             DrawDebug();
         }
+
+        double elapsed = DateTime.Now.Subtract(startTime).TotalMilliseconds;
+        m_debugInfo.Add("Elapsed Time : "+elapsed);
 
         WriteDebugInfo();
     }
@@ -111,38 +116,31 @@ public class Test15 : BaseTest
 
     }
     public void DoPart2()
-    {   
+    {
         int min = 0;
-        int max = IsTestInput?20:4000000;
+        int max = IsTestInput ? 20 : 4000000;
 
-        int foundx = -1;
-        int foundy = -1;
+        long foundx = -1;
+        long foundy = -1;
 
-        for(int y=min;y<=max;++y)
+        long result = -1;
+
+        for (int y = min; y <= max; ++y)
         {
-            for(int x=min;x<=max;++x)
+            if(y==11)
             {
-                if(x== 11 && y==14)
-                {
-                    int ibreak2 = 0;
-                }
-
-                bool included = false;
-                foreach(var alb in AllLongBounds)
-                {
-                    if(alb.Contains(x,y))
-                    {
-                        included = true;
-                        break;
-                    }
-                }
-                if(included == false)
-                {
-                    foundx = x;
-                    foundy= y;
-                    int ibreak = 0;
-                }
+                int ibreak =0 ;
             }
+
+            Ranges ranges = GetRanges(y, min, max);
+            if (ranges.HasSingleHole(min, max, ref result))
+            {
+                foundx = result;
+                foundy = y;
+                m_debugInfo.Add("Found gap at " + foundx + "," + foundy + "  = " + ((4000000 * foundx) + foundy));
+                //break;
+            }
+
         }
 
     }
@@ -155,8 +153,8 @@ public class Test15 : BaseTest
             LongVector2 destination = SensorBeaconMap[v];
             long x;
             long y;
-            v.ManhattanDistance(destination,out x,out y);
-            long distance = x+y;
+            v.ManhattanDistance(destination, out x, out y);
+            long distance = x + y;
 
             // need to add / sub distance from position
 
@@ -166,7 +164,7 @@ public class Test15 : BaseTest
             m_maxx = (long)Math.Max(m_maxx, v.X + distance);
             m_maxy = (long)Math.Max(m_maxy, v.Y + distance);
 
-            LongBounds lb = new LongBounds(v, x,y);
+            LongBounds lb = new LongBounds(v, distance);
             AllLongBounds.Add(lb);
 
         }
@@ -323,4 +321,148 @@ public class Test15 : BaseTest
 
         return '.';
     }
+
+    public Ranges GetRanges(int row, int min, int max)
+    {
+        Ranges ranges = new Ranges();
+        foreach (LongVector2 lv2 in SensorBeaconMap.Keys)
+        {
+            Range r = GetRangeForSensor(lv2, row, min, max);
+            if (r != null)
+            {
+                ranges.Merge(r);
+            }
+        }
+        return ranges;
+    }
+
+    public Range GetRangeForSensor(LongVector2 sensor, int row, int min, int max)
+    {
+        LongVector2 beacon = SensorBeaconMap[sensor];
+        long verticalDistance = Math.Abs(sensor.Y - row);
+        long manhattan = sensor.ManhattanDistance(beacon);
+        long horizontalDistance = manhattan - verticalDistance;
+
+        if (horizontalDistance >= 0)
+        {
+            long startPos = sensor.X - horizontalDistance;
+            long endPos = sensor.X + horizontalDistance;
+
+            startPos = Math.Max(min, startPos);
+            endPos = Math.Min(max, endPos);
+
+            return new Range(startPos, endPos);
+        }
+        return null;
+
+    }
 }
+
+public class Range
+{
+    public long Start;
+    public long End;
+
+    public Range(long s, long e)
+    {
+        Start = s;
+        End = e;
+    }
+
+    public void Merge(Range r)
+    {
+        Start = Math.Min(Start, r.Start);
+        End = Math.Max(End, r.End);
+    }
+
+    public bool Overlaps(Range r)
+    {
+        return (r.Start <= Start && r.End >= Start) || (r.Start <= End && r.End >= End);
+    }
+
+    public bool Contains(long value)
+    {
+        return Start <= value && End <= value;
+    }
+
+}
+
+public class Ranges
+{
+    public List<Range> ranges = new List<Range>();
+
+    public void Merge(Range range)
+    {
+        bool found = false;
+
+        foreach (Range r in ranges)
+        {
+            if (r.Overlaps(range))
+            {
+                range.Merge(r);
+            }
+        }
+
+        ranges.RemoveAll(x=>x.Overlaps(range));
+        ranges.Add(range);
+
+        // keep them in order
+        ranges.Sort((Range left,Range right)  => left.Start.CompareTo(right.Start));
+
+
+
+
+    }
+
+    public bool HasSingleHole(int min, int max, ref long result)
+    {
+        if (ranges.Count == 0)
+        {
+            return false;
+        }
+        // if there are more than 2 ranges then there must be more then one hole.
+        if (ranges.Count != 2)
+        {
+            return false;
+        }
+
+        // make sure the gap between end of range 1 and start of range 2 is 1...
+        if (ranges[0].End + 1 == ranges[1].Start - 1)
+        {
+            result = ranges[0].End + 1;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool Contains(long value)
+    {
+        if (ranges.Count == 0)
+        {
+            return false;
+        }
+
+        if (ranges.Count == 1)
+        {
+            return ranges[0].Contains(value);
+        }
+
+        int start = 0;
+        for (int i = 0; i < ranges.Count; ++i)
+        {
+            if (ranges[i].Contains(value))
+            {
+                return true;
+            }
+            if (ranges[i].Start > value)
+            {
+                return false;
+            }
+        }
+
+        return false;
+
+    }
+}
+

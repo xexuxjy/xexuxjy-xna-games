@@ -40,11 +40,20 @@ public class LongBounds
     private LongVector2 m_max;
     private LongVector2 m_center;
     private long m_distance;
-    public LongBounds(LongVector2 center,long x,long y)
+    public LongBounds(LongVector2 center,long distance)
     {
         m_center = center;
-        m_min = new LongVector2(center.X-x,center.Y-y);
-        m_max = new LongVector2(center.X+x,center.Y+y);
+        m_distance = distance;
+        m_min = new LongVector2(center.X-distance,center.Y-distance);
+        m_max = new LongVector2(center.X+distance,center.Y+distance);
+    }
+
+    public LongBounds(LongVector2 min, LongVector2 max)
+    {
+        m_min = min;
+        m_max = max;
+        m_center = (min + (min+max)/2);
+        m_distance = min.ManhattanDistance(max);
     }
 
     public bool Encapsulates(LongBounds bounds)
@@ -63,7 +72,20 @@ public class LongBounds
 
     public bool Contains(long x,long y)
     {
-        return (x >= m_min.X && x <= m_max.X) && (y >= m_min.Y && y <= m_max.Y);
+        if((x >= m_min.X && x <= m_max.X) && (y >= m_min.Y && y <= m_max.Y))
+        {
+            return m_center.ManhattanDistance(new LongVector2(x,y)) <= m_distance;
+        }
+        return false;
     }
+
+    public LongBounds Clip(int min,int max)
+    {
+        LongVector2 minclip = new LongVector2(Math.Max(m_min.X,min),Math.Max(m_min.Y,max));
+        LongVector2 maxclip = new LongVector2(Math.Min(m_max.X,min),Math.Min(m_max.Y,max));
+
+        return new LongBounds(minclip,maxclip);
+    }
+
 }
 

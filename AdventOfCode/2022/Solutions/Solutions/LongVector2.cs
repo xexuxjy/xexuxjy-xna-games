@@ -44,6 +44,23 @@ public struct LongVector2
         return vector;
     }
 
+    public static LongVector2 operator /(LongVector2 value1, int value)
+    {
+        LongVector2 vector;
+        vector.X = value1.X / value;
+        vector.Y = value1.Y / value;
+        return vector;
+    }
+
+        public static LongVector2 operator *(LongVector2 value1, int value)
+    {
+        LongVector2 vector;
+        vector.X = value1.X * value;
+        vector.Y = value1.Y * value;
+        return vector;
+    }
+
+
     public long ManhattanDistance(LongVector2 v)
     {
         long distanceX = Math.Abs(X - v.X);
@@ -53,7 +70,7 @@ public struct LongVector2
 
     }
 
-    public void ManhattanDistance(LongVector2 v,out long distanceX,out long distanceY)
+    public void ManhattanDistance(LongVector2 v, out long distanceX, out long distanceY)
     {
         distanceX = Math.Abs(X - v.X);
         distanceY = Math.Abs(Y - v.Y);
