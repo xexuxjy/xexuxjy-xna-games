@@ -1,7 +1,10 @@
 ﻿using System.Collections;
+using System.Runtime.CompilerServices;
 
 public struct LongVector2
 {
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public LongVector2(long x, long y)
     {
         X = x;
@@ -25,7 +28,8 @@ public struct LongVector2
         X = v.X;
         Y = v.Y;
     }
-
+            
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static LongVector2 operator +(LongVector2 value1, LongVector2 value2)
     {
         LongVector2 vector;
@@ -35,7 +39,8 @@ public struct LongVector2
     }
 
 
-
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static LongVector2 operator -(LongVector2 value1, LongVector2 value2)
     {
         LongVector2 vector;
