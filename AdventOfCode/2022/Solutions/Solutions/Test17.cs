@@ -17,7 +17,7 @@ public class Test17 : BaseTest
     public override void RunTest()
     {
         TestID = 17;
-        IsTestInput = true;
+        IsTestInput = false;
         IsPart2 = false;
         m_rockCount = IsPart2 ? (1000000000000 - 1) : (2022 - 1);
 
@@ -58,7 +58,6 @@ public class Test17 : BaseTest
                 char moveChar = m_moveList[moveIndex];
                 bool didMove = m_currentShape.ApplyMove(moveChar, m_moveMap[moveChar]);
                 m_currentShape.ApplyMove(Shape.MoveDown, m_moveMap[Shape.MoveDown]);
-
                 moveIndex++;
 
                 if (moveIndex >= moveCount)
@@ -72,15 +71,15 @@ public class Test17 : BaseTest
             m_board.CheckTruncate();
             m_board.EnsureFull();
 
-            int countCheck =1000000;
-            if (m_rockCount %  countCheck == 0)
+            int countCheck = 1000000;
+            if (m_rockCount % countCheck == 0)
             {
                 DateTime now = DateTime.Now;
                 TimeSpan elapsed = now.Subtract(lastTime);
                 lastTime = now;
                 long remainingSeconds = (m_rockCount / countCheck) * (long)elapsed.TotalSeconds;
                 long remainingHours = remainingSeconds / 3600;
-                System.Console.WriteLine("RockCount = " + m_rockCount+ " time "+ elapsed.TotalSeconds+" predicted remaining = "+remainingSeconds+ "  - "+remainingHours);
+                System.Console.WriteLine("RockCount = " + m_rockCount + " time " + elapsed.TotalSeconds + " predicted remaining = " + remainingSeconds + "  - " + remainingHours);
 
             }
         }
@@ -103,7 +102,6 @@ public class Test17 : BaseTest
         m_rockCount--;
 
         shape.Initialise(m_board);
-        DrawDebugBoard();
 
         return shape;
     }
@@ -126,13 +124,13 @@ public class Board
     { get { return m_hightestPoint; } }
 
     //private List<char> m_occupiedList = new List<char>();
-    
+
     private List<int> m_occupiedList = new List<int>();
 
     public Board()
     {
         EnsureFull();
-        SetOccupied(Width, 20, false);
+        //SetOccupied(Width, 20, false);
     }
 
     public bool IsOccupied(long x, long y, bool adjust = true)
@@ -143,8 +141,8 @@ public class Board
         }
 
         int adjustedY = adjust ? AdjustY(y) : (int)y;
-        int rowVal= m_occupiedList[adjustedY] ;
-        int masked = (rowVal & (1<<(int)x));
+        int rowVal = m_occupiedList[adjustedY];
+        int masked = (rowVal & (1 << (int)x));
         return masked != 0;
 
         //EnsureFull((int)x, adjustedY);
@@ -158,11 +156,13 @@ public class Board
         return (int)(y - m_highestFilledRow);
     }
 
-    public void MaskRow(long row,int mask)
+    public void MaskRow(long row, int mask)
     {
+        // need to make sure we don't overwrite existing values? not sure how though...
+
         int adjustedY = AdjustY(row);
         int rowValue = m_occupiedList[adjustedY];
-        if(mask == 0)
+        if (mask == 0)
         {
             rowValue = 0;
         }
@@ -170,7 +170,7 @@ public class Board
         {
             rowValue |= mask;
         }
-        
+
         m_occupiedList[adjustedY] = rowValue;
     }
 
@@ -184,7 +184,7 @@ public class Board
         int adjustedY = AdjustY(y);
 
         int rowValue = m_occupiedList[adjustedY];
-        if(value)
+        if (value)
         {
             rowValue |= 1 << (int)x;
         }
@@ -197,15 +197,15 @@ public class Board
 
     }
 
-    public const int FullRow = 1 |2 | 4 | 8 | 16 | 32 | 64;
+    public const int FullRow = 1 | 2 | 4 | 8 | 16 | 32 | 64;
     public void CheckTruncate()
     {
         if (ShouldTruncate)
         {
             int count = m_occupiedList.Count;
-            for (int i = count - 1; i >= 0; i --)
+            for (int i = count - 1; i >= 0; i--)
             {
-                if(m_occupiedList[i] == FullRow)
+                if (m_occupiedList[i] == FullRow)
                 {
                     m_highestFilledRow += i;
                     m_occupiedList.RemoveRange(0, i);
@@ -218,7 +218,7 @@ public class Board
 
     public void EnsureFull()
     {
-        int y = AdjustY(HighestPoint + 100);
+        int y = AdjustY(HighestPoint + 10);
 
         int count = m_occupiedList.Count;
         int extra = (y + 1 - count);
@@ -264,7 +264,7 @@ public class Board
             line.Append('+');
             for (int x = 0; x < Width; ++x)
             {
-                line.Append(IsOccupied(x, y, false)?"#":".");
+                line.Append(IsOccupied(x, y, false) ? "#" : ".");
             }
             line.Append('+');
             lines.Add(line.ToString());
@@ -300,7 +300,7 @@ public abstract class Shape
         IsFalling = true;
         // position = bottom left
         ShapePosition = new LongVector2(2, board.HighestPoint + 3);
-        FillBoard(true);
+        //FillBoard(true);
     }
 
     public bool IsFalling { get; set; }
@@ -313,7 +313,7 @@ public abstract class Shape
 
     public bool ApplyMove(char moveChar, LongVector2 moveV2)
     {
-        FillBoard(false);
+        //FillBoard(false);
 
         LongVector2 resultant = ShapePosition + moveV2;
 
@@ -367,7 +367,7 @@ public abstract class Shape
             }
         }
 
-        FillBoard(true);
+        //FillBoard(true);
         return true;
     }
 
@@ -377,25 +377,31 @@ public abstract class Shape
 
     public void FillBoard(bool value)
     {
-        for (int y = 0; y < Height; ++y)
+        if (false)
         {
-            for (int x = 0; x < Width; ++x)
+            for (int y = 0; y < Height; ++y)
             {
-                if (IsOccupied(x, y))
+                for (int x = 0; x < Width; ++x)
                 {
-                    //LongVector2 pos = new LongVector2(x, y) + ShapePosition;
-                    m_board.SetOccupied(ShapePosition.X + x, ShapePosition.Y + y, value);
+                    if (IsOccupied(x, y))
+                    {
+                        LongVector2 pos = new LongVector2(x, y) + ShapePosition;
+                        m_board.SetOccupied(ShapePosition.X + x, ShapePosition.Y + y, value);
+                    }
                 }
             }
         }
-        //for (int y = 0; y < Height; ++y)
-        //{
-        //    int maskValue = value?MaskForLine(y):0;
-            
-        //    int val = maskValue << ((7-Width)-(int)ShapePosition.X);
+        else
+        {
+            for (int y = 0; y < Height; ++y)
+            {
+                int maskValue = value ? MaskForLine(y) : 0;
 
-        //    m_board.MaskRow(ShapePosition.Y + y, val);
-        //}
+                //int val = maskValue << ((7 - Width) - (int)ShapePosition.X);
+                int val = maskValue << (int)ShapePosition.X;
+                m_board.MaskRow(ShapePosition.Y + y, val);
+            }
+        }
     }
 }
 
@@ -446,9 +452,9 @@ public class Shape2 : Shape
 
     public override int MaskForLine(int row)
     {
-        if(row == 1)
+        if (row == 1)
         {
-            return 1 | 2| 4;
+            return 1 | 2 | 4;
         }
         return 2;
     }
@@ -489,9 +495,9 @@ public class Shape3 : Shape
     {
         if (row == 1 || row == 2)
         {
-            return 1;
+            return 4;
         }
-        return 1 |2| 4;
+        return 1 | 2 | 4;
     }
 
 
