@@ -18,7 +18,7 @@ public class Test17 : BaseTest
     {
         TestID = 17;
         IsTestInput = false;
-        IsPart2 = false;
+        IsPart2 = true;
         m_rockCount = IsPart2 ? (1000000000000 - 1) : (2022 - 1);
 
         ReadDataFile();
@@ -71,14 +71,14 @@ public class Test17 : BaseTest
             m_board.CheckTruncate();
             m_board.EnsureFull();
 
-            int countCheck = 1000000;
+            int countCheck = 10000000;
             if (m_rockCount % countCheck == 0)
             {
                 DateTime now = DateTime.Now;
                 TimeSpan elapsed = now.Subtract(lastTime);
                 lastTime = now;
-                long remainingSeconds = (m_rockCount / countCheck) * (long)elapsed.TotalSeconds;
-                long remainingHours = remainingSeconds / 3600;
+                double remainingSeconds = (m_rockCount / countCheck) * elapsed.TotalSeconds;
+                double remainingHours = remainingSeconds / 3600;
                 System.Console.WriteLine("RockCount = " + m_rockCount + " time " + elapsed.TotalSeconds + " predicted remaining = " + remainingSeconds + "  - " + remainingHours);
 
             }
@@ -147,6 +147,20 @@ public class Board
 
         //EnsureFull((int)x, adjustedY);
         //return m_occupiedList[(Width * adjustedY) + (int)x];
+    }
+
+    public bool IsOccupiedMask(int maskVal,long y,bool adjust = true)
+    {
+        if (y < 0)
+        {
+            return true;
+        }
+
+        int adjustedY = adjust ? AdjustY(y) : (int)y;
+        int rowVal = m_occupiedList[adjustedY];
+
+        return (rowVal | maskVal) != (rowVal ^ maskVal);
+
     }
 
 
@@ -325,16 +339,11 @@ public abstract class Shape
 
                 for (int y = 0; y < Height; ++y)
                 {
-                    for (int x = 0; x < Width; ++x)
+                    int maskVal = MaskForLine(y) << (int)resultant.X;
+                    if(m_board.IsOccupiedMask(maskVal,resultant.Y+y))
                     {
-                        if (IsOccupied(x, y))
-                        {
-                            if (m_board.IsOccupied(resultant.X + x, resultant.Y + y))
-                            {
-                                canMove = false;
-                                break;
-                            }
-                        }
+                        canMove = false;
+                        break;
                     }
                 }
                 if (canMove)
@@ -348,18 +357,25 @@ public abstract class Shape
         {
             for (int y = 0; y < Height; ++y)
             {
-                for (int x = 0; x < Width; ++x)
+                int maskVal = MaskForLine(y) << (int)resultant.X;
+                if(m_board.IsOccupiedMask(maskVal,resultant.Y+y))
                 {
-                    if (IsOccupied(x, y))
-                    {
-                        if (m_board.IsOccupied(resultant.X + x, resultant.Y + y))
-                        {
-                            // can't move any lower?
-                            IsFalling = false;
-                            break;
-                        }
-                    }
+                    IsFalling = false;
+                    break;
                 }
+
+                //for (int x = 0; x < Width; ++x)
+                //{
+                //    if (IsOccupied(x, y))
+                //    {
+                //        if (m_board.IsOccupied(resultant.X + x, resultant.Y + y))
+                //        {
+                //            // can't move any lower?
+                //            IsFalling = false;
+                //            break;
+                //        }
+                //    }
+                //}
             }
             if (IsFalling)
             {
