@@ -17,8 +17,8 @@ public class Test17 : BaseTest
     public override void RunTest()
     {
         TestID = 17;
-        IsTestInput = false;
-        IsPart2 = true;
+        IsTestInput = true;
+        IsPart2 = false;
         m_rockCount = IsPart2 ? (1000000000000 - 1) : (2022 - 1);
 
         ReadDataFile();
@@ -103,7 +103,7 @@ public class Test17 : BaseTest
         m_rockCount--;
 
         shape.Initialise(m_board);
-        shape.FillBoard(true);
+        DrawDebugBoard();
 
         return shape;
     }
@@ -145,7 +145,7 @@ public class Board
         int adjustedY = adjust ? AdjustY(y) : (int)y;
         int rowVal= m_occupiedList[adjustedY] ;
         int masked = (rowVal & (1<<(int)x));
-        return  masked != 0;
+        return masked != 0;
 
         //EnsureFull((int)x, adjustedY);
         //return m_occupiedList[(Width * adjustedY) + (int)x];
@@ -158,6 +158,21 @@ public class Board
         return (int)(y - m_highestFilledRow);
     }
 
+    public void MaskRow(long row,int mask)
+    {
+        int adjustedY = AdjustY(row);
+        int rowValue = m_occupiedList[adjustedY];
+        if(mask == 0)
+        {
+            rowValue = 0;
+        }
+        else
+        {
+            rowValue |= mask;
+        }
+        
+        m_occupiedList[adjustedY] = rowValue;
+    }
 
     public void SetOccupied(long x, long y, bool value)
     {
@@ -241,13 +256,10 @@ public class Board
         }
         lines.Add(line.ToString());
 
-
-        int rows = m_occupiedList.Count / Width;
+        int rows = m_occupiedList.Count;
 
         for (int y = 0; y < rows; ++y)
         {
-
-
             line = new StringBuilder();
             line.Append('+');
             for (int x = 0; x < Width; ++x)
@@ -288,7 +300,7 @@ public abstract class Shape
         IsFalling = true;
         // position = bottom left
         ShapePosition = new LongVector2(2, board.HighestPoint + 3);
-
+        FillBoard(true);
     }
 
     public bool IsFalling { get; set; }
@@ -302,8 +314,6 @@ public abstract class Shape
     public bool ApplyMove(char moveChar, LongVector2 moveV2)
     {
         FillBoard(false);
-
-        bool fillValue = true;
 
         LongVector2 resultant = ShapePosition + moveV2;
 
@@ -346,7 +356,6 @@ public abstract class Shape
                         {
                             // can't move any lower?
                             IsFalling = false;
-                            fillValue = true;
                             break;
                         }
                     }
@@ -358,7 +367,7 @@ public abstract class Shape
             }
         }
 
-        FillBoard(fillValue);
+        FillBoard(true);
         return true;
     }
 
@@ -379,6 +388,14 @@ public abstract class Shape
                 }
             }
         }
+        //for (int y = 0; y < Height; ++y)
+        //{
+        //    int maskValue = value?MaskForLine(y):0;
+            
+        //    int val = maskValue << ((7-Width)-(int)ShapePosition.X);
+
+        //    m_board.MaskRow(ShapePosition.Y + y, val);
+        //}
     }
 }
 
@@ -400,7 +417,7 @@ public class Shape1 : Shape
     }
     public override int MaskForLine(int row)
     {
-        return 1 | 2 | 4 |8;
+        return 8 | 4 | 2 | 1;
     }
 
 }
