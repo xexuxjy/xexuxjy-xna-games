@@ -9,17 +9,29 @@ public class Test17 : BaseTest
     private string m_moveList;
     private List<Shape> m_shapes = new List<Shape>();
     private int m_shapeIndex = 0;
+    private int m_moveIndex = 0;
+
+    private long m_totalRocks = 0;
     private long m_rockCount = 0;
 
+    private bool m_foundCycle = false;
+    private long m_cyclePeriod = 0;
+    private long m_cycleHeight = 0;
+    private long m_extraHeight = 0;
+    private Tuple<int,int> m_cycleTuple = new Tuple<int, int>(-1,-1);
+
     private Dictionary<char, LongVector2> m_moveMap = new Dictionary<char, LongVector2>();
+    private Dictionary<Tuple<int,int>,List<long>> m_cycleMap = new Dictionary<Tuple<int, int>, List<long>>();
+    private Dictionary<Tuple<int,int>,List<long>> m_cycleRocksMap = new Dictionary<Tuple<int, int>, List<long>>();
 
 
     public override void RunTest()
     {
         TestID = 17;
         IsTestInput = false;
-        IsPart2 = true;
-        m_rockCount = IsPart2 ? (1000000000000 - 1) : (2022 - 1);
+        IsPart2 = false;
+        //m_totalRocks = IsPart2 ? (1000000000000 - 1) : (2022 - 1);
+        m_totalRocks = IsPart2 ? (1000000000000) : (2022);
 
         ReadDataFile();
         m_shapes.Add(new Shape1());
@@ -37,7 +49,7 @@ public class Test17 : BaseTest
         Simulate();
 
         m_board.CalcHighestPoint();
-        m_debugInfo.Add("Final Height : " + m_board.HighestPoint);
+        m_debugInfo.Add("Final Height : " + (m_board.HighestPoint+m_extraHeight));
 
         WriteDebugInfo();
 
@@ -45,24 +57,39 @@ public class Test17 : BaseTest
 
     public void Simulate()
     {
-        int moveIndex = 0;
         int moveCount = m_moveList.Count();
         DateTime lastTime = DateTime.Now;
 
-        while (m_rockCount >= 0)
+        while(m_rockCount < m_totalRocks)
         {
             m_currentShape = GetNextShape();
 
+            if(m_foundCycle)
+            {
+                long numPeriods = (m_totalRocks - m_rockCount) / m_cyclePeriod;
+                long remainingSim = (m_totalRocks - m_rockCount) % m_cyclePeriod;
+                m_extraHeight = m_cycleHeight*numPeriods;
+                
+                long boardHeightForFirst = m_cycleMap[m_cycleTuple][0];
+                long boardHeightForSecond = m_cycleMap[m_cycleTuple][1];
+
+                int ibreak = 0;
+                m_rockCount += (m_cyclePeriod * numPeriods);
+                m_foundCycle = false;
+            }
+
+
+
             while (m_currentShape.IsFalling)
             {
-                char moveChar = m_moveList[moveIndex];
+                char moveChar = m_moveList[m_moveIndex];
                 bool didMove = m_currentShape.ApplyMove(moveChar, m_moveMap[moveChar]);
                 m_currentShape.ApplyMove(Shape.MoveDown, m_moveMap[Shape.MoveDown]);
-                moveIndex++;
+                m_moveIndex++;
 
-                if (moveIndex >= moveCount)
+                if (m_moveIndex >= moveCount)
                 {
-                    moveIndex = 0;
+                    m_moveIndex = 0;
                 }
 
             }
@@ -71,7 +98,7 @@ public class Test17 : BaseTest
             m_board.CheckTruncate();
             m_board.EnsureFull();
 
-            int countCheck = 10000000;
+            int countCheck = 100000;
             if (m_rockCount % countCheck == 0)
             {
                 DateTime now = DateTime.Now;
@@ -79,9 +106,10 @@ public class Test17 : BaseTest
                 lastTime = now;
                 double remainingSeconds = (m_rockCount / countCheck) * elapsed.TotalSeconds;
                 double remainingHours = remainingSeconds / 3600;
-                System.Console.WriteLine("RockCount = " + m_rockCount + " time " + elapsed.TotalSeconds + " predicted remaining = " + remainingSeconds + "  - " + remainingHours);
+                //System.Console.WriteLine("RockCount = " + m_totalRocks + " time " + elapsed.TotalSeconds + " predicted remaining = " + remainingSeconds + "  - " + remainingHours);
 
             }
+
         }
 
     }
@@ -97,9 +125,50 @@ public class Test17 : BaseTest
     public Shape GetNextShape()
     {
         Shape shape = m_shapes[m_shapeIndex];//(Shape)Activator.CreateInstance(m_shapes[m_shapeIndex]);
+        m_rockCount++;
+
+
+        Tuple<int,int> key = new Tuple<int, int>(m_shapeIndex,m_moveIndex);
+        List<long> heights; 
+        List<long> rocks=null;
+        if(!m_cycleMap.TryGetValue(key,out heights))
+        {
+            heights = new List<long>();
+            rocks = new List<long>();
+            m_cycleMap[key] = heights;
+            m_cycleRocksMap[key] = rocks;
+        }
+        rocks = m_cycleRocksMap[key];
+
+        heights.Add(m_board.HighestPoint);
+        rocks.Add(m_rockCount);
+
+
+        if(heights.Count > 1)
+        {
+            List<long> diffs = new List<long>();
+            for(int i = 0;i<heights.Count-1;++i)
+            {
+                diffs.Add(heights[i+1]-heights[i]);
+            }
+
+            List<long> rockDiffs = new List<long>();
+            for(int i = 0;i<rocks.Count-1;++i)
+            {
+                rockDiffs.Add(rocks[i+1]-rocks[i]);
+            }
+
+            m_cyclePeriod = rockDiffs[0];
+            m_cycleHeight = diffs[0];
+
+            //System.Console.WriteLine(string.Format("Found matching cycle at ({0},{1}) : diff {2} : rockDiff {3}",key.Item1,key.Item2,string.Join(",",diffs),string.Join(",",rockDiffs)));
+            m_foundCycle = true;
+            m_cycleTuple = key;
+        }
+
+
         m_shapeIndex++;
         m_shapeIndex = m_shapeIndex % m_shapes.Count;
-        m_rockCount--;
 
         shape.Initialise(m_board);
 
