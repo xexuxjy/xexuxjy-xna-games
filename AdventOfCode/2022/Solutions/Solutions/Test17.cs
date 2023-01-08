@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -23,13 +25,14 @@ public class Test17 : BaseTest
     private Dictionary<char, LongVector2> m_moveMap = new Dictionary<char, LongVector2>();
     private Dictionary<Tuple<int,int>,List<long>> m_cycleMap = new Dictionary<Tuple<int, int>, List<long>>();
     private Dictionary<Tuple<int,int>,List<long>> m_cycleRocksMap = new Dictionary<Tuple<int, int>, List<long>>();
+    private List<long> m_boardHeights = new List<long>();
 
 
     public override void RunTest()
     {
         TestID = 17;
         IsTestInput = false;
-        IsPart2 = false;
+        IsPart2 = true;
         //m_totalRocks = IsPart2 ? (1000000000000 - 1) : (2022 - 1);
         m_totalRocks = IsPart2 ? (1000000000000) : (2022);
 
@@ -62,23 +65,52 @@ public class Test17 : BaseTest
 
         while(m_rockCount < m_totalRocks)
         {
-            m_currentShape = GetNextShape();
-
+            m_currentShape = m_shapes[m_shapeIndex];//(Shape)Activator.CreateInstance(m_shapes[m_shapeIndex]);
+            
+            CheckCycle();
             if(m_foundCycle)
             {
-                long numPeriods = (m_totalRocks - m_rockCount) / m_cyclePeriod;
-                long remainingSim = (m_totalRocks - m_rockCount) % m_cyclePeriod;
-                m_extraHeight = m_cycleHeight*numPeriods;
+                //Found period 35 / 53 SimulationState[round = 74, y = 119] & SimulationState[round = 39, y = 66] |
+                //    IdxState[jetIdx = 21, rockIdx = 0] | 28571428568 | 999999999989
+                //cur height 184 + 28571428568 * 53
+                //part 2: 1514285714288
+                //35ms
+
+                //Found period 1710 / 2620 SimulationState[round = 3424, y = 5327] & SimulationState[round = 1714, y = 2707] | IdxState[jetIdx = 9976, rockIdx = 0] | 584795318 | 999999998914
+                //cur height 9598 + 584795318 * 2620
+                //part 2: 1532163742758
+                //3146ms
+                          
+
+
+
+                long numPeriods = (m_totalRocks-m_rockCount) / m_cyclePeriod;
+                //long remainingSim = m_totalRocks % m_cyclePeriod;
+                
                 
                 long boardHeightForFirst = m_cycleMap[m_cycleTuple][0];
                 long boardHeightForSecond = m_cycleMap[m_cycleTuple][1];
 
-                int ibreak = 0;
-                m_rockCount += (m_cyclePeriod * numPeriods);
+                long rockNumberforFirst = m_cycleRocksMap[m_cycleTuple][0];
+
+
+
+                //m_extraHeight = boardHeightForFirst + (m_cycleHeight*numPeriods);
+                m_extraHeight = m_cycleHeight*(numPeriods);
+
+                //m_rockCount = (m_cyclePeriod * numPeriods)+rockNumberforFirst;
+                
+                m_rockCount +=  m_cyclePeriod * numPeriods;//m_totalRocks - remainingSim;
+
+                //m_board.Clear();
+
+                m_cycleMap.Clear();
+                m_cycleRocksMap.Clear();
+
                 m_foundCycle = false;
             }
 
-
+            m_currentShape.Initialise(m_board);
 
             while (m_currentShape.IsFalling)
             {
@@ -93,6 +125,14 @@ public class Test17 : BaseTest
                 }
 
             }
+
+            m_boardHeights.Add(m_board.HighestPoint);
+
+            m_rockCount++;
+            m_shapeIndex++;
+            m_shapeIndex = m_shapeIndex % m_shapes.Count;
+
+
             DrawDebugBoard();
             m_currentShape.FillBoard(true);
             m_board.CheckTruncate();
@@ -122,11 +162,13 @@ public class Test17 : BaseTest
         }
     }
 
-    public Shape GetNextShape()
-    {
-        Shape shape = m_shapes[m_shapeIndex];//(Shape)Activator.CreateInstance(m_shapes[m_shapeIndex]);
-        m_rockCount++;
 
+    public void CheckCycle()
+    {
+        if(m_shapeIndex != 0)
+        {
+            return;
+        }
 
         Tuple<int,int> key = new Tuple<int, int>(m_shapeIndex,m_moveIndex);
         List<long> heights; 
@@ -140,11 +182,19 @@ public class Test17 : BaseTest
         }
         rocks = m_cycleRocksMap[key];
 
-        heights.Add(m_board.HighestPoint);
+        //heights.Add(m_board.HighestPoint);
+        heights.Add(m_currentShape.ShapePosition.Y);
         rocks.Add(m_rockCount);
 
+        Tuple<int,int> zeroKey = new Tuple<int, int>(0,0);
 
-        if(heights.Count > 1)
+
+        // compare the values in the grid at different heights
+
+
+
+
+        if(heights.Count > 1 )
         {
             List<long> diffs = new List<long>();
             for(int i = 0;i<heights.Count-1;++i)
@@ -158,6 +208,26 @@ public class Test17 : BaseTest
                 rockDiffs.Add(rocks[i+1]-rocks[i]);
             }
 
+            long roundsDiff = rockDiffs[0];
+
+            int line1 = m_board.GetLine(heights[0]);
+            int line2 = m_board.GetLine(heights[1]);
+
+            long height1 = heights[0];
+            long height2 = heights[1];
+
+
+            for(int i=0;i<roundsDiff;++i)
+            {
+                if(m_board.GetLine(height1) != m_board.GetLine(height2))
+                {
+                    return;
+                }
+                height1--;
+                height2--;
+            }
+
+
             m_cyclePeriod = rockDiffs[0];
             m_cycleHeight = diffs[0];
 
@@ -167,14 +237,9 @@ public class Test17 : BaseTest
         }
 
 
-        m_shapeIndex++;
-        m_shapeIndex = m_shapeIndex % m_shapes.Count;
-
-        shape.Initialise(m_board);
-
-        return shape;
     }
 }
+
 
 
 public class Board
@@ -184,7 +249,7 @@ public class Board
     public const char RESTING = '#';
     public const char CURRENT = '@';
 
-    public bool ShouldTruncate = true;
+    public bool ShouldTruncate = false;
 
     private long m_highestFilledRow = 0;
     private long m_hightestPoint = 0;
@@ -200,6 +265,26 @@ public class Board
     {
         EnsureFull();
         //SetOccupied(Width, 20, false);
+    }
+
+    public void Clear()
+    {
+        m_highestFilledRow = 0;
+        m_hightestPoint = 0;
+        m_occupiedList.Clear();
+        EnsureFull();
+
+    }
+
+    public int GetLine(long y,bool adjust=true)
+    {
+        if (y < 0)
+        {
+            return 0;
+        }
+
+        int adjustedY = adjust ? AdjustY(y) : (int)y;
+        return m_occupiedList[adjustedY];
     }
 
     public bool IsOccupied(long x, long y, bool adjust = true)
