@@ -8,7 +8,7 @@
     public override void RunTest()
     {
         TestID = 18;
-        IsTestInput = false;
+        IsTestInput = true;
         IsPart2 = true;
         ReadDataFile();
 
@@ -96,6 +96,10 @@
 
         int[,,] touches = new int[maxVal, maxVal, maxVal];
 
+        // could test each val
+
+
+
 
         // any cube with 6 neighbours is solid.
         // any cube with 0 neighbours is either floating in an enclosed gap or not part of scan.
@@ -117,10 +121,21 @@
                     for (int i = 0; i < row.Count - 1; ++i)
                     {
                         int distance = row[i].ManhattanDistance(row[i + 1]) - 1;
-                        for(int j=0;j<distance;++j)
+                        if(distance >= 1)
                         {
-                            gaps.Add(new IntVector3(x,y,row[i].Z+j));
+                            IntVector3 holeStart = row[i]+ new IntVector3(0,0,1);
+                            List<IntVector3> filledArea = new List<IntVector3>();
+                            if(FloodFill(holeStart,filledArea))
+                            {
+                                int ibreak2 = 0;
+                            }
                         }
+
+
+                        //for(int j=0;j<distance;++j)   
+                        //{
+                        //    gaps.Add(new IntVector3(x,y,row[i].Z+j));
+                        //}
 
                     }
                 }
@@ -189,6 +204,45 @@
         return cube1.ManhattanDistance(cube2) == 1;
     }
 
+
+    public bool FloodFill(IntVector3 start,List<IntVector3> results)
+    {
+        results.Clear();
+
+        if(m_touchingMap.ContainsKey(start))
+        {
+            return false;
+        }
+
+        Queue<IntVector3> workingQueue = new Queue<IntVector3>();
+
+        int breakLimit = 100;
+
+        workingQueue.Enqueue(start);
+        while(workingQueue.Count > 0)
+        {
+            IntVector3 current = workingQueue.Dequeue();
+            results.Add(current);
+            foreach(IntVector3 offset in m_offsets)
+            {
+                IntVector3 adjusted = current + offset;
+                if(!m_touchingMap.ContainsKey(adjusted))
+                {
+                    if(!workingQueue.Contains(adjusted) && !results.Contains(adjusted))
+                    {
+                        workingQueue.Enqueue(current+offset);
+                    }
+                } 
+            }
+            // got too big, probably an outside square
+            if(results.Count > breakLimit) 
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 
 
