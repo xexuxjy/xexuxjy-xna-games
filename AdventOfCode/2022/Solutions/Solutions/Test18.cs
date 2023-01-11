@@ -8,7 +8,7 @@
     public override void RunTest()
     {
         TestID = 18;
-        IsTestInput = true;
+        IsTestInput = false;
         IsPart2 = true;
         ReadDataFile();
 
@@ -58,15 +58,6 @@
 
     public void Part2()
     {
-        // how do you identify somethign completely inside.
-        // well 
-
-        //work out bounds of cube.
-        // slice and fill externals
-        // rescan about how many lines hold both outside and gaps.
-
-        //bool[,,] m_outlineMap = new bool[
-
         int minX = int.MaxValue;
         int maxX = int.MinValue;
 
@@ -91,82 +82,104 @@
 
         }
 
-        int maxVal = Math.Max(maxX, Math.Max(maxY, maxZ));
-        maxVal++;
+        maxX++;
+        maxY++;
+        maxZ++;
 
-        int[,,] touches = new int[maxVal, maxVal, maxVal];
-
-        // could test each val
-
-
-
-
-        // any cube with 6 neighbours is solid.
-        // any cube with 0 neighbours is either floating in an enclosed gap or not part of scan.
-        int enclosedCount = 0;
-
-        List<IntVector3> gaps = new List<IntVector3>();
-
-
-        for (int x = minX; x < maxX; ++x)
+        int[,,] layout = new int[maxX,maxY,maxZ];
+        foreach(IntVector3 pos in m_positions)
         {
-            List<IntVector3> slice = m_positions.FindAll(a => a.X == x).OrderBy(a => a.Y).ThenBy(a => a.Z).ToList();
+            layout[pos.X,pos.Y,pos.Z] = 255;
+        }
 
-            for (int y = minY; y < maxY; ++y)
+        // filled in all the positions.
+
+        // check and see which are empty.
+
+
+        Dictionary<IntVector3, List<IntVector3>> floodFillResults = new Dictionary<IntVector3, List<IntVector3>>();
+
+        Dictionary<IntVector3, List<IntVector3>> validFills = new Dictionary<IntVector3, List<IntVector3>>();
+
+        List<IntVector3> alreadyFilled = new List<IntVector3>();
+
+        for (int x = minX; x <= maxX; ++x)
+        {
+            for (int y = minY; y <= maxY; ++y)
             {
-                List<IntVector3> row = slice.FindAll(a => a.Y == y).OrderBy(b => b.Z).ToList();
-
-                if (row.Count > 2)
-                {
-                    for (int i = 0; i < row.Count - 1; ++i)
-                    {
-                        int distance = row[i].ManhattanDistance(row[i + 1]) - 1;
-                        if(distance >= 1)
-                        {
-                            IntVector3 holeStart = row[i]+ new IntVector3(0,0,1);
-                            List<IntVector3> filledArea = new List<IntVector3>();
-                            if(FloodFill(holeStart,filledArea))
-                            {
-                                int ibreak2 = 0;
-                            }
-                        }
-
-
-                        //for(int j=0;j<distance;++j)   
-                        //{
-                        //    gaps.Add(new IntVector3(x,y,row[i].Z+j));
-                        //}
-
-                    }
-                }
-
-                for(int z = minZ;z<maxZ;++z)
+                for (int z = minZ; z <= maxZ; ++z)
                 {
                     IntVector3 loc = new IntVector3(x, y, z);
 
-                    // all the blocks on this level.
+                    if (!m_touchingMap.ContainsKey(loc))
+                    {
+                        if (!alreadyFilled.Contains(loc))
+                        {
+                            if (FloodFill(loc, floodFillResults))
 
+                                foreach (IntVector3 key in floodFillResults.Keys)
+                                {
+                                    validFills[key] = floodFillResults[key];
+                                }
+
+
+                            foreach (List<IntVector3> fillList in floodFillResults.Values)
+                            {
+                                alreadyFilled.AddRange(fillList);
+                            }
+                            //alreadyFilled.AddRange(floodFillResults);
+                        }
+                    }
                 }
             }
         }
-        
-        foreach(IntVector3 gap in gaps)
+
+
+        int altEnclosedCount = 0;
+        foreach (IntVector3 pos in validFills.Keys)
         {
-            if(IsEnclosed(gap))
-            {
-                enclosedCount++;
-            }
+            altEnclosedCount += (6 - (validFills[pos].Count * 2));
         }
+
 
         // new plan - work via a flood fill - figure out how sections join, flood filled sections form
         // a similar map to the original interms of touching and calcs
 
-
+        int enclosedCount = 0;
+        foreach (List<IntVector3> fill in validFills.Values)
+        {
+            enclosedCount += ((6 * fill.Count) - (2 * (fill.Count - 1)));
+        }
 
         int ibreak = 0;
 
-        m_debugInfo.Add("Part 2 : "+(m_freeSides-(enclosedCount * 6)));
+        // 4118 is too high :(
+        // 4118
 
+        m_debugInfo.Add("Part 2 : FreeSides = " + m_freeSides + "  Enclosed = " + enclosedCount + "  Total = " + (m_freeSides - enclosedCount));
+        m_debugInfo.Add("Part 2b : FreeSides = " + m_freeSides + "  Enclosed = " + altEnclosedCount + "  Total = " + (m_freeSides - altEnclosedCount));
+
+    }
+
+    public int CountMatching(List<IntVector3> positions,int[,,] layout,IntVector3 bounds,int testVal)
+    {
+        int count = 0;
+        foreach(IntVector3 pos in positions)
+        {
+            foreach(IntVector3 offset in m_offsets)
+            {
+                IntVector3 adjusted = pos+offset;
+                if(adjusted.X < 0 || adjusted.Y < 0 || adjusted.Z < 0  || adjusted.X >= bounds.X || adjusted.Y >= bounds.Y || adjusted.Z >= bounds.Z)
+                {
+                    continue;
+                }
+                if(layout[adjusted.X,adjusted.Y,adjusted.Z] == 0)
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public IntVector3[] m_offsets = new IntVector3[]{
@@ -176,11 +189,11 @@
 
     public bool IsEnclosed(IntVector3 cube)
     {
-        if(!m_touchingMap.ContainsKey(cube))
+        if (!m_touchingMap.ContainsKey(cube))
         {
-            foreach(IntVector3 offset in m_offsets)
+            foreach (IntVector3 offset in m_offsets)
             {
-                if(m_touchingMap.ContainsKey((cube+offset)))
+                if (m_touchingMap.ContainsKey((cube + offset)))
                 {
                     return false;
                 }
@@ -191,7 +204,7 @@
 
     public bool IsInside(IntVector3 cube)
     {
-        if(m_touchingMap.ContainsKey(cube))
+        if (m_touchingMap.ContainsKey(cube))
         {
             return m_touchingMap[cube].Count == 0;
         }
@@ -205,37 +218,36 @@
     }
 
 
-    public bool FloodFill(IntVector3 start,List<IntVector3> results)
+    public bool FloodFill(IntVector3 start, Dictionary<IntVector3, List<IntVector3>> results)
     {
         results.Clear();
 
-        if(m_touchingMap.ContainsKey(start))
-        {
-            return false;
-        }
-
         Queue<IntVector3> workingQueue = new Queue<IntVector3>();
 
-        int breakLimit = 100;
+        int breakLimit = 10;
 
         workingQueue.Enqueue(start);
-        while(workingQueue.Count > 0)
+        while (workingQueue.Count > 0)
         {
             IntVector3 current = workingQueue.Dequeue();
-            results.Add(current);
-            foreach(IntVector3 offset in m_offsets)
+
+            List<IntVector3> touching = new List<IntVector3>();
+            results[current] = touching;
+
+            foreach (IntVector3 offset in m_offsets)
             {
                 IntVector3 adjusted = current + offset;
-                if(!m_touchingMap.ContainsKey(adjusted))
+                if (!m_touchingMap.ContainsKey(adjusted))
                 {
-                    if(!workingQueue.Contains(adjusted) && !results.Contains(adjusted))
+                    if (!workingQueue.Contains(adjusted) && !results.ContainsKey(adjusted))
                     {
-                        workingQueue.Enqueue(current+offset);
+                        touching.Add(adjusted);
+                        workingQueue.Enqueue(adjusted);
                     }
-                } 
+                }
             }
             // got too big, probably an outside square
-            if(results.Count > breakLimit) 
+            if (results.Count > breakLimit)
             {
                 return false;
             }
