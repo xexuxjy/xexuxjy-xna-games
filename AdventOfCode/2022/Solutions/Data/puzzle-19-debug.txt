@@ -1,0 +1,161 @@
+===========================BluePrint 19 : 2, 2, 0, 0===========================
+
+== Minute 1 ==
+1 Ore-collecting robot collects 1 Ore . You now have 1 Ore
+
+
+== Minute 2 ==
+1 Ore-collecting robot collects 1 Ore . You now have 2 Ore
+
+
+== Minute 3 ==
+1 Ore-collecting robot collects 1 Ore . You now have 3 Ore
+
+
+== Minute 4 ==
+Spend 3 Ore  to start building a Ore-collecting robot.
+1 Ore-collecting robot collects 1 Ore . You now have 1 Ore
+
+The new Ore-collecting robot is ready. You now have 2 of them.
+
+== Minute 5 ==
+2 Ore-collecting robot collects 2 Ore . You now have 3 Ore
+
+
+== Minute 6 ==
+Spend 3 Ore  to start building a Ore-collecting robot.
+2 Ore-collecting robot collects 2 Ore . You now have 2 Ore
+
+The new Ore-collecting robot is ready. You now have 3 of them.
+
+== Minute 7 ==
+3 Ore-collecting robot collects 3 Ore . You now have 5 Ore
+
+
+== Minute 8 ==
+Spend 4 Ore  to start building a Clay-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 4 Ore
+
+The new Clay-collecting robot is ready. You now have 1 of them.
+
+== Minute 9 ==
+Spend 4 Ore  to start building a Clay-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 3 Ore
+1 Clay-collecting robot collects 1 Clay . You now have 1 Clay
+
+The new Clay-collecting robot is ready. You now have 2 of them.
+
+== Minute 10 ==
+3 Ore-collecting robot collects 3 Ore . You now have 6 Ore
+2 Clay-collecting robot collects 2 Clay . You now have 3 Clay
+
+
+== Minute 11 ==
+Spend 4 Ore  to start building a Clay-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 5 Ore
+2 Clay-collecting robot collects 2 Clay . You now have 5 Clay
+
+The new Clay-collecting robot is ready. You now have 3 of them.
+
+== Minute 12 ==
+Spend 4 Ore 5 Clay  to start building a Obsidian-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 4 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 3 Clay
+
+The new Obsidian-collecting robot is ready. You now have 1 of them.
+
+== Minute 13 ==
+3 Ore-collecting robot collects 3 Ore . You now have 7 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 6 Clay
+1 Obsidian-collecting robot collects 1 Obsidian . You now have 1 Obsidian
+
+
+== Minute 14 ==
+Spend 4 Ore 5 Clay  to start building a Obsidian-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 6 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 4 Clay
+1 Obsidian-collecting robot collects 1 Obsidian . You now have 2 Obsidian
+
+The new Obsidian-collecting robot is ready. You now have 2 of them.
+
+== Minute 15 ==
+3 Ore-collecting robot collects 3 Ore . You now have 9 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 7 Clay
+2 Obsidian-collecting robot collects 2 Obsidian . You now have 4 Obsidian
+
+
+== Minute 16 ==
+Spend 4 Ore 5 Clay  to start building a Obsidian-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 8 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 5 Clay
+2 Obsidian-collecting robot collects 2 Obsidian . You now have 6 Obsidian
+
+The new Obsidian-collecting robot is ready. You now have 3 of them.
+
+== Minute 17 ==
+Spend 4 Ore 5 Clay  to start building a Obsidian-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 7 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 3 Clay
+3 Obsidian-collecting robot collects 3 Obsidian . You now have 9 Obsidian
+
+The new Obsidian-collecting robot is ready. You now have 4 of them.
+
+== Minute 18 ==
+Spend 4 Ore 8 Obsidian  to start building a Geode-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 6 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 6 Clay
+4 Obsidian-collecting robot collects 4 Obsidian . You now have 5 Obsidian
+
+The new Geode-collecting robot is ready. You now have 1 of them.
+
+== Minute 19 ==
+Spend 4 Ore 5 Clay  to start building a Obsidian-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 5 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 4 Clay
+4 Obsidian-collecting robot collects 4 Obsidian . You now have 9 Obsidian
+1 Geode-collecting robot collects 1 Geode . You now have 1 Geode
+
+The new Obsidian-collecting robot is ready. You now have 5 of them.
+
+== Minute 20 ==
+Spend 4 Ore 8 Obsidian  to start building a Geode-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 4 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 7 Clay
+5 Obsidian-collecting robot collects 5 Obsidian . You now have 6 Obsidian
+1 Geode-collecting robot collects 1 Geode . You now have 2 Geode
+
+The new Geode-collecting robot is ready. You now have 2 of them.
+
+== Minute 21 ==
+Spend 4 Ore 5 Clay  to start building a Obsidian-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 3 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 5 Clay
+5 Obsidian-collecting robot collects 5 Obsidian . You now have 11 Obsidian
+2 Geode-collecting robot collects 2 Geode . You now have 4 Geode
+
+The new Obsidian-collecting robot is ready. You now have 6 of them.
+
+== Minute 22 ==
+3 Ore-collecting robot collects 3 Ore . You now have 6 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 8 Clay
+6 Obsidian-collecting robot collects 6 Obsidian . You now have 17 Obsidian
+2 Geode-collecting robot collects 2 Geode . You now have 6 Geode
+
+
+== Minute 23 ==
+Spend 4 Ore 8 Obsidian  to start building a Geode-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 5 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 11 Clay
+6 Obsidian-collecting robot collects 6 Obsidian . You now have 15 Obsidian
+2 Geode-collecting robot collects 2 Geode . You now have 8 Geode
+
+The new Geode-collecting robot is ready. You now have 3 of them.
+
+== Minute 24 ==
+Spend 4 Ore 8 Obsidian  to start building a Geode-collecting robot.
+3 Ore-collecting robot collects 3 Ore . You now have 4 Ore
+3 Clay-collecting robot collects 3 Clay . You now have 14 Clay
+6 Obsidian-collecting robot collects 6 Obsidian . You now have 13 Obsidian
+3 Geode-collecting robot collects 3 Geode . You now have 11 Geode
+
+The new Geode-collecting robot is ready. You now have 4 of them.

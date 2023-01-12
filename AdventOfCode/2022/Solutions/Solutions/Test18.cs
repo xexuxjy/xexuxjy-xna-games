@@ -13,12 +13,11 @@
         ReadDataFile();
 
 
-
         foreach (string line in m_dataFileContents)
         {
             string[] tokens = line.Split(',');
             IntVector3 position = new IntVector3(int.Parse(tokens[0]), int.Parse(tokens[1]), int.Parse(tokens[2]));
-            m_positions.Add(position);
+            m_positions.Add(position+new IntVector3(1,1,1));
         }
         // order by xyz...
         m_positions = m_positions.OrderBy(a => a.X).ThenBy(a => a.Y).ThenBy(a => a.Z).ToList();
@@ -82,9 +81,11 @@
 
         }
 
-        maxX++;
-        maxY++;
-        maxZ++;
+        maxX+=2;
+        maxY+=2;
+        maxZ+=2;
+
+        IntVector3 bounds = new IntVector3(maxX,maxY,maxZ);
 
         int[,,] layout = new int[maxX,maxY,maxZ];
         foreach(IntVector3 pos in m_positions)
@@ -92,72 +93,23 @@
             layout[pos.X,pos.Y,pos.Z] = 255;
         }
 
+        int intial = CountMatching(m_positions,layout,bounds,0);
+
+
+
+        FloodFill2(new IntVector3(),bounds,layout,1);
+
+        int final = CountMatching(m_positions,layout,bounds,1);
+
+        int ibreak =0 ;
+
         // filled in all the positions.
 
         // check and see which are empty.
 
 
-        Dictionary<IntVector3, List<IntVector3>> floodFillResults = new Dictionary<IntVector3, List<IntVector3>>();
-
-        Dictionary<IntVector3, List<IntVector3>> validFills = new Dictionary<IntVector3, List<IntVector3>>();
-
-        List<IntVector3> alreadyFilled = new List<IntVector3>();
-
-        for (int x = minX; x <= maxX; ++x)
-        {
-            for (int y = minY; y <= maxY; ++y)
-            {
-                for (int z = minZ; z <= maxZ; ++z)
-                {
-                    IntVector3 loc = new IntVector3(x, y, z);
-
-                    if (!m_touchingMap.ContainsKey(loc))
-                    {
-                        if (!alreadyFilled.Contains(loc))
-                        {
-                            if (FloodFill(loc, floodFillResults))
-
-                                foreach (IntVector3 key in floodFillResults.Keys)
-                                {
-                                    validFills[key] = floodFillResults[key];
-                                }
-
-
-                            foreach (List<IntVector3> fillList in floodFillResults.Values)
-                            {
-                                alreadyFilled.AddRange(fillList);
-                            }
-                            //alreadyFilled.AddRange(floodFillResults);
-                        }
-                    }
-                }
-            }
-        }
-
-
-        int altEnclosedCount = 0;
-        foreach (IntVector3 pos in validFills.Keys)
-        {
-            altEnclosedCount += (6 - (validFills[pos].Count * 2));
-        }
-
-
-        // new plan - work via a flood fill - figure out how sections join, flood filled sections form
-        // a similar map to the original interms of touching and calcs
-
-        int enclosedCount = 0;
-        foreach (List<IntVector3> fill in validFills.Values)
-        {
-            enclosedCount += ((6 * fill.Count) - (2 * (fill.Count - 1)));
-        }
-
-        int ibreak = 0;
-
-        // 4118 is too high :(
-        // 4118
-
-        m_debugInfo.Add("Part 2 : FreeSides = " + m_freeSides + "  Enclosed = " + enclosedCount + "  Total = " + (m_freeSides - enclosedCount));
-        m_debugInfo.Add("Part 2b : FreeSides = " + m_freeSides + "  Enclosed = " + altEnclosedCount + "  Total = " + (m_freeSides - altEnclosedCount));
+        //m_debugInfo.Add("Part 2 : FreeSides = " + m_freeSides + "  Enclosed = " + enclosedCount + "  Total = " + (m_freeSides - enclosedCount));
+        //m_debugInfo.Add("Part 2b : FreeSides = " + m_freeSides + "  Enclosed = " + altEnclosedCount + "  Total = " + (m_freeSides - altEnclosedCount));
 
     }
 
@@ -169,11 +121,11 @@
             foreach(IntVector3 offset in m_offsets)
             {
                 IntVector3 adjusted = pos+offset;
-                if(adjusted.X < 0 || adjusted.Y < 0 || adjusted.Z < 0  || adjusted.X >= bounds.X || adjusted.Y >= bounds.Y || adjusted.Z >= bounds.Z)
+                if(adjusted < IntVector3.Zero || adjusted >= bounds)
                 {
                     continue;
                 }
-                if(layout[adjusted.X,adjusted.Y,adjusted.Z] == 0)
+                if(layout[adjusted.X,adjusted.Y,adjusted.Z] == testVal)
                 {
                     count++;
                 }
@@ -215,6 +167,32 @@
     public bool DoCubesTouch(IntVector3 cube1, IntVector3 cube2)
     {
         return cube1.ManhattanDistance(cube2) == 1;
+    }
+
+    public void FloodFill2(IntVector3 start,IntVector3 bounds,int[,,] layout,int fillValue)
+    {
+        Stack<IntVector3> workingQueue = new Stack<IntVector3>();
+
+        workingQueue.Push(start);
+        while (workingQueue.Count > 0)
+        {
+            IntVector3 current = workingQueue.Pop();
+            layout[current.X,current.Y,current.Z] = fillValue;
+
+            foreach (IntVector3 offset in m_offsets)
+            {
+                IntVector3 adjusted = current + offset;
+                if(adjusted< IntVector3.Zero || adjusted >= bounds)
+                {
+                    continue;
+                }
+
+                if(layout[adjusted.X,adjusted.Y,adjusted.Z] == 0)
+                {
+                    workingQueue.Push(adjusted);
+                }
+            }
+        }
     }
 
 

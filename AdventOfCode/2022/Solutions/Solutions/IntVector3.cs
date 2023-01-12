@@ -2,6 +2,8 @@
 
 public struct IntVector3
 {
+    public static readonly IntVector3 Zero = new IntVector3();
+    
     public IntVector3(int x, int y,int z)
     {
         X = x;
@@ -66,6 +68,27 @@ public struct IntVector3
         vector.Y = value1.Y *value;
         vector.Z = value1.Z *value;
         return vector;
+    }
+
+    public static bool operator <(IntVector3 value1, IntVector3 value2)
+    {
+        return value1.X < value2.X || value1.Y < value2.Y || value1.Z < value2.Z;
+    }
+
+    public static bool operator <=(IntVector3 value1, IntVector3 value2)
+    {
+        return value1.X <= value2.X || value1.Y <= value2.Y || value1.Z <= value2.Z;
+    }
+
+
+    public static bool operator >(IntVector3 value1, IntVector3 value2)
+    {
+        return value1.X > value2.X || value1.Y > value2.Y || value1.Z > value2.Z;
+    }
+
+    public static bool operator >=(IntVector3 value1, IntVector3 value2)
+    {
+        return value1.X >= value2.X || value1.Y >= value2.Y || value1.Z >= value2.Z;
     }
 
 
