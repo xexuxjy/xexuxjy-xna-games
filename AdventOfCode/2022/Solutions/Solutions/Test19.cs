@@ -8,7 +8,7 @@ public class Test19 : BaseTest
     private List<BluePrint> m_blueprints = new List<BluePrint>();
     private List<SimulationResult> m_simulationResults = new List<SimulationResult>();
 
-    public int m_totalTime = 24;
+    public int m_totalTime = 24;//24;
     public int m_currentTime = 0;
 
     public int[] m_currentLimits = new int[(int)RobotType.NumValues];
@@ -28,6 +28,10 @@ public class Test19 : BaseTest
         Regex r1 = new Regex(numberPattern);
         foreach (string line in m_dataFileContents)
         {
+            if (line.StartsWith("#"))
+            {
+                continue;
+            }
             Match m1 = r1.Match(line);
             string blueprintIdStr = m1.Value;
             m1 = m1.NextMatch();
@@ -79,27 +83,56 @@ public class Test19 : BaseTest
         //    break;
         //}
 
-
         int totalScore = 0;
-        foreach (BluePrint bp in m_blueprints)
-        {
-            DateTime bpTime = DateTime.Now;
-            Result startResult = new Result();
-            startResult.BluePrint = bp;
-            startResult.Robots[(int)RobotType.Ore] = 1;
 
-            var bestResult = DoStep(startResult);
-            DebugOutput(SummariseBluePrint(bp));
-            DebugOutput("Best result blueprint " + bp.Id + " : " + bestResult.Inventory[(int)RobotType.Geode] + "  :  " + string.Join(",",bestResult.Route));
-            double bpElapsed = DateTime.Now.Subtract(bpTime).TotalMilliseconds;
-            DebugOutput("Elapsed = " + bpElapsed + " ms");
-            totalScore += (bestResult.Inventory[(int)RobotType.Geode] * bp.Id);
+        //Task<int>[] allTasks = new Task<int>[m_blueprints.Count];
+        //int count = 0;
+        //foreach (BluePrint bp in m_blueprints)
+        //{
+        //    allTasks[count] = new Task<int>(() =>
+        //    {
+        //        Console.WriteLine("Task on thread {0} started.", Thread.CurrentThread.ManagedThreadId);
+
+        //        DateTime bpTime = DateTime.Now;
+        //        Result startResult = new Result();
+        //        startResult.BluePrint = bp;
+        //        startResult.Robots[(int)RobotType.Ore] = 1;
+        //        startResult.Cache = new Dictionary<Result, Result>();
+
+        //        //var bestResult = DoStep(startResult);
+
+        //        DebugOutput(SummariseBluePrint(bp));
+        //        //DebugOutput("Best result blueprint " + bp.Id + " : " + bestResult.Inventory[(int)RobotType.Geode] + "  :  " + string.Join(",",bestResult.Route));
+        //        DebugOutput("Best result blueprint " + bp.Id + " : " + bestResult.Inventory[(int)RobotType.Geode]);
+        //        double bpElapsed = DateTime.Now.Subtract(bpTime).TotalMilliseconds;
+        //        DebugOutput("Elapsed = " + bpElapsed + " ms");
+        //        Console.WriteLine("Task on thread {0} completed.", Thread.CurrentThread.ManagedThreadId);
+        //        return (bestResult.Inventory[(int)RobotType.Geode] * bp.Id);
+        //    });
+
+
+        //    allTasks[count].Start();
+        //    count++;
+
+        //}
+        //Task.WaitAll(allTasks);
+        //foreach (Task<int> t in allTasks)
+        //{
+        //    totalScore += t.Result;
+        //}
+
+        foreach(BluePrint bp in m_blueprints)
+        {
+            int score = GetMaxGeodes(bp, 24);
+            int ibreak2 = 0;
+            int scoreF
         }
+
 
         //RunSimulation(best.BluePrint,best.Limits,true);
         double elapsed = DateTime.Now.Subtract(startTime).TotalMilliseconds;
-        DebugOutput("\nElapsed = "+elapsed+" ms");
-        DebugOutput("Total score : "+totalScore);
+        DebugOutput("\nElapsed = " + elapsed + " ms");
+        //DebugOutput("Total score : " + totalScore);
 
         WriteDebugInfo();
     }
@@ -116,7 +149,7 @@ public class Test19 : BaseTest
         int timeForObsidian = bp.ObsidianRobotClayCost * timeForClay;
         int timeForGeode = bp.GeodeRobotObsidianCost * timeForObsidian;
 
-        return string.Format("Blueprint {0} clay {1} obsidian {2} geode {3}",bp.Id,timeForClay,timeForObsidian,timeForGeode);
+        return string.Format("Blueprint {0} clay {1} obsidian {2} geode {3}", bp.Id, timeForClay, timeForObsidian, timeForGeode);
     }
 
     public SimulationResult RunSimulation(BluePrint bluePrint, int[] limits, bool debugInfo)
@@ -180,123 +213,265 @@ public class Test19 : BaseTest
 
     public Result DoStep(Result input)
     {
+        if (input == null)
+        {
+            return null;
+        }
+
+        if (input.Cache.ContainsKey(input))
+        {
+            return input.Cache[input];
+        }
+
+        Result maxResult = input;
+
         if (input.Time <= m_totalTime)
         {
-            //System.Console.WriteLine("Doing action "+input.action+" at time "+input.time);
-            Result maxResult = input;
-
             for (int i = 0; i < (int)RobotType.NumValues; i++)
             {
-                if (m_currentLimits[i] != 0 && input.Robots[i] >= m_currentLimits[i])
-                {
-                    continue;
-                }
+                //if (m_currentLimits[i] != 0 && input.Robots[i] >= m_currentLimits[i])
+                //{
+                //    continue;
+                //}
 
-                
-                var subStep = SubStep(input,(RobotType)i);
-                if (subStep != null )
-                {
-                    var result = DoStep(subStep);
 
-                    if (result != null )     
+                var subStep = SubStep(input, (RobotType)i, false);
+                if (subStep != null)
+                {
+                    var subStepResult = DoStep(subStep);
+
+                    if (subStepResult != null)
                     {
-                        if (maxResult.Inventory[(int)RobotType.Geode] < result.Inventory[(int)RobotType.Geode])
+                        if (maxResult.Score < subStepResult.Score)
                         {
-                            maxResult = result;
-                            if(result.Time < m_highestResult)
-                            {
-                                m_highestResult = result.Time;
-                                //System.Console.WriteLine("Have result for time "+maxResult.time+"  :  "+maxResult.inventory[(int)RobotType.Geode]+"  :  "+maxResult.route);
-                            }
+                            maxResult = subStepResult;
                         }
                     }
                 }
-                else
-                {
-                    int ibreak = 0;
-                }
-
             }
+            var waitSubStep = SubStep(input, RobotType.Ore, true);
+            var waitSubStepResult = DoStep(waitSubStep);
 
-            return maxResult;
+            if (waitSubStepResult != null)
+            {
+                if (maxResult.Score < waitSubStepResult.Score)
+                {
+                    maxResult = waitSubStepResult;
+                }
+            }
         }
         else
         {
-            return null ;
+            maxResult = null;
         }
+
+        //input.Cache[input] = maxResult;
+
+        return maxResult;
     }
 
 
 
-    public Result SubStep(Result input,RobotType action)
+    public Result SubStep(Result input, RobotType action, bool wait)
     {
-        // 
-        //if(input.route.StartsWith("WaitWaitWaitWaitWaitWaitWaitWaitWaitWait"))
-        //{
-        //    return null ;
-        //}
+        if (wait)
+        {
+            Result waitResult = input.Copy(action);
+            waitResult.Time += 1;
 
-        //if(action == RobotType.Ore && input.Time > 12)
-        //{
-        //    return null;
-        //}
-            
-        //if(action == RobotType.Clay && input.Time > 18)
-        //{
-        //    return null;
-        //}
+            for (int i = 0; i < waitResult.Inventory.Length; i++)
+            {
+                waitResult.Inventory[i] += waitResult.Robots[i];
+            }
+            return waitResult;
+        }
 
-
-        bool canBuild = false;
         int[] costs = input.BluePrint.Costs[action];
 
-        if (action != RobotType.Wait)
+
+        for (int i = 0; i < input.Inventory.Length; i++)
         {
-            bool valid = true;
-            for (int i = 0; i < input.Inventory.Length; i++)
+            if (input.Inventory[i] < costs[i])
             {
-                if (input.Inventory[i] < costs[i])
-                {
-                    valid = false;
-                    break;
-                }
+                return null;
             }
-            canBuild = valid;
         }
 
-        if(canBuild && (action == RobotType.Geode || action == RobotType.Obsidian ))
+        int maxOre = input.BluePrint.MaxPerTurnCosts[RobotType.Ore];
+        int maxClay = input.BluePrint.MaxPerTurnCosts[RobotType.Clay];
+        int maxObisidian = input.BluePrint.MaxPerTurnCosts[RobotType.Obsidian];
+
+        int ore = input.Inventory[(int)RobotType.Ore];
+        int clay = input.Inventory[(int)RobotType.Clay];
+        int obsidian = input.Inventory[(int)RobotType.Obsidian];
+
+        //if ((action == RobotType.Ore && ore >= maxOre) ||
+        //    (action == RobotType.Clay && clay >= maxClay) ||
+        //    (action == RobotType.Obsidian && (obsidian >= maxObisidian || (clay == 0))) ||
+        //    (action == RobotType.Geode && obsidian == 0))
+        //{
+        //    return null;
+        //}
+
+        if ((action == RobotType.Ore && ore >= maxOre))
         {
-            int ibreak =0 ;
+            return null;
+        }
+        if(action == RobotType.Clay && clay >= maxClay)
+        {
+            return null;
+        }
+        if(action == RobotType.Obsidian && (obsidian >= maxObisidian || (clay < maxClay)))
+        {
+            return null;
+        }
+        if((action == RobotType.Geode && obsidian == 0))
+        {
+            return null;
         }
 
-        if (canBuild || action == RobotType.Wait)
+        Result newResult = input.Copy(action);
+        newResult.Time += 1;
+
+        for (int i = 0; i < newResult.Inventory.Length; i++)
         {
-            Result newResult = input.Copy(action);
-
-            if (canBuild)
-            {
-                for (int i = 0; i < newResult.Inventory.Length; i++)
-                {
-                    newResult.Inventory[i] -= costs[i];
-                }
-            }
-
-            for (int i = 0; i < newResult.Inventory.Length; i++)
-            {
-                newResult.Inventory[i] += newResult.Robots[i];
-            }
-
-            if (canBuild)
-            {
-                newResult.Robots[(int)action]++;
-            }
-
-            newResult.Time += 1;
-            return newResult;
-
+            newResult.Inventory[i] -= costs[i];
         }
-        return null ;
+
+        for (int i = 0; i < newResult.Inventory.Length; i++)
+        {
+            newResult.Inventory[i] += newResult.Robots[i];
+        }
+
+        newResult.Robots[(int)action]++;
+
+        return newResult;
+
     }
+
+    private int GetMaxGeodes(BluePrint bp, int nrMinutes)
+	{
+		int result = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			result = Math.Max(result, getMaxGeodesForType(bp, nrMinutes, (RobotType)i, 0, 0, 0, 0, 1, 0, 0, 0));
+		}
+		return result;
+	}
+
+
+    private int getMaxGeodesForType(BluePrint bp, int minutesLeft, RobotType goal, int nrOre, int nrClay, int nrOb,
+			int nrGeo, int nrOreRobots, int nrClayRobots, int nrObRobots, int nrGeoRobots)
+	{
+		if (minutesLeft == 0)
+		{
+			return nrGeo;
+		}
+		// Stop building a robot if we have more of the resource it builds than we need.
+		// final int maxOre = Math.Max(b.oreCost(), Math.Max(b.clayOreCost(),
+		// Math.Max(b.obOreCost(), b.geoObCost())));
+		int maxOre = bp.MaxPerTurnCosts[(int)RobotType.Ore];
+
+//		if (goal == ORE_ROBOT && nrOre >= maxOre || goal == CLAY_ROBOT && nrClay >= b.obClayCost()
+//				|| goal == OB_ROBOT && (nrOb >= b.geoObCost() || nrClay == 0) || goal == GEO_ROBOT && nrOb == 0)
+//		{
+//			return 0;
+//		}
+
+		if (goal == RobotType.Ore && nrOre >= maxOre)
+		{
+			return 0;
+		}
+
+		if (goal == RobotType.Clay && nrClay >= bp.Costs[RobotType.Obsidian][(int)RobotType.Clay])
+		{
+			return 0;
+		}
+		if (goal == RobotType.Obsidian && (nrOb >= bp.Costs[RobotType.Geode][(int)RobotType.Obsidian] || nrClay == 0))
+		{
+			return 0;
+		}
+		if (goal == RobotType.Geode && nrOb == 0)
+		{
+			return 0;
+		}
+
+        State state = new State(nrOre, nrClay, nrOb, nrGeo, nrOreRobots, nrClayRobots, nrObRobots, nrGeoRobots,minutesLeft, goal);
+
+		//if (cache.containsKey(state))
+		//{
+		//	return cache.get(state);
+		//}
+		int max = 0;
+
+		while (minutesLeft > 0)
+		{
+			if (goal == RobotType.Ore && nrOre >= bp.Costs[RobotType.Ore][(int)RobotType.Ore])
+			{ // Build ore robot
+				int tmpMax = 0;
+				for (int newGoal = 0; newGoal < 4; newGoal++)
+				{
+					tmpMax = Math.Max(tmpMax,
+							getMaxGeodesForType(bp, minutesLeft - 1, (RobotType)newGoal, nrOre - bp.Costs[RobotType.Ore][(int)RobotType.Ore] + nrOreRobots,
+									nrClay + nrClayRobots, nrOb + nrObRobots, nrGeo + nrGeoRobots, nrOreRobots + 1,
+									nrClayRobots, nrObRobots, nrGeoRobots));
+				}
+				max = Math.Max(max, tmpMax);
+				//cache.put(state, max);
+				return max;
+			} else if (goal == RobotType.Clay  && nrOre >= bp.Costs[RobotType.Clay][(int)RobotType.Ore])
+			{ // Build clay robot
+				int tmpMax = 0;
+				for (int newGoal = 0; newGoal < 4; newGoal++)
+				{
+					tmpMax = Math.Max(tmpMax,
+							getMaxGeodesForType(bp, minutesLeft - 1, (RobotType)newGoal, nrOre - bp.Costs[RobotType.Clay][(int)RobotType.Ore] + nrOreRobots,
+									nrClay + nrClayRobots, nrOb + nrObRobots, nrGeo + nrGeoRobots, nrOreRobots,
+									nrClayRobots + 1, nrObRobots, nrGeoRobots));
+				}
+				max = Math.Max(max, tmpMax);
+				//cache.put(state, max);
+				return max;
+			} else if (goal == RobotType.Obsidian  && nrOre >= bp.Costs[RobotType.Obsidian][(int)RobotType.Ore] && nrClay >= bp.Costs[RobotType.Obsidian][(int)RobotType.Clay])
+			{ // Build ob robot
+				int tmpMax = 0;
+				for (int newGoal = 0; newGoal < 4; newGoal++)
+				{
+					tmpMax = Math.Max(tmpMax,
+							getMaxGeodesForType(bp, minutesLeft - 1, (RobotType)newGoal, nrOre - bp.Costs[RobotType.Obsidian][(int)RobotType.Ore] + nrOreRobots,
+									nrClay - bp.Costs[RobotType.Obsidian][(int)RobotType.Clay] + nrClayRobots, nrOb + nrObRobots, nrGeo + nrGeoRobots,
+									nrOreRobots, nrClayRobots, nrObRobots + 1, nrGeoRobots));
+				}
+				max = Math.Max(max, tmpMax);
+				//cache.put(state, max);
+				return max;
+			} else if (goal == RobotType.Geode && nrOre >= bp.Costs[RobotType.Geode][(int)RobotType.Ore] && nrOb >= bp.Costs[RobotType.Geode][(int)RobotType.Obsidian])
+			{ // Build geo robot
+				int tmpMax = 0;
+				for (int newGoal = 0; newGoal < 4; newGoal++)
+				{
+					tmpMax = Math.Max(tmpMax,
+							getMaxGeodesForType(bp, minutesLeft - 1, (RobotType)newGoal, nrOre - bp.Costs[RobotType.Geode][(int)RobotType.Ore] + nrOreRobots,
+									nrClay + nrClayRobots, nrOb - bp.Costs[RobotType.Geode][(int)RobotType.Obsidian] + nrObRobots, nrGeo + nrGeoRobots,
+									nrOreRobots, nrClayRobots, nrObRobots, nrGeoRobots + 1));
+				}
+				max = Math.Max(max, tmpMax);
+				//cache.put(state, max);
+				return max;
+			}
+			// Can not build a robot, so continue gathering resources.
+			minutesLeft--;
+			nrOre += nrOreRobots;
+			nrClay += nrClayRobots;
+			nrOb += nrObRobots;
+			nrGeo += nrGeoRobots;
+			max = Math.Max(max, nrGeo);
+		}
+		//cache.put(state, max);
+		return max;
+	}
+
+
 
 
     public class SimulationResult
@@ -457,23 +632,68 @@ public class Test19 : BaseTest
     public class Result
     {
         public BluePrint BluePrint;
-        public int[] Inventory =  new int[(int)RobotType.NumValues];
-        public int[] Robots =  new int[(int)RobotType.NumValues];
+        public int[] Inventory = new int[(int)RobotType.NumValues];
+        public int[] Robots = new int[(int)RobotType.NumValues];
         public int Time;
-        public List<RobotType> Route = new List<RobotType>();
+        //public List<RobotType> Route = new List<RobotType>();
+        public Dictionary<Result, Result> Cache;
+        public RobotType Action;
 
         public Result Copy(RobotType action)
         {
             Result result = new Result();
             result.BluePrint = BluePrint;
-            Array.Copy(Inventory,result.Inventory,Inventory.Length);
-            Array.Copy(Robots,result.Robots,Robots.Length);
+            Array.Copy(Inventory, result.Inventory, Inventory.Length);
+            Array.Copy(Robots, result.Robots, Robots.Length);
             result.Time = Time;
-            result.Route.AddRange(Route);
-            result.Route.Add(action);
+            //result.Route.AddRange(Route);
+            //result.Route.Add(action);
+            result.Action = action;
+            result.Cache = Cache;
             return result;
         }
 
+        public int Score
+        { get { return Inventory[(int)RobotType.Geode]; } }
+
+
+        public override bool Equals(object obj)
+        {
+            Result r = obj as Result;
+            if (r.Time != Time)
+            {
+                return false;
+            }
+            if (r.Action != Action)
+            {
+                return false;
+            }
+            for (int i = 0; i < Inventory.Length; ++i)
+            {
+                if (r.Inventory[i] != Inventory[i])
+                {
+                    return false;
+                }
+            }
+            for (int i = 0; i < Robots.Length; ++i)
+            {
+                if (r.Robots[i] != Robots[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+            //return obj is Result result &&
+            //       EqualityComparer<int[]>.Default.Equals(Inventory, result.Inventory) &&
+            //       EqualityComparer<int[]>.Default.Equals(Robots, result.Robots) &&
+            //       Time == result.Time &&
+            //       Action == result.Action;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Inventory, Robots, Time, Action);
+        }
     }
 
 
@@ -487,7 +707,8 @@ public class Test19 : BaseTest
         public int GeodeRobotOreCost;
         public int GeodeRobotObsidianCost;
 
-        public Dictionary<RobotType,int[]> Costs = new Dictionary<RobotType, int[]>();
+        public Dictionary<RobotType, int[]> Costs = new Dictionary<RobotType, int[]>();
+        public Dictionary<RobotType, int> MaxPerTurnCosts = new Dictionary<RobotType, int>();
 
         public BluePrint(int id, int oreRobotCost, int clayRobotCost, int obsidianRobotOreCost,
                         int obsidianRobotClayCost, int geodeRobotOreCost, int geodeRobotObsidianCost)
@@ -500,7 +721,8 @@ public class Test19 : BaseTest
             GeodeRobotOreCost = geodeRobotOreCost;
             GeodeRobotObsidianCost = geodeRobotObsidianCost;
 
-            Costs[RobotType.Wait] = new int[(int)RobotType.NumValues];
+
+
             Costs[RobotType.Ore] = new int[(int)RobotType.NumValues];
             Costs[RobotType.Clay] = new int[(int)RobotType.NumValues];
             Costs[RobotType.Obsidian] = new int[(int)RobotType.NumValues];
@@ -509,20 +731,27 @@ public class Test19 : BaseTest
             Costs[RobotType.Ore][(int)RobotType.Ore] = oreRobotCost;
 
             Costs[RobotType.Clay][(int)RobotType.Ore] = clayRobotCost;
-            
+
             Costs[RobotType.Obsidian][(int)RobotType.Ore] = obsidianRobotOreCost;
             Costs[RobotType.Obsidian][(int)RobotType.Clay] = obsidianRobotClayCost;
 
             Costs[RobotType.Geode][(int)RobotType.Ore] = geodeRobotOreCost;
             Costs[RobotType.Geode][(int)RobotType.Obsidian] = geodeRobotObsidianCost;
 
+            int maxOre = Math.Max(oreRobotCost, Math.Max(clayRobotCost, Math.Max(obsidianRobotOreCost, geodeRobotOreCost)));
+            int maxClay = obsidianRobotClayCost;
+            int maxObsidian = geodeRobotObsidianCost;
 
+            MaxPerTurnCosts[RobotType.Ore] = maxOre;
+            MaxPerTurnCosts[RobotType.Clay] = maxClay;
+            MaxPerTurnCosts[RobotType.Obsidian] = maxObsidian;
 
         }
 
+
         public void GetCost2(RobotType type, int[] values)
         {
-            Array.Fill(values,0);
+            Array.Fill(values, 0);
 
             if (type == RobotType.Ore)
             {
@@ -552,9 +781,13 @@ public class Test19 : BaseTest
 
 
 
+public record State(int nrOre, int nrClay, int nrOb, int nrGeo, int nrOreRobot, 
+                    int nrClayRobot, int nrObRobot,int nrGeoRobot, int minutesLeft, RobotType goal)
+{
+}
+
 public enum RobotType
 {
-    Wait,
     Ore,
     Clay,
     Obsidian,
