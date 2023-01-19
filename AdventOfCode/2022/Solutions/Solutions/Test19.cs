@@ -8,7 +8,7 @@ public class Test19 : BaseTest
     private List<BluePrint> m_blueprints = new List<BluePrint>();
     private List<SimulationResult> m_simulationResults = new List<SimulationResult>();
 
-    public int m_totalTime = 24;//24;
+    public int m_totalTime = 24;
     public int m_currentTime = 0;
 
     public int[] m_currentLimits = new int[(int)RobotType.NumValues];
@@ -18,11 +18,92 @@ public class Test19 : BaseTest
         DateTime startTime = DateTime.Now;
 
         TestID = 19;
-        IsTestInput = true;
+        IsTestInput = false;
         IsPart2 = false;
         ReadDataFile();
 
+        BuildBluePrints();
 
+        int totalScore = IsPart2?1:0;
+        m_totalTime = IsPart2?32:24;
+
+        Task<int>[] allTasks = new Task<int>[m_blueprints.Count];
+        int count = 0;
+        foreach (BluePrint bp in m_blueprints)
+        {
+            allTasks[count] = new Task<int>(() =>
+            {
+                Console.WriteLine("Task on thread {0} started.", Thread.CurrentThread.ManagedThreadId);
+
+                DateTime bpTime = DateTime.Now;
+                Result startResult = new Result();
+                startResult.BluePrint = bp;
+                startResult.Robots[(int)RobotType.Ore] = 1;
+                startResult.Cache = new Dictionary<Result, Result>();
+
+                int javaScore = GetMaxGeodes(bp, m_totalTime);
+                var bestResult = DoStep(startResult);
+                int score = 0;
+                if (bestResult != null)
+                {
+                    score = bestResult.Inventory[(int)RobotType.Geode];
+                }
+
+
+                DebugOutput(SummariseBluePrint(bp));
+                DebugOutput("Best result blueprint " + bp.Id + " : " + score);
+                double bpElapsed = DateTime.Now.Subtract(bpTime).TotalMilliseconds;
+                DebugOutput("Elapsed = " + bpElapsed + " ms");
+                Console.WriteLine("Task on thread {0} completed.", Thread.CurrentThread.ManagedThreadId);
+                if(IsPart2)
+                {
+                    return javaScore;
+                }
+                else
+                {
+                    return (javaScore * bp.Id);
+                }
+            });
+
+
+            allTasks[count].Start();
+            count++;
+
+        }
+        Task.WaitAll(allTasks);
+        foreach (Task<int> t in allTasks)
+        {
+            if(IsPart2)
+            {
+                totalScore *= t.Result;
+            }
+            else
+            {
+                totalScore += t.Result;
+            }
+        }
+
+        //foreach (BluePrint bp in m_blueprints)
+        //{
+        //    int score = GetMaxGeodes(bp, 24);
+        //    int ibreak2 = 0;
+        //    int scoreF
+        //}
+
+
+        //RunSimulation(best.BluePrint,best.Limits,true);
+        double elapsed = DateTime.Now.Subtract(startTime).TotalMilliseconds;
+        DebugOutput("\nElapsed = " + elapsed + " ms");
+        DebugOutput("Total score : " + totalScore);
+
+        WriteDebugInfo();
+    }
+
+
+    public void BuildBluePrints()
+    {
+        int lineCount = IsPart2?3:m_dataFileContents.Count;
+        
         string numberPattern = @"\.*[\+-]?\d+\.*";
 
         Regex r1 = new Regex(numberPattern);
@@ -59,88 +140,13 @@ public class Test19 : BaseTest
                 int.Parse(geodeRobotOreCost), int.Parse(geodeRobotObsidianCost));
 
             m_blueprints.Add(blueprint);
+            lineCount--;
+            if(lineCount == 0)
+            {
+                break;
+            }
+
         }
-
-        int[] robots = new int[(int)RobotType.NumValues];
-        robots[(int)RobotType.Ore] = 1;
-        int[] inventory = new int[(int)RobotType.NumValues];
-
-        int ibreak = 0;
-
-        m_currentLimits[(int)RobotType.Ore] = 8;
-        m_currentLimits[(int)RobotType.Clay] = 5;
-
-        //foreach (BluePrint bp in m_blueprints)
-        //{
-        //    int[] limits = new int[] { 1, 8, 0, 0 };
-        //    m_simulationResults.Add(RunSimulation(bp, limits, true));
-
-        //    int timeForClay = bp.ClayRobotCost;
-        //    int timeForObsidian = bp.ObsidianRobotClayCost * timeForClay;
-        //    int timeForGeode = bp.GeodeRobotObsidianCost * timeForObsidian;
-
-        //    m_debugInfo.Add(String.Format("Blueprint {0} clay {1} obsidian {2} geode {3}", bp.Id, timeForClay, timeForObsidian, timeForGeode));
-        //    break;
-        //}
-
-        int totalScore = 0;
-
-        //Task<int>[] allTasks = new Task<int>[m_blueprints.Count];
-        //int count = 0;
-        //foreach (BluePrint bp in m_blueprints)
-        //{
-        //    allTasks[count] = new Task<int>(() =>
-        //    {
-        //        Console.WriteLine("Task on thread {0} started.", Thread.CurrentThread.ManagedThreadId);
-
-        //        DateTime bpTime = DateTime.Now;
-        //        Result startResult = new Result();
-        //        startResult.BluePrint = bp;
-        //        startResult.Robots[(int)RobotType.Ore] = 1;
-        //        startResult.Cache = new Dictionary<Result, Result>();
-
-        //        //var bestResult = DoStep(startResult);
-
-        //        DebugOutput(SummariseBluePrint(bp));
-        //        //DebugOutput("Best result blueprint " + bp.Id + " : " + bestResult.Inventory[(int)RobotType.Geode] + "  :  " + string.Join(",",bestResult.Route));
-        //        DebugOutput("Best result blueprint " + bp.Id + " : " + bestResult.Inventory[(int)RobotType.Geode]);
-        //        double bpElapsed = DateTime.Now.Subtract(bpTime).TotalMilliseconds;
-        //        DebugOutput("Elapsed = " + bpElapsed + " ms");
-        //        Console.WriteLine("Task on thread {0} completed.", Thread.CurrentThread.ManagedThreadId);
-        //        return (bestResult.Inventory[(int)RobotType.Geode] * bp.Id);
-        //    });
-
-
-        //    allTasks[count].Start();
-        //    count++;
-
-        //}
-        //Task.WaitAll(allTasks);
-        //foreach (Task<int> t in allTasks)
-        //{
-        //    totalScore += t.Result;
-        //}
-
-        foreach(BluePrint bp in m_blueprints)
-        {
-            int score = GetMaxGeodes(bp, 24);
-            int ibreak2 = 0;
-            int scoreF
-        }
-
-
-        //RunSimulation(best.BluePrint,best.Limits,true);
-        double elapsed = DateTime.Now.Subtract(startTime).TotalMilliseconds;
-        DebugOutput("\nElapsed = " + elapsed + " ms");
-        //DebugOutput("Total score : " + totalScore);
-
-        WriteDebugInfo();
-    }
-
-    public void DebugOutput(string s)
-    {
-        m_debugInfo.Add(s);
-        System.Console.WriteLine(s);
     }
 
     public string SummariseBluePrint(BluePrint bp)
@@ -151,6 +157,8 @@ public class Test19 : BaseTest
 
         return string.Format("Blueprint {0} clay {1} obsidian {2} geode {3}", bp.Id, timeForClay, timeForObsidian, timeForGeode);
     }
+
+
 
     public SimulationResult RunSimulation(BluePrint bluePrint, int[] limits, bool debugInfo)
     {
