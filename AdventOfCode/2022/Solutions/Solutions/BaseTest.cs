@@ -58,10 +58,13 @@ public abstract class BaseTest
         }
     }
 
-    public void DebugOutput(string s)
+    public void DebugOutput(string s,bool testOnly=false)
     {
-        m_debugInfo.Add(s);
-        System.Console.WriteLine(s);
+        if(!testOnly || (testOnly && IsTestInput))
+        {
+            m_debugInfo.Add(s);
+            System.Console.WriteLine(s);
+        }
     }
 
     public abstract void RunTest();

@@ -1,0 +1,4 @@
+Index 1000 : 6773
+Index 2000 : 512
+Index 3000 : -4572
+Answer is : 2713

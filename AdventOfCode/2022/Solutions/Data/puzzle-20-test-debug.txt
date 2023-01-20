@@ -14,7 +14,7 @@ Initial arrangement:
 1,2,-3,0,3,4,-2
 4 moves between -3 and 0 :
 1,2,-3,4,0,3,-2
-Index 1000 : -2
-Index 2000 : 3
-Index 3000 : 0
-Answer is : 1
+Index 1000 : 4
+Index 2000 : -3
+Index 3000 : 2
+Answer is : 3
