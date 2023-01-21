@@ -202,83 +202,44 @@ public class MonkeyNode
                 case "":
                     return Value;
                 case "+":
-                    Int128 newValAdd = valToMatch - lhsNode.Result;
-                    Test.DebugOutput($"PLUS {valToMatch} - {lhsNode.Result}");
+                    Int128 newValAdd = valToMatch - known.Result;
+                    Test.DebugOutput($"PLUS {valToMatch} - {known.Result}");
                     return unknown.Find(newValAdd);
                 case "-":
                     Int128 newValSub = 0;
                     if(unknown == rhsNode)
                     {
-                        Test.DebugOutput($"MINUS  {valToMatch} - {known.Result}");
-                        newValSub= valToMatch - known.Result;
+                        Test.DebugOutput($"MINUS {known.Result} - {valToMatch} ");
+                        newValSub= known.Result - valToMatch;
                     }
                     else
                     {
-                        Test.DebugOutput($"MINUS  {known.Result} + {valToMatch}");
-                        newValSub = known.Result + valToMatch;
+                        Test.DebugOutput($"MINUS {valToMatch} + {known.Result}");
+                        newValSub = valToMatch + known.Result;
                     }
                     return unknown.Find(newValSub);
                 case "*":
-                    Test.DebugOutput($"MULT {valToMatch} / {lhsNode.Result} ");
-                    Int128 newValMul = valToMatch / lhsNode.Result;
+                    Test.DebugOutput($"MULT {valToMatch} / {known.Result} ");
+                    Int128 newValMul = valToMatch / known.Result;
 
                     return unknown.Find(newValMul);
                 case "/":
-                    Test.DebugOutput($"DIV {known.Result} * {valToMatch} ");
-                    Int128 newValDiv = known.Result * valToMatch;
-                    return unknown.Find(newValDiv);
+                    if(unknown == lhsNode)
+                    {
+                        Test.DebugOutput($"DIV {valToMatch} * {known.Result} ");
+                        Int128 newValDiv = valToMatch * known.Result;
+                        return unknown.Find(newValDiv);
+                    }
+                    else
+                    {
+                        Test.DebugOutput($"DIV {valToMatch} / {known.Result} ");
+                        Int128 newValDiv = valToMatch / known.Result;
+                        return unknown.Find(newValDiv);
+                    }
+                }
+
+
             }
-
-
-            //if (leftContains)
-            //{
-            //    switch (MathOperator)
-            //    {
-            //        case "":
-            //            return Value;
-            //        case "+":
-            //            //Int128 newValAdd = valToMatch - m_map[RHS].Result;
-            //            Int128 newValAdd = m_map[RHS].Result - valToMatch;
-            //            return m_map[LHS].Find(newValAdd);
-            //        case "-":
-            //            //Int128 newValSub = valToMatch + m_map[RHS].Result;
-            //            Int128 newValSub = m_map[RHS].Result + valToMatch;
-            //            return m_map[LHS].Find(newValSub);
-            //        case "*":
-            //            //Int128 newValMul = valToMatch / m_map[RHS].Result;
-            //            Int128 newValMul = m_map[RHS].Result / valToMatch;
-            //            return m_map[LHS].Find(newValMul);
-            //        case "/":
-            //            //Int128 newValDiv = valToMatch * m_map[RHS].Result;
-            //            Int128 newValDiv = m_map[RHS].Result * valToMatch;
-            //            return m_map[LHS].Find(newValDiv);
-            //    }
-            //}
-            //else if (rightContains)
-            //{
-            //    switch (MathOperator)
-            //    {
-            //        case "":
-            //            return Value;
-            //        case "+":
-            //            Int128 newValAdd = valToMatch - m_map[LHS].Result;
-            //            return m_map[RHS].Find(newValAdd);
-            //        case "-":
-            //            Int128 newValSub = valToMatch + m_map[LHS].Result;
-            //            //Int128 newValSub = m_map[LHS].Result - valToMatch;
-            //            return m_map[RHS].Find(newValSub);
-            //        case "*":
-            //            Int128 newValMul = valToMatch / m_map[LHS].Result;
-            //            //Int128 newValMul = m_map[LHS].Result / valToMatch;
-            //            return m_map[RHS].Find(newValMul);
-            //        case "/":
-            //            Int128 newValDiv = valToMatch * m_map[LHS].Result;
-            //            return m_map[RHS].Find(newValDiv);
-
-            //    }
-
-            //}
-        }
         return Value;
     }
 }
