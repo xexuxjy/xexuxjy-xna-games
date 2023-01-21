@@ -3,18 +3,21 @@
 public class Test20 : BaseTest
 {
 
-    public List<(int,int)> m_numberList = new List<(int,int)>();
+    public List<(int,long)> m_numberList = new List<(int,long)>();
 
     public override void RunTest()
     {
         TestID = 20;
-        IsTestInput = false;
+        IsTestInput = false ;
+        IsPart2 = true;
 
         ReadDataFile();
         int count = 0;
+        long decryptionKey = IsPart2?811589153:1;
+
         foreach (string line in m_dataFileContents)
         {
-            m_numberList.Add(((count++),int.Parse(line)));
+            m_numberList.Add(((count++),long.Parse(line)*decryptionKey));
         }
 
         // need to handle multiples of the same number.
@@ -24,25 +27,26 @@ public class Test20 : BaseTest
         // wrap an object and it's original position together should work.
 
 
-
         DebugOutput("Initial arrangement:",true);
         DebugOutput(string.Join(",", m_numberList.Select(x=>x.Item2)),true);
 
-        for (int i = 0; i < m_numberList.Count; i++)
+        int numMixes = IsPart2?10:1;
+
+        for(int mix = 0; mix < numMixes;mix++)
         {
-            MoveItem(i);
+            for (int i = 0; i < m_numberList.Count; i++)
+            {
+                MoveItem(i);
+            }
         }
 
-
         int[] answerIndex = new int[] { 1000, 2000, 3000 };
-        int answer = 0;
+        long answer = 0;
         int zeroIndex = m_numberList.FindIndex(x=>x.Item2 == 0);
         foreach (int index in answerIndex)
         {
             int adjustedIndex = zeroIndex + index;
-            //int newIndex = GetWrappedValue(index);
-            //int score = m_numberList[newIndex];
-            int score = m_numberList[adjustedIndex%m_numberList.Count].Item2;
+            long score = m_numberList[adjustedIndex%m_numberList.Count].Item2;
             DebugOutput("Index " + index + " : " + score);
             answer += score;
         }
@@ -64,33 +68,22 @@ public class Test20 : BaseTest
         var item = m_numberList.Find(x=>x.Item1== position);
         int index = m_numberList.IndexOf(item);
 
-        int newIndex = index + item.Item2;
+        long newIndex = index + item.Item2;
         newIndex = GetWrappedValue(newIndex);
-
-        if(newIndex < 0)
-        {
-            int ibreak =0 ;
-        }
 
         m_numberList.RemoveAt(index);
 
-        if (newIndex > m_numberList.Count)
-        {
-            newIndex = 0;
-            //newIndex = m_numberList.Count;
-        }
 
-
-        m_numberList.Insert(newIndex, item);
+        m_numberList.Insert((int)newIndex, item);
 
         if (item.Item2 != 0)
         {
-            int prevIndex = newIndex - 1;
+            int prevIndex = (int)newIndex - 1;
             if (prevIndex < 0)
             {
                 prevIndex += m_numberList.Count;
             }
-            int nextIndex = newIndex + 1;
+            int nextIndex = (int)newIndex + 1;
             if (nextIndex >= m_numberList.Count)
             {
                 nextIndex -= m_numberList.Count;
@@ -106,63 +99,19 @@ public class Test20 : BaseTest
         DebugOutput(string.Join(",", m_numberList.Select(x=>x.Item2)),true);
     }
 
-    public int GetWrappedValue(int newIndex)
+
+    public long GetWrappedValue(long newIndex)
     {
-        int original = newIndex;
-        bool wrappedBack = false;
-        bool wrappedForward = false;
-        bool addToEnd = false;
+        newIndex = (newIndex) % (m_numberList.Count - 1);
 
-        if(original == 9999)
-        {
-            int ibreak = 0;
-        }
-
-        if (newIndex == 0)
-        {
-            addToEnd = true;
-            newIndex = m_numberList.Count - 1;
-        }
-        else
-        {
-            while (newIndex < 0)
-            {
-                wrappedBack = true;
-                newIndex += (m_numberList.Count);
-            }
-            while (newIndex >= m_numberList.Count)
-            {
-                wrappedForward = true;
-                newIndex -= m_numberList.Count;
-            }
-
-            if (wrappedBack)
-            {
-                newIndex--;
-            }
-            if (wrappedForward)
-            {
-                newIndex++;
-            }
-        }
-
-        if(original == newIndex)
-        {
-            int ibreak = 0;
-        }
-
-        if(newIndex == m_numberList.Count)
-        {
-            newIndex--;
-        }
         if (newIndex < 0)
         {
-            int ibreak =0 ;
-            newIndex = 0;//m_numberList.Count - 1;
+            newIndex = m_numberList.Count + newIndex - 1;
         }
         return newIndex;
 
     }
+
 
 
 }

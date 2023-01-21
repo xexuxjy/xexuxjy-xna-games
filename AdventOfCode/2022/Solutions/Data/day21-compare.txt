@@ -1,0 +1,146 @@
+LHS has the human  in it
+Checking node fzvp OP *
+MULT 88521161883075 / 9
+Checking node rcmw OP +
+PLUS 9835684653675 - 937
+Checking node tjgv OP /
+DIV 9835684652738 * 9
+Checking node qfpr OP -
+MINUS 193764052094285 - 88521161874642
+Checking node fcfh OP /
+DIV 105242890219643 * 2
+Checking node whmw OP +
+PLUS 210485780439286 - 226
+Checking node wjmn OP *
+MULT 210485780439060 / 2
+Checking node vqgg OP -
+MINUS 105242890219530 + 598
+Checking node nfsh OP *
+MULT 105242890220128 / 4
+Checking node tgrl OP -
+MINUS 26310722555032 + 972
+Checking node bwvn OP /
+DIV 26310722556004 * 3
+Checking node qzqw OP +
+PLUS 78932167668012 - 881
+Checking node gbtf OP /
+DIV 78932167667131 * 2
+Checking node qnpj OP +
+PLUS 157864335334262 - 685
+Checking node zpjz OP +
+PLUS 157864335333577 - 216
+Checking node zrbf OP -
+MINUS 157864335333361 + 273
+Checking node bjvv OP *
+MULT 157864335333634 / 2
+Checking node csmn OP +
+PLUS 78932167666817 - 549
+Checking node tlpr OP /
+DIV 78932167666268 * 3
+Checking node jscf OP +
+PLUS 236796502998804 - 25
+Checking node cfrf OP +
+PLUS 236796502998779 - 516
+Checking node tnpv OP -
+MINUS 236796502998263 + 729
+Checking node tqtm OP *
+MULT 236796502998992 / 2
+Checking node jndl OP +
+PLUS 118398251499496 - 580
+Checking node jjtd OP *
+MULT 118398251498916 / 2
+Checking node zmdm OP -
+MINUS 59199125749458 + 545
+Checking node hpds OP /
+DIV 59199125750003 * 2
+Checking node tbcs OP +
+PLUS 118398251500006 - 754
+Checking node vrtl OP *
+MULT 118398251499252 / 4
+Checking node npzr OP -
+MINUS 29599562874813 + 910
+Checking node sgbm OP /
+DIV 29599562875723 * 2
+Checking node mpmv OP +
+PLUS 59199125751446 - 285
+Checking node zpjp OP /
+DIV 59199125751161 * 3
+Checking node shbq OP +
+PLUS 177597377253483 - 190
+Checking node nchz OP -
+MINUS 177597377253293 + 115
+Checking node wqlv OP *
+MULT 177597377253408 / 2
+Checking node mbct OP +
+PLUS 88798688626704 - 122
+Checking node hncw OP /
+DIV 88798688626582 * 2
+Checking node nthq OP +
+PLUS 177597377253164 - 320
+Checking node vqns OP *
+MULT 177597377252844 / 2
+Checking node pzbt OP -
+MINUS 88798688626422 + 726
+Checking node nzcm OP *
+MULT 88798688627148 / 9
+Checking node qhqq OP -
+MINUS 9866520958572 + 583
+Checking node pzmn OP /
+DIV 9866520959155 * 7
+Checking node lgdh OP +
+PLUS 69065646714085 - 917
+Checking node bpnb OP *
+MULT 69065646713168 / 7
+Checking node tcdr OP -
+MINUS 9866520959024 + 297
+Checking node mgvf OP /
+DIV 9866520959321 * 5
+Checking node mjlv OP +
+PLUS 49332604796605 - 114
+Checking node jgnv OP +
+PLUS 49332604796491 - 317
+Checking node nsdq OP *
+MULT 49332604796174 / 2
+Checking node mvvg OP +
+PLUS 24666302398087 - 396
+Checking node fvvl OP /
+DIV 24666302397691 * 4
+Checking node nglh OP -
+MINUS 98665209590764 + 476
+Checking node qvqr OP *
+MULT 98665209591240 / 6
+Checking node ptnq OP +
+PLUS 16444201598540 - 77
+Checking node bvpd OP /
+DIV 16444201598463 * 3
+Checking node bwll OP +
+PLUS 49332604795389 - 820
+Checking node jcmb OP -
+MINUS 49332604794569 + 733
+Checking node hgcq OP /
+DIV 49332604795302 * 3
+Checking node pbzj OP -
+MINUS 147997814385906 + 472
+Checking node pltf OP *
+MULT 147997814386378 / 2
+Checking node qhmb OP +
+PLUS 73998907193189 - 589
+Checking node sshh OP *
+MULT 73998907192600 / 10
+Checking node qndb OP -
+MINUS 7399890719260 + 899
+Checking node nlvg OP /
+DIV 7399890720159 * 3
+Checking node nmhf OP +
+PLUS 22199672160477 - 765
+Checking node zvrd OP *
+MULT 22199672159712 / 18
+Checking node lhfg OP +
+PLUS 1233315119984 - 574
+Checking node htqt OP /
+DIV 1233315119410 * 3
+Checking node rqmm OP -
+MINUS 3699945358230 + 334
+The monkey named "root" will yell: 282285213953670
+The new humn number is: 3699945358564
+Time elapsed: 807ms.

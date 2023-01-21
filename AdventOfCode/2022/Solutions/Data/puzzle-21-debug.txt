@@ -1,0 +1,146 @@
+LHS has the human  in it
+Checking node fzvp OP *
+MULT 88521161883075 / 9 
+Checking node rcmw OP +
+PLUS 9835684653675 - 21529339119308
+Checking node tjgv OP /
+DIV 9 * -11693654465633 
+Checking node qfpr OP -
+MINUS  -105242890190697 - 193764052094285
+Checking node fcfh OP /
+DIV 2 * -299006942284982 
+Checking node whmw OP +
+PLUS -598013884569964 - 226
+Checking node wjmn OP *
+MULT -598013884570190 / 2 
+Checking node vqgg OP -
+MINUS  598 + -299006942285095
+Checking node nfsh OP *
+MULT -299006942284497 / 5248 
+Checking node tgrl OP -
+MINUS  972 + -56975408209
+Checking node bwvn OP /
+DIV 3 * -56975407237 
+Checking node qzqw OP +
+PLUS -170926221711 - 881
+Checking node gbtf OP /
+DIV 2 * -170926222592 
+Checking node qnpj OP +
+PLUS -341852445184 - 34873
+Checking node zpjz OP +
+PLUS -341852480057 - 216
+Checking node zrbf OP -
+MINUS  273 + -341852480273
+Checking node bjvv OP *
+MULT -341852480000 / 2 
+Checking node csmn OP +
+PLUS -170926240000 - 16916
+Checking node tlpr OP /
+DIV 3 * -170926256916 
+Checking node jscf OP +
+PLUS -512778770748 - 50723
+Checking node cfrf OP +
+PLUS -512778821471 - 516
+Checking node tnpv OP -
+MINUS  729 + -512778821987
+Checking node tqtm OP *
+MULT -512778821258 / 25468 
+Checking node jndl OP +
+PLUS -20134239 - 24888
+Checking node jjtd OP *
+MULT -20159127 / 2 
+Checking node zmdm OP -
+MINUS  545 + -10079563
+Checking node hpds OP /
+DIV 2 * -10079018 
+Checking node tbcs OP +
+PLUS -20158036 - 25224
+Checking node vrtl OP *
+MULT -20183260 / 6306 
+Checking node npzr OP -
+MINUS  910 + -3200
+Checking node sgbm OP /
+DIV 2 * -2290 
+Checking node mpmv OP +
+PLUS -4580 - 285
+Checking node zpjp OP /
+DIV 3 * -4865 
+Checking node shbq OP +
+PLUS -14595 - 190
+Checking node nchz OP -
+MINUS  115 + -14785
+Checking node wqlv OP *
+MULT -14670 / 2 
+Checking node mbct OP +
+PLUS -7335 - 122
+Checking node hncw OP /
+DIV 2 * -7457 
+Checking node nthq OP +
+PLUS -14914 - 41802
+Checking node vqns OP *
+MULT -56716 / 20901 
+Checking node pzbt OP -
+MINUS  726 + -2
+Checking node nzcm OP *
+MULT 724 / 9 
+Checking node qhqq OP -
+MINUS  583 + 80
+Checking node pzmn OP /
+DIV 7 * 663 
+Checking node lgdh OP +
+PLUS 4641 - 917
+Checking node bpnb OP *
+MULT 3724 / 7 
+Checking node tcdr OP -
+MINUS  297 + 532
+Checking node mgvf OP /
+DIV 5 * 829 
+Checking node mjlv OP +
+PLUS 4145 - 114
+Checking node jgnv OP +
+PLUS 4031 - 317
+Checking node nsdq OP *
+MULT 3714 / 2 
+Checking node mvvg OP +
+PLUS 1857 - 7270
+Checking node fvvl OP /
+DIV 4 * -5413 
+Checking node nglh OP -
+MINUS  476 + -21652
+Checking node qvqr OP *
+MULT -21176 / 6 
+Checking node ptnq OP +
+PLUS -3529 - 4849
+Checking node bvpd OP /
+DIV 3 * -8378 
+Checking node bwll OP +
+PLUS -25134 - 13729
+Checking node jcmb OP -
+MINUS  733 + -38863
+Checking node hgcq OP /
+DIV 3 * -38130 
+Checking node pbzj OP -
+MINUS  472 + -114390
+Checking node pltf OP *
+MULT -113918 / 21929 
+Checking node qhmb OP +
+PLUS -5 - 21340
+Checking node sshh OP *
+MULT -21345 / 10 
+Checking node qndb OP -
+MINUS  899 + -2134
+Checking node nlvg OP /
+DIV 3 * -1235 
+Checking node nmhf OP +
+PLUS -3705 - 765
+Checking node zvrd OP *
+MULT -4470 / 18 
+Checking node lhfg OP +
+PLUS -248 - -111
+Checking node htqt OP /
+DIV 3 * -137 
+Checking node rqmm OP -
+MINUS  334 + -411
+Checking node humn OP 
+Found human node value : -77
+Root mismatch : LHS 193764052084419  RHS 88521161883075
