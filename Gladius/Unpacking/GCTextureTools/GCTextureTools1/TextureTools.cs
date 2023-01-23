@@ -739,22 +739,22 @@ namespace GCTextureTools
             string outputDirectory = baseOutput;
             string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
 
-            TestExtract(sourcePath, outputDirectory);
+            //TestExtract(sourcePath, outputDirectory);
             //TestReencode(reencodedOutputDirectory);
 
 
-            //if (args.Length != 2)
-            //{
-            //    System.Console.WriteLine("texturetools <original file>  <destination file>");
-            //}
-            //else
-            //{
-            //    string originalFilename = args[0];
-            //    string destinatioFilename = args[1];
+            if (args.Length != 2)
+            {
+                System.Console.WriteLine("texturetools <original file>  <destination file>");
+            }
+            else
+            {
+                string originalFilename = args[0];
+                string destinatioFilename = args[1];
 
-            //    EncodeFile(originalFilename, destinatioFilename);
+                EncodeFile(originalFilename, destinatioFilename);
 
-            //}
+            }
 
             int ibreak = 0;
         }
