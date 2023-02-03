@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 public struct IntVector2
 {
@@ -35,6 +36,10 @@ public struct IntVector2
     }
 
 
+    public static IntVector2 operator -(IntVector2 value1)
+    {
+        return new IntVector2(-value1.X, -value1.Y);
+    }
 
     public static IntVector2 operator -(IntVector2 value1, IntVector2 value2)
     {
@@ -47,18 +52,29 @@ public struct IntVector2
     public static IntVector2 operator /(IntVector2 value1, int value)
     {
         IntVector2 vector;
-        vector.X = value1.X /value;
-        vector.Y = value1.Y /value;
+        vector.X = value1.X / value;
+        vector.Y = value1.Y / value;
         return vector;
     }
 
     public static IntVector2 operator *(IntVector2 value1, int value)
     {
         IntVector2 vector;
-        vector.X = value1.X *value;
-        vector.Y = value1.Y *value;
+        vector.X = value1.X * value;
+        vector.Y = value1.Y * value;
         return vector;
     }
+
+    public static bool operator ==(IntVector2 value1, IntVector2 value2)
+    {
+        return value1.X == value2.X && value1.Y == value2.Y;
+    }
+
+    public static bool operator !=(IntVector2 value1, IntVector2 value2)
+    {
+        return value1.X != value2.X || value1.Y != value2.Y;
+    }
+
 
 
     public int ManhattanDistance(IntVector2 v)
@@ -70,6 +86,14 @@ public struct IntVector2
 
     }
 
+    public override bool Equals([NotNullWhen(true)] object obj)
+    {
+        return base.Equals(obj);
+    }
+    public override string ToString()
+    {
+        return "" + X + "," + Y;
+    }
 
     public int X;
     public int Y;
