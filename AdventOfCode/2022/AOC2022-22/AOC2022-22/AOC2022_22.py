@@ -156,14 +156,14 @@ class Cube:
                         loc = C(rect(rho, phi + pi / 2) + offset)
                 match self.grid[loc.imag][loc.real]:
                     case "#":  # Wall. No more movement will occur.
-                        debugfile.write("Instuction "+str(instructionCount)+" position is "+str(self.my_loc)+" face is "+str(self.my_face)+"\n")
+                        debugfile.write("Instuction wall "+str(instructionCount)+" position is "+str(self.my_loc)+"  dir is "+str(self.my_dir)+"\n")
 
                         return
                     case "." | ">" | "v" | "<" | "^":  # Successful movement.
                         self.grid[loc.imag][loc.real] = ">v<^"[dir]
                         self.my_loc = loc
                         self.my_dir = dir
-                        debugfile.write("Instuction "+str(instructionCount)+" position is "+str(self.my_loc)+" face is "+str(self.my_face)+"\n")
+                        debugfile.write("Instuction "+str(instructionCount)+" position is "+str(self.my_loc)+"  dir is "+str(self.my_dir)+"\n")
 
     def turn_right(self) -> None:
         self.my_dir = (self.my_dir + 1) % 4
@@ -176,11 +176,19 @@ class Cube:
         instructionCount = 0
 
         while instructions:
+            if instructionCount == 466 :
+                foo = 1;
+
             truncate = 1
             if instructions[0] == "L":
                 cube.turn_left()
+                #debugfile.write("TURN LEFT Instuction "+str(instructionCount)+" position is "+str(self.my_loc)+"  dir is "+str(self.my_dir)+" face is "+str(self.my_face)+"\n")
+                debugfile.write("TURN LEFT Instuction "+str(instructionCount)+" position is "+str(self.my_loc)+"  dir is "+str(self.my_dir)+"\n")
+
             elif instructions[0] == "R":
                 cube.turn_right()
+                #debugfile.write("TURN RIGHT Instuction "+str(instructionCount)+" position is "+str(self.my_loc)+"  dir is "+str(self.my_dir)+" face is "+str(self.my_face)+"\n")
+                debugfile.write("TURN RIGHT Instuction "+str(instructionCount)+" position is "+str(self.my_loc)+"  dir is "+str(self.my_dir)+"\n")
             else:
                 truncate = (
                     x.index("R")

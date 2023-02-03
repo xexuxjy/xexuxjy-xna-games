@@ -9,6 +9,14 @@ public class Test22 : BaseTest
 
     const int BlockSize = 50;
 
+    public static IntVector2 Left = new IntVector2(-1,0);
+    public static IntVector2 Right = new IntVector2(1,0);
+    public static IntVector2 Up = new IntVector2(0,1);
+    public static IntVector2 Down = new IntVector2(0,-1);
+
+    public Dictionary<IntVector2,int> DegreeMap = new Dictionary<IntVector2,int>();
+
+
 
     public override void RunTest()
     {
@@ -16,6 +24,15 @@ public class Test22 : BaseTest
         TestID = 22;
         IsTestInput = false;
         IsPart2 = true;
+
+        DegreeMap[Right]  = 0;
+        DegreeMap[Up]  = 90;
+        DegreeMap[Left]  = 180;
+        DegreeMap[Down]  = 270;
+
+
+
+
         ReadDataFile();
 
         m_map = new Map(m_dataFileContents);
@@ -33,10 +50,14 @@ public class Test22 : BaseTest
             if (command == "L")
             {
                 m_player.TurnLeft();
+                //m_debugInfo.Add($"TURN LEFT Instuction {i} position is ({m_player.Position.X}+{m_player.Position.Y}j) dir is {m_player.Degrees/90} face is {FaceForCoordinate(m_player.Position)}");
+                m_debugInfo.Add($"TURN LEFT Instuction {i} position is ({m_player.Position.X}+{m_player.Position.Y}j) dir is {m_player.Degrees/90}");
             }
             else if (command == "R")
             {
                 m_player.TurnRight();
+                //m_debugInfo.Add($"TURN RIGHT Instuction {i} position is ({m_player.Position.X}+{m_player.Position.Y}j) dir is {m_player.Degrees/90} face is {FaceForCoordinate(m_player.Position)}");
+                m_debugInfo.Add($"TURN RIGHT Instuction {i} position is ({m_player.Position.X}+{m_player.Position.Y}j) dir is {m_player.Degrees/90}");
             }
             else
             {
@@ -76,7 +97,9 @@ public class Test22 : BaseTest
             IntVector2 startPos = m_player.Position;
             if(IsPart2)
             {
-                m_player.Position = m_map.CubeWrapMove(m_player.Position, m_player.Forward,instructionNumber);
+                var result = m_map.CubeWrapMove(m_player.Position, m_player.Forward,instructionNumber);
+                m_player.Degrees = DegreeMap[result.Item1];
+                m_player.Position = result.Item2;
             }
             else
             {
@@ -86,8 +109,15 @@ public class Test22 : BaseTest
 
    
             Test22.FaceForCoordinate(m_player.Position);
-            m_debugInfo.Add($"Instuction {instructionNumber} position is ({m_player.Position.X}+{m_player.Position.Y}j) face is {FaceForCoordinate(m_player.Position)}");
-            
+            //m_debugInfo.Add($"Instuction {instructionNumber} position is ({m_player.Position.X}+{m_player.Position.Y}j) dir is {m_player.Degrees/90} face is {FaceForCoordinate(m_player.Position)}");
+            if(startPos == m_player.Position)
+            {
+                m_debugInfo.Add($"Instuction wall{instructionNumber} position is ({m_player.Position.X}+{m_player.Position.Y}j) dir is {m_player.Degrees/90} face is {FaceForCoordinate(m_player.Position)}");
+            }
+            else
+            {
+                m_debugInfo.Add($"Instuction {instructionNumber} position is ({m_player.Position.X}+{m_player.Position.Y}j) dir is {m_player.Degrees/90} face is {FaceForCoordinate(m_player.Position)}");
+            }
                      // can't go any futher
             if(m_player.Position == startPos)
             {
@@ -168,35 +198,35 @@ public class Test22 : BaseTest
 
     public static int LinkedFace(int startFace, IntVector2 direction)
     {
-        if (startFace == 1 && direction == new IntVector2(1, 0)) return 2;
-        if (startFace == 1 && direction == new IntVector2(-1, 0)) return 4;
-        if (startFace == 1 && direction == new IntVector2(0, 1)) return 3;
-        if (startFace == 1 && direction == new IntVector2(0, -1)) return 6;
+        if (startFace == 1 && direction == Right) return 2;
+        if (startFace == 1 && direction == Left) return 4;
+        if (startFace == 1 && direction == Up) return 3;
+        if (startFace == 1 && direction == Down) return 6;
 
-        if (startFace == 2 && direction == new IntVector2(1, 0)) return 5;
-        if (startFace == 2 && direction == new IntVector2(-1, 0)) return 1;
-        if (startFace == 2 && direction == new IntVector2(0, 1)) return 3;
-        if (startFace == 2 && direction == new IntVector2(0, -1)) return 6;
+        if (startFace == 2 && direction == Right) return 5;
+        if (startFace == 2 && direction == Left) return 1;
+        if (startFace == 2 && direction == Up) return 3;
+        if (startFace == 2 && direction == Down) return 6;
 
-        if (startFace == 3 && direction == new IntVector2(1, 0)) return 2;
-        if (startFace == 3 && direction == new IntVector2(-1, 0)) return 4;
-        if (startFace == 3 && direction == new IntVector2(0, 1)) return 5;
-        if (startFace == 3 && direction == new IntVector2(0, -1)) return 1;
+        if (startFace == 3 && direction == Right) return 2;
+        if (startFace == 3 && direction == Left) return 4;
+        if (startFace == 3 && direction == Up) return 5;
+        if (startFace == 3 && direction == Down) return 1;
 
-        if (startFace == 4 && direction == new IntVector2(1, 0)) return 5;
-        if (startFace == 4 && direction == new IntVector2(-1, 0)) return 1;
-        if (startFace == 4 && direction == new IntVector2(0, 1)) return 6;
-        if (startFace == 4 && direction == new IntVector2(0, -1)) return 3;
+        if (startFace == 4 && direction == Right) return 5;
+        if (startFace == 4 && direction == Left) return 1;
+        if (startFace == 4 && direction == Up) return 6;
+        if (startFace == 4 && direction == Down) return 3;
 
-        if (startFace == 5 && direction == new IntVector2(1, 0)) return 2;
-        if (startFace == 5 && direction == new IntVector2(-1, 0)) return 4;
-        if (startFace == 5 && direction == new IntVector2(0, 1)) return 6;
-        if (startFace == 5 && direction == new IntVector2(0, -1)) return 3;
+        if (startFace == 5 && direction == Right) return 2;
+        if (startFace == 5 && direction == Left) return 4;
+        if (startFace == 5 && direction == Up) return 6;
+        if (startFace == 5 && direction == Down) return 3;
 
-        if (startFace == 6 && direction == new IntVector2(1, 0)) return 5;
-        if (startFace == 6 && direction == new IntVector2(-1, 0)) return 1;
-        if (startFace == 6 && direction == new IntVector2(0, 1)) return 2;
-        if (startFace == 6 && direction == new IntVector2(0, -1)) return 4;
+        if (startFace == 6 && direction == Right) return 5;
+        if (startFace == 6 && direction == Left) return 1;
+        if (startFace == 6 && direction == Up) return 2;
+        if (startFace == 6 && direction == Down) return 4;
 
         return -1;
     }
@@ -317,7 +347,15 @@ public class Test22 : BaseTest
 
         public IntVector2 Forward { get; private set; }
 
-        public int Degrees { get; private set; }
+        private int m_degrees;
+        public int Degrees 
+        { get{return m_degrees; }
+            set
+            {
+                m_degrees = value;
+                UpdateForward();
+                }
+        }
 
         public void TurnLeft()
         {
@@ -326,7 +364,6 @@ public class Test22 : BaseTest
             {
                 Degrees += 360;
             }
-            UpdateForward();
         }
 
         public void TurnRight()
@@ -336,23 +373,22 @@ public class Test22 : BaseTest
             {
                 Degrees = 0;
             }
-            UpdateForward();
         }
         private void UpdateForward()
         {
             switch (Degrees)
             {
                 case 0:
-                    Forward = new IntVector2(1, 0);
+                    Forward = Right;
                     break;
                 case 90:
-                    Forward = new IntVector2(0, 1);
+                    Forward = Up;
                     break;
                 case 180:
-                    Forward = new IntVector2(-1, 0);
+                    Forward = Left;
                     break;
                 case 270:
-                    Forward = new IntVector2(0, -1);
+                    Forward = Down;
                     break;
                 default:
                     int ibreak = 0;
@@ -495,7 +531,7 @@ public class Test22 : BaseTest
         //}
 
 
-        public IntVector2 CubeWrapMove(IntVector2 start, IntVector2 direction,int instructionNumber)
+        public (IntVector2,IntVector2) CubeWrapMove(IntVector2 start, IntVector2 direction,int instructionNumber)
         {
             IntVector2 startLocalMin = new IntVector2();
             IntVector2 startLocalMax = new IntVector2();
@@ -508,26 +544,29 @@ public class Test22 : BaseTest
             int endFace = startFace;
 
             BoundsForFace(startFace, ref startLocalMin, ref startLocalMax);
-            //IntVector2 faceLocalDirection = FaceLocalDirection(startFace, direction);
-
 
             IntVector2 localStart = start - startLocalMin;
-            IntVector2 localEnd = localStart + faceLocalDirection;
+            IntVector2 localEnd = localStart + direction;
 
             IntVector2 pos = start;
 
             IntVector2 localEndCopy = localEnd;
+            IntVector2 updatedDirection = direction;
+
 
             if (localEnd.X < 0 || localEnd.X > BlockSize - 1 || localEnd.Y < 0 || localEnd.Y > BlockSize - 1)
             {
-                if(instructionNumber == 384)
+                if(instructionNumber == 488)
                 {
                     int ibreak =0 ;
                 }
                 // changed face.
                 endFace = LinkedFace(startFace, direction);
                 BoundsForFace(endFace, ref endLocalMin, ref endLocalMax);
-                localEnd = ApplyFaceChangeRule(startFace,endFace,localEnd);
+                var result = ApplyFaceChangeRule(startFace,endFace,localEnd,direction);
+                updatedDirection = result.Item1;
+                localEnd = result.Item2;
+
                 pos = localEnd + endLocalMin;
 
 
@@ -545,62 +584,63 @@ public class Test22 : BaseTest
 
             if (IsBlocked(pos))
             {
-                return start;
+                //return (updatedDirection,start);
+                return (direction,start);
             }
             Test22.FaceForCoordinate(pos);
-            return pos;
+            return (updatedDirection,pos);
 
         }
         
-        public IntVector2 ApplyFaceChangeRule(int startFace,int endFace,IntVector2 localEnd)
+        public (IntVector2,IntVector2) ApplyFaceChangeRule(int startFace,int endFace,IntVector2 localEnd,IntVector2 direction)
         {
             if(startFace == 1 && endFace == 6)
             {
-                return new IntVector2(0,localEnd.X);
+                return (Right,new IntVector2(0,localEnd.X));
             }
             if(startFace == 1 && endFace == 4)
             {
-                return new IntVector2(0,(BlockSize-1)-localEnd.Y);
+                return (Right,new IntVector2(0,(BlockSize-1)-localEnd.Y));
             }
             if(startFace == 2 && endFace == 3)
             {
-                return new IntVector2(localEnd.Y,localEnd.X);
+                return (Left,new IntVector2((BlockSize-1),localEnd.X));
             }
             if(startFace == 2 && endFace == 5)
             {
-                return new IntVector2(BlockSize-1,localEnd.Y);
+                return (Left,new IntVector2((BlockSize-1),(BlockSize-1)-localEnd.Y));
             }
             if(startFace == 3 && endFace == 2)
             {
-                return new IntVector2((BlockSize-1)-localEnd.Y,0);
+                return (Down,new IntVector2(localEnd.Y,BlockSize-1));
             }
             if(startFace == 3 && endFace == 4)
             {
-                return new IntVector2(localEnd.Y,0);
+                return (Up,new IntVector2(localEnd.Y,0));
             }
             if(startFace == 4 && endFace == 3)
             {
-                return new IntVector2(0,localEnd.X);
+                return (Right,new IntVector2(0,localEnd.X));
             }
             if(startFace == 4 && endFace == 1)
             {
-                return new IntVector2(0,(BlockSize-1)-localEnd.Y);
+                return (Right,new IntVector2(0,(BlockSize-1)-localEnd.Y));
             }
             if(startFace == 5 && endFace == 2)
             {
-                return new IntVector2(0,(BlockSize-1)-localEnd.Y);
+                return (Left,new IntVector2((BlockSize-1),(BlockSize-1)-localEnd.Y));
             }
             if(startFace == 5 && endFace == 6)
             {
-                return new IntVector2(BlockSize-1,localEnd.X);
+                return (Left,new IntVector2(BlockSize-1,localEnd.X));
             }
             if(startFace == 6 && endFace == 1)
             {
-                return new IntVector2(localEnd.Y,0);
+                return (Up,new IntVector2(localEnd.Y,0));
             }
             if(startFace == 6 && endFace == 5)
             {
-                return new IntVector2(localEnd.Y,BlockSize-1);
+                return (Down,new IntVector2(localEnd.Y,BlockSize-1));
             }
 
 
@@ -621,7 +661,7 @@ public class Test22 : BaseTest
             {
                 localEnd.Y = 0;
             }
-            return localEnd;
+            return (direction,localEnd);
 
         }
         
