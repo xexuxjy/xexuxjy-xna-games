@@ -4,7 +4,7 @@ MULT 88521161883075 / 9
 Checking node rcmw OP +
 PLUS 9835684653675 - 937
 Checking node tjgv OP /
-DIV 9835684652738 * 9
+DIV 9835684652738 * 9 
 Checking node qfpr OP -
 MINUS 193764052094285 - 88521161874642
 Checking node fcfh OP /

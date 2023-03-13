@@ -649,7 +649,7 @@ namespace Assets.Editor
                     CommonModelData commonModel = model.ToCommon();
 
                     commonModel.Name = adjustedFilename;
-                    int lodLevel = -1; //model.m_selsInfo.GetBestLodData();
+                    int lodLevel = 1;//model.m_selsInfo.GetBestLodData();
                     ProcessModel(assetName, lodLevel, commonModel);
 
 

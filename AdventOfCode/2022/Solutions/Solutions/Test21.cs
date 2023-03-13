@@ -177,7 +177,7 @@ public class MonkeyNode
 
     public Int128 Find(Int128 valToMatch)
     {
-        Test.DebugOutput($"Checking node {Id} OP {MathOperator}");
+        //Test.DebugOutput($"Checking node {Id} OP {MathOperator}");
         if(Id == HUMAN)
         {
             Test.DebugOutput("Found human node value : "+valToMatch);
@@ -203,36 +203,30 @@ public class MonkeyNode
                     return Value;
                 case "+":
                     Int128 newValAdd = valToMatch - known.Result;
-                    Test.DebugOutput($"PLUS {valToMatch} - {known.Result}");
                     return unknown.Find(newValAdd);
                 case "-":
                     Int128 newValSub = 0;
                     if(unknown == rhsNode)
                     {
-                        Test.DebugOutput($"MINUS {known.Result} - {valToMatch} ");
                         newValSub= known.Result - valToMatch;
                     }
                     else
                     {
-                        Test.DebugOutput($"MINUS {valToMatch} + {known.Result}");
                         newValSub = valToMatch + known.Result;
                     }
                     return unknown.Find(newValSub);
                 case "*":
-                    Test.DebugOutput($"MULT {valToMatch} / {known.Result} ");
                     Int128 newValMul = valToMatch / known.Result;
 
                     return unknown.Find(newValMul);
                 case "/":
                     if(unknown == lhsNode)
                     {
-                        Test.DebugOutput($"DIV {valToMatch} * {known.Result} ");
                         Int128 newValDiv = valToMatch * known.Result;
                         return unknown.Find(newValDiv);
                     }
                     else
                     {
-                        Test.DebugOutput($"DIV {valToMatch} / {known.Result} ");
                         Int128 newValDiv = valToMatch / known.Result;
                         return unknown.Find(newValDiv);
                     }

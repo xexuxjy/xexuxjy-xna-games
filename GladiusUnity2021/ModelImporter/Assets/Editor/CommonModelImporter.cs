@@ -1795,7 +1795,18 @@ public class MaterialData
     public void WriteInfo(StreamWriter sw)
     {
         //StringBuilder sb = new StringBuilder();
-        //sb.AppendFormat("T{0} {1} {2} {3} {4} {5:0.00000} {6} {7}", diffuseTextureId / XboxModel.s_textureBlockSize, header1, header2, header3, header4, startVal, header5, header6);
+        //sb.AppendFormat("T{0} {1} {2} {3}
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //{4} {5:0.00000} {6} {7}", diffuseTextureId / XboxModel.s_textureBlockSize, header1, header2, header3, header4, startVal, header5, header6);
         //sb.AppendLine();
         //foreach (int[] db in m_data)
         //{
