@@ -4,175 +4,224 @@ using System.Xml.Linq;
 public class Test24 : BaseTest
 {
 
-    Cave m_cave = new Cave();
     List<Cave> m_caveSimulations = new List<Cave>();
-
     public IntVector2 Explorer = new IntVector2();
 
     public const int NO_ROUTE = int.MaxValue;
-    public const int MAX_DEPTH = 50;
+    public const int MAX_DEPTH = 2000;
 
-    int m_shortestRouteLength = NO_ROUTE;
     List<IntVector2> m_shortestRoute = new List<IntVector2>();
+    Dictionary<IntVector3, bool> m_exploredRoutes = new Dictionary<IntVector3, bool>();
+
+
+    public IntVector2 StartPosition{get;set; }
+    public IntVector2 EndPosition{get;set; }
+
+
+
     public override void RunTest()
     {
+        DateTime startTime = DateTime.Now;
+
         TestID = 24;
-        IsTestInput = true;
+        IsTestInput = false;
+        IsPart2 = true;
         ReadDataFile();
 
-
-        m_cave.Size = new IntVector2(m_dataFileContents[0].Length,m_dataFileContents.Count);
+        Cave firstCave = new Cave(new IntVector2(m_dataFileContents[0].Length, m_dataFileContents.Count)); 
+        ResetCaves(firstCave);
 
         Wind.CharacterMap[IntVector2.Right] = '>';
         Wind.CharacterMap[IntVector2.Left] = '<';
-        Wind.CharacterMap[IntVector2.Down] = '^';
-        Wind.CharacterMap[IntVector2.Up] = 'v';
+        Wind.CharacterMap[IntVector2.Down] = 'v';
+        Wind.CharacterMap[IntVector2.Up] = '^';
 
 
-        for(int y=0;y<m_dataFileContents.Count;y++)
+        for (int y = 0; y < m_dataFileContents.Count; y++)
         {
             string line = m_dataFileContents[y];
 
-            for(int x=0;x<line.Length;x++)
+            for (int x = 0; x < line.Length; x++)
             {
-                if(y == 0 && line[x] == '.')
+                if (y == 0 && line[x] == '.')
                 {
-                    m_cave.StartPosition = new IntVector2(x,y);
+                    StartPosition = new IntVector2(x, y);
                 }
-                if(y == m_dataFileContents.Count-1 && line[x] == '.')
+                if (y == m_dataFileContents.Count - 1 && line[x] == '.')
                 {
-                    m_cave.EndPosition = new IntVector2(x,y);
+                    EndPosition = new IntVector2(x, y);
                 }
 
-
-
-                if(line[x] == '#')
+                if (line[x] == '#')
                 {
-                    m_cave.AddWall(new IntVector2(x,y));
+                    firstCave.AddWall(new IntVector2(x, y));
                 }
-                else if(line[x] == '>')
+                else if (line[x] == '>')
                 {
-                    m_cave.AddWind(new Wind(){Position = new IntVector2(x,y),Direction=IntVector2.Right});
+                    firstCave.AddWind(new Wind() { Position = new IntVector2(x, y), Direction = IntVector2.Right });
 
                 }
-                else if(line[x] == '<')
+                else if (line[x] == '<')
                 {
-                    m_cave.AddWind(new Wind(){Position = new IntVector2(x,y),Direction=IntVector2.Left});
+                    firstCave.AddWind(new Wind() { Position = new IntVector2(x, y), Direction = IntVector2.Left });
 
                 }
-                else if(line[x] == '^')
+                else if (line[x] == '^')
                 {
-                    m_cave.AddWind(new Wind(){Position = new IntVector2(x,y),Direction=IntVector2.Down});
+                    firstCave.AddWind(new Wind() { Position = new IntVector2(x, y), Direction = IntVector2.Up });
 
                 }
-                else if(line[x] == 'v')
+                else if (line[x] == 'v')
                 {
-                    m_cave.AddWind(new Wind(){Position = new IntVector2(x,y),Direction=IntVector2.Up});
+                    firstCave.AddWind(new Wind() { Position = new IntVector2(x, y), Direction = IntVector2.Down });
 
                 }
-                
+
             }
         }
 
-        m_debugInfo.Add(m_cave.GenerateDebug());
-    
-        Explorer = m_cave.StartPosition;
-
-        // need a move, being a direction and time,
         List<IntVector2> moveList = new List<IntVector2>();
-        int foundRouteDepth = TestRoute(GetCave(0).StartPosition,0,moveList);
-        DebugOutput("Found shortest as : "+m_shortestRoute.Count);
+        TestRoute(StartPosition, StartPosition,EndPosition,0, moveList);
+        DebugOutput("Found shortest as : " + m_shortestRoute.Count);
+
+        if(IsPart2)
+        {
+            int there = m_shortestRoute.Count;
+
+            m_shortestRoute.Clear();
+            m_exploredRoutes.Clear();
+            ResetCaves(m_caveSimulations[there]);
+
+            TestRoute(EndPosition,EndPosition,StartPosition,0, moveList);
+            int andBackAgain = m_shortestRoute.Count;
+            DebugOutput($"There and back again....  : {there}  , {andBackAgain} = {there+andBackAgain}");
+
+            m_shortestRoute.Clear();
+            m_exploredRoutes.Clear();
+            ResetCaves(m_caveSimulations[andBackAgain]);
+
+
+            TestRoute(StartPosition,StartPosition,EndPosition,0, moveList);
+            int andFinally = m_shortestRoute.Count;
+
+            DebugOutput($"AndFinally....  : {there}  , {andBackAgain}, {andFinally} = {there + andBackAgain + andFinally}");
+
+
+        }
+
+        //for(int i=0;i<20;++i)
+        //{
+        //    m_debugInfo.Add(GetCave(i).GenerateDebug(new IntVector2()));
+        //}
+
+
+        if (IsTestInput)
+        {
+            if (m_shortestRoute.Count > 0)
+            {
+                for (int i = 0; i < m_shortestRoute.Count; i++)
+                {
+                    m_debugInfo.Add(GetCave(i).GenerateDebug(m_shortestRoute[i],StartPosition,EndPosition));
+                }
+            }
+        }
+        double bpElapsed = DateTime.Now.Subtract(startTime).TotalMilliseconds;
+        DebugOutput("Elapsed = " + bpElapsed + " ms");
+
 
         WriteDebugInfo();
     }
 
+    public void ResetCaves(Cave start)
+    {
+        m_caveSimulations.Clear();
+        m_caveSimulations.Add(start);
+    }
+
     public Cave GetCave(int depth)
     {
-        if(m_caveSimulations.Count == 0)
-        {
-            m_caveSimulations.Add(m_cave);
-        }
-
-        while(m_caveSimulations.Count-1 < depth)
+        while (m_caveSimulations.Count - 1 < depth)
         {
             m_caveSimulations.Add(m_caveSimulations.Last().SimulateNext());
         }
-        
+
         return m_caveSimulations[depth];
 
     }
 
-    public static IntVector2[] MoveOptions = new IntVector2[]{new IntVector2(),IntVector2.Up,IntVector2.Down,IntVector2.Left,IntVector2.Right};
+    public static IntVector2[] MoveOptions = new IntVector2[] { new IntVector2(), IntVector2.Up, IntVector2.Down, IntVector2.Left, IntVector2.Right };
 
 
-    public int TestRoute(IntVector2 position,int depth,List<IntVector2> moveList)
+    public bool TestRoute(IntVector2 position, IntVector2 start,IntVector2 end,int depth, List<IntVector2> moveList)
     {
-        if(position == GetCave(0).EndPosition)
+        bool existingRoute;
+        IntVector3 searchKey = new IntVector3(position.X, position.Y, depth);
+        if (m_exploredRoutes.TryGetValue(searchKey, out existingRoute))
         {
-            if(depth < m_shortestRouteLength)
+            return existingRoute;
+        }
+
+        if (position == end)
+        {
+            if (m_shortestRoute.Count == 0 || (m_shortestRoute.Count > 0 && moveList.Count < m_shortestRoute.Count))
             {
-                m_shortestRouteLength = depth;
                 m_shortestRoute.Clear();
                 m_shortestRoute.AddRange(moveList);
-                return NO_ROUTE;
             }
-            return NO_ROUTE;
+            return true;
         }
 
         // stop overflow of continually staying in one place
-        if(depth > MAX_DEPTH)
+        if (depth > MAX_DEPTH)
         {
-            return NO_ROUTE;
+            return false;
         }
 
-        if(m_shortestRouteLength != NO_ROUTE && depth >= m_shortestRouteLength)
+        if (m_shortestRoute.Count > 0 && depth >= m_shortestRoute.Count)
         {
-            return NO_ROUTE;
+            return false;
         }
 
-        if(!GetCave(depth).IsEmpty(position))
+        if (!GetCave(depth).IsEmpty(position,start,end))
         {
-            return NO_ROUTE;
+            return false;
         }
 
-        int localRoute = NO_ROUTE;
-        foreach(IntVector2 option in MoveOptions)
+        List<IntVector2> moveChoices = new List<IntVector2>();
+        foreach (IntVector2 option in MoveOptions)
         {
-            moveList.Add(option);
-            if(moveList.Count != depth+1)
-            {
-                int ibreak = 0;
-            }
-
-            int foundRoute = TestRoute(position+option,depth+1,moveList);
-            if(foundRoute == NO_ROUTE)
-            {
-                moveList.Remove(moveList.Last());   
-            }
-            else
-            {
-                localRoute = foundRoute;
-            }
+            moveChoices.Add(position + option);
         }
 
-        
-        return localRoute;
 
+        bool hasRoute = false;
+        foreach (IntVector2 option in moveChoices.OrderBy(x => x.ManhattanDistance(EndPosition)))
+        {
+            moveList.Add(position);
+            hasRoute |= TestRoute(option, start,end,depth + 1, moveList);
+            moveList.RemoveAt(moveList.Count - 1);
+        }
+
+        m_exploredRoutes[searchKey] = hasRoute;
+
+
+        return hasRoute;
     }
 
-}
 
-
-
-
-public class Cave
+    public class Cave
 {
     public int Time;
 
-    public IntVector2 StartPosition;
-    public IntVector2 EndPosition;
+    private bool[] m_occupied;
 
-    public IntVector2 Size { get; set; }
+    public Cave(IntVector2 size)
+    {
+        m_occupied = new bool[size.X * size.Y];
+        Size = size;
+    }
+
+    public IntVector2 Size { get; private set; }
     public void AddWall(IntVector2 wall)
     {
         m_walls.Add(wall);
@@ -185,57 +234,57 @@ public class Cave
 
     public bool InBounds(IntVector2 pos)
     {
-        return pos.X > 0 && pos.X < Size.X-1 && pos.Y >0 && pos.Y < Size.Y-1;
+        return pos.X > 0 && pos.X < Size.X - 1 && pos.Y > 0 && pos.Y < Size.Y - 1;
     }
 
-    public bool IsEmpty(IntVector2 pos)
+    public bool IsEmpty(IntVector2 pos,IntVector2 start,IntVector2 end)
     {
-        if(pos == StartPosition || pos == EndPosition)
+        if (pos == start || pos == end)
         {
             return true;
         }
-        if(!InBounds(pos)) return false;
-        if(m_winds.Find(x=>x.Position == pos) != null)
-        {
-            return false;
-        }
-        return true;
+        if (!InBounds(pos)) return false;
+
+        return !m_occupied[(pos.Y * Size.X) + pos.X];
     }
 
     public void Simulate()
     {
-        foreach(Wind w in m_winds)
+        // 0 is wall left,top
+        // x-1 is wall right
+        // y-1 is wall bototm
+
+        int wallWidth = 1;
+        foreach (Wind w in m_winds)
         {
             w.Position += w.Direction;
 
-            if(w.Position.X <= 0)
+            if (w.Position.X <= 0)
             {
-                w.Position.X += Size.X;
+                w.Position.X = Size.X - 2;
             }
-            else if (w.Position.X == Size.X-1)
+            else if (w.Position.X == Size.X - 1)
             {
-                w.Position.X =1;
+                w.Position.X = 1;
             }
-            else if(w.Position.Y <= 0)
+            else if (w.Position.Y <= 0)
             {
-                w.Position.Y += Size.Y;
+                w.Position.Y = Size.Y - 2;
             }
-            else if (w.Position.Y == Size.Y-1)
+            else if (w.Position.Y == Size.Y - 1)
             {
-                w.Position.Y =1;
+                w.Position.Y = 1;
             }
+            m_occupied[(w.Position.Y * Size.X) + w.Position.X] = true;
         }
     }
 
     public Cave SimulateNext()
     {
-        Cave nextCave = new Cave();
-        nextCave.Time = Time+1;
+        Cave nextCave = new Cave(Size);
+        nextCave.Time = Time + 1;
         nextCave.m_walls.AddRange(m_walls);
         nextCave.Size = Size;
-        nextCave.StartPosition = StartPosition;
-        nextCave.EndPosition = EndPosition;
-
 
         foreach (Wind w in m_winds)
         {
@@ -248,35 +297,43 @@ public class Cave
 
     public const char NO_CHAR = 'x';
 
-    public string GenerateDebug()
+    public string GenerateDebug(IntVector2 explorerPosition,IntVector2 start,IntVector2 end)
     {
-        StringBuilder sb= new StringBuilder();
-        for(int y=0;y<Size.Y;++y)
+        StringBuilder sb = new StringBuilder();
+        for (int y = 0; y < Size.Y; ++y)
         {
-            for(int x=0;x<Size.X;++x)
+            for (int x = 0; x < Size.X; ++x)
             {
                 char addChar = NO_CHAR;
 
-                IntVector2 v = new IntVector2(x,y);
-                if(StartPosition == v || EndPosition == v)
+                IntVector2 v = new IntVector2(x, y);
+
+                if (v == explorerPosition)
+                {
+                    addChar = 'E';
+                }
+                else if (start == v || end == v)
                 {
                     addChar = '.';
                 }
-                else if(m_walls.Contains(v))
+                else if (m_walls.Contains(v))
                 {
                     addChar = '#';
                 }
-                
-                List<Wind> wl = m_winds.FindAll(x=>x.Position == v);
-                if(wl != null && wl.Count > 0)
+
+                if (addChar == NO_CHAR)
                 {
-                    if(wl.Count == 1)
+                    List<Wind> wl = m_winds.FindAll(x => x.Position == v);
+                    if (wl != null && wl.Count > 0)
                     {
-                        addChar = Wind.CharacterMap[wl[0].Direction];
-                    }
-                    else
-                    {
-                        addChar = (char)(((int)'0')+wl.Count);
+                        if (wl.Count == 1)
+                        {
+                            addChar = Wind.CharacterMap[wl[0].Direction];
+                        }
+                        else
+                        {
+                            addChar = (char)(((int)'0') + wl.Count);
+                        }
                     }
                 }
                 if (addChar == NO_CHAR)
@@ -303,6 +360,12 @@ public class Wind
     public IntVector2 Position;
     public IntVector2 Direction;
 
-    public static Dictionary<IntVector2,char> CharacterMap = new Dictionary<IntVector2,char>();
+    public static Dictionary<IntVector2, char> CharacterMap = new Dictionary<IntVector2, char>();
 
 }
+
+}
+
+
+
+
