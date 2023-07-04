@@ -1,4 +1,4 @@
 Found shortest as : 262
 There and back again....  : 262  , 266 = 528
 AndFinally....  : 262  , 266, 257 = 785
-Elapsed = 151199.3761 ms
+Elapsed = 127727.2895 ms

@@ -45,15 +45,22 @@ public class ExtractBec
 
     static ulong[] m_crcTable = null;
 
-    public static void BuildHashesForFile(string filename)
+    public static void BuildHashesForFile(string filename,string outfile,bool csharp=false)
     {
         string[] files = File.ReadAllLines(filename);
 
-        using (StreamWriter sw = new StreamWriter("d:/tmp/gladius-python-hashes.txt"))
+        using (StreamWriter sw = new StreamWriter(outfile))
         {
             foreach (string file in files)
             {
-                sw.WriteLine(String.Format("0x{0:X} : \"{1}\",", ExtractBec.stringToHash(file), file));
+                if(csharp)
+                {
+                    sw.WriteLine(String.Format("hashpaths[0x{0:X}] = \"{1}\";", ExtractBec.stringToHash(file), file));
+                }
+                else
+                {
+                    sw.WriteLine(String.Format("0x{0:X} : \"{1}\",", ExtractBec.stringToHash(file), file));
+                }
             }
 
         }
@@ -368,8 +375,9 @@ public class ExtractBec
         BuildTable();
         HashData.BuildHashInfo();
 
+        ExtractBec.BuildHashesForFile(@"D:\GladiusCodeClean\BackupData\GladiusData\data\filelist.txt","d:/tmp/gladius-python-scp-hashes.txt");
 
-        ExtractBecData(@"D:\tmp\gladius-xbox\gladius.bec", @"D:\tmp\gladius-xbox\csharp-extracted");
+        //ExtractBecData(@"D:\GladiusISOWorkingExtracted\GC-NR\gladius.bec", @"D:\tmp\gladius-GC-NR\csharp-extracted-scp");
 
     }
 

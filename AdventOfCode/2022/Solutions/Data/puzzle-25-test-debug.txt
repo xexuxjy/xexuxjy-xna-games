@@ -1,0 +1,15 @@
+ 1=-0-2 converted to 1747 and back to 1=-0-2 matches True
+ 12111 converted to 906 and back to 12111 matches True
+ 2=0= converted to 198 and back to 2=0= matches True
+ 21 converted to 11 and back to 21 matches True
+ 2=01 converted to 201 and back to 2=01 matches True
+ 111 converted to 31 and back to 111 matches True
+ 20012 converted to 1257 and back to 20012 matches True
+ 112 converted to 32 and back to 112 matches True
+ 1=-1= converted to 353 and back to 1=-1= matches True
+ 1-12 converted to 107 and back to 1-12 matches True
+ 12 converted to 7 and back to 12 matches True
+ 1= converted to 3 and back to 1= matches True
+ 122 converted to 37 and back to 122 matches True
+Total as decimal 4890 and as elf 2=-1=0
+Elapsed = 18.4463 ms

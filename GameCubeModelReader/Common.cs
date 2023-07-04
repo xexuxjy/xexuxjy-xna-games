@@ -49,8 +49,8 @@ public static class Common
     //public static char[] endTag = new char[] { (char)0x3F,'E', 'N', 'D'};
 
 
-    public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag,
-                                      dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag,
+    public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
+                                      dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, 
                                       ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
                                       vflgTag,stypTag,nameTag };
 
@@ -505,15 +505,6 @@ public static class Common
         v.Z = Common.ToInt32BigEndian(s_buffer, 0);
         return v;
     }
-    public static IndexedVector2 FromStreamVector2BE(BinaryReader reader)
-    {
-        IndexedVector2 v = new IndexedVector2();
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.X = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
-        return v;
-    }
 
 
     public static IndexedVector3 FromStreamVector3(BinaryReader reader)
@@ -602,6 +593,16 @@ public static class Common
         v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
         reader.Read(s_buffer, 0, s_buffer.Length);
         v.Z = Common.ReadSingleBigEndian(s_buffer, 0);
+        return v;
+    }
+
+    public static IndexedVector2 FromStreamVector2BE(BinaryReader reader)
+    {
+        IndexedVector2 v = new IndexedVector2();
+        reader.Read(s_buffer, 0, s_buffer.Length);
+        v.X = Common.ReadSingleBigEndian(s_buffer, 0);
+        reader.Read(s_buffer, 0, s_buffer.Length);
+        v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
         return v;
     }
 
@@ -747,62 +748,34 @@ public static class Common
         }
     }
 
-    public static void DecomposeMatrix(ref UnityEngine.Matrix4x4 mat, ref UnityEngine.Vector3 pos, ref UnityEngine.Quaternion rot)
+
+}
+
+
+
+public class MaterialBlock
+{
+    // s_materialBlockSize (44) / 4 == 11
+    public int[] blockData = new int[11];
+
+    public int Offset
     {
-        // Extract new local position
-        pos = mat.GetColumn(3);
-
-        // Extract new local rotation
-        rot = UnityEngine.Quaternion.LookRotation(
-            mat.GetColumn(2),
-            mat.GetColumn(1)
-        );
-
-        //// Extract new local scale
-        //Vector3 scale = new Vector3(
-        //    m.GetColumn(0).magnitude,
-        //    m.GetColumn(1).magnitude,
-        //    m.GetColumn(2).magnitude
-        //);
+        get { return blockData[5]; }
     }
 
-    public static UnityEngine.Quaternion Normalize(UnityEngine.Quaternion q)
+    public int Lod
     {
-        UnityEngine.Vector4 v = new UnityEngine.Vector4(q.x, q.y, q.z, q.w);
-        v.Normalize();
-        return new UnityEngine.Quaternion(v.x, v.y, v.z, v.w);
+        get { return blockData[4]; }
     }
 
-    public static UnityEngine.Vector3 ExtractEulerZYX(UnityEngine.Matrix4x4 m)
-    {
-        //m.Translation = Vector3.Zero;
-        m = UnityEngine.Matrix4x4.Transpose(m);
 
-        UnityEngine.Vector3 r = new UnityEngine.Vector3();
-        if (m.m20 < 1.0f)
+    public static MaterialBlock FromStream(BinaryReader binReader)
+    {
+        MaterialBlock materialBlock = new MaterialBlock();
+        for (int i = 0; i < materialBlock.blockData.Length; ++i)
         {
-            if (m.m20 > -1.0f)
-            {
-                r.y = (float)Math.Asin(-m.m20);
-                r.z = (float)Math.Atan2(m.m10, m.m00);
-                r.x = (float)Math.Atan2(m.m21, m.m22);
-            }
-            else
-            {
-                // Not a unique solution.
-                r.y = (float)Math.PI / 2.0f;
-                r.z = -(float)Math.Atan2(-m.m12, m.m11);
-                r.x = 0;
-            }
+            materialBlock.blockData[i] = binReader.ReadInt32();
         }
-        else
-        {
-            r.y = (float)-Math.PI / 2.0f;
-            r.z = -(float)Math.Atan2(-m.m12, m.m11);
-            r.x = 0;
-        }
-        return r;
+        return materialBlock;
     }
-
-
 }

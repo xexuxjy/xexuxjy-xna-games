@@ -295,7 +295,7 @@ namespace ExtractBEC
                 {
                     if(platform == Platform.PS2Preview || platform == Platform.PS2Review)
                     {
-                        return PS2PFHDChunk.FromStream(name, binReader,platform);
+                        return null;//PS2PFHDChunk.FromStream(name, binReader,platform);
                     }
                     else 
                     {
