@@ -1,5 +1,6 @@
 ﻿//String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
 String modelPath = @"D:\GladiusISOWorkingExtracted\python-gc\gc\data\mesh\weapons\axeh\";
+modelPath = @"D:\GladiusISOWorkingExtracted\python-gc\gc\data\levels\";
 String infoFile = @"d:\tmp\unpacking\gc-models\results.txt";
 String sectionInfoFile = @"d:\tmp\unpacking\gc-models\sectionInfo.txt";
 

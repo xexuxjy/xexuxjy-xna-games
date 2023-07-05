@@ -243,51 +243,6 @@ public class GCModel
                 }
             }
         }
-
-
-    }
-
-    public void WriteOBJ(StreamWriter writer, StreamWriter materialWriter)
-    {
-        // write material?
-        String textureName = "";
-        materialWriter.WriteLine("newmtl Textured");
-        materialWriter.WriteLine("Ka 1.000 1.000 1.000");
-        materialWriter.WriteLine("Kd 1.000 1.000 1.000");
-        materialWriter.WriteLine("Ks 0.000 0.000 0.000");
-        materialWriter.WriteLine("d 1.0");
-        materialWriter.WriteLine("illum 2");
-        materialWriter.WriteLine("map_Ka " + textureName);
-        materialWriter.WriteLine("map_Kd " + textureName);
-
-
-        // and now points, uv's and normals.
-        foreach (IndexedVector3 v in m_points)
-        {
-            writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-        }
-        foreach (IndexedVector2 v in m_uvs)
-        {
-            writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.X, v.Y));
-        }
-        foreach (IndexedVector3 v in m_points)
-        {
-            writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.X, v.Y, v.Z));
-        }
-
-        foreach (DisplayListHeader dlh in m_displayListHeaders)
-        {
-            int counter = 0;
-            for (int i = 0; i < dlh.entries.Count;)
-            {
-                writer.WriteLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex, dlh.entries[i].UVIndex, dlh.entries[i].NormIndex,
-                    dlh.entries[i + 1].PosIndex, dlh.entries[i + 1].UVIndex, dlh.entries[i + 1].NormIndex,
-                    dlh.entries[i + 2].PosIndex, dlh.entries[i + 2].UVIndex, dlh.entries[i + 2].NormIndex));
-                i += 3;
-            }
-        }
-
-
     }
 
     public void BuildStandardMesh(List<int> indices, List<IndexedVector3> points, List<IndexedVector3> normals, List<IndexedVector2> uvs)
@@ -366,6 +321,246 @@ public class GCModel
             }
 
         }
+    }
+
+    public void WriteData(BinaryWriter bw)
+    {
+        WriteVERS(bw);
+        WriteCPRT(bw);
+        WriteSELS(bw);
+        WriteCNTR(bw);
+        WriteSHDR(bw);
+        WriteTXTR(bw);
+        WriteDSLS(bw);
+        WriteDSLI(bw);
+        WriteDSLC(bw);
+        WritePOSI(bw);
+        WriteNORM(bw);
+        WriteUV0(bw);
+        WriteVFLA(bw);
+        WriteMSAR(bw);
+        WriteNLVL(bw);
+        WriteMESH(bw);
+        WriteELEM(bw);
+        WriteEND(bw);
+
+    }
+
+    public static void WriteNull(BinaryWriter bw, int num)
+    {
+        for (int i = 0; i < num; ++i)
+        {
+            bw.Write((byte)0);
+        }
+    }
+
+    public static void WriteNullPaddedString(BinaryWriter bw, string str, int requiredLength)
+    {
+        bw.Write(str);
+        WriteNull(bw, requiredLength - str.Length);
+    }
+
+    public static void WriteStringList(BinaryWriter bw, List<string> list, int requiredPadding)
+    {
+        for (int i = 0; i < list.Count; ++i)
+        {
+            bw.Write(list[i]);
+            if (i < list.Count - 1)
+            {
+                bw.Write((byte)0x00);
+            }
+        }
+    }
+
+    public static int GetStringListSize(List<string> list, int requiredPadding)
+    {
+        int total = 0;
+        for (int i = 0; i < list.Count; ++i)
+        {
+            total += list[i].Length;
+            if (i < list.Count - 1)
+            {
+                total += 1;
+            }
+        }
+        return total;
+    }
+    public void WriteVERS(BinaryWriter bw)
+    {
+        // Write VERS
+        bw.Write("VERS");
+        WriteNull(bw, 8);
+        bw.Write((byte)1);
+        WriteNull(bw, 7);
+        bw.Write((byte)0x0e);
+        WriteNull(bw, 11);
+    }
+
+    public void WriteCPRT(BinaryWriter bw)
+    {
+        bw.Write("CPRT");
+        bw.Write(0x90);
+        bw.Write(0x00);
+        bw.Write(0x80);
+        bw.Write("(C) May 27 2003 LucasArts a division of LucasFilm, Inc.");
+        WriteNull(bw, 0x4a);
+    }
+
+
+    public void WriteSELS(BinaryWriter bw)
+    {
+        // Texture names.
+        bw.Write("SELS");
+        int total = 16;
+        int textureLength = GetStringListSize(m_textures, 4);
+        total += textureLength;
+        bw.Write(total);
+
+
+    }
+
+    public void WriteCNTR(BinaryWriter bw)
+    {
+        // Write VERS
+        bw.Write("CNTR");
+        WriteNull(bw, 8);
+        bw.Write((byte)1);
+        WriteNull(bw, 7);
+        bw.Write((byte)0x0e);
+        WriteNull(bw, 11);
+    }
+
+
+    public void WriteSHDR(BinaryWriter bw)
+    {
+        bw.Write("SHDR");
+        bw.Write(0); // block size
+        bw.Write(1); // num materials, 1 for now
+        bw.Write(-1);
+        bw.Write("metal");
+        WriteNull(bw, 0x84);
+
+    }
+
+    public void WriteTXTR(BinaryWriter bw)
+    {
+        bw.Write("TXTR");
+        bw.Write(0); // block size
+        bw.Write(1); // num materials, 1 for now
+
+    }
+
+
+
+    public void WriteDSLS(BinaryWriter bw)
+    {
+        bw.Write("DSLS");
+        bw.Write(0); // block size
+    }
+
+    public void WriteDSLI(BinaryWriter bw)
+    {
+        bw.Write("DSLI");
+        bw.Write(0); // block size
+    }
+
+    public void WriteDSLC(BinaryWriter bw)
+    {
+        bw.Write("DSLC");
+        bw.Write(0); // block size
+
+    }
+
+    public void WritePOSI(BinaryWriter bw)
+    {
+        bw.Write("POSI");
+        bw.Write(0); // block size
+        bw.Write(m_points.Count); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+        foreach (IndexedVector3 v in m_points)
+        {
+            Common.WriteVector3BE(bw, v);
+        }
+    }
+
+    public void WriteNORM(BinaryWriter bw)
+    {
+        bw.Write("NORM");
+        bw.Write(0); // block size
+        bw.Write(m_points.Count); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+        foreach (IndexedVector3 v in m_normals)
+        {
+            Common.WriteVector3BE(bw, v);
+        }
+    }
+
+    public void WriteUV0(BinaryWriter bw)
+    {
+        bw.Write("UV0 ");
+        bw.Write(0); // block size
+        bw.Write(m_uvs.Count); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+        foreach (IndexedVector2 v in m_uvs)
+        {
+            Common.WriteVector2BE(bw, v);
+        }
+    }
+
+    public void WriteVFLA(BinaryWriter bw)
+    {
+        bw.Write("VFLA");
+        bw.Write(0); // block size
+        bw.Write(0); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+    }
+
+    public void WriteMSAR(BinaryWriter bw)
+    {
+        bw.Write("MSAR");
+        bw.Write(0); // block size
+        bw.Write(0); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+    }
+
+    public void WriteNLVL(BinaryWriter bw)
+    {
+        bw.Write("NLVL");
+        bw.Write(0); // block size
+        bw.Write(0); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+    }
+
+    public void WriteMESH(BinaryWriter bw)
+    {
+        bw.Write("MESH");
+        bw.Write(0); // block size
+        bw.Write(0); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+    }
+    public void WriteELEM(BinaryWriter bw)
+    {
+        bw.Write("ELEM");
+        bw.Write(0); // block size
+        bw.Write(0); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
+    }
+
+    public void WriteEND(BinaryWriter bw)
+    {
+        bw.Write("END.");
+        bw.Write(0); // block size
+        bw.Write(0); // number of elements.
+        bw.Write(0);
+        bw.Write(0);
     }
 
 
@@ -506,7 +701,7 @@ public class GCModelReader
     public void DumpSectionLengths(String sourceDirectory, String infoFile)
     {
         m_models.Clear();
-        String[] files = Directory.GetFiles(sourceDirectory, "*");
+        String[] files = Directory.GetFiles(sourceDirectory, "*.pao",SearchOption.AllDirectories);
 
         using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
         {
@@ -598,13 +793,13 @@ public class GCModelReader
                             sb.AppendLine($"MinUV {header.entries.Min(entry => entry.UVIndex)}");
                             sb.AppendLine($"MaxUV {header.entries.Max(entry => entry.UVIndex)}  less {(header.entries.Max(entry => entry.UVIndex) < model.m_uvs.Count)} ");
                             int counter = 0;
-                            for (int i = 0; i < header.entries.Count;)
-                            {
-                                sb.AppendLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", header.entries[i].PosIndex, header.entries[i].UVIndex, header.entries[i].NormIndex,
-                                header.entries[i + 1].PosIndex, header.entries[i + 1].UVIndex, header.entries[i + 1].NormIndex,
-                                header.entries[i + 2].PosIndex, header.entries[i + 2].UVIndex, header.entries[i + 2].NormIndex));
-                                i += 3;
-                            }
+                            //for (int i = 0; i < header.entries.Count;)
+                            //{
+                            //    sb.AppendLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", header.entries[i].PosIndex, header.entries[i].UVIndex, header.entries[i].NormIndex,
+                            //    header.entries[i + 1].PosIndex, header.entries[i + 1].UVIndex, header.entries[i + 1].NormIndex,
+                            //    header.entries[i + 2].PosIndex, header.entries[i + 2].UVIndex, header.entries[i + 2].NormIndex));
+                            //    i += 3;
+                            //}
                         }
 
 

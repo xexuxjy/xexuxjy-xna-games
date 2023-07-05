@@ -102,7 +102,7 @@ namespace Assets.Editor
 
                     MeshFilter filter = gladiusToUnity.AddComponent<MeshFilter>();
                     MeshRenderer renderer = gladiusToUnity.AddComponent<MeshRenderer>();
-
+                        
                     filter.sharedMesh = populatedMesh;
 
                     String outputDirName = OutputDirectory + assetSubDirectories;// + "/";

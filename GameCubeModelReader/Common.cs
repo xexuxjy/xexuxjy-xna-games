@@ -656,6 +656,18 @@ public static class Common
         sw.WriteLine(String.Format("{0} {1} {2}", v.X, v.Y, v.Z));
     }
 
+    public static void WriteVector3BE(BinaryWriter bw,IndexedVector3 v)
+    {
+        bw.Write(v.X);
+        bw.Write(v.Y);  
+        bw.Write(v.Z);
+    }
+
+    public static void WriteVector2BE(BinaryWriter bw,IndexedVector2 v)
+    {
+        bw.Write(v.X);
+        bw.Write(v.Y);  
+    }
 
     public static void ReadNullSeparatedNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
     {
