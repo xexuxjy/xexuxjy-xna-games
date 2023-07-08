@@ -596,6 +596,22 @@ public static class Common
         return v;
     }
 
+    public static IndexedVector4 FromStreamVector4BE(BinaryReader reader)
+    {
+        IndexedVector4 v = new IndexedVector4();
+        reader.Read(s_buffer, 0, s_buffer.Length);
+        v.X = Common.ReadSingleBigEndian(s_buffer, 0);
+        reader.Read(s_buffer, 0, s_buffer.Length);
+        v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
+        reader.Read(s_buffer, 0, s_buffer.Length);
+        v.Z = Common.ReadSingleBigEndian(s_buffer, 0);
+        reader.Read(s_buffer, 0, s_buffer.Length);
+        v.W = Common.ReadSingleBigEndian(s_buffer, 0);
+
+        return v;
+    }
+
+
     public static IndexedVector2 FromStreamVector2BE(BinaryReader reader)
     {
         IndexedVector2 v = new IndexedVector2();
@@ -668,6 +684,15 @@ public static class Common
         bw.Write(v.X);
         bw.Write(v.Y);  
     }
+
+    public static void WriteVector4BE(BinaryWriter bw,IndexedVector4 v)
+    {
+        bw.Write(v.X);
+        bw.Write(v.Y);  
+        bw.Write(v.Z);  
+        bw.Write(v.W);  
+    }
+
 
     public static void ReadNullSeparatedNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
     {
