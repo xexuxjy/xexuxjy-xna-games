@@ -10,6 +10,8 @@ using System.Text;
 public class GCModel
 {
     public const int HeaderSize = 16;
+    public const int MaxTextureNameSize = 0x80;
+    public const int TextureBlockSize = 0x98;
 
     public GCModel(String name)
     {
@@ -28,7 +30,7 @@ public class GCModel
             m_centers.Add(Common.FromStreamVector4BE(binReader));
         }
 
-        Common.ReadNullSeparatedNames(binReader, GCModelReader.txtrTag, m_textures);
+        ReadTXTRSection(binReader);
 
 
         long currentPos = binReader.BaseStream.Position;
@@ -105,6 +107,29 @@ public class GCModel
 
     }
 
+
+    public void ReadTXTRSection(BinaryReader binReader)
+    {
+        //Common.ReadNullSeparatedNames(binReader, GCModelReader.txtrTag, m_textures);
+        if (Common.FindCharsInStream(binReader, GCModelReader.txtrTag, true))
+        {
+            int blockSize = binReader.ReadInt32();
+            int uk4 = binReader.ReadInt32();
+            int numTextures = binReader.ReadInt32();
+            for(int i=0;i<numTextures; i++)
+            {
+                byte[] textureBlock = binReader.ReadBytes(TextureBlockSize);
+                byte[] textureNameData = new byte[MaxTextureNameSize];
+                Array.Copy(textureBlock,textureNameData, MaxTextureNameSize);
+                string s = Encoding.ASCII.GetString(textureNameData).Trim();;
+                m_textures.Add(s);
+
+
+            }
+
+        }
+
+    }
     public void ReadDSLISection(BinaryReader binReader)
     {
         if (Common.FindCharsInStream(binReader, GCModelReader.dsliTag, true))
@@ -255,59 +280,59 @@ public class GCModel
     }
 
 
-    public void WriteData(BinaryWriter bw)
+    public void WriteData(BinaryWriter writer)
     {
-        WriteVERS(bw);
-        WriteCPRT(bw);
-        WriteSELS(bw);
-        WriteCNTR(bw);
-        WriteSHDR(bw);
-        WriteTXTR(bw);
-        WriteDSLS(bw);
-        WriteDSLI(bw);
-        WriteDSLC(bw);
-        WritePOSI(bw);
-        WriteNORM(bw);
-        WriteUV0(bw);
-        WriteVFLA(bw);
-        WriteMSAR(bw);
-        WriteNLVL(bw);
-        WriteMESH(bw);
-        WriteELEM(bw);
-        WriteEND(bw);
+        WriteVERS(writer);
+        WriteCPRT(writer);
+        WriteSELS(writer);
+        WriteCNTR(writer);
+        WriteSHDR(writer);
+        WriteTXTR(writer);
+        WriteDSLS(writer);
+        WriteDSLI(writer);
+        WriteDSLC(writer);
+        WritePOSI(writer);
+        WriteNORM(writer);
+        WriteUV0(writer);
+        WriteVFLA(writer);
+        WriteMSAR(writer);
+        WriteNLVL(writer);
+        WriteMESH(writer);
+        WriteELEM(writer);
+        WriteEND(writer);
 
     }
 
-    public static void WriteNull(BinaryWriter bw, int num)
+    public static void WriteNull(BinaryWriter writer, int num)
     {
         for (int i = 0; i < num; ++i)
         {
-            bw.Write((byte)0);
+            writer.Write((byte)0);
         }
     }
 
-    public static void WriteNullPaddedString(BinaryWriter bw, string str, int requiredLength)
+    public static void WriteNullPaddedString(BinaryWriter writer, string str, int requiredLength)
     {
-        bw.Write(str);
-        WriteNull(bw, requiredLength - str.Length);
+        writer.Write(str);
+        WriteNull(writer, requiredLength - str.Length);
     }
 
-    public static void WriteStringList(BinaryWriter bw, List<string> list, int totalLength)
+    public static void WriteStringList(BinaryWriter writer, List<string> list, int totalLength)
     {
         int ongoingTotal = 0;
         for (int i = 0; i < list.Count; ++i)
         {
             ongoingTotal += list[i].Length;
-            WriteASCIIString(bw, list[i]);
+            WriteASCIIString(writer, list[i]);
             if (i < list.Count - 1)
             {
-                bw.Write((byte)0x00);
+                writer.Write((byte)0x00);
                 ongoingTotal += 1;
             }
         }
         while (ongoingTotal < totalLength)
         {
-            bw.Write((byte)0x00);
+            writer.Write((byte)0x00);
             ongoingTotal++;
         }
 
@@ -329,37 +354,46 @@ public class GCModel
         return total;//+pad;
     }
 
-    public static void WriteASCIIString(BinaryWriter bw, string s)
+    public static void WriteASCIIString(BinaryWriter writer, string s,int padToLength=0)
     {
-        bw.Write(Encoding.ASCII.GetBytes(s));
+        byte[] bytes = Encoding.ASCII.GetBytes(s);
+        writer.Write(bytes);
+        if(padToLength > 0)
+        {
+            int pad = padToLength - bytes.Length;
+            for(int i= 0; i < pad; ++i)
+            {
+                writer.Write((byte)0x00);
+            }
+        }
     }
 
-    public void WriteVERS(BinaryWriter bw)
+    public void WriteVERS(BinaryWriter writer)
     {
         // Write VERS
-        WriteASCIIString(bw, "VERS");
+        WriteASCIIString(writer, "VERS");
         // header size
-        bw.Write(0x20);
-        bw.Write(0x00);
-        bw.Write(0x01);
-        bw.Write(0x00);
-        bw.Write(0x0E);
-        bw.Write(0x00);
-        bw.Write(0x00);
+        writer.Write(0x20);
+        writer.Write(0x00);
+        writer.Write(0x01);
+        writer.Write(0x00);
+        writer.Write(0x0E);
+        writer.Write(0x00);
+        writer.Write(0x00);
     }
 
-    public void WriteCPRT(BinaryWriter bw)
+    public void WriteCPRT(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "CPRT");
-        bw.Write(0x90);
-        bw.Write(0x00);
-        bw.Write(0x80);
-        WriteASCIIString(bw, "(C) May 27 2003 LucasArts a division of LucasFilm, Inc.");
-        WriteNull(bw, 0x49);
+        WriteASCIIString(writer, "CPRT");
+        writer.Write(0x90);
+        writer.Write(0x00);
+        writer.Write(0x80);
+        WriteASCIIString(writer, "(C) May 27 2003 LucasArts a division of LucasFilm, Inc.");
+        WriteNull(writer, 0x49);
     }
 
 
-    public void WriteSELS(BinaryWriter bw)
+    public void WriteSELS(BinaryWriter writer)
     {
         int total = HeaderSize;
         int textureLength = GetStringListSize(m_selsInfo, 4);
@@ -372,180 +406,204 @@ public class GCModel
         {
             total += (padSize - pad);
         }
-        WriteASCIIString(bw, "SELS");
+        WriteASCIIString(writer, "SELS");
 
         //total = 0x50;
-        bw.Write(total);
-        bw.Write(0x00);
-        bw.Write(0x01);
+        writer.Write(total);
+        writer.Write(0x00);
+        writer.Write(0x01);
 
 
-        WriteStringList(bw, m_selsInfo, (total - HeaderSize));
+        WriteStringList(writer, m_selsInfo, (total - HeaderSize));
 
     }
 
-    public void WriteCNTR(BinaryWriter bw)
+    public void WriteCNTR(BinaryWriter writer)
     {
         // Write VERS
-        WriteASCIIString(bw, "CNTR");
-        bw.Write(0x50);
-        bw.Write(0x00);
-        bw.Write(0x01);
+        WriteASCIIString(writer, "CNTR");
+        writer.Write(0x50);
+        writer.Write(0x00);
+        writer.Write(0x01);
 
         // 4x4 matrix.
         foreach (IndexedVector4 v in m_centers)
         {
-            Common.WriteVector4BE(bw, v);
+            Common.WriteVector4BE(writer, v);
         }
     }
 
 
-
-    public void WriteSHDR(BinaryWriter bw)
+    byte[] metalShaderData = new byte[]{0xFF,0xFF,0xFF,0xFF,0x6D,0x65,0x74,0x61,0x6C,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
+    public void WriteSHDR(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "SHDR");
+        int total = HeaderSize;
+        WriteASCIIString(writer, "SHDR");
+        total+= metalShaderData.Length;
+        writer.Write(total); // block size
+        writer.Write(0);
+        writer.Write(1); // num materials, 1 for now
+        writer.Write(metalShaderData);
+    }
 
-        bw.Write(0); // block size
-        bw.Write(1); // num materials, 1 for now
-        bw.Write(-1);
-        WriteASCIIString(bw, "metal");
+    public void WriteTXTR(BinaryWriter writer)
+    {
+        int total = HeaderSize;
+        total += m_textures.Count * TextureBlockSize;
+        WriteASCIIString(writer, "TXTR");
+        writer.Write(total);
+        writer.Write(0); // block size
+        writer.Write(m_textures.Count);
 
-        WriteNull(bw, 0x84);
+
+        foreach(string texture in m_textures)
+        {
+            WriteASCIIString(writer,texture,MaxTextureNameSize);
+            WriteNull(writer,TextureBlockSize-MaxTextureNameSize);
+        }
+
 
     }
 
-    public void WriteTXTR(BinaryWriter bw)
-    {
-        WriteASCIIString(bw, "TXTR");
 
-        bw.Write(0); // block size
-        bw.Write(1); // num materials, 1 for now
+
+    public void WriteDSLS(BinaryWriter writer)
+    {
+        int total = HeaderSize;
+
+        WriteASCIIString(writer, "DSLS");
+
+        
+        foreach(DisplayListHeader dlh in m_displayListHeaders)
+        {
+            total += 4;
+            total += dlh.entries.Count * 6;
+        }
+
+        writer.Write(total); // block size
+        writer.Write(0);
+        writer.Write(m_displayListHeaders.Count);
+
+        foreach(DisplayListHeader dlh in m_displayListHeaders)
+        {
+            dlh.ToStream(writer);
+        }
+    }
+
+    public void WriteDSLI(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "DSLI");
+
+        writer.Write(0); // block size
+    }
+
+    public void WriteDSLC(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "DSLC");
+
+        writer.Write(0); // block size
 
     }
 
-
-
-    public void WriteDSLS(BinaryWriter bw)
+    public void WritePOSI(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "DSLS");
+        WriteASCIIString(writer, "POSI");
 
-        bw.Write(0); // block size
-    }
-
-    public void WriteDSLI(BinaryWriter bw)
-    {
-        WriteASCIIString(bw, "DSLI");
-
-        bw.Write(0); // block size
-    }
-
-    public void WriteDSLC(BinaryWriter bw)
-    {
-        WriteASCIIString(bw, "DSLC");
-
-        bw.Write(0); // block size
-
-    }
-
-    public void WritePOSI(BinaryWriter bw)
-    {
-        WriteASCIIString(bw, "POSI");
-
-        bw.Write(0); // block size
-        bw.Write(m_points.Count); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(m_points.Count); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
         foreach (IndexedVector3 v in m_points)
         {
-            Common.WriteVector3BE(bw, v);
+            Common.WriteVector3BE(writer, v);
         }
     }
 
-    public void WriteNORM(BinaryWriter bw)
+    public void WriteNORM(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "NORM");
+        WriteASCIIString(writer, "NORM");
 
-        bw.Write(0); // block size
-        bw.Write(m_points.Count); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(m_points.Count); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
         foreach (IndexedVector3 v in m_normals)
         {
-            Common.WriteVector3BE(bw, v);
+            Common.WriteVector3BE(writer, v);
         }
     }
 
-    public void WriteUV0(BinaryWriter bw)
+    public void WriteUV0(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "UV0 ");
+        WriteASCIIString(writer, "UV0 ");
 
-        bw.Write(0); // block size
-        bw.Write(m_uvs.Count); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(m_uvs.Count); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
         foreach (IndexedVector2 v in m_uvs)
         {
-            Common.WriteVector2BE(bw, v);
+            Common.WriteVector2BE(writer, v);
         }
     }
 
-    public void WriteVFLA(BinaryWriter bw)
+    public void WriteVFLA(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "VFLA");
+        WriteASCIIString(writer, "VFLA");
 
-        bw.Write(0); // block size
-        bw.Write(0); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
     }
 
-    public void WriteMSAR(BinaryWriter bw)
+    public void WriteMSAR(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "MSAR");
+        WriteASCIIString(writer, "MSAR");
 
-        bw.Write(0); // block size
-        bw.Write(0); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
     }
 
-    public void WriteNLVL(BinaryWriter bw)
+    public void WriteNLVL(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "NLVL");
+        WriteASCIIString(writer, "NLVL");
 
-        bw.Write(0); // block size
-        bw.Write(0); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
     }
 
-    public void WriteMESH(BinaryWriter bw)
+    public void WriteMESH(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "MESH");
+        WriteASCIIString(writer, "MESH");
 
-        bw.Write(0); // block size
-        bw.Write(0); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
     }
-    public void WriteELEM(BinaryWriter bw)
+    public void WriteELEM(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "ELEM");
+        WriteASCIIString(writer, "ELEM");
 
-        bw.Write(0); // block size
-        bw.Write(0); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
     }
 
-    public void WriteEND(BinaryWriter bw)
+    public void WriteEND(BinaryWriter writer)
     {
-        WriteASCIIString(bw, "END.");
+        WriteASCIIString(writer, "END.");
 
-        bw.Write(0); // block size
-        bw.Write(0); // number of elements.
-        bw.Write(0);
-        bw.Write(0);
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
     }
 
 
@@ -591,6 +649,19 @@ public class DisplayListHeader
     public bool Valid = true;
     public List<DisplayListEntry> entries = new List<DisplayListEntry>();
 
+    public void ToStream(BinaryWriter writer)
+    {
+        writer.Write((byte)0x98);
+        writer.Write((short)0x00);
+    
+        writer.Write((short)entries.Count);
+        foreach(DisplayListEntry ble in entries)
+        {
+            ble.ToStream(writer);
+        }
+
+    }
+
     public static bool FromStream(BinaryReader reader, out DisplayListHeader header, DSLIInfo dsliInfo)
     {
         long currentPosition = reader.BaseStream.Position;
@@ -634,6 +705,12 @@ public struct DisplayListEntry
         return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex;
     }
 
+    public void ToStream(BinaryWriter writer)
+    {
+        writer.Write((short)PosIndex);
+        writer.Write((short)NormIndex);
+        writer.Write((short)UVIndex);
+    }
     public static DisplayListEntry FromStream(BinaryReader reader)
     {
         DisplayListEntry entry = new DisplayListEntry();

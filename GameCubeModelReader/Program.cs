@@ -1,5 +1,5 @@
 ﻿//String modelPath = @"C:\tmp\unpacking\gc-probable-models-renamed\probable-models-renamed";
-string drive = @"F:\";
+string drive = @"D:\";
 String modelPath = drive+@"GladiusISOWorkingExtracted\python-gc\gc\data\mesh\weapons\";
 //modelPath = drive+@"GladiusISOWorkingExtracted\python-gc\gc\data\levels\";
 String outputBaseDir = drive+@"tmp\unpacking\gc-models\";
