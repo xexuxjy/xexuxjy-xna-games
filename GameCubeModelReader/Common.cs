@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Buffers.Binary;
 
 public static class Common
 {
@@ -13,7 +14,7 @@ public static class Common
     public static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
     public static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
     public static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
-    //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
+    public static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
     public static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };   // DisplayList information - int16 pairs of position,normal,uv0 - possible that some uv's also used for weights?
     public static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };   // display list -offsets and lengths
     public static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };   // seems to contain the number of display lists and then bytes at 01 to say used?
@@ -52,7 +53,7 @@ public static class Common
     public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag, 
                                       dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag, 
                                       ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
-                                      vflgTag,stypTag,nameTag };
+                                      vflgTag,stypTag,nameTag,paddTag };
 
     public static char[][] xboxTags = { versTag, cprtTag, selsTag, txtrTag, xrndTag };
 
@@ -468,9 +469,16 @@ public static class Common
     }
 
 
+    public static float ReverseOrder(float f)
+    {
+        byte[] bytes = BitConverter.GetBytes(f);
+        Array.Reverse(bytes);
+        return BitConverter.ToSingle(bytes);
+        
+    }
 
 
-    public static int ToInt16BigEndian(byte[] buf, int i)
+    public static short ToInt16BigEndian(byte[] buf, int i)
     {
         return (short)(buf[i] << 8 | buf[i + 1]);
     }
@@ -516,6 +524,15 @@ public static class Common
         return v;
     }
 
+    public static IndexedVector4 FromStreamVector4(BinaryReader reader)
+    {
+        IndexedVector4 v = new IndexedVector4();
+        v.X = reader.ReadSingle();
+        v.Y = reader.ReadSingle();
+        v.Z = reader.ReadSingle();
+        v.W = reader.ReadSingle();
+        return v;
+    }
 
     public static IndexedQuaternion FromStreamQuaternion(BinaryReader reader)
     {
@@ -526,6 +543,13 @@ public static class Common
         q.W = reader.ReadSingle();
         return q;
     }
+
+    public static void WriteBigEndian(BinaryWriter writer,short value)
+    {
+        short BEValue = BinaryPrimitives.ReverseEndianness(value);
+        writer.Write(BEValue);
+    }
+
 
 
     public static float ByteToFloat(byte b)
@@ -599,14 +623,19 @@ public static class Common
     public static IndexedVector4 FromStreamVector4BE(BinaryReader reader)
     {
         IndexedVector4 v = new IndexedVector4();
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.X = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Z = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.W = Common.ReadSingleBigEndian(s_buffer, 0);
+        v.X = ReverseOrder(reader.ReadSingle());
+        v.Y = ReverseOrder(reader.ReadSingle());
+        v.Z = ReverseOrder(reader.ReadSingle());
+        v.W = ReverseOrder(reader.ReadSingle());
+
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.X = Common.ReadSingleBigEndian(s_buffer, 0);
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.Z = Common.ReadSingleBigEndian(s_buffer, 0);
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.W = Common.ReadSingleBigEndian(s_buffer, 0);
 
         return v;
     }
@@ -674,25 +703,32 @@ public static class Common
 
     public static void WriteVector3BE(BinaryWriter bw,IndexedVector3 v)
     {
-        bw.Write(v.X);
-        bw.Write(v.Y);  
-        bw.Write(v.Z);
+        bw.Write(ReverseOrder(v.X));
+        bw.Write(ReverseOrder(v.Y));  
+        bw.Write(ReverseOrder(v.Z));
     }
 
     public static void WriteVector2BE(BinaryWriter bw,IndexedVector2 v)
     {
-        bw.Write(v.X);
-        bw.Write(v.Y);  
+        bw.Write(ReverseOrder(v.X));
+        bw.Write(ReverseOrder(v.Y));  
     }
 
     public static void WriteVector4BE(BinaryWriter bw,IndexedVector4 v)
+    {
+        bw.Write(ReverseOrder(v.X));
+        bw.Write(ReverseOrder(v.Y));  
+        bw.Write(ReverseOrder(v.Z));  
+        bw.Write(ReverseOrder(v.W));  
+    }
+
+    public static void WriteVector4(BinaryWriter bw,IndexedVector4 v)
     {
         bw.Write(v.X);
         bw.Write(v.Y);  
         bw.Write(v.Z);  
         bw.Write(v.W);  
     }
-
 
     public static void ReadNullSeparatedNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
     {

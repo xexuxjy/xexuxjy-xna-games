@@ -12,9 +12,9 @@ GCModelReader reader = new GCModelReader();
 //reader.LoadModels(modelPath,infoFile);
 //reader.DumpPoints(infoFile);
 //reader.DumpSectionLengths(modelPath, sectionInfoFile);
-GCModel axeModel = reader.LoadSingleModel(modelPath+@"axeh\axeh_cultellus.pax",null);
+GCModel axeModel = reader.LoadSingleModel(modelPath + @"axeh\axeh_cultellus.pax", null);
 
-using(BinaryWriter bw = new BinaryWriter(File.OpenWrite(outputBaseDir+"axe.pax")))
+using (BinaryWriter bw = new BinaryWriter(File.OpenWrite(outputBaseDir + "axe.pax")))
 {
     axeModel.WriteData(bw);
 }
