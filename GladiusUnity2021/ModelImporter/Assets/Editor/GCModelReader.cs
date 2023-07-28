@@ -5,118 +5,179 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using GCTextureTools;
 using UnityEngine;
-
-// Info taken from : http://smashboards.com/threads/melee-dat-format.292603/
-// much appreciated.
-
-//http://www.falloutsoftware.com/tutorials/gl/gl3.htm
-
-//case 0xB8: // (GL_POINTS)
-//case 0xA8: // (GL_LINES)
-//case 0xB0: // (GL_LINE_STRIP)
-//case 0x90: // (GL_TRIANGLES)
-//case 0x98: // (GL_TRIANGLE_STRIP)
-//case 0xA0: // (GL_TRIANGLE_FAN)
-//case 0x80: // (GL_QUADS)
-public class DisplayListHeader
-{
-    public byte primitiveFlags;
-    public short indexCount;
-    public bool Valid = true;
-    public List<DisplayListEntry> entries = new List<DisplayListEntry>();
-
-    public static bool FromStream(BinaryReader reader, out DisplayListHeader header, DSLIInfo dsliInfo)
-    {
-        long currentPosition = reader.BaseStream.Position;
-        bool success = false;
-        byte header1 = reader.ReadByte();
-        //Debug.Assert(header1 == 0x098);
-        short pad1 = reader.ReadInt16();
-
-        header = new DisplayListHeader();
-        header.primitiveFlags = reader.ReadByte();
-        //Debug.Assert(header.primitiveFlags== 0x090);
-        if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x00)
-        {
-            header.indexCount = Common.ToInt16BigEndian(reader);
-
-            success = true;
-            for (int i = 0; i < header.indexCount; ++i)
-            {
-                header.entries.Add(DisplayListEntry.FromStream(reader));
-            }
-        }
-        else
-        {
-            reader.BaseStream.Position = currentPosition;
-        }
-        return success;
-    }
-}
-
-
-
-
-public struct DisplayListEntry
-{
-    public ushort PosIndex;
-    public ushort NormIndex;
-    public ushort UVIndex;
-
-    public String ToString()
-    {
-        return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex;
-    }
-
-    public static DisplayListEntry FromStream(BinaryReader reader)
-    {
-        DisplayListEntry entry = new DisplayListEntry();
-        entry.PosIndex = Common.ToUInt16BigEndian(reader);
-        entry.NormIndex = Common.ToUInt16BigEndian(reader);
-        entry.UVIndex = Common.ToUInt16BigEndian(reader);
-
-        //if (entry.PosIndex < 0 || entry.NormIndex < 0 || entry.UVIndex < 0)
-        //{
-        //    int ibreak = 0;
-        //}
-
-
-        return entry;
-    }
-}
-
 
 
 public class GCModel
 {
+    public const int HeaderSize = 16;
+    public const int MaxTextureNameSize = 0x80;
+    public const int TextureBlockSize = 0x98;
+
     public GCModel(String name)
     {
         m_name = name;
     }
 
+    public static GCModel CreateFromGameObject(GameObject gameObj)
+    {
+        MeshFilter meshFilter = gameObj.GetComponent<MeshFilter>();
+        MeshRenderer meshRenderer = gameObj.GetComponent<MeshRenderer>();
+        if (meshFilter != null && meshRenderer != null)
+        {
+            // setup core data
+            
+            GCModel model = new GCModel(gameObj.name);
+
+            foreach (Vector3 v in meshFilter.sharedMesh.vertices)
+            {
+                model.m_points.Add(v);
+            }
+
+            foreach (Vector3 v in meshFilter.sharedMesh.normals)
+            {
+                model.m_normals.Add(v);
+            }
+
+            foreach (Vector2 v in meshFilter.sharedMesh.uv)
+            {
+                model.m_uvs.Add(v);
+            }
+            
+            DisplayListHeader dlh = DisplayListHeader.CreateFromMeshData(meshFilter.sharedMesh.triangles,
+                meshFilter.sharedMesh.vertices, meshFilter.sharedMesh.normals, meshFilter.sharedMesh.uv);
+            model.m_displayListHeaders.Add(dlh);
+
+
+            Material m = meshRenderer.material;
+            model.m_textures.Add(new TextureInfo(){Name=m.mainTexture.name,Width=m.mainTexture.width,Height = m.mainTexture.height});
+            
+            return model;
+        }
+
+        return null;
+    }
+
+
+    public void LoadData(BinaryReader binReader)
+    {
+        Common.ReadNullSeparatedNames(binReader, GCModelReader.selsTag, m_selsInfo);
+
+        if (Common.FindCharsInStream(binReader, GCModelReader.cntrTag, true))
+        {
+            binReader.BaseStream.Position += 12;
+
+            m_centers.Add(Common.FromStreamVector4BE(binReader));
+            m_centers.Add(Common.FromStreamVector4BE(binReader));
+            m_centers.Add(Common.FromStreamVector4BE(binReader));
+            m_centers.Add(Common.FromStreamVector4BE(binReader));
+            //m_centers.Add(Common.FromStreamVector4(binReader));
+            //m_centers.Add(Common.FromStreamVector4(binReader));
+            //m_centers.Add(Common.FromStreamVector4(binReader));
+            //m_centers.Add(Common.FromStreamVector4(binReader));
+        }
+
+        ReadTXTRSection(binReader);
+
+
+        long currentPos = binReader.BaseStream.Position;
+        ReadDSLISection(binReader);
+        binReader.BaseStream.Position = currentPos;
+
+        ReadDSLSSection(binReader);
+
+        ReadSKELSection(binReader);
+
+
+        if (Common.FindCharsInStream(binReader, GCModelReader.posiTag))
+        {
+            int posSectionLength = binReader.ReadInt32();
+            int uk2 = binReader.ReadInt32();
+            int numPoints = binReader.ReadInt32();
+            for (int i = 0; i < numPoints; ++i)
+            {
+                m_points.Add(Common.FromStreamVector3BE(binReader));
+            }
+        }
+
+        if (Common.FindCharsInStream(binReader, GCModelReader.normTag))
+        {
+            int normSectionLength = binReader.ReadInt32();
+            int uk4 = binReader.ReadInt32();
+            int numNormals = binReader.ReadInt32();
+
+            for (int i = 0; i < numNormals; ++i)
+            {
+                m_normals.Add(Common.FromStreamVector3BE(binReader));
+            }
+        }
+
+        if (Common.FindCharsInStream(binReader, GCModelReader.uv0Tag))
+        {
+            int normSectionLength = binReader.ReadInt32();
+            int uk4 = binReader.ReadInt32();
+            int numUVs = binReader.ReadInt32();
+
+            for (int i = 0; i < numUVs; ++i)
+            {
+                m_uvs.Add(Common.FromStreamVector2BE(binReader));
+            }
+        }
+    }
+
+
     public void BuildBB()
     {
-        Vector3 min = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
-        Vector3 max = new Vector3(float.MinValue,float.MinValue,float.MinValue);
+        IndexedVector3 min = new IndexedVector3(float.MaxValue);
+        IndexedVector3 max = new IndexedVector3(float.MinValue);
 
         //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
         //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
 
         for (int i = 0; i < m_points.Count; ++i)
         {
-            if (m_points[i].x < min.x) min.x = m_points[i].x;
-            if (m_points[i].y < min.y) min.y = m_points[i].y;
-            if (m_points[i].z < min.z) min.z = m_points[i].z;
-            if (m_points[i].z > max.x) max.x = m_points[i].x;
-            if (m_points[i].y > max.y) max.y = m_points[i].y;
-            if (m_points[i].z > max.z) max.z = m_points[i].z;
-
+            if (m_points[i].X < min.X) min.X = m_points[i].X;
+            if (m_points[i].Y < min.Y) min.Y = m_points[i].Y;
+            if (m_points[i].Z < min.Z) min.Z = m_points[i].Z;
+            if (m_points[i].X > max.X) max.X = m_points[i].X;
+            if (m_points[i].Y > max.Y) max.Y = m_points[i].Y;
+            if (m_points[i].Z > max.Z) max.Z = m_points[i].Z;
         }
 
         MinBB = min;
         MaxBB = max;
+    }
 
+
+    public void ReadTXTRSection(BinaryReader binReader)
+    {
+        //Common.ReadNullSeparatedNames(binReader, GCModelReader.txtrTag, m_textures);
+        if (Common.FindCharsInStream(binReader, GCModelReader.txtrTag, true))
+        {
+            int blockSize = binReader.ReadInt32();
+            int uk4 = binReader.ReadInt32();
+            int numTextures = binReader.ReadInt32();
+            for(int i=0;i<numTextures; i++)
+            {
+                //byte[] textureBlock = binReader.ReadBytes(TextureBlockSize);
+                byte[] textureNameData = binReader.ReadBytes(MaxTextureNameSize);
+                //Array.Copy(textureBlock,textureNameData, MaxTextureNameSize);
+                string s = Encoding.ASCII.GetString(textureNameData).Trim();;
+
+                int texNum = binReader.ReadInt32();
+                int unknown = binReader.ReadInt32();
+                int width = binReader.ReadInt32();
+                int height = binReader.ReadInt32();
+                int unknown2 = binReader.ReadInt32();
+                int unknown3 = binReader.ReadInt32();
+
+                m_textures.Add(new TextureInfo(){Name=s, Width=width,Height=height });
+
+
+            }
+
+        }
     }
 
     public void ReadDSLISection(BinaryReader binReader)
@@ -146,7 +207,7 @@ public class GCModel
             int blockSize = binReader.ReadInt32();
             int pad1 = binReader.ReadInt32();
             int pad2 = binReader.ReadInt32();
-            int numBones = (blockSize - 16) / 32;
+            int numBones = (blockSize - HeaderSize) / 32;
 
             for (int i = 0; i < numBones; ++i)
             {
@@ -177,15 +238,13 @@ public class GCModel
                 {
                     m_displayListHeaders.Add(header);
                 }
-
             }
+
             long nowAt = binReader.BaseStream.Position;
 
             long diff = (dsllStartsAt + (long)dslsSectionLength) - nowAt;
             int ibreak = 0;
         }
-
-
     }
 
 
@@ -211,7 +270,6 @@ public class GCModel
 
     public void ConstructSkin(GCModel model)
     {
-
     }
 
 
@@ -221,7 +279,6 @@ public class GCModel
         {
             if (header.primitiveFlags == 0x90)
             {
-
                 for (int i = 0; i < header.entries.Count; ++i)
                 {
                     if (header.entries[i].PosIndex < 0 || header.entries[i].PosIndex >= m_points.Count)
@@ -229,66 +286,21 @@ public class GCModel
                         header.Valid = false;
                         break;
                     }
+
                     if (header.entries[i].NormIndex < 0 || header.entries[i].NormIndex >= m_normals.Count)
                     {
                         header.Valid = false;
                         break;
                     }
+
                     if (header.entries[i].UVIndex < 0 || header.entries[i].UVIndex >= m_uvs.Count)
                     {
                         header.Valid = false;
                         break;
                     }
-
-
                 }
             }
         }
-
-
-    }
-
-    public void WriteOBJ(StreamWriter writer, StreamWriter materialWriter)
-    {
-        // write material?
-        String textureName = "";
-        materialWriter.WriteLine("newmtl Textured");
-        materialWriter.WriteLine("Ka 1.000 1.000 1.000");
-        materialWriter.WriteLine("Kd 1.000 1.000 1.000");
-        materialWriter.WriteLine("Ks 0.000 0.000 0.000");
-        materialWriter.WriteLine("d 1.0");
-        materialWriter.WriteLine("illum 2");
-        materialWriter.WriteLine("map_Ka " + textureName);
-        materialWriter.WriteLine("map_Kd " + textureName);
-
-
-        // and now points, uv's and normals.
-        foreach (Vector3 v in m_points)
-        {
-            writer.WriteLine(String.Format("v {0:0.00000} {1:0.00000} {2:0.00000}", v.x, v.y, v.z));
-        }
-        foreach (Vector2 v in m_uvs)
-        {
-            writer.WriteLine(String.Format("vt {0:0.00000} {1:0.00000}", v.x, v.y));
-        }
-        foreach (Vector3 v in m_points)
-        {
-            writer.WriteLine(String.Format("vn {0:0.00000} {1:0.00000} {2:0.00000}", v.x, v.y, v.z));
-        }
-
-        foreach (DisplayListHeader dlh in m_displayListHeaders)
-        {
-            int counter = 0;
-            for (int i = 0; i < dlh.entries.Count;)
-            {
-                writer.WriteLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex, dlh.entries[i].UVIndex, dlh.entries[i].NormIndex,
-                    dlh.entries[i + 1].PosIndex, dlh.entries[i + 1].UVIndex, dlh.entries[i + 1].NormIndex,
-                    dlh.entries[i + 2].PosIndex, dlh.entries[i + 2].UVIndex, dlh.entries[i + 2].NormIndex));
-                i += 3;
-            }
-        }
-
-
     }
 
     public void BuildStandardMesh(List<int> indices, List<Vector3> points, List<Vector3> normals, List<Vector2> uvs)
@@ -296,7 +308,7 @@ public class GCModel
         foreach (DisplayListHeader dlh in m_displayListHeaders)
         {
             int counter = 0;
-            for (int i = 0; i < dlh.entries.Count;i++)
+            for (int i = 0; i < dlh.entries.Count;)
             {
                 points.Add(m_points[dlh.entries[i].PosIndex]);
                 normals.Add(m_normals[dlh.entries[i].NormIndex]);
@@ -309,96 +321,565 @@ public class GCModel
                 //i += 3;
             }
         }
-
-
     }
 
-    public void LoadData(BinaryReader binReader)
+
+    public void WriteData(BinaryWriter writer)
     {
-        Common.ReadTextureNames(binReader, GCModelReader.txtrTag, m_textures);
+        WriteVERS(writer);
+        WriteCPRT(writer);
+        WriteSELS(writer);
+        WriteCNTR(writer);
+        WriteSHDR(writer);
+        WriteTXTR(writer);
+        WriteDSLS(writer);
+        WritePADD(writer);
+        WriteDSLI(writer);
+        WriteDSLC(writer);
+        WritePOSI(writer);
+        WritePADD(writer);
+        WriteNORM(writer);
+        WritePADD(writer);
+        WriteUV0(writer);
+        WritePADD(writer);
+        WriteVFLA(writer);
+        WriteRAM(writer);
+        WriteMSAR(writer);
+        WriteNLVL(writer);
+        WriteMESH(writer);
+        WriteELEM(writer);
+        WriteEND(writer);
+    }
 
-        long currentPos = binReader.BaseStream.Position;
-        ReadDSLISection(binReader);
-        binReader.BaseStream.Position = currentPos;
-
-        ReadDSLSSection(binReader);
-
-        ReadSKELSection(binReader);
-
-
-        if (Common.FindCharsInStream(binReader, GCModelReader.cntrTag, true))
+    public static void WriteNull(BinaryWriter writer, int num)
+    {
+        for (int i = 0; i < num; ++i)
         {
+            writer.Write((byte)0);
         }
+    }
 
-        if (Common.FindCharsInStream(binReader, GCModelReader.posiTag))
+    public static void WriteNullPaddedString(BinaryWriter writer, string str, int requiredLength)
+    {
+        writer.Write(str);
+        WriteNull(writer, requiredLength - str.Length);
+    }
+
+    public static void WriteStringList(BinaryWriter writer, List<string> list, int totalLength)
+    {
+        int ongoingTotal = 0;
+        for (int i = 0; i < list.Count; ++i)
         {
-            int posSectionLength = binReader.ReadInt32();
-            int uk2 = binReader.ReadInt32();
-            int numPoints = binReader.ReadInt32();
-            for (int i = 0; i < numPoints; ++i)
+            ongoingTotal += list[i].Length;
+            WriteASCIIString(writer, list[i]);
+            if (i < list.Count - 1)
             {
-                m_points.Add(Common.FromStreamVector3BE(binReader));
+                writer.Write((byte)0x00);
+                ongoingTotal += 1;
             }
         }
 
-        if (Common.FindCharsInStream(binReader, GCModelReader.normTag))
+        while (ongoingTotal < totalLength)
         {
-            int normSectionLength = binReader.ReadInt32();
-            int uk4 = binReader.ReadInt32();
-            int numNormals = binReader.ReadInt32();
+            writer.Write((byte)0x00);
+            ongoingTotal++;
+        }
+    }
 
-            for (int i = 0; i < numNormals; ++i)
+    public static int GetStringListSize(List<string> list, int requiredPadding)
+    {
+        int total = 0;
+        for (int i = 0; i < list.Count; ++i)
+        {
+            total += list[i].Length;
+            if (i < list.Count - 1)
             {
-                m_normals.Add(Common.FromStreamVector3BE(binReader));
+                total += 1;
             }
+        }
+        //int pad = total % requiredPadding;
+
+        return total; //+pad;
+    }
+
+    public static void WriteASCIIString(BinaryWriter writer, string s, int padToLength = 0)
+    {
+        byte[] bytes = Encoding.ASCII.GetBytes(s);
+        writer.Write(bytes);
+        if (padToLength > 0)
+        {
+            int pad = padToLength - bytes.Length;
+            for (int i = 0; i < pad; ++i)
+            {
+                writer.Write((byte)0x00);
+            }
+        }
+    }
+
+    public void WriteVERS(BinaryWriter writer)
+    {
+        // Write VERS
+        WriteASCIIString(writer, "VERS");
+        // header size
+        writer.Write(0x20);
+        writer.Write(0x00);
+        writer.Write(0x01);
+        writer.Write(0x00);
+        writer.Write(0x0E);
+        writer.Write(0x00);
+        writer.Write(0x00);
+    }
+
+    public void WriteCPRT(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "CPRT");
+        writer.Write(0x90);
+        writer.Write(0x00);
+        writer.Write(0x80);
+        WriteASCIIString(writer, "(C) May 27 2003 LucasArts a division of LucasFilm, Inc.");
+        WriteNull(writer, 0x49);
+    }
 
 
+    public void WriteSELS(BinaryWriter writer)
+    {
+        int total = HeaderSize;
+        int textureLength = GetStringListSize(m_selsInfo, 4);
+        total += textureLength;
+        //total += (shader.Length+1);
+
+        int padSize = 4;
+        int pad = total % padSize;
+        if (pad != 0)
+        {
+            total += (padSize - pad);
         }
 
-        if (Common.FindCharsInStream(binReader, GCModelReader.uv0Tag))
+        WriteASCIIString(writer, "SELS");
+
+        //total = 0x50;
+        writer.Write(total);
+        writer.Write(0x00);
+        writer.Write(0x01);
+
+
+        WriteStringList(writer, m_selsInfo, (total - HeaderSize));
+    }
+
+    public void WriteCNTR(BinaryWriter writer)
+    {
+        // Write VERS
+        WriteASCIIString(writer, "CNTR");
+        writer.Write(0x50);
+        writer.Write(0x01);
+        writer.Write(0x01);
+
+        // 4x4 matrix.
+        foreach (IndexedVector4 v in m_centers)
         {
-            int normSectionLength = binReader.ReadInt32();
-            int uk4 = binReader.ReadInt32();
-            int numUVs = binReader.ReadInt32();
-
-            for (int i = 0; i < numUVs; ++i)
-            {
-                m_uvs.Add(Common.FromStreamVector2BE(binReader));
-            }
-
+            Common.WriteVector4BE(writer, v);
+            //Common.WriteVector4(writer, v);
         }
+    }
+
+
+    static byte[] MetalShaderData = new byte[]
+    {
+        0xFF, 0xFF, 0xFF, 0xFF, 0x6D, 0x65, 0x74, 0x61, 0x6C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    public void WriteSHDR(BinaryWriter writer)
+    {
+        int total = HeaderSize;
+        WriteASCIIString(writer, "SHDR");
+        total += MetalShaderData.Length;
+        writer.Write(total); // block size
+        writer.Write(0);
+        writer.Write(1); // num materials, 1 for now
+        writer.Write(MetalShaderData);
+    }
+
+    public void WriteTXTR(BinaryWriter writer)
+    {
+        int total = HeaderSize;
+        total += m_textures.Count * TextureBlockSize;
+        WriteASCIIString(writer, "TXTR");
+        writer.Write(total);
+        writer.Write(0); // block size
+        writer.Write(m_textures.Count);
+
+
+        foreach(TextureInfo textureInfo in m_textures)
+        {
+            WriteASCIIString(writer,textureInfo.Name,MaxTextureNameSize);
+            writer.Write(-1);
+            writer.Write(0);
+            writer.Write(textureInfo.Width);
+            writer.Write(textureInfo.Height);
+
+            int unknown1 = 3;
+            int unknown2 = 3;
+
+            writer.Write(unknown1);
+            writer.Write(unknown2);
+        }
+    }
+
+
+    public void WriteDSLS(BinaryWriter writer)
+    {
+        int total = HeaderSize;
+
+        WriteASCIIString(writer, "DSLS");
+
+        foreach (DisplayListHeader dlh in m_displayListHeaders)
+        {
+            total += 4;
+            total += dlh.entries.Count * 6;
+        }
+
+        writer.Write(total); // block size
+        writer.Write(1);
+        writer.Write(m_displayListHeaders.Count);
+
+        foreach (DisplayListHeader dlh in m_displayListHeaders)
+        {
+            dlh.ToStream(writer);
+        }
+
+        WriteNull(writer, 2);
+    }
+
+    public void WriteDSLI(BinaryWriter writer)
+    {
+        int blockSize = 0x20;
+        WriteASCIIString(writer, "DSLI");
+
+        writer.Write(blockSize); // block size
+        writer.Write(2); // number of elements.
+        writer.Write(1);
+        WriteNull(writer, 0x10);
+    }
+
+    public void WriteDSLC(BinaryWriter writer)
+    {
+        int blockSize = 0x20;
+        WriteASCIIString(writer, "DSLC");
+
+        writer.Write(blockSize); // block size
+        writer.Write(2); // number of elements.
+        writer.Write(1);
+        WriteNull(writer, 0x10);
+    }
+
+    public void WritePOSI(BinaryWriter writer)
+    {
+        int blockSize = HeaderSize + (m_points.Count * 12);
+        WriteASCIIString(writer, "POSI");
+
+        writer.Write(blockSize); // block size
+        writer.Write(1);
+        writer.Write(m_points.Count); // number of elements.
+        foreach (IndexedVector3 v in m_points)
+        {
+            Common.WriteVector3BE(writer, v);
+        }
+    }
+
+    public void WriteNORM(BinaryWriter writer)
+    {
+        int blockSize = HeaderSize + (m_normals.Count * 12);
+
+        WriteASCIIString(writer, "NORM");
+
+        writer.Write(blockSize); // block size
+        writer.Write(1);
+        writer.Write(m_normals.Count); // number of elements.
+        foreach (IndexedVector3 v in m_normals)
+        {
+            Common.WriteVector3BE(writer, v);
+        }
+
+        // fixme
+        WriteNull(writer, 8);
+    }
+
+    public void WriteUV0(BinaryWriter writer)
+    {
+        int blockSize = HeaderSize + (m_uvs.Count * 8);
+        WriteASCIIString(writer, "UV0 ");
+
+        writer.Write(blockSize); // block size
+        writer.Write(1);
+        writer.Write(m_uvs.Count); // number of elements.
+        foreach (IndexedVector2 v in m_uvs)
+        {
+            Common.WriteVector2BE(writer, v);
+        }
+
+        // fixme
+        WriteNull(writer, 8);
+    }
+
+    static byte[] VFLAGSData = new byte[]
+        { 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+    public void WriteVFLA(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "VFLA");
+        writer.Write(0x20); // block size
+        writer.Write(1);
+        writer.Write(1);
+        writer.Write(VFLAGSData);
+    }
+
+    public void WriteRAM(BinaryWriter writer)
+    {
+        int blockSize = 0x90;
+        WriteASCIIString(writer, "RAM ");
+        writer.Write(blockSize); // block size
+        writer.Write(1);
+        writer.Write(1);
+        WriteNull(writer, blockSize - HeaderSize);
+    }
+
+    public void WriteMSAR(BinaryWriter writer)
+    {
+        int blockSize = 0x40;
+        WriteASCIIString(writer, "MSAR");
+
+        writer.Write(blockSize); // block size
+        writer.Write(0);
+        writer.Write(1);
+        WriteNull(writer, blockSize - HeaderSize);
+    }
+
+    public void WriteNLVL(BinaryWriter writer)
+    {
+        int blockSize = 0x20;
+        WriteASCIIString(writer, "NLVL");
+
+        writer.Write(blockSize); // block size
+        writer.Write(2); // number of elements.
+        writer.Write(1);
+        WriteNull(writer, 0x10);
+    }
+
+    public void WriteMESH(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "MESH");
+
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
+    }
+
+    public void WriteELEM(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "ELEM");
+
+        writer.Write(0); // block size
+        writer.Write(0); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
+    }
+
+    public void WriteEND(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "END.");
+
+        writer.Write(HeaderSize); // block size
+        writer.Write(0x00); // number of elements.
+        writer.Write(0x00);
+    }
+
+    public void WritePADD(BinaryWriter writer)
+    {
+        WriteASCIIString(writer, "PADD");
+        writer.Write(HeaderSize);
+        writer.Write(0x00);
+        writer.Write(0x00);
     }
 
 
     public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
     public String m_name;
-    public List<Vector3> m_points = new List<Vector3>();
-    public List<Vector3> m_normals = new List<Vector3>();
-    public List<Vector2> m_uvs = new List<Vector2>();
-    public List<Vector2> m_uv2s = new List<Vector2>();
-    public List<String> m_textures = new List<String>();
+    public List<IndexedVector3> m_points = new List<IndexedVector3>();
+    public List<IndexedVector3> m_normals = new List<IndexedVector3>();
+    public List<IndexedVector2> m_uvs = new List<IndexedVector2>();
+    public List<IndexedVector2> m_uv2s = new List<IndexedVector2>();
+    public List<TextureInfo> m_textures = new List<TextureInfo>();
     public List<String> m_names = new List<String>();
     public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
-    public List<Vector3> m_centers = new List<Vector3>();
+    public List<IndexedVector4> m_centers = new List<IndexedVector4>();
     public List<String> m_selsInfo = new List<string>();
     public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
-    public Vector3 MinBB;
-    public Vector3 MaxBB;
-    public Vector3 Center;
+    public IndexedVector3 MinBB;
+    public IndexedVector3 MaxBB;
+    public IndexedVector3 Center;
+
     public List<BoneNode> m_bones = new List<BoneNode>();
     //public bool Valid =true;
 }
+
+
+// Info taken from : http://smashboards.com/threads/melee-dat-format.292603/
+// much appreciated.
+
+//http://www.falloutsoftware.com/tutorials/gl/gl3.htm
+
+//case 0xB8: // (GL_POINTS)
+//case 0xA8: // (GL_LINES)
+//case 0xB0: // (GL_LINE_STRIP)
+//case 0x90: // (GL_TRIANGLES)
+//case 0x98: // (GL_TRIANGLE_STRIP)
+//case 0xA0: // (GL_TRIANGLE_FAN)
+//case 0x80: // (GL_QUADS)
+
+
+public class DisplayListHeader
+{
+    public byte primitiveFlags;
+    public short indexCount;
+    public bool Valid = true;
+    public List<DisplayListEntry> entries = new List<DisplayListEntry>();
+
+    public void ToStream(BinaryWriter writer)
+    {
+        writer.Write((byte)0x98);
+        writer.Write((byte)0x00);
+        writer.Write((byte)0x00);
+        writer.Write((byte)0x90);
+
+        Common.WriteBigEndian(writer, (short)entries.Count);
+        //writer.Write((short)entries.Count);
+        foreach (DisplayListEntry ble in entries)
+        {
+            ble.ToStream(writer);
+        }
+    }
+
+    public static bool FromStream(BinaryReader reader, out DisplayListHeader header, DSLIInfo dsliInfo)
+    {
+        long currentPosition = reader.BaseStream.Position;
+        bool success = false;
+        byte header1 = reader.ReadByte();
+        //Debug.Assert(header1 == 0x098);
+        short pad1 = reader.ReadInt16();
+
+        header = new DisplayListHeader();
+        header.primitiveFlags = reader.ReadByte();
+        //Debug.Assert(header.primitiveFlags== 0x090);
+        if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x00)
+        {
+            header.indexCount = Common.ToInt16BigEndian(reader);
+
+            success = true;
+            for (int i = 0; i < header.indexCount; ++i)
+            {
+                header.entries.Add(DisplayListEntry.FromStream(reader));
+            }
+        }
+        else
+        {
+            reader.BaseStream.Position = currentPosition;
+        }
+
+        return success;
+    }
+
+
+    public static DisplayListHeader CreateFromMeshData(int[] triangles, Vector3[] vertices,
+        Vector3[] normals, Vector2[] uvs)
+    {
+        DisplayListHeader dlh = new DisplayListHeader();
+        for (int i = 0; i < triangles.Length; i += 3)
+        {
+            dlh.entries.Add(new DisplayListEntry((ushort)triangles[i]));
+        }
+
+        return dlh;
+    }
+}
+
+
+public struct DisplayListEntry
+{
+    public ushort PosIndex;
+    public ushort NormIndex;
+    public ushort UVIndex;
+
+    public String ToString()
+    {
+        return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex;
+    }
+
+    public DisplayListEntry(ushort index)
+    {
+        PosIndex = index;
+        NormIndex = index;
+        UVIndex = index;
+    }
+
+    public DisplayListEntry(ushort pos, ushort norm, ushort uv)
+    {
+        PosIndex = pos;
+        NormIndex = norm;
+        UVIndex = uv;
+    }
+
+
+    public void ToStream(BinaryWriter writer)
+    {
+        Common.WriteBigEndian(writer, (short)PosIndex);
+        Common.WriteBigEndian(writer, (short)NormIndex);
+        Common.WriteBigEndian(writer, (short)UVIndex);
+    }
+
+    public static DisplayListEntry FromStream(BinaryReader reader)
+    {
+        DisplayListEntry entry = new DisplayListEntry();
+        entry.PosIndex = Common.ToUInt16BigEndian(reader);
+        entry.NormIndex = Common.ToUInt16BigEndian(reader);
+        entry.UVIndex = Common.ToUInt16BigEndian(reader);
+
+        //if (entry.PosIndex < 0 || entry.NormIndex < 0 || entry.UVIndex < 0)
+        //{
+        //    int ibreak = 0;
+        //}
+
+
+        return entry;
+    }
+}
+
 
 public class GCModelReader
 {
     public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
     public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
-    public static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' }; // External link information? referes to textures, other models, entities and so on? 
+
+    public static char[]
+        selsTag = new char[]
+        {
+            'S', 'E', 'L', 'S'
+        }; // External link information? referes to textures, other models, entities and so on? 
+
     public static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
     public static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
     public static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
-    //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
-    public static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };  // DisplayList information
+    public static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
+    public static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' }; // DisplayList information
     public static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };
     public static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };
     public static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
@@ -417,10 +898,13 @@ public class GCModelReader
     public static char[] stypTag = new char[] { 'S', 'T', 'Y', 'P' };
 
 
-    public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag,
-                                      dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag,
-                                      ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
-                                      vflgTag,stypTag,nameTag };
+    public static char[][] allTags =
+    {
+        versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag,
+        dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag,
+        ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
+        vflgTag, stypTag, nameTag, paddTag
+    };
 
     public List<GCModel> m_models = new List<GCModel>();
 
@@ -440,13 +924,13 @@ public class GCModelReader
                 model = new GCModel(sourceFile.Name);
             }
 
+            model.LoadData(binReader);
+
             model.BuildBB();
             model.Validate();
             return model;
         }
-
     }
-
 
 
     public void LoadModels(String sourceDirectory, String infoFile, int maxFiles = -1)
@@ -470,12 +954,12 @@ public class GCModelReader
                 catch (Exception e)
                 {
                 }
+
                 counter++;
                 if (maxFiles > 0 && counter > maxFiles)
                 {
                     break;
                 }
-
             }
         }
     }
@@ -486,28 +970,30 @@ public class GCModelReader
         {
             foreach (GCModel model in m_models)
             {
-                infoStream.WriteLine(String.Format("File : {0} : {1} : {2}", model.m_name, model.m_points.Count, model.m_normals.Count));
+                infoStream.WriteLine(String.Format("File : {0} : {1} : {2}", model.m_name, model.m_points.Count,
+                    model.m_normals.Count));
                 infoStream.WriteLine("Verts : ");
-                foreach (Vector3 sv in model.m_points)
+                foreach (IndexedVector3 sv in model.m_points)
                 {
                     Common.WriteInt(infoStream, sv);
                 }
+
                 infoStream.WriteLine("Normals : ");
-                foreach (Vector3 sv in model.m_normals)
+                foreach (IndexedVector3 sv in model.m_normals)
                 {
                     Common.WriteInt(infoStream, sv);
                 }
+
                 infoStream.WriteLine();
                 infoStream.WriteLine();
             }
         }
-
     }
 
     public void DumpSectionLengths(String sourceDirectory, String infoFile)
     {
         m_models.Clear();
-        String[] files = Directory.GetFiles(sourceDirectory, "*");
+        String[] files = Directory.GetFiles(sourceDirectory, "*.pax", SearchOption.AllDirectories);
 
         using (System.IO.StreamWriter infoStream = new System.IO.StreamWriter(infoFile))
         {
@@ -515,7 +1001,6 @@ public class GCModelReader
             {
                 try
                 {
-
                     FileInfo sourceFile = new FileInfo(file);
 
                     if (sourceFile.Name != "File 005496")
@@ -527,7 +1012,8 @@ public class GCModelReader
                     LoadSingleModel(sourceFile.FullName, model);
 
 
-                    using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
+                    using (BinaryReader binReader =
+                           new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
                     {
                         m_models.Add(model);
                         infoStream.WriteLine("File : " + model.m_name);
@@ -546,6 +1032,18 @@ public class GCModelReader
                                 model.m_tagSizes[tag] = -1;
                             }
                         }
+
+                        int numPadd = 0;
+                        binReader.BaseStream.Position = 0;
+                        while (Common.FindCharsInStream(binReader, paddTag, false))
+                        {
+                            numPadd++;
+                            int blockSize = (int)binReader.ReadInt32();
+                            infoStream.WriteLine("PADD : " + blockSize);
+                        }
+
+                        infoStream.WriteLine("Num PADD : " + numPadd);
+
 
                         //foreach(char[] tagName in model.m_tagSizes.Keys.Values)
                         //{
@@ -573,9 +1071,9 @@ public class GCModelReader
                         }
 
                         sb.AppendLine("Textures : ");
-                        foreach (string textureName in model.m_textures)
+                        foreach (TextureInfo textureInfo in model.m_textures)
                         {
-                            sb.AppendLine("\t" + textureName);
+                            sb.AppendLine($"\t {textureInfo.Name}  {textureInfo.Width}  {textureInfo.Height}");
                         }
 
 
@@ -591,28 +1089,29 @@ public class GCModelReader
                         sb.AppendLine("DisplayListHeaders : " + model.m_displayListHeaders.Count);
                         foreach (DisplayListHeader header in model.m_displayListHeaders)
                         {
-                            sb.AppendLine($"Header , entries : {+header.entries.Count} , div by 3 [{(header.entries.Count % 3 == 0)}]");
+                            sb.AppendLine(
+                                $"Header , entries : {+header.entries.Count} , div by 3 [{(header.entries.Count % 3 == 0)}]");
                             sb.AppendLine($"MinPoint {header.entries.Min(entry => entry.PosIndex)}");
-                            sb.AppendLine($"MaxPoint {header.entries.Max(entry => entry.PosIndex)}  less {(header.entries.Max(entry => entry.PosIndex) < model.m_points.Count)} ");
+                            sb.AppendLine(
+                                $"MaxPoint {header.entries.Max(entry => entry.PosIndex)}  less {(header.entries.Max(entry => entry.PosIndex) < model.m_points.Count)} ");
                             sb.AppendLine($"MinNormal {header.entries.Min(entry => entry.NormIndex)}");
-                            sb.AppendLine($"MaxNormal {header.entries.Max(entry => entry.NormIndex)}  less {(header.entries.Max(entry => entry.NormIndex) < model.m_normals.Count)} ");
+                            sb.AppendLine(
+                                $"MaxNormal {header.entries.Max(entry => entry.NormIndex)}  less {(header.entries.Max(entry => entry.NormIndex) < model.m_normals.Count)} ");
                             sb.AppendLine($"MinUV {header.entries.Min(entry => entry.UVIndex)}");
-                            sb.AppendLine($"MaxUV {header.entries.Max(entry => entry.UVIndex)}  less {(header.entries.Max(entry => entry.UVIndex) < model.m_uvs.Count)} ");
+                            sb.AppendLine(
+                                $"MaxUV {header.entries.Max(entry => entry.UVIndex)}  less {(header.entries.Max(entry => entry.UVIndex) < model.m_uvs.Count)} ");
                             int counter = 0;
-                            for (int i = 0; i < header.entries.Count;)
-                            {
-                                sb.AppendLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", header.entries[i].PosIndex, header.entries[i].UVIndex, header.entries[i].NormIndex,
-                                header.entries[i + 1].PosIndex, header.entries[i + 1].UVIndex, header.entries[i + 1].NormIndex,
-                                header.entries[i + 2].PosIndex, header.entries[i + 2].UVIndex, header.entries[i + 2].NormIndex));
-                                i += 3;
-                            }
+                            //for (int i = 0; i < header.entries.Count;)
+                            //{
+                            //    sb.AppendLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", header.entries[i].PosIndex, header.entries[i].UVIndex, header.entries[i].NormIndex,
+                            //    header.entries[i + 1].PosIndex, header.entries[i + 1].UVIndex, header.entries[i + 1].NormIndex,
+                            //    header.entries[i + 2].PosIndex, header.entries[i + 2].UVIndex, header.entries[i + 2].NormIndex));
+                            //    i += 3;
+                            //}
                         }
 
 
                         infoStream.WriteLine(sb.ToString());
-
-
-
                     }
                 }
                 catch (Exception e)
@@ -621,17 +1120,9 @@ public class GCModelReader
                 }
             }
         }
-
     }
-
-
-
-
-
-
-
-
 }
+
 public class DSLIInfo
 {
     public int startPos;
@@ -645,7 +1136,13 @@ public class DSLIInfo
         info.length = Common.ReadInt32BigEndian(reader);
         return info;
     }
-
 }
 
 
+
+public struct TextureInfo
+{
+    public string Name;
+    public int Width;
+    public int Height;
+}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,6 +47,9 @@ public static class Common
     public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
     public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
     public static char[] obbtTag = new char[] { 'O', 'B', 'B', 'T' };
+    
+    public static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
+
     //public static char[] endTag = new char[] { (char)0x3F,'E', 'N', 'D'};
 
 
@@ -547,6 +551,64 @@ public static class Common
         return ((float)val);
     }
 
+    
+    public static void WriteBigEndian(BinaryWriter writer,short value)
+    {
+        short BEValue = BinaryPrimitives.ReverseEndianness(value);
+        writer.Write(BEValue);
+    }
+
+    public static float ReverseOrder(float f)
+    {
+        byte[] bytes = BitConverter.GetBytes(f);
+        Array.Reverse(bytes);
+        return BitConverter.ToSingle(bytes);
+        
+    }
+
+    public static void WriteVector3BE(BinaryWriter bw,IndexedVector3 v)
+    {
+        bw.Write(ReverseOrder(v.X));
+        bw.Write(ReverseOrder(v.Y));  
+        bw.Write(ReverseOrder(v.Z));
+    }
+
+    public static void WriteVector2BE(BinaryWriter bw,IndexedVector2 v)
+    {
+        bw.Write(ReverseOrder(v.X));
+        bw.Write(ReverseOrder(v.Y));  
+    }
+
+    public static void WriteVector4BE(BinaryWriter bw,IndexedVector4 v)
+    {
+        bw.Write(ReverseOrder(v.X));
+        bw.Write(ReverseOrder(v.Y));  
+        bw.Write(ReverseOrder(v.Z));  
+        bw.Write(ReverseOrder(v.W));  
+    }
+
+    
+    public static IndexedVector4 FromStreamVector4BE(BinaryReader reader)
+    {
+        IndexedVector4 v = new IndexedVector4();
+        v.X = ReverseOrder(reader.ReadSingle());
+        v.Y = ReverseOrder(reader.ReadSingle());
+        v.Z = ReverseOrder(reader.ReadSingle());
+        v.W = ReverseOrder(reader.ReadSingle());
+
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.X = Common.ReadSingleBigEndian(s_buffer, 0);
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.Z = Common.ReadSingleBigEndian(s_buffer, 0);
+        //reader.Read(s_buffer, 0, s_buffer.Length);
+        //v.W = Common.ReadSingleBigEndian(s_buffer, 0);
+
+        return v;
+    }
+
+    
 
     public static float FromStream2ByteToFloatU(BinaryReader reader)
     {

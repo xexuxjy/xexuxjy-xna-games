@@ -5,9 +5,9 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 using ExtractBEC;
-using Ionic.Zlib;
-using CompressionLevel = Ionic.Zlib.CompressionLevel;
-using DeflateStream = Ionic.Zlib.DeflateStream;
+//using Ionic.Zlib;
+//using CompressionLevel = Ionic.Zlib.CompressionLevel;
+//using DeflateStream = Ionic.Zlib.DeflateStream;
 
 /*
  *
@@ -375,7 +375,14 @@ public class ExtractBec
         BuildTable();
         HashData.BuildHashInfo();
 
-        ExtractBec.BuildHashesForFile(@"D:\GladiusCodeClean\BackupData\GladiusData\data\filelist.txt","d:/tmp/gladius-python-scp-hashes.txt");
+        string[] files = new string[]{"data/mesh/weapons/staff/candycane.pax","data/mesh/weapons/staff/candycane.ptx" };
+        foreach(string file in files)
+        {
+            System.Console.WriteLine(String.Format("0x{0:X} : \"{1}\",", ExtractBec.stringToHash(file), file));
+        }
+                
+
+        //ExtractBec.BuildHashesForFile(@"D:\GladiusCodeClean\BackupData\GladiusData\data\filelist.txt","d:/tmp/gladius-python-scp-hashes.txt");
 
         //ExtractBecData(@"D:\GladiusISOWorkingExtracted\GC-NR\gladius.bec", @"D:\tmp\gladius-GC-NR\csharp-extracted-scp");
 
@@ -525,8 +532,8 @@ public class BecFile
         MemoryStream inputMS = new MemoryStream(sourceData);
         MemoryStream outputMS = new MemoryStream();
 
-        ZlibStream zlStream = new ZlibStream(inputMS, Ionic.Zlib.CompressionMode.Decompress);
-        CopyStream(zlStream,outputMS );
+        //ZlibStream zlStream = new ZlibStream(inputMS, Ionic.Zlib.CompressionMode.Decompress);
+        //CopyStream(zlStream,outputMS );
 
         return outputMS.ToArray();
 
@@ -537,7 +544,7 @@ public class BecFile
         MemoryStream inputMS = new MemoryStream(sourceData);
         MemoryStream outputMS = new MemoryStream();
 
-        Stream deflateStream = new ZlibStream(outputMS, Ionic.Zlib.CompressionMode.Compress, CompressionLevel.BestSpeed, true);
+        Stream deflateStream = null;//new ZlibStream(outputMS, Ionic.Zlib.CompressionMode.Compress, CompressionLevel.BestSpeed, true);
         //Stream deflateStream = new DeflateStream(outputMS,Ionic.Zlib.CompressionMode.Compress);
         CopyStream(inputMS, deflateStream);
         deflateStream.Close();

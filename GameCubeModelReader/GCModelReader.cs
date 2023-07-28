@@ -125,11 +125,20 @@ public class GCModel
             int numTextures = binReader.ReadInt32();
             for(int i=0;i<numTextures; i++)
             {
-                byte[] textureBlock = binReader.ReadBytes(TextureBlockSize);
-                byte[] textureNameData = new byte[MaxTextureNameSize];
-                Array.Copy(textureBlock,textureNameData, MaxTextureNameSize);
+                //byte[] textureBlock = binReader.ReadBytes(TextureBlockSize);
+                byte[] textureNameData = binReader.ReadBytes(MaxTextureNameSize);
+                //Array.Copy(textureBlock,textureNameData, MaxTextureNameSize);
                 string s = Encoding.ASCII.GetString(textureNameData).Trim();;
-                m_textures.Add(s);
+
+                int texNum = binReader.ReadInt32();
+                Debug.Assert(texNum == -1);
+                int unknown = binReader.ReadInt32();
+                int width = binReader.ReadInt32();
+                int height = binReader.ReadInt32();
+                int unknown2 = binReader.ReadInt32();
+                int unknown3 = binReader.ReadInt32();
+
+                m_textures.Add(new TextureInfo(){Name=s, Width=width,Height=height });
 
 
             }
@@ -469,10 +478,19 @@ public class GCModel
         writer.Write(m_textures.Count);
 
 
-        foreach(string texture in m_textures)
+        foreach(TextureInfo textureInfo in m_textures)
         {
-            WriteASCIIString(writer,texture,MaxTextureNameSize);
-            WriteNull(writer,TextureBlockSize-MaxTextureNameSize);
+            WriteASCIIString(writer,textureInfo.Name,MaxTextureNameSize);
+            writer.Write(-1);
+            writer.Write(0);
+            writer.Write(textureInfo.Width);
+            writer.Write(textureInfo.Height);
+
+            int unknown1 = 3;
+            int unknown2 = 3;
+
+            writer.Write(unknown1);
+            writer.Write(unknown2);
         }
 
 
@@ -658,7 +676,7 @@ public class GCModel
     public List<IndexedVector3> m_normals = new List<IndexedVector3>();
     public List<IndexedVector2> m_uvs = new List<IndexedVector2>();
     public List<IndexedVector2> m_uv2s = new List<IndexedVector2>();
-    public List<String> m_textures = new List<String>();
+    public List<TextureInfo> m_textures = new List<TextureInfo>();
     public List<String> m_names = new List<String>();
     public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
     public List<IndexedVector4> m_centers = new List<IndexedVector4>();
@@ -737,7 +755,22 @@ public class DisplayListHeader
         }
         return success;
     }
+
+
+    public static DisplayListHeader CreateFromMeshData(List<int> triangles,List<IndexedVector3> vertices,List<IndexedVector3> normals,List<IndexedVector2> uvs)
+    {
+        DisplayListHeader dlh = new DisplayListHeader();
+        for(int i=0; i<triangles.Count;i+=3)
+        {
+            dlh.entries.Add(new DisplayListEntry((ushort)triangles[i]));
+        }
+
+        return dlh;
+    }
+
+
 }
+
 
 
 
@@ -752,6 +785,23 @@ public struct DisplayListEntry
     {
         return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex;
     }
+
+    public DisplayListEntry(ushort index)
+    {
+        PosIndex = index;
+        NormIndex = index;
+        UVIndex = index;
+    }
+
+    public DisplayListEntry(ushort pos,ushort norm, ushort uv)
+    {
+        PosIndex = pos;
+        NormIndex = norm;
+        UVIndex = uv;
+
+    }
+
+
 
     public void ToStream(BinaryWriter writer)
     {
@@ -977,9 +1027,9 @@ public class GCModelReader
                         }
 
                         sb.AppendLine("Textures : ");
-                        foreach (string textureName in model.m_textures)
+                        foreach (TextureInfo textureInfo in model.m_textures)
                         {
-                            sb.AppendLine("\t" + textureName);
+                            sb.AppendLine($"\t {textureInfo.Name}  {textureInfo.Width}  {textureInfo.Height}");
                         }
 
 
@@ -1052,4 +1102,11 @@ public class DSLIInfo
 
 }
 
+
+public struct TextureInfo
+{
+    public string Name;
+    public int Width;
+    public int Height;
+}
 
