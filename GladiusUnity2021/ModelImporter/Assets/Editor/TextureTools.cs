@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using GCTextureTools;
 using System.Drawing.Imaging;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using Color = System.Drawing.Color;
 
@@ -512,6 +513,43 @@ namespace GCTextureTools
         }
 
 
+        public static void ReadColours(UnityEngine.Color[] colours,int width,int height , List<DXTBlock> colorBlockList, List<DXTBlock> alphaBlockList)
+        {
+            UnityEngine.Color[] unpackedColourPixels = new UnityEngine.Color[colours.Length];
+            UnityEngine.Color[] unpackedAlphaPixels = new UnityEngine.Color[colours.Length];
+            
+            int count = 0;
+            foreach (UnityEngine.Color c in colours)
+            {
+                unpackedColourPixels[count] = new UnityEngine.Color(c.r, c.g, c.b, 1.0f);
+                unpackedAlphaPixels[count] = new UnityEngine.Color(0.0f, c.g, 0.0f, 1.0f);
+                count++;
+            }
+
+            for (int y = 0; y < height; y += 8)
+            {
+                for (int x = 0; x < width; x += 8)
+                {
+                    int index = (y * width + x);
+                    colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
+                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+
+                    index = (y * width + x+4);
+                    colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
+                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+
+                    index = ((y + 4) * width + x);
+                    colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
+                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+
+                    index = ((y + 4) * width + x + 4);
+                    colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
+                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                }
+            }
+            
+        }
+
         public static void ReadBitmap(DirectBitmap bitmap, List<DXTBlock> colorBlockList, List<DXTBlock> alphaBlockList)
         {
             byte[] bytes = bitmap.Bits;
@@ -637,17 +675,26 @@ namespace GCTextureTools
         }
 
 
-        public static void EncodeFile(Texture2D t, string destinationFile)
+        public static void DecodeFile(string fileName)
         {
-            string imageName = Path.GetFileName(destinationFile);
+            
+            
+        }
+        
+        public static void EncodeFile(Texture2D t, string imageName,string destinationFile)
+        {
+            //DirectBitmap directBitmap = new DirectBitmap(t);
+            //int width = directBitmap.Width;
+            //int height = directBitmap.Height;
 
-            DirectBitmap directBitmap = new DirectBitmap(t);
-            int width = directBitmap.Width;
-            int height = directBitmap.Height;
+            int width = t.width;
+            int height = t.height;
+
             
             List<DXTBlock> colorBlockList = new List<DXTBlock>();
             List<DXTBlock> alphaBlockList = new List<DXTBlock>();
-            ReadBitmap(directBitmap, colorBlockList, alphaBlockList);
+            //ReadBitmap(directBitmap, colorBlockList, alphaBlockList);
+            ReadColours(t.GetPixels(), width, height,colorBlockList,alphaBlockList);
 
             byte[] processResults = ProcessBlockList(colorBlockList, alphaBlockList);
             WriteImageFile(destinationFile,imageName, width, height, processResults);
@@ -947,6 +994,26 @@ namespace GCTextureTools
             }
         }
 
+
+        public static DXTBlock FromUncompressed(UnityEngine.Color[] data, int offset, int stride)
+        {
+            DXTBlock block = new DXTBlock();
+            int count = 0;
+            for (int y = 0; y < 4; ++y)
+            {
+                for (int x = 0; x < 4; ++x)
+                {
+                    Color convertedColour = Color.FromArgb((int)(data[offset + x].a * 255), (int)(data[offset + x].r * 255),(int)(data[offset + x].g * 255),(int)(data[offset + x].b * 255));
+
+                    block.SourceColours[count++] = convertedColour;
+                }
+                offset += stride;
+            }
+
+
+            return block;
+        }
+        
         public static DXTBlock FromUncompressed(Color[] data, int offset, int stride)
         {
             DXTBlock block = new DXTBlock();

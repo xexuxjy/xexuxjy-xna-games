@@ -64,13 +64,13 @@ public class GladiusGCExporter : Editor
 
         if (newPath != null && newPath.Length != 0)
         {
-            string testPath = newPath.Substring(0,newPath.Length-newPath.LastIndexOf("/"));
+            string testPath = newPath.Substring(0,(newPath.Length-newPath.LastIndexOf("/"))+1);
             testPath += "/";
             
             GCModel model = GCModel.CreateFromGameObject(gameObj);
             if (model != null)
             {
-                using (BinaryWriter bw = new BinaryWriter(File.OpenWrite(newPath)))
+                using (BinaryWriter bw = new BinaryWriter(File.Create(newPath)))
                 {
                     model.WriteData(bw);
                 }
@@ -83,8 +83,9 @@ public class GladiusGCExporter : Editor
             MeshRenderer meshRenderer = gameObj.GetComponent<MeshRenderer>();
             Material m = meshRenderer.material;
 
-            ImageExtractor.EncodeFile((Texture2D)m.mainTexture,testPath+m.mainTexture.name+".ptx");
+            string textureName = m.mainTexture.name.ToLower();
             
+            ImageExtractor.EncodeFile((Texture2D)m.mainTexture,textureName+".tga", testPath+textureName+".ptx");
         }
 
         return null;
