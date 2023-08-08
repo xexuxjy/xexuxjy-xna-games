@@ -1007,64 +1007,24 @@ public class GCModelReader
                     {
                         m_models.Add(model);
                         infoStream.WriteLine("File : " + model.m_name);
-                        foreach (char[] tag in allTags)
-                        {
-                            // reset for each so we don't worry about order
-                            binReader.BaseStream.Position = 0;
-                            if (Common.FindCharsInStream(binReader, tag, true))
-                            {
-                                int blockSize = binReader.ReadInt32();
-                                model.m_tagSizes[tag] = blockSize;
-                                //infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), blockSize));
-                            }
-                            else
-                            {
-                                model.m_tagSizes[tag] = -1;
-                            }
-                        }
+                        //foreach (char[] tag in allTags)
+                        //{
+                        //    // reset for each so we don't worry about order
+                        //    binReader.BaseStream.Position = 0;
+                        //    if (Common.FindCharsInStream(binReader, tag, true))
+                        //    {
+                        //        int blockSize = binReader.ReadInt32();
+                        //        model.m_tagSizes[tag] = blockSize;
+                        //        //infoStream.WriteLine(String.Format("\t {0} : {1}", new String(tag), blockSize));
+                        //    }
+                        //    else
+                        //    {
+                        //        model.m_tagSizes[tag] = -1;
+                        //    }
+                        //}
                         
                         binReader.BaseStream.Position = 0;
                         infoStream.WriteLine(GetStructure(binReader));
-
-
-                        //int[] alignVals = new int[]{128,64,32,16 };
-                        //int numPadd = 0;
-                        //binReader.BaseStream.Position = 0;
-                        //while(Common.FindCharsInStream(binReader,paddTag,false))
-                        //{
-                        //    numPadd++;
-                        //    int blockSize = (int)binReader.ReadInt32();
-                        //    int startPos = (int)(binReader.BaseStream.Position-8);
-
-                        //    int alignValue = 1;
-                        //    foreach(int val in alignVals)
-                        //    {
-                        //        if(startPos % val ==0)
-                        //        {
-                        //            alignValue = val;
-                        //            break;
-                        //        }
-                        //    }
-
-                        //    infoStream.WriteLine("PADD : " + blockSize+ " Position = "+startPos+" Align "+alignValue);
-
-                        //}
-
-                        //infoStream.WriteLine("Num PADD : " + numPadd);
-
-
-                        //foreach(char[] tagName in model.m_tagSizes.Keys.Values)
-                        //{
-                        //    if(model.m_tagSizes[tagName] > 0)
-                        //    {
-                        //        infoStream.WriteLine("{ : " + (((model.m_tagSizes[dsliTag] - 16) / 8) - 1));
-                        //    }
-                        //}
-
-                        //binReader.BaseStream.Position = 0;
-                        //Common.FindCharsInStream(binReader,dsliTag,false);
-                        //infoStream.WriteLine($"DSLI  : {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()}");
-                       
 
 
                         StringBuilder sb = new StringBuilder();
@@ -1099,14 +1059,9 @@ public class GCModelReader
                             sb.AppendLine(String.Format("\t {0} {1}", dsliInfo.startPos, dsliInfo.length));
                         }
 
-                        //binReader.BaseStream.Position = 0;
-                        //Common.FindCharsInStream(binReader,dsliTag,false);
-                        //infoStream.WriteLine($"DSLI  : {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()}");
-
                         binReader.BaseStream.Position = 0;
                         Common.FindCharsInStream(binReader,dslcTag,false);
-                        infoStream.WriteLine($"DSLC  : {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()}");
-
+                        sb.AppendLine($"DSLC  : {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()}");
 
                         sb.AppendLine("DisplayListHeaders : " + model.m_displayListHeaders.Count);
                         foreach (DisplayListHeader header in model.m_displayListHeaders)
@@ -1127,15 +1082,26 @@ public class GCModelReader
                             //    i += 3;
                             //}
                         }
-
+                            
                         binReader.BaseStream.Position = 0;
                         Common.FindCharsInStream(binReader,meshTag,false);
-                        infoStream.WriteLine($"MESH  : size[{binReader.ReadInt32()}] ver[{binReader.ReadInt32()}] num[{binReader.ReadInt32()}] Union[{binReader.ReadInt32()}] ListPtr[{binReader.ReadInt32()}] ShaderId[{binReader.ReadInt32()}] elementCount[{binReader.ReadInt32()}] vertArrayId[{binReader.ReadInt32()}] ssMask[{binReader.ReadInt32()}]");
+                        sb.AppendLine($"MESH  : size[{binReader.ReadInt32()}] ver[{binReader.ReadInt32()}] num[{binReader.ReadInt32()}] Union[{binReader.ReadInt32()}] ListPtr[{binReader.ReadInt32()}] ShaderId[{binReader.ReadInt32()}] elementCount[{binReader.ReadInt32()}] vertArrayId[{binReader.ReadInt32()}] ssMask[{binReader.ReadInt32()}]");
 
-                        binReader.BaseStream.Position = 0;
-                        Common.FindCharsInStream(binReader,elemTag,false);
-                        infoStream.WriteLine($"ELEM  : size[{binReader.ReadInt32()}] ver[{binReader.ReadInt32()}] num[{binReader.ReadInt32()}] A[{binReader.ReadInt32()}] B[{binReader.ReadInt32()}] C[{binReader.ReadInt32()}] D[{binReader.ReadInt32()}]");
+                        {
+                            binReader.BaseStream.Position = 0;
+                            Common.FindCharsInStream(binReader,elemTag,false);
 
+                            int size = binReader.ReadInt32();
+                            int ver = binReader.ReadInt32();
+                            int num = binReader.ReadInt32();
+                            int a = binReader.ReadInt32();
+                            int b = binReader.ReadInt32();
+                            int c = binReader.ReadInt32();
+                            int d = binReader.ReadInt32();
+
+                            sb.AppendLine($"ELEM  : size[{size}] ver[{ver}] num[{num}] A[{a}] B[{b}] C[{c}] D[{d}]");
+                            sb.AppendLine($"ELEM  : size[{size}] ver[{ver}] num[{num}] type[{a & 0xff}] indexcount [{a >> 8}] B[{b}] C[{c}] D[{d}]");
+                        }
 
 
 

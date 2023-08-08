@@ -81,7 +81,7 @@ public class GladiusGCExporter : Editor
             }
             
             MeshRenderer meshRenderer = gameObj.GetComponent<MeshRenderer>();
-            Material m = meshRenderer.material;
+            Material m = meshRenderer.sharedMaterial;
 
             string textureName = m.mainTexture.name.ToLower();
             

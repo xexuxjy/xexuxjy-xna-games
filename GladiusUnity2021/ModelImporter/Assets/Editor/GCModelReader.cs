@@ -56,12 +56,19 @@ public class GCModel
 
 
             Material m = meshRenderer.sharedMaterial;
+            // model.m_textures.Add(new TextureInfo()
+            //     { Name = m.mainTexture.name, Width = m.mainTexture.width, Height = m.mainTexture.height });
+
+            string textureName = m.mainTexture.name;
+            textureName = "staff_bo";
+            textureName += ".tga";
+            
             model.m_textures.Add(new TextureInfo()
-                { Name = m.mainTexture.name, Width = m.mainTexture.width, Height = m.mainTexture.height });
+                { Name = textureName, Width = 128, Height = 128 });
 
-
+            
             model.m_selsInfo.Add(DefaultShader);
-            model.m_selsInfo.Add(m.mainTexture.name + ".tga");
+            model.m_selsInfo.Add(textureName);
 
             model.m_centers.Add(new IndexedVector3());
             
@@ -332,6 +339,7 @@ public class GCModel
 
     public void PaddIfNeeded(BinaryWriter writer)
     {
+        return;
         int padValue = 32;
         if (writer.BaseStream.Position % padValue == 0)
         {
@@ -353,9 +361,9 @@ public class GCModel
         PaddIfNeeded(writer);
         WriteTXTR(writer);
         PaddIfNeeded(writer);
-        WriteDSLS(writer);
+        int dslsSize = WriteDSLS(writer);
         PaddIfNeeded(writer);
-        WriteDSLI(writer);
+        WriteDSLI(writer,dslsSize);
         PaddIfNeeded(writer);
         WriteDSLC(writer);
         PaddIfNeeded(writer);
@@ -593,7 +601,7 @@ public class GCModel
     }
 
 
-    public void WriteDSLS(BinaryWriter writer)
+    public int WriteDSLS(BinaryWriter writer)
     {
         int total = HeaderSize;
 
@@ -608,7 +616,7 @@ public class GCModel
         
         writer.Write(paddedTotal); // block size
         writer.Write(1);
-        writer.Write(m_displayListHeaders.Count);
+        writer.Write(1);
 
         foreach (DisplayListHeader dlh in m_displayListHeaders)
         {
@@ -616,24 +624,21 @@ public class GCModel
         }
 
         WriteNull(writer, (paddedTotal - total));
-
+        return paddedTotal - HeaderSize;
     }
 
-    public void WriteDSLI(BinaryWriter writer)
+    public void WriteDSLI(BinaryWriter writer,int dslsSize)
     {
         int total = HeaderSize+16;
 
         WriteASCIIString(writer, "DSLI");
         writer.Write(total); // block size
-        writer.Write(1); // number of elements.
+        writer.Write(0); 
         writer.Write(1);
         writer.Write(0);
-        writer.Write(537067520);
+        Common.WriteBigEndian(writer, (int)dslsSize);
         writer.Write(0);
         writer.Write(0);
-
-        
-        
     }
 
     public void WriteDSLC(BinaryWriter writer)
@@ -642,9 +647,9 @@ public class GCModel
         WriteASCIIString(writer, "DSLC");
 
         writer.Write(total); // block size
-        writer.Write(1); // number of elements.
         writer.Write(1);
-        writer.Write(0);
+        writer.Write(1);
+        writer.Write(1);
         writer.Write(0);
         writer.Write(0);
         writer.Write(0);
@@ -777,11 +782,13 @@ public class GCModel
         WriteASCIIString(writer, "ELEM");
 
         writer.Write(total); // block size
-        writer.Write(0); // number of elements.
+        writer.Write(0); 
         writer.Write(1);
-        writer.Write(0);
 
-        writer.Write(33796);
+        int val = (4 | (m_displayListHeaders[0].entries.Count << 8));
+        
+        writer.Write(val);
+        writer.Write(0);
         writer.Write(0);
         writer.Write(0);
     }
@@ -900,7 +907,7 @@ public class DisplayListHeader
         Vector3[] normals, Vector2[] uvs)
     {
         DisplayListHeader dlh = new DisplayListHeader();
-        for (int i = 0; i < triangles.Length; i += 3)
+        for (int i = 0; i < triangles.Length; i ++)
         {
             dlh.entries.Add(new DisplayListEntry((ushort)triangles[i]));
         }

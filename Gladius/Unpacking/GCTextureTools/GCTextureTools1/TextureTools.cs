@@ -656,6 +656,8 @@ namespace GCTextureTools
             imageName = imageName.Replace(".png", ".tga");
             imageName = imageName.Replace(".jpg", ".tga");
             imageName = imageName.Replace(".gif", ".tga");
+            imageName = imageName.ToLower();
+
 
             using (FileStream fs = new FileStream(outputName, FileMode.Create))
             {
