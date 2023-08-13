@@ -19,6 +19,7 @@ public class GCModel
 
     public const int AlignmentValue = 16;
     
+    public const float ScaleFactor = 0.3f;
     
     public GCModel(String name)
     {
@@ -33,25 +34,76 @@ public class GCModel
         {
             // setup core data
 
-            GCModel model = new GCModel(gameObj.name);
+            HashSet<Vector3> uniqueVertices = new HashSet<Vector3>();
+            HashSet<Vector3> uniqueNormals = new HashSet<Vector3>();
+            HashSet<Vector2> uniqueUVs = new HashSet<Vector2>();
 
             foreach (Vector3 v in meshFilter.sharedMesh.vertices)
             {
-                model.m_points.Add(v);
+                uniqueVertices.Add(v);
             }
 
             foreach (Vector3 v in meshFilter.sharedMesh.normals)
             {
-                model.m_normals.Add(v);
+                uniqueNormals.Add(v);
             }
 
             foreach (Vector2 v in meshFilter.sharedMesh.uv)
             {
-                model.m_uvs.Add(v);
+                uniqueUVs.Add(v);
+            }
+            
+
+            GCModel model = new GCModel(gameObj.name);
+
+            
+            foreach (Vector3 v in uniqueVertices)
+            {
+                model.m_points.Add(v);
             }
 
-            DisplayListHeader dlh = DisplayListHeader.CreateFromMeshData(meshFilter.sharedMesh.triangles,
-                meshFilter.sharedMesh.vertices, meshFilter.sharedMesh.normals, meshFilter.sharedMesh.uv);
+            foreach (Vector3 v in uniqueNormals)
+            {
+                model.m_normals.Add(v);
+            }
+
+            foreach (Vector2 v in uniqueUVs)
+            {
+                model.m_uvs.Add(v);
+            }
+           
+            DisplayListHeader dlh = new DisplayListHeader();
+            for (int i = 0; i < meshFilter.sharedMesh.triangles.Length; i+=3)
+            {
+                int lookupIndex = meshFilter.sharedMesh.triangles[i];
+                int posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
+                int normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
+                int uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+                
+                dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
+                
+                lookupIndex = meshFilter.sharedMesh.triangles[i+2];
+                posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
+                normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
+                uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+                
+                dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
+
+                lookupIndex = meshFilter.sharedMesh.triangles[i+1];
+                posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
+                normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
+                uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+                
+                dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
+                
+            }
+
+            
+            
+            // DisplayListHeader dlh = DisplayListHeader.CreateFromMeshData(meshFilter.sharedMesh.triangles,
+            //     meshFilter.sharedMesh.vertices, meshFilter.sharedMesh.normals, meshFilter.sharedMesh.uv);
+
+            
             model.m_displayListHeaders.Add(dlh);
 
 
@@ -60,7 +112,7 @@ public class GCModel
             //     { Name = m.mainTexture.name, Width = m.mainTexture.width, Height = m.mainTexture.height });
 
             string textureName = m.mainTexture.name;
-            textureName = "staff_bo";
+            //textureName = "staff_bo";
             textureName += ".tga";
             
             model.m_textures.Add(new TextureInfo()
@@ -337,10 +389,10 @@ public class GCModel
         }
     }
 
-    public void PaddIfNeeded(BinaryWriter writer)
+    public void PadIfNeeded(BinaryWriter writer)
     {
-        return;
-        int padValue = 32;
+        //return;
+        int padValue = 64;
         if (writer.BaseStream.Position % padValue == 0)
         {
             WritePADD(writer);
@@ -350,41 +402,41 @@ public class GCModel
     public void WriteData(BinaryWriter writer)
     {
         WriteVERS(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteCPRT(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteSELS(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteCNTR(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteSHDR(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteTXTR(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         int dslsSize = WriteDSLS(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteDSLI(writer,dslsSize);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteDSLC(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WritePOSI(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteNORM(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteUV0(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteVFLA(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteRAM(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteMSAR(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteNLVL(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteMESH(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteELEM(writer);
-        PaddIfNeeded(writer);
+        PadIfNeeded(writer);
         WriteEND(writer);
     }
 
@@ -509,19 +561,35 @@ public class GCModel
     public void WriteCNTR(BinaryWriter writer)
     {
         int total = HeaderSize;
-        total += (12 * m_centers.Count);
+        int numV3 = 5;
+        total += (12 * numV3);
+        
         int paddedTotal = GetPadValue(total);
-        paddedTotal = 0x50;
-        // Write VERS
+        //paddedTotal = 0x50;
         WriteASCIIString(writer, "CNTR");
         writer.Write(paddedTotal);
         writer.Write(0x01);
         writer.Write(0x01);
-        foreach (IndexedVector3 v in m_centers)
+        
+        Vector3 min = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
+        Vector3 max = new Vector3(float.MinValue,float.MinValue,float.MinValue);
+
+        foreach(Vector3 v in m_points)
         {
-            Common.WriteVector3BE(writer, v);
+            min = Vector3.Min(min, v*ScaleFactor);
+            max = Vector3.Max(max, v*ScaleFactor);
         }
 
+        Vector3 extents = max-min;
+        extents /= 2f;
+        float radius = Math.Max(extents.x,Math.Max(extents.y,extents.z));
+
+        Common.WriteVector3BE(writer, min);
+        Common.WriteVector3BE(writer, max);
+        Common.WriteVector3BE(writer, min + ((max-min)/2f));
+        Common.WriteVector3BE(writer,new IndexedVector3(radius,0,0)); 
+        Common.WriteVector3BE(writer, min + ((max-min)/2f));
+        
         WriteNull(writer, (paddedTotal - total));
 
     }
@@ -665,10 +733,11 @@ public class GCModel
         writer.Write(paddedTotal); // block size
         writer.Write(1);
         writer.Write(m_points.Count); // number of elements.
+
         
         foreach (IndexedVector3 v in m_points)
         {
-            Common.WriteVector3BE(writer, v);
+            Common.WriteVector3BE(writer, v * ScaleFactor);
         }
         
         WriteNull(writer, (paddedTotal - total));
@@ -765,11 +834,11 @@ public class GCModel
         writer.Write(0); // number of elements.
         writer.Write(1);
         
-        writer.Write(1);
-        writer.Write(50);
-        writer.Write(0);
-        writer.Write(0);
-        writer.Write(1);
+        writer.Write(24); // union
+        writer.Write(0);  // listptr
+        writer.Write(0); // shader id
+        writer.Write(1); // element count
+        writer.Write(0); // vert array id 
         writer.Write(0);
         writer.Write(0);
         writer.Write(0);
