@@ -63,6 +63,18 @@ public struct IndexedVector3
         result.Z = Math.Abs(Z);
     }
 
+    public IndexedVector3 Min(IndexedVector3 v)
+    {
+        return new IndexedVector3(Math.Min(X,v.X),Math.Min(Y,v.Y),Math.Min(Z,v.Z));
+    }
+
+    public IndexedVector3 Max(IndexedVector3 v)
+    {
+        return new IndexedVector3(Math.Max(X,v.X),Math.Max(Y,v.Y),Math.Max(Z,v.Z));
+    }
+
+
+
     public IndexedVector3 Abs()
     {
         return new IndexedVector3(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));

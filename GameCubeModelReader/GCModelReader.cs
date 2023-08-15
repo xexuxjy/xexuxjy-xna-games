@@ -447,12 +447,25 @@ public class GCModel
         writer.Write(0x01);
         writer.Write(0x01);
 
-        // 4x4 matrix.
-        foreach (IndexedVector4 v in m_centers)
+
+        IndexedVector3 min = new IndexedVector3(float.MaxValue,float.MaxValue,float.MaxValue);
+        IndexedVector3 max = new IndexedVector3(float.MinValue,float.MinValue,float.MinValue);
+
+        foreach(IndexedVector3 v in m_points)
         {
-            Common.WriteVector4BE(writer, v);
-            //Common.WriteVector4(writer, v);
+            min = min.Min(v);
+            max = max.Max(v);
         }
+
+        IndexedVector3 extents = max-min;
+        extents /= 2f;
+        float radius = Math.Max(extents.X,Math.Max(extents.Y,extents.Z));
+
+
+        Common.WriteVector3BE(writer, min);
+        Common.WriteVector3BE(writer, max);
+        Common.WriteVector3BE(writer, min + ((max-min)/2f));
+        Common.WriteVector3BE(writer,new IndexedVector3(radius,0,0)); 
     }
 
 
@@ -1049,6 +1062,10 @@ public class GCModelReader
                         }
 
 
+
+
+
+
                         sb.AppendLine("Num Points : " + model.m_points.Count);
                         sb.AppendLine("Num Normals: " + model.m_normals.Count);
                         sb.AppendLine("Num UVs : " + model.m_uvs.Count);
@@ -1082,7 +1099,23 @@ public class GCModelReader
                             //    i += 3;
                             //}
                         }
-                            
+
+                        IndexedVector3 min = new IndexedVector3(float.MaxValue,float.MaxValue,float.MaxValue);
+                        IndexedVector3 max = new IndexedVector3(float.MinValue,float.MinValue,float.MinValue);
+
+                        foreach(IndexedVector3 v in model.m_points)
+                        {
+                            min = min.Min(v);
+                            max = max.Max(v);
+                        }
+
+                        sb.AppendLine($"Min {min}  Max {max} Extents {max-min} Center {min + ((max-min)/2f)}");
+
+                        binReader.BaseStream.Position = 0;
+                        Common.FindCharsInStream(binReader,cntrTag,false);
+                        sb.AppendLine($"CNTR : {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()}  BL: {Common.FromStreamVector3BE(binReader)} TR: {Common.FromStreamVector3BE(binReader)}  C: {Common.FromStreamVector3BE(binReader)}  R: {Common.FromStreamVector3BE(binReader)} List:{Common.FromStreamVector3BE(binReader)} ");
+
+
                         binReader.BaseStream.Position = 0;
                         Common.FindCharsInStream(binReader,meshTag,false);
                         sb.AppendLine($"MESH  : size[{binReader.ReadInt32()}] ver[{binReader.ReadInt32()}] num[{binReader.ReadInt32()}] Union[{binReader.ReadInt32()}] ListPtr[{binReader.ReadInt32()}] ShaderId[{binReader.ReadInt32()}] elementCount[{binReader.ReadInt32()}] vertArrayId[{binReader.ReadInt32()}] ssMask[{binReader.ReadInt32()}]");
@@ -1102,7 +1135,25 @@ public class GCModelReader
                             sb.AppendLine($"ELEM  : size[{size}] ver[{ver}] num[{num}] A[{a}] B[{b}] C[{c}] D[{d}]");
                             sb.AppendLine($"ELEM  : size[{size}] ver[{ver}] num[{num}] type[{a & 0xff}] indexcount [{a >> 8}] B[{b}] C[{c}] D[{d}]");
                         }
+                        
+                        sb.AppendLine("Points");
+                        foreach(IndexedVector3 v in model.m_points)
+                        {
+                            sb.AppendLine(""+v);
+                        }
 
+
+                        sb.AppendLine("Normals");
+                        foreach(IndexedVector3 v in model.m_normals)
+                        {
+                            sb.AppendLine(""+v);
+                        }
+
+                        sb.AppendLine("UV");
+                        foreach(IndexedVector2 v in model.m_uvs)
+                        {
+                            sb.AppendLine(""+v);
+                        }
 
 
                         infoStream.WriteLine(sb.ToString());
