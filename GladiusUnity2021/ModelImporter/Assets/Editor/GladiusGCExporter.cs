@@ -64,8 +64,9 @@ public class GladiusGCExporter : Editor
 
         if (newPath != null && newPath.Length != 0)
         {
-            string testPath = newPath.Substring(0,(newPath.Length-newPath.LastIndexOf("/"))+1);
-            testPath += "/";
+            //string testPath = newPath.Substring(0,(newPath.Length-newPath.LastIndexOf("/"))+1);
+            string testPath = newPath.Substring(0,(newPath.LastIndexOf("/"))+1);
+            //testPath += "/";
             
             GCModel model = GCModel.CreateFromGameObject(gameObj);
             if (model != null)

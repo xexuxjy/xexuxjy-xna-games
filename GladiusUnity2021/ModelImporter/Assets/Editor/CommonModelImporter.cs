@@ -998,7 +998,7 @@ public class BoneNode
     {
         BoneNode node = new BoneNode();
         node.offset = Common.FromStreamVector3(binReader);
-        GladiusGlobals.AdjustV3(ref node.offset);
+        GladiusGlobals.GladiusToUnity(ref node.offset);
 
         node.rotation = Common.FromStreamQuaternion(binReader);
         GladiusGlobals.AdjustQuaternion(ref node.rotation);

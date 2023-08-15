@@ -736,9 +736,9 @@ public class XboxModel : BaseModel
                 IndexedVector3 normV = UncompressNormal(normal);
                 IndexedVector2 u = CommonModelImporter.FromStreamVector2(binReader);
                 CommonVertexInstance vpnt = new CommonVertexInstance();
-                vpnt.Position = GladiusGlobals.AdjustV3(p);
+                vpnt.Position = GladiusGlobals.GladiusToUnity(p);
                 vpnt.UV = u;
-                vpnt.Normal = GladiusGlobals.AdjustV3(normV);
+                vpnt.Normal = GladiusGlobals.GladiusToUnity(normV);
                 desc.VertexData.Add(vpnt);
             }
             catch (System.Exception ex)
@@ -779,9 +779,9 @@ public class XboxModel : BaseModel
                 int unk1 = binReader.ReadInt32();
                 IndexedVector2 u = CommonModelImporter.FromStreamVector2(binReader);
                 CommonVertexInstance vpnt = new CommonVertexInstance();
-                vpnt.Position = GladiusGlobals.AdjustV3(p); ;
+                vpnt.Position = GladiusGlobals.GladiusToUnity(p); ;
                 vpnt.UV = u;
-                vpnt.Normal = GladiusGlobals.AdjustV3(normV);
+                vpnt.Normal = GladiusGlobals.GladiusToUnity(normV);
                 desc.VertexData.Add(vpnt);
             }
             catch (System.Exception ex)
@@ -817,10 +817,10 @@ public class XboxModel : BaseModel
                 IndexedVector2 u = CommonModelImporter.FromStreamVector2(binReader);
                 IndexedVector2 u2 = CommonModelImporter.FromStreamVector2(binReader);
                 CommonVertexInstance vpnt = new CommonVertexInstance();
-                vpnt.Position = GladiusGlobals.AdjustV3(p);
+                vpnt.Position = GladiusGlobals.GladiusToUnity(p);
                 vpnt.UV = u;
                 vpnt.UV2 = u2;
-                vpnt.Normal = GladiusGlobals.AdjustV3(normV);
+                vpnt.Normal = GladiusGlobals.GladiusToUnity(normV);
                 //vpnt.ExtraData = unk1;
                 desc.VertexData.Add(vpnt);
             }
@@ -843,10 +843,10 @@ public class XboxModel : BaseModel
             {
                 CommonVertexInstance vpnt = new CommonVertexInstance();
                 vpnt.Position = CommonModelImporter.FromStreamVector3(binReader);
-                vpnt.Position = GladiusGlobals.AdjustV3(vpnt.Position);
+                vpnt.Position = GladiusGlobals.GladiusToUnity(vpnt.Position);
                 //vpnt.BoneInfo1 = binReader.ReadInt32();
                 vpnt.Normal = UncompressNormal(binReader.ReadInt32());
-                vpnt.Normal = GladiusGlobals.AdjustV3(vpnt.Normal);
+                vpnt.Normal = GladiusGlobals.GladiusToUnity(vpnt.Normal);
                 //int unk1 = binReader.ReadInt32();
                 vpnt.UV = CommonModelImporter.FromStreamVector2(binReader);
                 vpnt.BoneWeights = binReader.ReadInt32();
@@ -871,9 +871,9 @@ public class XboxModel : BaseModel
             {
                 CommonVertexInstance vpnt = new CommonVertexInstance();
                 vpnt.Position = CommonModelImporter.FromStreamVector3(binReader);
-                vpnt.Position = GladiusGlobals.AdjustV3(vpnt.Position);
+                vpnt.Position = GladiusGlobals.GladiusToUnity(vpnt.Position);
                 vpnt.Normal = UncompressNormal(binReader.ReadInt32());
-                vpnt.Normal = GladiusGlobals.AdjustV3(vpnt.Normal);
+                vpnt.Normal = GladiusGlobals.GladiusToUnity(vpnt.Normal);
                 vpnt.DiffuseColor = CommonModelImporter.FromStreamColor32(binReader);
                 vpnt.UV = CommonModelImporter.FromStreamVector2(binReader);
                 vpnt.BoneWeights = binReader.ReadInt32();

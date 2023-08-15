@@ -19,10 +19,6 @@ public class GCModel
 
     public const int AlignmentValue = 16;
     
-    //public const float ScaleFactor = 0.3f;
-
-    public Transform AttachPoint;
-    
     public GCModel(String name)
     {
         m_name = name;
@@ -41,35 +37,33 @@ public class GCModel
             HashSet<Vector3> uniqueNormals = new HashSet<Vector3>();
             HashSet<Vector2> uniqueUVs = new HashSet<Vector2>();
 
-            Vector3 offset = Vector3.zero;
-            Transform t = gameObj.transform.Find("attach");
-            if (t != null)
+            IndexedVector3 offset = IndexedVector3.Zero;
+            Transform attachPoint = gameObj.transform.Find("attach");
+            if (attachPoint != null)
             {
-                //offset = t.position;
+                offset = attachPoint.position;
             }
-            
             
             foreach (Vector3 v in meshFilter.sharedMesh.vertices)
             {
-                uniqueVertices.Add(gameObj.transform.TransformPoint(v-offset));
+                //uniqueVertices.Add(gameObj.transform.TransformPoint(v-offset));
+                uniqueVertices.Add(v);
             }
 
             foreach (Vector3 v in meshFilter.sharedMesh.normals)
             {
-                uniqueNormals.Add(gameObj.transform.TransformDirection(v));
+                //uniqueNormals.Add(gameObj.transform.TransformDirection(v));
+                uniqueNormals.Add(v);
             }
 
             foreach (Vector2 v in meshFilter.sharedMesh.uv)
             {
                 uniqueUVs.Add(v);
             }
-        
             
 
             GCModel model = new GCModel(gameObj.name);
 
-            model.AttachPoint = gameObj.transform.Find("attach");
-            
             
             foreach (Vector3 v in uniqueVertices)
             {
@@ -111,28 +105,33 @@ public class GCModel
                 dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
                 
             }
+            
+            // go through and adjust positions and normals now that the lists have been built
+            for (int i = 0; i < model.m_points.Count; ++i)
+            {
+                Vector3 adjusted = model.m_points[i] - offset;
+                model.m_points[i] = GladiusGlobals.UnityToGladius(adjusted);
+            }
 
-            
-            
-            // DisplayListHeader dlh = DisplayListHeader.CreateFromMeshData(meshFilter.sharedMesh.triangles,
-            //     meshFilter.sharedMesh.vertices, meshFilter.sharedMesh.normals, meshFilter.sharedMesh.uv);
+            for (int i = 0; i < model.m_normals.Count; ++i)
+            {
+                model.m_normals[i] = GladiusGlobals.UnityToGladius(model.m_normals[i]);
+            }
 
-            
+           
             model.m_displayListHeaders.Add(dlh);
 
 
             Material m = meshRenderer.sharedMaterial;
-            // model.m_textures.Add(new TextureInfo()
-            //     { Name = m.mainTexture.name, Width = m.mainTexture.width, Height = m.mainTexture.height });
-
             string textureName = m.mainTexture.name;
+
             //textureName = "staff_bo";
             textureName += ".tga";
-            
+            textureName = textureName.ToLower();
+           
             model.m_textures.Add(new TextureInfo()
-                { Name = textureName, Width = 128, Height = 128 });
+                { Name = textureName, Width = m.mainTexture.width, Height = m.mainTexture.height });
 
-            
             model.m_selsInfo.Add(DefaultShader);
             model.m_selsInfo.Add(textureName);
            
@@ -166,7 +165,9 @@ public class GCModel
             int numPoints = binReader.ReadInt32();
             for (int i = 0; i < numPoints; ++i)
             {
-                m_points.Add(Common.FromStreamVector3BE(binReader));
+                Vector3 p = Common.FromStreamVector3BE(binReader);
+                p = GladiusGlobals.GladiusToUnity(p);
+                m_points.Add(p);
             }
         }
 
@@ -178,7 +179,9 @@ public class GCModel
 
             for (int i = 0; i < numNormals; ++i)
             {
-                m_normals.Add(Common.FromStreamVector3BE(binReader));
+                Vector3 n = Common.FromStreamVector3BE(binReader);
+                n = GladiusGlobals.GladiusToUnity(n);
+                m_normals.Add(n);
             }
         }
 
@@ -399,12 +402,10 @@ public class GCModel
                 uvs.Add(m_uvs[entry.UVIndex]);
                 indices.Add(counter);
                 counter++;
-                //writer.WriteLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex, dlh.entries[i].UVIndex, dlh.entries[i].NormIndex,
-                //    dlh.entries[i + 1].PosIndex, dlh.entries[i + 1].UVIndex, dlh.entries[i + 1].NormIndex,
-                //    dlh.entries[i + 2].PosIndex, dlh.entries[i + 2].UVIndex, dlh.entries[i + 2].NormIndex));
-                //i += 3;
             }
         }
+        
+        
     }
 
     public void PadIfNeeded(BinaryWriter writer)
@@ -603,17 +604,12 @@ public class GCModel
         float radius = Math.Max(extents.x,Math.Max(extents.y,extents.z));
 
         Vector3 midPoint = min + ((max - min) / 2f);
-        // if (AttachPoint != null)
-        // {
-        //     midPoint = AttachPoint.position;
-        // }
         
         Common.WriteVector3BE(writer, min);
         Common.WriteVector3BE(writer, max);
         Common.WriteVector3BE(writer, midPoint);
         Common.WriteVector3BE(writer,new IndexedVector3(radius,0,0));
-
-        Common.WriteVector3BE(writer, midPoint+new Vector3(-0.4f,-0.4f,-0.4f));
+        Common.WriteVector3BE(writer, midPoint);
 
         WriteNull(writer, (paddedTotal - total));
 

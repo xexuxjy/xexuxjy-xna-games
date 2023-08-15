@@ -93,8 +93,35 @@ namespace Assets.Editor
                     GameObject gladiusToUnity = new GameObject("GladiusToUnity");
                     gladiusToUnity.transform.SetParent(combinedPrefab.transform, false);
 
-
                     Mesh populatedMesh= PopulateMeshData(model);
+                    
+                    Vector3 min = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
+                    Vector3 max = new Vector3(float.MinValue,float.MinValue,float.MinValue);
+
+                    foreach(Vector3 v in model.m_points)
+                    {
+                        min = Vector3.Min(min, v);
+                        max = Vector3.Max(max, v);
+                    }
+
+                    Vector3 extents = max-min;
+                    extents /= 2f;
+                    float radius = Math.Max(extents.x,Math.Max(extents.y,extents.z));
+
+                    Vector3 midPoint = min + ((max - min) / 2f);
+
+
+                    
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine($"Min {min}  Max {max} Extents {max-min} Center {min + ((max-min)/2f)}");
+
+                    binReader.BaseStream.Position = 0;
+                    Common.FindCharsInStream(binReader,GCModelReader.cntrTag,false);
+                    sb.AppendLine($"CNTR : {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()}  BL: {Common.FromStreamVector3BE(binReader)} TR: {Common.FromStreamVector3BE(binReader)}  C: {Common.FromStreamVector3BE(binReader)}  R: {Common.FromStreamVector3BE(binReader)} List:{Common.FromStreamVector3BE(binReader)} ");
+
+
+                    Debug.LogWarning(sb.ToString());
+                    
                     populatedMesh.name = adjustedFilename + "_" + 0;
 
                     string meshOutputDir = "Assets/Resources/Meshes/GC/";
@@ -104,7 +131,7 @@ namespace Assets.Editor
                     }
                     
                     AssetDatabase.CreateAsset(populatedMesh, meshOutputDir + populatedMesh.name + ".mesh");
-
+                
 
                     MeshFilter filter = gladiusToUnity.AddComponent<MeshFilter>();
                     MeshRenderer renderer = gladiusToUnity.AddComponent<MeshRenderer>();
