@@ -522,7 +522,8 @@ namespace GCTextureTools
             foreach (UnityEngine.Color c in colours)
             {
                 unpackedColourPixels[count] = new UnityEngine.Color(c.r, c.g, c.b, 1.0f);
-                unpackedAlphaPixels[count] = new UnityEngine.Color(0.0f, c.g, 0.0f, 1.0f);
+                //unpackedAlphaPixels[count] = new UnityEngine.Color(0.0f, c.g, 0.0f, 1.0f);
+                unpackedAlphaPixels[count] = new UnityEngine.Color(1.0f, 1.0f, 1.0f, 1.0f);
                 count++;
             }
 
@@ -880,10 +881,15 @@ namespace GCTextureTools
                     for (int x = 0; x < Width; ++x)
                     {
                         int index = x + (y * Width);
-                        Bits[index + 0] = (byte)(colourData[colourCounter][0] * 255);
-                        Bits[index + 1] = (byte)(colourData[colourCounter][1] * 255);
-                        Bits[index + 2] = (byte)(colourData[colourCounter][2] * 255);
-                        Bits[index + 3] = (byte)(colourData[colourCounter][3] * 255);
+                        // Bits[index + 0] = (byte)(colourData[colourCounter][0] * 255);
+                        // Bits[index + 1] = (byte)(colourData[colourCounter][1] * 255);
+                        // Bits[index + 2] = (byte)(colourData[colourCounter][2] * 255);
+                        // Bits[index + 3] = (byte)(colourData[colourCounter][3] * 255);
+                        Bits[index + 0] = (byte)(colourData[colourCounter][3] * 255);
+                        Bits[index + 1] = (byte)(colourData[colourCounter][0] * 255);
+                        Bits[index + 2] = (byte)(colourData[colourCounter][1] * 255);
+                        Bits[index + 3] = (byte)(colourData[colourCounter][2] * 255);
+                        
                         colourCounter++;
 
                     }
@@ -908,10 +914,15 @@ namespace GCTextureTools
             int index = x + (y * Width);
             unchecked
             {
-                Bits[index + 0] = (byte)(color[0] * 255);
-                Bits[index + 1] = (byte)(color[1] * 255);
-                Bits[index + 2] = (byte)(color[2] * 255);
-                Bits[index + 3] = (byte)(color[3] * 255);
+                // Bits[index + 0] = (byte)(color[0] * 255);
+                // Bits[index + 1] = (byte)(color[1] * 255);
+                // Bits[index + 2] = (byte)(color[2] * 255);
+                // Bits[index + 3] = (byte)(color[3] * 255);
+                Bits[index + 0] = (byte)(color[3] * 255);
+                Bits[index + 1] = (byte)(color[0] * 255);
+                Bits[index + 2] = (byte)(color[1] * 255);
+                Bits[index + 3] = (byte)(color[2] * 255);
+                
             }
         }
 

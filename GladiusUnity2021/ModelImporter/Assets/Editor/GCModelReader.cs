@@ -19,7 +19,9 @@ public class GCModel
 
     public const int AlignmentValue = 16;
     
-    public const float ScaleFactor = 0.3f;
+    //public const float ScaleFactor = 0.3f;
+
+    public Transform AttachPoint;
     
     public GCModel(String name)
     {
@@ -28,6 +30,7 @@ public class GCModel
 
     public static GCModel CreateFromGameObject(GameObject gameObj)
     {
+        
         MeshFilter meshFilter = gameObj.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = gameObj.GetComponent<MeshRenderer>();
         if (meshFilter != null && meshRenderer != null)
@@ -38,24 +41,35 @@ public class GCModel
             HashSet<Vector3> uniqueNormals = new HashSet<Vector3>();
             HashSet<Vector2> uniqueUVs = new HashSet<Vector2>();
 
+            Vector3 offset = Vector3.zero;
+            Transform t = gameObj.transform.Find("attach");
+            if (t != null)
+            {
+                //offset = t.position;
+            }
+            
+            
             foreach (Vector3 v in meshFilter.sharedMesh.vertices)
             {
-                uniqueVertices.Add(v);
+                uniqueVertices.Add(gameObj.transform.TransformPoint(v-offset));
             }
 
             foreach (Vector3 v in meshFilter.sharedMesh.normals)
             {
-                uniqueNormals.Add(v);
+                uniqueNormals.Add(gameObj.transform.TransformDirection(v));
             }
 
             foreach (Vector2 v in meshFilter.sharedMesh.uv)
             {
                 uniqueUVs.Add(v);
             }
+        
             
 
             GCModel model = new GCModel(gameObj.name);
 
+            model.AttachPoint = gameObj.transform.Find("attach");
+            
             
             foreach (Vector3 v in uniqueVertices)
             {
@@ -121,10 +135,7 @@ public class GCModel
             
             model.m_selsInfo.Add(DefaultShader);
             model.m_selsInfo.Add(textureName);
-
-            model.m_centers.Add(new IndexedVector3());
-            
-            
+           
             return model;
         }
 
@@ -135,16 +146,6 @@ public class GCModel
     public void LoadData(BinaryReader binReader)
     {
         Common.ReadNullSeparatedNames(binReader, GCModelReader.selsTag, m_selsInfo);
-
-        if (Common.FindCharsInStream(binReader, GCModelReader.cntrTag, true))
-        {
-            binReader.BaseStream.Position += 12;
-
-            m_centers.Add(Common.FromStreamVector3BE(binReader));
-            // m_centers.Add(Common.FromStreamVector4BE(binReader));
-            // m_centers.Add(Common.FromStreamVector4BE(binReader));
-            // m_centers.Add(Common.FromStreamVector4BE(binReader));
-        }
 
         ReadTXTRSection(binReader);
 
@@ -374,11 +375,28 @@ public class GCModel
         foreach (DisplayListHeader dlh in m_displayListHeaders)
         {
             int counter = 0;
-            for (int i = 0; i < dlh.entries.Count;)
+            for (int i = 0; i < dlh.entries.Count;i++)
             {
-                points.Add(m_points[dlh.entries[i].PosIndex]);
-                normals.Add(m_normals[dlh.entries[i].NormIndex]);
-                uvs.Add(m_uvs[dlh.entries[i].UVIndex]);
+                DisplayListEntry entry = dlh.entries[i];
+
+                if (entry.PosIndex >= m_points.Count)
+                {
+                    int ibreak = 0;
+                }
+                if (entry.NormIndex >= m_normals.Count)
+                {
+                    int ibreak = 0;
+                }
+
+                if (entry.UVIndex >= m_uvs.Count)
+                {
+                    int ibreak = 0;
+                }
+
+                
+                points.Add(m_points[entry.PosIndex]);
+                normals.Add(m_normals[entry.NormIndex]);
+                uvs.Add(m_uvs[entry.UVIndex]);
                 indices.Add(counter);
                 counter++;
                 //writer.WriteLine(String.Format("{0}/{1}/{2} {3}/{4}/{5} {6}/{7}/{8}", dlh.entries[i].PosIndex, dlh.entries[i].UVIndex, dlh.entries[i].NormIndex,
@@ -576,20 +594,27 @@ public class GCModel
 
         foreach(Vector3 v in m_points)
         {
-            min = Vector3.Min(min, v*ScaleFactor);
-            max = Vector3.Max(max, v*ScaleFactor);
+            min = Vector3.Min(min, v);
+            max = Vector3.Max(max, v);
         }
 
         Vector3 extents = max-min;
         extents /= 2f;
         float radius = Math.Max(extents.x,Math.Max(extents.y,extents.z));
 
+        Vector3 midPoint = min + ((max - min) / 2f);
+        // if (AttachPoint != null)
+        // {
+        //     midPoint = AttachPoint.position;
+        // }
+        
         Common.WriteVector3BE(writer, min);
         Common.WriteVector3BE(writer, max);
-        Common.WriteVector3BE(writer, min + ((max-min)/2f));
-        Common.WriteVector3BE(writer,new IndexedVector3(radius,0,0)); 
-        Common.WriteVector3BE(writer, min + ((max-min)/2f));
-        
+        Common.WriteVector3BE(writer, midPoint);
+        Common.WriteVector3BE(writer,new IndexedVector3(radius,0,0));
+
+        Common.WriteVector3BE(writer, midPoint+new Vector3(-0.4f,-0.4f,-0.4f));
+
         WriteNull(writer, (paddedTotal - total));
 
     }
@@ -737,7 +762,7 @@ public class GCModel
         
         foreach (IndexedVector3 v in m_points)
         {
-            Common.WriteVector3BE(writer, v * ScaleFactor);
+            Common.WriteVector3BE(writer, v);
         }
         
         WriteNull(writer, (paddedTotal - total));
@@ -888,7 +913,7 @@ public class GCModel
     public List<TextureInfo> m_textures = new List<TextureInfo>();
     public List<String> m_names = new List<String>();
     public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
-    public List<IndexedVector3> m_centers = new List<IndexedVector3>();
+    
     public List<String> m_selsInfo = new List<string>();
     public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
     public IndexedVector3 MinBB;

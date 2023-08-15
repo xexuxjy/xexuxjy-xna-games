@@ -15,7 +15,7 @@ namespace Assets.Editor
         public static bool MERGE_MESH = true;
         public const string m_extension = ".mdl";
         public const string m_newExtension = ".asset";
-        public const string OriginalModelDirectory = "GCModels";
+        public const string OriginalModelDirectory = "OriginalGCModel";
         public const string OutputDirectory = "Resources/GCModelPrefabs/";
         public static bool HasExtension(string asset)
         {
@@ -43,7 +43,7 @@ namespace Assets.Editor
                 Debug.Log(asset);
                 // This is our detection of file - by extension
                 //if (HasExtension(asset))
-                if (asset.ToUpper().Contains("Assets/GCModels/".ToUpper()))
+                if (asset.ToUpper().Contains(("Assets/"+OriginalModelDirectory).ToUpper()))
                 {
                     ImportMyAsset(asset);
                 }
@@ -97,7 +97,13 @@ namespace Assets.Editor
                     Mesh populatedMesh= PopulateMeshData(model);
                     populatedMesh.name = adjustedFilename + "_" + 0;
 
-                    AssetDatabase.CreateAsset(populatedMesh, "Assets/Resources/Meshes/GC/" + populatedMesh.name + ".mesh");
+                    string meshOutputDir = "Assets/Resources/Meshes/GC/";
+                    if (!Directory.Exists(meshOutputDir))
+                    {
+                        Directory.CreateDirectory(meshOutputDir);
+                    }
+                    
+                    AssetDatabase.CreateAsset(populatedMesh, meshOutputDir + populatedMesh.name + ".mesh");
 
 
                     MeshFilter filter = gladiusToUnity.AddComponent<MeshFilter>();
