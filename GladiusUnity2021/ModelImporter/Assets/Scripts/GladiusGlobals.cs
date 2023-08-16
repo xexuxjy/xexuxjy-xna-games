@@ -145,12 +145,23 @@ public static class GladiusGlobals
     {
     }
 
-    public static void AdjustV3(ref Vector3 input)
+    public static void GladiusToUnity(ref Vector3 input)
     {
         input = new Vector3(input.x, input.z, input.y);
     }
 
-    public static Vector3 AdjustV3(Vector3 input)
+    public static Vector3 GladiusToUnity(Vector3 input)
+    {
+        input = new Vector3(input.x, input.z, input.y);
+        return input;
+    }
+
+    public static void UnityToGladius(ref Vector3 input)
+    {
+        input = new(input.x, input.z, input.y);
+    }
+
+    public static Vector3 UnityToGladius(Vector3 input)
     {
         input = new Vector3(input.x, input.z, input.y);
         return input;
@@ -323,7 +334,7 @@ public static class GladiusGlobals
             float.TryParse(values[startPos + 1], out result.y);
             float.TryParse(values[startPos + 2], out result.z);
         }
-        result = AdjustV3(result);
+        result = GladiusToUnity(result);
         return result;
     }
 
@@ -405,7 +416,7 @@ public static class GladiusGlobals
         v.x = reader.ReadSingle();
         v.y = reader.ReadSingle();
         v.z = reader.ReadSingle();
-        v = AdjustV3(v);
+        v = GladiusToUnity(v);
         return v;
     }
 

@@ -109,13 +109,15 @@ public class GCModel
             // go through and adjust positions and normals now that the lists have been built
             for (int i = 0; i < model.m_points.Count; ++i)
             {
-                Vector3 adjusted = model.m_points[i] - offset;
+                IndexedVector3 adjusted = model.m_points[i];
+                adjusted = gameObj.transform.TransformPoint(adjusted);
+                adjusted -= offset;
                 model.m_points[i] = GladiusGlobals.UnityToGladius(adjusted);
             }
 
             for (int i = 0; i < model.m_normals.Count; ++i)
             {
-                model.m_normals[i] = GladiusGlobals.UnityToGladius(model.m_normals[i]);
+                model.m_normals[i] = GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(model.m_normals[i]));
             }
 
            

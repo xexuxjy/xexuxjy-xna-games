@@ -558,6 +558,14 @@ public static class Common
         writer.Write(BEValue);
     }
 
+    public static void WriteBigEndian(BinaryWriter writer,int value)
+    {
+        int BEValue = BinaryPrimitives.ReverseEndianness(value);
+        writer.Write(BEValue);
+    }
+
+    
+    
     public static float ReverseOrder(float f)
     {
         byte[] bytes = BitConverter.GetBytes(f);
