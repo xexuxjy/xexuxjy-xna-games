@@ -46,13 +46,11 @@ public class GCModel
             
             foreach (Vector3 v in meshFilter.sharedMesh.vertices)
             {
-                //uniqueVertices.Add(gameObj.transform.TransformPoint(v-offset));
                 uniqueVertices.Add(v);
             }
 
             foreach (Vector3 v in meshFilter.sharedMesh.normals)
             {
-                //uniqueNormals.Add(gameObj.transform.TransformDirection(v));
                 uniqueNormals.Add(v);
             }
 
@@ -130,7 +128,10 @@ public class GCModel
             //textureName = "staff_bo";
             textureName += ".tga";
             textureName = textureName.ToLower();
-           
+
+            // model.m_textures.Add(new TextureInfo()
+            //     { Name = textureName, Width = 256, Height = 256 });
+
             model.m_textures.Add(new TextureInfo()
                 { Name = textureName, Width = m.mainTexture.width, Height = m.mainTexture.height });
 
