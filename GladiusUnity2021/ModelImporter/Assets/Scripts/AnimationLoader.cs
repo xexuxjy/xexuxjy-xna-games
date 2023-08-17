@@ -304,7 +304,7 @@ public class anim_OptPosTrack
         //mPosScalar.y = binReader.ReadSingle();
         //mPosScalar.z = binReader.ReadSingle();
         mPosScalar = Common.FromStreamVector3(binReader);
-        GladiusGlobals.AdjustV3(ref mPosScalar);
+        GladiusGlobals.GladiusToUnity(ref mPosScalar);
         uint dummyPointer = binReader.ReadUInt32();
     }
 
@@ -1680,7 +1680,7 @@ public class AnimationData
                     }
                     if (posTrack.boneAnimData != null)
                     {
-                        GladiusGlobals.AdjustV3(ref resolvedPos);
+                        GladiusGlobals.GladiusToUnity(ref resolvedPos);
                         posTrack.boneAnimData.CurrentPosition = resolvedPos;
                     }
 

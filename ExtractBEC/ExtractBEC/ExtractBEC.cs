@@ -375,13 +375,14 @@ public class ExtractBec
         BuildTable();
         HashData.BuildHashInfo();
 
-        string[] files = new string[]{"data/mesh/weapons/staff/candycane.pax","data/mesh/weapons/staff/candycane.ptx" };
+        string[] files = new string[]{"data/mesh/weapons/staff/candycane.pax","data/mesh/weapons/staff/candycane.ptx","data/mesh/weapons/staff/candycane128.ptx","data/mesh/weapons/staff/candycane256.ptx" };
         foreach(string file in files)
         {
             System.Console.WriteLine(String.Format("0x{0:X} : \"{1}\",", ExtractBec.stringToHash(file), file));
         }
                 
 
+        int ibreak = 0;
         //ExtractBec.BuildHashesForFile(@"D:\GladiusCodeClean\BackupData\GladiusData\data\filelist.txt","d:/tmp/gladius-python-scp-hashes.txt");
 
         //ExtractBecData(@"D:\GladiusISOWorkingExtracted\GC-NR\gladius.bec", @"D:\tmp\gladius-GC-NR\csharp-extracted-scp");
