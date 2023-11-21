@@ -103,6 +103,8 @@ public class GCModel
                 dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
                 
             }
+
+            dlh.indexCount = (short)dlh.entries.Count;
             
             // go through and adjust positions and normals now that the lists have been built
             for (int i = 0; i < model.m_points.Count; ++i)

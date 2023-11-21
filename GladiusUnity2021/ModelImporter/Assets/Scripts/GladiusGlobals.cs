@@ -158,7 +158,7 @@ public static class GladiusGlobals
 
     public static void UnityToGladius(ref Vector3 input)
     {
-        input = new(input.x, input.z, input.y);
+        input = new Vector3(input.x, input.z, input.y);
     }
 
     public static Vector3 UnityToGladius(Vector3 input)
