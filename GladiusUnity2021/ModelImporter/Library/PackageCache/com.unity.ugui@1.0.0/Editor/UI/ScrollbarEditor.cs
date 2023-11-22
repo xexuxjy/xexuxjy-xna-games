@@ -65,6 +65,8 @@ namespace UnityEditor.UI
                 EditorGUILayout.PropertyField(m_Direction);
                 if (EditorGUI.EndChangeCheck())
                 {
+                    Undo.RecordObjects(serializedObject.targetObjects, "Change Scrollbar Direction");
+
                     Scrollbar.Direction direction = (Scrollbar.Direction)m_Direction.enumValueIndex;
                     foreach (var obj in serializedObject.targetObjects)
                     {

@@ -130,12 +130,35 @@ namespace InputfieldTests
             inputField.text = input;
 
             inputField.OnSelect(eventData);
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            // On Xbox, the onScreenKeyboard is going to constrain the application and make it go out of focus. 
+            // We need to wait for the application to go out of focus before we can close the onScreenKeyboard.
+            while (Application.isFocused)
+            {
+                yield return null;
+            }
+#else
             yield return null;
+#endif
 
             Assert.AreEqual(output, inputField.text, string.Format("Failed character validation: input ={0}, output ={1}, validation ={2}",
                 input.Replace(kEmailSpecialCharacters, "specialchars"),
                 output.Replace(kEmailSpecialCharacters, "specialchars"),
                 validation));
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            // On Xbox, we then need to close onScreenKeyboard and wait for the application to be focused again.
+            // If this is not done, it could have an impact on subsequent tests that require the application to be focused in order to function correctly.
+            while (!Application.isFocused)
+            {
+                if (inputField.touchScreenKeyboard != null)
+                {
+                    inputField.touchScreenKeyboard.active = false;
+                }
+                yield return null;
+            }
+#endif
         }
 
         [Test]
@@ -165,11 +188,30 @@ namespace InputfieldTests
             InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
             BaseEventData eventData = new BaseEventData(m_PrefabRoot.GetComponentInChildren<EventSystem>());
             inputField.OnSelect(eventData);
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            while (Application.isFocused)
+            {
+                yield return null;
+            }
+#else
             yield return null;
+#endif
             var called = false;
             inputField.onEndEdit.AddListener((s) => { called = true; });
 
             inputField.OnDeselect(eventData);
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            while (!Application.isFocused)
+            {
+                if (inputField.touchScreenKeyboard != null)
+                {
+                    inputField.touchScreenKeyboard.active = false;
+                }
+                yield return null;
+            }
+#endif
 
             Assert.IsTrue(called, "Expected invocation of onEndEdit");
         }
@@ -194,9 +236,28 @@ namespace InputfieldTests
             InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
             BaseEventData eventData = new BaseEventData(m_PrefabRoot.GetComponentInChildren<EventSystem>());
             inputField.OnSelect(eventData);
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            while (Application.isFocused)
+            {
+                yield return null;
+            }
+#else
             yield return null;
+#endif
 
             Assert.NotNull(inputField.touchScreenKeyboard, "Expect a keyboard to be opened");
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            while (!Application.isFocused)
+            {
+                if (inputField.touchScreenKeyboard != null)
+                {
+                    inputField.touchScreenKeyboard.active = false;
+                }
+                yield return null;
+            }
+#endif
         }
 
         [UnityTest]
@@ -215,6 +276,47 @@ namespace InputfieldTests
                 Assert.IsFalse(inputField.shouldHideMobileInput);
                 Assert.IsFalse(TouchScreenKeyboard.hideInput, "Expect TouchScreenKeyboard.hideInput to be set");
             }
+        }
+
+        [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.IPhonePlayer, RuntimePlatform.PS4, RuntimePlatform.PS5 })]
+        public IEnumerator IsTouchScreenKeyboardVisible()
+        {
+            if (!TouchScreenKeyboard.isSupported)
+                yield break;
+
+            InputField inputField = m_PrefabRoot.GetComponentInChildren<InputField>();
+            BaseEventData eventData = new BaseEventData(m_PrefabRoot.GetComponentInChildren<EventSystem>());
+
+            inputField.OnSelect(eventData);
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            while (Application.isFocused)
+            {
+                yield return null;
+            }
+#else
+            yield return null;
+#endif
+
+            Assert.IsTrue(TouchScreenKeyboard.visible);
+
+            inputField.OnDeselect(eventData);
+
+#if UNITY_GAMECORE && !UNITY_EDITOR
+            while (!Application.isFocused)
+            {
+                if (inputField.touchScreenKeyboard != null)
+                {
+                    inputField.touchScreenKeyboard.active = false;
+                }
+                yield return null;
+            }
+#else
+            yield return null;
+#endif
+
+            Assert.IsFalse(TouchScreenKeyboard.visible);
         }
     }
 }

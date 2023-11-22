@@ -28,7 +28,7 @@ namespace UnityEditor.Events
         }
 
         private GUIContent m_Title;
-        private Styles m_Styles = new Styles();
+        private Styles m_Styles;
 
         public override void Initialize(UnityEngine.Object[] targets)
         {

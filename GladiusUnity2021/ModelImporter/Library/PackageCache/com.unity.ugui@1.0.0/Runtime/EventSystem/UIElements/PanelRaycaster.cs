@@ -107,6 +107,8 @@ namespace UnityEngine.UIElements
             delta.y = -delta.y;
 
             var eventSystem = UIElementsRuntimeUtility.activeEventSystem as EventSystem;
+            if (eventSystem == null || eventSystem.currentInputModule == null)
+                return;
             var pointerId = eventSystem.currentInputModule.ConvertUIToolkitPointerId(eventData);
 
             var capturingElement = m_Panel.GetCapturingElement(pointerId);

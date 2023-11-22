@@ -286,14 +286,9 @@ namespace UnityEngine.UI
                     {
                         m_SkipLayoutUpdate = m_Sprite.rect.size.Equals(value ? value.rect.size : Vector2.zero);
                         m_SkipMaterialUpdate = m_Sprite.texture == (value ? value.texture : null);
-                        bool wasReadeable = !GraphicsFormatUtility.IsCrunchFormat(m_Sprite.texture.format) && m_Sprite.texture.isReadable;
                         m_Sprite = value;
-                        if (value != null && wasReadeable && (GraphicsFormatUtility.IsCrunchFormat(m_Sprite.texture.format) || !m_Sprite.texture.isReadable) && m_AlphaHitTestMinimumThreshold > 0)
-                        {
-                            Debug.LogWarning("Sprite was changed for one not readeable or with Crunch Compression. Resetting the AlphaHitThreshold to 0.", this);
-                            m_AlphaHitTestMinimumThreshold = 0;
-                        }
 
+                        ResetAlphaHitThresholdIfNeeded();
                         SetAllDirty();
                         TrackSprite();
                     }
@@ -303,14 +298,24 @@ namespace UnityEngine.UI
                     m_SkipLayoutUpdate = value.rect.size == Vector2.zero;
                     m_SkipMaterialUpdate = value.texture == null;
                     m_Sprite = value;
-                    if ((GraphicsFormatUtility.IsCrunchFormat(m_Sprite.texture.format) || !m_Sprite.texture.isReadable) && m_AlphaHitTestMinimumThreshold > 0)
-                    {
-                        Debug.LogWarning("Sprite was changed for one not readeable or with Crunch Compression. Resetting the AlphaHitThreshold to 0.", this);
-                        m_AlphaHitTestMinimumThreshold = 0;
-                    }
 
+                    ResetAlphaHitThresholdIfNeeded();
                     SetAllDirty();
                     TrackSprite();
+                }
+
+                void ResetAlphaHitThresholdIfNeeded()
+                {
+                    if (!SpriteSupportsAlphaHitTest() && m_AlphaHitTestMinimumThreshold > 0)
+                    {
+                        Debug.LogWarning("Sprite was changed for one not readable or with Crunch Compression. Resetting the AlphaHitThreshold to 0.", this);
+                        m_AlphaHitTestMinimumThreshold = 0;
+                    }
+                }
+
+                bool SpriteSupportsAlphaHitTest()
+                {
+                    return m_Sprite != null && m_Sprite.texture != null && !GraphicsFormatUtility.IsCrunchFormat(m_Sprite.texture.format) && m_Sprite.texture.isReadable;
                 }
             }
         }

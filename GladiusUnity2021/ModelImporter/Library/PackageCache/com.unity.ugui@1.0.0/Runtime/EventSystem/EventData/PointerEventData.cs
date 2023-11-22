@@ -102,6 +102,11 @@ namespace UnityEngine.EventSystems
         public bool eligibleForClick { get; set; }
 
         /// <summary>
+        /// The index of the display that this pointer event comes from.
+        /// </summary>
+        public int displayIndex { get; set; }
+
+        /// <summary>
         /// Id of the pointer (touch id).
         /// </summary>
         public int pointerId { get; set; }
@@ -262,6 +267,7 @@ namespace UnityEngine.EventSystems
         {
             eligibleForClick = false;
 
+            displayIndex = 0;
             pointerId = -1;
             position = Vector2.zero; // Current position of the mouse or touch event
             delta = Vector2.zero; // Delta since last update
@@ -348,6 +354,8 @@ namespace UnityEngine.EventSystems
             sb.AppendLine(pointerCurrentRaycast.ToString());
             sb.AppendLine("<b>Press Raycast:</b>");
             sb.AppendLine(pointerPressRaycast.ToString());
+            sb.AppendLine("<b>Display Index:</b>");
+            sb.AppendLine(displayIndex.ToString());
             sb.AppendLine("<b>pressure</b>: " + pressure);
             sb.AppendLine("<b>tangentialPressure</b>: " + tangentialPressure);
             sb.AppendLine("<b>altitudeAngle</b>: " + altitudeAngle);

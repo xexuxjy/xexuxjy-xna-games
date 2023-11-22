@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 #if PACKAGE_TILEMAP
 using UnityEngine.Tilemaps;
@@ -95,9 +96,21 @@ namespace UnityEngine.EventSystems
                         screenPosition = eventData.position,
                         displayIndex = displayIndex,
                         index = resultAppendList.Count,
-                        sortingLayer =  r2d != null ? r2d.sortingLayerID : 0,
+                        sortingGroupID = r2d != null ? r2d.sortingGroupID : SortingGroup.invalidSortingGroupID,
+                        sortingGroupOrder = r2d != null ? r2d.sortingGroupOrder : 0,
+                        sortingLayer = r2d != null ? r2d.sortingLayerID : 0,
                         sortingOrder = r2d != null ? r2d.sortingOrder : 0
                     };
+
+                    if (result.sortingGroupID != SortingGroup.invalidSortingGroupID &&
+                        SortingGroup.GetSortingGroupByIndex(r2d.sortingGroupID) is SortingGroup sortingGroup)
+                    {
+                        // Calculate how far along the ray the sorting group is.
+                        result.distance = Vector3.Dot(ray.direction, sortingGroup.transform.position - ray.origin);
+                        result.sortingLayer = sortingGroup.sortingLayerID;
+                        result.sortingOrder = sortingGroup.sortingOrder;
+                    }
+
                     resultAppendList.Add(result);
                 }
             }

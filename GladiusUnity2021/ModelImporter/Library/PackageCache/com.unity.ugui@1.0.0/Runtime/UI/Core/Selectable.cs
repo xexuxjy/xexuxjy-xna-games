@@ -427,40 +427,34 @@ namespace UnityEngine.UI
         private readonly List<CanvasGroup> m_CanvasGroupCache = new List<CanvasGroup>();
         protected override void OnCanvasGroupChanged()
         {
-            // Figure out if parent groups allow interaction
-            // If no interaction is alowed... then we need
-            // to not do that :)
-            var groupAllowInteraction = true;
+            var parentGroupAllowsInteraction = ParentGroupAllowsInteraction();
+
+            if (parentGroupAllowsInteraction != m_GroupsAllowInteraction)
+            {
+                m_GroupsAllowInteraction = parentGroupAllowsInteraction;
+                OnSetProperty();
+            }
+        }
+
+        bool ParentGroupAllowsInteraction()
+        {
             Transform t = transform;
             while (t != null)
             {
                 t.GetComponents(m_CanvasGroupCache);
-                bool shouldBreak = false;
                 for (var i = 0; i < m_CanvasGroupCache.Count; i++)
                 {
-                    // if the parent group does not allow interaction
-                    // we need to break
                     if (m_CanvasGroupCache[i].enabled && !m_CanvasGroupCache[i].interactable)
-                    {
-                        groupAllowInteraction = false;
-                        shouldBreak = true;
-                    }
-                    // if this is a 'fresh' group, then break
-                    // as we should not consider parents
+                        return false;
+
                     if (m_CanvasGroupCache[i].ignoreParentGroups)
-                        shouldBreak = true;
+                        return true;
                 }
-                if (shouldBreak)
-                    break;
 
                 t = t.parent;
             }
 
-            if (groupAllowInteraction != m_GroupsAllowInteraction)
-            {
-                m_GroupsAllowInteraction = groupAllowInteraction;
-                OnSetProperty();
-            }
+            return true;
         }
 
         /// <summary>
@@ -524,6 +518,7 @@ namespace UnityEngine.UI
             s_Selectables[m_CurrentIndex] = this;
             s_SelectableCount++;
             isPointerDown = false;
+            m_GroupsAllowInteraction = ParentGroupAllowsInteraction();
             DoStateTransition(currentSelectionState, true);
 
             m_EnableCalled = true;
