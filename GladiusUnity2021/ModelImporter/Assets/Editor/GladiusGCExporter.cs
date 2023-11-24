@@ -46,21 +46,21 @@ public class GladiusGCExporter : Editor
     /// Exports ANY Game Object given to it. Will provide a dialog and return the path of the newly exported file
     /// </summary>
     /// <returns>The path of the newly exported FBX file</returns>
-    /// <param name="gameObj">Game object to be exported</param>
+    /// <param name="gameObject">Game object to be exported</param>
     /// <param name="copyMaterials">If set to <c>true</c> copy materials.</param>
     /// <param name="copyTextures">If set to <c>true</c> copy textures.</param>
     /// <param name="oldPath">Old path.</param>
-    public static string ExportGameObject(GameObject gameObj, bool copyMaterials, bool copyTextures,
+    public static string ExportGameObject(GameObject gameObject, bool copyMaterials, bool copyTextures,
         string oldPath = null)
     {
-        if (gameObj == null)
+        if (gameObject == null)
         {
             EditorUtility.DisplayDialog("Object is null", "Please select any GameObject to Export to GladiusGC",
                 "Okay");
             return null;
         }
 
-        string newPath = GetNewPath(gameObj, oldPath);
+        string newPath = GetNewPath(gameObject, oldPath);
 
         if (newPath != null && newPath.Length != 0)
         {
@@ -68,7 +68,7 @@ public class GladiusGCExporter : Editor
             string testPath = newPath.Substring(0,(newPath.LastIndexOf("/"))+1);
             //testPath += "/";
             
-            GCModel model = GCModel.CreateFromGameObject(gameObj);
+            GCModel model = GCModel.CreateFromGameObject(gameObject);
             if (model != null)
             {
                 using (BinaryWriter bw = new BinaryWriter(File.Create(newPath)))
@@ -81,12 +81,13 @@ public class GladiusGCExporter : Editor
                 EditorUtility.DisplayDialog("Warning", "Failed to create GCModel data from gameobj.","Okay");
             }
             
-            MeshRenderer meshRenderer = gameObj.GetComponent<MeshRenderer>();
+            MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
             Material m = meshRenderer.sharedMaterial;
 
             string textureName = m.mainTexture.name.ToLower();
-            
-            ImageExtractor.EncodeFile((Texture2D)m.mainTexture,textureName+".tga", testPath+textureName+".ptx");
+            string modelName = gameObject.name;
+
+            ImageExtractor.EncodeFile((Texture2D)m.mainTexture,textureName+".tga", testPath+modelName+".ptx");
         }
 
         return null;
