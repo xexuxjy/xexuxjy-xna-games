@@ -81,7 +81,11 @@ public class GladiusGCExporter : Editor
                 EditorUtility.DisplayDialog("Warning", "Failed to create GCModel data from gameobj.","Okay");
             }
             
-            MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            Renderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            if (meshRenderer == null)
+            {
+                meshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
+            }
             Material m = meshRenderer.sharedMaterial;
 
             string textureName = m.mainTexture.name.ToLower();
