@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Assets.Editor
 {
@@ -786,6 +787,14 @@ namespace Assets.Editor
                     {
                         CharacterMeshHolder cmh = combinedPrefab.AddComponent<CharacterMeshHolder>();
                     }
+                }
+
+
+                BoneRenderer boneRenderer = rootGO.AddComponent<BoneRenderer>();
+                boneRenderer.transforms = new Transform[commonModel.BoneList.Count - 1];
+                for (int i = 1; i < commonModel.BoneList.Count; ++i)
+                {
+                    boneRenderer.transforms[i - 1] = boneObjectMap[commonModel.BoneList[i]].transform;
                 }
             }
 
