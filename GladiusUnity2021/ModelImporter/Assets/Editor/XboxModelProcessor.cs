@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -703,6 +704,7 @@ namespace Assets.Editor
                 foreach (BoneNode bn in commonModel.BoneList)
                 {
                     GameObject go = new GameObject(bn.UniqueName);
+                    RigTransform rigTransform = go.AddComponent<RigTransform>();
                     boneObjectMap[bn] = go;
                     Quaternion q = bn.rotation;
 
@@ -710,6 +712,7 @@ namespace Assets.Editor
                     {
                         GameObject parentGo = boneObjectMap[bn.parent];
                         go.transform.SetParent(parentGo.transform, false);
+                        
                     }
 
                     go.transform.localPosition = bn.offset;
@@ -796,6 +799,19 @@ namespace Assets.Editor
                 {
                     boneRenderer.transforms[i - 1] = boneObjectMap[commonModel.BoneList[i]].transform;
                 }
+
+                Rig rig = rootGO.AddComponent<Rig>();
+
+                RigLayer rigLayer = new RigLayer(rig);
+                
+                RigBuilder rigBuilder = rootGO.AddComponent<RigBuilder>();
+                rigBuilder.layers.Add(rigLayer);
+
+                Animator animator = rootGO.AddComponent<Animator>();
+                
+                // look at adding human avatar - though not sure whgy....
+                
+
             }
 
             int everyMeshCounter = 0;
