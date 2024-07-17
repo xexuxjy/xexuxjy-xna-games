@@ -171,9 +171,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -96997225249601052, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.4348337
+      objectReference: {fileID: 0}
+    - target: {fileID: -96997225249601052, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.3208696
+      objectReference: {fileID: 0}
+    - target: {fileID: -96997225249601052, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.26407716
+      objectReference: {fileID: 0}
+    - target: {fileID: -96997225249601052, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7988903
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
       propertyPath: m_Name
       value: druid_game_rig
+      objectReference: {fileID: 0}
+    - target: {fileID: 7365274855286583315, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0028685005
+      objectReference: {fileID: 0}
+    - target: {fileID: 7365274855286583315, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.011843756
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -182,6 +206,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1331950226}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1331950227}
   m_SourcePrefab: {fileID: 100100000, guid: 5f059eeb2f1cda743a875d10f789fa87, type: 3}
 --- !u!1 &782677234 stripped
 GameObject:
@@ -641,6 +668,29 @@ MonoBehaviour:
   - {fileID: 782677237}
   - {fileID: 782677236}
   - {fileID: 782677235}
+--- !u!111 &1331950227
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782677234}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: f1fc16661a3b5474b8b5a7a1597286a0, type: 2}
+  - {fileID: 7400000, guid: e5673c347a0f7ac4db18641240a7fe03, type: 2}
+  - {fileID: 7400000, guid: 0a8a71d7b9140234994cf6aab5a80418, type: 2}
+  - {fileID: 7400000, guid: fddd0daf45824fb45a4fc3edf7badd01, type: 2}
+  - {fileID: 7400000, guid: 236ebb7fcb10cb942ba4e749540b1bf8, type: 2}
+  - {fileID: 7400000, guid: 56cd2c812f8c29943a3ca417234898f6, type: 2}
+  - {fileID: 7400000, guid: 0ffe75aaedb16dc4aa8779430499880f, type: 2}
+  - {fileID: 7400000, guid: 3e60e6fe7eaee0847bceaca19da6cf15, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
