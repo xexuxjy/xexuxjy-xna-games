@@ -332,6 +332,12 @@ public struct optVec
 
     }
 
+    public static optVec Put(Vector3 v, Vector3 s)
+    {
+
+        return new optVec();
+    }
+
     public static optVec FromStream(BinaryReader binReader)
     {
         optVec ov = new optVec();
@@ -341,6 +347,15 @@ public struct optVec
         ov.time = binReader.ReadUInt16();
         return ov;
     }
+
+    public static void ToStream(BinaryWriter binWriter, optVec ov)
+    {
+        binWriter.Write(ov.x);
+        binWriter.Write(ov.y);
+        binWriter.Write(ov.z);
+
+    }
+    
 }
 
 
@@ -424,6 +439,24 @@ public struct optQuat
         //ov.time = binReader.ReadUInt16();
         return ov;
     }
+    
+    public static optQuat Put(Vector3 v, Quaternion q)
+    {
+
+        return new optQuat();
+    }
+
+    
+    public static void ToStream(BinaryWriter binWriter, optQuat oq)
+    {
+        binWriter.Write(oq.x);
+        binWriter.Write(oq.y);
+        binWriter.Write(oq.z);
+        binWriter.Write(oq.w);
+    }
+
+    
+    
 }
 
 

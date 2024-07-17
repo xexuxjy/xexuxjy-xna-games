@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 
 // with help from : https://github.com/KellanHiggins/AsciiFBXExporterForUnity/blob/master/Assets/com.8bitgoose.asciifbxexporter/Editor/ExporterMenu.cs
-public class GladiusGCExporter : Editor
+public class GladiusGCExporter : UnityEditor.Editor
 {
 // Dropdown
     [MenuItem("GameObject/GladiusGCExporter/Export", false, 10)]

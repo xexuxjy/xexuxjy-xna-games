@@ -11,13 +11,13 @@ using UnityEngine;
 
 public class GCModel
 {
-    public const int HeaderSize = 16;
+    //public const int GladiusFileWriter.HeaderSize = 16;
     public const int MaxTextureNameSize = 0x80;
     public const int TextureBlockSize = 0x98;
 
     public const string DefaultShader = "lambert2";
 
-    public const int AlignmentValue = 16;
+    //public const int AlignmentValue = 16;
     
     public GCModel(String name)
     {
@@ -282,7 +282,7 @@ public class GCModel
             int blockSize = binReader.ReadInt32();
             int pad1 = binReader.ReadInt32();
             int pad2 = binReader.ReadInt32();
-            int numBones = (blockSize - HeaderSize) / 32;
+            int numBones = (blockSize - GladiusFileWriter.HeaderSize) / 32;
 
             for (int i = 0; i < numBones; ++i)
             {
@@ -413,184 +413,77 @@ public class GCModel
         
     }
 
-    public void PadIfNeeded(BinaryWriter writer)
-    {
-        //return;
-        int padValue = 64;
-        if (writer.BaseStream.Position % padValue == 0)
-        {
-            WritePADD(writer);
-        }
-    }
 
     public void WriteData(BinaryWriter writer)
     {
-        WriteVERS(writer);
-        PadIfNeeded(writer);
-        WriteCPRT(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.WriteVERS(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
+        GladiusFileWriter.WriteCPRT(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteSELS(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteCNTR(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteSHDR(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteTXTR(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         int dslsSize = WriteDSLS(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteDSLI(writer,dslsSize);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteDSLC(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WritePOSI(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteNORM(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteUV0(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteVFLA(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteRAM(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteMSAR(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteNLVL(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteMESH(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteELEM(writer);
-        PadIfNeeded(writer);
+        GladiusFileWriter.PadIfNeeded(writer);
         WriteEND(writer);
     }
 
-    public static void WriteNull(BinaryWriter writer, int num)
-    {
-        for (int i = 0; i < num; ++i)
-        {
-            writer.Write((byte)0);
-        }
-    }
-
-    public static void WriteNullPaddedString(BinaryWriter writer, string str, int requiredLength)
-    {
-        writer.Write(str);
-        WriteNull(writer, requiredLength - str.Length);
-    }
-
-    public static void WriteStringList(BinaryWriter writer, List<string> list, int totalLength)
-    {
-        int ongoingTotal = 0;
-        for (int i = 0; i < list.Count; ++i)
-        {
-            ongoingTotal += list[i].Length;
-            WriteASCIIString(writer, list[i]);
-            if (i < list.Count - 1)
-            {
-                writer.Write((byte)0x00);
-                ongoingTotal += 1;
-            }
-        }
-
-        while (ongoingTotal < totalLength)
-        {
-            writer.Write((byte)0x00);
-            ongoingTotal++;
-        }
-    }
-
-    public static int GetStringListSize(List<string> list)
-    {
-        int total = 0;
-        for (int i = 0; i < list.Count; ++i)
-        {
-            total += list[i].Length;
-            if (i < list.Count - 1)
-            {
-                total += 1;
-            }
-        }
-        return total; //+pad;
-    }
-
-    public static void WriteASCIIString(BinaryWriter writer, string s, int padToLength = 0)
-    {
-        byte[] bytes = Encoding.ASCII.GetBytes(s);
-        writer.Write(bytes);
-        if (padToLength > 0)
-        {
-            int pad = padToLength - bytes.Length;
-            for (int i = 0; i < pad; ++i)
-            {
-                writer.Write((byte)0x00);
-            }
-        }
-    }
-
-    public void WriteVERS(BinaryWriter writer)
-    {
-        int total = HeaderSize+16;
-        WriteASCIIString(writer, "VERS");
-        // header size
-        writer.Write(total);
-        writer.Write(0);
-        writer.Write(1);
-        writer.Write(0);
-        writer.Write(14);
-        writer.Write(0);
-        writer.Write(0);
-    }
-
-    public void WriteCPRT(BinaryWriter writer)
-    {
-        WriteASCIIString(writer, "CPRT");
-        writer.Write(0x90);
-        writer.Write(0x00);
-        writer.Write(0x80);
-        WriteASCIIString(writer, "(C) May 27 2003 LucasArts a division of LucasFilm, Inc.");
-        WriteNull(writer, 0x49);
-    }
-
-
-    public int GetPadValue(int total)
-    {
-        int pad = total % AlignmentValue;
-        if (pad != 0)
-        {
-            total += (AlignmentValue - pad);
-        }
-
-        return total;
-    }
     
 
     public void WriteSELS(BinaryWriter writer)
     {
-        int total = HeaderSize;
-        int textureLength = GetStringListSize(m_selsInfo);
+        int total = GladiusFileWriter.HeaderSize;
+        int textureLength = GladiusFileWriter.GetStringListSize(m_selsInfo);
         total += textureLength;
 
-        int paddedTotal = GetPadValue(total); 
+        int paddedTotal = GladiusFileWriter.GetPadValue(total); 
         
-        WriteASCIIString(writer, "SELS");
+        GladiusFileWriter.WriteASCIIString(writer, "SELS");
 
         //total = 0x50;
         writer.Write(paddedTotal);
         writer.Write(0x00);
         writer.Write(0x01);
 
-        WriteStringList(writer, m_selsInfo, (paddedTotal - HeaderSize));
+        GladiusFileWriter.WriteStringList(writer, m_selsInfo, (paddedTotal - GladiusFileWriter.HeaderSize));
     }
 
     public void WriteCNTR(BinaryWriter writer)
     {
-        int total = HeaderSize;
+        int total = GladiusFileWriter.HeaderSize;
         int numV3 = 5;
         total += (12 * numV3);
         
-        int paddedTotal = GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
         //paddedTotal = 0x50;
-        WriteASCIIString(writer, "CNTR");
+        GladiusFileWriter.WriteASCIIString(writer, "CNTR");
         writer.Write(paddedTotal);
         writer.Write(0x01);
         writer.Write(0x01);
@@ -616,7 +509,7 @@ public class GCModel
         Common.WriteVector3BE(writer,new IndexedVector3(radius,0,0));
         Common.WriteVector3BE(writer, midPoint);
 
-        WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
 
     }
 
@@ -652,8 +545,8 @@ public class GCModel
 
     public void WriteSHDR(BinaryWriter writer)
     {
-        int total = HeaderSize;
-        WriteASCIIString(writer, "SHDR");
+        int total = GladiusFileWriter.HeaderSize;
+        GladiusFileWriter.WriteASCIIString(writer, "SHDR");
         total += Lambert2ShaderData.Length;
         writer.Write(total); // block size
         writer.Write(0);
@@ -663,13 +556,13 @@ public class GCModel
 
     public void WriteTXTR(BinaryWriter writer)
     {
-        int total = HeaderSize;
+        int total = GladiusFileWriter.HeaderSize;
         total += m_textures.Count * TextureBlockSize;
         
-        int paddedTotal = GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
         
-        WriteASCIIString(writer, "TXTR");
+        GladiusFileWriter.WriteASCIIString(writer, "TXTR");
         writer.Write(paddedTotal);
         writer.Write(0); 
         writer.Write(m_textures.Count);
@@ -677,7 +570,7 @@ public class GCModel
 
         foreach (TextureInfo textureInfo in m_textures)
         {
-            WriteASCIIString(writer, textureInfo.Name, MaxTextureNameSize);
+            GladiusFileWriter.WriteASCIIString(writer, textureInfo.Name, MaxTextureNameSize);
             writer.Write(-1);
             writer.Write(0);
             writer.Write(textureInfo.Width);
@@ -690,23 +583,23 @@ public class GCModel
             writer.Write(unknown2);
         }
         
-        WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
 
     }
 
 
     public int WriteDSLS(BinaryWriter writer)
     {
-        int total = HeaderSize;
+        int total = GladiusFileWriter.HeaderSize;
 
-        WriteASCIIString(writer, "DSLS");
+        GladiusFileWriter.WriteASCIIString(writer, "DSLS");
 
         foreach (DisplayListHeader dlh in m_displayListHeaders)
         {
             total += dlh.GetSize();
         }
 
-        int paddedTotal = GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
         
         writer.Write(paddedTotal); // block size
         writer.Write(1);
@@ -717,15 +610,15 @@ public class GCModel
             dlh.ToStream(writer);
         }
 
-        WriteNull(writer, (paddedTotal - total));
-        return paddedTotal - HeaderSize;
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+        return paddedTotal - GladiusFileWriter.HeaderSize;
     }
 
     public void WriteDSLI(BinaryWriter writer,int dslsSize)
     {
-        int total = HeaderSize+16;
+        int total = GladiusFileWriter.HeaderSize+16;
 
-        WriteASCIIString(writer, "DSLI");
+        GladiusFileWriter.WriteASCIIString(writer, "DSLI");
         writer.Write(total); // block size
         writer.Write(0); 
         writer.Write(1);
@@ -737,8 +630,8 @@ public class GCModel
 
     public void WriteDSLC(BinaryWriter writer)
     {
-        int total = HeaderSize+16;
-        WriteASCIIString(writer, "DSLC");
+        int total = GladiusFileWriter.HeaderSize+16;
+        GladiusFileWriter.WriteASCIIString(writer, "DSLC");
 
         writer.Write(total); // block size
         writer.Write(1);
@@ -751,11 +644,11 @@ public class GCModel
 
     public void WritePOSI(BinaryWriter writer)
     {
-        int total = HeaderSize;
+        int total = GladiusFileWriter.HeaderSize;
         total += (m_points.Count * 12);
-        int paddedTotal = GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        WriteASCIIString(writer, "POSI");
+        GladiusFileWriter.WriteASCIIString(writer, "POSI");
         writer.Write(paddedTotal); // block size
         writer.Write(1);
         writer.Write(m_points.Count); // number of elements.
@@ -766,17 +659,17 @@ public class GCModel
             Common.WriteVector3BE(writer, v);
         }
         
-        WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
         
     }
 
     public void WriteNORM(BinaryWriter writer)
     {
-        int total = HeaderSize;
+        int total = GladiusFileWriter.HeaderSize;
         total +=  (m_normals.Count * 12);
-        int paddedTotal = GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        WriteASCIIString(writer, "NORM");
+        GladiusFileWriter.WriteASCIIString(writer, "NORM");
         writer.Write(paddedTotal); // block size
         writer.Write(1);
         writer.Write(m_normals.Count); // number of elements.
@@ -786,16 +679,16 @@ public class GCModel
             Common.WriteVector3BE(writer, v);
         }
 
-        WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
     }
 
     public void WriteUV0(BinaryWriter writer)
     {
-        int total = HeaderSize;
+        int total = GladiusFileWriter.HeaderSize;
         total +=  (m_uvs.Count * 8);
-        int paddedTotal = GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        WriteASCIIString(writer, "UV0 ");
+        GladiusFileWriter.WriteASCIIString(writer, "UV0 ");
 
         writer.Write(paddedTotal); // block size
         writer.Write(1);
@@ -805,7 +698,7 @@ public class GCModel
             Common.WriteVector2BE(writer, v);
         }
 
-        WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
     }
 
     static byte[] VFLAGSData = new byte[]
@@ -813,7 +706,7 @@ public class GCModel
 
     public void WriteVFLA(BinaryWriter writer)
     {
-        WriteASCIIString(writer, "VFLA");
+        GladiusFileWriter.WriteASCIIString(writer, "VFLA");
         writer.Write(0x20); // block size
         writer.Write(1);
         writer.Write(1);
@@ -823,39 +716,39 @@ public class GCModel
     public void WriteRAM(BinaryWriter writer)
     {
         int blockSize = 0x90;
-        WriteASCIIString(writer, "RAM ");
+        GladiusFileWriter.WriteASCIIString(writer, "RAM ");
         writer.Write(blockSize); // block size
         writer.Write(1);
         writer.Write(1);
-        WriteNull(writer, blockSize - HeaderSize);
+        GladiusFileWriter.WriteNull(writer, blockSize - GladiusFileWriter.HeaderSize);
     }
 
     public void WriteMSAR(BinaryWriter writer)
     {
         int blockSize = 0x40;
-        WriteASCIIString(writer, "MSAR");
+        GladiusFileWriter.WriteASCIIString(writer, "MSAR");
 
         writer.Write(blockSize); // block size
         writer.Write(0);
         writer.Write(1);
-        WriteNull(writer, blockSize - HeaderSize);
+        GladiusFileWriter.WriteNull(writer, blockSize - GladiusFileWriter.HeaderSize);
     }
 
     public void WriteNLVL(BinaryWriter writer)
     {
         int blockSize = 0x20;
-        WriteASCIIString(writer, "NLVL");
+        GladiusFileWriter.WriteASCIIString(writer, "NLVL");
 
         writer.Write(blockSize); // block size
         writer.Write(2); // number of elements.
         writer.Write(1);
-        WriteNull(writer, 0x10);
+        GladiusFileWriter.WriteNull(writer, 0x10);
     }
 
     public void WriteMESH(BinaryWriter writer)
     {
-        int total = HeaderSize + 32;
-        WriteASCIIString(writer, "MESH");
+        int total = GladiusFileWriter.HeaderSize + 32;
+        GladiusFileWriter.WriteASCIIString(writer, "MESH");
         writer.Write(total); // block size
         writer.Write(0); // number of elements.
         writer.Write(1);
@@ -873,8 +766,8 @@ public class GCModel
 
     public void WriteELEM(BinaryWriter writer)
     {
-        int total = HeaderSize+16;
-        WriteASCIIString(writer, "ELEM");
+        int total = GladiusFileWriter.HeaderSize+16;
+        GladiusFileWriter.WriteASCIIString(writer, "ELEM");
 
         writer.Write(total); // block size
         writer.Write(0); 
@@ -890,19 +783,12 @@ public class GCModel
 
     public void WriteEND(BinaryWriter writer)
     {
-        WriteASCIIString(writer, "END.");
-        writer.Write(HeaderSize); // number of elements.
+        GladiusFileWriter.WriteASCIIString(writer, "END.");
+        writer.Write(GladiusFileWriter.HeaderSize); // number of elements.
         writer.Write(0);
         writer.Write(0);
     }
 
-    public void WritePADD(BinaryWriter writer)
-    {
-        WriteASCIIString(writer, "PADD");
-        writer.Write(HeaderSize);
-        writer.Write(0x00);
-        writer.Write(0x00);
-    }
 
 
     public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
