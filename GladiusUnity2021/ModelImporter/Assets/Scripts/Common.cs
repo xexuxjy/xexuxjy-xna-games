@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using UnityEngine;
 
 public static class Common
 {
@@ -564,6 +565,21 @@ public static class Common
         writer.Write(BEValue);
     }
 
+    public static void Write(BinaryWriter writer, Vector3 value)
+    {
+        writer.Write(value.x);
+        writer.Write(value.y);
+        writer.Write(value.z);
+
+    }
+    
+    public static void Write(BinaryWriter writer, Quaternion value)
+    {
+        writer.Write(value.x);
+        writer.Write(value.y);
+        writer.Write(value.z);
+        writer.Write(value.w);
+    }
     
     
     public static float ReverseOrder(float f)
@@ -875,4 +891,21 @@ public static class Common
     }
 
 
+    public static bool ByteArrayToFile(string fileName, byte[] byteArray)
+    {
+        try
+        {
+            using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+            {
+                fs.Write(byteArray, 0, byteArray.Length);
+                return true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception caught in process: {0}", ex);
+            return false;
+        }
+    }
+    
 }

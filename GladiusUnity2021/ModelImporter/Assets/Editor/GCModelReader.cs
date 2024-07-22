@@ -452,7 +452,7 @@ public class GCModel
         GladiusFileWriter.PadIfNeeded(writer);
         WriteELEM(writer);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteEND(writer);
+        GladiusFileWriter.WriteEND(writer);
     }
 
     
@@ -781,13 +781,6 @@ public class GCModel
         writer.Write(0);
     }
 
-    public void WriteEND(BinaryWriter writer)
-    {
-        GladiusFileWriter.WriteASCIIString(writer, "END.");
-        writer.Write(GladiusFileWriter.HeaderSize); // number of elements.
-        writer.Write(0);
-        writer.Write(0);
-    }
 
 
 

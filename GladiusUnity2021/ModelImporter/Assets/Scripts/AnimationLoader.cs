@@ -30,37 +30,6 @@ public static class AnimationLoader
 
     public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' }; // names of the various bones, null separated.
 
-    //public static void ReadPak1File(BinaryReader binReader, GladiusCharacterAnim gladiusAnim)
-    //{
-    //    Common.FindCharsInStream(binReader, pak1Tag);
-    //    int numAnimations = binReader.ReadInt32();
-    //    int animNameStart = binReader.ReadInt32();
-    //    int dataStart = binReader.ReadInt32();
-
-    //    binReader.BaseStream.Position = animNameStart;
-    //    List<String> animNames = new List<string>();
-    //    Common.ReadNullSeparatedNamesWithCount(binReader, numAnimations, animNames);
-
-    //    binReader.BaseStream.Position = dataStart;
-
-    //    for (int i = 0; i < numAnimations; ++i)
-    //    {
-    //        AnimationData animationData;
-    //        if (AnimationLoader.FromStream(binReader, gladiusAnim, out animationData))
-    //        {
-    //            animationData.name = StandardiseAnimName(animNames[i]);
-
-    //            // need moverun for overland?
-    //            if (animationData.name.Contains("idle") || animationData.name.Contains("moverun"))
-    //            {
-    //                animationData.mFlags |= AnimationData.ANIM_LOOP;
-    //            }
-    //            //animations.Add(animationData);
-    //            gladiusAnim.AddAnimationData(animationData);
-    //        }
-    //        //break;
-    //    }
-    //}
 
     public static string StandardiseAnimName(string input)
     {
@@ -79,11 +48,11 @@ public static class AnimationLoader
         return result;
     }
 
-    public static AnimationData ReadSingleAnimationFile(String fileName, GladiusSimpleAnim gladiusAnim, BinaryReader binReader)
+    public static AnimationData ReadSingleAnimationFile(String fileName, GladiusSimpleAnim gladiusAnim, BinaryReader reader)
     {
         AnimationData animationData;
 
-        if (AnimationLoader.FromStream(binReader, gladiusAnim, out animationData))
+        if (AnimationLoader.FromStream(reader, gladiusAnim, out animationData))
         {
             animationData.name = StandardiseAnimName(fileName.ToLower());
         }
@@ -93,64 +62,64 @@ public static class AnimationLoader
 
 
 
-    public static bool HandleChunk(FileChunk fileChunk, AnimationData animationData, BinaryReader binReader)
+    public static bool HandleChunk(FileChunk fileChunk, AnimationData animationData, BinaryReader reader)
     {
         bool handled = false;
         if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.hedrTag))
         {
-            Int16 jointCount = binReader.ReadInt16();
-            Int16 temp = binReader.ReadInt16();
+            Int16 jointCount = reader.ReadInt16();
+            Int16 temp = reader.ReadInt16();
             animationData.mTranslation = ((float)temp * (1.0f / 1024.0f));
-            animationData.mLength = binReader.ReadSingle();
+            animationData.mLength = reader.ReadSingle();
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.nameTag))
         {
-            Common.ReadNullSeparatedNamesInSectionLength(binReader, animationData.boneList,fileChunk.ChunkSize-FileChunk.ChunkHeaderSize);
+            Common.ReadNullSeparatedNamesInSectionLength(reader, animationData.boneList,fileChunk.ChunkSize-FileChunk.ChunkHeaderSize);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.blnmTag))
         {
-            Common.ReadNullSeparatedNamesInSectionLength(binReader, animationData.eventList,fileChunk.ChunkSize - FileChunk.ChunkHeaderSize);
+            Common.ReadNullSeparatedNamesInSectionLength(reader, animationData.eventList,fileChunk.ChunkSize - FileChunk.ChunkHeaderSize);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.maskTag))
         {
             animationData.maskTrack = new MaskTrack(animationData);
             animationData.maskTrack.mNumKeys = fileChunk.ChunkElements;
-            animationData.maskTrack.Process(binReader);
+            animationData.maskTrack.FromStream(reader);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.bktmTag))
         {
             for (int i = 0; i < fileChunk.ChunkElements; ++i)
             {
-                animationData.timeStepList.Add(binReader.ReadSingle());
+                animationData.timeStepList.Add(reader.ReadSingle());
             }
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.boolTag))
         {
             animationData.boolTrack = new BoolTrack(animationData);
-            animationData.boolTrack.Process(binReader,fileChunk.ChunkElements);
+            animationData.boolTrack.FromStream(reader,fileChunk.ChunkElements);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.dcptTag))
         {
             animationData.posXTrack = new PosXTrack(animationData);
-            animationData.posXTrack.Process(binReader,fileChunk.ChunkElements);
+            animationData.posXTrack.FromStream(reader,fileChunk.ChunkElements);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.dcrtTag))
         {
             animationData.rotXTrack = new RotXTrack(animationData);
-            animationData.rotXTrack.Process(binReader, fileChunk.ChunkElements);
+            animationData.rotXTrack.FromStream(reader, fileChunk.ChunkElements);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.optrTag))
         {
             animationData.optPosTrack = new OptPosTrack(animationData);
-            animationData.optPosTrack.Process(binReader, fileChunk.ChunkElements);
+            animationData.optPosTrack.FromStream(reader, fileChunk.ChunkElements);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.ovecTag))
@@ -159,7 +128,7 @@ public static class AnimationLoader
             {
                 for (int i = 0; i < track.mNumKeys; ++i)
                 {
-                    optVec ov = optVec.FromStream(binReader);
+                    optVec ov = optVec.FromStream(reader);
                     track.mOptVecs.Add(ov);
                 }
             }
@@ -168,7 +137,7 @@ public static class AnimationLoader
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.ortrTag))
         {
             animationData.optRotTrack = new OptRotTrack(animationData);
-            animationData.optRotTrack.Process(binReader,fileChunk.ChunkElements);
+            animationData.optRotTrack.FromStream(reader,fileChunk.ChunkElements);
             handled = true;
         }
         else if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.arktTag))
@@ -177,7 +146,7 @@ public static class AnimationLoader
             {
                 for (int i = 0; i < track.mNumKeys; ++i)
                 {
-                    ushort key = binReader.ReadUInt16();
+                    ushort key = reader.ReadUInt16();
                     track.mKeyTimes.Add(key);
                 }
             }
@@ -189,7 +158,7 @@ public static class AnimationLoader
             {
                 for (int i = 0; i < track.mNumKeys; ++i)
                 {
-                    optQuat oq = optQuat.FromStream(binReader);
+                    optQuat oq = optQuat.FromStream(reader);
                     track.mOptQuats.Add(oq);
                 }
             }
@@ -201,15 +170,15 @@ public static class AnimationLoader
 
 
 
-    public static bool FromStream(BinaryReader binReader, GladiusSimpleAnim gladiusAnim, out AnimationData animationData)
+    public static bool FromStream(BinaryReader reader, GladiusSimpleAnim gladiusAnim, out AnimationData animationData)
     {
-        long startStreamPos = binReader.BaseStream.Position;
+        long startStreamPos = reader.BaseStream.Position;
 
         animationData = new AnimationData();
         animationData.BuildPrecomputeGrid();
         animationData.gladiusAnim = gladiusAnim;
 
-        FileChunk fileChunk = FileChunk.FromStream(binReader);
+        FileChunk fileChunk = FileChunk.FromStream(reader);
         int escape = 20;
         int escapeCount = 0;
         while(fileChunk != null  && (!fileChunk.ChunkName.SequenceEqual(AnimationLoader.endTag)))
@@ -217,11 +186,11 @@ public static class AnimationLoader
             
             //Debug.LogError("FileChunk : " + new string(fileChunk.ChunkName));
             String chunkName = new String(fileChunk.ChunkName);
-            int currentPosition = (int)binReader.BaseStream.Position;
+            int currentPosition = (int)reader.BaseStream.Position;
 
-            bool handled = HandleChunk(fileChunk, animationData, binReader);
-            binReader.BaseStream.Position = currentPosition + fileChunk.ChunkSize - FileChunk.ChunkHeaderSize;
-            fileChunk = FileChunk.FromStream(binReader);
+            bool handled = HandleChunk(fileChunk, animationData, reader);
+            reader.BaseStream.Position = currentPosition + fileChunk.ChunkSize - FileChunk.ChunkHeaderSize;
+            fileChunk = FileChunk.FromStream(reader);
         }
         int ibreak = 0;
 
@@ -242,12 +211,12 @@ public class OptRotTrack : AnimTrack
 
     }
 
-    public void Process(BinaryReader binReader,int numTracks)
+    public void FromStream(BinaryReader reader,int numTracks)
     {
         for (int i = 0; i < numTracks; ++i)
         {
             anim_OptRotTrack rotTrack = new anim_OptRotTrack();
-            rotTrack.Process(binReader);
+            rotTrack.FromStream(reader);
             m_tracks.Add(rotTrack);
         }
     }
@@ -257,13 +226,21 @@ public class OptRotTrack : AnimTrack
 
 public class anim_OptRotTrack
 {
-    public void Process(BinaryReader binReader)
+    public void FromStream(BinaryReader reader)
     {
-        mNumKeys = binReader.ReadUInt32();
-        uint dummyPointer = binReader.ReadUInt32();
-        uint keyTimesPointer = binReader.ReadUInt32();
+        mNumKeys = reader.ReadUInt32();
+        uint dummyPointer = reader.ReadUInt32();
+        uint keyTimesPointer = reader.ReadUInt32();
     }
 
+    public static void ToStream(BinaryWriter binWriter,int numKeys, int pointerInfo)
+    {
+        binWriter.Write(numKeys);
+        binWriter.Write(0);
+        binWriter.Write(pointerInfo);
+    }
+
+    
     public int boneId;
     public BoneAnimData boneAnimData;
     public String trackBoneName;
@@ -282,12 +259,12 @@ public class OptPosTrack : AnimTrack
 
     }
 
-    public void Process(BinaryReader binReader,int numTracks)
+    public void FromStream(BinaryReader reader,int numTracks)
     {
         for (int i = 0; i < numTracks; ++i)
         {
             anim_OptPosTrack posTrack = new anim_OptPosTrack();
-            posTrack.Process(binReader);
+            posTrack.FromStream(reader);
             m_tracks.Add(posTrack);
         }
     }
@@ -297,17 +274,22 @@ public class OptPosTrack : AnimTrack
 
 public class anim_OptPosTrack
 {
-    public void Process(BinaryReader binReader)
+    public void FromStream(BinaryReader reader)
     {
-        mNumKeys = binReader.ReadUInt32();
-        //mPosScalar.x = binReader.ReadSingle();
-        //mPosScalar.y = binReader.ReadSingle();
-        //mPosScalar.z = binReader.ReadSingle();
-        mPosScalar = Common.FromStreamVector3(binReader);
+        mNumKeys = reader.ReadUInt32();
+        mPosScalar = Common.FromStreamVector3(reader);
         GladiusGlobals.GladiusToUnity(ref mPosScalar);
-        uint dummyPointer = binReader.ReadUInt32();
+        uint dummyPointer = reader.ReadUInt32();
     }
 
+    public static void ToStream(BinaryWriter writer,int numKeys, Vector3 scalar, int pointerInfo)
+    {
+        writer.Write(numKeys);
+        Common.Write(writer, scalar);
+        writer.Write(pointerInfo);
+    }
+    
+    
     public int boneId;
     public BoneAnimData boneAnimData;
     public String trackBoneName;
@@ -332,27 +314,32 @@ public struct optVec
 
     }
 
-    public static optVec Put(Vector3 v, Vector3 s)
+    public static optVec Put(Vector3 v, UInt16 time,Vector3 _scalar)
     {
-
-        return new optVec();
+        optVec dst =  new optVec();
+        dst.x = (short)((v.x * _scalar.x));
+        dst.y = (short)((v.y * _scalar.y));
+        dst.z = (short)((v.z * _scalar.z));
+        dst.time = time;
+        return dst;
     }
 
-    public static optVec FromStream(BinaryReader binReader)
+    public static optVec FromStream(BinaryReader reader)
     {
         optVec ov = new optVec();
-        ov.x = binReader.ReadInt16();
-        ov.y = binReader.ReadInt16();
-        ov.z = binReader.ReadInt16();
-        ov.time = binReader.ReadUInt16();
+        ov.x = reader.ReadInt16();
+        ov.y = reader.ReadInt16();
+        ov.z = reader.ReadInt16();
+        ov.time = reader.ReadUInt16();
         return ov;
     }
 
-    public static void ToStream(BinaryWriter binWriter, optVec ov)
+    public static void ToStream(BinaryWriter writer, optVec ov)
     {
-        binWriter.Write(ov.x);
-        binWriter.Write(ov.y);
-        binWriter.Write(ov.z);
+        writer.Write(ov.x);
+        writer.Write(ov.y);
+        writer.Write(ov.z);
+        writer.Write(ov.time);
 
     }
     
@@ -427,32 +414,109 @@ public struct optQuat
         }
     }
 
-    public static optQuat FromStream(BinaryReader binReader)
+    public static optQuat FromStream(BinaryReader reader)
     {
         optQuat ov = new optQuat();
-        ov.compact = binReader.ReadUInt32();
+        ov.compact = reader.ReadUInt32();
         ov.Get2(ref ov.quat);
-        //ov.x = binReader.ReadInt16();
-        //ov.y = binReader.ReadInt16();
-        //ov.z = binReader.ReadInt16();
-        //ov.w = binReader.ReadInt16();
-        //ov.time = binReader.ReadUInt16();
         return ov;
     }
     
-    public static optQuat Put(Vector3 v, Quaternion q)
+    public static int  DropLeastErrorTerm (ref IndexedQuaternion orig, ref IndexedQuaternion quant, ref IndexedQuaternion outQ, float QUANTIZE_AMOUNT)
     {
+        int outIndex = -1;
+        IndexedQuaternion quantQ = new IndexedQuaternion(quant);
+        quantQ = quantQ * (1.0f/QUANTIZE_AMOUNT);
 
-        return new optQuat();
+        int bestindex = 0;
+        float besterror = float.MaxValue;
+        float worsterror = -float.MinValue;
+        
+        for (int i = 0; i < 4; ++ i)
+        {
+            IndexedQuaternion testQq  = new IndexedQuaternion(quantQ);
+            IndexedQuaternion testQo  = new IndexedQuaternion(orig);
+            
+		
+            if (quantQ[i] < 0.0f) 
+            {
+                testQq = -(testQq);
+                testQo = -(testQo);
+            }
+		
+            int ind0 = i;
+            int ind1 = (i+1)%4;
+            int ind2 = (i+2)%4;
+            int ind3 = (i+3)%4;
+		
+            float mag2 = testQq[ind1]*testQq[ind1] + testQq[ind2]*testQq[ind2] + testQq[ind3]*testQq[ind3];
+            if (mag2 > 1.0f)
+            {
+                mag2 = 1.0f;
+            }
+
+            testQq[ind0] = Mathf.Sqrt (1.0f - mag2);
+            float error = Quaternion.Angle(testQq, testQo);
+		
+           
+            if (besterror > error)
+            {
+                besterror = error;
+                outIndex = ind0;
+                outQ = quant;
+                if (quantQ[ind0] < 0.0f)
+                {
+                    outQ = -(outQ);
+                }
+            }
+
+            if (worsterror < error)
+            {
+                worsterror = error;
+            }
+        }
+        return outIndex;
     }
 
     
-    public static void ToStream(BinaryWriter binWriter, optQuat oq)
+    
+    public static optQuat Put(Quaternion q,float time)
     {
-        binWriter.Write(oq.x);
-        binWriter.Write(oq.y);
-        binWriter.Write(oq.z);
-        binWriter.Write(oq.w);
+        IndexedQuaternion originalQuaternion = new IndexedQuaternion(q);
+        IndexedQuaternion quantizedQuaternion = originalQuaternion;
+        IndexedQuaternion outQuaternion = new IndexedQuaternion();
+        
+        quantizedQuaternion.X =  (int)((q.x > 1.0f ? 1.0f : (q.x < -1.0f ? -1.0f : q.x)) * (SCALAR_SIGNED10/1.0f));
+        quantizedQuaternion.Y =  (int)((q.y > 1.0f ? 1.0f : (q.y < -1.0f ? -1.0f : q.y)) * (SCALAR_SIGNED10/1.0f));
+        quantizedQuaternion.Z = (int)((q.z > 1.0f ? 1.0f : (q.z < -1.0f ? -1.0f : q.z)) * (SCALAR_SIGNED10/1.0f));
+        quantizedQuaternion.W =  (int)((q.w > 1.0f ? 1.0f : (q.w < -1.0f ? -1.0f : q.w)) * (SCALAR_SIGNED10/1.0f));
+
+        int index = DropLeastErrorTerm (ref originalQuaternion, ref quantizedQuaternion, ref outQuaternion, SCALAR_SIGNED10);
+       
+        int wi = index;
+        int xi = (int)outQuaternion[(index+1)%4];
+        int yi = (int)outQuaternion[(index+2)%4];
+        int zi = (int)outQuaternion[(index+3)%4];
+
+        optQuat result = new optQuat();
+        
+        // sign extension properties
+        result.compact  = (uint) ((xi << QXSHIFT) & QXMASK);
+        result.compact |= (uint) ((yi << QYSHIFT) & QYMASK);
+        result.compact |= (uint) ((zi << QZSHIFT) & QZMASK);
+        result.compact |= (uint) ((wi << QWSHIFT) & QWMASK);
+        result.time = (ushort) (time / AnimationUtils.FrameTime);
+
+        return result;
+    }
+
+    
+    public static void ToStream(BinaryWriter writer, optQuat oq)
+    {
+        writer.Write(oq.x);
+        writer.Write(oq.y);
+        writer.Write(oq.z);
+        writer.Write(oq.w);
     }
 
     
@@ -471,9 +535,9 @@ public class MaskTrack : AnimTrack
     {
     }
 
-    public void Process(BinaryReader binReader)
+    public void FromStream(BinaryReader reader)
     {
-        byte[] maskTable = binReader.ReadBytes(mNumKeys);
+        byte[] maskTable = reader.ReadBytes(mNumKeys);
         for (int i = 0; i < mNumKeys; ++i)
         {
             mAnimationData.mNumRot += ((maskTable[i] & AnimationData.pan_FilecRot) != 0) ? 1 : 0;
@@ -530,20 +594,20 @@ public class PosXTrack : AnimTrack
     {
     }
 
-    public void Process(BinaryReader binReader,int numTracks)
+    public void FromStream(BinaryReader reader,int numTracks)
     {
         // read track info...
         for (int i = 0; i < numTracks; ++i)
         {
-            m_tracks.Add(anim_DCTTrack.FromStream(binReader));
+            m_tracks.Add(anim_DCTTrack.FromStream(reader));
         }
 
 
-        if (Common.FindCharsInStream(binReader, AnimationLoader.dcpdTag))
+        if (Common.FindCharsInStream(reader, AnimationLoader.dcpdTag))
         {
-            int sectionLength = binReader.ReadInt32();
-            int pad1 = binReader.ReadInt32();
-            int numBones = binReader.ReadInt32();
+            int sectionLength = reader.ReadInt32();
+            int pad1 = reader.ReadInt32();
+            int numBones = reader.ReadInt32();
 
             uint adjust = 0;
 
@@ -555,10 +619,9 @@ public class PosXTrack : AnimTrack
                 m_tracks[j].alignmentAdjust = adjust;
                 for (int z = 0; z < m_tracks[j].mNumBytes; ++z)
                 {
-                    m_tracks[j].mpData[adjust + z] = binReader.ReadByte();
+                    m_tracks[j].mpData[adjust + z] = reader.ReadByte();
                 }
 
-                //sm_tracks[j].mpData = binReader.ReadBytes(m_tracks[j].mNumBytes);
                 adjust = (uint)m_tracks[j].mNumBytes % 4;
 
                 if (!CanDealWithAnimLength(mAnimationData.mLength, m_tracks[j]))
@@ -586,19 +649,19 @@ public class RotXTrack : AnimTrack
     {
     }
 
-    public void Process(BinaryReader binReader,int numTracks)
+    public void FromStream(BinaryReader reader,int numTracks)
     {
         // read track info...
         for (int i = 0; i < numTracks; ++i)
         {
-            m_tracks.Add(anim_DCTTrack.FromStream(binReader));
+            m_tracks.Add(anim_DCTTrack.FromStream(reader));
         }
 
-        if (Common.FindCharsInStream(binReader, AnimationLoader.dcrdTag))
+        if (Common.FindCharsInStream(reader, AnimationLoader.dcrdTag))
         {
-            int sectionLength = binReader.ReadInt32();
-            int pad1 = binReader.ReadInt32();
-            int numBones = binReader.ReadInt32();
+            int sectionLength = reader.ReadInt32();
+            int pad1 = reader.ReadInt32();
+            int numBones = reader.ReadInt32();
 
             uint adjust = 0;
 
@@ -610,10 +673,9 @@ public class RotXTrack : AnimTrack
                 m_tracks[j].alignmentAdjust = adjust;
                 for (int z = 0; z < m_tracks[j].mNumBytes; ++z)
                 {
-                    m_tracks[j].mpData[adjust + z] = binReader.ReadByte();
+                    m_tracks[j].mpData[adjust + z] = reader.ReadByte();
                 }
 
-                //sm_tracks[j].mpData = binReader.ReadBytes(m_tracks[j].mNumBytes);
                 adjust = (uint)m_tracks[j].mNumBytes % 4;
                 if (!CanDealWithAnimLength(mAnimationData.mLength, m_tracks[j]))
                 {
@@ -728,13 +790,6 @@ public class AnimTrack
         mAnimationData = ad;
     }
 
-    //public virtual void Process(BinaryReader binReader)
-    //{
-    //    int sectionLength = binReader.ReadInt32();
-    //    int pad1 = binReader.ReadInt32();
-    //    mNumKeys = binReader.ReadInt32();
-    //}
-
     public AnimationData mAnimationData;
     public int mNumKeys;
     public List<float> mKeyTimes
@@ -764,12 +819,12 @@ public class BoolTrack : AnimTrack
     {
     }
 
-    public void Process(BinaryReader binReader,int numKeys)
+    public void FromStream(BinaryReader reader,int numKeys)
     {
         mNumKeys = numKeys;
         for (int i = 0; i < numKeys; ++i)
         {
-            mBools.Add(binReader.ReadUInt32());
+            mBools.Add(reader.ReadUInt32());
         }
     }
 
@@ -1019,14 +1074,14 @@ public class anim_DCTTrack
         UnrotateQuatQ(ref outQ, ref tq, track.mPostRot);
     }
 
-    public static anim_DCTTrack FromStream(BinaryReader binReader)
+    public static anim_DCTTrack FromStream(BinaryReader reader)
     {
         anim_DCTTrack track = new anim_DCTTrack();
-        track.mRate = binReader.ReadByte();
-        track.mSqrtQuality = binReader.ReadByte();
-        track.mPreRoll = binReader.ReadByte();
-        track.mPostRot = (ePostRot)binReader.ReadByte();
-        track.mNumBytes = binReader.ReadInt32();
+        track.mRate = reader.ReadByte();
+        track.mSqrtQuality = reader.ReadByte();
+        track.mPreRoll = reader.ReadByte();
+        track.mPostRot = (ePostRot)reader.ReadByte();
+        track.mNumBytes = reader.ReadInt32();
         return track;
     }
 }

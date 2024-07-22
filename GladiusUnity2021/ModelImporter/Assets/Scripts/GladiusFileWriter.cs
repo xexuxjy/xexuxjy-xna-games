@@ -88,12 +88,20 @@ public static class GladiusFileWriter
 
     public static void WriteCPRT(BinaryWriter writer)
     {
+        int blockSize = 0x90;
+        int remain = blockSize;
         WriteASCIIString(writer, "CPRT");
-        writer.Write(0x90);
+        writer.Write(blockSize);
         writer.Write(0x00);
         writer.Write(0x80);
-        WriteASCIIString(writer, "(C) May 27 2003 LucasArts a division of LucasFilm, Inc.");
-        WriteNull(writer, 0x49);
+
+        remain -= 16;
+        
+        string s = "(C) Mar 21 2003 LucasArts Entertainment LLC";
+        remain -= s.Length;
+
+        WriteASCIIString(writer, s);
+        WriteNull(writer, remain);
     }
 
 
@@ -126,7 +134,14 @@ public static class GladiusFileWriter
         writer.Write(0x00);
     }
 
-    
+    public static void WriteEND(BinaryWriter writer)
+    {
+        GladiusFileWriter.WriteASCIIString(writer, "END.");
+        writer.Write(GladiusFileWriter.HeaderSize); // number of elements.
+        writer.Write(0);
+        writer.Write(0);
+    }
+
 
     
 }
