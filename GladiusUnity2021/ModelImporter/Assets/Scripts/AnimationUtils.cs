@@ -49,7 +49,7 @@ public static class AnimationUtils
 
         // these both work with the vectors
         WriteOPTR(writer, gac.PositionData);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteOVEC(writer,gac.PositionData);
         GladiusFileWriter.PadIfNeeded(writer);
 
@@ -130,37 +130,25 @@ public static class AnimationUtils
 
 
         GladiusFileWriter.WriteVERS(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
         GladiusFileWriter.WriteCPRT(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
         WriteHEDR(writer);
-            WriteNAME(writer,animationData.boneList);
-        GladiusFileWriter.PadIfNeeded(writer);
+        WriteNAME(writer,animationData.boneList);
         
         WriteBLNM(writer, null);
-        GladiusFileWriter.PadIfNeeded(writer);
         WriteMASK(writer, null);
-        GladiusFileWriter.PadIfNeeded(writer);
         WriteBLTK(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
+
         WriteBKTM(writer,numEvents);
-        GladiusFileWriter.PadIfNeeded(writer);
         WriteBOOL(writer,numEvents);
-        GladiusFileWriter.PadIfNeeded(writer);
 
         // these both work with the vectors
         WriteOPTR(writer, positionData);
-        GladiusFileWriter.PadIfNeeded(writer);
         WriteOVEC(writer,positionData);
-        GladiusFileWriter.PadIfNeeded(writer);
 
         // these all work with the quaternions
         WriteORTR(writer, rotationData);
-        GladiusFileWriter.PadIfNeeded(writer);
         WriteARKT(writer, optQuatList);
-        GladiusFileWriter.PadIfNeeded(writer);
         WriteOQUA(writer, optQuatList);
-        GladiusFileWriter.PadIfNeeded(writer);
         GladiusFileWriter.WriteEND(writer);
     }
     
@@ -168,11 +156,13 @@ public static class AnimationUtils
     
     public static void WriteHEDR(BinaryWriter writer)
     {
-        int total = GladiusFileWriter.HeaderSize;
+        int total = GladiusFileWriter.HeaderSize+8;
         GladiusFileWriter.WriteASCIIString(writer, "HEDR");
-        writer.Write(0);
+        writer.Write(total);
         writer.Write(1); // num materials, 1 for now
-        writer.Write(1);
+        writer.Write(0);
+        writer.Write(0);
+        writer.Write(0);
     }
 
     public static void WriteNAME(BinaryWriter writer, List<string> boneNames)
@@ -185,27 +175,81 @@ public static class AnimationUtils
             runningTotal += 1;
         }
 
+        runningTotal = GladiusFileWriter.GetPadValue(runningTotal,8); 
+        
         total += runningTotal;
         
         GladiusFileWriter.WriteASCIIString(writer, "NAME");
         writer.Write(total);
-        writer.Write(1); // num materials, 1 for now
-        writer.Write(boneNames.Count);
+        writer.Write(0); 
+        writer.Write(1);
         GladiusFileWriter.WriteStringList(writer, boneNames, runningTotal);
     }
 
     // this is a list of animation event names.e.g. : detachShield detachWeapon1 detachWeapon2 footStepL footStepR hideShield hideWeapon1 hideWeapon2 hit react show
     public static void WriteBLNM(BinaryWriter writer, List<string> events)
     {
+        List<string> eventNames = new List<string>();
+        eventNames.Add("detachShield");
+        eventNames.Add("detachWeapon1");
+        eventNames.Add("detachWeapon2");
+        eventNames.Add("footStepL");
+        eventNames.Add("footStepR");
+        eventNames.Add("hideShield");
+        eventNames.Add("hideWeapon1");
+        eventNames.Add("hideWeapon2");
+        eventNames.Add("hit");
+        eventNames.Add("react");
+        eventNames.Add("show");
+        
+        int total = GladiusFileWriter.HeaderSize;
+        int runningTotal = 0;
+        foreach (string s in eventNames)
+        {
+            runningTotal += s.Length;
+            runningTotal += 1;
+        }
+
+        
+        
+        total += runningTotal;
+
+        total = GladiusFileWriter.GetPadValue(total);
+
+        
+        GladiusFileWriter.WriteASCIIString(writer, "BLNM");
+        writer.Write(total);
+        writer.Write(0);
+        writer.Write(1);
+        //writer.Write(eventNames.Count);
+        GladiusFileWriter.WriteStringList(writer, eventNames, total-GladiusFileWriter.HeaderSize);
+        
     }
 
     public static void WriteMASK(BinaryWriter writer, List<string> boneNames)
     {
+        int numItems = 188;        
+        GladiusFileWriter.WriteASCIIString(writer, "MASK");
+        writer.Write(GladiusFileWriter.HeaderSize+numItems);
+        writer.Write(1); // num materials, 1 for now
+        writer.Write(numItems);
+        for (int i = 0; i < numItems; ++i)
+        {
+            writer.Write((byte)0);
+        }
     }
 
 
     public static void WriteBLTK(BinaryWriter writer)
     {
+        int numItems = 1;
+        int itemSize = 12;
+        
+        GladiusFileWriter.WriteASCIIString(writer, "BLTK");
+        writer.Write(GladiusFileWriter.HeaderSize+(numItems*itemSize));
+        writer.Write(0);
+        writer.Write(numItems);
+        GladiusFileWriter.WriteNull(writer, (numItems * itemSize));
     }
 
 
@@ -214,7 +258,7 @@ public static class AnimationUtils
     {
         int total = GladiusFileWriter.HeaderSize + (numEvents * 4);
 
-        GladiusFileWriter.WriteASCIIString(writer, "BLTK");
+        GladiusFileWriter.WriteASCIIString(writer, "BKTM");
         writer.Write(total);
         writer.Write(0);
         writer.Write(numEvents);
