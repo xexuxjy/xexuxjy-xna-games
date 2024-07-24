@@ -147,6 +147,9 @@ public static class AnimationLoader
                 for (int i = 0; i < track.mNumKeys; ++i)
                 {
                     ushort key = reader.ReadUInt16();
+                    // optQuat oq = track.mOptQuats[i];
+                    // oq.time = key;
+                    // track.mOptQuats[i] = oq;
                     track.mKeyTimes.Add(key);
                 }
             }
@@ -317,9 +320,9 @@ public struct optVec
     public static optVec Put(Vector3 v, UInt16 time,Vector3 _scalar)
     {
         optVec dst =  new optVec();
-        dst.x = (short)((v.x * _scalar.x));
-        dst.y = (short)((v.y * _scalar.y));
-        dst.z = (short)((v.z * _scalar.z));
+        dst.x = (Int16)((v.x / _scalar.x));
+        dst.y = (Int16)((v.y / _scalar.y));
+        dst.z = (Int16)((v.z / _scalar.z));
         dst.time = time;
         return dst;
     }
@@ -513,10 +516,11 @@ public struct optQuat
     
     public static void ToStream(BinaryWriter writer, optQuat oq)
     {
-        writer.Write(oq.x);
-        writer.Write(oq.y);
-        writer.Write(oq.z);
-        writer.Write(oq.w);
+        writer.Write(oq.compact);
+        // writer.Write(oq.x);
+        // writer.Write(oq.y);
+        // writer.Write(oq.z);
+        // writer.Write(oq.w);
     }
 
     
