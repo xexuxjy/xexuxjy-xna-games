@@ -46,46 +46,6 @@ public class XboxModelReader : BaseModelReader
         }
     }
 
-    //public override BaseModel LoadSingleModel(String modelPath, bool readDisplayLists = true)
-    //{
-    //    XboxModel model = null;
-    //    FileInfo sourceFile = new FileInfo(modelPath);
-
-    //    using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
-    //    {
-    //        model = new XboxModel(sourceFile.Name);
-    //        //model.LoadModelTags(binReader, CommonModelImporter.xboxTags);
-    //        model.LoadData(binReader);
-
-    //        JSONModelData jsonModelData = null;
-
-    //        String jsonFile = s_rootPath + "gladius-json-files\\" + model.m_name.Replace(".mdl", ".json");
-    //        if (File.Exists(jsonFile))
-    //        {
-    //            string jsonData = File.ReadAllText(jsonFile);
-    //            jsonModelData = JsonConvert.DeserializeObject<JSONModelData>(jsonData);
-    //            foreach (JSONMeshMaterial mm in jsonModelData.meshMaterials)
-    //            {
-    //                if (!String.IsNullOrEmpty(mm.textureDiffuse))
-    //                {
-    //                    mm.textureDiffuse = mm.textureDiffuse.Replace(".png", "");
-    //                }
-    //                if (!String.IsNullOrEmpty(mm.textureSpecular))
-    //                {
-    //                    mm.textureSpecular = mm.textureSpecular.Replace(".png", "");
-    //                }
-    //            }
-    //            Debug.Log("Have jsonData for " + model.m_name);
-    //        }
-    //        CommonModelData commonModel = model.ToCommon(jsonModelData);
-
-
-    //    }
-
-    //    m_models.Add(model);
-    //    return model;
-    //}
-
     public void WriteModel(XboxModel model, int bestSkinnedLod, Dictionary<string, int> modelMeshMap, String texturePath, String objOutputPath)
     {
         try

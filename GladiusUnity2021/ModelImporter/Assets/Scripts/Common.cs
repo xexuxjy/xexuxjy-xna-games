@@ -530,6 +530,13 @@ public static class Common
         return v;
     }
 
+    public static IndexedVector2 FromStreamVector2(BinaryReader reader)
+    {
+        IndexedVector2 v = new IndexedVector2();
+        v.X = reader.ReadSingle();
+        v.Y = reader.ReadSingle();
+        return v;
+    }
 
     public static IndexedQuaternion FromStreamQuaternion(BinaryReader reader)
     {

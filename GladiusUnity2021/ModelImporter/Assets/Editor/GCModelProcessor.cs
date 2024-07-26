@@ -83,7 +83,7 @@ namespace Assets.Editor
                     // deal with empty files
 
                     binReader.BaseStream.Position = 0;
-                    model.LoadData(binReader);
+                    model.LoadData(binReader,null);
 
                     int lodLevel = 1;
 
@@ -116,7 +116,7 @@ namespace Assets.Editor
                     sb.AppendLine($"Min {min}  Max {max} Extents {max-min} Center {min + ((max-min)/2f)}");
 
                     binReader.BaseStream.Position = 0;
-                    Common.FindCharsInStream(binReader,GCModelReader.cntrTag,false);
+                    Common.FindCharsInStream(binReader,CommonModelImporter.cntrTag,false);
                     sb.AppendLine($"CNTR : {binReader.ReadInt32()} {binReader.ReadInt32()} {binReader.ReadInt32()}  BL: {Common.FromStreamVector3BE(binReader)} TR: {Common.FromStreamVector3BE(binReader)}  C: {Common.FromStreamVector3BE(binReader)}  R: {Common.FromStreamVector3BE(binReader)} List:{Common.FromStreamVector3BE(binReader)} ");
 
 

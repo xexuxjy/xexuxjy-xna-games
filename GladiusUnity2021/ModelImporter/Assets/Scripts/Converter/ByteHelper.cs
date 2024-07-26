@@ -1,6 +1,6 @@
 ﻿namespace BCnEncoder.Shared
 {
-	internal static class ByteHelper
+	public static class ByteHelper
 	{
 		public static byte ClampToByte(int i)
 		{

@@ -7,6 +7,10 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection;
+using Unity.VisualScripting;
+using UnityEngine.PlayerLoop;
+using Debug = System.Diagnostics.Debug;
 
 
 public static class CommonModelImporter
@@ -64,6 +68,13 @@ public static class CommonModelImporter
     public static char[][] xboxTags = { versTag, cprtTag, selsTag, txtrTag, xrndTag };
 
 
+    public static Dictionary<char[], MethodInfo> ChunkMapping;
+
+    static CommonModelImporter()
+    {
+        ChunkMapping = BuildChunkDictionary();
+    }
+    
     public static int CountCharsInStream(BinaryReader binReader, char[] charsToFind)
     {
         int count = 0;
@@ -879,6 +890,20 @@ public static class CommonModelImporter
 
         return smd;
     }
+
+    public static Dictionary<char[], MethodInfo> BuildChunkDictionary()
+    {
+        Dictionary<char[], MethodInfo> methodInfoDictionary = new Dictionary<char[], MethodInfo>();
+        foreach (Type type in Assembly.GetAssembly(typeof(BaseChunk)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(BaseChunk))))
+        {
+            char[] chunkName = (char[]) type.GetMethod("ChunkName").Invoke(null, null);
+            MethodInfo methodInfo = type.GetMethod("FromStream");
+            methodInfoDictionary[chunkName] = methodInfo;
+        }
+
+        return methodInfoDictionary;
+    }
+    
 }
 
 public class R2V2
@@ -1544,8 +1569,8 @@ public class CommonTextureData
 {
     public string textureName;
     public string fullPathName;
-    public int width;
-    public int height;
+    public uint width;
+    public uint height;
     //public String fbxMaterialNodeId;
     //public String fbxTextureNodeId;
     //public String fbxVideoNodeId;
@@ -1581,6 +1606,7 @@ public class CommonModelData
     public bool HasColor;
     public bool HasUV2;
     public XboxModel XBoxModel;
+    public GCModel GCModel;
     public List<VertexDataAndDesc> VertexDataLists = new List<VertexDataAndDesc>();
     public List<List<int>> IndexDataList = new List<List<int>>();
     public List<CommonMeshData> CommonMeshData = new List<CommonMeshData>();
@@ -2004,4 +2030,689 @@ public class MaterialSlotInfo
 
 
 
+
+public class BaseChunk
+{
+    public const int ChunkHeaderSize = 16;
+    public char[] Signature;
+    public uint Length;
+    public uint Version;
+    public uint NumElements;
+
+    public static bool CompareSignature(char[] a,char[] b)
+    {
+        if(a == null || b == null)
+        {
+            return false;
+        }
+        if(a.Length != b.Length)
+        {
+            return false;
+        }
+        for(int i=0; i<a.Length;++i)
+        {
+            if(a[i] !=  b[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    
+    
+    
+    
+    public static BaseChunk FromStreamMaster(string name,BinaryReader binReader,StringBuilder debugInfo)
+    {
+        char[] type = binReader.ReadChars(4);
+        uint size = binReader.ReadUInt32();
+
+        binReader.BaseStream.Position -= 8;
+
+        object[] parameters = new object[] { binReader };
+
+        foreach (char[] key in CommonModelImporter.ChunkMapping.Keys)
+        {
+            if(CompareSignature(key,type))
+            {
+                MethodInfo methodInfo = CommonModelImporter.ChunkMapping[key]; 
+
+                BaseChunk chunk = (BaseChunk)methodInfo.Invoke(null, parameters);
+                return chunk;
+            }
+        }
+
+        if (debugInfo != null)
+        {
+            debugInfo.AppendLine($"Can't find chunk [{new string(type)}] ");
+        }
+        
+        binReader.BaseStream.Position += size;
+        return null;
+
+    }
+
+
+    public void BaseFromStream(BinaryReader binReader)
+    {
+        Signature = binReader.ReadChars(4);
+        Length = binReader.ReadUInt32();
+        Version = binReader.ReadUInt32();
+        NumElements = binReader.ReadUInt32();
+    }
+}
+
+
+public class VERSChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.versTag;
+    } 
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        VERSChunk chunk = new VERSChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize)); 
+        return chunk;
+    }
+}
+
+public class CPRTChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.cprtTag;
+    } 
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        CPRTChunk chunk = new CPRTChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize)); 
+        return chunk;
+    }
+}
+
+
+public class SKELChunk : BaseChunk
+{
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.skelTag;
+    }
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        SKELChunk chunk = new SKELChunk();
+        chunk.BaseFromStream(binReader);
+
+        for (int i = 0; i < chunk.NumElements; ++i)
+        {
+            BoneNode node = BoneNode.FromStream(binReader);
+            //node.name = m_boneNames[i];
+            //m_boneNameDictionary[i] = node.name;
+            //List<string> names;
+            //if (!BoneNode.pad1ByteNames.TryGetValue(node.flags, out names))
+            //{
+            //    names = new List<string>();
+            //    BoneNode.pad1ByteNames[node.flags] = names;
+            //}
+            //names.Add(node.name);
+            chunk.BoneList.Add(node);
+        }
+        return chunk;
+    }
+
+    public List<BoneNode> BoneList = new List<BoneNode>();
+}
+
+
+public class XboxChunk : BaseChunk
+{
+    public byte[] Data;
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.xrndTag;
+    }
+
+
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        XboxChunk chunk = new XboxChunk();
+        chunk.BaseFromStream(binReader);
+
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+}
+
+
+public class SelectSetTypesChunk : BaseChunk
+{
+    public List<SelectSet> SelectSetList = new List<SelectSet>();
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.selsTag;
+    }
+
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        SelectSetTypesChunk chunk = new SelectSetTypesChunk();
+        chunk.BaseFromStream(binReader);
+        for (int i = 0; i < chunk.NumElements; ++i)
+        {
+            chunk.SelectSetList.Add(SelectSet.FromStream(binReader));
+        }
+        return chunk;
+    }
+}
+
+public class SelectSet
+{
+    public UInt16 Mask;
+    public UInt16 NameIndex;
+
+    public static SelectSet FromStream(BinaryReader binReader)
+    {
+        SelectSet set = new SelectSet();
+        set.Mask = binReader.ReadUInt16();
+        set.NameIndex = binReader.ReadUInt16();
+        return set;
+    }
+
+}
+
+public class NameChunk : BaseChunk
+{
+    public List<string> Names = new List<string>();
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.nameTag;
+    }
+
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        NameChunk chunk = new NameChunk();
+        chunk.BaseFromStream(binReader);
+        CommonModelImporter.ReadNullSeparatedNames(binReader,  chunk.Names);
+        return chunk;
+    }
+
+}
+
+// public class SelectionSetsChunk : BaseChunk
+// {
+//     public List<string> Names = new List<string>();
+//     
+//     public static char[] ChunkName()
+//     {
+//         return CommonModelImporter.seltTag;
+//     }
+//
+//     
+//     public static BaseChunk FromStream(string name, BinaryReader binReader)
+//     {
+//         SelectionSetsChunk chunk = new SelectionSetsChunk();
+//         chunk.BaseFromStream(binReader);
+//         CommonModelImporter.ReadNullSeparatedNames(binReader,chunk.Names);
+//         return chunk;
+//     }
+//
+// }
+
+public class TXTRChunk : BaseChunk
+{
+    public List<PaxTexture> Textures = new List<PaxTexture>();
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.txtrTag;
+    }
+
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        TXTRChunk chunk = new TXTRChunk();
+        chunk.BaseFromStream(binReader);
+        for(int i=0;i<chunk.NumElements;++i)
+        {
+            chunk.Textures.Add(PaxTexture.FromStream(binReader));
+        }
+        return chunk;
+    }
+
+}
+
+
+
+public class PaxTexture
+{
+    public String Name;
+    public int TexNum;
+    public uint PointerToImageArray;
+    public uint Width;
+    public uint Height;
+    public uint AttribFlags;
+    public uint AttribValues;
+
+    public static PaxTexture FromStream(BinaryReader binReader)
+    {
+        PaxTexture paxTexture = new PaxTexture();
+        byte[] buffer = binReader.ReadBytes(128);
+        paxTexture.Name = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+        paxTexture.TexNum = binReader.ReadInt32();
+        paxTexture.PointerToImageArray = binReader.ReadUInt32();
+        paxTexture.Width = binReader.ReadUInt32();
+        paxTexture.Height = binReader.ReadUInt32();
+        paxTexture.AttribFlags = binReader.ReadUInt32();
+        paxTexture.AttribValues = binReader.ReadUInt32();
+        return paxTexture;
+    }
+
+    public CommonTextureData ToCommon()
+    {
+        CommonTextureData commonTextureData = new CommonTextureData();
+        commonTextureData.textureName = Name;
+        commonTextureData.fullPathName = Name;
+        commonTextureData.width = Width;
+        commonTextureData.height = Height;
+        return commonTextureData;
+    }
+    
+    
+}
+
+
+public class EndChunk : BaseChunk
+{
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.endTag;
+    }
+
+    public static BaseChunk FromStream(string name, BinaryReader binReader)
+    {
+        EndChunk chunk = new EndChunk();
+        chunk.BaseFromStream(binReader);
+        return chunk;
+    }
+}
+
+
+public class OBBTChunk : BaseChunk
+{
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.obbtTag;
+    }
+
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        OBBTChunk chunk = new OBBTChunk();
+        chunk.BaseFromStream(binReader);
+        return chunk;
+    }
+}
+
+
+public class POSIChunk : BaseChunk
+{
+    public List<IndexedVector3> Data = new List<IndexedVector3>();
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.posiTag;
+    }
+
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        POSIChunk chunk = new POSIChunk();
+        chunk.BaseFromStream(binReader);
+        for (int i = 0; i < chunk.NumElements; ++i)
+        {
+            chunk.Data.Add(Common.FromStreamVector3BE(binReader));
+        }
+        
+        return chunk;
+    }
+
+}
+
+public class NORMChunk : BaseChunk
+{
+    public List<IndexedVector3> Data = new List<IndexedVector3>();
+
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.normTag;
+    }
+
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        NORMChunk chunk = new NORMChunk();
+        chunk.BaseFromStream(binReader);
+        for (int i = 0; i < chunk.NumElements; ++i)
+        {
+            chunk.Data.Add(Common.FromStreamVector3BE(binReader));
+        }
+        
+        return chunk;
+    }
+}
+
+public class UV0Chunk : BaseChunk
+{
+    public List<IndexedVector2> Data = new List<IndexedVector2>();
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.uv0Tag;
+    }
+
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        UV0Chunk chunk = new UV0Chunk();
+        chunk.BaseFromStream(binReader);
+        for (int i = 0; i < chunk.NumElements; ++i)
+        {
+            chunk.Data.Add(Common.FromStreamVector2BE(binReader));
+        }
+        
+        return chunk;
+    }
+}
+
+public class SHDRChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.shdrTag;
+    }
+
+    
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        SHDRChunk chunk = new SHDRChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize)); 
+        
+        return chunk;
+    }
+}
+
+
+public class DSLIChunk : BaseChunk
+{
+    public List<DSLIInfo> Data = new List<DSLIInfo>();
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.dsliTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        DSLIChunk chunk = new DSLIChunk();
+        chunk.BaseFromStream(binReader);
+        
+        for (int i = 0; i < chunk.NumElements; ++i)
+        {
+            DSLIInfo info = DSLIInfo.ReadStream(binReader);
+            if (info.length > 0)
+            {
+                chunk.Data.Add(info);
+            }
+        }
+        
+        return chunk;
+    }
+
+}
+
+public class DSLSChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public List<DisplayListHeader> DisplayListHeaders = new List<DisplayListHeader>();
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.dslsTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        DSLSChunk chunk = new DSLSChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+    public void BuildData(DSLIChunk dsliChunk)
+    {
+        DisplayListHeader header = null;
+
+        using (BinaryReader binReader = new BinaryReader(new MemoryStream(Data)))
+        {
+            for (int i = 0; i < dsliChunk.Data.Count; ++i)
+            {
+                binReader.BaseStream.Position = dsliChunk.Data[i].startPos;
+                DisplayListHeader.FromStream(binReader, out header, dsliChunk.Data[i]);
+                if (header != null)
+                {
+                    DisplayListHeaders.Add(header);
+                }
+            }
+        }
+    }
+    
+}
+
+public class CNTRChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.cntrTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        CNTRChunk chunk = new CNTRChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+
+
+public class PADDChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.paddTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        PADDChunk chunk = new PADDChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+
+public class DSLCChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.dslcTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        DSLCChunk chunk = new DSLCChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+
+public class VFLAChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.vflaTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        VFLAChunk chunk = new VFLAChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+
+
+public class RAMChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.ramTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        RAMChunk chunk = new RAMChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+public class MSARChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.msarTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        MSARChunk chunk = new MSARChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+
+
+
+public class NLVLChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.nlvlTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        NLVLChunk chunk = new NLVLChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+public class MESHChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.meshTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        MESHChunk chunk = new MESHChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+
+public class ELEMChunk : BaseChunk
+{
+    public byte[] Data;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.elemTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        ELEMChunk chunk = new ELEMChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
 

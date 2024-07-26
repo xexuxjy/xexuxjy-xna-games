@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public static class AnimationUtils
 {
@@ -52,9 +54,9 @@ public static class AnimationUtils
 
 
         // these both work with the vectors
-        WriteOPTR(writer, gac.PositionData);
+        WriteOPTR(writer, gac.PositionData,null);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteOVEC(writer,gac.PositionData,null);
+        WriteOVEC(writer,gac.PositionData,null,null);
         GladiusFileWriter.PadIfNeeded(writer);
 
         // these all work with the quaternions
@@ -75,6 +77,9 @@ public static class AnimationUtils
         List<List<Vector3>> positionData = new List<List<Vector3>>();
         List<List<ushort>> positionTimeData = new List<List<ushort>>();
 
+        List<Vector3> trackPosScalarData = new List<Vector3>();
+
+
         for (int i = 0; i < animationData.optPosTrack.m_tracks.Count; ++i)
         {
             List<Vector3> data = new List<Vector3>();
@@ -82,12 +87,15 @@ public static class AnimationUtils
             
             positionData.Add(data);
             positionTimeData.Add(timeData);
+
+            trackPosScalarData.Add(animationData.optPosTrack.m_tracks[i].mPosScalar);
             
             foreach (var optVec in animationData.optPosTrack.m_tracks[i].mOptVecs)
             {
-                Vector3 dst = Vector3.zero; 
-
-                optVec.Get(ref dst, ref PosScalar);
+                Vector3 dst = Vector3.zero;
+                Vector3 scalar = animationData.optPosTrack.m_tracks[i].mPosScalar;
+                
+                optVec.Get(ref dst, ref scalar);
                 timeData.Add(optVec.time);
                 data.Add(dst);
             }
@@ -131,8 +139,8 @@ public static class AnimationUtils
         WriteBOOL(writer,numEvents);
 
         // these both work with the vectors
-        WriteOPTR(writer, positionData);
-        WriteOVEC(writer,positionData,positionTimeData);
+        WriteOPTR(writer, positionData,trackPosScalarData);
+        WriteOVEC(writer,positionData,trackPosScalarData,positionTimeData);
 
         // these all work with the quaternions
         WriteORTR(writer, rotationData);
@@ -293,7 +301,7 @@ public static class AnimationUtils
         GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
     }
 
-    public static void WriteOPTR(BinaryWriter writer, List<List<Vector3>> positionData)
+    public static void WriteOPTR(BinaryWriter writer, List<List<Vector3>> positionData,List<Vector3> trackScalarData)
     {
         int total = GladiusFileWriter.HeaderSize;
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
@@ -303,9 +311,24 @@ public static class AnimationUtils
         writer.Write(1);
         writer.Write(positionData.Count); // number of elements.
 
+        int count = 0;
         foreach (List<Vector3> positions in positionData)
         {
-            anim_OptPosTrack.ToStream(writer, positions.Count, PosScalar, 0);
+            
+            // calc scalar.
+            Vector3 scalar = Vector3.one;
+            foreach (Vector3 v in positions)
+            {
+                scalar.x = Math.Min(scalar.x, Math.Abs(v.x));
+                scalar.y = Math.Min(scalar.y, Math.Abs(v.y));
+                scalar.z = Math.Min(scalar.z, Math.Abs(v.z));
+            }
+
+            scalar.x /= PosScalar.x;
+            scalar.y /= PosScalar.y;
+            scalar.z /= PosScalar.z;
+            
+            anim_OptPosTrack.ToStream(writer, positions.Count, scalar, 0);
         }
     }
 
@@ -331,7 +354,7 @@ public static class AnimationUtils
         }
     }
 
-    public static void WriteOVEC(BinaryWriter writer, List<List<Vector3>> positionData,List<List<ushort>> timeData)
+    public static void WriteOVEC(BinaryWriter writer, List<List<Vector3>> positionData,List<Vector3> trackScalarData,List<List<ushort>> timeData)
     {
         int total = GladiusFileWriter.HeaderSize;
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
@@ -353,7 +376,7 @@ public static class AnimationUtils
         {
             for (int j = 0; j < positionData[i].Count; ++j)
             {
-                optVec.ToStream(writer, optVec.Put(positionData[i][j], timeData[i][j],PosScalar));                
+                optVec.ToStream(writer, optVec.Put(positionData[i][j], timeData[i][j],trackScalarData[i]));                
             }
         }
     }
