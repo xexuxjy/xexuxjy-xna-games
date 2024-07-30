@@ -1860,8 +1860,8 @@ public class TextureData
     public string fullPathName;
     public int minusOne;
     public int unknown;
-    public int width;
-    public int height;
+    public uint width;
+    public uint height;
     public int three;
     public int zero;
 
@@ -1898,8 +1898,8 @@ public class TextureData
 
         textureData.minusOne = binReader.ReadInt32();
         textureData.unknown = binReader.ReadInt32();
-        textureData.width = binReader.ReadInt32();
-        textureData.height = binReader.ReadInt32();
+        textureData.width = binReader.ReadUInt32();
+        textureData.height = binReader.ReadUInt32();
         textureData.three = binReader.ReadInt32();
         textureData.zero = binReader.ReadInt32();
 

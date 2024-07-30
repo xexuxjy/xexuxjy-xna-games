@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.Rendering;
 
 
@@ -441,14 +443,18 @@ public class GCModel
         TXTRChunk txtrChunk = (TXTRChunk)m_chunkList.Find(x => x is TXTRChunk);
         if (txtrChunk != null)
         {
+            int textureCount = 0;
             foreach (PaxTexture paxTexture in txtrChunk.Textures)
             {
-                cmd.CommonTextures.Add(paxTexture.ToCommon());
+                CommonTextureData commonTextureData = paxTexture.ToCommon(); 
+                cmd.CommonTextures.Add(commonTextureData);
+                
+                CommonMaterialData commonMaterialData = new CommonMaterialData();    
+                commonMaterialData.Name = m_name + (textureCount++);
+                commonMaterialData.TextureData1 = commonTextureData;
+                cmd.CommonMaterials.Add(commonMaterialData);
             }
         }
- 
-        
-
         
         
         foreach(VertexDataAndDesc vdad in cmd.VertexDataLists)
@@ -469,14 +475,11 @@ public class GCModel
         // //{
         // //    cmd.
         // //}
-        // int count = 0;
-        //
-        // foreach (MaterialData md in m_materialDataList)
-        // {
-        //     CommonMaterialData cm = md.ToCommon();
-        //     cm.Name = m_name + (count++);
-        //     cmd.CommonMaterials.Add(cm);
-        // }
+
+        int count = 0;
+
+   
+        
         //
         // List<int> meshIdList = new List<int>();
         // Dictionary<string, int> materialLookup = new Dictionary<string, int>();
@@ -501,6 +504,21 @@ public class GCModel
         //     cmd.CommonMeshData.Add(smd.ToCommon());
         // }
 
+
+
+        CommonMeshData commonMeshData = new CommonMeshData();
+        cmd.CommonMeshData.Add(commonMeshData);
+
+        commonMeshData.Name = m_name;
+        commonMeshData.Index = 0;
+        commonMeshData.MaterialId = 0;
+        commonMeshData.Indices.AddRange(cmd.IndexDataList[0]);
+        for (int i = 0; i < cmd.AllVertices.Count; ++i)
+        {
+            commonMeshData.Vertices.Add(i);
+        }
+            
+        
         return cmd;
     }
 
@@ -580,10 +598,6 @@ public class GCModel
         }
         while (count++ < 20);
 
-        if (debugInfo.Length > 0)
-        {
-            
-        }
         
         if(SkelChunk != null)
         {
