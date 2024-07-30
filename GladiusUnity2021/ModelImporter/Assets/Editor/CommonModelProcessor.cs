@@ -25,6 +25,18 @@ public static class CommonModelProcessor
     }
 
 
+    public static string TidyAssetName(string assetName,string originalModelDirectory)
+    {
+        String assetPath = assetName.Substring(0, assetName.LastIndexOf('/'));
+        String filename = assetName.Substring(assetName.LastIndexOf('/') + 1);
+        int startIndex = assetName.IndexOf(originalModelDirectory) + originalModelDirectory.Length;
+        int endIndex = assetName.LastIndexOf('/');
+        String assetSubDirectories = assetName.Substring(startIndex, endIndex - startIndex);
+        string adjustedFilename = filename.Replace(".bytes", "");
+        return adjustedFilename;
+
+    }
+    
     
     public static Material GetOrCreateMaterial(CommonModelData modelData, CommonMaterialData materialData,
         CommonMeshData commonMeshData)

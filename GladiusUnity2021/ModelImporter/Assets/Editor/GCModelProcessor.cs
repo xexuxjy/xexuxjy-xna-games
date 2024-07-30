@@ -16,6 +16,7 @@ namespace Assets.Editor
         public const string m_newExtension = ".asset";
         public const string OriginalModelDirectory = "GCModels";
         public const string OutputDirectory = "Resources/GCModelPrefabs/";
+        public const string PrefabOutputDirectory = "Resources/GCModelPrefabs/";
 
         public static bool HasExtension(string asset)
         {
@@ -62,30 +63,23 @@ namespace Assets.Editor
             try
             {
                 //Debug.LogFormat("[{0}] [{1}] [{2}]", filename, assetPath, assetSubDirectories);
+                int lodLevel = 1;
 
                 TextAsset assetData = AssetDatabase.LoadAssetAtPath<TextAsset>(assetName);
                 if (assetData != null)
                 {
-                    BinaryReader binReader = new BinaryReader(new MemoryStream(assetData.bytes));
+                    string adjustedFilename = CommonModelProcessor.TidyAssetName(assetName, OriginalModelDirectory);
 
-                    String assetPath = assetName.Substring(0, assetName.LastIndexOf('/'));
-                    String filename = assetName.Substring(assetName.LastIndexOf('/') + 1);
-                    int startIndex = assetName.IndexOf(OriginalModelDirectory) + OriginalModelDirectory.Length;
-                    int endIndex = assetName.LastIndexOf('/');
-                    String assetSubDirectories = assetName.Substring(startIndex, endIndex - startIndex);
-                    string adjustedFilename = filename.Replace(".bytes", "");
+                    GCModel model = new GCModel(adjustedFilename);
 
-                    GCModel model = new GCModel("");
+                    using (BinaryReader binReader = new BinaryReader(new MemoryStream(assetData.bytes)))
+                    {
+                        model.LoadData(binReader, null);
 
-                    model.m_name = adjustedFilename;
-
-                    binReader.BaseStream.Position = 0;
-                    model.LoadData(binReader, null);
-
-                    int lodLevel = 1;
-
-                    CommonModelData commonModel = model.ToCommon();
-                    CommonModelProcessor.ProcessCommonModel(assetName, lodLevel, commonModel,"Resources/GCModelPrefabs/");
+                        CommonModelData commonModel = model.ToCommon();
+                        CommonModelProcessor.ProcessCommonModel(assetName, lodLevel, commonModel,
+                            PrefabOutputDirectory);
+                    }
                 }
             }
             catch (Exception e)
@@ -95,22 +89,4 @@ namespace Assets.Editor
         }
 
 
-// public static Mesh PopulateMeshData(GCModel model,bool merge = false)
-        // {
-        //     List<int> indices = new List<int>();
-        //     List<Vector3> points = new List<Vector3>();
-        //     List<Vector3> normals = new List<Vector3>();
-        //     List<Vector2> uvs = new List<Vector2>();
-        //
-        //     model.BuildStandardMesh(indices,points,normals,uvs);
-        //
-        //     Mesh mesh = new Mesh();
-        //     mesh.vertices = points.ToArray();
-        //     mesh.triangles = indices.ToArray();
-        //     mesh.normals = normals.ToArray();
-        //     mesh.uv = uvs.ToArray();
-        //     
-        //     return mesh;
-        // }
-    }
 }

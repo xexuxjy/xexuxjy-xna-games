@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Unity.VisualScripting;
+using Unity.VisualScripting.YamlDotNet.Serialization.ObjectGraphVisitors;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -15,10 +16,10 @@ namespace Assets.Editor
     //http://answers.unity3d.com/questions/600046/importing-custom-assets.html
     public class XboxModelProcessor : AssetPostprocessor
     {
-
         public const string m_extension = ".mdl";
         public const string m_newExtension = ".asset";
         public const string OriginalModelDirectory = "XboxModels";
+        public const string PrefabOutputDirectory = "Resources/XboxModelPrefabs/";
 
         public static bool HasExtension(string asset)
         {
@@ -33,12 +34,12 @@ namespace Assets.Editor
 
         // This is called always when importing something
         static void OnPostprocessAllAssets
-            (
-                string[] importedAssets,
-                string[] deletedAssets,
-                string[] movedAssets,
-                string[] movedFromAssetPaths
-            )
+        (
+            string[] importedAssets,
+            string[] deletedAssets,
+            string[] movedAssets,
+            string[] movedFromAssetPaths
+        )
         {
             Debug.Log("In xbox processor");
             foreach (string asset in importedAssets)
@@ -59,52 +60,36 @@ namespace Assets.Editor
         }
 
 
-
-    
-
-
         // Imports my asset from the file
         static void ImportXBoxModel(string assetName)
         {
             Debug.Log("XboxModelProcessor importing : " + assetName);
 
-
             try
             {
-
-                //Debug.LogFormat("[{0}] [{1}] [{2}]", filename, assetPath, assetSubDirectories);
-
                 TextAsset assetData = AssetDatabase.LoadAssetAtPath<TextAsset>(assetName);
                 if (assetData != null)
                 {
-                    BinaryReader binReader = new BinaryReader(new MemoryStream(assetData.bytes));
-
-
-                    String assetPath = assetName.Substring(0, assetName.LastIndexOf('/'));
-                    String filename = assetName.Substring(assetName.LastIndexOf('/') + 1);
-                    int startIndex = assetName.IndexOf(OriginalModelDirectory) + OriginalModelDirectory.Length;
-                    int endIndex = assetName.LastIndexOf('/');
-                    String assetSubDirectories = assetName.Substring(startIndex, endIndex - startIndex);
-                    string adjustedFilename = filename.Replace(".bytes", "");
+                    string adjustedFilename = CommonModelProcessor.TidyAssetName(assetName, OriginalModelDirectory);
 
                     XboxModel model = new XboxModel("");
-
-
                     model.m_name = adjustedFilename;
 
                     // deal with empty files
 
-                    binReader.BaseStream.Position = 0;
-                    model.LoadData(binReader);
-                    model.GetIndices(null);
+                    int lodLevel = 1; //model.m_selsInfo.GetBestLodData();
 
+                    using (BinaryReader binReader = new BinaryReader(new MemoryStream(assetData.bytes)))
+                    {
+                        model.LoadData(binReader);
+                        model.GetIndices(null);
 
-                    CommonModelData commonModel = model.ToCommon();
+                        CommonModelData commonModel = model.ToCommon();
 
-                    commonModel.Name = adjustedFilename;
-                    int lodLevel = 1;//model.m_selsInfo.GetBestLodData();
-                    CommonModelProcessor.ProcessCommonModel(assetName, lodLevel, commonModel,"Resources/XboxModelPrefabs/");
-
+                        commonModel.Name = adjustedFilename;
+                        CommonModelProcessor.ProcessCommonModel(assetName, lodLevel, commonModel,
+                            PrefabOutputDirectory);
+                    }
 
                     Debug.Log("Best lod level is : " + lodLevel);
                 }
@@ -114,13 +99,5 @@ namespace Assets.Editor
                 Debug.LogErrorFormat("Failed [{0}] [{1}]", assetName, e.StackTrace);
             }
         }
-
-
-
-
-
-
-        //public static void Process(String assetName, String adjustedFilename, CommonModelData commonModel, XboxModelRW xboxModel, List<CommonMeshData> meshList, bool merge, GameObject splitPrefab, GameObject combinedPrefab, int index, Dictionary<BoneNode, GameObject> boneObjectMap)
-        
     }
 }
