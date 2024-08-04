@@ -396,7 +396,8 @@ public class GCModel
         UV0Chunk uv0Chunk =  (UV0Chunk)m_chunkList.Find(x => x is UV0Chunk);
         DSLIChunk dsliChunk  = (DSLIChunk)m_chunkList.Find(x => x is DSLIChunk);
         DSLSChunk dslsChunk  = (DSLSChunk)m_chunkList.Find(x => x is DSLSChunk);
-
+        DSLCChunk dslcChunk = (DSLCChunk)m_chunkList.Find(x => x is DSLCChunk);
+        
         if (posiChunk != null && normChunk != null && uv0Chunk != null && dsliChunk != null && dslsChunk != null)
         {
             dslsChunk.BuildData(dsliChunk);

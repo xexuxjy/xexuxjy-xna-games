@@ -2472,7 +2472,10 @@ public class DSLIChunk : BaseChunk
         DSLIChunk chunk = new DSLIChunk();
         chunk.BaseFromStream(binReader);
         
-        for (int i = 0; i < chunk.NumElements; ++i)
+        // possible chunks is data length - header length / 8 (2 int32)
+        uint numElements = (chunk.Length - ChunkHeaderSize) / 8;
+        
+        for (int i = 0; i < numElements; ++i)
         {
             DSLIInfo info = DSLIInfo.ReadStream(binReader);
             if (info.length > 0)
@@ -2568,6 +2571,7 @@ public class PADDChunk : BaseChunk
 
 }
 
+// dslc chunk contains info on how many display lists exist for each mesh? (always/usually 1)
 
 public class DSLCChunk : BaseChunk
 {
