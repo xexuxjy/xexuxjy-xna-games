@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.Rendering;
+using Debug = UnityEngine.Debug;
 
 
 public class GCModelReader : BaseModelReader
@@ -373,22 +374,18 @@ public class GCModel
     
     public CommonModelData ToCommon()
     {
-        CommonModelData cmd = new CommonModelData();
-        cmd.GCModel = this;
+        CommonModelData commonModelData = new CommonModelData();
+        commonModelData.GCModel = this;
         
-        cmd.Name = m_name;
-        cmd.VertexDataLists = new List<VertexDataAndDesc>();
-        cmd.IndexDataList = new List<List<int>>();
-
-        cmd.IndexDataList = new List<List<int>>();
-        List<int> allIndices = new List<int>();
-        cmd.IndexDataList.Add(allIndices);
+        commonModelData.Name = m_name;
+        commonModelData.VertexDataLists = new List<VertexDataAndDesc>();
+        commonModelData.IndexDataList = new List<List<int>>();
 
         
         SKELChunk skelChunk = (SKELChunk)m_chunkList.Find(x => x is SKELChunk);
         if (skelChunk != null)
         {
-            cmd.BoneList.AddRange(skelChunk.BoneList);
+            commonModelData.BoneList.AddRange(skelChunk.BoneList);
         }
         
         POSIChunk posiChunk =  (POSIChunk)m_chunkList.Find(x => x is POSIChunk);
@@ -397,35 +394,44 @@ public class GCModel
         DSLIChunk dsliChunk  = (DSLIChunk)m_chunkList.Find(x => x is DSLIChunk);
         DSLSChunk dslsChunk  = (DSLSChunk)m_chunkList.Find(x => x is DSLSChunk);
         DSLCChunk dslcChunk = (DSLCChunk)m_chunkList.Find(x => x is DSLCChunk);
+        MESHChunk meshChunk = (MESHChunk)m_chunkList.Find(x => x is MESHChunk);
         
-        if (posiChunk != null && normChunk != null && uv0Chunk != null && dsliChunk != null && dslsChunk != null)
+        if (posiChunk != null && normChunk != null && uv0Chunk != null && dsliChunk != null && dslsChunk != null && meshChunk != null)
         {
             dslsChunk.BuildData(dsliChunk);
 
+            Debug.Assert(dslsChunk.DisplayListHeaders.Count == meshChunk.PaxElements.Count);
+            
             VertexDataAndDesc vertexDataAndDesc = new VertexDataAndDesc();
-            cmd.VertexDataLists.Add(vertexDataAndDesc);
+            commonModelData.VertexDataLists.Add(vertexDataAndDesc);
 
+            int meshCount = 0;
+            int previousMeshVertexCount = 0;
+            int vertexCount = 0;
+            
             foreach (DisplayListHeader dlh in dslsChunk.DisplayListHeaders)
             {
-                int counter = 0;
+                int meshIndexCount = 0;
+                
+                CommonMeshData commonMeshData = new CommonMeshData();
+                commonModelData.CommonMeshData.Add(commonMeshData);
+
+                commonMeshData.Name = m_name;
+                commonMeshData.Index = meshCount;
+                commonMeshData.MaterialId = meshChunk.PaxElements[meshCount].MaterialId;
+                
+                // commonMeshData.Indices.AddRange(cmd.IndexDataList[0]);
+                // for (int i = 0; i < cmd.AllVertices.Count; ++i)
+                // {
+                //     commonMeshData.Vertices.Add(i);
+                // }
+
+                List<int> meshIndices = new List<int>();
+                commonModelData.IndexDataList.Add(meshIndices);
+                
                 for (int i = 0; i < dlh.entries.Count; i++)
                 {
                     DisplayListEntry entry = dlh.entries[i];
-
-                    if (entry.PosIndex >= m_points.Count)
-                    {
-                        int ibreak = 0;
-                    }
-
-                    if (entry.NormIndex >= m_normals.Count)
-                    {
-                        int ibreak = 0;
-                    }
-
-                    if (entry.UVIndex >= m_uvs.Count)
-                    {
-                        int ibreak = 0;
-                    }
 
                     CommonVertexInstance cvi = new CommonVertexInstance();
                     cvi.Position = posiChunk.Data[entry.PosIndex];
@@ -433,10 +439,26 @@ public class GCModel
                     cvi.UV = uv0Chunk.Data[entry.UVIndex];
 
                     vertexDataAndDesc.VertexData.Add(cvi);
+                    
+                    int vertexIndex = dlh.entries[i].PosIndex;
+                    vertexIndex = vertexCount;
 
-                    allIndices.Add(counter);
-                    counter++;
+                    vertexCount++;
+                    
+                    // adjust vertexIndex to be in bounds for this submesh
+                    //vertexIndex -= previousMeshVertexCount;
+                   
+                    commonMeshData.Vertices.Add(vertexIndex);                    
+
+                    meshIndices.Add(meshIndexCount);
+                    meshIndexCount++;
                 }
+                
+                previousMeshVertexCount += meshIndices.Count;
+                commonMeshData.Indices.AddRange(meshIndices);
+
+                meshCount++;
+
             }
         }
 
@@ -448,79 +470,36 @@ public class GCModel
             foreach (PaxTexture paxTexture in txtrChunk.Textures)
             {
                 CommonTextureData commonTextureData = paxTexture.ToCommon(); 
-                cmd.CommonTextures.Add(commonTextureData);
+                commonModelData.CommonTextures.Add(commonTextureData);
                 
                 CommonMaterialData commonMaterialData = new CommonMaterialData();    
                 commonMaterialData.Name = m_name + (textureCount++);
                 commonMaterialData.TextureData1 = commonTextureData;
-                cmd.CommonMaterials.Add(commonMaterialData);
+                commonModelData.CommonMaterials.Add(commonMaterialData);
             }
         }
         
         
-        foreach(VertexDataAndDesc vdad in cmd.VertexDataLists)
+        foreach(VertexDataAndDesc vdad in commonModelData.VertexDataLists)
         {
-            cmd.AllVertices.AddRange(vdad.VertexData);
+            commonModelData.AllVertices.AddRange(vdad.VertexData);
         }
 
-
         
-        
-        
-        // foreach(VertexDataAndDesc vdad in cmd.VertexDataLists)
+        // CommonMeshData commonMeshData = new CommonMeshData();
+        // cmd.CommonMeshData.Add(commonMeshData);
+        //
+        // commonMeshData.Name = m_name;
+        // commonMeshData.Index = 0;
+        // commonMeshData.MaterialId = 0;
+        // commonMeshData.Indices.AddRange(cmd.IndexDataList[0]);
+        // for (int i = 0; i < cmd.AllVertices.Count; ++i)
         // {
-        //     cmd.AllVertices.AddRange(vdad.VertexData);
+        //     commonMeshData.Vertices.Add(i);
         // }
-        //
-        // //foreach (List<int> list in cmd.IndexDataList)
-        // //{
-        // //    cmd.
-        // //}
-
-        int count = 0;
-
-   
-        
-        //
-        // List<int> meshIdList = new List<int>();
-        // Dictionary<string, int> materialLookup = new Dictionary<string, int>();
-        //
-        // for (int i = 0; i < m_subMeshData1List.Count; ++i)
-        // {
-        //     meshIdList.Add(i);
-        // }
-        //
-        //
-        // foreach (string textureName in m_textureNames)
-        // {
-        //     CommonTextureData ctd = new CommonTextureData();
-        //     ctd.textureName = textureName;
-        //     cmd.CommonTextures.Add(ctd);
-        // }
-        //
-        //
-        // List<SubmeshData> submeshList = GetIndices(meshIdList);
-        // foreach (SubmeshData smd in submeshList)
-        // {
-        //     cmd.CommonMeshData.Add(smd.ToCommon());
-        // }
-
-
-
-        CommonMeshData commonMeshData = new CommonMeshData();
-        cmd.CommonMeshData.Add(commonMeshData);
-
-        commonMeshData.Name = m_name;
-        commonMeshData.Index = 0;
-        commonMeshData.MaterialId = 0;
-        commonMeshData.Indices.AddRange(cmd.IndexDataList[0]);
-        for (int i = 0; i < cmd.AllVertices.Count; ++i)
-        {
-            commonMeshData.Vertices.Add(i);
-        }
             
         
-        return cmd;
+        return commonModelData;
     }
 
 
@@ -597,7 +576,7 @@ public class GCModel
                 binReader.BaseStream.Position = position + chunk.Length;
             }
         }
-        while (count++ < 20);
+        while (count++ < 100);
 
         
         if(SkelChunk != null)

@@ -535,7 +535,7 @@ public class XboxModel : BaseModel
                 //smi.meshMaterial = m_meshMaterialOffsetList[materialIndex];
                 ////GetTextureId(smi.index, out smi.originalMaterialId, out smi.materialId);
 
-                int materialBlockId = 0;
+                uint materialBlockId = 0;
                 Debug.Assert(submeshIndex < m_subMeshData3.offsetList.Count);
                 int offsetId = m_subMeshData3.offsetList[submeshIndex] / s_mmoOffsetBlockSize;
                 Debug.Assert(offsetId < m_meshMaterialOffsetList.Count);
@@ -639,10 +639,10 @@ public class XboxModel : BaseModel
             }
             //smi.boneIds.Sort();
                 bool validMesh = true;
-                int lookup = smi.materialId;
+                uint lookup = smi.materialId;
                 while (lookup < m_materialDataList.Count - 1)
                 {
-                    MaterialData materialData = m_materialDataList[lookup];
+                    MaterialData materialData = m_materialDataList[(int)lookup];
                     if (materialData.m_materialSlotInfoList.Count == 0)
                     {
                         lookup++;
@@ -1896,7 +1896,7 @@ public class SubMeshData3
     public float val1;
     public int always1;
     public int offset;
-    public int convertedOffset;
+    public uint convertedOffset;
 
     public static MeshMaterialOffsets FromStream(BinaryReader binReader)
     {
@@ -1908,7 +1908,7 @@ public class SubMeshData3
             Debug.Assert(meshMaterial.always1 == 1);
             meshMaterial.offset = binReader.ReadInt32();
             Debug.Assert(meshMaterial.offset % XboxModel.s_materialBlockSize == 0);
-            meshMaterial.convertedOffset = meshMaterial.offset / XboxModel.s_materialBlockSize;
+            meshMaterial.convertedOffset = (uint)(meshMaterial.offset / XboxModel.s_materialBlockSize);
         }
         else
         {
@@ -1966,8 +1966,8 @@ public class SubmeshData
     public Dictionary<int, int> reverseBoneIdMap = new Dictionary<int, int>();
     public MeshMaterialOffsets meshMaterial;
 
-    public int originalMaterialId;
-    public int materialId;
+    public uint originalMaterialId;
+    public uint materialId;
 
     public void AddIndexAndWeight(int boneId, int vertexIndex, float weight)
     {

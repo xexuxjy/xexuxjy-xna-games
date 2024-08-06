@@ -54,10 +54,10 @@ public static class CommonModelImporter
 
     public static char[] xrndTag = new char[] { 'X', 'R', 'N', 'D' };
     public static char[] doegTag = new char[] { 'd', 'o', 'e', 'g' };
-    public static char[] endTag = new char[] { 'E', 'N', 'D', (char)0x2E };
+    public static char[] endTag = new char[] { 'E', 'N', 'D', '.' };
     public static char[] obbtTag = new char[] { 'O', 'B', 'B', 'T' };
     public static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
-    //public static char[] endTag = new char[] { (char)0x3F,'E', 'N', 'D'};
+    
 
 
     public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag,
@@ -1584,7 +1584,7 @@ public class CommonMeshData
     public List<int> Vertices = new List<int>();
     public int LodLevel;
     public string Name;
-    public int MaterialId;
+    public uint MaterialId;
     public int Index;
     public int VertexListIndex = 0;
     public int IndexListIndex = 0;
@@ -2074,6 +2074,8 @@ public class BaseChunk
 
         foreach (char[] key in CommonModelImporter.ChunkMapping.Keys)
         {
+            
+            
             if(CompareSignature(key,type))
             {
                 MethodInfo methodInfo = CommonModelImporter.ChunkMapping[key]; 
@@ -2340,7 +2342,7 @@ public class EndChunk : BaseChunk
         return CommonModelImporter.endTag;
     }
 
-    public static BaseChunk FromStream(string name, BinaryReader binReader)
+    public static BaseChunk FromStream(BinaryReader binReader)
     {
         EndChunk chunk = new EndChunk();
         chunk.BaseFromStream(binReader);
@@ -2681,7 +2683,9 @@ public class NLVLChunk : BaseChunk
 
 public class MESHChunk : BaseChunk
 {
-    public byte[] Data;
+    //public byte[] Data;
+    public List<PaxElement> PaxElements = new List<PaxElement>();
+
     
     public static char[] ChunkName()
     {
@@ -2692,7 +2696,14 @@ public class MESHChunk : BaseChunk
     {
         MESHChunk chunk = new MESHChunk();
         chunk.BaseFromStream(binReader);
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+
+        uint numElements = (chunk.Length - ChunkHeaderSize) / 24;
+        for (int i = 0; i < numElements; ++i)
+        {
+            chunk.PaxElements.Add(PaxElement.FromStream(binReader));
+        }
+
+
         
         return chunk;
     }
@@ -2703,7 +2714,7 @@ public class MESHChunk : BaseChunk
 public class ELEMChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.elemTag;
@@ -2718,5 +2729,39 @@ public class ELEMChunk : BaseChunk
         return chunk;
     }
 
+}
+
+
+public class PaxElement
+{
+    public uint Unk1;
+    public uint AlwaysZero;
+    public uint MaterialId;
+    public uint ElementCount;
+    public uint AlwaysZero2;
+    public uint Unk2;
+
+    public static PaxElement FromStream(BinaryReader reader)
+    {
+        PaxElement paxElement = new PaxElement();
+        paxElement.Unk1 = reader.ReadUInt32();
+        paxElement.AlwaysZero = reader.ReadUInt32();
+        paxElement.MaterialId = reader.ReadUInt32();
+        paxElement.ElementCount = reader.ReadUInt32();
+        paxElement.AlwaysZero2 = reader.ReadUInt32();
+        paxElement.Unk2 = reader.ReadUInt32();
+        return paxElement;
+    }
+
+
+    public void ToStream(BinaryWriter writer)
+    {
+        writer.Write(Unk1);
+        writer.Write(AlwaysZero);
+        writer.Write(MaterialId);
+        writer.Write(ElementCount);
+        writer.Write(AlwaysZero2);
+        writer.Write(Unk2);
+    }
 }
 

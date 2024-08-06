@@ -84,7 +84,7 @@ namespace Assets.Editor
             }
             catch (Exception e)
             {
-                Debug.LogErrorFormat("Failed [{0}] [{1}]", assetName, e.StackTrace);
+                    Debug.LogErrorFormat("Failed [{0}] [{1}]", assetName, e.StackTrace);
             }
         }
 

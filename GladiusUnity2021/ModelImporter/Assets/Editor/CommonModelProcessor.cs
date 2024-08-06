@@ -10,7 +10,7 @@ using UnityEngine.Animations.Rigging;
 
 public static class CommonModelProcessor
 {
-    public static bool MERGE_MESH = true;
+    public static bool MERGE_MESH = false;
     
     static Dictionary<String, Material> TempMaterialStore = new Dictionary<string, Material>();
 
@@ -474,7 +474,7 @@ public static class CommonModelProcessor
             // always merge here as the splits handled furhter up..
             List<Mesh> combinedMeshes = CommonModelProcessor.MergeMesh(merge, meshes, boneConversionDictionary, commonModel.BoneList, remappedBoneNodeList);
 
-            CommonMaterialData commonMaterialData = commonModel.CommonMaterials[meshList.First().MaterialId];
+            CommonMaterialData commonMaterialData = commonModel.CommonMaterials[(int)meshList.First().MaterialId];
 
             foreach (Mesh combinedMesh in combinedMeshes)
             {
@@ -667,7 +667,7 @@ public static class CommonModelProcessor
             Dictionary<CommonMaterialData, List<CommonMeshData>> result = new Dictionary<CommonMaterialData, List<CommonMeshData>>();
             foreach (CommonMeshData mesh in model.CommonMeshData)
             {
-                CommonMaterialData materialData = model.CommonMaterials[mesh.MaterialId];
+                CommonMaterialData materialData = model.CommonMaterials[(int)mesh.MaterialId];
                 List<CommonMeshData> listResult = null;
                 if (!result.TryGetValue(materialData, out listResult))
                 {
@@ -702,14 +702,13 @@ public static class CommonModelProcessor
             }
             
 
-            CommonMaterialData commonMaterial = commonModel.CommonMaterials[submesh.MaterialId];
+            CommonMaterialData commonMaterial = commonModel.CommonMaterials[(int)submesh.MaterialId];
             Material m = CommonModelProcessor.GetOrCreateMaterial(commonModel, commonMaterial, submesh);
             if (m != null)
             {
                 renderer.material = m;
             }
 
-            //dlh.BuildCommonVertexData();
             Mesh mesh = new Mesh();
             mesh.name = submesh.Name;
             mf.sharedMesh= mesh;
@@ -724,7 +723,6 @@ public static class CommonModelProcessor
             }
 
             Vector3[] tempNormal = new Vector3[submesh.Vertices.Count];
-            //mesh.normals = new Vector3[submesh.Vertices.Count];
             for (int i = 0; i < tempNormal.Length; ++i)
             {
                 tempNormal[i] = commonModel.AllVertices[submesh.Vertices[i]].Normal;
@@ -743,6 +741,7 @@ public static class CommonModelProcessor
                 Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV;
                 tempUV[i] = new Vector2(uv.x, maxy - uv.y);
             }
+
             Vector2[] tempUV2 = null;
             if (commonModel.HasUV2)
             {
@@ -788,6 +787,7 @@ public static class CommonModelProcessor
                 }
                 mesh.colors = tempColors;
             }
+            
             if (commonModel.Skinned)
             {
                 BoneWeight[] tempBoneWeights = new BoneWeight[mesh.vertices.Length];
@@ -848,10 +848,6 @@ public static class CommonModelProcessor
             mf.sharedMesh = mesh;
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
-
-            //AssetDatabase.CreateAsset(mesh, "Assets/Resources/Meshes/" + mesh.name);
-
-            //Debug.LogFormat("Mesh [{0}][[{1}][{2}].", mesh.vertices.Length, mesh.normals.Length, mesh.uv.Length);
 
             return submeshObject;
         }
