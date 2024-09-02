@@ -64,9 +64,7 @@ public class GladiusGCExporter : UnityEditor.Editor
 
         if (newPath != null && newPath.Length != 0)
         {
-            //string testPath = newPath.Substring(0,(newPath.Length-newPath.LastIndexOf("/"))+1);
             string testPath = newPath.Substring(0,(newPath.LastIndexOf("/"))+1);
-            //testPath += "/";
             
             GCModel model = GCModel.CreateFromGameObject(gameObject);
             if (model != null)
@@ -75,25 +73,31 @@ public class GladiusGCExporter : UnityEditor.Editor
                 {
                     model.WriteData(bw);
                 }
+                
+                // texture data should be in the gcmodel now?
+
+                foreach (TextureInfo textureInfo in model.m_textures)
+                {
+                    Renderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+                    if (meshRenderer == null)
+                    {
+                        meshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
+                    }
+
+                    Material m = meshRenderer.sharedMaterial;
+
+                    string textureName = m.mainTexture.name.ToLower();
+                    string modelName = gameObject.name;
+
+                    ImageExtractor.EncodeFile((Texture2D)m.mainTexture, textureName + ".tga",
+                        testPath + modelName + ".ptx");
+                }
             }
             else
             {
                 EditorUtility.DisplayDialog("Warning", "Failed to create GCModel data from gameobj.","Okay");
             }
-            
-            Renderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-            if (meshRenderer == null)
-            {
-                meshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
-            }
-            Material m = meshRenderer.sharedMaterial;
-
-            string textureName = m.mainTexture.name.ToLower();
-            string modelName = gameObject.name;
-
-            ImageExtractor.EncodeFile((Texture2D)m.mainTexture,textureName+".tga", testPath+modelName+".ptx");
         }
-
         return null;
     }
 

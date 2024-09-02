@@ -377,6 +377,12 @@ public static class Common
         return (buf[i] << 24) | (buf[i + 1] << 16) | (buf[i + 2] << 8) | buf[i + 3];
     }
 
+    public static uint ToUInt32BigEndian(byte[] buf, int i)
+    {
+        return (uint)((buf[i] << 24) | (buf[i + 1] << 16) | (buf[i + 2] << 8) | buf[i + 3]);
+    }
+
+    
     public static short ToInt16BigEndian(BinaryReader reader)
     {
         byte b1 = reader.ReadByte();
@@ -486,6 +492,11 @@ public static class Common
         return Common.ToInt32BigEndian(s_buffer, 0);
     }
 
+    public static uint ReadUInt32BigEndian(BinaryReader reader)
+    {
+        reader.Read(s_buffer, 0, s_buffer.Length);
+        return Common.ToUInt32BigEndian(s_buffer, 0);
+    }
 
 
     public static IndexedVector3 FromStreamInt32(BinaryReader reader)

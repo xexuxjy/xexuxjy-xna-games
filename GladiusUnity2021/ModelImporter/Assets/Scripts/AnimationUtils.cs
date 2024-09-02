@@ -37,9 +37,9 @@ public static class AnimationUtils
         GladiusFileWriter.PadIfNeeded(writer);
         GladiusFileWriter.WriteCPRT(writer);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteHEDR(writer);
+        GladiusFileWriter.WriteHEDR(writer);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteNAME(writer, null);
+        GladiusFileWriter.WriteNAME(writer, null);
         
         WriteBLNM(writer, null);
         GladiusFileWriter.PadIfNeeded(writer);
@@ -128,8 +128,8 @@ public static class AnimationUtils
 
         GladiusFileWriter.WriteVERS(writer);
         GladiusFileWriter.WriteCPRT(writer);
-        WriteHEDR(writer);
-        WriteNAME(writer,animationData.boneList);
+        GladiusFileWriter.WriteHEDR(writer);
+        GladiusFileWriter.WriteNAME(writer,animationData.boneList);
         
         WriteBLNM(writer, null);
         WriteMASK(writer, null);
@@ -151,37 +151,6 @@ public static class AnimationUtils
     
     
     
-    public static void WriteHEDR(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize+8;
-        GladiusFileWriter.WriteASCIIString(writer, "HEDR");
-        writer.Write(total);
-        writer.Write(1); // num materials, 1 for now
-        writer.Write(0);
-        writer.Write(0);
-        writer.Write(0);
-    }
-
-    public static void WriteNAME(BinaryWriter writer, List<string> boneNames)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        int runningTotal = 0;
-        foreach (string s in boneNames)
-        {
-            runningTotal += s.Length;
-            runningTotal += 1;
-        }
-
-        runningTotal = GladiusFileWriter.GetPadValue(runningTotal,8); 
-        
-        total += runningTotal;
-        
-        GladiusFileWriter.WriteASCIIString(writer, "NAME");
-        writer.Write(total);
-        writer.Write(0); 
-        writer.Write(1);
-        GladiusFileWriter.WriteStringList(writer, boneNames, runningTotal);
-    }
 
     // this is a list of animation event names.e.g. : detachShield detachWeapon1 detachWeapon2 footStepL footStepR hideShield hideWeapon1 hideWeapon2 hit react show
     public static void WriteBLNM(BinaryWriter writer, List<string> events)

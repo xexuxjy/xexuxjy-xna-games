@@ -389,6 +389,13 @@ public class XboxModel : BaseModel
 
                     //
 
+                    Dictionary<int, List<CommonVertexInstance>> boneDebugInfo =
+                        new Dictionary<int, List<CommonVertexInstance>>();
+
+                    List<CommonVertexInstance> singleList = new List<CommonVertexInstance>();
+                    List<CommonVertexInstance> doubleList = new List<CommonVertexInstance>();
+                    List<CommonVertexInstance> greaterList = new List<CommonVertexInstance>();
+
                     int maxWeight = -1;
                     foreach (CommonVertexInstance vbi in m_vertexDataAndDesc.VertexData)
                     {
@@ -397,6 +404,46 @@ public class XboxModel : BaseModel
                         vbi.BoneIndices[1] = binReader.ReadInt16();
                         vbi.BoneIndices[2] = binReader.ReadInt16();
 
+
+
+                        int numUnassigned = 0;
+
+                        for (int i = 0; i < vbi.BoneIndices.Length; ++i)
+                        {
+                            if (vbi.BoneIndices[i] != -1)
+                            {
+                                if(!boneDebugInfo.TryGetValue(vbi.BoneIndices[i],out List<CommonVertexInstance> vertexList))
+                                {
+                                    vertexList = new List<CommonVertexInstance>();
+                                    boneDebugInfo[vbi.BoneIndices[i]] = vertexList;
+                                }
+
+                                vertexList.Add(vbi);
+
+                            }
+                            else
+                            {
+                                numUnassigned++;
+                            }
+                                
+                        }
+
+                        if (numUnassigned == 2)
+                        {
+                            singleList.Add(vbi);
+                        }
+
+                        if (numUnassigned == 1)
+                        {
+                            doubleList.Add(vbi);
+                        }
+
+                        if (numUnassigned == 0)
+                        {
+                            greaterList.Add(vbi);
+                        }
+
+                        
                         DebugBoneWeights(vbi.BoneIndices[0]);
                         DebugBoneWeights(vbi.BoneIndices[1]);
                         DebugBoneWeights(vbi.BoneIndices[2]);
@@ -411,6 +458,9 @@ public class XboxModel : BaseModel
 
 
                     }
+
+                    int dictionaryBreak = 0;
+
                 }
                 int ibreak2 = 0;
             }

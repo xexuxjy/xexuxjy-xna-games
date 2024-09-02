@@ -251,124 +251,137 @@ public class GCModel
 
     public static GCModel CreateFromGameObject(GameObject gameObj)
     {
-        
-        MeshFilter meshFilter = gameObj.GetComponent<MeshFilter>();
-        MeshRenderer meshRenderer = gameObj.GetComponent<MeshRenderer>();
-        if (meshFilter != null && meshRenderer != null)
+
+        // not valid
+        if (gameObj == null || gameObj.GetComponentsInChildren<MeshFilter>().Length == 0 ||
+            gameObj.GetComponentsInChildren<MeshRenderer>().Length == 0)
         {
-            // setup core data
+            return null;
+        }
+        
+        HashSet<Vector3> uniqueVertices = new HashSet<Vector3>();
+        HashSet<Vector3> uniqueNormals = new HashSet<Vector3>();
+        HashSet<Vector2> uniqueUVs = new HashSet<Vector2>();
 
-            HashSet<Vector3> uniqueVertices = new HashSet<Vector3>();
-            HashSet<Vector3> uniqueNormals = new HashSet<Vector3>();
-            HashSet<Vector2> uniqueUVs = new HashSet<Vector2>();
+        GCModel model = new GCModel(gameObj.name);
 
-            IndexedVector3 offset = IndexedVector3.Zero;
-            Transform attachPoint = gameObj.transform.Find("attach");
-            if (attachPoint != null)
+        IndexedVector3 offset = IndexedVector3.Zero;
+        Transform attachPoint = gameObj.transform.Find("attach");
+        if (attachPoint != null)
+        {
+            offset = attachPoint.position;
+        }
+        
+        foreach (MeshFilter meshFilter in gameObj.GetComponentsInChildren<MeshFilter>())
+        {
+            MeshRenderer meshRenderer = meshFilter.gameObject.GetComponent<MeshRenderer>();
+            if (meshFilter != null && meshRenderer != null)
             {
-                offset = attachPoint.position;
+                // setup core data
+
+                foreach (Vector3 v in meshFilter.sharedMesh.vertices)
+                {
+                    uniqueVertices.Add(v);
+                }
+
+                foreach (Vector3 v in meshFilter.sharedMesh.normals)
+                {
+                    uniqueNormals.Add(v);
+                }
+
+                foreach (Vector2 v in meshFilter.sharedMesh.uv)
+                {
+                    uniqueUVs.Add(v);
+                }
             }
-            
-            foreach (Vector3 v in meshFilter.sharedMesh.vertices)
-            {
-                uniqueVertices.Add(v);
-            }
-
-            foreach (Vector3 v in meshFilter.sharedMesh.normals)
-            {
-                uniqueNormals.Add(v);
-            }
-
-            foreach (Vector2 v in meshFilter.sharedMesh.uv)
-            {
-                uniqueUVs.Add(v);
-            }
-            
-
-            GCModel model = new GCModel(gameObj.name);
-
-            
-            foreach (Vector3 v in uniqueVertices)
-            {
-                model.m_points.Add(v);
-            }
-
-            foreach (Vector3 v in uniqueNormals)
-            {
-                model.m_normals.Add(v);
-            }
-
-            foreach (Vector2 v in uniqueUVs)
-            {
-                model.m_uvs.Add(v);
-            }
-           
-            DisplayListHeader dlh = new DisplayListHeader();
-            for (int i = 0; i < meshFilter.sharedMesh.triangles.Length; i+=3)
-            {
-                int lookupIndex = meshFilter.sharedMesh.triangles[i];
-                int posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
-                int normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
-                int uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
-                
-                dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
-                
-                lookupIndex = meshFilter.sharedMesh.triangles[i+2];
-                posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
-                normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
-                uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
-                
-                dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
-
-                lookupIndex = meshFilter.sharedMesh.triangles[i+1];
-                posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
-                normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
-                uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
-                
-                dlh.entries.Add(new DisplayListEntry((ushort)posIndex,(ushort)normIndex,(ushort)uvIndex));
-                
-            }
-
-            dlh.indexCount = (short)dlh.entries.Count;
-            
-            // go through and adjust positions and normals now that the lists have been built
-            for (int i = 0; i < model.m_points.Count; ++i)
-            {
-                IndexedVector3 adjusted = model.m_points[i];
-                adjusted = gameObj.transform.TransformPoint(adjusted);
-                adjusted -= offset;
-                model.m_points[i] = GladiusGlobals.UnityToGladius(adjusted);
-            }
-
-            for (int i = 0; i < model.m_normals.Count; ++i)
-            {
-                model.m_normals[i] = GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(model.m_normals[i]));
-            }
-
-           
-            model.m_displayListHeaders.Add(dlh);
-
-
-            Material m = meshRenderer.sharedMaterial;
-            string textureName = m.mainTexture.name;
-
-            //textureName = "staff_bo";
-            textureName += ".tga";
-            textureName = textureName.ToLower();
-
-            // model.m_textures.Add(new TextureInfo()
-            //     { Name = textureName, Width = 256, Height = 256 });
-
-            model.m_textures.Add(new TextureInfo()
-                { Name = textureName, Width = m.mainTexture.width, Height = m.mainTexture.height });
-
-            model.m_selsInfo.Add(DefaultShader);
-            model.m_selsInfo.Add(textureName);
-           
-            return model;
         }
 
-        return null;
+        foreach (Vector3 v in uniqueVertices)
+        {
+            model.m_points.Add(v);
+        }
+
+        foreach (Vector3 v in uniqueNormals)
+        {
+            model.m_normals.Add(v);
+        }
+
+        foreach (Vector2 v in uniqueUVs)
+        {
+            model.m_uvs.Add(v);
+        }
+        
+        foreach (MeshFilter meshFilter in gameObj.GetComponentsInChildren<MeshFilter>())
+        {
+            MeshRenderer meshRenderer = meshFilter.gameObject.GetComponent<MeshRenderer>();
+            if (meshFilter != null && meshRenderer != null)
+            {
+                DisplayListHeader dlh = new DisplayListHeader();
+                for (int i = 0; i < meshFilter.sharedMesh.triangles.Length; i += 3)
+                {
+                    int lookupIndex = meshFilter.sharedMesh.triangles[i];
+                    int posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
+                    int normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
+                    int uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+
+                    dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
+
+                    lookupIndex = meshFilter.sharedMesh.triangles[i + 2];
+                    posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
+                    normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
+                    uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+
+                    dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
+
+                    lookupIndex = meshFilter.sharedMesh.triangles[i + 1];
+                    posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
+                    normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
+                    uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+
+                    dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
+
+                }
+
+                dlh.indexCount = (short)dlh.entries.Count;
+
+                model.m_displayListHeaders.Add(dlh);
+
+                Material m = meshRenderer.sharedMaterial;
+                string textureName = m.mainTexture.name;
+
+                textureName += ".tga";
+                textureName = textureName.ToLower();
+
+                model.m_textures.Add(new TextureInfo()
+                    { Name = textureName, Width = m.mainTexture.width, Height = m.mainTexture.height });
+
+                model.m_selsInfo.Add(DefaultShader);
+                model.m_selsInfo.Add(textureName);
+
+            }
+            
+        }
+
+        
+        // go through and adjust positions and normals now that the lists have been built
+        for (int i = 0; i < model.m_points.Count; ++i)
+        {
+            IndexedVector3 adjusted = model.m_points[i];
+            adjusted = gameObj.transform.TransformPoint(adjusted);
+            adjusted -= offset;
+            model.m_points[i] = GladiusGlobals.UnityToGladius(adjusted);
+        }
+
+        for (int i = 0; i < model.m_normals.Count; ++i)
+        {
+            model.m_normals[i] =
+                GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(model.m_normals[i]));
+        }
+
+
+        
+        return model;
+
     }
 
     
@@ -510,9 +523,9 @@ public class GCModel
     // }
 
 
-    public SelectSetTypesChunk SelectSetTypesChunk
+    public SELSChunk SelsChunk
     {
-        get { return (m_chunkList.Find(x => x is SelectSetTypesChunk) as SelectSetTypesChunk); }
+        get { return (m_chunkList.Find(x => x is SELSChunk) as SELSChunk); }
     }
 
     public SKELChunk SkelChunk
@@ -520,9 +533,9 @@ public class GCModel
         get { return (m_chunkList.Find(x => x is SKELChunk) as SKELChunk); }
     }
 
-    public NameChunk NameChunk
+    public NAMEChunk NameChunk
     {
-        get { return (m_chunkList.Find(x => x is NameChunk) as NameChunk); }
+        get { return (m_chunkList.Find(x => x is NAMEChunk) as NAMEChunk); }
     }
 
     public OBBTChunk OBBTChunk
@@ -1427,9 +1440,14 @@ public class DSLIInfo
 }
 
 
-public struct TextureInfo
+public class TextureInfo
 {
     public string Name;
     public int Width;
     public int Height;
+
+    
+    public int CompressedLength;
+    public int UncompressedLength;
+
 }

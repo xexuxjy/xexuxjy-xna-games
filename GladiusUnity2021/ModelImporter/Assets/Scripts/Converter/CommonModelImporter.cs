@@ -561,7 +561,7 @@ public static class CommonModelImporter
         return v;
     }
 
-    static byte[] s_buffer = new byte[4];
+    public static byte[] s_buffer = new byte[4];
 
     public static IndexedVector3 FromStreamInt32BE(BinaryReader reader)
     {
@@ -2196,7 +2196,7 @@ public class XboxChunk : BaseChunk
 }
 
 
-public class SelectSetTypesChunk : BaseChunk
+public class SELSChunk : BaseChunk
 {
     public List<SelectSet> SelectSetList = new List<SelectSet>();
     
@@ -2208,7 +2208,7 @@ public class SelectSetTypesChunk : BaseChunk
     
     public static BaseChunk FromStream(BinaryReader binReader)
     {
-        SelectSetTypesChunk chunk = new SelectSetTypesChunk();
+        SELSChunk chunk = new SELSChunk();
         chunk.BaseFromStream(binReader);
         for (int i = 0; i < chunk.NumElements; ++i)
         {
@@ -2233,7 +2233,7 @@ public class SelectSet
 
 }
 
-public class NameChunk : BaseChunk
+public class NAMEChunk : BaseChunk
 {
     public List<string> Names = new List<string>();
     
@@ -2244,33 +2244,13 @@ public class NameChunk : BaseChunk
 
     public static BaseChunk FromStream(BinaryReader binReader)
     {
-        NameChunk chunk = new NameChunk();
+        NAMEChunk chunk = new NAMEChunk();
         chunk.BaseFromStream(binReader);
         CommonModelImporter.ReadNullSeparatedNames(binReader,  chunk.Names);
         return chunk;
     }
 
 }
-
-// public class SelectionSetsChunk : BaseChunk
-// {
-//     public List<string> Names = new List<string>();
-//     
-//     public static char[] ChunkName()
-//     {
-//         return CommonModelImporter.seltTag;
-//     }
-//
-//     
-//     public static BaseChunk FromStream(string name, BinaryReader binReader)
-//     {
-//         SelectionSetsChunk chunk = new SelectionSetsChunk();
-//         chunk.BaseFromStream(binReader);
-//         CommonModelImporter.ReadNullSeparatedNames(binReader,chunk.Names);
-//         return chunk;
-//     }
-//
-// }
 
 public class TXTRChunk : BaseChunk
 {
@@ -2732,6 +2712,27 @@ public class ELEMChunk : BaseChunk
 }
 
 
+public class NMTPChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.nmptTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        NMTPChunk chunk = new NMTPChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+
 public class PaxElement
 {
     public uint Unk1;
@@ -2765,3 +2766,243 @@ public class PaxElement
     }
 }
 
+// class CSkinningData
+// {
+//     public:
+//     uint32		sizeData;			// how much memory was allocated for the whole thing (for saving/loading)
+//     int			numVerts;
+//     int         numBones;
+//     uint16		mComponents;
+//
+// // input
+//     uint16		bBiTan;				// flags
+//     uint16		numSK1;				// the number of elements in SK1 list
+//     uint16		numSK2;				// the number of elements in SK2 list
+//     uint16		numSKA;				// the number of elements in SKA list
+//
+//     CSK1		*pSK1;				// 1-zies
+//     CSK2		*pSK2;				// 2-zies
+//     CSKA		*pSKA;				// Accumulation list
+//
+//     int			numPackets1;
+//     uint16*		pPacketStart1;
+//     uint16*		pPacketSize1;
+//
+//     int			numPackets2;
+//     uint16*		pPacketStart2;
+//     uint16*		pPacketSize2;
+//
+//     void*       pSrcData;
+//     void*       pWeightData;
+//     uint16		mAnimShift;
+//     uint16		pad[13];
+// };
+public class SKINChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public int Size;
+    public int NumberVertices;
+    public int NumberBones;
+    public short Components;
+    
+    public short Flags;
+    public short NumList1;
+    public short NumList2;
+    public short NumListA;
+    
+    public uint PointerList1;
+    public uint PointerList2;
+    public uint PointerListA;
+
+    public int NumPackets1;
+    public uint PacketStart1; //pointer uint16
+    public uint PacketSize1; //pointer uint16
+
+    public int NumPackets2;
+    public uint PacketStart2; //pointer uint16
+    public uint PacketSize2; //pointer uint16
+
+    public uint VoidPointer;
+    public uint WeightData;
+    public short AnimShift;
+
+    public List<CSK1> CSK1List = new List<CSK1>();
+    public List<CSK2> CSK2List = new List<CSK2>();
+    public List<CSKA> CSKAList = new List<CSKA>();
+    
+    public const int StructureSize = 96;
+    
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.skinTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        SKINChunk chunk = new SKINChunk();
+        chunk.BaseFromStream(binReader);
+        long afterHeaderPosition = binReader.BaseStream.Position;
+
+        chunk.Size = Common.ReadInt32BigEndian(binReader);
+        chunk.NumberVertices = Common.ReadInt32BigEndian(binReader);
+        chunk.NumberBones = Common.ReadInt32BigEndian(binReader);
+        chunk.Components = Common.ToInt16BigEndian(binReader);
+        
+        chunk.Flags = Common.ToInt16BigEndian(binReader);
+        chunk.NumList1 = Common.ToInt16BigEndian(binReader);
+        chunk.NumList2 = Common.ToInt16BigEndian(binReader);
+        chunk.NumListA = Common.ToInt16BigEndian(binReader);
+
+        // align
+        binReader.BaseStream.Position += 2;
+        
+        chunk.PointerList1 = ReadAndRelocate(binReader);
+        chunk.PointerList2 = ReadAndRelocate(binReader);
+        chunk.PointerListA = ReadAndRelocate(binReader);
+        
+        
+        chunk.NumPackets1 = Common.ReadInt32BigEndian(binReader);
+        chunk.PacketStart1 = ReadAndRelocate(binReader);
+        chunk.PacketSize1 = ReadAndRelocate(binReader);
+
+        chunk.NumPackets2 = Common.ReadInt32BigEndian(binReader);
+        chunk.PacketStart2 = ReadAndRelocate(binReader);
+        chunk.PacketSize2 = ReadAndRelocate(binReader);
+
+        chunk.VoidPointer = ReadAndRelocate(binReader);
+        chunk.WeightData = ReadAndRelocate(binReader);
+        
+        chunk.AnimShift = Common.ToInt16BigEndian(binReader);
+
+
+        binReader.BaseStream.Position = afterHeaderPosition + StructureSize + chunk.PointerList1;
+        
+        for (int loop1 = 0; loop1 < chunk.NumList1; loop1++)
+        {
+            CSK1 csk1 = CSK1.FromStream(binReader);
+            chunk.CSK1List.Add(csk1);
+
+        }
+        
+        binReader.BaseStream.Position = afterHeaderPosition + StructureSize + chunk.PointerList2;
+        
+        for (int loop1 = 0; loop1 < chunk.NumList2; loop1++)
+        {
+            CSK2 csk2 = CSK2.FromStream(binReader);
+            chunk.CSK2List.Add(csk2);
+        }
+        
+        
+        binReader.BaseStream.Position = afterHeaderPosition + StructureSize + chunk.PointerListA;
+        for (int loop1 = 0; loop1 < chunk.NumListA; loop1++)
+        {
+            CSKA cska = CSKA.FromStream(binReader);
+            chunk.CSKAList.Add(cska);
+        }
+        
+        
+        binReader.BaseStream.Position = afterHeaderPosition;
+            
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+
+    public static uint ReadAndRelocate(BinaryReader reader)
+    {
+        reader.Read(CommonModelImporter.s_buffer, 0, CommonModelImporter.s_buffer.Length);
+        
+        Debug.Assert(CommonModelImporter.s_buffer[0] == 0xdd);
+        CommonModelImporter.s_buffer[0] = 0;
+        return (uint)Common.ToInt32BigEndian(CommonModelImporter.s_buffer, 0);
+        
+    }
+    
+    public static uint RelocateAddr (uint baseValue,uint offset)
+    {
+        if (offset == 0)
+        {
+            return 0;
+        }
+        Debug.Assert((offset & 0xdd000000) == 0xdd000000);
+        
+    	offset ^= 0xdd000000; 
+    	baseValue += offset;
+    	return baseValue;
+    }
+
+    
+}
+
+
+
+public class  CSK1
+{
+	public byte	idxBone;			// bone/matrix index
+    public byte   _pad;
+    public ushort	count;				// total verts in this packet
+    public uint	vertSrc;
+    public uint 	vertDst;
+
+    public static CSK1 FromStream(BinaryReader binReader)
+    {
+        CSK1 csk1 = new CSK1();
+        csk1.idxBone = binReader.ReadByte();
+        csk1._pad = binReader.ReadByte();
+        csk1.count = Common.ToUInt16BigEndian(binReader);
+        //csk1.vertSrc = Common.ReadUInt32BigEndian(binReader);
+        csk1.vertSrc = SKINChunk.ReadAndRelocate(binReader);
+        csk1.vertDst = Common.ReadUInt32BigEndian(binReader);
+        return csk1;
+    }
+};
+
+
+public class CSK2
+{
+    public byte[] idxBone = new byte[2];
+    public ushort count;
+    public uint weights;
+    public uint vertSrc;
+    public uint vertDst;
+
+    public static CSK2 FromStream(BinaryReader binReader)
+    {
+        CSK2 csk2 = new CSK2();
+        csk2.idxBone[0] = binReader.ReadByte();
+        csk2.idxBone[1] = binReader.ReadByte();
+        csk2.count = Common.ToUInt16BigEndian(binReader);
+        csk2.weights = SKINChunk.ReadAndRelocate(binReader);
+        csk2.vertSrc = SKINChunk.ReadAndRelocate(binReader);
+        csk2.vertDst = binReader.ReadUInt32();
+
+        return csk2;
+    }
+}
+
+
+public class CSKA
+{
+    public byte idxBone;
+    public byte _pad;
+    public ushort count;
+    public uint weights;
+    public uint idxDst;
+    public uint vertSrc;
+
+    public static CSKA FromStream(BinaryReader binReader)
+    {
+        CSKA cska = new CSKA();
+        cska.idxBone = binReader.ReadByte();
+        cska._pad = binReader.ReadByte();
+        cska.count = Common.ToUInt16BigEndian(binReader);;
+        cska.weights = SKINChunk.ReadAndRelocate(binReader);
+        cska.idxDst = SKINChunk.ReadAndRelocate(binReader);
+        cska.vertSrc = SKINChunk.ReadAndRelocate(binReader);
+
+        return cska;
+
+    }
+}

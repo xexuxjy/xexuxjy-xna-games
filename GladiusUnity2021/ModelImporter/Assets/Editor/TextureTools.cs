@@ -22,7 +22,7 @@ namespace GCTextureTools
 
     public class GladiusImage
     {
-        private GladiusHeader gladiusHeader = null;
+        private GladiusImageHeader m_gladiusImageHeader = null;
         private string strFileName = string.Empty;
         public string ImageName;
         public DirectBitmap DirectBitmap;
@@ -31,13 +31,13 @@ namespace GCTextureTools
 
         public GladiusImage()
         {
-            this.gladiusHeader = new GladiusHeader();
+            this.m_gladiusImageHeader = new GladiusImageHeader();
         }
 
-        public GladiusHeader Header
+        public GladiusImageHeader ImageHeader
         {
-            get { return this.gladiusHeader; }
-            set { this.gladiusHeader = value; }
+            get { return this.m_gladiusImageHeader; }
+            set { this.m_gladiusImageHeader = value; }
         }
 
 
@@ -46,11 +46,36 @@ namespace GCTextureTools
             get { return this.strFileName; }
         }
 
+        public static GladiusImage FromStream(BinaryReader reader)
+        {
+            GladiusImage gladiusImage = new GladiusImage();
+            
+            short compressType = reader.ReadInt16();
+            gladiusImage.ImageHeader.DXTType = (ushort)(compressType == 17152 ? 5 : 1);
+            
+            // need to store these.
+            reader.ReadInt16();
+            reader.ReadInt32();
+            
+            gladiusImage.ImageHeader.Width = reader.ReadInt16();
+            gladiusImage.ImageHeader.Height = reader.ReadInt16();
+            gladiusImage.ImageHeader.CompressedSize = reader.ReadInt32();
+
+            // need to store these.
+            reader.ReadInt32();
+            reader.ReadInt32();
+            reader.ReadInt32();
+            reader.ReadInt32();
+            
+            return gladiusImage;
+        }
+        
+
     }
 
 
 
-    public class GladiusHeader
+    public class GladiusImageHeader
     {
         public int Width = 0;
         public int Height = 0;
@@ -99,10 +124,10 @@ namespace GCTextureTools
 
                 foreach (GladiusImage image in imageList)
                 {
-                    image.CompressedData = binReader.ReadBytes(image.Header.CompressedSize);
+                    image.CompressedData = binReader.ReadBytes(image.ImageHeader.CompressedSize);
 
-                    int potWidth = image.Header.Width;// ToNextNearest(image.Header.Width);
-                    int potHeight = image.Header.Height;// ToNextNearest(image.Header.Height);
+                    int potWidth = image.ImageHeader.Width;// ToNextNearest(image.Header.Width);
+                    int potHeight = image.ImageHeader.Height;// ToNextNearest(image.Header.Height);
 
                     //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
 
@@ -193,29 +218,14 @@ namespace GCTextureTools
             {
                 int sectionSize = binReader.ReadInt32();
                 int pad1 = binReader.ReadInt32();
-                //if (pad1 != 0 || pad1 != 1)
-                if (pad1 != 0 && pad1 != 1)
-                {
-                    int ibreak = 0;
-                }
+
                 int numTextures = binReader.ReadInt32();
 
                 for (int u = 0; u < numTextures; ++u)
                 {
-                    GladiusImage image = new GladiusImage();
+                    GladiusImage image = GladiusImage.FromStream(binReader);
                     image.ImageName = textureNames[u];
-
                     imageList.Add(image);
-
-                    short compressType = binReader.ReadInt16();
-                    image.Header.DXTType = (ushort)(compressType == 17152 ? 5 : 1);
-                    binReader.ReadInt16();
-                    binReader.ReadInt32();
-                    image.Header.Width = binReader.ReadInt16();
-                    image.Header.Height = binReader.ReadInt16();
-                    image.Header.CompressedSize = binReader.ReadInt32();
-
-                    binReader.BaseStream.Position += 16;
 
                 }
 
@@ -231,8 +241,8 @@ namespace GCTextureTools
 
             byte[] input = image.CompressedData;
 
-            int width = image.Header.Width;
-            int height = image.Header.Height;
+            int width = image.ImageHeader.Width;
+            int height = image.ImageHeader.Height;
 
             int blockCountX = (width + 3) / 4;
             int blockCountY = (height + 3) / 4;
@@ -485,7 +495,6 @@ namespace GCTextureTools
 
         public static ushort Swap16(ushort x)
         {
-            //return BinaryPrimitives.ReverseEndianness(val);
             return (ushort)((ushort)((x & 0xff) << 8) | ((x >> 8) & 0xff));
         }
 
@@ -682,6 +691,30 @@ namespace GCTextureTools
             
         }
         
+        
+        public static void EncodeFile(List<Texture2D> textureList, string imageName,string destinationFile)
+        {
+            List<byte[]> processeedList = new List<byte[]>();
+            foreach (Texture2D texture in textureList)
+            {
+                int width = texture.width;
+                int height = texture.height;
+
+                List<DXTBlock> colorBlockList = new List<DXTBlock>();
+                List<DXTBlock> alphaBlockList = new List<DXTBlock>();
+                ReadColours(texture.GetPixels(), width, height, colorBlockList, alphaBlockList);
+
+                byte[] processedResults = ProcessBlockList(colorBlockList, alphaBlockList);
+                processeedList.Add(processedResults);
+            }
+
+            
+            //WriteImageFile(destinationFile, imageName, width, height, processResults);
+
+            
+        }
+        
+        
         public static void EncodeFile(Texture2D t, string imageName,string destinationFile)
         {
             //DirectBitmap directBitmap = new DirectBitmap(t);
@@ -718,6 +751,73 @@ namespace GCTextureTools
         }
 
 
+        
+        
+        
+        /*
+         *
+         *
+         * 
+        // wheel info - 9 textures
+        NMTP     size               num textures
+        50464844 40010000 01000000 09000000 
+
+                           W    H    
+        0020 0800 00000000 8000 8000 002B0000 50010000 0000 00000000000000000000
+        0020 0900 00000000 8000 0001 C0550000 302C0000 1000 00000000000000000000
+        0020 0900 00000000 8000 0001 C0550000 D0810000 2000 00000000000000000000
+        0020 0900 00000000 8000 0001 C0550000 70D70000 3200 00000000000000000000
+        0020 0900 00000000 8000 0001 C0550000 102D0100 4400 00000000000000000000
+        0020 0900 00000000 8000 0001 C0550000 B0820100 5400 00000000000000000000
+        0020 0900 00000000 8000 0001 C0550000 50D80100 6500 00000000000000000000
+        0022 0800 00000000 8000 8000 00560000 F02D0200 7700 00000000000000000000
+        0022 0800 00000000 8000 8000 00560000 D0830200 8F00 00000000000000000000
+        00000000000000000000000000000000
+         */
+        
+        public static void WriteMultiImageFile(string outputName, List<TextureInfo> textureInfoList, List<byte[]> dataList)
+        {
+
+            using (FileStream fs = new FileStream(outputName, FileMode.Create))
+            {
+                using (BinaryWriter binWriter = new BinaryWriter(fs))
+                {
+
+                    List<string> textureNames = new List<string>();
+                    
+                    foreach (TextureInfo textureInfo in textureInfoList)
+                    {
+                        textureInfo.Name = textureInfo.Name.Replace(".png", ".tga");
+                        textureInfo.Name = textureInfo.Name.Replace(".jpg", ".tga");
+                        textureInfo.Name = textureInfo.Name.Replace(".gif", ".tga");
+
+                        textureNames.Add(textureInfo.Name);
+                    }
+                    
+                    binWriter.Write(Common.pttpTag);
+                    binWriter.Write(BaseChunk.ChunkHeaderSize);
+                    binWriter.Write(3);
+                    binWriter.Write(1);
+
+                    GladiusFileWriter.WriteNAME(binWriter, textureNames);
+                    GladiusFileWriter.WriteNMTP(binWriter, textureNames);
+
+                    GladiusFileWriter.WritePFHD(binWriter, textureInfoList);
+
+                    GladiusFileWriter.PadIfNeeded(binWriter);
+
+                    GladiusFileWriter.WritePTDT(binWriter, textureInfoList,dataList);
+                        
+                    GladiusFileWriter.WriteEND(binWriter);
+
+                }
+            }
+
+        }
+
+        
+        
+        
         public static void WriteImageFile(string outputName, string imageName, int width, int height, byte[] data)
         {
             imageName = imageName.Replace(".png", ".tga");
