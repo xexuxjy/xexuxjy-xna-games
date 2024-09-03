@@ -6,38 +6,35 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using GCTextureTools;
 using System.Drawing.Imaging;
 using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 using Color = System.Drawing.Color;
 
-
 // lots of help from https://github.com/Nominom/BCnEncoder.NET
 // and https://github.com/mafaca/Dxt
 
 namespace GCTextureTools
 {
-
-    public class GladiusImage
+    public class GCGladiusImage
     {
-        private GladiusImageHeader m_gladiusImageHeader = null;
+        private GCGladiusImageHeader m_header = null;
         private string strFileName = string.Empty;
         public string ImageName;
         public DirectBitmap DirectBitmap;
 
         public byte[] CompressedData;
 
-        public GladiusImage()
+        public GCGladiusImage()
         {
-            this.m_gladiusImageHeader = new GladiusImageHeader();
+            this.m_header = new GCGladiusImageHeader();
         }
 
-        public GladiusImageHeader ImageHeader
+        public GCGladiusImageHeader ImageHeader
         {
-            get { return this.m_gladiusImageHeader; }
-            set { this.m_gladiusImageHeader = value; }
+            get { return this.m_header; }
+            set { this.m_header = value; }
         }
 
 
@@ -46,36 +43,33 @@ namespace GCTextureTools
             get { return this.strFileName; }
         }
 
-        public static GladiusImage FromStream(BinaryReader reader)
+        public static GCGladiusImage FromStream(BinaryReader reader)
         {
-            GladiusImage gladiusImage = new GladiusImage();
-            
+            GCGladiusImage gcGladiusImage = new GCGladiusImage();
+
             short compressType = reader.ReadInt16();
-            gladiusImage.ImageHeader.DXTType = (ushort)(compressType == 17152 ? 5 : 1);
-            
+            gcGladiusImage.ImageHeader.DXTType = (ushort)(compressType == 17152 ? 5 : 1);
+
             // need to store these.
             reader.ReadInt16();
             reader.ReadInt32();
-            
-            gladiusImage.ImageHeader.Width = reader.ReadInt16();
-            gladiusImage.ImageHeader.Height = reader.ReadInt16();
-            gladiusImage.ImageHeader.CompressedSize = reader.ReadInt32();
+
+            gcGladiusImage.ImageHeader.Width = reader.ReadInt16();
+            gcGladiusImage.ImageHeader.Height = reader.ReadInt16();
+            gcGladiusImage.ImageHeader.CompressedSize = reader.ReadInt32();
 
             // need to store these.
             reader.ReadInt32();
             reader.ReadInt32();
             reader.ReadInt32();
             reader.ReadInt32();
-            
-            return gladiusImage;
-        }
-        
 
+            return gcGladiusImage;
+        }
     }
 
 
-
-    public class GladiusImageHeader
+    public class GCGladiusImageHeader
     {
         public int Width = 0;
         public int Height = 0;
@@ -85,12 +79,13 @@ namespace GCTextureTools
     }
 
 
-
-    public class ImageExtractor
+    public class GCImageExtractor
     {
+        public static Color[] TempColors = new Color[4];
+
         public static void ClearTempColours()
         {
-            for(int i=0;i<TempColors.Length;++i)
+            for (int i = 0; i < TempColors.Length; ++i)
             {
                 TempColors[i] = Color.FromArgb(0, 0, 0, 0);
             }
@@ -111,7 +106,7 @@ namespace GCTextureTools
         }
 
 
-        public void ReadPTDTSection(BinaryReader binReader, List<GladiusImage> imageList,StreamWriter errorStream)
+        public void ReadPTDTSection(BinaryReader binReader, List<GCGladiusImage> imageList, StringBuilder debugInfo)
         {
             if (Common.FindCharsInStream(binReader, Common.ptdtTag))
             {
@@ -121,25 +116,27 @@ namespace GCTextureTools
                 binReader.BaseStream.Position += skip;
 
 
-
-                foreach (GladiusImage image in imageList)
+                foreach (GCGladiusImage image in imageList)
                 {
                     image.CompressedData = binReader.ReadBytes(image.ImageHeader.CompressedSize);
 
-                    int potWidth = image.ImageHeader.Width;// ToNextNearest(image.Header.Width);
-                    int potHeight = image.ImageHeader.Height;// ToNextNearest(image.Header.Height);
+                    int potWidth = image.ImageHeader.Width; // ToNextNearest(image.Header.Width);
+                    int potHeight = image.ImageHeader.Height; // ToNextNearest(image.Header.Height);
 
                     //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
 
-                    DecompressDXT1GC(image,errorStream);
-
+                    DecompressDXT1GC(image, debugInfo);
                 }
             }
         }
 
         int ToNextNearest(int x)
         {
-            if (x < 0) { return 0; }
+            if (x < 0)
+            {
+                return 0;
+            }
+
             --x;
             x |= x >> 1;
             x |= x >> 2;
@@ -147,6 +144,88 @@ namespace GCTextureTools
             x |= x >> 8;
             x |= x >> 16;
             return x + 1;
+        }
+
+        public void ExtractImagesChunk(List<string> fileNames, string targetDirectory)
+        {
+            System.IO.DirectoryInfo targetInfo = new DirectoryInfo(targetDirectory);
+            if (!targetInfo.Exists)
+            {
+                targetInfo.Create();
+            }
+
+
+            bool doDelete = true;
+            if (doDelete)
+            {
+                foreach (FileInfo file in targetInfo.GetFiles())
+                {
+                    file.Delete();
+                }
+            }
+
+            StringBuilder debugInfo = new StringBuilder();
+
+            foreach (string fileName in fileNames)
+            {
+                FileInfo file = new FileInfo(fileName);
+                using (FileStream fs = new FileStream(file.FullName, FileMode.Open))
+                {
+                    using (BinaryReader binReader = new BinaryReader(fs))
+                    {
+                        List<GCGladiusImage> imageList = LoadDataChunk(binReader, debugInfo);
+                        foreach (GCGladiusImage gi in imageList)
+                        {
+                            if (gi.DirectBitmap != null)
+                            {
+                                gi.DirectBitmap.Bitmap.Save(targetDirectory + gi.ImageName + ".png",
+                                    ImageFormat.Png);
+                                gi.DirectBitmap.Dispose();
+                            }
+
+                            gi.CompressedData = null;
+                        }
+                    }
+                }
+            }
+        }
+
+        public List<GCGladiusImage> LoadDataChunk(BinaryReader binReader, StringBuilder debugInfo)
+        {
+            string name = "";
+            List<BaseChunk> chunkList = new List<BaseChunk>();
+
+            binReader.BaseStream.Position = 0;
+            int count = 0;
+
+            do
+            {
+                int position = (int)binReader.BaseStream.Position;
+                BaseChunk chunk = BaseChunk.FromStreamMaster(name, binReader, debugInfo);
+                if (chunk != null)
+                {
+                    chunkList.Add(chunk);
+
+                    if (chunk is EndChunk)
+                    {
+                        break;
+                    }
+
+                    binReader.BaseStream.Position = position + chunk.Length;
+                }
+            } while (count++ < 100);
+
+
+            PTTPChunk pttpChunk = (PTTPChunk)chunkList.Find(x => x is PTTPChunk);
+            NAMEChunk nameChunk = (NAMEChunk)chunkList.Find(x => x is NAMEChunk);
+            NMTPChunk nmptChunk = (NMTPChunk)chunkList.Find(x => x is NMTPChunk);
+            PFHDChunk pfhdChunk = (PFHDChunk)chunkList.Find(x => x is NMTPChunk);
+            PTDTChunk ptdtChunk = (PTDTChunk)chunkList.Find(x => x is PTDTChunk);
+
+            List<GCGladiusImage> imageList = pfhdChunk.ProcessData(nmptChunk.Data, debugInfo);
+            ptdtChunk.ProcessData(imageList, debugInfo);
+
+            return imageList;
         }
 
         public void ExtractImages(List<string> fileNames, string targetDirectory)
@@ -167,52 +246,57 @@ namespace GCTextureTools
                 }
             }
 
-            using (StreamWriter errorStream = new StreamWriter(new FileStream(targetDirectory + "\\errors.txt", FileMode.OpenOrCreate)))
+            StringBuilder debugInfo = new StringBuilder();
+
+            foreach (string fileName in fileNames)
             {
-                foreach (string fileName in fileNames)
+                List<GCGladiusImage> imageList = new List<GCGladiusImage>();
+                try
                 {
-
-                    List<GladiusImage> imageList = new List<GladiusImage>();
-                    try
+                    FileInfo file = new FileInfo(fileName);
+                    using (FileStream fs = new FileStream(file.FullName, FileMode.Open))
+                    using (BinaryReader binReader = new BinaryReader(fs))
                     {
-                        FileInfo file = new FileInfo(fileName);
-                        using (FileStream fs = new FileStream(file.FullName, FileMode.Open))
-                        using (BinaryReader binReader = new BinaryReader(fs))
+                        List<String> textureNameList = new List<string>();
+                        Common.ReadNullSeparatedNames(binReader, Common.nmptTag, textureNameList);
                         {
-                            List<String> textureNameList = new List<string>();
-                            Common.ReadNullSeparatedNames(binReader, Common.nmptTag, textureNameList);
+                            long currentPos = binReader.BaseStream.Position;
+
+                            ReadHeaderSection(binReader, imageList, textureNameList);
+                            binReader.BaseStream.Position = 0;
+                            ReadPTDTSection(binReader, imageList, debugInfo);
+
+                            foreach (GCGladiusImage gi in imageList)
                             {
-                                long currentPos = binReader.BaseStream.Position;
-
-                                ReadHeaderSection(binReader, imageList, textureNameList);
-                                binReader.BaseStream.Position = 0;
-                                ReadPTDTSection(binReader, imageList,errorStream);
-
-                                foreach (GladiusImage gi in imageList)
+                                if (gi.DirectBitmap != null)
                                 {
-                                    if (gi.DirectBitmap != null)
-                                    {
-                                        gi.DirectBitmap.Bitmap.Save(targetDirectory + gi.ImageName + ".png", ImageFormat.Png);
-                                        gi.DirectBitmap.Dispose();
-                                    }
-                                    gi.CompressedData = null;
+                                    gi.DirectBitmap.Bitmap.Save(targetDirectory + gi.ImageName + ".png",
+                                        ImageFormat.Png);
+                                    gi.DirectBitmap.Dispose();
                                 }
 
+                                gi.CompressedData = null;
                             }
                         }
-
-                    }
-                    catch (Exception e)
-                    {
-                        int ibreak = 0;
                     }
                 }
+                catch (Exception e)
+                {
+                    int ibreak = 0;
+                }
             }
+
+            using (StreamWriter errorStream =
+                   new StreamWriter(new FileStream(targetDirectory + "\\errors.txt", FileMode.OpenOrCreate)))
+            {
+                errorStream.WriteLine(debugInfo.ToString());
+            }
+
             int stophere = 0;
         }
 
 
-        public void ReadHeaderSection(BinaryReader binReader, List<GladiusImage> imageList, List<string> textureNames)
+        public void ReadHeaderSection(BinaryReader binReader, List<GCGladiusImage> imageList, List<string> textureNames)
         {
             if (Common.FindCharsInStream(binReader, Common.pfhdTag, true))
             {
@@ -223,19 +307,15 @@ namespace GCTextureTools
 
                 for (int u = 0; u < numTextures; ++u)
                 {
-                    GladiusImage image = GladiusImage.FromStream(binReader);
+                    GCGladiusImage image = GCGladiusImage.FromStream(binReader);
                     image.ImageName = textureNames[u];
                     imageList.Add(image);
-
                 }
-
             }
-
-
         }
 
 
-        public static void DecompressDXT1GC(GladiusImage image,StreamWriter errorStream)
+        public static void DecompressDXT1GC(GCGladiusImage image, StringBuilder debugInfo)
         {
             int offset = 0;
 
@@ -248,11 +328,9 @@ namespace GCTextureTools
             int blockCountY = (height + 3) / 4;
 
 
-            int alphaOffset = input.Length / 2 ;
+            int alphaOffset = input.Length / 2;
 
             int blockStorage = 0;
-            StringBuilder debugOut1 = new StringBuilder();
-            StringBuilder debugOut2 = new StringBuilder();
 
             int lastBlockStorage = 0;
 
@@ -263,6 +341,7 @@ namespace GCTextureTools
             {
                 blockCountX += 1;
             }
+
             if (oddXBlocks)
             {
                 blockCountY += 1;
@@ -276,18 +355,17 @@ namespace GCTextureTools
             DXTBlock alphaBlock = null;
 
 
-
             uint[] tempData = new uint[width * height];
             uint[] tempData2 = new uint[tempData.Length];
 
-            GetBlocks(input, blockStorage, alphaOffset, out block, out alphaBlock, debugOut1);
+            GetBlocks(input, blockStorage, alphaOffset, out block, out alphaBlock, debugInfo);
             DXTBlock padBlock = block;
             DXTBlock padAlphaBlock = alphaBlock;
 
-            image.DirectBitmap = new DirectBitmap(width,height);
+            image.DirectBitmap = new DirectBitmap(width, height);
             byte[] output = image.DirectBitmap.Bits;
 
-            for (int  y = 0; y < blockCountY; y++)
+            for (int y = 0; y < blockCountY; y++)
             {
                 lastBlockStorage = blockStorage;
 
@@ -297,7 +375,7 @@ namespace GCTextureTools
                     {
                         try
                         {
-                            GetBlocks(input, blockStorage, alphaOffset, out block, out alphaBlock, debugOut1);
+                            GetBlocks(input, blockStorage, alphaOffset, out block, out alphaBlock, debugInfo);
                         }
                         catch (Exception e)
                         {
@@ -306,8 +384,7 @@ namespace GCTextureTools
 
                         try
                         {
-                            FillDest2(tempData2, x, y, width, block, alphaBlock,errorStream);
-
+                            FillDest2(tempData2, x, y, width, block, alphaBlock, debugInfo);
                         }
                         catch (Exception e)
                         {
@@ -334,7 +411,7 @@ namespace GCTextureTools
 
                 if (oddXBlocks)
                 {
-                    FillDest2(tempData2, blockCountX, y, width, padBlock, padAlphaBlock,errorStream);
+                    FillDest2(tempData2, blockCountX, y, width, padBlock, padAlphaBlock, debugInfo);
                 }
 
 
@@ -352,7 +429,7 @@ namespace GCTextureTools
             {
                 for (int i = 0; i < blockCountX; ++i)
                 {
-                    FillDest2(tempData2, i, blockCountY, width, padBlock, padAlphaBlock,errorStream);
+                    FillDest2(tempData2, i, blockCountY, width, padBlock, padAlphaBlock, debugInfo);
                 }
             }
 
@@ -375,15 +452,17 @@ namespace GCTextureTools
             {
                 int ibreak = 0;
             }
-
         }
 
-        public static void GetBlocks(byte[] input,int offset,int alphaOffset, out DXTBlock block, out DXTBlock alphaBlock,StringBuilder debugOut = null)
+        public static void GetBlocks(byte[] input, int offset, int alphaOffset, out DXTBlock block,
+            out DXTBlock alphaBlock,
+            StringBuilder debugOut = null)
         {
             if (debugOut != null)
             {
-                debugOut.AppendLine(""+offset);
+                debugOut.AppendLine("" + offset);
             }
+
             block = DXTBlock.FromCompressed(input, offset);
             alphaBlock = null;
             //alphaBlock = DXTBlock.FromCompressed(input, offset+alphaOffset);
@@ -399,10 +478,7 @@ namespace GCTextureTools
         }
 
 
-        public static Color[] TempColors = new Color[4];
-
-
-        public static void FillDest(uint[] dst, int offset, int pitch, DXTBlock block,DXTBlock alphaBlock)
+        public static void FillDest(uint[] dst, int offset, int pitch, DXTBlock block, DXTBlock alphaBlock)
         {
             int localDstIndex = 0;
             int numiter = 0;
@@ -411,12 +487,12 @@ namespace GCTextureTools
                 for (int x = 0; x < 4; x++)
                 {
                     int index = (y * 4) + x;
-                    
+
                     int val = block[index];
                     Color blockColour = block.DecodedColours[val];
 
                     Color alphaColour = Color.White;
-                    if(alphaBlock != null)
+                    if (alphaBlock != null)
                     {
                         int alphaVal = alphaBlock[index];
                         alphaColour = alphaBlock.DecodedColours[alphaVal];
@@ -428,12 +504,15 @@ namespace GCTextureTools
                     dst[localDstIndex + offset + x] = (uint)resultColor.ToArgb();
                     numiter++;
                 }
+
                 localDstIndex += pitch;
             }
+
             int ibreak = 0;
         }
 
-        public static void FillDest2(uint[] dst, int xblock,int yblock, int pitch, DXTBlock block, DXTBlock alphaBlock,StreamWriter errorStream)
+        public static void FillDest2(uint[] dst, int xblock, int yblock, int pitch, DXTBlock block, DXTBlock alphaBlock,
+            StringBuilder debugInfo)
         {
             for (int y = 0; y < 4; y++)
             {
@@ -445,26 +524,25 @@ namespace GCTextureTools
                     Color blockColour = block.DecodedColours[val];
 
                     Color alphaColour = Color.White;
-                    if(alphaBlock != null)
+                    if (alphaBlock != null)
                     {
                         int alphaVal = alphaBlock[index];
                         alphaColour = alphaBlock.DecodedColours[alphaVal];
                     }
 
-                        Color resultColor = Color.FromArgb(alphaColour.G, blockColour.R, blockColour.G, blockColour.B);
+                    Color resultColor = Color.FromArgb(alphaColour.G, blockColour.R, blockColour.G, blockColour.B);
 
                     int yindex = (yblock * 4) + y;
                     int xindex = (xblock * 4) + x;
 
                     int destIndex = (yindex * pitch) + xindex;
                     dst[destIndex] = (uint)resultColor.ToArgb();
-                    errorStream.WriteLine($"Filling (di,i,x,y) : {destIndex},{index},{x}, {y} with {resultColor}");
-
+                    debugInfo.AppendLine($"Filling (di,i,x,y) : {destIndex},{index},{x}, {y} with {resultColor}");
                 }
             }
+
             int ibreak = 0;
         }
-
 
 
         public static void FillDestSource(uint[] dst, ref int dstIndex, int offset, int pitch, DXTBlock src)
@@ -474,8 +552,9 @@ namespace GCTextureTools
             {
                 for (int x = 0; x < 4; x++)
                 {
-                    dst[localDstIndex + offset + x] = (uint)src.SourceColours[(y*4)+x].ToArgb();
+                    dst[localDstIndex + offset + x] = (uint)src.SourceColours[(y * 4) + x].ToArgb();
                 }
+
                 localDstIndex += pitch;
             }
         }
@@ -522,11 +601,13 @@ namespace GCTextureTools
         }
 
 
-        public static void ReadColours(UnityEngine.Color[] colours,int width,int height , List<DXTBlock> colorBlockList, List<DXTBlock> alphaBlockList)
+        public static void ReadColours(UnityEngine.Color[] colours, int width, int height,
+            List<DXTBlock> colorBlockList,
+            List<DXTBlock> alphaBlockList)
         {
             UnityEngine.Color[] unpackedColourPixels = new UnityEngine.Color[colours.Length];
             UnityEngine.Color[] unpackedAlphaPixels = new UnityEngine.Color[colours.Length];
-            
+
             int count = 0;
             foreach (UnityEngine.Color c in colours)
             {
@@ -544,7 +625,7 @@ namespace GCTextureTools
                     colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
                     alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
 
-                    index = (y * width + x+4);
+                    index = (y * width + x + 4);
                     colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
                     alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
 
@@ -557,7 +638,6 @@ namespace GCTextureTools
                     alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
                 }
             }
-            
         }
 
         public static void ReadBitmap(DirectBitmap bitmap, List<DXTBlock> colorBlockList, List<DXTBlock> alphaBlockList)
@@ -593,7 +673,7 @@ namespace GCTextureTools
                     colorBlockList.Add(DXTBlock.FromUncompressed(colorPixels, index, bitmap.Width));
                     alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
 
-                    index = (y * width + x+4);
+                    index = (y * width + x + 4);
                     colorBlockList.Add(DXTBlock.FromUncompressed(colorPixels, index, bitmap.Width));
                     alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
 
@@ -609,8 +689,6 @@ namespace GCTextureTools
 
             int ibreak = 0;
         }
-
-
 
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -631,6 +709,7 @@ namespace GCTextureTools
                         DXTBlock resultBlock = BlockEncoder.Bc1BlockEncoderSlow.EncodeBlock(block);
                         resultBlock.Write(binWriter);
                     }
+
                     // go through and write alpha info
                     foreach (DXTBlock block in alphaBlocks)
                     {
@@ -641,9 +720,9 @@ namespace GCTextureTools
                     results = memStream.ToArray();
                 }
             }
+
             return results;
         }
-
 
 
         public static void TestReencode(string reencodePath)
@@ -659,40 +738,36 @@ namespace GCTextureTools
                 targetInfo.Create();
             }
 
-            DirectBitmap directBitmap = new DirectBitmap(basePath+filename);
+            DirectBitmap directBitmap = new DirectBitmap(basePath + filename);
             int width = directBitmap.Width;
             int height = directBitmap.Height;
 
             List<DXTBlock> colorBlockList = new List<DXTBlock>();
             List<DXTBlock> alphaBlockList = new List<DXTBlock>();
-            ReadBitmap(directBitmap,colorBlockList,alphaBlockList);
+            ReadBitmap(directBitmap, colorBlockList, alphaBlockList);
 
-            byte[] processResults = ProcessBlockList(colorBlockList,alphaBlockList);
+            byte[] processResults = ProcessBlockList(colorBlockList, alphaBlockList);
 
             DirectBitmap reencodedBitmap = new DirectBitmap(width, height);
-            
+
             //DecompressDXT1GC(processResults, width, height, reencodedBitmap.Bits);
 
             //reencodedBitmap.Bitmap.Save(reencodePath + filename, ImageFormat.Png);
             //reencodedBitmap.Dispose();
-
-
         }
 
-        public static void TestExtract(string sourcePath,string outputDirectory)
+        public static void TestExtract(string sourcePath, string outputDirectory)
         {
-            new ImageExtractor().ProcessImages(sourcePath, outputDirectory);
+            new GCImageExtractor().ProcessImages(sourcePath, outputDirectory);
         }
 
 
         public static void DecodeFile(string fileName)
         {
-            
-            
         }
-        
-        
-        public static void EncodeFile(List<Texture2D> textureList, string imageName,string destinationFile)
+
+
+        public static void EncodeFile(List<Texture2D> textureList, string imageName, string destinationFile)
         {
             List<byte[]> processeedList = new List<byte[]>();
             foreach (Texture2D texture in textureList)
@@ -708,14 +783,12 @@ namespace GCTextureTools
                 processeedList.Add(processedResults);
             }
 
-            
-            //WriteImageFile(destinationFile, imageName, width, height, processResults);
 
-            
+            //WriteImageFile(destinationFile, imageName, width, height, processResults);
         }
-        
-        
-        public static void EncodeFile(Texture2D t, string imageName,string destinationFile)
+
+
+        public static void EncodeFile(Texture2D t, string imageName, string destinationFile)
         {
             //DirectBitmap directBitmap = new DirectBitmap(t);
             //int width = directBitmap.Width;
@@ -724,18 +797,17 @@ namespace GCTextureTools
             int width = t.width;
             int height = t.height;
 
-            
+
             List<DXTBlock> colorBlockList = new List<DXTBlock>();
             List<DXTBlock> alphaBlockList = new List<DXTBlock>();
             //ReadBitmap(directBitmap, colorBlockList, alphaBlockList);
-            ReadColours(t.GetPixels(), width, height,colorBlockList,alphaBlockList);
+            ReadColours(t.GetPixels(), width, height, colorBlockList, alphaBlockList);
 
             byte[] processResults = ProcessBlockList(colorBlockList, alphaBlockList);
-            WriteImageFile(destinationFile,imageName, width, height, processResults);
-            
+            WriteImageFile(destinationFile, imageName, width, height, processResults);
         }
-        
-        public static void EncodeFile(string originalFile,string destinationFile)
+
+        public static void EncodeFile(string originalFile, string destinationFile)
         {
             string imageName = Path.GetFileName(destinationFile);
             DirectBitmap directBitmap = new DirectBitmap(originalFile);
@@ -747,13 +819,10 @@ namespace GCTextureTools
             ReadBitmap(directBitmap, colorBlockList, alphaBlockList);
 
             byte[] processResults = ProcessBlockList(colorBlockList, alphaBlockList);
-            WriteImageFile(destinationFile,imageName, width, height, processResults);
+            WriteImageFile(destinationFile, imageName, width, height, processResults);
         }
 
 
-        
-        
-        
         /*
          *
          *
@@ -761,7 +830,7 @@ namespace GCTextureTools
         // wheel info - 9 textures
         NMTP     size               num textures
         50464844 40010000 01000000 09000000 
-
+    
                            W    H    
         0020 0800 00000000 8000 8000 002B0000 50010000 0000 00000000000000000000
         0020 0900 00000000 8000 0001 C0550000 302C0000 1000 00000000000000000000
@@ -774,17 +843,16 @@ namespace GCTextureTools
         0022 0800 00000000 8000 8000 00560000 D0830200 8F00 00000000000000000000
         00000000000000000000000000000000
          */
-        
-        public static void WriteMultiImageFile(string outputName, List<TextureInfo> textureInfoList, List<byte[]> dataList)
-        {
 
+        public static void WriteMultiImageFile(string outputName, List<TextureInfo> textureInfoList,
+            List<byte[]> dataList)
+        {
             using (FileStream fs = new FileStream(outputName, FileMode.Create))
             {
                 using (BinaryWriter binWriter = new BinaryWriter(fs))
                 {
-
                     List<string> textureNames = new List<string>();
-                    
+
                     foreach (TextureInfo textureInfo in textureInfoList)
                     {
                         textureInfo.Name = textureInfo.Name.Replace(".png", ".tga");
@@ -793,7 +861,7 @@ namespace GCTextureTools
 
                         textureNames.Add(textureInfo.Name);
                     }
-                    
+
                     binWriter.Write(Common.pttpTag);
                     binWriter.Write(BaseChunk.ChunkHeaderSize);
                     binWriter.Write(3);
@@ -806,18 +874,14 @@ namespace GCTextureTools
 
                     GladiusFileWriter.PadIfNeeded(binWriter);
 
-                    GladiusFileWriter.WritePTDT(binWriter, textureInfoList,dataList);
-                        
-                    GladiusFileWriter.WriteEND(binWriter);
+                    GladiusFileWriter.WritePTDT(binWriter, textureInfoList, dataList);
 
+                    GladiusFileWriter.WriteEND(binWriter);
                 }
             }
-
         }
 
-        
-        
-        
+
         public static void WriteImageFile(string outputName, string imageName, int width, int height, byte[] data)
         {
             imageName = imageName.Replace(".png", ".tga");
@@ -842,6 +906,7 @@ namespace GCTextureTools
                     {
                         binWriter.Write((byte)0);
                     }
+
                     binWriter.Write(Common.pfhdTag);
                     // section size
                     binWriter.Write(64);
@@ -871,7 +936,6 @@ namespace GCTextureTools
                     }
 
 
-
                     binWriter.Write(Common.paddTag);
                     binWriter.Write(16);
                     binWriter.Write(1);
@@ -887,21 +951,17 @@ namespace GCTextureTools
                     binWriter.Write(16);
                     binWriter.Write(1);
                     binWriter.Write(1);
-
-
                 }
             }
-
         }
-
 
 
         static void Main(string[] args)
         {
-            string baseInput = @"f:\tmp\image\input\"; 
+            string baseInput = @"f:\tmp\image\input\";
             string baseOutput = @"f:\tmp\image\output\";
 
-            string sourcePath = baseInput;//baseInput+@"gui\leagues\";
+            string sourcePath = baseInput; //baseInput+@"gui\leagues\";
 
             string outputDirectory = baseOutput;
             string reencodedOutputDirectory = baseOutput + @"textures-gc-reencoded\";
@@ -920,12 +980,12 @@ namespace GCTextureTools
                 string destinatioFilename = args[1];
 
                 EncodeFile(originalFilename, destinatioFilename);
-
             }
 
             int ibreak = 0;
         }
     }
+
     public sealed class DirectBitmap : IDisposable
     {
         public DirectBitmap(int width, int height)
@@ -948,16 +1008,16 @@ namespace GCTextureTools
             UnityEngine.Color[] colourData = t.GetPixels();
             SetPixels(colourData);
         }
-        
-        
-        
+
+
         public DirectBitmap(string filename)
         {
             Bitmap = new Bitmap(filename);
             Width = Bitmap.Width;
             Height = Bitmap.Height;
 
-            BitmapData bitmapData = Bitmap.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bitmapData = Bitmap.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
             Bits = new byte[Math.Abs(bitmapData.Stride * bitmapData.Height)];
             Marshal.Copy(bitmapData.Scan0, Bits, 0, Bits.Length);
 
@@ -989,14 +1049,13 @@ namespace GCTextureTools
                         Bits[index + 1] = (byte)(colourData[colourCounter][0] * 255);
                         Bits[index + 2] = (byte)(colourData[colourCounter][1] * 255);
                         Bits[index + 3] = (byte)(colourData[colourCounter][2] * 255);
-                        
-                        colourCounter++;
 
+                        colourCounter++;
                     }
                 }
             }
         }
-        
+
         public void SetPixel(int x, int y, System.Drawing.Color color)
         {
             int index = x + (y * Width);
@@ -1009,6 +1068,7 @@ namespace GCTextureTools
                 Bits[index + 3] = (byte)(value >> 24);
             }
         }
+
         public void SetPixel(int x, int y, UnityEngine.Color color)
         {
             int index = x + (y * Width);
@@ -1022,12 +1082,10 @@ namespace GCTextureTools
                 Bits[index + 1] = (byte)(color[0] * 255);
                 Bits[index + 2] = (byte)(color[1] * 255);
                 Bits[index + 3] = (byte)(color[2] * 255);
-                
             }
         }
 
-        
-        
+
         public System.Drawing.Color GetPixel(int x, int y)
         {
             int index = x + (y * Width);
@@ -1050,6 +1108,7 @@ namespace GCTextureTools
                 {
                     m_bitsHandle.Free();
                 }
+
                 m_disposed = true;
             }
         }
@@ -1114,17 +1173,20 @@ namespace GCTextureTools
             {
                 for (int x = 0; x < 4; ++x)
                 {
-                    Color convertedColour = Color.FromArgb((int)(data[offset + x].a * 255), (int)(data[offset + x].r * 255),(int)(data[offset + x].g * 255),(int)(data[offset + x].b * 255));
+                    Color convertedColour = Color.FromArgb((int)(data[offset + x].a * 255),
+                        (int)(data[offset + x].r * 255),
+                        (int)(data[offset + x].g * 255), (int)(data[offset + x].b * 255));
 
                     block.SourceColours[count++] = convertedColour;
                 }
+
                 offset += stride;
             }
 
 
             return block;
         }
-        
+
         public static DXTBlock FromUncompressed(Color[] data, int offset, int stride)
         {
             DXTBlock block = new DXTBlock();
@@ -1135,6 +1197,7 @@ namespace GCTextureTools
                 {
                     block.SourceColours[count++] = data[offset + x];
                 }
+
                 offset += stride;
             }
 
@@ -1144,8 +1207,8 @@ namespace GCTextureTools
 
         public void Write(BinaryWriter binWriter)
         {
-            ushort swappedQ0 = ImageExtractor.Swap16(CalculatedColor0.data);
-            ushort swappedQ1 = ImageExtractor.Swap16(CalculatedColor1.data);
+            ushort swappedQ0 = GCImageExtractor.Swap16(CalculatedColor0.data);
+            ushort swappedQ1 = GCImageExtractor.Swap16(CalculatedColor1.data);
 
             binWriter.Write(swappedQ0);
             binWriter.Write(swappedQ1);
@@ -1153,7 +1216,7 @@ namespace GCTextureTools
             uint convertedColorIndices = 0;
             uint d = colorIndices;
 
-            if(colorIndices != 0)
+            if (colorIndices != 0)
             {
                 int ibreak = 0;
             }
@@ -1166,7 +1229,7 @@ namespace GCTextureTools
                 {
                     int val = this[(y * 4) + x];
                     convertedColorIndices |= (uint)(val << count);
-                    count-=2;
+                    count -= 2;
                 }
             }
 
@@ -1183,29 +1246,31 @@ namespace GCTextureTools
             ushort q0 = (ushort)(input[offset + 0] | input[offset + 1] << 8);
             ushort q1 = (ushort)(input[offset + 2] | input[offset + 3] << 8);
 
-            q0 = ImageExtractor.Swap16(q0);
-            q1 = ImageExtractor.Swap16(q1);
+            q0 = GCImageExtractor.Swap16(q0);
+            q1 = GCImageExtractor.Swap16(q1);
 
 
-            ImageExtractor.Rgb565(q0, out r0, out g0, out b0);
-            ImageExtractor.Rgb565(q1, out r1, out g1, out b1);
+            GCImageExtractor.Rgb565(q0, out r0, out g0, out b0);
+            GCImageExtractor.Rgb565(q1, out r1, out g1, out b1);
 
-            ImageExtractor.TempColors[0] = Color.FromArgb(255, r0, g0, b0);
-            ImageExtractor.TempColors[1] = Color.FromArgb(255, r1, g1, b1);
+            GCImageExtractor.TempColors[0] = Color.FromArgb(255, r0, g0, b0);
+            GCImageExtractor.TempColors[1] = Color.FromArgb(255, r1, g1, b1);
             if (q0 > q1)
             {
-                ImageExtractor.TempColors[2] = Color.FromArgb(255, (r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3);
-                ImageExtractor.TempColors[3] = Color.FromArgb(255, (r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3);
+                GCImageExtractor.TempColors[2] =
+                    Color.FromArgb(255, (r0 * 2 + r1) / 3, (g0 * 2 + g1) / 3, (b0 * 2 + b1) / 3);
+                GCImageExtractor.TempColors[3] =
+                    Color.FromArgb(255, (r0 + r1 * 2) / 3, (g0 + g1 * 2) / 3, (b0 + b1 * 2) / 3);
             }
             else
             {
-                ImageExtractor.TempColors[2] = Color.FromArgb(255, (r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2);
-                ImageExtractor.TempColors[3] = Color.FromArgb(0, 0, 0, 0);
+                GCImageExtractor.TempColors[2] = Color.FromArgb(255, (r0 + r1) / 2, (g0 + g1) / 2, (b0 + b1) / 2);
+                GCImageExtractor.TempColors[3] = Color.FromArgb(0, 0, 0, 0);
             }
 
             for (int i = 0; i < 4; ++i)
             {
-                block.DecodedColours[i] = ImageExtractor.TempColors[i];
+                block.DecodedColours[i] = GCImageExtractor.TempColors[i];
             }
 
 
@@ -1221,14 +1286,9 @@ namespace GCTextureTools
                 }
             }
 
-            ImageExtractor.ClearTempColours();
+            GCImageExtractor.ClearTempColours();
 
             return block;
-
         }
-
     };
-
-
-
 }

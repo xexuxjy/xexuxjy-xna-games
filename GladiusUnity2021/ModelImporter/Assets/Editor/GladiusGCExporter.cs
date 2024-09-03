@@ -89,7 +89,7 @@ public class GladiusGCExporter : UnityEditor.Editor
                     string textureName = m.mainTexture.name.ToLower();
                     string modelName = gameObject.name;
 
-                    ImageExtractor.EncodeFile((Texture2D)m.mainTexture, textureName + ".tga",
+                    GCImageExtractor.EncodeFile((Texture2D)m.mainTexture, textureName + ".tga",
                         testPath + modelName + ".ptx");
                 }
             }

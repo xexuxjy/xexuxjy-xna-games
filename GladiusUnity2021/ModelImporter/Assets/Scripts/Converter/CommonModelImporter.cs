@@ -8,6 +8,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Reflection;
+using GCTextureTools;
 using Unity.VisualScripting;
 using UnityEngine.PlayerLoop;
 using Debug = System.Diagnostics.Debug;
@@ -2714,7 +2715,7 @@ public class ELEMChunk : BaseChunk
 
 public class NMTPChunk : BaseChunk
 {
-    public byte[] Data;
+    public List<string> Data = new List<string>();
 
     public static char[] ChunkName()
     {
@@ -2725,7 +2726,7 @@ public class NMTPChunk : BaseChunk
     {
         NMTPChunk chunk = new NMTPChunk();
         chunk.BaseFromStream(binReader);
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        CommonModelImporter.ReadNullSeparatedNames(binReader,  chunk.Data);
         
         return chunk;
     }
@@ -3006,3 +3007,105 @@ public class CSKA
 
     }
 }
+
+
+
+public class PTDTChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.ptdtTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        PTDTChunk chunk = new PTDTChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+    public void ProcessData(List<GCGladiusImage> imageList,StringBuilder debugInfo)
+    {
+        using (BinaryReader binReader = new BinaryReader(new MemoryStream(Data)))
+        {
+            foreach (GCGladiusImage image in imageList)
+            {
+                image.CompressedData = binReader.ReadBytes(image.ImageHeader.CompressedSize);
+
+                int potWidth = image.ImageHeader.Width; // ToNextNearest(image.Header.Width);
+                int potHeight = image.ImageHeader.Height; // ToNextNearest(image.Header.Height);
+
+                //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
+
+                GCImageExtractor.DecompressDXT1GC(image, debugInfo);
+            }
+            
+        }
+
+    }
+
+    
+}
+
+public class PTTPChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.pttpTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        PTTPChunk chunk = new PTTPChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+}
+
+public class PFHDChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.pfhdTag;
+    }
+   
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        PFHDChunk chunk = new PFHDChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        
+        return chunk;
+    }
+
+    public List<GCGladiusImage> ProcessData(List<string> textureNames,StringBuilder debugInfo)
+    {
+        List<GCGladiusImage> imageList = new List<GCGladiusImage>();
+        using (BinaryReader binReader = new BinaryReader(new MemoryStream(Data)))
+        {
+            for (int u = 0; u < NumElements; ++u)
+            {
+                GCGladiusImage image = GCGladiusImage.FromStream(binReader);
+                image.ImageName = textureNames[u];
+                imageList.Add(image);
+
+            }
+        }
+
+        return imageList;
+    }
+
+
+}
+
