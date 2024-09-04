@@ -19,7 +19,7 @@ namespace GCTextureTools
 {
     public class GCGladiusImage
     {
-        private GCGladiusImageHeader m_header = null;
+        private TextureHeaderInfo m_header = null;
         private string strFileName = string.Empty;
         public string ImageName;
         public DirectBitmap DirectBitmap;
@@ -28,10 +28,10 @@ namespace GCTextureTools
 
         public GCGladiusImage()
         {
-            this.m_header = new GCGladiusImageHeader();
+            this.m_header = new TextureHeaderInfo();
         }
 
-        public GCGladiusImageHeader ImageHeader
+        public TextureHeaderInfo ImageHeader
         {
             get { return this.m_header; }
             set { this.m_header = value; }
@@ -69,14 +69,14 @@ namespace GCTextureTools
     }
 
 
-    public class GCGladiusImageHeader
-    {
-        public int Width = 0;
-        public int Height = 0;
-        public int CompressedSize = 0;
-        public bool ContainsDefinition;
-        public ushort DXTType = 0;
-    }
+    // public class GCGladiusImageHeader
+    // {
+    //     public int Width = 0;
+    //     public int Height = 0;
+    //     public int CompressedSize = 0;
+    //     public bool ContainsDefinition;
+    //     public ushort DXTType = 0;
+    // }
 
 
     public class GCImageExtractor
@@ -769,22 +769,31 @@ namespace GCTextureTools
 
         public static void EncodeFile(List<Texture2D> textureList, string imageName, string destinationFile)
         {
+            List<TextureHeaderInfo> headerList = new List<TextureHeaderInfo>();
             List<byte[]> processeedList = new List<byte[]>();
             foreach (Texture2D texture in textureList)
             {
                 int width = texture.width;
                 int height = texture.height;
 
+                
                 List<DXTBlock> colorBlockList = new List<DXTBlock>();
                 List<DXTBlock> alphaBlockList = new List<DXTBlock>();
                 ReadColours(texture.GetPixels(), width, height, colorBlockList, alphaBlockList);
 
                 byte[] processedResults = ProcessBlockList(colorBlockList, alphaBlockList);
+
+                TextureHeaderInfo headerInfo = new TextureHeaderInfo();
+                headerInfo.Name = texture.name;
+                headerInfo.Width = width;
+                headerInfo.Height = height;
+                headerInfo.CompressedSize = processedResults.Length;
+
+                headerList.Add(headerInfo);
                 processeedList.Add(processedResults);
             }
 
-
-            //WriteImageFile(destinationFile, imageName, width, height, processResults);
+            WriteMultiImageFile(imageName, headerList, processeedList);
         }
 
 
@@ -824,6 +833,16 @@ namespace GCTextureTools
 
 
         /*
+         *  GC Texture File made up of :
+         *  PTTP
+         *  NAME
+         *  NMPT
+         *  PFHD
+         *  PTDT
+         *  END
+         *
+         *  with possible PADD's
+         *
          *
          *
          * 
@@ -844,7 +863,7 @@ namespace GCTextureTools
         00000000000000000000000000000000
          */
 
-        public static void WriteMultiImageFile(string outputName, List<TextureInfo> textureInfoList,
+        public static void WriteMultiImageFile(string outputName, List<TextureHeaderInfo> textureInfoList,
             List<byte[]> dataList)
         {
             using (FileStream fs = new FileStream(outputName, FileMode.Create))
@@ -853,7 +872,7 @@ namespace GCTextureTools
                 {
                     List<string> textureNames = new List<string>();
 
-                    foreach (TextureInfo textureInfo in textureInfoList)
+                    foreach (TextureHeaderInfo textureInfo in textureInfoList)
                     {
                         textureInfo.Name = textureInfo.Name.Replace(".png", ".tga");
                         textureInfo.Name = textureInfo.Name.Replace(".jpg", ".tga");

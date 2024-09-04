@@ -22,7 +22,7 @@ public class GladiusGCExporter : UnityEditor.Editor
     {
         ExportCurrentGameObject(false, false);
     }
-
+    
     private static void ExportCurrentGameObject(bool copyMaterials, bool copyTextures)
     {
         if (Selection.activeGameObject == null)
@@ -42,6 +42,8 @@ public class GladiusGCExporter : UnityEditor.Editor
         ExportGameObject(currentGameObject, copyMaterials, copyTextures);
     }
 
+    
+    
     /// <summary>
     /// Exports ANY Game Object given to it. Will provide a dialog and return the path of the newly exported file
     /// </summary>
@@ -76,7 +78,7 @@ public class GladiusGCExporter : UnityEditor.Editor
                 
                 // texture data should be in the gcmodel now?
 
-                foreach (TextureInfo textureInfo in model.m_textures)
+                foreach (TextureHeaderInfo textureInfo in model.m_textures)
                 {
                     Renderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
                     if (meshRenderer == null)
@@ -100,6 +102,91 @@ public class GladiusGCExporter : UnityEditor.Editor
         }
         return null;
     }
+
+    
+    
+    
+    [MenuItem("GameObject/GladiusGCExporter/ExportTextures", false, 30)]
+    public static void ExportDropdownGameObjectTexturestToGladiusGC()
+    {
+        ExportCurrentGameObjectTextures();
+    }
+    
+    [MenuItem("Assets/GladiusGCExporter/ExportTextures", false, 30)]
+    public static void ExportGameObjecTexturestToGladiusGC()
+    {
+        ExportCurrentGameObjectTextures();
+    }
+
+    public static void ExportCurrentGameObjectTextures()
+    {
+        if (Selection.activeGameObject == null)
+        {
+            EditorUtility.DisplayDialog("No Object Selected", "Please select any GameObject to Export Textures", "Okay");
+            return;
+        }
+
+        GameObject currentGameObject = Selection.activeObject as GameObject;
+
+        if (currentGameObject == null)
+        {
+            EditorUtility.DisplayDialog("Warning", "Item selected is not a GameObject", "Okay");
+            return;
+        }
+
+        ExportGameObjectTextures(currentGameObject);
+
+    }
+
+    public static void ExportGameObjectTextures(GameObject gameObject, string oldPath = null)
+    {
+        if (gameObject == null)
+        {
+            EditorUtility.DisplayDialog("Object is null", "Please select any GameObject to Export to GladiusGC",
+                "Okay");
+            return;
+        }
+
+        string newPath = GetNewPath(gameObject, oldPath);
+
+        if (newPath != null && newPath.Length != 0)
+        {
+            string testPath = newPath.Substring(0, (newPath.LastIndexOf("/")) + 1);
+            string modelName = gameObject.name;
+
+            MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+            List<Texture2D> textureList = new List<Texture2D>();
+            foreach (MeshRenderer meshRenderer in meshRenderers)
+            {
+                Texture2D texture = (Texture2D)meshRenderer.sharedMaterial.mainTexture;
+                if (texture != null)
+                {
+                    if (!texture.isReadable)
+                    {
+                        EditorUtility.DisplayDialog("Texture Not Readable", "The texture must have it's read/write flag set ",
+                            "Okay");
+                        return;
+                    }
+                    
+                    textureList.Add(texture);
+                }
+                else
+                {
+                    EditorUtility.DisplayDialog("Texture not 2D", "Only works with basic Texture2D",
+                        "Okay");
+                    return;
+                }
+
+            }
+
+            string imageName = testPath + modelName + ".ptx";
+            GCImageExtractor.EncodeFile(textureList,imageName,imageName);
+        }
+    }
+
+
+
+
 
     /// <summary>
     /// Creates save dialog window depending on old path or right to the /Assets folder no old path is given

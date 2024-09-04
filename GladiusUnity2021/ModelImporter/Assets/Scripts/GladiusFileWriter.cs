@@ -213,7 +213,7 @@ public static class GladiusFileWriter
     }
 
     
-    public static void WritePFHD(BinaryWriter writer, List<TextureInfo> textureInfoList)
+    public static void WritePFHD(BinaryWriter writer, List<TextureHeaderInfo> textureInfoList)
     {
         int sectionSize = 32;
         
@@ -228,7 +228,7 @@ public static class GladiusFileWriter
         writer.Write(1); 
         writer.Write(textureInfoList.Count);
 
-        foreach (TextureInfo textureInfo in textureInfoList)
+        foreach (TextureHeaderInfo textureInfo in textureInfoList)
         {
             // compress type
             writer.Write((ushort)0x2200);
@@ -241,26 +241,23 @@ public static class GladiusFileWriter
             writer.Write((ushort)textureInfo.Height);
 
             // compressed size
-            writer.Write(textureInfo.CompressedLength);
+            writer.Write(textureInfo.CompressedSize);
 
             writer.Write(0x50);
             writer.Write(0);
 
-            for (int i = 0; i < 24; ++i)
-            {
-                writer.Write((byte)0);
-            }
+            WriteNull(writer, 24);
         }
 
     }
 
-    public static void WritePTDT(BinaryWriter writer, List<TextureInfo> textureInfoList,List<byte[]> dataList)
+    public static void WritePTDT(BinaryWriter writer, List<TextureHeaderInfo> textureInfoList,List<byte[]> dataList)
     {
         int total = HeaderSize;
 
-        foreach (TextureInfo textureInfo in textureInfoList)
+        foreach (TextureHeaderInfo textureInfo in textureInfoList)
         {
-            total += textureInfo.CompressedLength;
+            total += textureInfo.CompressedSize;
             total = GladiusFileWriter.GetPadValue(total, 8);
         }
 
@@ -271,7 +268,7 @@ public static class GladiusFileWriter
 
         for(int i=0;i<textureInfoList.Count;++i)
         {
-            Debug.Assert(textureInfoList[i].CompressedLength == dataList[i].Length);
+            Debug.Assert(textureInfoList[i].CompressedSize == dataList[i].Length);
             writer.Write(dataList[i]);
         }
     }

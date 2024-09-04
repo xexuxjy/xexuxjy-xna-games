@@ -352,7 +352,7 @@ public class GCModel
                 textureName += ".tga";
                 textureName = textureName.ToLower();
 
-                model.m_textures.Add(new TextureInfo()
+                model.m_textures.Add(new TextureHeaderInfo()
                     { Name = textureName, Width = m.mainTexture.width, Height = m.mainTexture.height });
 
                 model.m_selsInfo.Add(DefaultShader);
@@ -560,7 +560,7 @@ public class GCModel
             textureName = textureName.ToLower();
 
 
-            model.m_textures.Add(new TextureInfo()
+            model.m_textures.Add(new TextureHeaderInfo()
                 { Name = textureName, Width = m.mainTexture.width, Height = m.mainTexture.height });
 
             model.m_selsInfo.Add(DefaultShader);
@@ -1049,7 +1049,7 @@ public class GCModel
         writer.Write(m_textures.Count);
 
 
-        foreach (TextureInfo textureInfo in m_textures)
+        foreach (TextureHeaderInfo textureInfo in m_textures)
         {
             GladiusFileWriter.WriteASCIIString(writer, textureInfo.Name, MaxTextureNameSize);
             writer.Write(-1);
@@ -1271,7 +1271,7 @@ public class GCModel
     public List<IndexedVector3> m_normals = new List<IndexedVector3>();
     public List<IndexedVector2> m_uvs = new List<IndexedVector2>();
     public List<IndexedVector2> m_uv2s = new List<IndexedVector2>();
-    public List<TextureInfo> m_textures = new List<TextureInfo>();
+    public List<TextureHeaderInfo> m_textures = new List<TextureHeaderInfo>();
     public List<String> m_names = new List<String>();
     public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
     
@@ -1440,14 +1440,15 @@ public class DSLIInfo
 }
 
 
-public class TextureInfo
+public class TextureHeaderInfo
 {
     public string Name;
     public int Width;
     public int Height;
-
     
-    public int CompressedLength;
-    public int UncompressedLength;
-
+    public int CompressedSize;
+    public int UncompressedSize;
+    
+    public bool ContainsDefinition;
+    public ushort DXTType = 0;
 }
