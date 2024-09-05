@@ -179,8 +179,13 @@ public class GladiusGCExporter : UnityEditor.Editor
 
             }
 
+            string appPath = Application.dataPath.Remove(Application.dataPath.LastIndexOf("/Assets"), "/Assets".Length)+"/";
             string imageName = testPath + modelName + ".ptx";
             GCImageExtractor.EncodeFile(textureList,imageName,imageName);
+
+            GCImageExtractor.DecodeFile(appPath+imageName,"d:/tmp/gladius-gc-texture-test");
+
+
         }
     }
 
@@ -202,8 +207,13 @@ public class GladiusGCExporter : UnityEditor.Editor
 
         string newPath = null;
         if (oldPath == null)
-            newPath = EditorUtility.SaveFilePanelInProject("Export GladiusGC File", name + ".pax", "pax",
+        {
+            // newPath = EditorUtility.SaveFilePanelInProject("Export GladiusGC File", name + ".pax", "pax",
+            //     "Export " + name + " GameObject to a GladiusGC file");
+            newPath = EditorUtility.SaveFilePanelInProject("Export GladiusGC File", name + "", "",
                 "Export " + name + " GameObject to a GladiusGC file");
+
+        }
         else
         {
             if (oldPath.StartsWith("/Assets"))

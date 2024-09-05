@@ -101,7 +101,16 @@ namespace GCTextureTools
         public void ProcessImages(String sourcePath, String outputDirectory)
         {
             List<string> fileNames = new List<string>();
-            fileNames.AddRange(Directory.GetFiles(sourcePath, "**"));
+            FileAttributes attr = File.GetAttributes(sourcePath);
+            if (attr.HasFlag(FileAttributes.Directory))
+            {
+                FileInfo fileInfo = new FileInfo(sourcePath);
+                fileNames.AddRange(Directory.GetFiles(sourcePath, "**"));
+            }
+            else
+            {
+                fileNames.Add(sourcePath);
+            }
             ExtractImages(fileNames, outputDirectory);
         }
 
@@ -762,8 +771,9 @@ namespace GCTextureTools
         }
 
 
-        public static void DecodeFile(string fileName)
+        public static void DecodeFile(string fileName, string outputDirectory)
         {
+            new GCImageExtractor().ProcessImages(fileName, outputDirectory);
         }
 
 
