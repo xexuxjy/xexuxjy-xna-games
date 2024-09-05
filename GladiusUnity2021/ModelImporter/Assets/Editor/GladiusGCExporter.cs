@@ -183,7 +183,7 @@ public class GladiusGCExporter : UnityEditor.Editor
             string imageName = testPath + modelName + ".ptx";
             GCImageExtractor.EncodeFile(textureList,imageName,imageName);
 
-            GCImageExtractor.DecodeFile(appPath+imageName,"d:/tmp/gladius-gc-texture-test");
+            GCImageExtractor.DecodeFile(appPath+imageName,"d:/tmp/gladius-gc-texture-test/");
 
 
         }

@@ -228,6 +228,10 @@ public static class GladiusFileWriter
         writer.Write(1); 
         writer.Write(textureInfoList.Count);
 
+        //                    W    H    
+        // 0020 0800 00000000 8000 8000 002B0000 50010000 00000000 00000000 00000000
+
+        
         foreach (TextureHeaderInfo textureInfo in textureInfoList)
         {
             // compress type
@@ -245,8 +249,9 @@ public static class GladiusFileWriter
 
             writer.Write(0x50);
             writer.Write(0);
-
-            WriteNull(writer, 24);
+            writer.Write(0);
+            writer.Write(0);
+            
         }
 
     }
