@@ -201,7 +201,7 @@ public static class GladiusFileWriter
             runningTotal += 1;
         }
 
-        runningTotal = GladiusFileWriter.GetPadValue(runningTotal,8); 
+        runningTotal = GladiusFileWriter.GetPadValue(runningTotal,32); 
         
         total += runningTotal;
         

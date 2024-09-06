@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Drawing.Imaging;
 using System.Drawing;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Color = System.Drawing.Color;
@@ -614,6 +615,16 @@ namespace GCTextureTools
             List<DXTBlock> colorBlockList,
             List<DXTBlock> alphaBlockList)
         {
+            bool hasAlpha = true;
+            foreach (UnityEngine.Color c in colours)
+            {
+                if (c.a != 1.0f)
+                {
+                    hasAlpha = true;
+                    break;
+                }
+            }
+            
             UnityEngine.Color[] unpackedColourPixels = new UnityEngine.Color[colours.Length];
             UnityEngine.Color[] unpackedAlphaPixels = new UnityEngine.Color[colours.Length];
 
@@ -632,19 +643,31 @@ namespace GCTextureTools
                 {
                     int index = (y * width + x);
                     colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    }
 
                     index = (y * width + x + 4);
                     colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    }
 
                     index = ((y + 4) * width + x);
                     colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    }
 
                     index = ((y + 4) * width + x + 4);
                     colorBlockList.Add(DXTBlock.FromUncompressed(unpackedColourPixels, index, width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(unpackedAlphaPixels, index, width));
+                    }
                 }
             }
         }
@@ -665,6 +688,7 @@ namespace GCTextureTools
                 colorPixels[count++] = c;
             }
 
+            bool hasAlpha = true;
             Color[] alphaPixels = new Color[bytes.Length / 4];
             count = 0;
             for (int i = 0; i < bytes.Length; i += 4)
@@ -672,27 +696,46 @@ namespace GCTextureTools
                 // set alpha into green
                 //alphaPixels[count++] = Color.FromArgb(255, 0, bytes[i + 0], 0);
                 alphaPixels[count++] = Color.FromArgb(255, 0, bytes[i + 3], 0);
+                if (bytes[i + 3] != 255)
+                {
+                    hasAlpha = true;
+                }
             }
 
+                        
+            
+            
             for (int y = 0; y < height; y += 8)
             {
                 for (int x = 0; x < width; x += 8)
                 {
                     int index = (y * width + x);
                     colorBlockList.Add(DXTBlock.FromUncompressed(colorPixels, index, bitmap.Width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    }
 
                     index = (y * width + x + 4);
                     colorBlockList.Add(DXTBlock.FromUncompressed(colorPixels, index, bitmap.Width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    }
 
                     index = ((y + 4) * width + x);
                     colorBlockList.Add(DXTBlock.FromUncompressed(colorPixels, index, bitmap.Width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    }
 
                     index = ((y + 4) * width + x + 4);
                     colorBlockList.Add(DXTBlock.FromUncompressed(colorPixels, index, bitmap.Width));
-                    alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    if (hasAlpha)
+                    {
+                        alphaBlockList.Add(DXTBlock.FromUncompressed(alphaPixels, index, bitmap.Width));
+                    }
                 }
             }
 
@@ -779,6 +822,8 @@ namespace GCTextureTools
 
         public static void EncodeFile(List<Texture2D> textureList, string imageName, string destinationFile)
         {
+            textureList = textureList.OrderBy(x => x.name).ToList();
+            
             List<TextureHeaderInfo> headerList = new List<TextureHeaderInfo>();
             List<byte[]> processeedList = new List<byte[]>();
             foreach (Texture2D texture in textureList)
@@ -794,7 +839,9 @@ namespace GCTextureTools
                 byte[] processedResults = ProcessBlockList(colorBlockList, alphaBlockList);
 
                 TextureHeaderInfo headerInfo = new TextureHeaderInfo();
-                headerInfo.Name = texture.name;
+                
+                headerInfo.Name = texture.name+".tga";
+                
                 headerInfo.Width = width;
                 headerInfo.Height = height;
                 headerInfo.CompressedSize = processedResults.Length;
