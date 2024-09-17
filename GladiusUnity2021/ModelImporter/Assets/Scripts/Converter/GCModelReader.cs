@@ -310,6 +310,8 @@ public class GCModel
         {
             model.m_uvs.Add(v);
         }
+
+        int subObjectCount = 0;
         
         foreach (MeshFilter meshFilter in gameObj.GetComponentsInChildren<MeshFilter>())
         {
@@ -357,6 +359,11 @@ public class GCModel
 
                 model.m_selsInfo.Add(DefaultShader);
                 model.m_selsInfo.Add(textureName);
+
+                PaxElement paxElement = new PaxElement((uint)subObjectCount, 0);
+                model.m_paxElements.Add(paxElement);
+                
+                subObjectCount++;
 
             }
             
@@ -911,7 +918,7 @@ public class GCModel
         GladiusFileWriter.PadIfNeeded(writer);
         int dslsSize = WriteDSLS(writer);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteDSLI(writer,dslsSize);
+        WriteDSLI(writer);
         GladiusFileWriter.PadIfNeeded(writer);
         WriteDSLC(writer);
         GladiusFileWriter.PadIfNeeded(writer);
@@ -1095,18 +1102,27 @@ public class GCModel
         return paddedTotal - GladiusFileWriter.HeaderSize;
     }
 
-    public void WriteDSLI(BinaryWriter writer,int dslsSize)
+    public void WriteDSLI(BinaryWriter writer)
     {
-        int total = GladiusFileWriter.HeaderSize+16;
-
+        int total = GladiusFileWriter.HeaderSize;
+        total += (8 * m_displayListHeaders.Count); // (start,length for each
         GladiusFileWriter.WriteASCIIString(writer, "DSLI");
         writer.Write(total); // block size
         writer.Write(0); 
         writer.Write(1);
-        writer.Write(0);
-        Common.WriteBigEndian(writer, (int)dslsSize);
-        writer.Write(0);
-        writer.Write(0);
+
+
+        int runningTotal = 0;
+        
+        foreach (DisplayListHeader header in m_displayListHeaders)
+        {
+            Common.WriteBigEndian(writer,runningTotal);
+            Common.WriteBigEndian(writer,header.entries.Count);
+            runningTotal += header.entries.Count;
+        }
+        
+        //writer.Write(0);
+        //writer.Write(0);
     }
 
     public void WriteDSLC(BinaryWriter writer)
@@ -1228,20 +1244,27 @@ public class GCModel
 
     public void WriteMESH(BinaryWriter writer)
     {
-        int total = GladiusFileWriter.HeaderSize + 32;
+        int total = GladiusFileWriter.HeaderSize + (24 * m_paxElements.Count);
         GladiusFileWriter.WriteASCIIString(writer, "MESH");
         writer.Write(total); // block size
         writer.Write(0); // number of elements.
         writer.Write(1);
+
+        for (int i = 0; i < m_paxElements.Count;++i)
+        {
+            m_paxElements[i].ToStream(writer);
+        }
         
-        writer.Write(24); // union
-        writer.Write(0);  // listptr
-        writer.Write(0); // shader id
-        writer.Write(1); // element count
-        writer.Write(0); // vert array id 
-        writer.Write(0);
-        writer.Write(0);
-        writer.Write(0);
+        
+        
+        // writer.Write(24); // union
+        // writer.Write(0);  // listptr
+        // writer.Write(0); // shader id
+        // writer.Write(1); // element count
+        // writer.Write(0); // vert array id 
+        // writer.Write(0);
+        // writer.Write(0);
+        // writer.Write(0);
 
     }
 
@@ -1277,6 +1300,8 @@ public class GCModel
     
     public List<String> m_selsInfo = new List<string>();
     public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
+    public List<PaxElement> m_paxElements = new List<PaxElement>();
+
     public IndexedVector3 MinBB;
     public IndexedVector3 MaxBB;
     public IndexedVector3 Center;

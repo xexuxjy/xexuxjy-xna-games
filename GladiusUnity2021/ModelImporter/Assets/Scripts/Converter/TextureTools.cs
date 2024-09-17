@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Scripting;
 using Color = System.Drawing.Color;
 
 // lots of help from https://github.com/Nominom/BCnEncoder.NET
@@ -20,23 +21,35 @@ namespace GCTextureTools
 {
     public class GCGladiusImage
     {
-        private TextureHeaderInfo m_header = null;
+        //private TextureHeaderInfo m_header = null;
         private string strFileName = string.Empty;
         public string ImageName;
+
+        public byte HeaderSize;
+        public byte Type;
+        public byte MipCount;
+        public byte BitDepth;
+
+        public ushort UStart;
+        public ushort VStart;
+        
+        public string Name;
+        public ushort Width;
+        public ushort Height;
+    
+        public int Size;
+        public int Offset;
+        public int NameOffset;
+        
+        
+        public bool ContainsDefinition;
+        public ushort DXTType = 0;
+        public ushort CompressType;
+
+        
         public DirectBitmap DirectBitmap;
 
         public byte[] CompressedData;
-
-        public GCGladiusImage()
-        {
-            this.m_header = new TextureHeaderInfo();
-        }
-
-        public TextureHeaderInfo ImageHeader
-        {
-            get { return this.m_header; }
-            set { this.m_header = value; }
-        }
 
 
         public string FileName
@@ -44,27 +57,50 @@ namespace GCTextureTools
             get { return this.strFileName; }
         }
 
+
+        public string DebugInfo
+        {
+        
+        get {
+            return
+                $" HdrSz : {HeaderSize} DXT : {DXTType} MipCnt : {MipCount} BitDepth : {BitDepth}  Us : {UStart} Vs : {VStart}  W : {Width} H : {Height}  Size: {Size} Offset : {Offset} NOffset : {NameOffset}";
+        }
+    }
+
+        public string DebugInfoCSV
+        {
+
+            get
+            {
+                return
+                    $"{HeaderSize},{DXTType} , {MipCount}, {BitDepth} , {UStart}, {VStart} , {Width}, {Height}  , {Size} , {Offset}, {NameOffset}";
+            }
+        }
+
         public static GCGladiusImage FromStream(BinaryReader reader)
         {
             GCGladiusImage gcGladiusImage = new GCGladiusImage();
 
-            short compressType = reader.ReadInt16();
-            gcGladiusImage.ImageHeader.DXTType = (ushort)(compressType == 17152 ? 5 : 1);
+            gcGladiusImage.HeaderSize = reader.ReadByte();
+            gcGladiusImage.DXTType = reader.ReadByte();
+            gcGladiusImage.MipCount = reader.ReadByte();
+            gcGladiusImage.BitDepth = reader.ReadByte();
 
+            gcGladiusImage.UStart = reader.ReadUInt16();
+            gcGladiusImage.VStart = reader.ReadUInt16();
+            
+            gcGladiusImage.Width = reader.ReadUInt16();
+            gcGladiusImage.Height = reader.ReadUInt16();
+            gcGladiusImage.Size = reader.ReadInt32();
+            gcGladiusImage.Offset = reader.ReadInt32();
+            gcGladiusImage.NameOffset = reader.ReadInt32();
+
+            // padding
+            reader.ReadInt32();
+            reader.ReadInt32();
+            
             // need to store these.
-            reader.ReadInt16();
-            reader.ReadInt32();
-
-            gcGladiusImage.ImageHeader.Width = reader.ReadInt16();
-            gcGladiusImage.ImageHeader.Height = reader.ReadInt16();
-            gcGladiusImage.ImageHeader.CompressedSize = reader.ReadInt32();
-
-            // need to store these.
-            reader.ReadInt32();
-            reader.ReadInt32();
-            reader.ReadInt32();
-            reader.ReadInt32();
-
+            
             return gcGladiusImage;
         }
     }
@@ -128,10 +164,10 @@ namespace GCTextureTools
 
                 foreach (GCGladiusImage image in imageList)
                 {
-                    image.CompressedData = binReader.ReadBytes(image.ImageHeader.CompressedSize);
+                    image.CompressedData = binReader.ReadBytes(image.Size);
 
-                    int potWidth = image.ImageHeader.Width; // ToNextNearest(image.Header.Width);
-                    int potHeight = image.ImageHeader.Height; // ToNextNearest(image.Header.Height);
+                    int potWidth = image.Width; // ToNextNearest(image.Header.Width);
+                    int potHeight = image.Height; // ToNextNearest(image.Header.Height);
 
                     //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
 
@@ -200,7 +236,7 @@ namespace GCTextureTools
             }
         }
 
-        public List<GCGladiusImage> LoadDataChunk(BinaryReader binReader, StringBuilder debugInfo)
+        public static List<GCGladiusImage> LoadDataChunk(BinaryReader binReader, StringBuilder debugInfo)
         {
             string name = "";
             List<BaseChunk> chunkList = new List<BaseChunk>();
@@ -229,7 +265,7 @@ namespace GCTextureTools
             PTTPChunk pttpChunk = (PTTPChunk)chunkList.Find(x => x is PTTPChunk);
             NAMEChunk nameChunk = (NAMEChunk)chunkList.Find(x => x is NAMEChunk);
             NMTPChunk nmptChunk = (NMTPChunk)chunkList.Find(x => x is NMTPChunk);
-            PFHDChunk pfhdChunk = (PFHDChunk)chunkList.Find(x => x is NMTPChunk);
+            PFHDChunk pfhdChunk = (PFHDChunk)chunkList.Find(x => x is PFHDChunk);
             PTDTChunk ptdtChunk = (PTDTChunk)chunkList.Find(x => x is PTDTChunk);
 
             List<GCGladiusImage> imageList = pfhdChunk.ProcessData(nmptChunk.Data, debugInfo);
@@ -331,8 +367,8 @@ namespace GCTextureTools
 
             byte[] input = image.CompressedData;
 
-            int width = image.ImageHeader.Width;
-            int height = image.ImageHeader.Height;
+            int width = image.Width;
+            int height = image.Height;
 
             int blockCountX = (width + 3) / 4;
             int blockCountY = (height + 3) / 4;

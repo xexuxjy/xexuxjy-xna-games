@@ -66,34 +66,23 @@ public class GladiusGCExporter : UnityEditor.Editor
 
         if (newPath != null && newPath.Length != 0)
         {
-            string testPath = newPath.Substring(0,(newPath.LastIndexOf("/"))+1);
             
+            string modelName = gameObject.name;
+            
+            string outputPath = newPath.Substring(0,(newPath.LastIndexOf("/"))+1);
+            
+            string appPath = Application.dataPath.Remove(Application.dataPath.LastIndexOf("/Assets"), "/Assets".Length)+"/";
+            string objectName = outputPath + modelName + ".pax";
+
             GCModel model = GCModel.CreateFromGameObject(gameObject);
             if (model != null)
             {
-                using (BinaryWriter bw = new BinaryWriter(File.Create(newPath)))
+                using (BinaryWriter bw = new BinaryWriter(File.Create(objectName)))
                 {
                     model.WriteData(bw);
                 }
-                
-                // texture data should be in the gcmodel now?
 
-                foreach (TextureHeaderInfo textureInfo in model.m_textures)
-                {
-                    Renderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-                    if (meshRenderer == null)
-                    {
-                        meshRenderer = gameObject.GetComponent<SkinnedMeshRenderer>();
-                    }
-
-                    Material m = meshRenderer.sharedMaterial;
-
-                    string textureName = m.mainTexture.name.ToLower();
-                    string modelName = gameObject.name;
-
-                    GCImageExtractor.EncodeFile((Texture2D)m.mainTexture, textureName + ".tga",
-                        testPath + modelName + ".ptx");
-                }
+                WriteTextures(gameObject, outputPath);
             }
             else
             {
@@ -151,45 +140,52 @@ public class GladiusGCExporter : UnityEditor.Editor
 
         if (newPath != null && newPath.Length != 0)
         {
-            string testPath = newPath.Substring(0, (newPath.LastIndexOf("/")) + 1);
+            string outputPath = newPath.Substring(0, (newPath.LastIndexOf("/")) + 1);
             string modelName = gameObject.name;
 
-            MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
-            List<Texture2D> textureList = new List<Texture2D>();
-            foreach (MeshRenderer meshRenderer in meshRenderers)
-            {
-                Texture2D texture = (Texture2D)meshRenderer.sharedMaterial.mainTexture;
-                if (texture != null)
-                {
-                    if (!texture.isReadable)
-                    {
-                        EditorUtility.DisplayDialog("Texture Not Readable", "The texture must have it's read/write flag set ",
-                            "Okay");
-                        return;
-                    }
-                    
-                    textureList.Add(texture);
-                }
-                else
-                {
-                    EditorUtility.DisplayDialog("Texture not 2D", "Only works with basic Texture2D",
-                        "Okay");
-                    return;
-                }
 
-            }
-
-            string appPath = Application.dataPath.Remove(Application.dataPath.LastIndexOf("/Assets"), "/Assets".Length)+"/";
-            string imageName = testPath + modelName + ".ptx";
-            GCImageExtractor.EncodeFile(textureList,imageName,imageName);
-
-            GCImageExtractor.DecodeFile(appPath+imageName,"d:/tmp/gladius-gc-texture-test/");
+            WriteTextures(gameObject, outputPath);
+            
+            //GCImageExtractor.DecodeFile(appPath+imageName,"d:/tmp/gladius-gc-texture-test/");
 
 
         }
     }
 
 
+    public static void WriteTextures(GameObject gameObject,string outputPath)
+    {
+        string modelName = gameObject.name;
+        MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+        List<Texture2D> textureList = new List<Texture2D>();
+        foreach (MeshRenderer meshRenderer in meshRenderers)
+        {
+            Texture2D texture = (Texture2D)meshRenderer.sharedMaterial.mainTexture;
+            if (texture != null)
+            {
+                if (!texture.isReadable)
+                {
+                    EditorUtility.DisplayDialog("Texture Not Readable", "The texture must have it's read/write flag set ",
+                        "Okay");
+                    return;
+                }
+                    
+                textureList.Add(texture);
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Texture not 2D", "Only works with basic Texture2D",
+                    "Okay");
+                return;
+            }
+
+        }
+
+        string appPath = Application.dataPath.Remove(Application.dataPath.LastIndexOf("/Assets"), "/Assets".Length)+"/";
+        string imageName = outputPath + modelName + ".ptx";
+        GCImageExtractor.EncodeFile(textureList,imageName,imageName);
+    }
+    
 
 
 

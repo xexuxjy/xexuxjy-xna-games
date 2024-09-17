@@ -2069,6 +2069,9 @@ public class BaseChunk
         char[] type = binReader.ReadChars(4);
         uint size = binReader.ReadUInt32();
 
+        string typeString = new string(type);
+        
+        debugInfo.AppendLine("Trying : " + typeString);
         binReader.BaseStream.Position -= 8;
 
         object[] parameters = new object[] { binReader };
@@ -2743,9 +2746,15 @@ public class PaxElement
     public uint AlwaysZero2;
     public uint Unk2;
 
+    public PaxElement(uint materialId, uint elementCount)
+    {
+        MaterialId = materialId;
+        ElementCount = 1;
+    }
+    
     public static PaxElement FromStream(BinaryReader reader)
     {
-        PaxElement paxElement = new PaxElement();
+        PaxElement paxElement = new PaxElement(0,0);
         paxElement.Unk1 = reader.ReadUInt32();
         paxElement.AlwaysZero = reader.ReadUInt32();
         paxElement.MaterialId = reader.ReadUInt32();
@@ -3034,14 +3043,18 @@ public class PTDTChunk : BaseChunk
         {
             foreach (GCGladiusImage image in imageList)
             {
-                image.CompressedData = binReader.ReadBytes(image.ImageHeader.CompressedSize);
+                //if (image.ImageHeader.CompressedSize > 0)
+                if (image.Size > 100)
+                {
+                    image.CompressedData = binReader.ReadBytes(image.Size);
 
-                int potWidth = image.ImageHeader.Width; // ToNextNearest(image.Header.Width);
-                int potHeight = image.ImageHeader.Height; // ToNextNearest(image.Header.Height);
+                    int potWidth = image.Width; // ToNextNearest(image.Header.Width);
+                    int potHeight = image.Height; // ToNextNearest(image.Header.Height);
 
-                //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
+                    //image.DirectBitmap = new DirectBitmap(potWidth, potHeight);
 
-                GCImageExtractor.DecompressDXT1GC(image, debugInfo);
+                    GCImageExtractor.DecompressDXT1GC(image, debugInfo);
+                }
             }
             
         }
