@@ -1572,9 +1572,7 @@ public class CommonTextureData
     public string fullPathName;
     public uint width;
     public uint height;
-    //public String fbxMaterialNodeId;
-    //public String fbxTextureNodeId;
-    //public String fbxVideoNodeId;
+
 }
 
 
@@ -1821,33 +1819,6 @@ public class MaterialData
 
     public void WriteInfo(StreamWriter sw)
     {
-        //StringBuilder sb = new StringBuilder();
-        //sb.AppendFormat("T{0} {1} {2} {3}
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //{4} {5:0.00000} {6} {7}", diffuseTextureId / XboxModel.s_textureBlockSize, header1, header2, header3, header4, startVal, header5, header6);
-        //sb.AppendLine();
-        //foreach (int[] db in m_data)
-        //{
-        //    foreach (int i in db)
-        //    {
-        //        sb.Append(String.Format("{0,10} ", i));
-        //    }
-        //    sb.AppendLine();
-        //}
-        //sb.AppendLine();
-        //sb.AppendFormat("{0:0.000000}", endVal);
-        //sb.AppendLine();
-        //sb.AppendLine("*******************************************");
-        //sw.WriteLine(sb.ToString());
     }
 
 }
@@ -2070,8 +2041,12 @@ public class BaseChunk
         uint size = binReader.ReadUInt32();
 
         string typeString = new string(type);
-        
-        debugInfo.AppendLine("Trying : " + typeString);
+
+        if (debugInfo != null)
+        {
+            debugInfo.AppendLine("Trying : " + typeString);
+        }
+
         binReader.BaseStream.Position -= 8;
 
         object[] parameters = new object[] { binReader };
