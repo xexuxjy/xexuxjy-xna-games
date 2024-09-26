@@ -124,12 +124,12 @@ public class GCModel
 
                 foreach (Vector3 v in meshFilter.sharedMesh.vertices)
                 {
-                    uniqueVertices.Add(v);
+                    uniqueVertices.Add(meshFilter.gameObject.transform.position + v);
                 }
 
                 foreach (Vector3 v in meshFilter.sharedMesh.normals)
                 {
-                    uniqueNormals.Add(v);
+                    uniqueNormals.Add(meshFilter.gameObject.transform.TransformDirection(v));
                 }
 
                 foreach (Vector2 v in meshFilter.sharedMesh.uv)
@@ -170,23 +170,37 @@ public class GCModel
                 for (int i = 0; i < meshFilter.sharedMesh.triangles.Length; i += 3)
                 {
                     int lookupIndex = meshFilter.sharedMesh.triangles[i];
-                    int posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
-                    int normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
-                    int uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+
+                    Vector3 sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] + meshFilter.gameObject.transform.position;
+                    Vector3 sharedMeshN = meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
+                    Vector2 sharedMeshU = meshFilter.sharedMesh.uv[lookupIndex];
+                    
+                    
+                    int posIndex = model.m_points.IndexOf(sharedMeshV);
+                    int normIndex = model.m_normals.IndexOf(sharedMeshN);
+                    int uvIndex = model.m_uvs.IndexOf(sharedMeshU);
 
                     dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
 
                     lookupIndex = meshFilter.sharedMesh.triangles[i + 2];
-                    posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
-                    normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
-                    uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
-
+                    sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] + meshFilter.gameObject.transform.position;
+                    sharedMeshN = meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
+                    sharedMeshU = meshFilter.sharedMesh.uv[lookupIndex];
+                    
+                    posIndex = model.m_points.IndexOf(sharedMeshV);
+                    normIndex = model.m_normals.IndexOf(sharedMeshN);
+                    uvIndex = model.m_uvs.IndexOf(sharedMeshU);
                     dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
 
+
                     lookupIndex = meshFilter.sharedMesh.triangles[i + 1];
-                    posIndex = model.m_points.IndexOf(meshFilter.sharedMesh.vertices[lookupIndex]);
-                    normIndex = model.m_normals.IndexOf(meshFilter.sharedMesh.normals[lookupIndex]);
-                    uvIndex = model.m_uvs.IndexOf(meshFilter.sharedMesh.uv[lookupIndex]);
+                    sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] + meshFilter.gameObject.transform.position;
+                    sharedMeshN = meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
+                    sharedMeshU = meshFilter.sharedMesh.uv[lookupIndex];
+                    
+                    posIndex = model.m_points.IndexOf(sharedMeshV);
+                    normIndex = model.m_normals.IndexOf(sharedMeshN);
+                    uvIndex = model.m_uvs.IndexOf(sharedMeshU);
 
                     dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
 
@@ -670,11 +684,15 @@ public class GCModel
     {
         int total = GladiusFileWriter.HeaderSize;
         GladiusFileWriter.WriteASCIIString(writer, "SHDR");
-        total += Lambert2ShaderData.Length;
+        total += Lambert2ShaderData.Length * m_textures.Count;
         writer.Write(total); // block size
         writer.Write(0);
-        writer.Write(1); // num materials, 1 for now
-        writer.Write(Lambert2ShaderData);
+        writer.Write(m_textures.Count); // num materials, 1 for now
+
+        for (int i = 0; i < m_textures.Count; ++i)
+        {
+            writer.Write(Lambert2ShaderData);
+        }
     }
 
     public void WriteTXTR(BinaryWriter writer)
@@ -743,8 +761,12 @@ public class GCModel
     {
         int total = GladiusFileWriter.HeaderSize;
         total += (8 * m_displayListHeaders.Count); // (start,length for each
+        
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        
         GladiusFileWriter.WriteASCIIString(writer, "DSLI");
-        writer.Write(total); // block size
+        writer.Write(paddedTotal); // block size
         writer.Write(0); 
         writer.Write(1);
 
@@ -764,6 +786,7 @@ public class GCModel
             startPos += dsliInfo.length;
         }
         
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
         //writer.Write(0);
         //writer.Write(0);
     }
@@ -889,7 +912,11 @@ public class GCModel
     {
         int total = GladiusFileWriter.HeaderSize + (24 * m_paxElements.Count);
         GladiusFileWriter.WriteASCIIString(writer, "MESH");
-        writer.Write(total); // block size
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        writer.Write(paddedTotal); // block size
+        
         writer.Write(0); // number of elements.
         writer.Write(1);
 
@@ -898,16 +925,7 @@ public class GCModel
             m_paxElements[i].ToStream(writer);
         }
         
-        
-        
-        // writer.Write(24); // union
-        // writer.Write(0);  // listptr
-        // writer.Write(0); // shader id
-        // writer.Write(1); // element count
-        // writer.Write(0); // vert array id 
-        // writer.Write(0);
-        // writer.Write(0);
-        // writer.Write(0);
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
 
     }
 
@@ -972,7 +990,7 @@ public class DisplayListHeader
 {
     public byte header1 = 0x98;
     public ushort pad1 = 0;
-    public byte primitiveFlags;
+    public byte primitiveFlags = 0x90;
     public ushort indexCount;
     public bool Valid = true;
     public List<DisplayListEntry> entries = new List<DisplayListEntry>();
