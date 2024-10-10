@@ -1924,6 +1924,23 @@ public class CommonVertexInstance
         return String.Format("P {0}\tN {1}\tUV {2}\tE {3}", CommonModelImporter.ToString(Position), CommonModelImporter.ToString(Normal), CommonModelImporter.ToString(UV), ExtraData);
     }
 
+    protected bool Equals(CommonVertexInstance other)
+    {
+        return Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((CommonVertexInstance)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Position, Normal, Tangent);
+    }
 
     public int ActiveWeights()
     {
@@ -2400,7 +2417,9 @@ public class UV0Chunk : BaseChunk
 
 public class SHDRChunk : BaseChunk
 {
-    public byte[] Data;
+    public byte[] RawData;
+
+    public List<GCMaterial> Data = new List<GCMaterial>();
 
     public static char[] ChunkName()
     {
@@ -2412,7 +2431,16 @@ public class SHDRChunk : BaseChunk
     {
         SHDRChunk chunk = new SHDRChunk();
         chunk.BaseFromStream(binReader);
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize)); 
+        long temp = binReader.BaseStream.Position;
+        chunk.RawData = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        binReader.BaseStream.Position = temp;
+
+        for (int i = 0; i < chunk.NumElements; ++i)
+        {
+            GCMaterial gcm = GCMaterial.ReadStream(binReader);
+            chunk.Data.Add(gcm);
+        }
+        
         
         return chunk;
     }
@@ -2714,7 +2742,7 @@ public class NMTPChunk : BaseChunk
 
 public class PaxElement
 {
-    public uint Unk1;
+    public uint VertexCount;
     public uint AlwaysZero;
     public uint MaterialId;
     public uint ElementCount;
@@ -2730,7 +2758,7 @@ public class PaxElement
     public static PaxElement FromStream(BinaryReader reader)
     {
         PaxElement paxElement = new PaxElement(0,0);
-        paxElement.Unk1 = reader.ReadUInt32();
+        paxElement.VertexCount = reader.ReadUInt32();
         paxElement.AlwaysZero = reader.ReadUInt32();
         paxElement.MaterialId = reader.ReadUInt32();
         paxElement.ElementCount = reader.ReadUInt32();
@@ -2742,7 +2770,7 @@ public class PaxElement
 
     public void ToStream(BinaryWriter writer)
     {
-        writer.Write(Unk1);
+        writer.Write(VertexCount);
         writer.Write(AlwaysZero);
         writer.Write(MaterialId);
         writer.Write(ElementCount);

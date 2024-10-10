@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -163,9 +164,13 @@ public class GCModel
         
         foreach (MeshFilter meshFilter in gameObj.GetComponentsInChildren<MeshFilter>())
         {
+            HashSet<int> uniqueVertexIds = new HashSet<int>();
+
             MeshRenderer meshRenderer = meshFilter.gameObject.GetComponent<MeshRenderer>();
             if (meshFilter != null && meshRenderer != null)
             {
+
+                
                 DisplayListHeader dlh = new DisplayListHeader();
                 for (int i = 0; i < meshFilter.sharedMesh.triangles.Length; i += 3)
                 {
@@ -203,6 +208,7 @@ public class GCModel
                     uvIndex = model.m_uvs.IndexOf(sharedMeshU);
 
                     dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
+                    uniqueVertexIds.Add(posIndex);
 
                 }
 
@@ -222,6 +228,10 @@ public class GCModel
                 model.m_selsInfo.Add(textureName);
 
                 PaxElement paxElement = new PaxElement((uint)subObjectCount, 0);
+                paxElement.VertexCount = (uint)uniqueVertexIds.Count;
+                
+                
+                
                 model.m_paxElements.Add(paxElement);
                 
                 subObjectCount++;
@@ -274,6 +284,7 @@ public class GCModel
         DSLSChunk dslsChunk  = (DSLSChunk)m_chunkList.Find(x => x is DSLSChunk);
         DSLCChunk dslcChunk = (DSLCChunk)m_chunkList.Find(x => x is DSLCChunk);
         MESHChunk meshChunk = (MESHChunk)m_chunkList.Find(x => x is MESHChunk);
+        ELEMChunk elemChunk = (ELEMChunk)m_chunkList.Find(x => x is ELEMChunk);
         
         if (posiChunk != null && normChunk != null && uv0Chunk != null && dsliChunk != null && dslsChunk != null && meshChunk != null)
         {
@@ -317,16 +328,14 @@ public class GCModel
                     cvi.Normal = normChunk.Data[entry.NormIndex];
                     cvi.UV = uv0Chunk.Data[entry.UVIndex];
 
-                    vertexDataAndDesc.VertexData.Add(cvi);
-                    
-                    int vertexIndex = dlh.entries[i].PosIndex;
-                    vertexIndex = vertexCount;
-
-                    vertexCount++;
-                    
-                    // adjust vertexIndex to be in bounds for this submesh
-                    //vertexIndex -= previousMeshVertexCount;
-                   
+                    int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
+                    if (vertexIndex == -1)
+                    {
+                        vertexDataAndDesc.VertexData.Add(cvi);
+                        vertexIndex = vertexCount;
+                        vertexCount++;
+                        
+                    }
                     commonMeshData.Vertices.Add(vertexIndex);                    
 
                     meshIndices.Add(meshIndexCount);
@@ -767,7 +776,7 @@ public class GCModel
         
         GladiusFileWriter.WriteASCIIString(writer, "DSLI");
         writer.Write(paddedTotal); // block size
-        writer.Write(0); 
+        writer.Write(1); 
         writer.Write(1);
 
 
@@ -795,11 +804,16 @@ public class GCModel
     {
         int total = GladiusFileWriter.HeaderSize+16;
         GladiusFileWriter.WriteASCIIString(writer, "DSLC");
-
         writer.Write(total); // block size
         writer.Write(1);
-        writer.Write(1);
-        writer.Write(1);
+        writer.Write(m_paxElements.Count);
+        
+        writer.Write((byte)1);
+        writer.Write((byte)1);
+        writer.Write((byte)0);
+        writer.Write((byte)0);
+        
+        
         writer.Write(0);
         writer.Write(0);
         writer.Write(0);
@@ -903,7 +917,7 @@ public class GCModel
         GladiusFileWriter.WriteASCIIString(writer, "NLVL");
 
         writer.Write(blockSize); // block size
-        writer.Write(2); // number of elements.
+        writer.Write(2); 
         writer.Write(1);
         GladiusFileWriter.WriteNull(writer, 0x10);
     }
@@ -917,8 +931,9 @@ public class GCModel
 
         writer.Write(paddedTotal); // block size
         
-        writer.Write(0); // number of elements.
-        writer.Write(1);
+        writer.Write(0);
+        writer.Write(m_paxElements.Count); // number of elements
+        
 
         for (int i = 0; i < m_paxElements.Count;++i)
         {
@@ -936,14 +951,14 @@ public class GCModel
 
         writer.Write(total); // block size
         writer.Write(0); 
-        writer.Write(1);
+        writer.Write(m_paxElements.Count);
 
-        int val = (4 | (m_displayListHeaders[0].entries.Count << 8));
-        
-        writer.Write(val);
-        writer.Write(0);
-        writer.Write(0);
-        writer.Write(0);
+        for (int i = 0;i < m_displayListHeaders.Count; ++i)
+        {
+            int val = (4 | (m_displayListHeaders[i].entries.Count << 8));
+            writer.Write(val);
+            writer.Write(0);
+        }
     }
 
 
@@ -1140,4 +1155,38 @@ public class TextureHeaderInfo
     
     public bool ContainsDefinition;
     public ushort DXTType = 0;
+}
+
+
+public class GCMaterial
+{
+    public int MaterialId = -1;
+    public char[] MatNameRaw = new char[124];
+    public string MatName;
+    public uint SelectSetMask;
+    public uint AttributeFlags;
+    public uint AttributeValues;
+    public byte[] TexIndex = new byte[8];
+    public byte[] BlendModes= new byte[8];
+    public byte[] GenModes= new byte[8];
+
+
+    public static GCMaterial ReadStream(BinaryReader reader)
+    {
+        GCMaterial gcm = new GCMaterial();
+        gcm.MaterialId = reader.ReadInt32();
+        gcm.MatNameRaw = reader.ReadChars(124);
+
+        gcm.MatName = new string(gcm.MatNameRaw);
+        gcm.SelectSetMask = reader.ReadUInt32();
+        gcm.AttributeFlags = reader.ReadUInt32();
+        gcm.AttributeValues = reader.ReadUInt32();
+
+        gcm.TexIndex = reader.ReadBytes(8);
+        gcm.BlendModes = reader.ReadBytes(8);
+        gcm.GenModes = reader.ReadBytes(8);
+        
+        return gcm;
+    }
+    
 }
