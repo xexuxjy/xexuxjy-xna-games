@@ -2437,7 +2437,7 @@ public class SHDRChunk : BaseChunk
 
         for (int i = 0; i < chunk.NumElements; ++i)
         {
-            GCMaterial gcm = GCMaterial.ReadStream(binReader);
+            GCMaterial gcm = GCMaterial.FromStream(binReader);
             chunk.Data.Add(gcm);
         }
         
@@ -2466,7 +2466,7 @@ public class DSLIChunk : BaseChunk
         
         for (int i = 0; i < numElements; ++i)
         {
-            DSLIInfo info = DSLIInfo.ReadStream(binReader);
+            DSLIInfo info = DSLIInfo.FromStream(binReader);
             if (info.length > 0)
             {
                 chunk.Data.Add(info);
