@@ -2810,6 +2810,9 @@ public class PaxElement
 //     uint16		mAnimShift;
 //     uint16		pad[13];
 // };
+
+// skinned model file contains dsls,uv, but no pos or norm, so that data, along with the weights must be in the skin.
+
 public class SKINChunk : BaseChunk
 {
     public byte[] Data;
@@ -2888,6 +2891,7 @@ public class SKINChunk : BaseChunk
         
         chunk.AnimShift = Common.ToInt16BigEndian(binReader);
 
+        long dataPosition = afterHeaderPosition + StructureSize;
 
         binReader.BaseStream.Position = afterHeaderPosition + StructureSize + chunk.PointerList1;
         
@@ -2914,6 +2918,43 @@ public class SKINChunk : BaseChunk
             chunk.CSKAList.Add(cska);
         }
         
+        foreach (CSK1 csk1 in chunk.CSK1List)
+        {
+            binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
+            for (int i = 0; i < csk1.count; ++i)
+            {
+                
+                PosNorm16 pn16 = PosNorm16.FromStream(binReader);
+                csk1.ExtractedData.Add(pn16);
+            }
+
+            int ibreak = 0;
+        }
+
+        foreach (CSK2 csk2 in chunk.CSK2List)
+        {
+            binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
+            for (int i = 0; i < csk2.count; ++i)
+            {
+                
+                PosNorm16 pn16 = PosNorm16.FromStream(binReader);
+                csk2.ExtractedData.Add(pn16);
+            }
+
+            binReader.BaseStream.Position = dataPosition + csk2.weights;
+            for (int i = 0; i < csk2.count; ++i)
+            {
+                byte b1 = binReader.ReadByte();
+                byte b2 = binReader.ReadByte();
+
+                csk2.ExtractedWeights.Add((b1 / 255f, b2 / 255f));
+            }
+
+            
+            int ibreak = 0;
+        }
+        
+        
         
         binReader.BaseStream.Position = afterHeaderPosition;
             
@@ -2921,7 +2962,6 @@ public class SKINChunk : BaseChunk
         
         return chunk;
     }
-
 
     public static uint ReadAndRelocate(BinaryReader reader)
     {
@@ -2949,6 +2989,29 @@ public class SKINChunk : BaseChunk
     
 }
 
+public struct PosNorm16
+{
+    public short x;
+    public short y;
+    public short z;
+    public byte nx;
+    public byte ny;
+    public byte nz;
+
+    public static PosNorm16 FromStream(BinaryReader reader)
+    {
+        PosNorm16 pn16 = new PosNorm16();
+        pn16.x = reader.ReadInt16();
+        pn16.y = reader.ReadInt16();
+        pn16.z = reader.ReadInt16();
+        pn16.nx = reader.ReadByte();
+        pn16.ny = reader.ReadByte();
+        pn16.nz = reader.ReadByte();
+
+        return pn16;
+    }
+    
+}
 
 
 public class  CSK1
@@ -2958,6 +3021,8 @@ public class  CSK1
     public ushort	count;				// total verts in this packet
     public uint	vertSrc;
     public uint 	vertDst;
+
+    public List<PosNorm16> ExtractedData = new List<PosNorm16>();
 
     public static CSK1 FromStream(BinaryReader binReader)
     {
@@ -2980,6 +3045,9 @@ public class CSK2
     public uint weights;
     public uint vertSrc;
     public uint vertDst;
+
+    public List<(float, float)> ExtractedWeights = new List<(float, float)>();
+    public List<PosNorm16> ExtractedData = new List<PosNorm16>();
 
     public static CSK2 FromStream(BinaryReader binReader)
     {
