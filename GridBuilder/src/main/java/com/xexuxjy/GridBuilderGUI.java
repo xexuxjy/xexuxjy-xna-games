@@ -365,6 +365,19 @@ public class GridBuilderGUI
 		{
 			GridFile gridFile = new GridFile();
 
+			if(args != null && args.length == 1)
+			{
+				try
+				{
+					File file = new File(args[0]);
+					gridFile = GridFile.loadData(file);
+				}
+				catch(Exception e)
+				{
+					logger.error("",e);
+				}
+			}
+			
 			JFrame jframe = new JFrame();
 
 			GridBuilderGUI gui = new GridBuilderGUI();
