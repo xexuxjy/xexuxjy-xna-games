@@ -2817,36 +2817,8 @@ public class SKINChunk : BaseChunk
 {
     public byte[] Data;
 
-    public int Size;
-    public int NumberVertices;
-    public int NumberBones;
-    public short Components;
-    
-    public short Flags;
-    public short NumList1;
-    public short NumList2;
-    public short NumListA;
-    
-    public uint PointerList1;
-    public uint PointerList2;
-    public uint PointerListA;
+    public List<SkinData> SkinDataList = new List<SkinData>();
 
-    public int NumPackets1;
-    public uint PacketStart1; //pointer uint16
-    public uint PacketSize1; //pointer uint16
-
-    public int NumPackets2;
-    public uint PacketStart2; //pointer uint16
-    public uint PacketSize2; //pointer uint16
-
-    public uint VoidPointer;
-    public uint WeightData;
-    public short AnimShift;
-
-    public List<CSK1> CSK1List = new List<CSK1>();
-    public List<CSK2> CSK2List = new List<CSK2>();
-    public List<CSKA> CSKAList = new List<CSKA>();
-    
     public const int StructureSize = 96;
     
     public static char[] ChunkName()
@@ -2860,99 +2832,68 @@ public class SKINChunk : BaseChunk
         chunk.BaseFromStream(binReader);
         long afterHeaderPosition = binReader.BaseStream.Position;
 
-        chunk.Size = Common.ReadInt32BigEndian(binReader);
-        chunk.NumberVertices = Common.ReadInt32BigEndian(binReader);
-        chunk.NumberBones = Common.ReadInt32BigEndian(binReader);
-        chunk.Components = Common.ToInt16BigEndian(binReader);
-        
-        chunk.Flags = Common.ToInt16BigEndian(binReader);
-        chunk.NumList1 = Common.ToInt16BigEndian(binReader);
-        chunk.NumList2 = Common.ToInt16BigEndian(binReader);
-        chunk.NumListA = Common.ToInt16BigEndian(binReader);
-
-        // align
-        binReader.BaseStream.Position += 2;
-        
-        chunk.PointerList1 = ReadAndRelocate(binReader);
-        chunk.PointerList2 = ReadAndRelocate(binReader);
-        chunk.PointerListA = ReadAndRelocate(binReader);
-        
-        
-        chunk.NumPackets1 = Common.ReadInt32BigEndian(binReader);
-        chunk.PacketStart1 = ReadAndRelocate(binReader);
-        chunk.PacketSize1 = ReadAndRelocate(binReader);
-
-        chunk.NumPackets2 = Common.ReadInt32BigEndian(binReader);
-        chunk.PacketStart2 = ReadAndRelocate(binReader);
-        chunk.PacketSize2 = ReadAndRelocate(binReader);
-
-        chunk.VoidPointer = ReadAndRelocate(binReader);
-        chunk.WeightData = ReadAndRelocate(binReader);
-        
-        chunk.AnimShift = Common.ToInt16BigEndian(binReader);
-
-        long dataPosition = afterHeaderPosition + StructureSize;
-
-        binReader.BaseStream.Position = afterHeaderPosition + StructureSize + chunk.PointerList1;
-        
-        for (int loop1 = 0; loop1 < chunk.NumList1; loop1++)
+        for (int i = 0; i < chunk.NumElements; ++i)
         {
-            CSK1 csk1 = CSK1.FromStream(binReader);
-            chunk.CSK1List.Add(csk1);
-
-        }
-        
-        binReader.BaseStream.Position = afterHeaderPosition + StructureSize + chunk.PointerList2;
-        
-        for (int loop1 = 0; loop1 < chunk.NumList2; loop1++)
-        {
-            CSK2 csk2 = CSK2.FromStream(binReader);
-            chunk.CSK2List.Add(csk2);
-        }
-        
-        
-        binReader.BaseStream.Position = afterHeaderPosition + StructureSize + chunk.PointerListA;
-        for (int loop1 = 0; loop1 < chunk.NumListA; loop1++)
-        {
-            CSKA cska = CSKA.FromStream(binReader);
-            chunk.CSKAList.Add(cska);
-        }
-        
-        foreach (CSK1 csk1 in chunk.CSK1List)
-        {
-            binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
-            for (int i = 0; i < csk1.count; ++i)
-            {
-                
-                PosNorm16 pn16 = PosNorm16.FromStream(binReader);
-                csk1.ExtractedData.Add(pn16);
-            }
-
-            int ibreak = 0;
+            SkinData skinData = SkinData.FromStream(binReader);
+            chunk.SkinDataList.Add(skinData);
         }
 
-        foreach (CSK2 csk2 in chunk.CSK2List)
+
+        binReader.BaseStream.Position = afterHeaderPosition + (chunk.NumElements * SkinData.StructureSize);
+        long dataPosition = binReader.BaseStream.Position;
+        
+        
+        foreach (SkinData skinData in chunk.SkinDataList)
         {
-            binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
-            for (int i = 0; i < csk2.count; ++i)
-            {
-                
-                PosNorm16 pn16 = PosNorm16.FromStream(binReader);
-                csk2.ExtractedData.Add(pn16);
-            }
+            skinData.ReadSkinWeights(binReader,dataPosition);
+        }
 
-            binReader.BaseStream.Position = dataPosition + csk2.weights;
-            for (int i = 0; i < csk2.count; ++i)
-            {
-                byte b1 = binReader.ReadByte();
-                byte b2 = binReader.ReadByte();
 
-                csk2.ExtractedWeights.Add((b1 / 255f, b2 / 255f));
-            }
+        //long dataPosition = binReader.BaseStream.Position;
+        
 
+        foreach (SkinData skinData in chunk.SkinDataList)
+        {
             
-            int ibreak = 0;
+            foreach (CSK1 csk1 in skinData.CSK1List)
+            {
+                binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
+                for (int i = 0; i < csk1.count; ++i)
+                {
+
+                    PosNorm16 pn16 = PosNorm16.FromStream(binReader);
+                    csk1.ExtractedData.Add(pn16);
+                }
+
+                int ibreak = 0;
+            }
+
+            foreach (CSK2 csk2 in skinData.CSK2List)
+            {
+                binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
+                for (int i = 0; i < csk2.count; ++i)
+                {
+
+                    PosNorm16 pn16 = PosNorm16.FromStream(binReader);
+                    csk2.ExtractedData.Add(pn16);
+                }
+
+                binReader.BaseStream.Position = dataPosition + csk2.weights;
+                for (int i = 0; i < csk2.count; ++i)
+                {
+                    byte b1 = binReader.ReadByte();
+                    byte b2 = binReader.ReadByte();
+
+                    csk2.ExtractedWeights.Add((b1 / 255f, b2 / 255f));
+                }
+
+
+                int ibreak = 0;
+            }
+
         }
+        
+        
         
         
         
@@ -2986,6 +2927,118 @@ public class SKINChunk : BaseChunk
     	return baseValue;
     }
 
+    
+}
+
+public class SkinData
+{
+    public int Size;
+    public int NumberVertices;
+    public int NumberBones;
+    public short Components;
+    
+    public short Flags;
+    public short NumList1;
+    public short NumList2;
+    public short NumListA;
+    
+    public uint PointerList1;
+    public uint PointerList2;
+    public uint PointerListA;
+
+    public int NumPackets1;
+    public uint PacketStart1; //pointer uint16
+    public uint PacketSize1; //pointer uint16
+
+    public int NumPackets2;
+    public uint PacketStart2; //pointer uint16
+    public uint PacketSize2; //pointer uint16
+
+    public uint VoidPointer;
+    public uint WeightData;
+    public short AnimShift;
+
+    public List<CSK1> CSK1List = new List<CSK1>();
+    public List<CSK2> CSK2List = new List<CSK2>();
+    public List<CSKA> CSKAList = new List<CSKA>();
+    
+    public const int StructureSize = 96;
+
+    public static SkinData FromStream(BinaryReader binReader)
+    {
+        long startPosition = binReader.BaseStream.Position;
+
+
+        SkinData skinData = new SkinData();
+
+        skinData.Size = Common.ReadInt32BigEndian(binReader);
+        skinData.NumberVertices = Common.ReadInt32BigEndian(binReader);
+        skinData.NumberBones = Common.ReadInt32BigEndian(binReader);
+        skinData.Components = Common.ToInt16BigEndian(binReader);
+
+        skinData.Flags = Common.ToInt16BigEndian(binReader);
+        skinData.NumList1 = Common.ToInt16BigEndian(binReader);
+        skinData.NumList2 = Common.ToInt16BigEndian(binReader);
+        skinData.NumListA = Common.ToInt16BigEndian(binReader);
+
+        // align
+        if (binReader.BaseStream.Position % 4 != 0)
+        {
+            binReader.BaseStream.Position += 2;
+        }
+
+        skinData.PointerList1 = SKINChunk.ReadAndRelocate(binReader);
+        skinData.PointerList2 = SKINChunk.ReadAndRelocate(binReader);
+        skinData.PointerListA = SKINChunk.ReadAndRelocate(binReader);
+
+
+        skinData.NumPackets1 = Common.ReadInt32BigEndian(binReader);
+        skinData.PacketStart1 = SKINChunk.ReadAndRelocate(binReader);
+        skinData.PacketSize1 = SKINChunk.ReadAndRelocate(binReader);
+
+        skinData.NumPackets2 = Common.ReadInt32BigEndian(binReader);
+        skinData.PacketStart2 = SKINChunk.ReadAndRelocate(binReader);
+        skinData.PacketSize2 = SKINChunk.ReadAndRelocate(binReader);
+
+        skinData.VoidPointer = SKINChunk.ReadAndRelocate(binReader);
+        skinData.WeightData = SKINChunk.ReadAndRelocate(binReader);
+
+        skinData.AnimShift = Common.ToInt16BigEndian(binReader);
+
+        long extraPadding = 26;
+        binReader.BaseStream.Position += extraPadding;
+        
+        return skinData;
+    }
+
+    public void ReadSkinWeights(BinaryReader binReader,long dataPosition)
+    {
+        binReader.BaseStream.Position = dataPosition + PointerList1;
+
+        for (int loop1 = 0; loop1 < NumList1; loop1++)
+        {
+            CSK1 csk1 = CSK1.FromStream(binReader);
+            CSK1List.Add(csk1);
+
+        }
+
+        binReader.BaseStream.Position = dataPosition + PointerList2;
+
+        for (int loop1 = 0; loop1 < NumList2; loop1++)
+        {
+            CSK2 csk2 = CSK2.FromStream(binReader);
+            CSK2List.Add(csk2);
+        }
+
+
+        binReader.BaseStream.Position = dataPosition + PointerListA;
+        for (int loop1 = 0; loop1 < NumListA; loop1++)
+        {
+            CSKA cska = CSKA.FromStream(binReader);
+            CSKAList.Add(cska);
+        }
+        
+    }
     
 }
 
@@ -3030,11 +3083,48 @@ public class  CSK1
         csk1.idxBone = binReader.ReadByte();
         csk1._pad = binReader.ReadByte();
         csk1.count = Common.ToUInt16BigEndian(binReader);
-        //csk1.vertSrc = Common.ReadUInt32BigEndian(binReader);
         csk1.vertSrc = SKINChunk.ReadAndRelocate(binReader);
         csk1.vertDst = Common.ReadUInt32BigEndian(binReader);
         return csk1;
     }
+    
+    /*
+
+    typedef struct { int16 x, y, z; } tVecQ;
+    typedef struct { int8 x, y, z; } tNormQ;
+
+
+   	const int size_vector = 2*3;
+	const int size_normal = 3;
+	const int size_index = 2;
+	const int size_weight = 1;
+
+	KDCArray<COnezie>   onezies;
+	KDCArray<CTwozie>   twozies;
+	KDCArray<CAccList>  acclist(numBones,numBones,0); 
+	KDCArray<CBoneData> idxBones(numBones,numBones,0); 
+
+	const int numVerts = pI->numVerts;
+
+	const bool bBiTan = pI->aBinIds && pI->aTanIds;
+	const int numNormals = bBiTan ? 3 : 1;
+	const int size_pos_norm = size_vector + size_normal*numNormals;
+
+     
+    // supply the actual data
+    for( int j=0; j<count; j++ )
+    {
+        const char* pD = (char*)pSK1->vertSrc + j*size_pos_norm;
+        const int idx = data.vertSrc[j];
+        *(tVecQ*)pD = ((tVecQ*)aPos)[idx];
+        *(tNormQ*)(pD+size_vector) = ((tNormQ*)aNrms)[pI->aNrmIds[idx]];
+        if (bBiTan)
+        {
+            *(tNormQ*)(pD+size_vector+size_normal) = ((tNormQ*)aNrms)[pI->aBinIds[idx]];
+            *(tNormQ*)(pD+size_vector+2*size_normal) = ((tNormQ*)aNrms)[pI->aTanIds[idx]];
+        }
+    }
+    */
 };
 
 
