@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,25 +19,52 @@ public static class CommonModelImporter
 
     public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };
     public static char[] cprtTag = new char[] { 'C', 'P', 'R', 'T' };
-    public static char[] selsTag = new char[] { 'S', 'E', 'L', 'S' }; // External link information? referes to textures, other models, entities and so on? 
+
+    public static char[]
+        selsTag = new char[]
+        {
+            'S', 'E', 'L', 'S'
+        }; // External link information? referes to textures, other models, entities and so on? 
+
     public static char[] cntrTag = new char[] { 'C', 'N', 'T', 'R' };
     public static char[] shdrTag = new char[] { 'S', 'H', 'D', 'R' };
+
     public static char[] txtrTag = new char[] { 'T', 'X', 'T', 'R' };
+
     //static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
-    public static char[] dslsTag = new char[] { 'D', 'S', 'L', 'S' };   // DisplayList information - int16 pairs of position,normal,uv0 - possible that some uv's also used for weights?
-    public static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' };   // display list -offsets and lengths
-    public static char[] dslcTag = new char[] { 'D', 'S', 'L', 'C' };   // seems to contain the number of display lists and then bytes at 01 to say used?
+    public static char[]
+        dslsTag = new char[]
+        {
+            'D', 'S', 'L', 'S'
+        }; // DisplayList information - int16 pairs of position,normal,uv0 - possible that some uv's also used for weights?
+
+    public static char[] dsliTag = new char[] { 'D', 'S', 'L', 'I' }; // display list -offsets and lengths
+
+    public static char[]
+        dslcTag = new char[]
+            { 'D', 'S', 'L', 'C' }; // seems to contain the number of display lists and then bytes at 01 to say used?
+
     public static char[] posiTag = new char[] { 'P', 'O', 'S', 'I' };
     public static char[] normTag = new char[] { 'N', 'O', 'R', 'M' };
-    public static char[] uv0Tag = new char[] { 'U', 'V', '0', ' ' };    // for non-skinned models, this seems to be 2 bigendian float32's
-    public static char[] uv1Tag = new char[] { 'U', 'V', '1', ' ' };    // for non-skinned models, this seems to be 2 bigendian float32's
+
+    public static char[]
+        uv0Tag = new char[] { 'U', 'V', '0', ' ' }; // for non-skinned models, this seems to be 2 bigendian float32's
+
+    public static char[]
+        uv1Tag = new char[] { 'U', 'V', '1', ' ' }; // for non-skinned models, this seems to be 2 bigendian float32's
 
     public static char[] vflaTag = new char[] { 'V', 'F', 'L', 'A' };
     public static char[] ramTag = new char[] { 'R', 'A', 'M', ' ' };
     public static char[] msarTag = new char[] { 'M', 'S', 'A', 'R' };
     public static char[] nlvlTag = new char[] { 'N', 'L', 'V', 'L' };
-    public static char[] meshTag = new char[] { 'M', 'E', 'S', 'H' };   // how many mesh segments exist. each block is 24 bytes
-    public static char[] elemTag = new char[] { 'E', 'L', 'E', 'M' };   // how many elements , matches mesh segments, each block is 8 bytes,
+
+    public static char[]
+        meshTag = new char[] { 'M', 'E', 'S', 'H' }; // how many mesh segments exist. each block is 24 bytes
+
+    public static char[]
+        elemTag = new char[]
+            { 'E', 'L', 'E', 'M' }; // how many elements , matches mesh segments, each block is 8 bytes,
+
     public static char[] skelTag = new char[] { 'S', 'K', 'E', 'L' };
     public static char[] skinTag = new char[] { 'S', 'K', 'I', 'N' };
     public static char[] nameTag = new char[] { 'N', 'A', 'M', 'E' };
@@ -58,13 +84,15 @@ public static class CommonModelImporter
     public static char[] endTag = new char[] { 'E', 'N', 'D', '.' };
     public static char[] obbtTag = new char[] { 'O', 'B', 'B', 'T' };
     public static char[] paddTag = new char[] { 'P', 'A', 'D', 'D' };
-    
 
 
-    public static char[][] allTags = { versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag,
-                                      dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag,
-                                      ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
-                                      vflgTag,stypTag,nameTag };
+    public static char[][] allTags =
+    {
+        versTag, cprtTag, selsTag, cntrTag, shdrTag, txtrTag,
+        dslsTag, dsliTag, dslcTag, posiTag, normTag, uv0Tag, vflaTag,
+        ramTag, msarTag, nlvlTag, meshTag, elemTag, skelTag, skinTag,
+        vflgTag, stypTag, nameTag
+    };
 
     public static char[][] xboxTags = { versTag, cprtTag, selsTag, txtrTag, xrndTag };
 
@@ -75,7 +103,7 @@ public static class CommonModelImporter
     {
         ChunkMapping = BuildChunkDictionary();
     }
-    
+
     public static int CountCharsInStream(BinaryReader binReader, char[] charsToFind)
     {
         int count = 0;
@@ -92,6 +120,7 @@ public static class CommonModelImporter
         catch (Exception e)
         {
         }
+
         return count;
     }
 
@@ -121,6 +150,7 @@ public static class CommonModelImporter
         c.a = (byte)((aCol >> 24) & 0xFF);
         return c;
     }
+
     public static Color FromStreamColor(BinaryReader reader)
     {
         Color c = new Color(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
@@ -131,10 +161,14 @@ public static class CommonModelImporter
     public static String ToStringC(IndexedMatrix m)
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M11, m.M12, m.M13, m.M14));
-        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M21, m.M22, m.M23, m.M24));
-        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M31, m.M32, m.M33, m.M34));
-        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000} ", m.M41, m.M42, m.M43, m.M44));
+        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M11, m.M12, m.M13,
+            m.M14));
+        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M21, m.M22, m.M23,
+            m.M24));
+        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000}, ", m.M31, m.M32, m.M33,
+            m.M34));
+        sb.Append(String.Format("{0:0.00000000}, {1:0.00000000}, {2:0.00000000}, {3:0.00000000} ", m.M41, m.M42, m.M43,
+            m.M44));
         return sb.ToString();
     }
 
@@ -173,6 +207,7 @@ public static class CommonModelImporter
         {
             sb.AppendFormat("{0:0.00000000},");
         }
+
         return sb.ToString();
     }
 
@@ -190,16 +225,18 @@ public static class CommonModelImporter
                 {
                     binReader.BaseStream.Position -= 4;
                 }
+
                 break;
             }
         }
+
         if (!found)
         {
             binReader.BaseStream.Position = startPosition;
             int ibreak = 0;
         }
-        return found;
 
+        return found;
     }
 
     public static bool PositionAtFloats(BinaryReader binReader, float[] vals, bool skipBack = true)
@@ -220,6 +257,7 @@ public static class CommonModelImporter
                     {
                         binReader.BaseStream.Position -= 4 * vals.Length;
                     }
+
                     break;
                 }
             }
@@ -228,18 +266,16 @@ public static class CommonModelImporter
                 count = 0;
                 binReader.BaseStream.Position -= ((count - 1) * 4);
             }
-
         }
+
         if (!found)
         {
             binReader.BaseStream.Position = startPosition;
             int ibreak = 0;
         }
+
         return found;
-
     }
-
-
 
 
     public static bool PositionAtInt(BinaryReader binReader, int val, bool skipBack = true)
@@ -256,19 +292,23 @@ public static class CommonModelImporter
                 {
                     binReader.BaseStream.Position -= 4;
                 }
+
                 break;
             }
         }
+
         if (!found)
         {
             binReader.BaseStream.Position = startPosition;
             int ibreak = 0;
         }
+
         return found;
     }
 
 
-    public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, bool resetPositionIfNotFound = true)
+    public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind,
+        bool resetPositionIfNotFound = true)
     {
         bool found = false;
         byte b = (byte)' ';
@@ -297,6 +337,7 @@ public static class CommonModelImporter
         catch (Exception e)
         {
         }
+
         if (!found && resetPositionIfNotFound)
         {
             binReader.BaseStream.Position = currentPosition;
@@ -304,10 +345,10 @@ public static class CommonModelImporter
 
 
         return found;
-
     }
 
-    public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, long endRange, bool resetPositionIfNotFound = true)
+    public static bool FindCharsInStream(BinaryReader binReader, char[] charsToFind, long endRange,
+        bool resetPositionIfNotFound = true)
     {
         bool found = false;
         byte b = (byte)' ';
@@ -322,6 +363,7 @@ public static class CommonModelImporter
                     found = false;
                     break;
                 }
+
                 b = binReader.ReadByte();
                 if (b == charsToFind[lastFoundIndex])
                 {
@@ -341,6 +383,7 @@ public static class CommonModelImporter
         catch (Exception e)
         {
         }
+
         if (!found && resetPositionIfNotFound)
         {
             binReader.BaseStream.Position = currentPosition;
@@ -348,12 +391,11 @@ public static class CommonModelImporter
 
 
         return found;
-
     }
 
 
-
-    public static bool FindCharsInStream(BinaryReader binReader, byte[] charsToFind, bool resetPositionIfNotFound = true)
+    public static bool FindCharsInStream(BinaryReader binReader, byte[] charsToFind,
+        bool resetPositionIfNotFound = true)
     {
         bool found = false;
         byte b = (byte)' ';
@@ -371,6 +413,7 @@ public static class CommonModelImporter
                     {
                         int ibreak = 0;
                     }
+
                     if (lastFoundIndex == charsToFind.Length)
                     {
                         found = true;
@@ -387,6 +430,7 @@ public static class CommonModelImporter
         catch (Exception e)
         {
         }
+
         if (!found && resetPositionIfNotFound)
         {
             binReader.BaseStream.Position = currentPosition;
@@ -394,11 +438,7 @@ public static class CommonModelImporter
 
 
         return found;
-
     }
-
-
-
 
 
     public static bool FuzzyEquals(float x, float y, float eps = float.Epsilon)
@@ -411,14 +451,17 @@ public static class CommonModelImporter
     {
         return ReadSingle(data, offset, false);
     }
+
     public static float ReadSingleLittleEndian(byte[] data, int offset)
     {
         return ReadSingle(data, offset, true);
     }
+
     private static float ReadSingle(byte[] data, int offset, bool littleEndian)
     {
         if (BitConverter.IsLittleEndian != littleEndian)
-        {   // other-endian; reverse this portion of the data (4 bytes)
+        {
+            // other-endian; reverse this portion of the data (4 bytes)
             byte tmp = data[offset];
             data[offset] = data[offset + 3];
             data[offset + 3] = tmp;
@@ -426,6 +469,7 @@ public static class CommonModelImporter
             data[offset + 1] = data[offset + 2];
             data[offset + 2] = tmp;
         }
+
         return BitConverter.ToSingle(data, offset);
     }
 
@@ -484,7 +528,6 @@ public static class CommonModelImporter
 
     public static float ToFloatInt16(BinaryReader reader)
     {
-
         short val = reader.ReadInt16();
         float result = (val / (float)(Int16.MaxValue));
         return result;
@@ -515,8 +558,10 @@ public static class CommonModelImporter
                     hex.Append(" ");
                 }
             }
+
             return hex.ToString();
         }
+
         return "";
     }
 
@@ -532,12 +577,12 @@ public static class CommonModelImporter
             {
                 hex.AppendFormat("{0:X2}", ba[i]);
             }
+
             return hex.ToString();
         }
+
         return "";
     }
-
-
 
 
     public static int ToInt16BigEndian(byte[] buf, int i)
@@ -550,7 +595,6 @@ public static class CommonModelImporter
         reader.Read(s_buffer, 0, s_buffer.Length);
         return Common.ToInt32BigEndian(s_buffer, 0);
     }
-
 
 
     public static IndexedVector3 FromStreamInt32(BinaryReader reader)
@@ -613,6 +657,7 @@ public static class CommonModelImporter
         {
             val = -256 + val;
         }
+
         return ((float)val);
     }
 
@@ -658,8 +703,6 @@ public static class CommonModelImporter
     //    //}
     //    //return ((float)val);
     //}
-
-
 
 
     public static IndexedVector3 FromStreamVector3BE(BinaryReader reader)
@@ -709,17 +752,20 @@ public static class CommonModelImporter
                 count++;
                 sb.Append(b);
             }
+
             count++;
             if (sb.Length > 0)
             {
                 names.Add(sb.ToString());
             }
+
             if (binReader.PeekChar() == 0)
             {
                 break;
             }
         }
     }
+
     public static void ReadNullSeparatedNames(BinaryReader binReader, char[] tagName, List<String> selsNames)
     {
         if (Common.FindCharsInStream(binReader, tagName))
@@ -731,7 +777,7 @@ public static class CommonModelImporter
 
             selsSectionLength -= 16;
 
-    
+
             char b;
             int count = 0;
             while (count < selsSectionLength)
@@ -742,6 +788,7 @@ public static class CommonModelImporter
                     count++;
                     sb.Append(b);
                 }
+
                 count++;
                 if (sb.Length > 0)
                 {
@@ -751,7 +798,8 @@ public static class CommonModelImporter
         }
     }
 
-    public static void ReadNullSeparatedNames(BinaryReader binReader, long position, int numAnims, List<String> selsNames)
+    public static void ReadNullSeparatedNames(BinaryReader binReader, long position, int numAnims,
+        List<String> selsNames)
     {
         binReader.BaseStream.Position = position;
         char b;
@@ -764,6 +812,7 @@ public static class CommonModelImporter
                 count++;
                 sb.Append(b);
             }
+
             count++;
             if (sb.Length > 0)
             {
@@ -773,8 +822,8 @@ public static class CommonModelImporter
     }
 
 
-
-    public static void ReadTextureNames(BinaryReader binReader, char[] tagName, List<String> textureNames, bool stripExtension = false)
+    public static void ReadTextureNames(BinaryReader binReader, char[] tagName, List<String> textureNames,
+        bool stripExtension = false)
     {
         if (Common.FindCharsInStream(binReader, tagName, true))
         {
@@ -793,6 +842,7 @@ public static class CommonModelImporter
                     count++;
                     sb.Append(b);
                 }
+
                 count++;
 
                 String textureName = sb.ToString();
@@ -800,14 +850,15 @@ public static class CommonModelImporter
                 {
                     textureName = textureName.Substring(0, textureName.IndexOf('.'));
                 }
+
                 textureNames.Add(textureName);
                 binReader.BaseStream.Position += (textureSlotSize - count);
-
             }
         }
     }
 
-    public static MaterialData FromStream(BinaryReader binReader, int numMeshes, int sectionLength, MaterialBlock materialBlock)
+    public static MaterialData FromStream(BinaryReader binReader, int numMeshes, int sectionLength,
+        MaterialBlock materialBlock)
     {
         MaterialData smd = new MaterialData();
         smd.Header.x = binReader.ReadSingle();
@@ -833,8 +884,7 @@ public static class CommonModelImporter
             {
                 binReader.BaseStream.Position -= 4;
             }
-        }
-        while (val1 == 3073);
+        } while (val1 == 3073);
 
         int val4 = binReader.ReadInt32();
         //Debug.Assert(val4 == 330761);
@@ -855,8 +905,7 @@ public static class CommonModelImporter
         List<int[]> iaList = new List<int[]>();
         while (keepGoing)
         {
-
-            data = new int[7];//new int[count - 17];
+            data = new int[7]; //new int[count - 17];
 
             for (int i = 0; i < data.Length; ++i)
             {
@@ -872,8 +921,8 @@ public static class CommonModelImporter
                     iaList.Add(data);
                 }
             }
-
         }
+
         //if (Common.PositionAtFloat(binReader, 1.0f) || Common.PositionAtFloat(binReader, 0.0f))
         if (Common.PositionAtFloat(binReader, 1.0f))
         {
@@ -895,16 +944,16 @@ public static class CommonModelImporter
     public static Dictionary<char[], MethodInfo> BuildChunkDictionary()
     {
         Dictionary<char[], MethodInfo> methodInfoDictionary = new Dictionary<char[], MethodInfo>();
-        foreach (Type type in Assembly.GetAssembly(typeof(BaseChunk)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(BaseChunk))))
+        foreach (Type type in Assembly.GetAssembly(typeof(BaseChunk)).GetTypes().Where(myType =>
+                     myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(BaseChunk))))
         {
-            char[] chunkName = (char[]) type.GetMethod("ChunkName").Invoke(null, null);
+            char[] chunkName = (char[])type.GetMethod("ChunkName").Invoke(null, null);
             MethodInfo methodInfo = type.GetMethod("FromStream");
             methodInfoDictionary[chunkName] = methodInfo;
         }
 
         return methodInfoDictionary;
     }
-    
 }
 
 public class R2V2
@@ -913,11 +962,11 @@ public class R2V2
 
 
     public byte[] r2v2Tag = new byte[4];
-    public int sizecounter48;  // seems to be a decrementing field that is always 0x48 different to previous/next
+    public int sizecounter48; // seems to be a decrementing field that is always 0x48 different to previous/next
     public int tag201;
     public int tag0;
     public int tag1;
-    public int order;       // -1 (
+    public int order; // -1 (
     public int textureNum; // which of the textures mentioned this mesh block uses.
     public byte[] nonzerostuff = new byte[28];
     public int numVertices;
@@ -979,12 +1028,13 @@ public class R2V2
             {
                 sb.Append(" ");
             }
+
             sb.Append(r2v2.hexString[i]);
         }
+
         r2v2.hexStringFormatted = sb.ToString();
 
         return r2v2;
-
     }
 }
 
@@ -1002,18 +1052,13 @@ public class BoneNode
     public byte NameIndex;
     public byte ParentIndex;
 
-    public String DummyName
-    {
-        get; set;
-    }
+    public String DummyName { get; set; }
 
     public string UniqueName
     {
-        get
-        {
-            return name + "--" + Index + "--" + Type;
-        }
+        get { return name + "--" + Index + "--" + Type; }
     }
+
     public BoneNode parent;
 
     public const int kDontTranslate = 1;
@@ -1039,11 +1084,13 @@ public class BoneNode
 
     public override String ToString()
     {
-        String result = String.Format("N[{0}]\t\t id1[{1}]\t id2[{2}]\t pr[{3}]\t f[{4}]\n", name, Index, NameIndex, ParentIndex, Type);
-        result += String.Format("pos[{0:0.0000},{1:0.0000},{2:0.0000}] rot[{3:0.0000} ,{4:0.0000} ,{5:0.0000} ,{6:0.0000}]", offset.x, offset.y, offset.z, rotation.x, rotation.y, rotation.z, rotation.w);
+        String result = String.Format("N[{0}]\t\t id1[{1}]\t id2[{2}]\t pr[{3}]\t f[{4}]\n", name, Index, NameIndex,
+            ParentIndex, Type);
+        result += String.Format(
+            "pos[{0:0.0000},{1:0.0000},{2:0.0000}] rot[{3:0.0000} ,{4:0.0000} ,{5:0.0000} ,{6:0.0000}]", offset.x,
+            offset.y, offset.z, rotation.x, rotation.y, rotation.z, rotation.w);
         return result;
     }
-
 }
 
 
@@ -1054,9 +1101,17 @@ public class BaseModel
         m_name = name;
     }
 
-    public virtual void LoadData(BinaryReader binReader) { }
-    public virtual void BuildBB() { }
-    public virtual void Validate() { }
+    public virtual void LoadData(BinaryReader binReader)
+    {
+    }
+
+    public virtual void BuildBB()
+    {
+    }
+
+    public virtual void Validate()
+    {
+    }
 
 
     public TextureData FindTextureData(ShaderData sd)
@@ -1066,7 +1121,8 @@ public class BaseModel
         {
             index = 0;
         }
-        TextureData result = m_textures[index];//.textureName;
+
+        TextureData result = m_textures[index]; //.textureName;
         if (result.textureName.Contains("skygold"))
         {
             index = sd.textureId2;
@@ -1099,7 +1155,6 @@ public class BaseModel
                 }
             }
         }
-
     }
 
 
@@ -1113,28 +1168,28 @@ public class BaseModel
                 TagSizeAndData tsad = m_tagSizes[tag];
                 if (tsad.length > 0)
                 {
-
                     String tagOutputDirname = fileOutputDir + "/" + m_name + "/";
                     try
                     {
                         Directory.CreateDirectory(tagOutputDirname);
                     }
-                    catch (Exception e) { }
+                    catch (Exception e)
+                    {
+                    }
 
                     String tagOutputFilename = tagOutputDirname + "/" + new String(tag);
-                    using (System.IO.BinaryWriter outStream = new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create)))
+                    using (System.IO.BinaryWriter outStream =
+                           new BinaryWriter(File.Open(tagOutputFilename, FileMode.Create)))
                     {
                         outStream.Write(tsad.data);
                     }
                 }
             }
             catch (Exception e)
-            { }
+            {
+            }
         }
     }
-
-
-
 
 
     public void BuildSkeleton()
@@ -1157,7 +1212,6 @@ public class BaseModel
 
         if (BoneList.Count > 0)
         {
-
             m_rootBone = BoneList[0];
             //m_rootBone = m_bones[1];
             //BuildBoneList(m_rootBone, BoneList);
@@ -1188,19 +1242,14 @@ public class BaseModel
                     //}
 
                     // build tranform from parent chain?
-
                 }
 
                 SkelMinBB = min;
                 SkelMaxBB = max;
                 m_builtSkelBB = true;
             }
-
-
         }
-
     }
-
 
 
     //public void CalcBindFinalMatrix(BoneNode bone, Matrix parentMatrix)
@@ -1220,7 +1269,6 @@ public class BaseModel
     {
         get { return true; }
     }
-
 
 
     public List<BoneNode> BoneList
@@ -1243,6 +1291,7 @@ public class BaseModel
     public List<String> m_textureNames = new List<String>();
     public List<Vector3> m_centers = new List<Vector3>();
     public List<String> m_selsInfo = new List<string>();
+
     public List<ShaderData> m_shaderData = new List<ShaderData>();
     //public List<Vector2> UVs = new List<Vector2>();
 
@@ -1266,8 +1315,7 @@ public class BaseModel
     public bool m_hasColorInfo = false;
 
     //public int m_maxVertex;
-    public int MaxVertex
-    { get; set; }
+    public int MaxVertex { get; set; }
 
     public int m_maxNormal;
     public int m_maxUv;
@@ -1311,81 +1359,43 @@ public abstract class ModelSubMesh
 {
     public Vector3 MinBB;
     public Vector3 MaxBB;
-    public abstract int NumIndices
-    { get; }
-    public abstract int NumVertices
-    { get; }
+    public abstract int NumIndices { get; }
+    public abstract int NumVertices { get; }
 
-    public int LodLevel
-    { get; set; }
+    public int LodLevel { get; set; }
 
-    public int MeshId
-    {
-        get;
-        set;
-    }
-    public int MaxNormal
-    {
-        get;
-        set;
-    }
+    public int MeshId { get; set; }
+    public int MaxNormal { get; set; }
 
-    public int MaxVertex
-    {
-        get;
-        set;
-    }
+    public int MaxVertex { get; set; }
 
-    public int MinUV
-    {
-        get;
-        set;
-    }
+    public int MinUV { get; set; }
 
 
-    public int MaxUV
-    {
-        get;
-        set;
-    }
+    public int MaxUV { get; set; }
 
     public bool Valid
     {
         get { return true; }
     }
 
-    public abstract List<IndexedVector3> Vertices
-    {
-        get;
-    }
+    public abstract List<IndexedVector3> Vertices { get; }
 
-    public abstract List<IndexedVector3> Normals
-    {
-        get;
-    }
+    public abstract List<IndexedVector3> Normals { get; }
 
     public bool HasNormals
     {
         get { return Normals.Count > 0; }
     }
 
-    public abstract List<IndexedVector2> UVs
-    {
-        get;
-    }
+    public abstract List<IndexedVector2> UVs { get; }
 
-    public abstract List<ushort> Indices
-    {
-        get;
-    }
+    public abstract List<ushort> Indices { get; }
 
     public void BuildMinMax()
     {
         MinUV = int.MaxValue;
         MaxUV = int.MinValue;
-
-
-
     }
 
     //public List<Vector3> Vertices = new List<Vector3>();
@@ -1396,13 +1406,11 @@ public abstract class ModelSubMesh
 
 public class BaseModelReader
 {
-
     public virtual BaseModel LoadSingleModel(String modelPath, bool readDisplayLists = true)
     {
         return null;
     }
 }
-
 
 
 public class TagSizeAndData
@@ -1414,7 +1422,6 @@ public class TagSizeAndData
         reader.BaseStream.Position -= 8;
         t.data = reader.ReadBytes(t.length);
         return t;
-
     }
 
     public TagSizeAndData(int len)
@@ -1444,7 +1451,6 @@ public class ShaderData
     public int unk7;
 
 
-
     public static ShaderData FromStream(BinaryReader binReader)
     {
         ShaderData shader = new ShaderData();
@@ -1460,8 +1466,10 @@ public class ShaderData
             {
                 break;
             }
+
             sb.Append(b);
         }
+
         shader.shaderName = sb.ToString();
 
         shader.unk1 = binReader.ReadInt32();
@@ -1476,7 +1484,6 @@ public class ShaderData
         shader.unk7 = binReader.ReadInt32();
         return shader;
     }
-
 }
 
 public class CommonMaterialData
@@ -1508,15 +1515,16 @@ public class CommonMaterialData
 
     public bool IsTwoSided
     {
-        get 
+        get
         {
             //return ForceTwoSided || ((Flags & 0x0002) != 0); 
             return RenderState == 147;
         }
     }
+
     public bool IsTransparent
     {
-        get 
+        get
         {
             //return ForceTransparent || ((Flags & 0x0001) != 0); 
             return false;
@@ -1525,11 +1533,9 @@ public class CommonMaterialData
 
     public bool IsCubeMapReflect
     {
-        get
-        {
-            return ShaderSet == 8;
-        }
+        get { return ShaderSet == 8; }
     }
+
     public bool IsDetailMap
     {
         get
@@ -1544,7 +1550,6 @@ public class CommonMaterialData
     {
         //t { return ForceCutout || ((Flags & 0x0004) != 0); }
         get { return RenderState == 60; }
-
     }
 
 
@@ -1552,7 +1557,8 @@ public class CommonMaterialData
     {
         get
         {
-            return TextureData1.textureName.Contains(".cc") || (TextureData2 != null && TextureData2.textureName.Contains(".cc"));
+            return TextureData1.textureName.Contains(".cc") ||
+                   (TextureData2 != null && TextureData2.textureName.Contains(".cc"));
         }
     }
 
@@ -1563,7 +1569,6 @@ public class CommonMaterialData
         cmd.TextureData1.textureName = textureName;
         return cmd;
     }
-
 }
 
 public class CommonTextureData
@@ -1572,13 +1577,11 @@ public class CommonTextureData
     public string fullPathName;
     public uint width;
     public uint height;
-
 }
 
 
 public class CommonMeshData
 {
-
     public List<int> Indices = new List<int>();
     public List<int> Vertices = new List<int>();
     public int LodLevel;
@@ -1621,6 +1624,7 @@ public class CommonModelData
         {
             return XBoxModel.AdjustBone(index, adjust);
         }
+
         return index;
     }
 
@@ -1635,9 +1639,9 @@ public class CommonModelData
                 filteredList.Add(CommonMeshData[i]);
             }
         }
+
         return filteredList;
     }
-
 
 
     public BoneNode RootBone
@@ -1648,10 +1652,16 @@ public class CommonModelData
             {
                 return BoneList[0];
             }
+
             return null;
         }
     }
-    public bool Skinned { get { return BoneList.Count > 0; } }
+
+    public bool Skinned
+    {
+        get { return BoneList.Count > 0; }
+    }
+
     public bool AnimsLoaded;
 }
 
@@ -1669,6 +1679,7 @@ public class MaterialData2
     public TextureData TextureData1;
     public TextureData TextureData2;
     public String Name;
+
     public CommonMaterialData ToCommon()
     {
         CommonMaterialData commonMaterial = new CommonMaterialData();
@@ -1677,10 +1688,12 @@ public class MaterialData2
         {
             commonMaterial.TextureData1 = TextureData1.ToCommon();
         }
+
         if (TextureData2 != null)
         {
             commonMaterial.TextureData2 = TextureData2.ToCommon();
         }
+
         return commonMaterial;
     }
 }
@@ -1722,6 +1735,7 @@ public class MaterialData
             {
                 int ibreak = 0;
             }
+
             if (materialData.m_materialSlotInfoList.Count == 2)
             {
                 TextureData specularTexture = new TextureData();
@@ -1746,7 +1760,6 @@ public class MaterialData
                 textureData2.textureName = skygold;
             }
         }
-
     }
 
 
@@ -1757,6 +1770,7 @@ public class MaterialData
         {
             cmd.TextureData1 = textureData1.ToCommon();
         }
+
         if (textureData2 != null)
         {
             cmd.TextureData2 = textureData2.ToCommon();
@@ -1807,8 +1821,7 @@ public class MaterialData
                     {
                         binReader.BaseStream.Position -= 4;
                     }
-                }
-                while (val1 == 3073);
+                } while (val1 == 3073);
 
                 //int val4 = binReader.ReadInt32();
                 //Debug.Assert(val4 == 330761);
@@ -1820,10 +1833,7 @@ public class MaterialData
     public void WriteInfo(StreamWriter sw)
     {
     }
-
 }
-
-
 
 
 public class TextureData
@@ -1883,9 +1893,9 @@ public class TextureData
 
     public override string ToString()
     {
-        return String.Format("N {0} a {1} b {2} w {3} h {4} u1 {5} u2 {6}", textureName, minusOne, unknown, width, height, three, zero);
+        return String.Format("N {0} a {1} b {2} w {3} h {4} u1 {5} u2 {6}", textureName, minusOne, unknown, width,
+            height, three, zero);
     }
-
 }
 
 public class MatrixAndTime
@@ -1908,7 +1918,9 @@ public class CommonVertexInstance
     public IndexedVector2 UV2;
     public IndexedVector2 UV3;
     public Color DiffuseColor;
+
     public int ExtraData;
+
     //public byte[] Weights;
     public short[] BoneIndices;
     public short[] TranslatedBoneIndices;
@@ -1921,7 +1933,8 @@ public class CommonVertexInstance
 
     public override string ToString()
     {
-        return String.Format("P {0}\tN {1}\tUV {2}\tE {3}", CommonModelImporter.ToString(Position), CommonModelImporter.ToString(Normal), CommonModelImporter.ToString(UV), ExtraData);
+        return String.Format("P {0}\tN {1}\tUV {2}\tE {3}", CommonModelImporter.ToString(Position),
+            CommonModelImporter.ToString(Normal), CommonModelImporter.ToString(UV), ExtraData);
     }
 
     protected bool Equals(CommonVertexInstance other)
@@ -1952,6 +1965,7 @@ public class CommonVertexInstance
                 result++;
             }
         }
+
         return result;
     }
 
@@ -1964,13 +1978,13 @@ public class CommonVertexInstance
         {
             int ibreak = 0;
         }
+
         a = a >> (index * 8);
         return (float)a / (float)255;
     }
 
     public void SanityTest()
     {
-
         for (int i = 0; i < 3; ++i)
         {
             float weight = Weight(i);
@@ -1987,14 +2001,11 @@ public class CommonVertexInstance
                 {
                     int ibreak = 0;
                     sFailedCount++;
-
                 }
             }
-
         }
     }
 }
-
 
 
 public class MaterialSlotInfo
@@ -2014,10 +2025,7 @@ public class MaterialSlotInfo
         slotInfo.resolvedTexture = slotInfo.textureOffset / 64;
         return slotInfo;
     }
-
 }
-
-
 
 
 public class BaseChunk
@@ -2028,31 +2036,31 @@ public class BaseChunk
     public uint Version;
     public uint NumElements;
 
-    public static bool CompareSignature(char[] a,char[] b)
+    public static bool CompareSignature(char[] a, char[] b)
     {
-        if(a == null || b == null)
+        if (a == null || b == null)
         {
             return false;
         }
-        if(a.Length != b.Length)
+
+        if (a.Length != b.Length)
         {
             return false;
         }
-        for(int i=0; i<a.Length;++i)
+
+        for (int i = 0; i < a.Length; ++i)
         {
-            if(a[i] !=  b[i])
+            if (a[i] != b[i])
             {
                 return false;
             }
         }
+
         return true;
     }
 
-    
-    
-    
-    
-    public static BaseChunk FromStreamMaster(string name,BinaryReader binReader,StringBuilder debugInfo)
+
+    public static BaseChunk FromStreamMaster(string name, BinaryReader binReader, StringBuilder debugInfo)
     {
         char[] type = binReader.ReadChars(4);
         uint size = binReader.ReadUInt32();
@@ -2070,11 +2078,9 @@ public class BaseChunk
 
         foreach (char[] key in CommonModelImporter.ChunkMapping.Keys)
         {
-            
-            
-            if(CompareSignature(key,type))
+            if (CompareSignature(key, type))
             {
-                MethodInfo methodInfo = CommonModelImporter.ChunkMapping[key]; 
+                MethodInfo methodInfo = CommonModelImporter.ChunkMapping[key];
 
                 BaseChunk chunk = (BaseChunk)methodInfo.Invoke(null, parameters);
                 return chunk;
@@ -2085,10 +2091,9 @@ public class BaseChunk
         {
             debugInfo.AppendLine($"Can't find chunk [{new string(type)}] ");
         }
-        
+
         binReader.BaseStream.Position += size;
         return null;
-
     }
 
 
@@ -2109,12 +2114,13 @@ public class VERSChunk : BaseChunk
     public static char[] ChunkName()
     {
         return CommonModelImporter.versTag;
-    } 
+    }
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         VERSChunk chunk = new VERSChunk();
         chunk.BaseFromStream(binReader);
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize)); 
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
         return chunk;
     }
 }
@@ -2126,12 +2132,13 @@ public class CPRTChunk : BaseChunk
     public static char[] ChunkName()
     {
         return CommonModelImporter.cprtTag;
-    } 
+    }
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         CPRTChunk chunk = new CPRTChunk();
         chunk.BaseFromStream(binReader);
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize)); 
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
         return chunk;
     }
 }
@@ -2139,12 +2146,11 @@ public class CPRTChunk : BaseChunk
 
 public class SKELChunk : BaseChunk
 {
-    
     public static char[] ChunkName()
     {
         return CommonModelImporter.skelTag;
     }
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         SKELChunk chunk = new SKELChunk();
@@ -2164,6 +2170,7 @@ public class SKELChunk : BaseChunk
             //names.Add(node.name);
             chunk.BoneList.Add(node);
         }
+
         return chunk;
     }
 
@@ -2174,6 +2181,7 @@ public class SKELChunk : BaseChunk
 public class XboxChunk : BaseChunk
 {
     public byte[] Data;
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.xrndTag;
@@ -2186,7 +2194,7 @@ public class XboxChunk : BaseChunk
         chunk.BaseFromStream(binReader);
 
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
 }
@@ -2195,13 +2203,13 @@ public class XboxChunk : BaseChunk
 public class SELSChunk : BaseChunk
 {
     public List<SelectSet> SelectSetList = new List<SelectSet>();
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.selsTag;
     }
 
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         SELSChunk chunk = new SELSChunk();
@@ -2210,6 +2218,7 @@ public class SELSChunk : BaseChunk
         {
             chunk.SelectSetList.Add(SelectSet.FromStream(binReader));
         }
+
         return chunk;
     }
 }
@@ -2226,13 +2235,12 @@ public class SelectSet
         set.NameIndex = binReader.ReadUInt16();
         return set;
     }
-
 }
 
 public class NAMEChunk : BaseChunk
 {
     public List<string> Names = new List<string>();
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.nameTag;
@@ -2242,35 +2250,33 @@ public class NAMEChunk : BaseChunk
     {
         NAMEChunk chunk = new NAMEChunk();
         chunk.BaseFromStream(binReader);
-        CommonModelImporter.ReadNullSeparatedNames(binReader,  chunk.Names);
+        CommonModelImporter.ReadNullSeparatedNames(binReader, chunk.Names);
         return chunk;
     }
-
 }
 
 public class TXTRChunk : BaseChunk
 {
     public List<PaxTexture> Textures = new List<PaxTexture>();
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.txtrTag;
     }
 
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         TXTRChunk chunk = new TXTRChunk();
         chunk.BaseFromStream(binReader);
-        for(int i=0;i<chunk.NumElements;++i)
+        for (int i = 0; i < chunk.NumElements; ++i)
         {
             chunk.Textures.Add(PaxTexture.FromStream(binReader));
         }
+
         return chunk;
     }
-
 }
-
 
 
 public class PaxTexture
@@ -2306,8 +2312,6 @@ public class PaxTexture
         commonTextureData.height = Height;
         return commonTextureData;
     }
-    
-    
 }
 
 
@@ -2334,7 +2338,7 @@ public class OBBTChunk : BaseChunk
         return CommonModelImporter.obbtTag;
     }
 
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         OBBTChunk chunk = new OBBTChunk();
@@ -2353,7 +2357,7 @@ public class POSIChunk : BaseChunk
         return CommonModelImporter.posiTag;
     }
 
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         POSIChunk chunk = new POSIChunk();
@@ -2362,23 +2366,22 @@ public class POSIChunk : BaseChunk
         {
             chunk.Data.Add(Common.FromStreamVector3BE(binReader));
         }
-        
+
         return chunk;
     }
-
 }
 
 public class NORMChunk : BaseChunk
 {
     public List<IndexedVector3> Data = new List<IndexedVector3>();
 
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.normTag;
     }
 
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         NORMChunk chunk = new NORMChunk();
@@ -2387,7 +2390,7 @@ public class NORMChunk : BaseChunk
         {
             chunk.Data.Add(Common.FromStreamVector3BE(binReader));
         }
-        
+
         return chunk;
     }
 }
@@ -2401,7 +2404,7 @@ public class UV0Chunk : BaseChunk
         return CommonModelImporter.uv0Tag;
     }
 
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         UV0Chunk chunk = new UV0Chunk();
@@ -2410,7 +2413,7 @@ public class UV0Chunk : BaseChunk
         {
             chunk.Data.Add(Common.FromStreamVector2BE(binReader));
         }
-        
+
         return chunk;
     }
 }
@@ -2426,7 +2429,7 @@ public class SHDRChunk : BaseChunk
         return CommonModelImporter.shdrTag;
     }
 
-    
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         SHDRChunk chunk = new SHDRChunk();
@@ -2440,8 +2443,8 @@ public class SHDRChunk : BaseChunk
             GCMaterial gcm = GCMaterial.FromStream(binReader);
             chunk.Data.Add(gcm);
         }
-        
-        
+
+
         return chunk;
     }
 }
@@ -2455,15 +2458,15 @@ public class DSLIChunk : BaseChunk
     {
         return CommonModelImporter.dsliTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         DSLIChunk chunk = new DSLIChunk();
         chunk.BaseFromStream(binReader);
-        
+
         // possible chunks is data length - header length / 8 (2 int32)
         uint numElements = (chunk.Length - ChunkHeaderSize) / 8;
-        
+
         for (int i = 0; i < numElements; ++i)
         {
             DSLIInfo info = DSLIInfo.FromStream(binReader);
@@ -2472,10 +2475,9 @@ public class DSLIChunk : BaseChunk
                 chunk.Data.Add(info);
             }
         }
-        
+
         return chunk;
     }
-
 }
 
 public class DSLSChunk : BaseChunk
@@ -2488,13 +2490,13 @@ public class DSLSChunk : BaseChunk
     {
         return CommonModelImporter.dslsTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         DSLSChunk chunk = new DSLSChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
 
@@ -2515,49 +2517,45 @@ public class DSLSChunk : BaseChunk
             }
         }
     }
-    
 }
 
 public class CNTRChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.cntrTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         CNTRChunk chunk = new CNTRChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
-
 
 
 public class PADDChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.paddTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         PADDChunk chunk = new PADDChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
 
 // dslc chunk contains info on how many display lists exist for each mesh? (always/usually 1)
@@ -2565,107 +2563,99 @@ public class PADDChunk : BaseChunk
 public class DSLCChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.dslcTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         DSLCChunk chunk = new DSLCChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
 
 
 public class VFLAChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.vflaTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         VFLAChunk chunk = new VFLAChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
-
 
 
 public class RAMChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.ramTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         RAMChunk chunk = new RAMChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
 
 public class MSARChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.msarTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         MSARChunk chunk = new MSARChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
-
-
 
 
 public class NLVLChunk : BaseChunk
 {
     public byte[] Data;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.nlvlTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         NLVLChunk chunk = new NLVLChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
 
 public class MESHChunk : BaseChunk
@@ -2673,12 +2663,12 @@ public class MESHChunk : BaseChunk
     //public byte[] Data;
     public List<PaxElement> PaxElements = new List<PaxElement>();
 
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.meshTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         MESHChunk chunk = new MESHChunk();
@@ -2691,10 +2681,8 @@ public class MESHChunk : BaseChunk
         }
 
 
-        
         return chunk;
     }
-
 }
 
 
@@ -2706,16 +2694,15 @@ public class ELEMChunk : BaseChunk
     {
         return CommonModelImporter.elemTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         ELEMChunk chunk = new ELEMChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
 
 
@@ -2727,16 +2714,15 @@ public class NMTPChunk : BaseChunk
     {
         return CommonModelImporter.nmptTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         NMTPChunk chunk = new NMTPChunk();
         chunk.BaseFromStream(binReader);
-        CommonModelImporter.ReadNullSeparatedNames(binReader,  chunk.Data);
-        
+        CommonModelImporter.ReadNullSeparatedNames(binReader, chunk.Data);
+
         return chunk;
     }
-
 }
 
 
@@ -2754,10 +2740,10 @@ public class PaxElement
         MaterialId = materialId;
         ElementCount = 1;
     }
-    
+
     public static PaxElement FromStream(BinaryReader reader)
     {
-        PaxElement paxElement = new PaxElement(0,0);
+        PaxElement paxElement = new PaxElement(0, 0);
         paxElement.VertexCount = reader.ReadUInt32();
         paxElement.AlwaysZero = reader.ReadUInt32();
         paxElement.MaterialId = reader.ReadUInt32();
@@ -2820,47 +2806,32 @@ public class SKINChunk : BaseChunk
     public List<SkinData> SkinDataList = new List<SkinData>();
 
     public const int StructureSize = 96;
-    
+
     public static char[] ChunkName()
     {
         return CommonModelImporter.skinTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         SKINChunk chunk = new SKINChunk();
         chunk.BaseFromStream(binReader);
         long afterHeaderPosition = binReader.BaseStream.Position;
-
-        for (int i = 0; i < chunk.NumElements; ++i)
+        long nextHeaderStart = 0;
+        
+        for (int skinDataCount = 0; skinDataCount < chunk.NumElements; ++skinDataCount)
         {
+            binReader.BaseStream.Position = afterHeaderPosition + nextHeaderStart;
             SkinData skinData = SkinData.FromStream(binReader);
             chunk.SkinDataList.Add(skinData);
-        }
+            long dataPosition = binReader.BaseStream.Position;
+            skinData.ReadSkinWeights(binReader, dataPosition);
 
-
-        binReader.BaseStream.Position = afterHeaderPosition + (chunk.NumElements * SkinData.StructureSize);
-        long dataPosition = binReader.BaseStream.Position;
-        
-        
-        foreach (SkinData skinData in chunk.SkinDataList)
-        {
-            skinData.ReadSkinWeights(binReader,dataPosition);
-        }
-
-
-        //long dataPosition = binReader.BaseStream.Position;
-        
-
-        foreach (SkinData skinData in chunk.SkinDataList)
-        {
-            
             foreach (CSK1 csk1 in skinData.CSK1List)
             {
                 binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
                 for (int i = 0; i < csk1.count; ++i)
                 {
-
                     PosNorm16 pn16 = PosNorm16.FromStream(binReader);
                     csk1.ExtractedData.Add(pn16);
                 }
@@ -2873,7 +2844,6 @@ public class SKINChunk : BaseChunk
                 binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
                 for (int i = 0; i < csk2.count; ++i)
                 {
-
                     PosNorm16 pn16 = PosNorm16.FromStream(binReader);
                     csk2.ExtractedData.Add(pn16);
                 }
@@ -2888,46 +2858,43 @@ public class SKINChunk : BaseChunk
                 }
 
 
-                int ibreak = 0;
             }
 
+            nextHeaderStart += skinData.Size;
+
+            int ibreak2 = 0;
         }
-        
-        
-        
-        
-        
+
+
         binReader.BaseStream.Position = afterHeaderPosition;
-            
+
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
 
     public static uint ReadAndRelocate(BinaryReader reader)
     {
         reader.Read(CommonModelImporter.s_buffer, 0, CommonModelImporter.s_buffer.Length);
-        
+
         Debug.Assert(CommonModelImporter.s_buffer[0] == 0xdd);
         CommonModelImporter.s_buffer[0] = 0;
         return (uint)Common.ToInt32BigEndian(CommonModelImporter.s_buffer, 0);
-        
     }
-    
-    public static uint RelocateAddr (uint baseValue,uint offset)
+
+    public static uint RelocateAddr(uint baseValue, uint offset)
     {
         if (offset == 0)
         {
             return 0;
         }
-        Debug.Assert((offset & 0xdd000000) == 0xdd000000);
-        
-    	offset ^= 0xdd000000; 
-    	baseValue += offset;
-    	return baseValue;
-    }
 
-    
+        Debug.Assert((offset & 0xdd000000) == 0xdd000000);
+
+        offset ^= 0xdd000000;
+        baseValue += offset;
+        return baseValue;
+    }
 }
 
 public class SkinData
@@ -2936,12 +2903,12 @@ public class SkinData
     public int NumberVertices;
     public int NumberBones;
     public short Components;
-    
+
     public short Flags;
     public short NumList1;
     public short NumList2;
     public short NumListA;
-    
+
     public uint PointerList1;
     public uint PointerList2;
     public uint PointerListA;
@@ -2961,7 +2928,7 @@ public class SkinData
     public List<CSK1> CSK1List = new List<CSK1>();
     public List<CSK2> CSK2List = new List<CSK2>();
     public List<CSKA> CSKAList = new List<CSKA>();
-    
+
     public const int StructureSize = 96;
 
     public static SkinData FromStream(BinaryReader binReader)
@@ -3007,11 +2974,11 @@ public class SkinData
 
         long extraPadding = 26;
         binReader.BaseStream.Position += extraPadding;
-        
+
         return skinData;
     }
 
-    public void ReadSkinWeights(BinaryReader binReader,long dataPosition)
+    public void ReadSkinWeights(BinaryReader binReader, long dataPosition)
     {
         binReader.BaseStream.Position = dataPosition + PointerList1;
 
@@ -3019,7 +2986,6 @@ public class SkinData
         {
             CSK1 csk1 = CSK1.FromStream(binReader);
             CSK1List.Add(csk1);
-
         }
 
         binReader.BaseStream.Position = dataPosition + PointerList2;
@@ -3037,9 +3003,7 @@ public class SkinData
             CSKA cska = CSKA.FromStream(binReader);
             CSKAList.Add(cska);
         }
-        
     }
-    
 }
 
 public struct PosNorm16
@@ -3063,17 +3027,16 @@ public struct PosNorm16
 
         return pn16;
     }
-    
 }
 
 
-public class  CSK1
+public class CSK1
 {
-	public byte	idxBone;			// bone/matrix index
-    public byte   _pad;
-    public ushort	count;				// total verts in this packet
-    public uint	vertSrc;
-    public uint 	vertDst;
+    public byte idxBone; // bone/matrix index
+    public byte _pad;
+    public ushort count; // total verts in this packet
+    public uint vertSrc;
+    public uint vertDst;
 
     public List<PosNorm16> ExtractedData = new List<PosNorm16>();
 
@@ -3087,7 +3050,7 @@ public class  CSK1
         csk1.vertDst = Common.ReadUInt32BigEndian(binReader);
         return csk1;
     }
-    
+
     /*
 
     typedef struct { int16 x, y, z; } tVecQ;
@@ -3168,16 +3131,15 @@ public class CSKA
         CSKA cska = new CSKA();
         cska.idxBone = binReader.ReadByte();
         cska._pad = binReader.ReadByte();
-        cska.count = Common.ToUInt16BigEndian(binReader);;
+        cska.count = Common.ToUInt16BigEndian(binReader);
+        ;
         cska.weights = SKINChunk.ReadAndRelocate(binReader);
         cska.idxDst = SKINChunk.ReadAndRelocate(binReader);
         cska.vertSrc = SKINChunk.ReadAndRelocate(binReader);
 
         return cska;
-
     }
 }
-
 
 
 public class PTDTChunk : BaseChunk
@@ -3188,17 +3150,17 @@ public class PTDTChunk : BaseChunk
     {
         return CommonModelImporter.ptdtTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         PTDTChunk chunk = new PTDTChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
 
-    public void ProcessData(List<GCGladiusImage> imageList,StringBuilder debugInfo)
+    public void ProcessData(List<GCGladiusImage> imageList, StringBuilder debugInfo)
     {
         using (BinaryReader binReader = new BinaryReader(new MemoryStream(Data)))
         {
@@ -3217,12 +3179,8 @@ public class PTDTChunk : BaseChunk
                     GCImageExtractor.DecompressDXT1GC(image, debugInfo);
                 }
             }
-            
         }
-
     }
-
-    
 }
 
 public class PTTPChunk : BaseChunk
@@ -3233,16 +3191,15 @@ public class PTTPChunk : BaseChunk
     {
         return CommonModelImporter.pttpTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         PTTPChunk chunk = new PTTPChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
-
 }
 
 public class PFHDChunk : BaseChunk
@@ -3253,17 +3210,17 @@ public class PFHDChunk : BaseChunk
     {
         return CommonModelImporter.pfhdTag;
     }
-   
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         PFHDChunk chunk = new PFHDChunk();
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-        
+
         return chunk;
     }
 
-    public List<GCGladiusImage> ProcessData(List<string> textureNames,StringBuilder debugInfo)
+    public List<GCGladiusImage> ProcessData(List<string> textureNames, StringBuilder debugInfo)
     {
         List<GCGladiusImage> imageList = new List<GCGladiusImage>();
         using (BinaryReader binReader = new BinaryReader(new MemoryStream(Data)))
@@ -3273,13 +3230,9 @@ public class PFHDChunk : BaseChunk
                 GCGladiusImage image = GCGladiusImage.FromStream(binReader);
                 image.ImageName = textureNames[u];
                 imageList.Add(image);
-
             }
         }
 
         return imageList;
     }
-
-
 }
-
