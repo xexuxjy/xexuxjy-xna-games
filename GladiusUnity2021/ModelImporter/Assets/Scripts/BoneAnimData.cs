@@ -57,6 +57,12 @@ public class BoneAnimData
         Vector3 tempPos = posSet ? currentPosition : bindPosePosition;
         Quaternion tempRot = rotSet ? currentRotationQuat : bindPoseQuaternion;
 
+        if (boneNameAndInfo.Contains("bodyLumbar1"))
+        {
+            int ibreak = 0;
+        }
+        
+        
         if (parentBad == null)
         {
             //gameObjectTranform.localRotation = tempRot * GladiusGlobals.CharacterLocalRotation;

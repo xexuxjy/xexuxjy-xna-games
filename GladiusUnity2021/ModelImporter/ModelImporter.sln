@@ -5,7 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{58eea00a-12b3-0a9e-dc3d-1436e7dbfd61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{23b029aa-0ae6-6149-7add-1d76ab4817a2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Universal.Config.Editor.Tests", "Unity.RenderPipelines.Universal.Config.Editor.Tests.csproj", "{322afec7-026a-d4cd-1234-8c2e9da03f99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Universal.Config.Runtime", "Unity.RenderPipelines.Universal.Config.Runtime.csproj", "{1c057e3c-0590-a4fb-e0ef-74474f5f4396}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,8 +18,10 @@ Global
 		{4051c099-a2b9-3717-377e-0b0523e2be1d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58eea00a-12b3-0a9e-dc3d-1436e7dbfd61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{58eea00a-12b3-0a9e-dc3d-1436e7dbfd61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23b029aa-0ae6-6149-7add-1d76ab4817a2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23b029aa-0ae6-6149-7add-1d76ab4817a2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322afec7-026a-d4cd-1234-8c2e9da03f99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322afec7-026a-d4cd-1234-8c2e9da03f99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1c057e3c-0590-a4fb-e0ef-74474f5f4396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1c057e3c-0590-a4fb-e0ef-74474f5f4396}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

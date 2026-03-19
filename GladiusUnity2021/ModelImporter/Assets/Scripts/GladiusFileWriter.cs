@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public static class GladiusFileWriter
 {
@@ -72,6 +74,9 @@ public static class GladiusFileWriter
         }
     }
 
+    
+    
+    
     public static void WriteVERS(BinaryWriter writer)
     {
         int total = HeaderSize + 8;
@@ -154,6 +159,123 @@ public static class GladiusFileWriter
         writer.Write(0);
     }
 
+    public static void WriteHEDR(BinaryWriter writer)
+    {
+        int total = GladiusFileWriter.HeaderSize+8;
+        GladiusFileWriter.WriteASCIIString(writer, "HEDR");
+        writer.Write(total);
+        writer.Write(1); // num materials, 1 for now
+        writer.Write(0);
+        writer.Write(0);
+        writer.Write(0);
+    }
+
+    public static void WriteNAME(BinaryWriter writer, List<string> names)
+    {
+        int total = HeaderSize;
+        int runningTotal = 0;
+        foreach (string s in names)
+        {
+            runningTotal += s.Length;
+            runningTotal += 1;
+        }
+
+        runningTotal = GladiusFileWriter.GetPadValue(runningTotal,8); 
+        
+        total += runningTotal;
+        
+        writer.Write(NAMEChunk.ChunkName());
+        writer.Write(total);
+        writer.Write(0); 
+        writer.Write(1);
+        GladiusFileWriter.WriteStringList(writer, names, runningTotal);
+    }
+
+    public static void WriteNMTP(BinaryWriter writer, List<string> names)
+    {
+        int total = HeaderSize;
+        int runningTotal = 0;
+        foreach (string s in names)
+        {
+            runningTotal += s.Length;
+            runningTotal += 1;
+        }
+
+        runningTotal = GladiusFileWriter.GetPadValue(runningTotal,32); 
+        
+        total += runningTotal;
+        
+        writer.Write(NMTPChunk.ChunkName());
+        writer.Write(total);
+        writer.Write(0); 
+        writer.Write(1);
+        GladiusFileWriter.WriteStringList(writer, names, runningTotal);
+    }
 
     
+    public static void WritePFHD(BinaryWriter writer, List<TextureHeaderInfo> textureInfoList)
+    {
+        int sectionSize = 32;
+        
+        int total = HeaderSize;
+        total += sectionSize * textureInfoList.Count; 
+
+        total = GladiusFileWriter.GetPadValue(total,8); 
+        
+        
+        writer.Write(Common.pfhdTag);
+        writer.Write(total);
+        writer.Write(1); 
+        writer.Write(textureInfoList.Count);
+
+        //                    W    H    
+        // 0020 0800 00000000 8000 8000 002B0000 50010000 00000000 00000000 00000000
+
+        
+        foreach (TextureHeaderInfo textureInfo in textureInfoList)
+        {
+            // compress type
+            writer.Write((ushort)0x2200);
+            // unknown
+            writer.Write((ushort)0);
+
+            writer.Write(0x80);
+
+            writer.Write((ushort)textureInfo.Width);
+            writer.Write((ushort)textureInfo.Height);
+
+            // compressed size
+            writer.Write(textureInfo.CompressedSize);
+
+            writer.Write(0x50);
+            writer.Write(0);
+            writer.Write(0);
+            writer.Write(0);
+            
+        }
+
+    }
+
+    public static void WritePTDT(BinaryWriter writer, List<TextureHeaderInfo> textureInfoList,List<byte[]> dataList)
+    {
+        int total = HeaderSize;
+
+        foreach (TextureHeaderInfo textureInfo in textureInfoList)
+        {
+            total += textureInfo.CompressedSize;
+            total = GladiusFileWriter.GetPadValue(total, 8);
+        }
+
+        writer.Write(Common.ptdtTag);
+        writer.Write(total);
+        writer.Write(1); 
+        writer.Write(textureInfoList.Count);
+
+        for(int i=0;i<textureInfoList.Count;++i)
+        {
+            Debug.Assert(textureInfoList[i].CompressedSize == dataList[i].Length);
+            writer.Write(dataList[i]);
+        }
+    }
+
 }

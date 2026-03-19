@@ -375,7 +375,7 @@ public class ExtractBec
         BuildTable();
         HashData.BuildHashInfo();
 
-        string[] files = new string[]{"data/mesh/weapons/staff/candycane.pax","data/mesh/weapons/staff/candycane.ptx","data/mesh/weapons/staff/candycane128.ptx","data/mesh/weapons/staff/candycane256.ptx" };
+        string[] files = new string[]{"data/mesh/weapons/staff/candycane.pax","data/mesh/weapons/staff/candycane.ptx","data/mesh/weapons/staff/candycane128.ptx","data/mesh/weapons/staff/candycane256.ptx","data/mesh/weapons/staff/staff_asa.p2p" };
         foreach(string file in files)
         {
             System.Console.WriteLine(String.Format("0x{0:X} : \"{1}\",", ExtractBec.stringToHash(file), file));

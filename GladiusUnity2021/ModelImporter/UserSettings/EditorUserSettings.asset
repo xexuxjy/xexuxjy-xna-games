@@ -5,8 +5,23 @@ EditorUserSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 4
   m_ConfigSettings:
+    QuickInstaller_com.unity.purchasing_installRecorded:
+      value: 2550581500
+      flags: 0
+    QuickInstaller_com.unity.services.levelplay_installRecorded:
+      value: 2550581500
+      flags: 0
     RecentlyUsedSceneGuid-0:
       value: 5303550500045e0a580a0e274174594445151d7a2e2d7234757e4b66b2b83561
+      flags: 0
+    RecentlyUsedSceneGuid-1:
+      value: 5253510550500c0d5c5658724975084442151c787b7e24347b7d186ab2e56560
+      flags: 0
+    RecentlyUsedSceneGuid-2:
+      value: 0253020003510f590b560a2711250f4445154a7c2f7f77667b711f31e1e3676d
+      flags: 0
+    RecentlyUsedSceneGuid-3:
+      value: 0201005651515e0b5e570820157a5d4444164c72747c76682e2d4937bab1623c
       flags: 0
     RecentlyUsedScenePath-0:
       value: 22424703114646680e0b0227036c6c111b07142f1f2b233e2867083debf42d
@@ -31,4 +46,6 @@ EditorUserSettings:
   m_VCHierarchyOverlayIcons: 1
   m_VCOtherOverlayIcons: 1
   m_VCAllowAsyncUpdate: 1
+  m_VCScanLocalPackagesOnConnect: 1
   m_ArtifactGarbageCollection: 1
+  m_CompressAssetsOnImport: 1

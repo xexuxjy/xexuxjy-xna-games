@@ -5,58 +5,46 @@ using UnityEngine;
 public class MeshBaker : MonoBehaviour
 {
     bool done = false;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    public static GameObject CreateBakedPrefab(GameObject original)
     {
-        if (!done)
+        GameObject mergedObject = new GameObject(original.name+"-baked-");
+        Vector3 offset = Vector3.zero;//mergedObject.transform.position - transform.position;
+
+        List<Mesh> childMeshes = new List<Mesh>();
+
+        SkinnedMeshRenderer[] skinnedMeshRenderers = original.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        for (int i = 0; i < skinnedMeshRenderers.Length; ++i)
         {
-            GameObject mergedObject = new GameObject("Merged");
-            Vector3 offset = mergedObject.transform.position - transform.position;
-
-            List<Mesh> childMeshes = new List<Mesh>();
-
-            SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
-            
-            for (int i = 0; i < skinnedMeshRenderers.Length; ++i)
-            {
-                Mesh mesh = new Mesh();
-                skinnedMeshRenderers[i].BakeMesh(mesh);
-                childMeshes.Add(mesh);
-            }
-
-            foreach (MeshFilter meshFilter in GetComponentsInChildren<MeshFilter>())
-            {
-                if (meshFilter.gameObject.GetComponent<SkinnedMeshRenderer>() == null)
-                {
-                    Mesh clonedMesh = CopyMesh(meshFilter.sharedMesh, meshFilter.transform,offset);
-                    childMeshes.Add(clonedMesh);
-                }
-                else
-                {
-                    int ibreak = 0;
-                }
-            }
-
-
-            List<Mesh> mergedList = MergeMesh(true, childMeshes.ToArray());
-            if (mergedList.Count > 0)
-            {
-                Mesh mergedMesh = mergedList[0];
-                MeshFilter mf = mergedObject.AddComponent<MeshFilter>();
-                MeshRenderer mr = mergedObject.AddComponent<MeshRenderer>();
-
-                mf.sharedMesh = mergedMesh;
-            }
-
+            Mesh mesh = new Mesh();
+            skinnedMeshRenderers[i].BakeMesh(mesh);
+            childMeshes.Add(mesh);
         }
-        done = true;
+
+        foreach (MeshFilter meshFilter in original.GetComponentsInChildren<MeshFilter>())
+        {
+            if (meshFilter.gameObject.GetComponent<SkinnedMeshRenderer>() == null)
+            {
+                Mesh clonedMesh = CopyMesh(meshFilter.sharedMesh, meshFilter.transform, offset);
+                childMeshes.Add(clonedMesh);
+            }
+        }
+
+
+        List<Mesh> mergedList = MergeMesh(true, childMeshes.ToArray());
+        if (mergedList.Count > 0)
+        {
+            Mesh mergedMesh = mergedList[0];
+            MeshFilter mf = mergedObject.AddComponent<MeshFilter>();
+            MeshRenderer mr = mergedObject.AddComponent<MeshRenderer>();
+
+            mf.sharedMesh = mergedMesh;
+        }
+
+        return mergedObject;
     }
+    
 
     public static Mesh CopyMesh(Mesh source,Transform t,Vector3 offset)
     {

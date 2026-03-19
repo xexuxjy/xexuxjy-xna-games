@@ -7,6 +7,15 @@ using UnityEngine;
 
 public static class AnimationLoader
 {
+    
+    public const float FrameRate = 30;
+    public const float FrameTime = 1f / FrameRate;
+
+    
+    public const float ScalarItem = 1.0f / 32767.0f;
+
+
+    
     public static char[] pak1Tag = new char[] { 'P', 'A', 'K', '1' };
     public static char[] hedrTag = new char[] { 'H', 'E', 'D', 'R' };   // start of anim
     public static char[] versTag = new char[] { 'V', 'E', 'R', 'S' };   // version label
@@ -508,7 +517,7 @@ public struct optQuat
         result.compact |= (uint) ((yi << QYSHIFT) & QYMASK);
         result.compact |= (uint) ((zi << QZSHIFT) & QZMASK);
         result.compact |= (uint) ((wi << QWSHIFT) & QWMASK);
-        result.time = (ushort) (time / AnimationUtils.FrameTime);
+        result.time = (ushort) (time / AnimationLoader.FrameTime);
 
         return result;
     }

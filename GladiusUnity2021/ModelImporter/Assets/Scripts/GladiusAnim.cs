@@ -26,10 +26,11 @@ public class GladiusSimpleAnim
         }
         if (characterTransform == null)
         {
-            characterTransform = ownerTransform.transform.GetChild(0);
+            Transform gtou = ownerTransform.FuzzyFindChild("GladiusToUnity");
+            characterTransform = gtou.GetChild(0);
         }
 
-            BuildInitialMap(null, characterTransform);
+        BuildInitialMap(null, characterTransform);
 
         m_orderedBoneList.Sort((lhs, rhs) => Comparer<int>.Default.Compare(lhs.boneId, rhs.boneId));
 
@@ -39,14 +40,6 @@ public class GladiusSimpleAnim
 
     public virtual void Update()
     {
-        //if(FixedRate)
-        //{
-        //    AnimationSpeed = FixedAnimFrameRate;
-        //}
-        //else
-        //{
-        //    AnimationSpeed = Time.deltaTime;
-        //}
         UpdateAnimationTracks();
     }
 
@@ -97,10 +90,7 @@ public class GladiusSimpleAnim
     {
         if (CurrentAnimation != null)
         {
-            //m_elapsed += Time.deltaTime * AnimationSpeed;
-            //if (m_elapsed > AnimFrameRate)
             {
-                //m_elapsed -= AnimFrameRate;
                 DoAnimation();
             }
         }
@@ -217,8 +207,6 @@ public class GladiusSimpleAnim
 
 public class GladiusCharacterAnim : GladiusSimpleAnim
 {
-    // unity properties
-    public string Pak1File;
 
 
 #if DEBUG
@@ -228,48 +216,15 @@ public class GladiusCharacterAnim : GladiusSimpleAnim
 #endif
 
 
-    public String ExtraAnimDirectory = "";
-
-    private ActorClassDef m_actorClassDef;
-
     public delegate void AnimationEventArgs(object sender, AnimationLifetimeEvent e);
 
     public event AnimationEventArgs AnimationStarted;
     public event AnimationEventArgs AnimationEnded;
     public event AnimationEventArgs AnimationLooped;
 
-    public void Init(Transform ownerTransform, ActorClassDef actorClassDef)
+    public void Init(Transform ownerTransform)
     {
         base.Init(ownerTransform);
-        m_actorClassDef = actorClassDef;
-
-        String replacedName = actorClassDef.name;
-        replacedName += ".pak1";
-        Pak1File = replacedName;
-
-        //TextAsset textAsset = Resources.Load<TextAsset>(GladiusGlobals.GetFileName("GladiusAnims/" + Pak1File));
-        //if (textAsset != null)
-        //{
-        //    using (BinaryReader binReader = new BinaryReader(new MemoryStream(textAsset.bytes)))
-        //    {
-        //        AnimationLoader.ReadPak1File(binReader, this);
-        //        foreach (AnimationData animationData in m_allAnimations)
-        //        {
-        //            animationData.AssignModelAndSkeleton(this, ownerTransform);
-        //        }
-        //    }
-        //}
-
-        if (String.IsNullOrEmpty(ExtraAnimDirectory))
-        {
-            ExtraAnimDirectory = m_actorClassDef.mesh;
-        }
-
-        if (!String.IsNullOrEmpty(ExtraAnimDirectory))
-        {
-            TryAddAnimDirectory(ExtraAnimDirectory);
-        }
-
 
         FixAnimationMovement();
 
@@ -474,8 +429,9 @@ public class GladiusCharacterAnim : GladiusSimpleAnim
 
     public void NotifyAnimationStarted(String anim)
     {
+#if DEBUG
         AnimationStarts.Enqueue(anim);
-
+#endif
         if (AnimationStarted != null)
         {
             AnimationStarted(this, new AnimationLifetimeEvent(anim));
@@ -484,7 +440,9 @@ public class GladiusCharacterAnim : GladiusSimpleAnim
 
     public void NotifyAnimationStopped(String anim)
     {
+#if DEBUG
         AnimationStops.Enqueue(anim);
+#endif
         if (AnimationEnded != null)
         {
             AnimationEnded(this, new AnimationLifetimeEvent(anim));
