@@ -259,6 +259,26 @@ public class GCModel : BaseModel
 
     }
 
+    public SKINChunk SKINChunk()
+    {
+        SKINChunk skinChunk = (SKINChunk)m_chunkList.Find(x => x is SKINChunk);
+        return skinChunk;
+    }
+    
+    public List<IndexedVector3> VertexData
+    {
+        get
+        {
+            // SKINChunk skinChunk =SKINChunk();
+            // if (skinChunk != null)
+            // {
+            //     return skinChunk.m_vertices;
+            // }
+
+            return null;
+        }
+    }
+    
     
     public CommonModelData ToCommon()
     {
@@ -377,28 +397,6 @@ public class GCModel : BaseModel
         return commonModelData;
     }
 
-
-    public SELSChunk SelsChunk
-    {
-        get { return (m_chunkList.Find(x => x is SELSChunk) as SELSChunk); }
-    }
-
-    public SKELChunk SkelChunk
-    {
-        get { return (m_chunkList.Find(x => x is SKELChunk) as SKELChunk); }
-    }
-
-    public NAMEChunk NameChunk
-    {
-        get { return (m_chunkList.Find(x => x is NAMEChunk) as NAMEChunk); }
-    }
-
-    public OBBTChunk OBBTChunk
-    {
-        get { return (m_chunkList.Find(x => x is OBBTChunk) as OBBTChunk); }
-    }
-
-
     public void BuildMaterialData(GameObject go,GCModel model)
     {
         HashSet<Material> materials = new HashSet<Material>();
@@ -447,14 +445,14 @@ public class GCModel : BaseModel
         while (count++ < 100);
 
         
-        if(SkelChunk != null)
+        if(SKELChunk != null)
         {
-            foreach(BoneNode bn in SkelChunk.BoneList)
+            foreach(BoneNode bn in SKELChunk.BoneList)
             {
-                bn.name = NameChunk.Names[bn.NameIndex];
+                bn.name = NAMEChunk.Names[bn.NameIndex];
                 if(bn.Index != bn.ParentIndex)
                 {
-                    bn.parent = SkelChunk.BoneList[bn.ParentIndex];
+                    bn.parent = SKELChunk.BoneList[bn.ParentIndex];
                 }
             }
             //BoneList.AddRange(SkeletonChunk.BoneList);

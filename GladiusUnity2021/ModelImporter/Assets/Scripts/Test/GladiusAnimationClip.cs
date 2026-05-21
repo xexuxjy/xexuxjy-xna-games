@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -14,6 +15,11 @@ public class GladiusAnimationClip
     public List<List<Quaternion>> RotationData = new List<List<Quaternion>>();
     public List<List<float>> TimeData = new List<List<float>>();
 
+
+    public static bool IsValidCurveBinding(EditorCurveBinding ecb)
+    {
+        return ecb != null && ecb.path == "";
+    }
     public GladiusAnimationClip(AnimationClip animationClip)
     {
         m_animationClip = animationClip;
@@ -21,35 +27,41 @@ public class GladiusAnimationClip
 
         EditorCurveBinding[] curveBindings = AnimationUtility.GetCurveBindings(m_animationClip);
 
-        if (curveBindings != null && curveBindings.Length > 3)
+        if (curveBindings != null)
         {
-            AnimationCurve rootTx = AnimationUtility.GetEditorCurve(animationClip, curveBindings[0]);
-            AnimationCurve rootTy = AnimationUtility.GetEditorCurve(animationClip, curveBindings[1]);
-            AnimationCurve rootTz = AnimationUtility.GetEditorCurve(animationClip, curveBindings[2]);
 
+            List<float> timeData = new List<float>();
+            Dictionary<string, List<float>> propertyData = new Dictionary<string, List<float>>();
 
-            StringBuilder sb = new StringBuilder();
-            float time = 0;
-            while (time < m_animationClip.length)
+            foreach (var curveBinding in curveBindings)
             {
-                sb.AppendLine(""+new Vector3(rootTx.Evaluate(time), rootTy.Evaluate(time), rootTz.Evaluate(time)));
-                time += AnimationUtils.FrameTime;
+                if (IsValidCurveBinding(curveBinding))
+                {
+                    propertyData.Add(curveBinding.propertyName, new List<float>());
+                }
             }
 
-            Animator animator = null;
-            
-            
-            
-            Debug.Log(sb.ToString());
-            //Keyframe[] keys = animationCurve.keys;
+            using (TextWriter tw = new StreamWriter("d:/tmp/animation-data.txt"))
+            {
+                float time = 0;
+                while (time < m_animationClip.length)
+                {
+                    timeData.Add(time);
+                    for (int i = 0; i < curveBindings.Length; i++)
+                    {
+                        if(IsValidCurveBinding(curveBindings[i]))
+                        {
+                            var curve = AnimationUtility.GetEditorCurve(animationClip, curveBindings[i]);
+                            propertyData[curveBindings[i].propertyName].Add(curve.Evaluate(time));
+
+                            tw.WriteLine($"{curveBindings[i].propertyName}  time {time}  value {curve.Evaluate(time)}");
+                        }
+                    }
+                    time += AnimationUtils.FrameTime;
+                }
+            }
+
             int ibreak = 0;
         }
-
-        //curveBindings[0].propertyName;
-
-        //https://stackoverflow.com/questions/57846333/how-can-i-store-or-read-a-animation-clip-data-in-runtime
-
-
-        // look at bone name map. to translate some anim data from existing files?
     }
 }

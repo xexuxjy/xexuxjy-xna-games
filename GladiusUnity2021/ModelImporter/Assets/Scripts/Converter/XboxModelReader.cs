@@ -270,20 +270,6 @@ public class XboxModel : BaseModel
         get { return (m_chunkList.Find(x => x is STYPChunk) as STYPChunk); }
     }
 
-    public SKELChunk SKELChunk
-    {
-        get { return (m_chunkList.Find(x => x is SKELChunk) as SKELChunk); }
-    }
-
-    public NAMEChunk NAMEChunk
-    {
-        get { return (m_chunkList.Find(x => x is NAMEChunk) as NAMEChunk); }
-    }
-
-    public OBBTChunk OBBTChunk
-    {
-        get { return (m_chunkList.Find(x => x is OBBTChunk) as OBBTChunk); }
-    }
 
     public CommonModelData ToCommon()
     {

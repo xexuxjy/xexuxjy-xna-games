@@ -1141,6 +1141,23 @@ public class BaseModel
         }
     }
 
+    public SKELChunk SKELChunk
+    {
+        get { return (m_chunkList.Find(x => x is SKELChunk) as SKELChunk); }
+    }
+
+    public NAMEChunk NAMEChunk
+    {
+        get { return (m_chunkList.Find(x => x is NAMEChunk) as NAMEChunk); }
+    }
+
+    public OBBTChunk OBBTChunk
+    {
+        get { return (m_chunkList.Find(x => x is OBBTChunk) as OBBTChunk); }
+    }
+
+    
+    
     public Dictionary<int, BoneNode> m_boneIdDictionary = new Dictionary<int, BoneNode>();
     public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
     public List<ModelSubMesh> m_modelMeshes = new List<ModelSubMesh>();
@@ -2597,6 +2614,44 @@ public class ELEMChunk : BaseChunk
 }
 
 
+public class VFLGChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.vflgTag;
+    }
+
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        VFLGChunk chunk = new VFLGChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+
+        return chunk;
+    }
+}
+
+public class JLODChunk : BaseChunk
+{
+    public byte[] Data;
+
+    public static char[] ChunkName()
+    {
+        return CommonModelImporter.jlodTag;
+    }
+
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        JLODChunk chunk = new JLODChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+
+        return chunk;
+    }
+}
+
 public class NMTPChunk : BaseChunk
 {
     public List<string> Data = new List<string>();
@@ -2695,7 +2750,9 @@ public class SKINChunk : BaseChunk
     public byte[] Data;
 
     public List<SkinData> SkinDataList = new List<SkinData>();
-
+    public List<IndexedVector3> Positions  = new List<IndexedVector3>();
+    public List<IndexedVector3> Normals  = new List<IndexedVector3>();
+    
     public const int StructureSize = 96;
 
     public static char[] ChunkName()

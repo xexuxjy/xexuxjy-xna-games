@@ -15,21 +15,56 @@ public static class AnimationUtils
 
     public static Vector3 PosScalar = new Vector3(ScalarItem, ScalarItem, ScalarItem);
 
-    public static void CreatePANFromAnimClip(AnimationClip ac)
+
+    public static void BuildSkeleton(Transform t, BoneNode parent,ref byte boneId,List<BoneNode> boneNodes)
     {
-        using (BinaryWriter bw = new BinaryWriter(new MemoryStream()))
+        if (t != null)
         {
+            BoneNode boneNode = new BoneNode();
+            boneNodes.Add(boneNode);
+            
+            boneNode.name = t.name;
+            boneNode.Index = boneId;
+            boneNode.offset = t.localPosition;
+            boneNode.rotation = t.localRotation;
+            
+            boneId++;
+
+            if (boneId > 250)
+            {
+                Debug.LogError($"Skeleton potentially has too many bones");
+            }
+            
+            if (parent != null)
+            {
+                boneNode.ParentIndex = parent.Index;
+            }
+
+            foreach (Transform child in t)
+            {
+                BuildSkeleton(child,boneNode,ref boneId,boneNodes);
+            }
         }
+        
     }
-
     
     
-    
-
-    public static void WriteData(BinaryWriter writer, GladiusAnimationClip gac)
+    public static void WriteDataAsPAN(BinaryWriter writer, Transform rootBone,List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
-        int numEvents = gac.m_numEvents;
-        List<optQuat> optQuatList = new List<optQuat>();
+        // build a skeleton from rootBone.
+        
+        List<BoneNode> boneNodes = new List<BoneNode>();
+        byte boneId = 0;
+        BuildSkeleton(rootBone,null,ref boneId,boneNodes);
+        
+        List<string> boneNames = new List<string>();
+        foreach (BoneNode boneNode in boneNodes)
+        {
+            boneNames.Add(boneNode.name);
+        }
+        
+        List<ushort> timeDataUShort = new List<ushort>();
+        
 
         GladiusFileWriter.WriteVERS(writer);
         GladiusFileWriter.PadIfNeeded(writer);
@@ -37,109 +72,109 @@ public static class AnimationUtils
         GladiusFileWriter.PadIfNeeded(writer);
         WriteHEDR(writer);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteNAME(writer, null);
-        
-        WriteBLNM(writer, null);
+        WriteNAME(writer, boneNames);
+
+        List<string> eventsString = new List<string>();
+        WriteBLNM(writer, eventsString);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteMASK(writer, null);
+        WriteMASK(writer, boneNodes);
         GladiusFileWriter.PadIfNeeded(writer);
         WriteBLTK(writer);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteBKTM(writer,numEvents);
+        WriteBKTM(writer,timeData);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteBOOL(writer,numEvents);
+        WriteBOOL(writer,timeData);
         GladiusFileWriter.PadIfNeeded(writer);
-
 
         // these both work with the vectors
-        WriteOPTR(writer, gac.PositionData);
+        WriteOPTR(writer, transformList,timeData,positionData);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteOVEC(writer,gac.PositionData,null);
+        WriteOVEC(writer,transformList,timeData,positionData);
         GladiusFileWriter.PadIfNeeded(writer);
 
         // these all work with the quaternions
-        WriteORTR(writer, gac.RotationData);
+        WriteORTR(writer, transformList,timeData,rotationData);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteARKT(writer, null);
+        WriteARKT(writer, transformList,timeData,rotationData);
         GladiusFileWriter.PadIfNeeded(writer);
-        WriteOQUA(writer, null);
+        WriteOQUA(writer, transformList,timeData,rotationData);
         GladiusFileWriter.PadIfNeeded(writer);
         GladiusFileWriter.WriteEND(writer);
     }
 
-    public static void WriteData(BinaryWriter writer, GladiusSimpleAnim simpleAnim)
-    {
-        AnimationData animationData = simpleAnim.m_allAnimations[0];
-        int numEvents = animationData.boolTrack.mNumKeys;
-
-        List<List<Vector3>> positionData = new List<List<Vector3>>();
-        List<List<ushort>> positionTimeData = new List<List<ushort>>();
-
-        for (int i = 0; i < animationData.optPosTrack.m_tracks.Count; ++i)
-        {
-            List<Vector3> data = new List<Vector3>();
-            List<ushort> timeData = new List<ushort>();
-            
-            positionData.Add(data);
-            positionTimeData.Add(timeData);
-            
-            foreach (var optVec in animationData.optPosTrack.m_tracks[i].mOptVecs)
-            {
-                Vector3 dst = Vector3.zero; 
-
-                optVec.Get(ref dst, ref PosScalar);
-                timeData.Add(optVec.time);
-                data.Add(dst);
-            }
-        }
-
-        
-        List<List<Quaternion>> rotationData = new List<List<Quaternion>>();
-        List<List<ushort>> rotationTimeData = new List<List<ushort>>();
-        for (int i = 0; i < animationData.optRotTrack.m_tracks.Count; ++i)
-        {
-            List<Quaternion> data = new List<Quaternion>();
-            List<ushort> timeData = new List<ushort>();
-
-            rotationData.Add(data);
-            rotationTimeData.Add(timeData);
-            
-            int count = 0;
-            foreach (var optQuat in animationData.optRotTrack.m_tracks[i].mOptQuats)
-            {
-                Quaternion q = Quaternion.identity;
-                optQuat.Get(ref q);
-                data.Add(q);
-                timeData.Add(animationData.optRotTrack.m_tracks[i].mKeyTimes[count++]);
-
-            }
-        }
-
-
-        
-
-        GladiusFileWriter.WriteVERS(writer);
-        GladiusFileWriter.WriteCPRT(writer);
-        WriteHEDR(writer);
-        WriteNAME(writer,animationData.boneList);
-        
-        WriteBLNM(writer, null);
-        WriteMASK(writer, null);
-        WriteBLTK(writer);
-
-        WriteBKTM(writer,numEvents);
-        WriteBOOL(writer,numEvents);
-
-        // these both work with the vectors
-        WriteOPTR(writer, positionData);
-        WriteOVEC(writer,positionData,positionTimeData);
-
-        // these all work with the quaternions
-        WriteORTR(writer, rotationData);
-        WriteARKT(writer, rotationTimeData);
-        WriteOQUA(writer, rotationData);
-        GladiusFileWriter.WriteEND(writer);
-    }
+    // public static void WriteData(BinaryWriter writer, GladiusSimpleAnim simpleAnim)
+    // {
+    //     AnimationData animationData = simpleAnim.m_allAnimations[0];
+    //     int numEvents = animationData.boolTrack.mNumKeys;
+    //
+    //     List<List<Vector3>> positionData = new List<List<Vector3>>();
+    //     List<List<ushort>> positionTimeData = new List<List<ushort>>();
+    //
+    //     for (int i = 0; i < animationData.optPosTrack.m_tracks.Count; ++i)
+    //     {
+    //         List<Vector3> data = new List<Vector3>();
+    //         List<ushort> timeData = new List<ushort>();
+    //         
+    //         positionData.Add(data);
+    //         positionTimeData.Add(timeData);
+    //         
+    //         foreach (var optVec in animationData.optPosTrack.m_tracks[i].mOptVecs)
+    //         {
+    //             Vector3 dst = Vector3.zero; 
+    //
+    //             optVec.Get(ref dst, ref PosScalar);
+    //             timeData.Add(optVec.time);
+    //             data.Add(dst);
+    //         }
+    //     }
+    //
+    //     
+    //     List<List<Quaternion>> rotationData = new List<List<Quaternion>>();
+    //     List<List<ushort>> rotationTimeData = new List<List<ushort>>();
+    //     for (int i = 0; i < animationData.optRotTrack.m_tracks.Count; ++i)
+    //     {
+    //         List<Quaternion> data = new List<Quaternion>();
+    //         List<ushort> timeData = new List<ushort>();
+    //
+    //         rotationData.Add(data);
+    //         rotationTimeData.Add(timeData);
+    //         
+    //         int count = 0;
+    //         foreach (var optQuat in animationData.optRotTrack.m_tracks[i].mOptQuats)
+    //         {
+    //             Quaternion q = Quaternion.identity;
+    //             optQuat.Get(ref q);
+    //             data.Add(q);
+    //             timeData.Add(animationData.optRotTrack.m_tracks[i].mKeyTimes[count++]);
+    //
+    //         }
+    //     }
+    //
+    //
+    //     
+    //
+    //     GladiusFileWriter.WriteVERS(writer);
+    //     GladiusFileWriter.WriteCPRT(writer);
+    //     WriteHEDR(writer);
+    //     WriteNAME(writer,animationData.boneList);
+    //     
+    //     WriteBLNM(writer, null);
+    //     WriteMASK(writer, null);
+    //     WriteBLTK(writer);
+    //
+    //     WriteBKTM(writer,numEvents);
+    //     WriteBOOL(writer,numEvents);
+    //
+    //     // these both work with the vectors
+    //     WriteOPTR(writer, positionData);
+    //     WriteOVEC(writer,positionData,positionTimeData);
+    //
+    //     // these all work with the quaternions
+    //     WriteORTR(writer, rotationData);
+    //     WriteARKT(writer, rotationTimeData);
+    //     WriteOQUA(writer, rotationData);
+    //     GladiusFileWriter.WriteEND(writer);
+    // }
     
     
     
@@ -215,16 +250,19 @@ public static class AnimationUtils
         
     }
 
-    public static void WriteMASK(BinaryWriter writer, List<string> boneNames)
+    // for each bone, we need to write what sort of animation track is associated with it (for pos and rot)
+    // for now everything standard pos and rot
+    public static void WriteMASK(BinaryWriter writer, List<BoneNode> boneList)
     {
-        int numItems = 188;        
+        int numItems = boneList.Count;        
         GladiusFileWriter.WriteASCIIString(writer, "MASK");
         writer.Write(GladiusFileWriter.HeaderSize+numItems);
-        writer.Write(1); // num materials, 1 for now
+        writer.Write(1); 
         writer.Write(numItems);
+        byte mask = AnimationData.pan_FilecPos | AnimationData.pan_FilecRot;
         for (int i = 0; i < numItems; ++i)
         {
-            writer.Write((byte)0);
+            writer.Write(mask);
         }
     }
 
@@ -243,31 +281,31 @@ public static class AnimationUtils
 
 
     // write timestamps.
-    public static void WriteBKTM(BinaryWriter writer, int numEvents)
+    public static void WriteBKTM(BinaryWriter writer, List<float> timeData)
     {
-        int total = GladiusFileWriter.HeaderSize + (numEvents * 4);
+        int total = GladiusFileWriter.HeaderSize + (timeData.Count * 4);
 
         GladiusFileWriter.WriteASCIIString(writer, "BKTM");
         writer.Write(total);
         writer.Write(0);
-        writer.Write(numEvents);
+        writer.Write(timeData.Count);
 
-        for (int i = 0; i < numEvents; ++i)
+        foreach (float t in timeData)
         {
-            writer.Write((float)i * FrameTime);
+            writer.Write(t);
         }
     }
 
-    public static void WriteBOOL(BinaryWriter writer, int numEvents)
+    public static void WriteBOOL(BinaryWriter writer, List<float> timeData)
     {
-        int total = GladiusFileWriter.HeaderSize + (numEvents * 4);
+        int total = GladiusFileWriter.HeaderSize + (timeData.Count * 4);
 
         GladiusFileWriter.WriteASCIIString(writer, "BOOL");
         writer.Write(total);
         writer.Write(0);
-        writer.Write(numEvents);
+        writer.Write(timeData.Count);
 
-        for (int i = 0; i < numEvents; ++i)
+        for (int i = 0; i < timeData.Count; ++i)
         {
             writer.Write(0);
         }
@@ -293,7 +331,7 @@ public static class AnimationUtils
         GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
     }
 
-    public static void WriteOPTR(BinaryWriter writer, List<List<Vector3>> positionData)
+    public static void WriteOPTR(BinaryWriter writer,List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData)
     {
         int total = GladiusFileWriter.HeaderSize;
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
@@ -303,13 +341,13 @@ public static class AnimationUtils
         writer.Write(1);
         writer.Write(positionData.Count); // number of elements.
 
-        foreach (List<Vector3> positions in positionData)
+        foreach (Transform t in transformList)
         {
-            anim_OptPosTrack.ToStream(writer, positions.Count, PosScalar, 0);
+            anim_OptPosTrack.ToStream(writer, positionData[t].Count, PosScalar, 0);
         }
     }
 
-    public static void WriteORTR(BinaryWriter writer, List<List<Quaternion>> rotationData)
+    public static void WriteORTR(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
         int total = GladiusFileWriter.HeaderSize;
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
@@ -319,9 +357,10 @@ public static class AnimationUtils
         writer.Write(1);
         writer.Write(rotationData.Count); // number of elements.
 
-        foreach (List<Quaternion> rotations in rotationData)
+        foreach (Transform t in transformList)
+
         {
-            writer.Write(rotations.Count);
+            writer.Write(rotationData[t].Count);
             writer.Write(0);
             writer.Write(0);
 
@@ -331,13 +370,19 @@ public static class AnimationUtils
         }
     }
 
-    public static void WriteOVEC(BinaryWriter writer, List<List<Vector3>> positionData,List<List<ushort>> timeData)
+    public static ushort FloatTimeToUShort(float time)
+    {
+        return (ushort)(time / FrameRate);
+    }
+    
+    
+    public static void WriteOVEC(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData)
     {
         int total = GladiusFileWriter.HeaderSize;
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
         int totalElements = 0;
-        foreach (var track in positionData)
+        foreach (var track in positionData.Values)
         {
             totalElements += track.Count;
         }
@@ -349,72 +394,84 @@ public static class AnimationUtils
 
 
 
-        for (int i = 0; i < positionData.Count; ++i)
+        for (int i = 0; i < transformList.Count; ++i)
         {
-            for (int j = 0; j < positionData[i].Count; ++j)
+            List<(float,Vector3)> positionList = positionData[transformList[i]];
+            for (int j = 0; j < positionList.Count; ++j)
             {
-                optVec.ToStream(writer, optVec.Put(positionData[i][j], timeData[i][j],PosScalar));                
+                optVec.ToStream(writer, optVec.Put(positionList[j].Item2, FloatTimeToUShort(positionList[j].Item1),PosScalar));                
             }
         }
     }
 
 
-    public static void WriteOQUA(BinaryWriter writer, List<List<Quaternion>> rotationData)
+    public static void WriteOQUA(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
         int total = GladiusFileWriter.HeaderSize;
+        int totalElements = 0;
         
-        
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-        int runningTotal = 0;
-        foreach (var list in rotationData)
+        foreach (var track in rotationData.Values)
         {
-            runningTotal += list.Count;
+            totalElements += track.Count;
         }
 
-        total += runningTotal;
+        total += totalElements;
         
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
         
         GladiusFileWriter.WriteASCIIString(writer, "OQUA");
         writer.Write(paddedTotal); // block size
         writer.Write(1);
-        writer.Write(runningTotal);
+        writer.Write(totalElements);
 
-
-        foreach (var list in rotationData)
+        for (int i = 0; i < transformList.Count; ++i)
         {
-            foreach (Quaternion q in list)
+            List<(float,Quaternion)> rotationList = rotationData[transformList[i]];
+            for (int j = 0; j < rotationList.Count; ++j)
             {
                 // time will be set in arkt
-                optQuat.ToStream(writer, optQuat.Put(q, 0f));
+                optQuat.ToStream(writer, optQuat.Put(rotationList[j].Item2, rotationList[j].Item1));
             }
         }
     }
 
-    public static void WriteARKT(BinaryWriter writer, List<List<ushort>> rotationTimeData)
+    /*
+     *             foreach (anim_OptRotTrack track in animationData.optRotTrack.m_tracks)
+            {
+                for (int i = 0; i < track.mNumKeys; ++i)
+                {
+                    ushort key = reader.ReadUInt16();
+                    // optQuat oq = track.mOptQuats[i];
+                    // oq.time = key;
+                    // track.mOptQuats[i] = oq;
+                    track.mKeyTimes.Add(key);
+                }
+            }
+
+     */
+    public static void WriteARKT(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
         int total = GladiusFileWriter.HeaderSize;
-
-        int runningTotal = 0;
-        foreach (var list in rotationTimeData)
+        int totalElements = 0;
+        foreach (var track in rotationData.Values)
         {
-            runningTotal += list.Count;
+            totalElements += track.Count;
         }
         
-        total += (rotationTimeData.Count * 2);
-        
-        int paddedTotal = total + runningTotal + 2;
+        int paddedTotal = total + totalElements + 2;
 
         GladiusFileWriter.WriteASCIIString(writer, "ARKT");
         writer.Write(paddedTotal); // block size
         writer.Write(0);
-        writer.Write(runningTotal);
+        writer.Write(totalElements);
 
-        foreach (var list in rotationTimeData)
+        
+        for (int i = 0; i < transformList.Count; ++i)
         {
-            foreach (ushort t in list)
+            List<(float,Quaternion)> rotationList = rotationData[transformList[i]];
+            for (int j = 0; j < rotationList.Count; ++j)
             {
-                writer.Write(t);
+                writer.Write(FloatTimeToUShort(rotationList[j].Item1));
             }
         }
 
