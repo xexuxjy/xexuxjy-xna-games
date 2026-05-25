@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Unity.Mathematics;
@@ -67,38 +68,38 @@ public static class AnimationUtils
         
 
         GladiusFileWriter.WriteVERS(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         GladiusFileWriter.WriteCPRT(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteHEDR(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
+        WriteHEDR(writer,timeData.Last());
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteNAME(writer, boneNames);
 
         List<string> eventsString = new List<string>();
         WriteBLNM(writer, eventsString);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteMASK(writer, boneNodes);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteBLTK(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteBKTM(writer,timeData);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteBOOL(writer,timeData);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
 
         // these both work with the vectors
         WriteOPTR(writer, transformList,timeData,positionData);
         //GladiusFileWriter.PadIfNeeded(writer);
         WriteOVEC(writer,transformList,timeData,positionData);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
 
         // these all work with the quaternions
         WriteORTR(writer, transformList,timeData,rotationData);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteARKT(writer, transformList,timeData,rotationData);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         WriteOQUA(writer, transformList,timeData,rotationData);
-        GladiusFileWriter.PadIfNeeded(writer);
+        //GladiusFileWriter.PadIfNeeded(writer);
         GladiusFileWriter.WriteEND(writer);
     }
 
@@ -178,15 +179,25 @@ public static class AnimationUtils
     
     
     
-    public static void WriteHEDR(BinaryWriter writer)
+    /*
+     *       if (fileChunk.ChunkName.SequenceEqual(AnimationLoader.hedrTag))
+        {
+            Int16 jointCount = reader.ReadInt16();
+            Int16 temp = reader.ReadInt16();
+            animationData.mTranslation = ((float)temp * (1.0f / 1024.0f));
+            animationData.mLength = reader.ReadSingle();
+            handled = true;
+        }
+     */
+    public static void WriteHEDR(BinaryWriter writer,float animationLength)
     {
         int total = GladiusFileWriter.HeaderSize+8;
         GladiusFileWriter.WriteASCIIString(writer, "HEDR");
         writer.Write(total);
-        writer.Write(1); // num materials, 1 for now
+        writer.Write(1); // size 2 
         writer.Write(0);
-        writer.Write(0);
-        writer.Write(0);
+        writer.Write(0); // joint count
+        writer.Write(animationLength); // Animation length
     }
 
     public static void WriteNAME(BinaryWriter writer, List<string> boneNames)
@@ -316,6 +327,8 @@ public static class AnimationUtils
         int total = GladiusFileWriter.HeaderSize;
         total += (points.Count * 12);
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int numPadBytes = paddedTotal - total; 
+
 
         GladiusFileWriter.WriteASCIIString(writer, "POSI");
         writer.Write(paddedTotal); // block size
@@ -328,13 +341,17 @@ public static class AnimationUtils
             Common.WriteVector3BE(writer, v);
         }
 
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(writer, numPadBytes);
     }
 
     public static void WriteOPTR(BinaryWriter writer,List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData)
     {
+        long startPos = writer.BaseStream.Position;
         int total = GladiusFileWriter.HeaderSize;
+        total += transformList.Count * anim_OptPosTrack.Size;
+
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int numPadBytes = paddedTotal - total; 
 
         GladiusFileWriter.WriteASCIIString(writer, "OPTR");
         writer.Write(paddedTotal); // block size
@@ -345,12 +362,19 @@ public static class AnimationUtils
         {
             anim_OptPosTrack.ToStream(writer, positionData[t].Count, PosScalar, 0);
         }
+        long endPos = writer.BaseStream.Position;
+        long diff =  endPos - startPos;
+        GladiusFileWriter.WriteNull(writer,numPadBytes);
     }
 
     public static void WriteORTR(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
         int total = GladiusFileWriter.HeaderSize;
+        total += transformList.Count * anim_OptRotTrack.Size;
+        
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int numPadBytes = paddedTotal - total; 
+
 
         GladiusFileWriter.WriteASCIIString(writer, "ORTR");
         writer.Write(paddedTotal); // block size
@@ -368,6 +392,8 @@ public static class AnimationUtils
             // uint dummyPointer = binReader.ReadUInt32();
             // uint keyTimesPointer = binReader.ReadUInt32();
         }
+        GladiusFileWriter.WriteNull(writer,numPadBytes);
+        
     }
 
     public static ushort FloatTimeToUShort(float time)
@@ -379,7 +405,6 @@ public static class AnimationUtils
     public static void WriteOVEC(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData)
     {
         int total = GladiusFileWriter.HeaderSize;
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
         int totalElements = 0;
         foreach (var track in positionData.Values)
@@ -387,12 +412,16 @@ public static class AnimationUtils
             totalElements += track.Count;
         }
 
-        GladiusFileWriter.WriteASCIIString(writer, "OVEC");
+        total += (totalElements * optVec.Size);
+        
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int numPadBytes = paddedTotal - total; 
+
+
+        writer.Write(AnimationLoader.ovecTag);
         writer.Write(paddedTotal); // block size
         writer.Write(0);
-        writer.Write(total); // number of elements.
-
-
+        writer.Write(totalElements); // number of elements.
 
         for (int i = 0; i < transformList.Count; ++i)
         {
@@ -402,6 +431,7 @@ public static class AnimationUtils
                 optVec.ToStream(writer, optVec.Put(positionList[j].Item2, FloatTimeToUShort(positionList[j].Item1),PosScalar));                
             }
         }
+        GladiusFileWriter.WriteNull(writer, numPadBytes);
     }
 
 
@@ -415,11 +445,13 @@ public static class AnimationUtils
             totalElements += track.Count;
         }
 
-        total += totalElements;
+        total += (totalElements * optQuat.Size);
         
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int numPadBytes = paddedTotal - total; 
+
         
-        GladiusFileWriter.WriteASCIIString(writer, "OQUA");
+        writer.Write(AnimationLoader.oquaTag);
         writer.Write(paddedTotal); // block size
         writer.Write(1);
         writer.Write(totalElements);
@@ -433,6 +465,7 @@ public static class AnimationUtils
                 optQuat.ToStream(writer, optQuat.Put(rotationList[j].Item2, rotationList[j].Item1));
             }
         }
+        GladiusFileWriter.WriteNull(writer, numPadBytes);
     }
 
     /*
@@ -457,14 +490,17 @@ public static class AnimationUtils
         {
             totalElements += track.Count;
         }
+
+        total += (totalElements * 2);
         
-        int paddedTotal = total + totalElements + 2;
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int numPadBytes = paddedTotal - total; 
+        
 
         GladiusFileWriter.WriteASCIIString(writer, "ARKT");
         writer.Write(paddedTotal); // block size
         writer.Write(0);
         writer.Write(totalElements);
-
         
         for (int i = 0; i < transformList.Count; ++i)
         {
@@ -475,7 +511,7 @@ public static class AnimationUtils
             }
         }
 
-        GladiusFileWriter.WriteNull(writer,2);
+        GladiusFileWriter.WriteNull(writer,numPadBytes);
 
     }
 }

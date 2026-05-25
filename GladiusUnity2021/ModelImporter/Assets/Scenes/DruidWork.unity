@@ -885,7 +885,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimationClip: {fileID: 3094330708855449807, guid: 9508ccae6dd32b54cb61bd81eda00380, type: 3}
   OutputPath: d:/AnimationTest/druid_idle.pan
+  DebugOutputPath: d:/AnimationTest/druid_idle.txt
   RootBone: {fileID: 1411522488}
+  Animator: {fileID: 2116573383}
+  AnimationState: Idle
+  Time: 0
+  AnimationTimes: []
+  TransformList: []
+  DataWritten: 0
+--- !u!95 &2116573383 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1140830129411603548, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+  m_PrefabInstance: {fileID: 7668162036987159323}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7668162036987159323
 PrefabInstance:
   m_ObjectHideFlags: 0

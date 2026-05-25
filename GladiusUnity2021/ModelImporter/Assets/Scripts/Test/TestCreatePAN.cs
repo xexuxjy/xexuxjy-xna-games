@@ -16,6 +16,11 @@ namespace Gladius.util.Test
         public string AnimationState;
 
         public float Time;
+        public float CumulativeTime = 0f;
+        
+        public int AnimationRate = 30;
+        public float FrameDuration = 0;
+        
         public List<float> AnimationTimes = new List<float>();
         public List<Transform> TransformList = new List<Transform>();
         public Dictionary<Transform, List<(float,Vector3)>> BonePositionData = new Dictionary<Transform, List<(float,Vector3)>>();
@@ -26,20 +31,12 @@ namespace Gladius.util.Test
         
         public void Awake()
         {
-            // if (AnimationClip != null)
-            // {
-            //     GladiusAnimationClip gladiusAnimationClip = new GladiusAnimationClip(AnimationClip);
-            //     int ibreak = 0;
-            //     // using (BinaryWriter binaryWriter = new BinaryWriter(new FileStream(OutputPath, FileMode.Create)))
-            //     // {
-            //     //     AnimationUtils.WriteDataAsPAN(binaryWriter, RootBone, gladiusAnimationClip);
-            //     //     binaryWriter.Flush();
-            //     // }
-            // }
-
             BuildBoneData(RootBone);
             Time = 0f;
-            //Animation.Play(AnimationState);
+            CumulativeTime = 0f;
+            FrameDuration = (1f / (float)AnimationRate);
+            
+            
             Animator.Play(AnimationState);
         }
 
@@ -56,49 +53,79 @@ namespace Gladius.util.Test
 
         public void Update()
         {
-            AnimatorStateInfo currentInfo = Animator.GetCurrentAnimatorStateInfo(0); 
-            if(currentInfo.normalizedTime < 1f)
+            CumulativeTime += UnityEngine.Time.deltaTime;
+            if (CumulativeTime >= FrameDuration)
             {
-                Time += 1f / 30f;
-                AnimationTimes.Add(Time);
-                
-                foreach (Transform t in BonePositionData.Keys)
+                CumulativeTime = 0f;
+                AnimatorStateInfo currentInfo = Animator.GetCurrentAnimatorStateInfo(0);
+                if(!DataWritten)
                 {
-                    BonePositionData[t].Add((Time,t.localPosition));
-                }
+                    Time += FrameDuration;
+                    AnimationTimes.Add(Time);
 
-                foreach (Transform t in BoneRotationData.Keys)
-                {
-                    BoneRotationData[t].Add((Time,t.localRotation));
-                }
-            }
-
-            if (currentInfo.normalizedTime >= 1f)
-            {
-                if (!DataWritten)
-                {
-                    using (TextWriter tw = new StreamWriter(DebugOutputPath))
+                    foreach (Transform t in BonePositionData.Keys)
                     {
-                        for (int i = 0; i < AnimationTimes.Count; i++)
+                        BonePositionData[t].Add((Time, t.localPosition));
+                    }
+
+                    foreach (Transform t in BoneRotationData.Keys)
+                    {
+                        BoneRotationData[t].Add((Time, t.localRotation));
+                    }
+                    
+                    if(currentInfo.normalizedTime >= 1.0f)
+                    {
+                        using (TextWriter tw = new StreamWriter(DebugOutputPath))
                         {
-                            foreach (Transform t in TransformList)
+                            for (int i = 0; i < AnimationTimes.Count; i++)
                             {
-                                tw.WriteLine($"{t.name} lp ({BonePositionData[t][i]})   lr ({BoneRotationData[t][i]})");
+                                foreach (Transform t in TransformList)
+                                {
+                                    tw.WriteLine(
+                                        $"{t.name} lp ({BonePositionData[t][i]})   lr ({BoneRotationData[t][i]})");
+                                }
                             }
                         }
+
+                        using (BinaryWriter bw = new BinaryWriter(File.Open(OutputPath, FileMode.Create)))
+                        {
+                            AnimationUtils.WriteDataAsPAN(bw, RootBone, TransformList, AnimationTimes, BonePositionData,
+                                BoneRotationData);
+                        }
+
+                        GladiusSimpleAnim simpleAnim = new GladiusSimpleAnim();
+                        AnimationData druidData = null;
+                        AnimationData barbarianData = null;
+                        AnimationData urlanPosRotData = null;
+
+                        // now try and load that as a gladius anim.
+                        using (BinaryReader binReader = new BinaryReader(new FileStream(OutputPath, FileMode.Open)))
+                        {
+                            druidData = AnimationLoader.ReadSingleAnimationFile("", simpleAnim, binReader);
+                        }
+
+
+                        using (BinaryReader binReader = new BinaryReader(
+                                   new FileStream("Assets/GladiusAnims/barbarian/barbarian_idle.pan.bytes",
+                                       FileMode.Open)))
+                        {
+                            barbarianData = AnimationLoader.ReadSingleAnimationFile("", simpleAnim, binReader);
+                        }
+
+                        using (BinaryReader binReader = new BinaryReader(
+                                   new FileStream("Assets/GladiusAnims/urlan/urlan_act2axeswingbr.pan.bytes",
+                                       FileMode.Open)))
+                        {
+                            urlanPosRotData = AnimationLoader.ReadSingleAnimationFile("", simpleAnim, binReader);
+                        }
+
+
+                        DataWritten = true;
+
                     }
-
-                    using (BinaryWriter bw = new BinaryWriter(File.Open(OutputPath, FileMode.Create)))
-                    {
-                        AnimationUtils.WriteDataAsPAN(bw, RootBone, TransformList, AnimationTimes, BonePositionData,
-                            BoneRotationData);
-                    }
-
-                    DataWritten = true;
-
                 }
-            }
 
+            }
         }
     }
 }

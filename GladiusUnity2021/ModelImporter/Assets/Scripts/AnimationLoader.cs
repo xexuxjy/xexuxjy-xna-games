@@ -193,8 +193,17 @@ public static class AnimationLoader
         FileChunk fileChunk = FileChunk.FromStream(reader);
         int escape = 20;
         int escapeCount = 0;
+
+        List<FileChunk> chunkHistory = new List<FileChunk>();
+        
         while(fileChunk != null  && (!fileChunk.ChunkName.SequenceEqual(AnimationLoader.endTag)))
         {
+            chunkHistory.Add(fileChunk);
+            if (fileChunk.ChunkSize <= 0 || fileChunk.ChunkElements < 0)
+            {
+                int ibreak2 = 0;
+                return false;
+            }
             
             //Debug.LogError("FileChunk : " + new string(fileChunk.ChunkName));
             String chunkName = new String(fileChunk.ChunkName);
@@ -238,6 +247,7 @@ public class OptRotTrack : AnimTrack
 
 public class anim_OptRotTrack
 {
+    public const int Size = 12;
     public void FromStream(BinaryReader reader)
     {
         mNumKeys = reader.ReadUInt32();
@@ -286,6 +296,7 @@ public class OptPosTrack : AnimTrack
 
 public class anim_OptPosTrack
 {
+    public const int Size = 20;
     public void FromStream(BinaryReader reader)
     {
         mNumKeys = reader.ReadUInt32();
@@ -313,6 +324,8 @@ public class anim_OptPosTrack
 
 public struct optVec
 {
+    public const int Size = 8;
+    
     //	char		x, y;//, z, pad;
     public Int16 x, y, z;
     //	uint32		compact;
@@ -361,6 +374,8 @@ public struct optVec
 
 public struct optQuat
 {
+    public const int Size = 4;
+    
     // Touch these
     public const int QXBITS = 10;
     public const int QYBITS = 10;
