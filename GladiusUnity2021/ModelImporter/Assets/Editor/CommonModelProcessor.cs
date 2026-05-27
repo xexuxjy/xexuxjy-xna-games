@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -308,7 +309,175 @@ public static class CommonModelProcessor
             triangles = mesh.triangles.Reverse().ToArray()
         };
     }
+    // with thanks to : https://github.com/bkevelham/unity-avatar-generation/blob/main/Assets/Scripts/AvatarUtils.cs
+    
+    public static Dictionary<string, string> GladiusToUnityAvatarBoneMappings = new Dictionary<string, string>()
+    {
+		{"faceSkull", "Head" },
+        {"zero", "Hips" },
+		{"fingerInTip_L", "Left Index Distal" },
+		{"fingerInMid_L", "Left Index Intermediate" },
+		{"fingerInRoot_L", "Left Index Proximal" },
+		{"fingerPinkTip_L", "Left Little Distal" },
+		{"fingerPinkMid_L", "Left Little Intermediate" },
+		{"fingerPinkRoot_L", "Left Little Proximal" },
+		{"fingerMidTip_L", "Left Middle Distal" },
+		{"fingerMidMid_L", "Left Middle Intermediate" },
+		{"fingerMidRoot_L", "Left Middle Proximal" },
+		{"fingerRingTip_L", "Left Ring Distal" },
+		{"fingerRingMid_L", "Left Ring Intermediate" },
+		{"fingerRingRoot_L", "Left Ring Proximal" },
+		{"fingerThTip_L", "Left Thumb Distal" },
+		{"fingerThMid_L", "Left Thumb Intermediate" },
+		{"fingerThRoot_L", "Left Thumb Proximal" },
+		{"legBall_L", "LeftFoot" },
+		{"fingerPalm_L", "LeftHand" },
+		{"armWristTwist_L", "LeftLowerArm" },
+		{"legAnkle_L", "LeftLowerLeg" },
+		{"armShoulderTwist_L", "LeftShoulder" },
+		{"mixamorig:LeftToeBase", "LeftToes" },
+		{"armShoulderTwist_L2", "LeftUpperArm" },
+		{"legKnee_L", "LeftUpperLeg" },
+		{"bodyNeck", "Neck" },
+        {"fingerInTip_R", "Right Index Distal" },
+        {"fingerInMid_R", "Right Index Intermediate" },
+        {"fingerInRoot_R", "Right Index Proximal" },
+        {"fingerPinkTip_R", "Right Little Distal" },
+        {"fingerPinkMid_R", "Right Little Intermediate" },
+        {"fingerPinkRoot_R", "Right Little Proximal" },
+        {"fingerMidTip_R", "Right Middle Distal" },
+        {"fingerMidMid_R", "Right Middle Intermediate" },
+        {"fingerMidRoot_R", "Right Middle Proximal" },
+        {"fingerRingTip_R", "Right Ring Distal" },
+        {"fingerRingMid_R", "Right Ring Intermediate" },
+        {"fingerRingRoot_R", "Right Ring Proximal" },
+        {"fingerThTip_R", "Right Thumb Distal" },
+        {"fingerThMid_R", "Right Thumb Intermediate" },
+        {"fingerThRoot_R", "Right Thumb Proximal" },
+        {"legBall_R", "RightFoot" },
+        {"fingerPalm_R", "RightHand" },
+        {"armWristTwist_R", "RightLowerArm" },
+        {"legAnkle_R", "RightLowerLeg" },
+        {"armShoulderTwist_R", "RightShoulder" },
+        {"mixamorig:RightToeBase", "RightToes" },
+        {"armShoulderTwist_R2", "RightUpperArm" },
+        {"legKnee_R", "RightUpperLeg" },
+		{"bodyLumbar1", "Spine" },
+		{"bodyThoracic", "UpperChest" }    
+    };
+    
+    public static Dictionary<string, string> GladiusToUnityAvatarBoneMappings2 = new Dictionary<string, string>()
+    {
+        {"faceSkull", "Head" },
+        {"zero", "Hips" },
+		{"armShoulderTwist_L2", "LeftUpperArm" },
+        {"armShoulderTwist_R2", "RightUpperArm" },
+        {"legKnee_L", "LeftUpperLeg" },
+        {"legKnee_R", "RightUpperLeg" },
+        {"legAnkle_L", "LeftLowerLeg" },
+        {"legAnkle_R", "RightLowerLeg" },
+        {"legBall_L", "LeftFoot" },
+        {"legBall_R", "RightFoot" },
+        {"bodyLumbar1", "Spine" },
+        {"armWristTwist_L", "LeftLowerArm" },
+        {"armWristTwist_R", "RightLowerArm" },
+        {"fingerPalm_L", "LeftHand" },
+        {"fingerPalm_R", "RightHand" }
+    };
+    
+    
+    
+    public static Avatar BuildAvatar(GameObject go)
+    {
+        HumanDescription humanDescription = new HumanDescription();
+        SkeletonBone[] skeletonBones = CreateSkeletonBones(go);
+        HumanBone[] humanBones = CreateHumanBones(go);
+        
+        humanDescription.skeleton = skeletonBones;
+        humanDescription.human = humanBones;
+        
+        Avatar avatar = AvatarBuilder.BuildHumanAvatar(go, humanDescription);
+        
+        return avatar;
+    }
+        
+    private static SkeletonBone[] CreateSkeletonBones(GameObject avatarRoot)
+    {
+        List<SkeletonBone> skeleton = new List<SkeletonBone>();
 
+        Transform[] avatarTransforms = avatarRoot.GetComponentsInChildren<Transform>();
+        foreach (Transform avatarTransform in avatarTransforms)
+        {
+            SkeletonBone bone = new SkeletonBone()
+            {
+                name = avatarTransform.name,
+                
+                position = avatarTransform.localPosition,
+                rotation = avatarTransform.localRotation,
+                scale = avatarTransform.localScale
+            };
+
+            skeleton.Add(bone);
+        }
+        return skeleton.ToArray();
+    }
+    private static HumanBone[] CreateHumanBones(GameObject avatarRoot)
+    {
+        List<HumanBone> humanBones = new List<HumanBone>();
+
+        Transform[] avatarTransforms = avatarRoot.GetComponentsInChildren<Transform>();
+        int count = 0;
+        foreach (Transform avatarTransform in avatarTransforms)
+        {
+            if (count == 34)
+            {
+                int ibreak = 0;
+            }
+            foreach(string key in GladiusToUnityAvatarBoneMappings.Keys)
+            {
+                string truncatedName = avatarTransform.name.Substring(0,avatarTransform.name.IndexOf("--")); 
+                if (truncatedName == key)
+                {
+                    string humanName = GladiusToUnityAvatarBoneMappings[key];
+                    HumanBone bone = new HumanBone
+                    {
+                        boneName = avatarTransform.name,
+                        humanName = humanName,
+                        limit = new HumanLimit()
+                    };
+                    bone.limit.useDefaultValues = true;
+
+                    humanBones.Add(bone);
+                    break;
+                }
+            }
+
+            count++;
+        }
+
+        string[] requiredBones = new string[]{"Hips","Spine","LeftUpperArm","LeftLowerArm","LeftHand","RightUpperArm","RightLowerArm","RightHand","LeftUpperLeg","LeftLowerLeg","LeftFoot","RightUpperLeg","RightLowerLeg","RightFoot","Head"};
+
+        foreach (string requiredBone in requiredBones)
+        {
+            bool found = false;
+            foreach (var humanBone in humanBones)
+            {
+                if (humanBone.humanName == requiredBone)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                Debug.LogWarning($"Can't find required bone {requiredBone}");
+            }
+        }
+        
+        return humanBones.ToArray();
+    }
+    
 
     public static string ProcessCommonModel(string fullAssetPath, string outputHierarchy, int lodLevel,
         CommonModelData commonModel, string outputDirectory)
@@ -368,7 +537,7 @@ public static class CommonModelProcessor
             }
 
             rootGO = boneObjectMap[commonModel.BoneList[0]];
-            rootGO.transform.SetParent(gladiusToUnity.transform, false);
+            //rootGO.transform.SetParent(gladiusToUnity.transform, false);
 
 
             String noExtensionName = commonModel.Name.Replace(".mdl", "");
@@ -431,9 +600,28 @@ public static class CommonModelProcessor
             RigBuilder rigBuilder = rootGO.AddComponent<RigBuilder>();
             rigBuilder.layers.Add(rigLayer);
 
-            Animator animator = rootGO.AddComponent<Animator>();
+            Animator animator = rootGO.GetComponent<Animator>();
+            if (animator == null)
+            {
+                animator = rootGO.AddComponent<Animator>();
+            }
 
-            // look at adding human avatar - though not sure whgy....
+            Avatar avatar = BuildAvatar(rootGO);
+            avatar.name = commonModel.Name;
+            
+            
+            animator.avatar = avatar;
+            
+            string avatarAssetOutputDirName = "Avatars" + outputHierarchy;
+            string avatarFullOuputDirName = Application.dataPath + "/" + avatarAssetOutputDirName;
+
+            if (!Directory.Exists(avatarFullOuputDirName))
+            {
+                Directory.CreateDirectory(avatarFullOuputDirName);
+            }
+
+            AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName + avatar.name + ".avatar");
+            rootGO.transform.SetParent(gladiusToUnity.transform, false);
         }
 
         

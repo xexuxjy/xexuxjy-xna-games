@@ -341,6 +341,8 @@ public struct optVec
 
     public static optVec Put(Vector3 v, UInt16 time,Vector3 _scalar)
     {
+        v = GladiusGlobals.UnityToGladius(v);
+        
         optVec dst =  new optVec();
         dst.x = (Int16)((v.x / _scalar.x));
         dst.y = (Int16)((v.y / _scalar.y));
