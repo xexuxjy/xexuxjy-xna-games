@@ -42,8 +42,12 @@ namespace Assets.Editor
         )
 
         {
-            Debug.Log("In xbox processor");
 
+            //GladiusGlobals.APPLY_UNITY_TRANSLATION = false;
+            //GladiusGlobals.APPLY_UNITY_TRANSLATION_INVERT_X = true;
+            
+            
+            Debug.Log($"In xbox processor - ApplyTranslation ({GladiusGlobals.APPLY_UNITY_TRANSLATION})  ApplyTranslationX ({GladiusGlobals.APPLY_UNITY_TRANSLATION_INVERT_X})");
 
             object o2 = CommonModelImporter.BuildChunkDictionary();
 

@@ -61,7 +61,13 @@ public static class AnimationUtils
         List<string> boneNames = new List<string>();
         foreach (BoneNode boneNode in boneNodes)
         {
-            boneNames.Add(boneNode.name);
+            string originalName = boneNode.name;
+            if (boneNode.name.Contains("--"))
+            {
+                originalName = boneNode.name.Substring(0, boneNode.name.IndexOf("--"));
+            }
+
+            boneNames.Add(originalName);
         }
         
         List<ushort> timeDataUShort = new List<ushort>();
@@ -398,7 +404,9 @@ public static class AnimationUtils
 
     public static ushort FloatTimeToUShort(float time)
     {
-        return (ushort)(time / FrameRate);
+        //return (ushort)(time / FrameRate);
+        return (ushort)(time / FrameTime);
+        
     }
     
     

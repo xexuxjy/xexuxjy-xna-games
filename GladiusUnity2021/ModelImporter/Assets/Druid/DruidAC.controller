@@ -145,7 +145,7 @@ AnimatorState:
   - {fileID: -6727519330935730902}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
+  m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
@@ -247,7 +247,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -3733985316696045359}
-    m_Position: {x: 342.5, y: -21.5, z: 0}
+    m_Position: {x: 340, y: -20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2193448541165196229}
     m_Position: {x: 340, y: 200, z: 0}

@@ -145,39 +145,102 @@ public static class GladiusGlobals
     {
     }
 
+    public static bool APPLY_UNITY_TRANSLATION = true;
+    public static bool APPLY_UNITY_TRANSLATION_INVERT_X = false;
+    
     public static void GladiusToUnity(ref Vector3 input)
     {
-        input = new Vector3(input.x, input.z, input.y);
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            input = new Vector3(input.x, input.z, input.y);
+        }
+        if (APPLY_UNITY_TRANSLATION_INVERT_X)
+        {
+            input.x = -input.x;
+        }
+        
     }
 
     public static Vector3 GladiusToUnity(Vector3 input)
     {
-        input = new Vector3(input.x, input.z, input.y);
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            input = new Vector3(input.x, input.z, input.y);
+        }
+        if (APPLY_UNITY_TRANSLATION_INVERT_X)
+        {
+            input.x = -input.x;
+        }
+
         return input;
     }
 
     public static void UnityToGladius(ref Vector3 input)
     {
-        input = new Vector3(input.x, input.z, input.y);
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            input = new Vector3(input.x, input.z, input.y);
+        }
+        if (APPLY_UNITY_TRANSLATION_INVERT_X)
+        {
+            input.x = -input.x;
+        }
     }
 
     public static Vector3 UnityToGladius(Vector3 input)
     {
-        input = new Vector3(input.x, input.z, input.y);
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            input = new Vector3(input.x, input.z, input.y);
+        }
+        if (APPLY_UNITY_TRANSLATION_INVERT_X)
+        {
+            input.x = -input.x;
+        }
+
         return input;
     }
 
 
     public static void AdjustV4(ref Vector4 input)
     {
-        input = new Vector4(input.x, input.z, input.y,0);
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            input = new Vector4(input.x, input.z, input.y, 0);
+        }
+        if (APPLY_UNITY_TRANSLATION_INVERT_X)
+        {
+            input.x = -input.x;
+        }
     }
 
+    public static Quaternion AdjustQuaternion(Quaternion q)
+    {
+        Quaternion result = q;
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            result = new Quaternion(result.x, result.z, result.y, result.w);
+        }
+        if (APPLY_UNITY_TRANSLATION_INVERT_X)
+        {
+            result.x = -result.x;
+        }
+
+        return result;
+    }
 
 
     public static void AdjustQuaternion(ref Quaternion q)
     {
-        q = new Quaternion(q.x, q.z, q.y, q.w);
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            q = new Quaternion(q.x, q.z, q.y, q.w);
+        }
+        if (APPLY_UNITY_TRANSLATION_INVERT_X)
+        {
+            q.x = -q.x;
+        }
+        
     }
 
 

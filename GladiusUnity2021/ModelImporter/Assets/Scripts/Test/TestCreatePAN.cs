@@ -60,8 +60,9 @@ namespace Gladius.util.Test
                 AnimatorStateInfo currentInfo = Animator.GetCurrentAnimatorStateInfo(0);
                 if(!DataWritten)
                 {
-                    Time += FrameDuration;
                     AnimationTimes.Add(Time);
+
+                    Time += FrameDuration;
 
                     foreach (Transform t in BonePositionData.Keys)
                     {
@@ -106,7 +107,7 @@ namespace Gladius.util.Test
 
 
                         using (BinaryReader binReader = new BinaryReader(
-                                   new FileStream("Assets/GladiusAnims/barbarian/barbarian_idle.pan.bytes",
+                                   new FileStream("Assets/GladiusAnims/barbarian/barbarian_moveclimbhalf.pan.bytes",
                                        FileMode.Open)))
                         {
                             barbarianData = AnimationLoader.ReadSingleAnimationFile("", simpleAnim, binReader);

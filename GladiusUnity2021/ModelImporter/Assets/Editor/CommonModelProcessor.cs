@@ -334,7 +334,7 @@ public static class CommonModelProcessor
 		{"fingerPalm_L", "LeftHand" },
 		{"armWristTwist_L", "LeftLowerArm" },
 		{"legAnkle_L", "LeftLowerLeg" },
-		{"armShoulderTwist_L", "LeftShoulder" },
+		{"armShoulderBlade_L", "LeftShoulder" },
 		{"mixamorig:LeftToeBase", "LeftToes" },
 		{"armShoulderTwist_L2", "LeftUpperArm" },
 		{"legKnee_L", "LeftUpperLeg" },
@@ -358,13 +358,72 @@ public static class CommonModelProcessor
         {"fingerPalm_R", "RightHand" },
         {"armWristTwist_R", "RightLowerArm" },
         {"legAnkle_R", "RightLowerLeg" },
-        {"armShoulderTwist_R", "RightShoulder" },
+        {"armShoulderBlade_R", "RightShoulder" },
         {"mixamorig:RightToeBase", "RightToes" },
         {"armShoulderTwist_R2", "RightUpperArm" },
         {"legKnee_R", "RightUpperLeg" },
 		{"bodyLumbar1", "Spine" },
 		{"bodyThoracic", "UpperChest" }    
     };
+
+    
+        public static Dictionary<string, string> GladiusToUnityAvatarBoneMappingsLRSWAP = new Dictionary<string, string>()
+    {
+		{"faceSkull", "Head" },
+        {"zero", "Hips" },
+		{"fingerInTip_R", "Left Index Distal" },
+		{"fingerInMid_R", "Left Index Intermediate" },
+		{"fingerInRoot_R", "Left Index Proximal" },
+		{"fingerPinkTip_R", "Left Little Distal" },
+		{"fingerPinkMid_R", "Left Little Intermediate" },
+		{"fingerPinkRoot_R", "Left Little Proximal" },
+		{"fingerMidTip_R", "Left Middle Distal" },
+		{"fingerMidMid_R", "Left Middle Intermediate" },
+		{"fingerMidRoot_R", "Left Middle Proximal" },
+		{"fingerRingTip_R", "Left Ring Distal" },
+		{"fingerRingMid_R", "Left Ring Intermediate" },
+		{"fingerRingRoot_R", "Left Ring Proximal" },
+		{"fingerThTip_R", "Left Thumb Distal" },
+		{"fingerThMid_R", "Left Thumb Intermediate" },
+		{"fingerThRoot_R", "Left Thumb Proximal" },
+		{"legBall_R", "LeftFoot" },
+		{"fingerPalm_R", "LeftHand" },
+		{"armWristTwist_R", "LeftLowerArm" },
+		{"legAnkle_R", "LeftLowerLeg" },
+		{"armShoulderBlade_R", "LeftShoulder" },
+		{"mixamorig:LeftToeBase", "LeftToes" },
+		{"armShoulderTwist_R2", "LeftUpperArm" },
+		{"legKnee_R", "LeftUpperLeg" },
+		{"bodyNeck", "Neck" },
+        {"fingerInTip_L", "Right Index Distal" },
+        {"fingerInMid_L", "Right Index Intermediate" },
+        {"fingerInRoot_L", "Right Index Proximal" },
+        {"fingerPinkTip_L", "Right Little Distal" },
+        {"fingerPinkMid_L", "Right Little Intermediate" },
+        {"fingerPinkRoot_L", "Right Little Proximal" },
+        {"fingerMidTip_L", "Right Middle Distal" },
+        {"fingerMidMid_L", "Right Middle Intermediate" },
+        {"fingerMidRoot_L", "Right Middle Proximal" },
+        {"fingerRingTip_L", "Right Ring Distal" },
+        {"fingerRingMid_L", "Right Ring Intermediate" },
+        {"fingerRingRoot_L", "Right Ring Proximal" },
+        {"fingerThTip_L", "Right Thumb Distal" },
+        {"fingerThMid_L", "Right Thumb Intermediate" },
+        {"fingerThRoot_L", "Right Thumb Proximal" },
+        {"legBall_L", "RightFoot" },
+        {"fingerPalm_L", "RightHand" },
+        {"armWristTwist_L", "RightLowerArm" },
+        {"legAnkle_L", "RightLowerLeg" },
+        {"armShoulderBlade_L", "RightShoulder" },
+        {"mixamorig:RightToeBase", "RightToes" },
+        {"armShoulderTwist_L2", "RightUpperArm" },
+        {"legKnee_L", "RightUpperLeg" },
+		{"bodyLumbar1", "Spine" },
+		{"bodyThoracic", "UpperChest" }    
+    };
+
+    
+    
     
     public static Dictionary<string, string> GladiusToUnityAvatarBoneMappings2 = new Dictionary<string, string>()
     {
@@ -423,6 +482,11 @@ public static class CommonModelProcessor
     }
     private static HumanBone[] CreateHumanBones(GameObject avatarRoot)
     {
+
+        bool swapMap = true;
+        Dictionary<string, string> boneMappings =
+            swapMap ? GladiusToUnityAvatarBoneMappingsLRSWAP : GladiusToUnityAvatarBoneMappings;
+        
         List<HumanBone> humanBones = new List<HumanBone>();
 
         Transform[] avatarTransforms = avatarRoot.GetComponentsInChildren<Transform>();
@@ -433,12 +497,12 @@ public static class CommonModelProcessor
             {
                 int ibreak = 0;
             }
-            foreach(string key in GladiusToUnityAvatarBoneMappings.Keys)
+            foreach(string key in boneMappings.Keys)
             {
                 string truncatedName = avatarTransform.name.Substring(0,avatarTransform.name.IndexOf("--")); 
                 if (truncatedName == key)
                 {
-                    string humanName = GladiusToUnityAvatarBoneMappings[key];
+                    string humanName = boneMappings[key];
                     HumanBone bone = new HumanBone
                     {
                         boneName = avatarTransform.name,
@@ -620,7 +684,7 @@ public static class CommonModelProcessor
                 Directory.CreateDirectory(avatarFullOuputDirName);
             }
 
-            AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName + avatar.name + ".avatar");
+            AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName + avatar.name + ".asset");
             rootGO.transform.SetParent(gladiusToUnity.transform, false);
         }
 

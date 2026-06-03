@@ -2089,15 +2089,6 @@ public class SKELChunk : BaseChunk
         for (int i = 0; i < chunk.NumElements; ++i)
         {
             BoneNode node = BoneNode.FromStream(binReader);
-            //node.name = m_boneNames[i];
-            //m_boneNameDictionary[i] = node.name;
-            //List<string> names;
-            //if (!BoneNode.pad1ByteNames.TryGetValue(node.flags, out names))
-            //{
-            //    names = new List<string>();
-            //    BoneNode.pad1ByteNames[node.flags] = names;
-            //}
-            //names.Add(node.name);
             chunk.BoneList.Add(node);
         }
 

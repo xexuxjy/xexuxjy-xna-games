@@ -511,6 +511,8 @@ public struct optQuat
     
     public static optQuat Put(Quaternion q,float time)
     {
+        q = GladiusGlobals.AdjustQuaternion(q);
+        
         IndexedQuaternion originalQuaternion = new IndexedQuaternion(q);
         IndexedQuaternion quantizedQuaternion = originalQuaternion;
         IndexedQuaternion outQuaternion = new IndexedQuaternion();

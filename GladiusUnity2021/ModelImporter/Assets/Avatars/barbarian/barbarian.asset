@@ -786,8 +786,8 @@ Avatar:
       data:
         serializedVersion: 2
         m_RootX:
-          t: {x: -0.001641825, y: 1.1213317, z: -0.03690456}
-          q: {x: -0, y: 1, z: -0, w: 0}
+          t: {x: 0.0015706598, y: 1.1213317, z: -0.03690456}
+          q: {x: -0, y: -0, z: -0, w: 1}
           s: {x: 1, y: 1, z: 1}
         m_Skeleton:
           data:
@@ -811,11 +811,11 @@ Avatar:
             - m_ParentId: 7
               m_AxesId: 4
             - m_ParentId: 5
-              m_AxesId: -1
+              m_AxesId: 5
             - m_ParentId: 9
               m_AxesId: -1
             - m_ParentId: 10
-              m_AxesId: 5
+              m_AxesId: -1
             - m_ParentId: 11
               m_AxesId: 6
             - m_ParentId: 12
@@ -859,11 +859,11 @@ Avatar:
             - m_ParentId: 31
               m_AxesId: 23
             - m_ParentId: 5
-              m_AxesId: -1
+              m_AxesId: 24
             - m_ParentId: 33
               m_AxesId: -1
             - m_ParentId: 34
-              m_AxesId: 24
+              m_AxesId: -1
             - m_ParentId: 35
               m_AxesId: 25
             - m_ParentId: 36
@@ -968,23 +968,23 @@ Avatar:
               m_Type: 1
             - m_PreQ: {x: -0, y: -0, z: -0, w: 1}
               m_PostQ: {x: -0, y: -0, z: -0, w: -1}
-              m_Sgn: {x: 1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.2617994, z: -0.2617994}
                 m_Max: {x: 0, y: 0.2617994, z: 0.5235988}
-              m_Length: 0.15639998
+              m_Length: 0.36914998
               m_Type: 1
-            - m_PreQ: {x: 0.000000042058634, y: -0.24421035, z: -0.33168852, w: -0.9112322}
+            - m_PreQ: {x: -0.000000042058634, y: 0.24421014, z: 0.33168852, w: -0.91123223}
               m_PostQ: {x: -0, y: 0.0000001268016, z: -0, w: 1}
-              m_Sgn: {x: 1, y: 1, z: -1}
+              m_Sgn: {x: -1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: -1.5707964, y: -1.7453293, z: -1.0471976}
                 m_Max: {x: 1.5707964, y: 1.7453293, z: 1.7453293}
               m_Length: 0.17627335
               m_Type: 1
-            - m_PreQ: {x: 0.54170185, y: -0.45448783, z: -0.45448783, w: -0.54170185}
+            - m_PreQ: {x: 0.54170185, y: 0.45448783, z: 0.45448783, w: -0.54170185}
               m_PostQ: {x: -0.7071068, y: -0.000000008429242, z: -0.000000008429242, w: 0.7071068}
-              m_Sgn: {x: 1, y: 1, z: -1}
+              m_Sgn: {x: -1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: -1.5707964, y: 0, z: -1.3962634}
                 m_Max: {x: 1.5707964, y: 0, z: 1.3962634}
@@ -992,151 +992,151 @@ Avatar:
               m_Type: 1
             - m_PreQ: {x: -0, y: -0.000000011920747, z: -0, w: 1}
               m_PostQ: {x: -0, y: 0.000000011920747, z: 0, w: -1}
-              m_Sgn: {x: 1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.6981317, z: -1.3962634}
                 m_Max: {x: 0, y: 0.6981317, z: 1.3962634}
               m_Length: 0.07812619
               m_Type: 1
-            - m_PreQ: {x: -0.61427844, y: 0.43046653, z: 0.4911752, w: 0.44284028}
+            - m_PreQ: {x: 0.5917667, y: -0.44593835, z: -0.20513576, w: -0.63942975}
               m_PostQ: {x: 0.49999988, y: -0.5, z: -0.5000002, w: -0.50000006}
-              m_Sgn: {x: -1, y: -1, z: 1}
+              m_Sgn: {x: 1, y: -1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: -0.43633232, z: -0.34906584}
                 m_Max: {x: 0, y: 0.43633232, z: 0.34906584}
               m_Length: 0.08013164
               m_Type: 1
-            - m_PreQ: {x: 0.57180154, y: -0.40877947, z: -0.37809977, w: -0.60248053}
+            - m_PreQ: {x: -0.4087793, y: 0.57180166, z: 0.60248065, w: 0.3780995}
               m_PostQ: {x: -0.5792281, y: 0.40558, z: 0.57922786, w: 0.40557948}
-              m_Sgn: {x: -1, y: 1, z: 1}
+              m_Sgn: {x: 1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.6981317}
                 m_Max: {x: 0, y: 0, z: 0.61086524}
               m_Length: 0.040249996
               m_Type: 1
-            - m_PreQ: {x: -0.6340984, y: 0.30327696, z: 0.47697526, w: 0.5276712}
+            - m_PreQ: {x: 0.50186133, y: -0.49213096, z: -0.658984, w: -0.26773563}
               m_PostQ: {x: 0.5792281, y: -0.40558, z: -0.57922786, w: -0.40557948}
-              m_Sgn: {x: -1, y: 1, z: 1}
+              m_Sgn: {x: 1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.6981317}
                 m_Max: {x: 0, y: 0, z: 0.61086524}
               m_Length: 0.022640623
               m_Type: 1
-            - m_PreQ: {x: 0.024970798, y: -0.15934736, z: -0.28541777, w: -0.94473356}
+            - m_PreQ: {x: 0.024970796, y: 0.0071245893, z: -0.28541774, w: 0.9580513}
               m_PostQ: {x: -0, y: -0.000000074505806, z: 0, w: 1}
-              m_Sgn: {x: -1, y: -1, z: -1}
+              m_Sgn: {x: 1, y: -1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.34906584, z: -0.87266463}
                 m_Max: {x: 0, y: 0.34906584, z: 0.87266463}
               m_Length: 0.05735425
               m_Type: 1
-            - m_PreQ: {x: -0.054417428, y: 0.000000021225853, z: 0.30861655, w: 0.9496286}
+            - m_PreQ: {x: -0.054417428, y: -0.000000021225853, z: 0.30861655, w: -0.9496286}
               m_PostQ: {x: -0, y: -0.000000022351742, z: -0, w: -1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.046299882
               m_Type: 1
-            - m_PreQ: {x: 0.054417428, y: -0.000000028301137, z: -0.30861655, w: -0.9496286}
+            - m_PreQ: {x: 0.054417428, y: 0.000000028301137, z: -0.30861655, w: 0.9496286}
               m_PostQ: {x: -0, y: 0.000000029802322, z: -0, w: 1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.026043683
               m_Type: 1
-            - m_PreQ: {x: 0.0031321212, y: -0.048723087, z: -0.28712013, w: -0.9566495}
+            - m_PreQ: {x: 0.0031321214, y: -0.027842281, z: -0.28712016, w: 0.9574848}
               m_PostQ: {x: -0, y: 0.000000007450581, z: 0, w: 1}
-              m_Sgn: {x: -1, y: -1, z: -1}
+              m_Sgn: {x: 1, y: -1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.1308997, z: -0.87266463}
                 m_Max: {x: 0, y: 0.1308997, z: 0.87266463}
               m_Length: 0.06940001
               m_Type: 1
-            - m_PreQ: {x: -0.006836298, y: 0.00000001503498, z: 0.31330284, w: 0.9496286}
+            - m_PreQ: {x: -0.006836298, y: -0.00000001503498, z: 0.31330284, w: -0.9496286}
               m_PostQ: {x: -0, y: -0.000000015832484, z: -0, w: -1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.04964329
               m_Type: 1
-            - m_PreQ: {x: 0.006836298, y: -0.00000001591939, z: -0.31330284, w: -0.9496286}
+            - m_PreQ: {x: 0.006836298, y: 0.00000001591939, z: -0.31330284, w: 0.9496286}
               m_PostQ: {x: -0, y: 0.000000016763806, z: -0, w: 1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.02792435
               m_Type: 1
-            - m_PreQ: {x: -0.01877969, y: 0.10080195, z: -0.28652245, w: -0.95257086}
+            - m_PreQ: {x: -0.01877969, y: -0.024395967, z: -0.28652245, w: 0.9575788}
               m_PostQ: {x: -0, y: -0.000000052154064, z: -0, w: 1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.1308997, z: -0.87266463}
                 m_Max: {x: 0, y: 0.1308997, z: 0.87266463}
               m_Length: 0.064914
               m_Type: 1
-            - m_PreQ: {x: 0.040903967, y: -0.0000000070752844, z: 0.31069648, w: 0.9496286}
+            - m_PreQ: {x: 0.040903967, y: 0.0000000070752844, z: 0.31069648, w: -0.9496286}
               m_PostQ: {x: -0, y: 0.000000007450581, z: -0, w: -1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.047038883
               m_Type: 1
-            - m_PreQ: {x: -0.04090396, y: -0.0000000070752844, z: -0.31069645, w: -0.9496286}
+            - m_PreQ: {x: -0.04090396, y: 0.0000000070752844, z: -0.31069645, w: 0.9496286}
               m_PostQ: {x: -0, y: 0.000000007450581, z: -0, w: 1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.026459374
               m_Type: 1
-            - m_PreQ: {x: -0.0373968, y: 0.2004045, z: -0.28405687, w: -0.9368838}
+            - m_PreQ: {x: -0.0373968, y: -0.0489075, z: -0.28405687, w: 0.9568287}
               m_PostQ: {x: -0, y: -0.000000014901161, z: -0, w: 1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.34906584, z: -0.87266463}
                 m_Max: {x: 0, y: 0.34906584, z: 0.87266463}
               m_Length: 0.040782273
               m_Type: 1
-            - m_PreQ: {x: 0.08110811, y: -0.00000016980684, z: 0.30269942, w: 0.9496287}
+            - m_PreQ: {x: 0.08110811, y: 0.00000016980684, z: 0.30269942, w: -0.9496287}
               m_PostQ: {x: -0, y: 0.00000017881393, z: -0, w: -1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.040936545
               m_Type: 1
-            - m_PreQ: {x: -0.08110811, y: 0.00000016980684, z: -0.30269942, w: -0.9496287}
+            - m_PreQ: {x: -0.08110811, y: -0.00000016980684, z: -0.30269942, w: 0.9496287}
               m_PostQ: {x: -0, y: -0.00000017881393, z: -0, w: 1}
-              m_Sgn: {x: -1, y: 1, z: -1}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.023026805
               m_Type: 1
             - m_PreQ: {x: -0, y: -0, z: 1, w: 0}
-              m_PostQ: {x: -0, y: -0, z: -1, w: -0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_PostQ: {x: -0, y: -0, z: -1, w: 0}
+              m_Sgn: {x: 1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: -0.2617994, z: -0.2617994}
                 m_Max: {x: 0, y: 0.2617994, z: 0.5235988}
-              m_Length: 0.15639998
+              m_Length: 0.36914998
               m_Type: 1
-            - m_PreQ: {x: 0.24421024, y: -0, z: -0.91123223, w: -0.33168852}
+            - m_PreQ: {x: -0.24421024, y: -0, z: -0.91123223, w: 0.33168852}
               m_PostQ: {x: -0, y: -0, z: 1, w: 0}
-              m_Sgn: {x: -1, y: 1, z: 1}
+              m_Sgn: {x: 1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: -1.5707964, y: -1.7453293, z: -1.0471976}
                 m_Max: {x: 1.5707964, y: 1.7453293, z: 1.7453293}
               m_Length: 0.1771
               m_Type: 1
-            - m_PreQ: {x: 0.45448783, y: -0.54170185, z: -0.54170185, w: -0.45448783}
+            - m_PreQ: {x: -0.45448783, y: -0.54170185, z: -0.54170185, w: 0.45448783}
               m_PostQ: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
-              m_Sgn: {x: -1, y: 1, z: 1}
+              m_Sgn: {x: 1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: -1.5707964, y: 0, z: -1.3962634}
                 m_Max: {x: 1.5707964, y: 0, z: 1.3962634}
@@ -1144,155 +1144,131 @@ Avatar:
               m_Type: 1
             - m_PreQ: {x: -0, y: -0, z: 1, w: 0}
               m_PostQ: {x: -0, y: -0, z: -1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: 1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: -0.6981317, z: -1.3962634}
                 m_Max: {x: 0, y: 0.6981317, z: 1.3962634}
               m_Length: 0.0782793
               m_Type: 1
-            - m_PreQ: {x: -0.43046656, y: 0.61427873, z: 0.4428402, w: 0.49117476}
+            - m_PreQ: {x: 0.44593853, y: -0.5917669, z: -0.6394296, w: -0.20513533}
               m_PostQ: {x: -0.5000001, y: 0.50000024, z: 0.49999997, w: 0.49999982}
-              m_Sgn: {x: 1, y: -1, z: -1}
+              m_Sgn: {x: -1, y: -1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.43633232, z: -0.34906584}
                 m_Max: {x: 0, y: 0.43633232, z: 0.34906584}
               m_Length: 0.08050002
               m_Type: 1
-            - m_PreQ: {x: 0.40877947, y: -0.5718015, z: -0.60248053, w: -0.3780998}
+            - m_PreQ: {x: -0.57180166, y: 0.4087793, z: 0.3780995, w: 0.60248065}
               m_PostQ: {x: 0.40558, y: -0.5792281, z: -0.40557948, w: -0.57922786}
-              m_Sgn: {x: 1, y: 1, z: -1}
+              m_Sgn: {x: -1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.6981317}
                 m_Max: {x: 0, y: 0, z: 0.61086524}
               m_Length: 0.040249996
               m_Type: 1
-            - m_PreQ: {x: -0.30327693, y: 0.6340985, z: 0.52767116, w: 0.47697526}
+            - m_PreQ: {x: 0.49213096, y: -0.50186133, z: -0.26773563, w: -0.658984}
               m_PostQ: {x: -0.40558, y: 0.5792281, z: 0.40557948, w: 0.57922786}
-              m_Sgn: {x: 1, y: 1, z: -1}
+              m_Sgn: {x: -1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.6981317}
                 m_Max: {x: 0, y: 0, z: 0.61086524}
               m_Length: 0.022640623
               m_Type: 1
-            - m_PreQ: {x: -0.15934746, y: 0.024970818, z: 0.9447337, w: 0.28541774}
+            - m_PreQ: {x: 0.0071246675, y: 0.024970818, z: -0.9580513, w: 0.28541774}
               m_PostQ: {x: -0.000000007450581, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: -1, z: 1}
+              m_Sgn: {x: -1, y: -1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: -0.34906584, z: -0.87266463}
                 m_Max: {x: 0, y: 0.34906584, z: 0.87266463}
               m_Length: 0.057499994
               m_Type: 1
-            - m_PreQ: {x: -0.000000035376424, y: -0.054417405, z: -0.9496286, w: -0.30861655}
+            - m_PreQ: {x: 0.000000035376424, y: -0.054417405, z: 0.9496286, w: -0.30861655}
               m_PostQ: {x: -0.000000037252903, y: -0, z: -1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.046000045
               m_Type: 1
-            - m_PreQ: {x: 0.000000035376424, y: 0.054417405, z: 0.9496286, w: 0.30861655}
+            - m_PreQ: {x: -0.000000035376424, y: 0.054417405, z: -0.9496286, w: 0.30861655}
               m_PostQ: {x: 0.000000037252903, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.025875024
               m_Type: 1
-            - m_PreQ: {x: -0.04872307, y: 0.0031321174, z: 0.9566495, w: 0.28712013}
+            - m_PreQ: {x: -0.027842293, y: 0.003132118, z: -0.9574848, w: 0.28712016}
               m_PostQ: {x: 0.000000004656613, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: -1, z: 1}
+              m_Sgn: {x: -1, y: -1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: -0.1308997, z: -0.87266463}
                 m_Max: {x: 0, y: 0.1308997, z: 0.87266463}
               m_Length: 0.068999976
               m_Type: 1
-            - m_PreQ: {x: 0.000000009728516, y: -0.006836296, z: -0.9496286, w: -0.31330284}
+            - m_PreQ: {x: -0.000000009728516, y: -0.006836296, z: 0.9496286, w: -0.31330284}
               m_PostQ: {x: 0.000000010244548, y: -0, z: -1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.049450006
               m_Type: 1
-            - m_PreQ: {x: -0.000000009728516, y: 0.006836296, z: 0.9496286, w: 0.31330284}
+            - m_PreQ: {x: 0.000000009728516, y: 0.006836296, z: -0.9496286, w: 0.31330284}
               m_PostQ: {x: -0.000000010244548, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.027815629
               m_Type: 1
-            - m_PreQ: {x: 0.10080192, y: -0.01877968, z: 0.95257086, w: 0.28652245}
+            - m_PreQ: {x: -0.024395939, y: -0.01877968, z: -0.9575788, w: 0.28652245}
               m_PostQ: {x: 0.000000022351742, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: -0.1308997, z: -0.87266463}
                 m_Max: {x: 0, y: 0.1308997, z: 0.87266463}
               m_Length: 0.06439998
               m_Type: 1
-            - m_PreQ: {x: -0.000000021225853, y: 0.040903967, z: -0.9496286, w: -0.31069645}
+            - m_PreQ: {x: 0.000000021225853, y: 0.040903967, z: 0.9496286, w: -0.31069645}
               m_PostQ: {x: -0.000000022351742, y: -0, z: -1, w: -0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.047149986
               m_Type: 1
-            - m_PreQ: {x: 0.000000021225853, y: -0.040903967, z: 0.9496286, w: 0.31069645}
+            - m_PreQ: {x: -0.000000021225853, y: -0.040903967, z: -0.9496286, w: 0.31069645}
               m_PostQ: {x: 0.000000022351742, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.026521867
               m_Type: 1
-            - m_PreQ: {x: 0.20040455, y: -0.03739682, z: 0.93688375, w: 0.28405687}
+            - m_PreQ: {x: -0.048907556, y: -0.03739682, z: -0.9568287, w: 0.28405687}
               m_PostQ: {x: 0.00000008940697, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: -0.34906584, z: -0.87266463}
                 m_Max: {x: 0, y: 0.34906584, z: 0.87266463}
               m_Length: 0.04024999
               m_Type: 1
-            - m_PreQ: {x: -0.00000012735512, y: 0.081108086, z: -0.9496287, w: -0.3026994}
+            - m_PreQ: {x: 0.00000012735512, y: 0.081108086, z: 0.9496287, w: -0.3026994}
               m_PostQ: {x: -0.00000013411044, y: -0, z: -1, w: -0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.041399963
               m_Type: 1
-            - m_PreQ: {x: 0.00000012735514, y: -0.08110809, z: 0.9496287, w: 0.30269942}
+            - m_PreQ: {x: -0.00000012735514, y: -0.08110809, z: -0.9496287, w: 0.30269942}
               m_PostQ: {x: 0.00000013411045, y: -0, z: 1, w: 0}
-              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Sgn: {x: -1, y: 1, z: -1}
               m_Limit:
                 m_Min: {x: 0, y: 0, z: -0.7853982}
                 m_Max: {x: 0, y: 0, z: 0.7853982}
               m_Length: 0.02328748
-              m_Type: 1
-            - m_PreQ: {x: 0.632973, y: -0.3151906, z: 0.632973, w: -0.3151906}
-              m_PostQ: {x: -0.5298055, y: 0.46830136, z: -0.5298055, w: 0.46830136}
-              m_Sgn: {x: 1, y: 1, z: 1}
-              m_Limit:
-                m_Min: {x: -1.0471976, y: -1.0471976, z: -1.5707964}
-                m_Max: {x: 1.0471976, y: 1.0471976, z: 0.87266463}
-              m_Length: 0.5620019
-              m_Type: 1
-            - m_PreQ: {x: -0.2593819, y: -0.65781534, z: -0.2593819, w: -0.65781534}
-              m_PostQ: {x: -0.2240983, y: 0.6706564, z: -0.2240983, w: 0.6706564}
-              m_Sgn: {x: 1, y: 1, z: -1}
-              m_Limit:
-                m_Min: {x: -1.5707964, y: 0, z: -1.3962634}
-                m_Max: {x: 1.5707964, y: 0, z: 1.3962634}
-              m_Length: 0.23025334
-              m_Type: 1
-            - m_PreQ: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
-              m_PostQ: {x: 0.5, y: -0.5, z: 0.5, w: -0.5}
-              m_Sgn: {x: 1, y: 1, z: 1}
-              m_Limit:
-                m_Min: {x: 0, y: -0.5235988, z: -0.87266463}
-                m_Max: {x: 0, y: 0.5235988, z: 0.87266463}
-              m_Length: 0.000000014901161
               m_Type: 1
             - m_PreQ: {x: 0.632973, y: -0.3151906, z: 0.632973, w: -0.3151906}
               m_PostQ: {x: -0.5298055, y: 0.46830136, z: -0.5298055, w: 0.46830136}
@@ -1313,6 +1289,30 @@ Avatar:
             - m_PreQ: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
               m_PostQ: {x: 0.5, y: -0.5, z: 0.5, w: -0.5}
               m_Sgn: {x: 1, y: -1, z: 1}
+              m_Limit:
+                m_Min: {x: 0, y: -0.5235988, z: -0.87266463}
+                m_Max: {x: 0, y: 0.5235988, z: 0.87266463}
+              m_Length: 0.000000014901161
+              m_Type: 1
+            - m_PreQ: {x: 0.632973, y: -0.3151906, z: 0.632973, w: -0.3151906}
+              m_PostQ: {x: -0.5298055, y: 0.46830136, z: -0.5298055, w: 0.46830136}
+              m_Sgn: {x: 1, y: 1, z: 1}
+              m_Limit:
+                m_Min: {x: -1.0471976, y: -1.0471976, z: -1.5707964}
+                m_Max: {x: 1.0471976, y: 1.0471976, z: 0.87266463}
+              m_Length: 0.5620019
+              m_Type: 1
+            - m_PreQ: {x: -0.2593819, y: -0.65781534, z: -0.2593819, w: -0.65781534}
+              m_PostQ: {x: -0.2240983, y: 0.6706564, z: -0.2240983, w: 0.6706564}
+              m_Sgn: {x: 1, y: 1, z: -1}
+              m_Limit:
+                m_Min: {x: -1.5707964, y: 0, z: -1.3962634}
+                m_Max: {x: 1.5707964, y: 0, z: 1.3962634}
+              m_Length: 0.23025334
+              m_Type: 1
+            - m_PreQ: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
+              m_PostQ: {x: 0.5, y: -0.5, z: 0.5, w: -0.5}
+              m_Sgn: {x: 1, y: 1, z: 1}
               m_Limit:
                 m_Min: {x: 0, y: -0.5235988, z: -0.87266463}
                 m_Max: {x: 0, y: 0.5235988, z: 0.87266463}
@@ -1521,11 +1521,11 @@ Avatar:
               s: {x: 1, y: 1, z: 1}
         m_LeftHand:
           data:
-            m_HandBoneIndex: 12000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f00000020000000
+            m_HandBoneIndex: 2a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000
         m_RightHand:
           data:
-            m_HandBoneIndex: 2a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000
-        m_HumanBoneIndex: 010000003b0000003f0000003c000000400000003d0000004100000002000000ffffffff0400000006000000080000000b000000230000000c000000240000000e000000260000001100000029000000ffffffffffffffffffffffffffffffffffffffff
+            m_HandBoneIndex: 12000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f00000020000000
+        m_HumanBoneIndex: 010000003f0000003b000000400000003c000000410000003d00000002000000ffffffff0400000006000000080000002100000009000000240000000c000000260000000e0000002900000011000000ffffffffffffffffffffffffffffffffffffffff
         m_HumanBoneMass:
         - 0.14545456
         - 0.12121213
@@ -1718,159 +1718,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: armShoulderTwist_L--33--2
-      m_HumanName: LeftShoulder
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: armShoulderTwist_L2--34--2
-      m_HumanName: LeftUpperArm
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: armWristTwist_L--36--2
-      m_HumanName: LeftLowerArm
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerPalm_L--39--2
-      m_HumanName: LeftHand
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerThRoot_L--40--2
-      m_HumanName: Left Thumb Proximal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerThMid_L--41--2
-      m_HumanName: Left Thumb Intermediate
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerThTip_L--42--2
-      m_HumanName: Left Thumb Distal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerInRoot_L--43--2
-      m_HumanName: Left Index Proximal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerInMid_L--44--2
-      m_HumanName: Left Index Intermediate
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerInTip_L--45--2
-      m_HumanName: Left Index Distal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerMidRoot_L--46--2
-      m_HumanName: Left Middle Proximal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerMidMid_L--47--2
-      m_HumanName: Left Middle Intermediate
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerMidTip_L--48--2
-      m_HumanName: Left Middle Distal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerRingRoot_L--49--2
-      m_HumanName: Left Ring Proximal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerRingMid_L--50--2
-      m_HumanName: Left Ring Intermediate
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerRingTip_L--51--2
-      m_HumanName: Left Ring Distal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerPinkRoot_L--52--2
-      m_HumanName: Left Little Proximal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerPinkMid_L--53--2
-      m_HumanName: Left Little Intermediate
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: fingerPinkTip_L--54--2
-      m_HumanName: Left Little Distal
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: armShoulderTwist_R--59--2
+    - m_BoneName: armShoulderBlade_L--31--2
       m_HumanName: RightShoulder
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1878,7 +1726,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: armShoulderTwist_R2--60--2
+    - m_BoneName: armShoulderTwist_L2--34--2
       m_HumanName: RightUpperArm
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1886,7 +1734,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: armWristTwist_R--62--2
+    - m_BoneName: armWristTwist_L--36--2
       m_HumanName: RightLowerArm
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1894,7 +1742,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerPalm_R--65--2
+    - m_BoneName: fingerPalm_L--39--2
       m_HumanName: RightHand
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1902,7 +1750,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerThRoot_R--66--2
+    - m_BoneName: fingerThRoot_L--40--2
       m_HumanName: Right Thumb Proximal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1910,7 +1758,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerThMid_R--67--2
+    - m_BoneName: fingerThMid_L--41--2
       m_HumanName: Right Thumb Intermediate
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1918,7 +1766,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerThTip_R--68--2
+    - m_BoneName: fingerThTip_L--42--2
       m_HumanName: Right Thumb Distal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1926,7 +1774,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerInRoot_R--69--2
+    - m_BoneName: fingerInRoot_L--43--2
       m_HumanName: Right Index Proximal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1934,7 +1782,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerInMid_R--70--2
+    - m_BoneName: fingerInMid_L--44--2
       m_HumanName: Right Index Intermediate
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1942,7 +1790,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerInTip_R--71--2
+    - m_BoneName: fingerInTip_L--45--2
       m_HumanName: Right Index Distal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1950,7 +1798,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerMidRoot_R--72--2
+    - m_BoneName: fingerMidRoot_L--46--2
       m_HumanName: Right Middle Proximal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1958,7 +1806,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerMidMid_R--73--2
+    - m_BoneName: fingerMidMid_L--47--2
       m_HumanName: Right Middle Intermediate
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1966,7 +1814,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerMidTip_R--74--2
+    - m_BoneName: fingerMidTip_L--48--2
       m_HumanName: Right Middle Distal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1974,7 +1822,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerRingRoot_R--75--2
+    - m_BoneName: fingerRingRoot_L--49--2
       m_HumanName: Right Ring Proximal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1982,7 +1830,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerRingMid_R--76--2
+    - m_BoneName: fingerRingMid_L--50--2
       m_HumanName: Right Ring Intermediate
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1990,7 +1838,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerRingTip_R--77--2
+    - m_BoneName: fingerRingTip_L--51--2
       m_HumanName: Right Ring Distal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -1998,7 +1846,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerPinkRoot_R--78--2
+    - m_BoneName: fingerPinkRoot_L--52--2
       m_HumanName: Right Little Proximal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -2006,7 +1854,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerPinkMid_R--79--2
+    - m_BoneName: fingerPinkMid_L--53--2
       m_HumanName: Right Little Intermediate
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -2014,7 +1862,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: fingerPinkTip_R--80--2
+    - m_BoneName: fingerPinkTip_L--54--2
       m_HumanName: Right Little Distal
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -2022,31 +1870,159 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
+    - m_BoneName: armShoulderBlade_R--57--2
+      m_HumanName: LeftShoulder
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: armShoulderTwist_R2--60--2
+      m_HumanName: LeftUpperArm
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: armWristTwist_R--62--2
+      m_HumanName: LeftLowerArm
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerPalm_R--65--2
+      m_HumanName: LeftHand
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerThRoot_R--66--2
+      m_HumanName: Left Thumb Proximal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerThMid_R--67--2
+      m_HumanName: Left Thumb Intermediate
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerThTip_R--68--2
+      m_HumanName: Left Thumb Distal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerInRoot_R--69--2
+      m_HumanName: Left Index Proximal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerInMid_R--70--2
+      m_HumanName: Left Index Intermediate
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerInTip_R--71--2
+      m_HumanName: Left Index Distal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerMidRoot_R--72--2
+      m_HumanName: Left Middle Proximal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerMidMid_R--73--2
+      m_HumanName: Left Middle Intermediate
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerMidTip_R--74--2
+      m_HumanName: Left Middle Distal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerRingRoot_R--75--2
+      m_HumanName: Left Ring Proximal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerRingMid_R--76--2
+      m_HumanName: Left Ring Intermediate
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerRingTip_R--77--2
+      m_HumanName: Left Ring Distal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerPinkRoot_R--78--2
+      m_HumanName: Left Little Proximal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerPinkMid_R--79--2
+      m_HumanName: Left Little Intermediate
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: fingerPinkTip_R--80--2
+      m_HumanName: Left Little Distal
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
     - m_BoneName: legKnee_L--84--2
-      m_HumanName: LeftUpperLeg
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: legAnkle_L--85--2
-      m_HumanName: LeftLowerLeg
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: legBall_L--86--2
-      m_HumanName: LeftFoot
-      m_Limit:
-        m_Min: {x: 0, y: 0, z: 0}
-        m_Max: {x: 0, y: 0, z: 0}
-        m_Value: {x: 0, y: 0, z: 0}
-        m_Length: 0
-        m_Modified: 0
-    - m_BoneName: legKnee_R--88--2
       m_HumanName: RightUpperLeg
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -2054,7 +2030,7 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: legAnkle_R--89--2
+    - m_BoneName: legAnkle_L--85--2
       m_HumanName: RightLowerLeg
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
@@ -2062,8 +2038,32 @@ Avatar:
         m_Value: {x: 0, y: 0, z: 0}
         m_Length: 0
         m_Modified: 0
-    - m_BoneName: legBall_R--90--2
+    - m_BoneName: legBall_L--86--2
       m_HumanName: RightFoot
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: legKnee_R--88--2
+      m_HumanName: LeftUpperLeg
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: legAnkle_R--89--2
+      m_HumanName: LeftLowerLeg
+      m_Limit:
+        m_Min: {x: 0, y: 0, z: 0}
+        m_Max: {x: 0, y: 0, z: 0}
+        m_Value: {x: 0, y: 0, z: 0}
+        m_Length: 0
+        m_Modified: 0
+    - m_BoneName: legBall_R--90--2
+      m_HumanName: LeftFoot
       m_Limit:
         m_Min: {x: 0, y: 0, z: 0}
         m_Max: {x: 0, y: 0, z: 0}
