@@ -517,14 +517,6 @@ public static class CommonModelImporter
         return result;
     }
 
-    //public static float ToHalfFloatInt16(BinaryReader reader)
-    //{
-    //    ushort val = reader.ReadUInt16();
-    //    HalfSingle hs = new HalfSingle();
-    //    hs.PackedValue = val;
-    //    return hs.ToSingle();
-    //}
-
     public static float ToFloatInt16(BinaryReader reader)
     {
         short val = reader.ReadInt16();
@@ -663,45 +655,11 @@ public static class CommonModelImporter
 
     public static float FromStream2ByteToFloatU(BinaryReader reader)
     {
-        //float v = ToFloatUInt16(reader);
-
         float v = ToFloatUInt16(reader);
         return v;
-        //float fixedpart = (float)(reader.ReadByte());
-        //float floatpart = (((float)reader.ReadByte()) / 255.0f);
-
-        //return fixedpart + floatpart;
     }
 
 
-    //public static float FromStream2ByteToFloatR(BinaryReader reader)
-    //{
-    //    float floatpart = (((float)reader.ReadByte()) / 255.0f);
-    //    float fixedpart = ByteToFloat(reader.ReadByte());
-
-    //    return fixedpart + floatpart;
-    //}
-
-    //public static float FromStream2ByteToFloat(BinaryReader reader)
-    //{
-    //    float fixedpart = ByteToFloat(reader.ReadByte());
-    //    float floatpart = (((float)reader.ReadByte()) / 255.0f);
-
-    //    return fixedpart + floatpart;
-
-    //    //short s = reader.ReadInt16();
-    //    //fixed / 65536.0
-    //    //return ((float)s / 65536.0f);
-    //    //byte b1 = reader.ReadByte();
-    //    //byte b2 = reader.ReadByte();
-
-    //    //int val = (int)b;
-    //    //if (val > 127)
-    //    //{
-    //    //    val = -256 + val;
-    //    //}
-    //    //return ((float)val);
-    //}
 
 
     public static IndexedVector3 FromStreamVector3BE(BinaryReader reader)
@@ -1156,8 +1114,7 @@ public class BaseModel
         get { return (m_chunkList.Find(x => x is OBBTChunk) as OBBTChunk); }
     }
 
-    
-    
+
     public Dictionary<int, BoneNode> m_boneIdDictionary = new Dictionary<int, BoneNode>();
     public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
     public List<ModelSubMesh> m_modelMeshes = new List<ModelSubMesh>();
@@ -1204,7 +1161,7 @@ public class BaseModel
  * lodlevel 1
     gc : 'full' model at 'best' quality?
 
-    lodlevel 2 
+    lodlevel 2
     gc : front face minus eyes, quiver
 
 
@@ -1212,7 +1169,7 @@ public class BaseModel
     gc: eyes and quiver
 
 
-    lodlevel 8 
+    lodlevel 8
     gc: hair with bar and quiver
 
     lodlevel 16
@@ -1415,21 +1372,20 @@ public class CommonMaterialData
         return texturename;
     }
 
-    
+
     public void GenerateNameFromTextures()
     {
         TextureData1.fullPathName = TidyTextureName(TextureData1.fullPathName);
         TextureData1.textureName = TidyTextureName(TextureData1.textureName);
 
-        
-        
+
         if (TextureData2 != null)
         {
             TextureData2.fullPathName = TidyTextureName(TextureData2.fullPathName);
             TextureData2.textureName = TidyTextureName(TextureData2.textureName);
         }
 
-        
+
         string name = TextureData1.textureName;
 
         if (TextureData2 != null)
@@ -1543,17 +1499,6 @@ public class CommonModelData
     public List<CommonMaterialData> CommonMaterials = new List<CommonMaterialData>();
     public List<BoneNode> BoneList = new List<BoneNode>();
     public Dictionary<int, BoneNode> BoneIdDictionary = new Dictionary<int, BoneNode>();
-
-
-    public int AdjustBone(int index, int adjust)
-    {
-        if (XBoxModel != null)
-        {
-            return XBoxModel.XRenderSetup.AdjustBone(index, adjust);
-        }
-
-        return index;
-    }
 
 
     public List<CommonMeshData> GetFilteredSubmeshes(List<int> excludeList)
@@ -1848,15 +1793,14 @@ public class CommonVertexInstance
 
     public int ExtraData;
 
-    //public byte[] Weights;
-    public short[] BoneIndices;
-    public short[] TranslatedBoneIndices;
-    public int BoneInfo1;
-    public int BoneWeights;
-    public int BoneInfo3;
+    public BoneWeight BoneWeight;
 
-    public static HashSet<short> sBoneIndices = new HashSet<short>();
-    public static Dictionary<short, int> sBoneIndicesCount = new Dictionary<short, int>();
+    public int WeightCount = 0;
+    
+    public short[] UntranslatedBoneIndices;
+    public short[] TranslatedBoneIndices;
+
+    public int UntranslatedWeightData;
 
     public override string ToString()
     {
@@ -1882,56 +1826,6 @@ public class CommonVertexInstance
         return HashCode.Combine(Position, Normal, Tangent);
     }
 
-    public int ActiveWeights()
-    {
-        int result = 0;
-        for (int i = 0; i < 3; ++i)
-        {
-            if (Weight(i) > 0.0f)
-            {
-                result++;
-            }
-        }
-
-        return result;
-    }
-
-    public float Weight(int index)
-    {
-        uint[] masks = { 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000 };
-        uint mask = masks[index];
-        int a = (int)(BoneWeights & mask);
-        if (index == 3 && a != 0)
-        {
-            int ibreak = 0;
-        }
-
-        a = a >> (index * 8);
-        return (float)a / (float)255;
-    }
-
-    public void SanityTest()
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            float weight = Weight(i);
-            int index = BoneIndices[i];
-            if (weight == 0 && index != -1)
-            {
-                int ibreak = 0;
-                sFailedCount++;
-            }
-
-            if (index != -1)
-            {
-                if (weight == 0)
-                {
-                    int ibreak = 0;
-                    sFailedCount++;
-                }
-            }
-        }
-    }
 }
 
 
@@ -2741,9 +2635,9 @@ public class SKINChunk : BaseChunk
     public byte[] Data;
 
     public List<SkinData> SkinDataList = new List<SkinData>();
-    public List<IndexedVector3> Positions  = new List<IndexedVector3>();
-    public List<IndexedVector3> Normals  = new List<IndexedVector3>();
-    
+    public List<IndexedVector3> Positions = new List<IndexedVector3>();
+    public List<IndexedVector3> Normals = new List<IndexedVector3>();
+
     public const int StructureSize = 96;
 
     public static char[] ChunkName()
@@ -2771,7 +2665,7 @@ public class SKINChunk : BaseChunk
                 //binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
 
                 binReader.BaseStream.Position = dataPosition + csk1.vertDst;
-                SkinData.ReadPositionAndNormals(binReader, csk1.count, csk1.ExtractedPositions, csk1.ExtractedNormals);
+                SkinData.ReadPositionAndNormals(binReader, csk1.count, skinData.AnimShift,csk1.ExtractedPositions, csk1.ExtractedNormals);
 
                 // for (int i = 0; i < csk1.count; ++i)
                 // {
@@ -2791,7 +2685,7 @@ public class SKINChunk : BaseChunk
                 //     csk2.ExtractedData.Add(pn16);
                 // }
 
-                SkinData.ReadPositionAndNormals(binReader, csk2.count, csk2.ExtractedPositions, csk2.ExtractedNormals);
+                SkinData.ReadPositionAndNormals(binReader, csk2.count,skinData.AnimShift, csk2.ExtractedPositions, csk2.ExtractedNormals);
 
                 binReader.BaseStream.Position = dataPosition + csk2.weights;
                 for (int i = 0; i < csk2.count; ++i)
@@ -2891,7 +2785,7 @@ public class SkinData
         skinData.NumList2 = Common.ToInt16BigEndian(binReader);
         skinData.NumListA = Common.ToInt16BigEndian(binReader);
 
-        // align
+        // // align
         if (binReader.BaseStream.Position % 4 != 0)
         {
             binReader.BaseStream.Position += 2;
@@ -2948,47 +2842,73 @@ public class SkinData
         }
     }
 
-    public static void ReadPositionAndNormals(BinaryReader binReader, int count, List<Vector3> positions,
+//     public static void ReadPositionAndNormals(BinaryReader binReader, int count, List<Vector3> positions,
+//         List<Vector3> normals)
+//     {
+//         int stride = 9;
+//         long currentPosition = binReader.BaseStream.Position;
+//         long end = currentPosition + (count * stride);
+//
+//         int diff = (count * stride);
+//         for (int i = 0; i < diff - 2; i++)
+//         {
+//             float nx = binReader.ReadByte() / (255f);
+//             float ny = binReader.ReadByte() / (255f);
+//             float nz = binReader.ReadByte() / (255f);
+//
+//             Vector3 n = new Vector3(nx, ny, nz);
+//             if (Common.FuzzyEquals(n.magnitude, 1.0f, 0.001f))
+//             {
+//                 int ibreak2 = 0;
+//             }
+//
+//             binReader.BaseStream.Position -= 2;
+//         }
+//
+//
+//         for (int i = 0; i < count; ++i)
+//         {
+//             float x = binReader.ReadInt16() / (65536f);
+//             float y = binReader.ReadInt16() / (65536f);
+//             float z = binReader.ReadInt16() / (65536f);
+//
+//             float nx = binReader.ReadByte() / (255f);
+//             float ny = binReader.ReadByte() / (255f);
+//             float nz = binReader.ReadByte() / (255f);
+//
+//             positions.Add(new Vector3(x, y, z));
+//             normals.Add(new Vector3(nx, ny, nz));
+//         }
+//
+//         int ibreak = 0;
+//     }
+    public static void ReadPositionAndNormals(BinaryReader binReader, int count, short animShift,
+        List<Vector3> positions,
         List<Vector3> normals)
     {
-        int stride = 9;
-        long currentPosition = binReader.BaseStream.Position;
-        long end = currentPosition + (count * stride);
-
-        int diff = (count * stride);
-        for (int i = 0; i < diff - 2; i++)
-        {
-            float nx = binReader.ReadByte() / (255f);
-            float ny = binReader.ReadByte() / (255f);
-            float nz = binReader.ReadByte() / (255f);
-
-            Vector3 n = new Vector3(nx, ny, nz);
-            if (Common.FuzzyEquals(n.magnitude, 1.0f, 0.001f))
-            {
-                int ibreak2 = 0;
-            }
-
-            binReader.BaseStream.Position -= 2;
-        }
-
-
+        // PosNorm9 record on real GC files:
+        //   int16 x, y, z (positions) — BIG-ENDIAN, scale = 1 / 2^AnimShift.
+        //   int8 nx, ny, nz (normals) — SIGNED, scale = 1 / 64.
+        // Total 9 bytes per vertex. The stream must point at the start of a
+        // packet's vertex data before this is called.
+        float posScale = 1f / (float)(1 << Mathf.Clamp(animShift, 0, 15));
+        const float normScale = 1f / 64f;
         for (int i = 0; i < count; ++i)
         {
-            float x = binReader.ReadInt16() / (65536f);
-            float y = binReader.ReadInt16() / (65536f);
-            float z = binReader.ReadInt16() / (65536f);
+            short xRaw = Common.ToInt16BigEndian(binReader);
+            short yRaw = Common.ToInt16BigEndian(binReader);
+            short zRaw = Common.ToInt16BigEndian(binReader);
 
-            float nx = binReader.ReadByte() / (255f);
-            float ny = binReader.ReadByte() / (255f);
-            float nz = binReader.ReadByte() / (255f);
+            sbyte nxRaw = (sbyte)binReader.ReadByte();
+            sbyte nyRaw = (sbyte)binReader.ReadByte();
+            sbyte nzRaw = (sbyte)binReader.ReadByte();
 
-            positions.Add(new Vector3(x, y, z));
-            normals.Add(new Vector3(nx, ny, nz));
+            positions.Add(new Vector3(xRaw * posScale, yRaw * posScale, zRaw * posScale));
+            normals.Add(new Vector3(nxRaw * normScale, nyRaw * normScale, nzRaw * normScale));
         }
-
-        int ibreak = 0;
     }
 }
+
 
 public struct PosNorm16
 {
@@ -3059,23 +2979,23 @@ public class CSK1
     typedef struct { int8 x, y, z; } tNormQ;
 
 
-   	const int size_vector = 2*3;
-	const int size_normal = 3;
-	const int size_index = 2;
-	const int size_weight = 1;
+    const int size_vector = 2*3;
+    const int size_normal = 3;
+    const int size_index = 2;
+    const int size_weight = 1;
 
-	KDCArray<COnezie>   onezies;
-	KDCArray<CTwozie>   twozies;
-	KDCArray<CAccList>  acclist(numBones,numBones,0); 
-	KDCArray<CBoneData> idxBones(numBones,numBones,0); 
+    KDCArray<COnezie>   onezies;
+    KDCArray<CTwozie>   twozies;
+    KDCArray<CAccList>  acclist(numBones,numBones,0);
+    KDCArray<CBoneData> idxBones(numBones,numBones,0);
 
-	const int numVerts = pI->numVerts;
+    const int numVerts = pI->numVerts;
 
-	const bool bBiTan = pI->aBinIds && pI->aTanIds;
-	const int numNormals = bBiTan ? 3 : 1;
-	const int size_pos_norm = size_vector + size_normal*numNormals;
+    const bool bBiTan = pI->aBinIds && pI->aTanIds;
+    const int numNormals = bBiTan ? 3 : 1;
+    const int size_pos_norm = size_vector + size_normal*numNormals;
 
-     
+
     // supply the actual data
     for( int j=0; j<count; j++ )
     {

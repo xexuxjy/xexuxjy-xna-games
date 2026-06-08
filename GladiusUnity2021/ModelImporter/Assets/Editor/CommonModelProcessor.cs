@@ -96,10 +96,13 @@ public static class CommonModelProcessor
                 {
                     Debug.LogWarningFormat("Can't find texture {0}", textureData1.textureName);
                 }
-
-                if (!isCharacter && DoesTextureHaveAlpha(texture1))
+                else
                 {
-                    commonMaterialData.isTransparent = true;
+
+                    if (!isCharacter && DoesTextureHaveAlpha(texture1))
+                    {
+                        commonMaterialData.isTransparent = true;
+                    }
                 }
 
                 if (textureData2 != null)
@@ -234,6 +237,11 @@ public static class CommonModelProcessor
 
     public static bool DoesTextureHaveAlpha(Texture texture)
     {
+        if (texture == null)
+        {
+            return false;
+        }
+        
         bool hasAlpha = false;
         // Create a temporary RenderTexture of the same size as the texture
         RenderTexture tmp = RenderTexture.GetTemporary(
@@ -670,21 +678,27 @@ public static class CommonModelProcessor
                 animator = rootGO.AddComponent<Animator>();
             }
 
-            Avatar avatar = BuildAvatar(rootGO);
-            avatar.name = commonModel.Name;
-            
-            
-            animator.avatar = avatar;
-            
-            string avatarAssetOutputDirName = "Avatars" + outputHierarchy;
-            string avatarFullOuputDirName = Application.dataPath + "/" + avatarAssetOutputDirName;
-
-            if (!Directory.Exists(avatarFullOuputDirName))
+            if (isCharacter)
             {
-                Directory.CreateDirectory(avatarFullOuputDirName);
+                Avatar avatar = BuildAvatar(rootGO);
+                avatar.name = commonModel.Name;
+
+
+                animator.avatar = avatar;
+
+                string avatarAssetOutputDirName = "Avatars" + outputHierarchy;
+                string avatarFullOuputDirName = Application.dataPath + "/" + avatarAssetOutputDirName;
+
+                if (!Directory.Exists(avatarFullOuputDirName))
+                {
+                    Directory.CreateDirectory(avatarFullOuputDirName);
+                }
+
+                AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName + avatar.name + ".asset");
             }
 
-            AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName + avatar.name + ".asset");
+
+
             rootGO.transform.SetParent(gladiusToUnity.transform, false);
         }
 
@@ -752,26 +766,11 @@ public static class CommonModelProcessor
             }
         }
         
-        //"Resources/XboxModelPrefabs/"
-        //String outputDirName = outputDirectory + commonModel.AssetSubDirectories + "/";
 
         String prefabName = "Assets/" + outputDirName + commonModel.Name + ".prefab";
 
 
         PrefabUtility.SaveAsPrefabAssetAndConnect(combinedPrefab, prefabName, InteractionMode.AutomatedAction);
-
-
-        // UnityEngine.Object existingPrefab = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(prefabName);
-        // if (existingPrefab == null)
-        // {
-        //     PrefabUtility.CreatePrefab(prefabName, combinedPrefab, ReplacePrefabOptions.ReplaceNameBased);
-        //
-        // }
-        // else
-        // {
-        //     PrefabUtility.ReplacePrefab(combinedPrefab, existingPrefab);
-        // }
-
 
         if (splitPrefab != null)
         {
@@ -1227,50 +1226,8 @@ public static class CommonModelProcessor
             {
                 BoneWeight bw = new BoneWeight();
                 var vertex = commonModel.AllVertices[submesh.Vertices[i]];
-                vertex.TranslatedBoneIndices = new short[vertex.BoneIndices.Length];
-                for (int j = 0; j < vertex.BoneIndices.Length; ++j)
-                {
-                    int originalBoneId = -1;
-                    originalBoneId =
-                        commonModel.XBoxModel.XRenderSetup.AdjustBone(vertex.BoneIndices[j], submesh.Index);
-                    vertex.TranslatedBoneIndices[j] = (short)originalBoneId;
-                }
 
-                int numWeights = vertex.ActiveWeights();
-                float sum = 0.0f;
-                if (numWeights > 0)
-                {
-                    bw.weight0 = vertex.Weight(0);
-                    bw.boneIndex0 = vertex.TranslatedBoneIndices[0];
-                    sum += vertex.Weight(0);
-                }
-
-                if (numWeights > 1)
-                {
-                    bw.weight1 = vertex.Weight(1);
-                    bw.boneIndex1 = vertex.TranslatedBoneIndices[1];
-                    sum += vertex.Weight(1);
-                }
-
-                if (numWeights > 2)
-                {
-                    bw.weight2 = vertex.Weight(2);
-                    bw.boneIndex2 = vertex.TranslatedBoneIndices[2];
-                    sum += vertex.Weight(2);
-                }
-
-                if (numWeights > 3)
-                {
-                    bw.weight3 = vertex.Weight(3);
-                    bw.boneIndex3 = vertex.TranslatedBoneIndices[3];
-                    sum += vertex.Weight(3);
-                }
-
-                tempBoneWeights[i] = bw;
-                if (sum > 1.01f)
-                {
-                    int ibreak = 0;
-                }
+                tempBoneWeights[i] = vertex.BoneWeight;
             }
 
             mesh.boneWeights = tempBoneWeights;
@@ -1278,10 +1235,6 @@ public static class CommonModelProcessor
 
         bool twoSidedMaterial = commonModel.Skinned && submesh.LodLevel == 0;
 
-        if (mesh.triangles.Length == 135)
-        {
-            int ibreak = 0;
-        }
 
         if (twoSidedMaterial || commonMaterial.IsTwoSided)
         {

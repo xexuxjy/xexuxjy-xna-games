@@ -607,6 +607,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8917097363425780242, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
   m_PrefabInstance: {fileID: 2073690843}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1357601214 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 548050363536956462, guid: 4d87b4b5676ba404594baf690aa9afff, type: 3}
+  m_PrefabInstance: {fileID: 2059345727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1360220016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1137762978639492140, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
@@ -671,10 +676,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 782ef31fb4e84284b7a80f4c9612b29c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimationClip: {fileID: 0}
+  AnimationClip: {fileID: 7400000, guid: adbb389688008c14796387ae38a7a819, type: 2}
   OutputPath: d:/animationtest/barbarian_idle.pan
   DebugOutputPath: d:/animationtest/barbarian_idle.txt
   RootBone: {fileID: 82493221}
+  ZeroBone: {fileID: 1357601214}
   Animator: {fileID: 82493223}
   AnimationState: BarbarianDemo1
   Time: 0
@@ -1423,6 +1429,7 @@ MonoBehaviour:
   OutputPath: d:/AnimationTest/druid_idle.pan
   DebugOutputPath: d:/AnimationTest/druid_idle.txt
   RootBone: {fileID: 1411522488}
+  ZeroBone: {fileID: 0}
   Animator: {fileID: 2116573383}
   AnimationState: Idle
   Time: 0

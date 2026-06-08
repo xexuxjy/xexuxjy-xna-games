@@ -304,8 +304,9 @@ public class GCModel : BaseModel
         DSLCChunk dslcChunk = (DSLCChunk)m_chunkList.Find(x => x is DSLCChunk);
         MESHChunk meshChunk = (MESHChunk)m_chunkList.Find(x => x is MESHChunk);
         ELEMChunk elemChunk = (ELEMChunk)m_chunkList.Find(x => x is ELEMChunk);
+        SKINChunk skinChunk = (SKINChunk)m_chunkList.Find(x => x is SKINChunk);
         
-        if (posiChunk != null && normChunk != null && uv0Chunk != null && dsliChunk != null && dslsChunk != null && meshChunk != null)
+        if (((posiChunk != null && normChunk != null && uv0Chunk != null) || skinChunk != null)  && dsliChunk != null && dslsChunk != null && meshChunk != null)
         {
             dslsChunk.BuildData(dsliChunk);
 
@@ -328,38 +329,107 @@ public class GCModel : BaseModel
                 commonMeshData.Name = m_name;
                 commonMeshData.Index = meshCount;
                 commonMeshData.MaterialId = (int)meshChunk.PaxElements[meshCount].MaterialId;
-                
-                // commonMeshData.Indices.AddRange(cmd.IndexDataList[0]);
-                // for (int i = 0; i < cmd.AllVertices.Count; ++i)
-                // {
-                //     commonMeshData.Vertices.Add(i);
-                // }
 
                 List<int> meshIndices = new List<int>();
                 commonModelData.IndexDataList.Add(meshIndices);
-                
-                for (int i = 0; i < dlh.entries.Count; i++)
+
+                if (skinChunk != null)
                 {
-                    DisplayListEntry entry = dlh.entries[i];
-
-                    CommonVertexInstance cvi = new CommonVertexInstance();
-                    cvi.Position = posiChunk.Data[entry.PosIndex];
-                    cvi.Normal = normChunk.Data[entry.NormIndex];
-                    cvi.UV = uv0Chunk.Data[entry.UVIndex];
-
-                    int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
-                    if (vertexIndex == -1)
+                    List<(Vector3,byte[])> positionAndWeights = new List<(Vector3, byte[])>();
+                    List<Vector3> normals = new List<Vector3>();
+                    
+                    // build all the skin data into temp lists
+                    foreach (CSK1 csk in skinChunk.SkinDataList[meshIndexCount].CSK1List)
                     {
-                        vertexDataAndDesc.VertexData.Add(cvi);
-                        vertexIndex = vertexCount;
-                        vertexCount++;
+                        foreach (Vector3 v3 in csk.ExtractedPositions)
+                        {
+                            positionAndWeights.Add((v3, new byte[]{ csk.idxBone} ));
+                        }
+
+                        foreach (Vector3 v3 in csk.ExtractedNormals)
+                        {
+                            normals.Add(v3);
+                        }
+
+                    }
+                    
+                    foreach (CSK2 csk in skinChunk.SkinDataList[meshIndexCount].CSK2List)
+                    {
+                        foreach (Vector3 v3 in csk.ExtractedPositions)
+                        {
+                            positionAndWeights.Add((v3, csk.idxBone));
+                        }
+                        foreach (Vector3 v3 in csk.ExtractedNormals)
+                        {
+                            normals.Add(v3);
+                        }
                         
                     }
-                    commonMeshData.Vertices.Add(vertexIndex);                    
+                    // foreach (CSKA csk in skinChunk.SkinDataList[meshIndexCount].CSKAList)
+                    // {
+                    //     foreach (Vector3 v3 in csk.ExtractedPositions)
+                    //     {
+                    //         positionAndWeights.Add((v3, csk.idxBone));
+                    //     }
+                    //     
+                    // }
+                    
+                    
+                    for (int i = 0; i < dlh.entries.Count; i++)
+                    {
+                        DisplayListEntry entry = dlh.entries[i];
 
-                    meshIndices.Add(meshIndexCount);
-                    meshIndexCount++;
+                        CommonVertexInstance cvi = new CommonVertexInstance();
+                        cvi.Position = positionAndWeights[entry.PosIndex].Item1;
+                        cvi.Normal = normals[entry.NormIndex];
+                        //cvi.UV = uv0Chunk.Data[entry.UVIndex];
+
+                        int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
+                        if (vertexIndex == -1)
+                        {
+                            vertexDataAndDesc.VertexData.Add(cvi);
+                            vertexIndex = vertexCount;
+                            vertexCount++;
+                        
+                        }
+                        commonMeshData.Vertices.Add(vertexIndex);                    
+
+                        meshIndices.Add(meshIndexCount);
+                        meshIndexCount++;
+                    }
+                    
+                    
+                    
+                    
+                    
                 }
+                else
+                {
+                    for (int i = 0; i < dlh.entries.Count; i++)
+                    {
+                        DisplayListEntry entry = dlh.entries[i];
+
+                        CommonVertexInstance cvi = new CommonVertexInstance();
+                        cvi.Position = posiChunk.Data[entry.PosIndex];
+                        cvi.Normal = normChunk.Data[entry.NormIndex];
+                        cvi.UV = uv0Chunk.Data[entry.UVIndex];
+
+                        int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
+                        if (vertexIndex == -1)
+                        {
+                            vertexDataAndDesc.VertexData.Add(cvi);
+                            vertexIndex = vertexCount;
+                            vertexCount++;
+                        
+                        }
+                        commonMeshData.Vertices.Add(vertexIndex);                    
+
+                        meshIndices.Add(meshIndexCount);
+                        meshIndexCount++;
+                    }
+                    
+                }
+                
                 
                 previousMeshVertexCount += meshIndices.Count;
                 commonMeshData.Indices.AddRange(meshIndices);

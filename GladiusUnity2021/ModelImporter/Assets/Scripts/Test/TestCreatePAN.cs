@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ namespace Gladius.util.Test
         public string OutputPath;
         public string DebugOutputPath;
         public Transform RootBone;
-
+        public Transform ZeroBone;
+        
         public Animator Animator;
         public string AnimationState;
 
@@ -53,6 +55,19 @@ namespace Gladius.util.Test
 
         public void Update()
         {
+            EditorCurveBinding[] ecba = AnimationUtility.GetCurveBindings(AnimationClip);
+            foreach (EditorCurveBinding ecb in ecba)
+            {
+                AnimationCurve acv = AnimationUtility.GetEditorCurve(AnimationClip, ecb);
+                Keyframe[] keyFrames = acv.keys;
+                
+                // do something clever
+                int ibreak = 0;
+
+            }
+
+            
+            
             CumulativeTime += UnityEngine.Time.deltaTime;
             if (CumulativeTime >= FrameDuration)
             {
@@ -66,7 +81,15 @@ namespace Gladius.util.Test
 
                     foreach (Transform t in BonePositionData.Keys)
                     {
-                        BonePositionData[t].Add((Time, t.localPosition));
+                        if (t == ZeroBone)
+                        {
+                            BonePositionData[t].Add((Time, new Vector3(0, 0.9f, 0)));                            
+                            //BonePositionData[t].Add((Time, Vector3.zero));
+                        }
+                        else
+                        {
+                            BonePositionData[t].Add((Time, t.localPosition));
+                        }
                     }
 
                     foreach (Transform t in BoneRotationData.Keys)
@@ -88,6 +111,15 @@ namespace Gladius.util.Test
                             }
                         }
 
+                        
+                        // List<(float,Vector3)> zeroData = BonePositionData[ZeroBone];
+                        // for (int i = 0; i < zeroData.Count; i++)
+                        // {
+                        //     zeroData[i] = (zeroData[i].Item1,new Vector3(0,0.1f*i));
+                        // }
+                            
+                        
+                        
                         using (BinaryWriter bw = new BinaryWriter(File.Open(OutputPath, FileMode.Create)))
                         {
                             AnimationUtils.WriteDataAsPAN(bw, RootBone, TransformList, AnimationTimes, BonePositionData,
@@ -111,6 +143,18 @@ namespace Gladius.util.Test
                                        FileMode.Open)))
                         {
                             barbarianData = AnimationLoader.ReadSingleAnimationFile("", simpleAnim, binReader);
+                            List<Vector3> positions = new List<Vector3>();
+                            // find all the zero pos updates.
+                            foreach (var optVec in barbarianData.optPosTrack.m_tracks[0].mOptVecs)
+                            {
+                                Vector3 dest = new Vector3();
+                                optVec.Get(ref dest,ref barbarianData.optPosTrack.m_tracks[0].mPosScalar);
+                                GladiusGlobals.GladiusToUnity(ref dest);
+                                positions.Add(dest);
+                            }
+
+                            int ibreak = 0;
+                            
                         }
 
                         using (BinaryReader binReader = new BinaryReader(
@@ -118,6 +162,18 @@ namespace Gladius.util.Test
                                        FileMode.Open)))
                         {
                             urlanPosRotData = AnimationLoader.ReadSingleAnimationFile("", simpleAnim, binReader);
+                            
+                            List<Vector3> positions = new List<Vector3>();
+                            // find all the zero pos updates.
+                            foreach (var optVec in urlanPosRotData.optPosTrack.m_tracks[0].mOptVecs)
+                            {
+                                Vector3 dest = new Vector3();
+                                optVec.Get(ref dest,ref urlanPosRotData.optPosTrack.m_tracks[0].mPosScalar);
+                                GladiusGlobals.GladiusToUnity(ref dest);
+                                positions.Add(dest);
+                            }
+
+                            int ibreak = 0;
                         }
 
 

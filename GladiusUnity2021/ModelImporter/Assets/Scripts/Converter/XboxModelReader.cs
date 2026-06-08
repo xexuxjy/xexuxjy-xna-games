@@ -123,7 +123,7 @@ public class XboxModelReader : BaseModelReader
             vpnt.Normal = UncompressNormal(binReader.ReadInt32());
             vpnt.Normal = GladiusGlobals.GladiusToUnity(vpnt.Normal);
             vpnt.UV = CommonModelImporter.FromStreamVector2(binReader);
-            vpnt.BoneWeights = binReader.ReadInt32();
+            vpnt.UntranslatedWeightData = binReader.ReadInt32();
             vpnt.DiffuseColor = Color.white;
 
             vertices.Add(vpnt);
@@ -145,7 +145,7 @@ public class XboxModelReader : BaseModelReader
             vpnt.DiffuseColor = CommonModelImporter.FromStreamColor32(binReader);
 
             vpnt.UV = CommonModelImporter.FromStreamVector2(binReader);
-            vpnt.BoneWeights = binReader.ReadInt32();
+            vpnt.UntranslatedWeightData = binReader.ReadInt32();
             vertices.Add(vpnt);
         }
     }
@@ -285,6 +285,8 @@ public class XboxModel : BaseModel
             commonModel.AllVertices.AddRange(vb.Vertices);
         }
 
+        
+        
         commonModel.HasUV2 = XRenderSetup.VertexBuffers[0].HasUV2;
         commonModel.HasColor = XRenderSetup.VertexBuffers[0].HasColor;
 
@@ -300,13 +302,14 @@ public class XboxModel : BaseModel
         SortedSet<int> translucentMaterials = new SortedSet<int>();
 
         int index = 0;
+        int meshCount = 0;
         foreach(CLXRenderMesh renderMesh in XRenderSetup.MeshList)
         {
             CommonMeshData commonMesh = new CommonMeshData();
             commonModel.CommonMeshData.Add(commonMesh);
             MaterialGroup materialGroup = XRenderSetup.MeshMaterialList[index];
             CLXRenderIndexBuffer indexBuffer = XRenderSetup.IndexBuffers[index];
-
+            
             commonMesh.Index = index;
             commonMesh.Radius = renderMesh.Radius;
             commonMesh.Center = renderMesh.Center;
@@ -386,32 +389,99 @@ public class XboxModel : BaseModel
 
 
             commonMesh.Vertices.AddRange(sortedVertices);
+            
+            // fix up bone info.
 
-            if(index == 3120)
+            foreach (int vertexId in sortedVertices)
             {
-                int ibreak = 0;
+                CommonVertexInstance cvi = commonModel.AllVertices[vertexId];
+                cvi.TranslatedBoneIndices = new short[cvi.UntranslatedBoneIndices.Length];
+                
+                for (int j = 0; j < cvi.UntranslatedBoneIndices.Length; ++j)
+                {
+                    int originalBoneId = -1;
+                    originalBoneId = XRenderSetup.AdjustBone(cvi.UntranslatedBoneIndices[j], index);
+                    cvi.TranslatedBoneIndices[j] = (short)originalBoneId;
+                }
+
+
+                int numWeights = ActiveWeights(cvi.UntranslatedWeightData);
+                float sum = 0.0f;
+                if (numWeights > 0)
+                {
+                    cvi.BoneWeight.weight0 = UnpackWeight(cvi.UntranslatedWeightData,0);
+                    cvi.BoneWeight.boneIndex0 = cvi.TranslatedBoneIndices[0];
+                    sum += cvi.BoneWeight.weight0;
+                }
+
+                if (numWeights > 1)
+                {
+                    cvi.BoneWeight.weight1 = UnpackWeight(cvi.UntranslatedWeightData,1);
+                    cvi.BoneWeight.boneIndex1 = cvi.TranslatedBoneIndices[1];
+                    sum += cvi.BoneWeight.weight1;
+                }
+
+                if (numWeights > 2)
+                {
+                    cvi.BoneWeight.weight2 = UnpackWeight(cvi.UntranslatedWeightData,2);
+                    cvi.BoneWeight.boneIndex2 = cvi.TranslatedBoneIndices[2];
+                    sum += cvi.BoneWeight.weight2;
+                }
+
+                if (numWeights > 3)
+                {
+                    cvi.BoneWeight.weight3 = UnpackWeight(cvi.UntranslatedWeightData,3);
+                    cvi.BoneWeight.boneIndex3 = cvi.TranslatedBoneIndices[3];
+                    sum += cvi.BoneWeight.weight3;
+
+                }
+
+                if (sum > 1.01f)
+                {
+                    int ibreak = 0;
+                }
+                
+                commonModel.AllVertices[vertexId] = cvi;
             }
 
             index++;
+            
         }
 
         return commonModel;
     }
 
-
-
-    public void DebugBoneWeights(short index)
+    public int ActiveWeights(int packedWeight)
     {
-
-        CommonVertexInstance.sBoneIndices.Add(index);
-        int count = 0;
-        if (!CommonVertexInstance.sBoneIndicesCount.TryGetValue(index, out count))
+        int result = 0;
+        for (int i = 0; i < 3; ++i)
         {
-            CommonVertexInstance.sBoneIndicesCount[index] = count;
+            if (UnpackWeight(packedWeight,i) > 0.0f)
+            {
+                result++;
+            }
         }
-        count++;
-        CommonVertexInstance.sBoneIndicesCount[index] = count;
+
+        return result;
     }
+
+    public float UnpackWeight(int packedWeight,int index)
+    {
+        uint[] masks = { 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000 };
+        uint mask = masks[index];
+        int a = (int)(packedWeight & mask);
+        if (index == 3 && a != 0)
+        {
+            int ibreak = 0;
+        }
+
+        a = a >> (index * 8);
+        return (float)a / (float)255;
+    }
+
+
+
+
 }
 
 
@@ -796,6 +866,7 @@ public class XRenderSetup
             vb.Populate(binReader, postHeaderPosition + xrs.PointerToVertices);
         }
 
+        
         return xrs;
     }
 
@@ -1502,11 +1573,11 @@ public class CLXRenderVertexBuffer
         {
             foreach (CommonVertexInstance vbi in Vertices)
             {
-                vbi.BoneIndices = new short[3];
-                vbi.BoneIndices[0] = binReader.ReadInt16();
-                vbi.BoneIndices[1] = binReader.ReadInt16();
-                vbi.BoneIndices[2] = binReader.ReadInt16();
-
+                vbi.UntranslatedBoneIndices = new short[3];
+                vbi.UntranslatedBoneIndices[0] = binReader.ReadInt16();
+                vbi.UntranslatedBoneIndices[1] = binReader.ReadInt16();
+                vbi.UntranslatedBoneIndices[2] = binReader.ReadInt16();
+                
                 //DebugBoneWeights(vbi.BoneIndices[0]);
                 //DebugBoneWeights(vbi.BoneIndices[1]);
                 //DebugBoneWeights(vbi.BoneIndices[2]);
