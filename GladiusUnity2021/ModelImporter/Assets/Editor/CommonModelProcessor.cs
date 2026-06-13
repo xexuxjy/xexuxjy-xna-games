@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.UIElements;
 
 public static class CommonModelProcessor
 {
@@ -293,6 +294,12 @@ public static class CommonModelProcessor
         List<BoneNode> remappedBoneNodeList = new List<BoneNode>();
         List<Mesh> combinedMeshes = MergeMesh(true, originalMeshes.ToArray(), boneConversionDictionary,
             commonModel.BoneList, remappedBoneNodeList, remapBones);
+
+        if (combinedMeshes.Count == 0)
+        {
+            int ibreak = 0;
+        }
+        
         return combinedMeshes[0];
     }
 
@@ -1087,11 +1094,23 @@ public static class CommonModelProcessor
 
     public static Dictionary<CommonMaterialData, List<CommonMeshData>> SplitByMaterial(CommonModelData model)
     {
+        if (model == null)
+        {
+            int ibreak = 0;
+        }
+        
         Dictionary<CommonMaterialData, List<CommonMeshData>> result =
             new Dictionary<CommonMaterialData, List<CommonMeshData>>();
         foreach (CommonMeshData mesh in model.CommonMeshData)
         {
-            CommonMaterialData materialData = model.CommonMaterials[(int)mesh.MaterialId];
+            int materialId = mesh.MaterialId;
+            if (materialId < 0 || materialId >= model.CommonMaterials.Count)
+            {
+                materialId = 0;
+
+            }
+            
+            CommonMaterialData materialData = model.CommonMaterials[materialId];
             List<CommonMeshData> listResult = null;
             if (!result.TryGetValue(materialData, out listResult))
             {

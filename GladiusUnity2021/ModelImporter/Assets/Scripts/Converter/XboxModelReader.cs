@@ -232,25 +232,6 @@ public class XboxModel : BaseModel
     }
 
 
-    public int GetBestLodLevel()
-    {
-        return GetMeshLodLevel("set_LOD0");
-    }
-
-    public int GetMeshLodLevel(string setName)
-    {
-        if (SELSChunk != null)
-        {
-            //int nameIndex = SELSChunk.SelectSetList.IndexOf(setName);
-            int nameIndex = 0;
-            if (nameIndex != -1)
-            {
-                SelectSet selectSet = StypChunk.SelectSetList.Find(x => x.NameIndex == nameIndex);
-                return selectSet.Mask;
-            }
-        }
-        return -1;
-    }
 
     public XRNDChunk XRNDChunk
     { get { return (m_chunkList.Find(x => x is XRNDChunk) as XRNDChunk); } }

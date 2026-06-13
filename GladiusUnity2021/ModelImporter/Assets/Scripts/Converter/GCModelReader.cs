@@ -14,7 +14,6 @@ using Debug = UnityEngine.Debug;
 
 public class GCModelReader : BaseModelReader
 {
-
     public List<GCModel> m_models = new List<GCModel>();
 
     public void LoadModels()
@@ -33,7 +32,7 @@ public class GCModelReader : BaseModelReader
                 model = new GCModel(sourceFile.Name);
             }
 
-            model.LoadData(binReader,null);
+            model.LoadData(binReader, null);
 
             model.BuildBB();
             model.Validate();
@@ -72,7 +71,6 @@ public class GCModelReader : BaseModelReader
             }
         }
     }
-
 }
 
 
@@ -85,8 +83,6 @@ public class GCModel : BaseModel
     public const string DefaultShader = "lambert2";
 
 
-
-    
     public GCModel(String name) : base(name)
     {
         m_name = name;
@@ -94,14 +90,13 @@ public class GCModel : BaseModel
 
     public static GCModel CreateFromGameObject(GameObject gameObj)
     {
-
         // not valid
         if (gameObj == null || gameObj.GetComponentsInChildren<MeshFilter>().Length == 0 ||
             gameObj.GetComponentsInChildren<MeshRenderer>().Length == 0)
         {
             return null;
         }
-        
+
         HashSet<Vector3> uniqueVertices = new HashSet<Vector3>();
         HashSet<Vector3> uniqueNormals = new HashSet<Vector3>();
         HashSet<Vector2> uniqueUVs = new HashSet<Vector2>();
@@ -114,7 +109,7 @@ public class GCModel : BaseModel
         {
             offset = attachPoint.position;
         }
-        
+
         foreach (MeshFilter meshFilter in gameObj.GetComponentsInChildren<MeshFilter>())
         {
             MeshRenderer meshRenderer = meshFilter.gameObject.GetComponent<MeshRenderer>();
@@ -156,11 +151,10 @@ public class GCModel : BaseModel
 
         int subObjectCount = 0;
 
-        
+
         model.m_selsInfo.Add(DefaultShader);
 
-        
-        
+
         foreach (MeshFilter meshFilter in gameObj.GetComponentsInChildren<MeshFilter>())
         {
             HashSet<int> uniqueVertexIds = new HashSet<int>();
@@ -168,18 +162,18 @@ public class GCModel : BaseModel
             MeshRenderer meshRenderer = meshFilter.gameObject.GetComponent<MeshRenderer>();
             if (meshFilter != null && meshRenderer != null)
             {
-
-                
                 DisplayListHeader dlh = new DisplayListHeader();
                 for (int i = 0; i < meshFilter.sharedMesh.triangles.Length; i += 3)
                 {
                     int lookupIndex = meshFilter.sharedMesh.triangles[i];
 
-                    Vector3 sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] + meshFilter.gameObject.transform.position;
-                    Vector3 sharedMeshN = meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
+                    Vector3 sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] +
+                                          meshFilter.gameObject.transform.position;
+                    Vector3 sharedMeshN =
+                        meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
                     Vector2 sharedMeshU = meshFilter.sharedMesh.uv[lookupIndex];
-                    
-                    
+
+
                     int posIndex = model.m_points.IndexOf(sharedMeshV);
                     int normIndex = model.m_normals.IndexOf(sharedMeshN);
                     int uvIndex = model.m_uvs.IndexOf(sharedMeshU);
@@ -187,10 +181,12 @@ public class GCModel : BaseModel
                     dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
 
                     lookupIndex = meshFilter.sharedMesh.triangles[i + 2];
-                    sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] + meshFilter.gameObject.transform.position;
-                    sharedMeshN = meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
+                    sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] +
+                                  meshFilter.gameObject.transform.position;
+                    sharedMeshN =
+                        meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
                     sharedMeshU = meshFilter.sharedMesh.uv[lookupIndex];
-                    
+
                     posIndex = model.m_points.IndexOf(sharedMeshV);
                     normIndex = model.m_normals.IndexOf(sharedMeshN);
                     uvIndex = model.m_uvs.IndexOf(sharedMeshU);
@@ -198,17 +194,18 @@ public class GCModel : BaseModel
 
 
                     lookupIndex = meshFilter.sharedMesh.triangles[i + 1];
-                    sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] + meshFilter.gameObject.transform.position;
-                    sharedMeshN = meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
+                    sharedMeshV = meshFilter.sharedMesh.vertices[lookupIndex] +
+                                  meshFilter.gameObject.transform.position;
+                    sharedMeshN =
+                        meshFilter.gameObject.transform.TransformDirection(meshFilter.sharedMesh.normals[lookupIndex]);
                     sharedMeshU = meshFilter.sharedMesh.uv[lookupIndex];
-                    
+
                     posIndex = model.m_points.IndexOf(sharedMeshV);
                     normIndex = model.m_normals.IndexOf(sharedMeshN);
                     uvIndex = model.m_uvs.IndexOf(sharedMeshU);
 
                     dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
                     uniqueVertexIds.Add(posIndex);
-
                 }
 
                 dlh.indexCount = (ushort)dlh.entries.Count;
@@ -228,18 +225,15 @@ public class GCModel : BaseModel
 
                 PaxElement paxElement = new PaxElement((uint)subObjectCount, 0);
                 paxElement.VertexCount = (uint)uniqueVertexIds.Count;
-                
-                
-                
-                model.m_paxElements.Add(paxElement);
-                
-                subObjectCount++;
 
+
+                model.m_paxElements.Add(paxElement);
+
+                subObjectCount++;
             }
-            
         }
 
-        
+
         // go through and adjust positions and normals now that the lists have been built
         for (int i = 0; i < model.m_points.Count; ++i)
         {
@@ -254,9 +248,8 @@ public class GCModel : BaseModel
             model.m_normals[i] =
                 GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(model.m_normals[i]));
         }
-       
-        return model;
 
+        return model;
     }
 
     public SKINChunk SKINChunk()
@@ -264,7 +257,7 @@ public class GCModel : BaseModel
         SKINChunk skinChunk = (SKINChunk)m_chunkList.Find(x => x is SKINChunk);
         return skinChunk;
     }
-    
+
     public List<IndexedVector3> VertexData
     {
         get
@@ -278,51 +271,160 @@ public class GCModel : BaseModel
             return null;
         }
     }
-    
-    
+
+
     public CommonModelData ToCommon()
     {
         CommonModelData commonModelData = new CommonModelData();
         commonModelData.GCModel = this;
-        
+
         commonModelData.Name = m_name;
         commonModelData.VertexDataLists = new List<VertexDataAndDesc>();
         commonModelData.IndexDataList = new List<List<int>>();
 
-        
+
         SKELChunk skelChunk = (SKELChunk)m_chunkList.Find(x => x is SKELChunk);
         if (skelChunk != null)
         {
             commonModelData.BoneList.AddRange(skelChunk.BoneList);
         }
-        
-        POSIChunk posiChunk =  (POSIChunk)m_chunkList.Find(x => x is POSIChunk);
-        NORMChunk normChunk =  (NORMChunk)m_chunkList.Find(x => x is NORMChunk);
-        UV0Chunk uv0Chunk =  (UV0Chunk)m_chunkList.Find(x => x is UV0Chunk);
-        DSLIChunk dsliChunk  = (DSLIChunk)m_chunkList.Find(x => x is DSLIChunk);
-        DSLSChunk dslsChunk  = (DSLSChunk)m_chunkList.Find(x => x is DSLSChunk);
+
+        POSIChunk posiChunk = (POSIChunk)m_chunkList.Find(x => x is POSIChunk);
+        NORMChunk normChunk = (NORMChunk)m_chunkList.Find(x => x is NORMChunk);
+        UV0Chunk uv0Chunk = (UV0Chunk)m_chunkList.Find(x => x is UV0Chunk);
+        DSLIChunk dsliChunk = (DSLIChunk)m_chunkList.Find(x => x is DSLIChunk);
+        DSLSChunk dslsChunk = (DSLSChunk)m_chunkList.Find(x => x is DSLSChunk);
         DSLCChunk dslcChunk = (DSLCChunk)m_chunkList.Find(x => x is DSLCChunk);
         MESHChunk meshChunk = (MESHChunk)m_chunkList.Find(x => x is MESHChunk);
         ELEMChunk elemChunk = (ELEMChunk)m_chunkList.Find(x => x is ELEMChunk);
         SKINChunk skinChunk = (SKINChunk)m_chunkList.Find(x => x is SKINChunk);
-        
-        if (((posiChunk != null && normChunk != null && uv0Chunk != null) || skinChunk != null)  && dsliChunk != null && dslsChunk != null && meshChunk != null)
+        SELSChunk selsChunk = (SELSChunk)m_chunkList.Find(x => x is SELSChunk);
+        STYPChunk stypChunk = (STYPChunk)m_chunkList.Find(x => x is STYPChunk);
+
+
+        if (dsliChunk != null && dslsChunk != null)
         {
             dslsChunk.BuildData(dsliChunk);
-
             Debug.Assert(dslsChunk.DisplayListHeaders.Count == meshChunk.PaxElements.Count);
-            
+
             VertexDataAndDesc vertexDataAndDesc = new VertexDataAndDesc();
             commonModelData.VertexDataLists.Add(vertexDataAndDesc);
 
-            int meshCount = 0;
-            int previousMeshVertexCount = 0;
-            int vertexCount = 0;
-            
-            foreach (DisplayListHeader dlh in dslsChunk.DisplayListHeaders)
+            int lodLevel = CommonModelImporter.GetBestLodLevel(selsChunk,stypChunk);
+
+            if (skinChunk != null)
+            {
+                BuildSkinnedMesh(dslsChunk, commonModelData, meshChunk, skinChunk, uv0Chunk, lodLevel,vertexDataAndDesc);
+            }
+            else
+            {
+                BuildUnskinnedMesh(dslsChunk, commonModelData, meshChunk, posiChunk, normChunk, uv0Chunk,
+                    vertexDataAndDesc);
+            }
+        }
+
+        SHDRChunk shdrChunk = (SHDRChunk)m_chunkList.Find(x => x is SHDRChunk);
+        TXTRChunk txtrChunk = (TXTRChunk)m_chunkList.Find(x => x is TXTRChunk);
+
+        if (shdrChunk != null && txtrChunk != null)
+        {
+            foreach (GCMaterial gcMaterial in shdrChunk.Data)
+            {
+                CommonMaterialData commonMaterialData = new CommonMaterialData();
+                commonModelData.CommonMaterials.Add(commonMaterialData);
+
+                if (gcMaterial.TexIndex[0] != 0xFF)
+                {
+                    PaxTexture paxTexture = txtrChunk.Textures[gcMaterial.TexIndex[0]];
+                    commonMaterialData.TextureData1 = paxTexture.ToCommon();
+                    commonModelData.CommonTextures.Add(commonMaterialData.TextureData1);
+                }
+
+                if (gcMaterial.TexIndex[1] != 0xFF)
+                {
+                    PaxTexture paxTexture = txtrChunk.Textures[gcMaterial.TexIndex[1]];
+                    commonMaterialData.TextureData2 = paxTexture.ToCommon();
+                    commonModelData.CommonTextures.Add(commonMaterialData.TextureData2);
+                }
+
+                // if ((renderFlags & 0x04) != 0)
+                //     cmd.isTransparent = true;
+            }
+        }
+
+
+        foreach (VertexDataAndDesc vdad in commonModelData.VertexDataLists)
+        {
+            commonModelData.AllVertices.AddRange(vdad.VertexData);
+        }
+
+
+        return commonModelData;
+    }
+
+    private void BuildUnskinnedMesh(DSLSChunk dslsChunk, CommonModelData commonModelData, MESHChunk meshChunk,
+        POSIChunk posiChunk, NORMChunk normChunk, UV0Chunk uv0Chunk,VertexDataAndDesc vertexDataAndDesc)
+    {
+        int meshCount = 0;
+        int vertexCount = 0;
+
+        foreach (DisplayListHeader dlh in dslsChunk.DisplayListHeaders)
+        {
+            int meshIndexCount = 0;
+
+            CommonMeshData commonMeshData = new CommonMeshData();
+            commonModelData.CommonMeshData.Add(commonMeshData);
+
+            commonMeshData.Name = m_name;
+            commonMeshData.Index = meshCount;
+            commonMeshData.MaterialId = (int)meshChunk.PaxElements[meshCount].MaterialId;
+
+            List<int> meshIndices = new List<int>();
+            commonModelData.IndexDataList.Add(meshIndices);
+            commonMeshData.Indices = meshIndices;
+
+
+            for (int i = 0; i < dlh.entries.Count; i++)
+            {
+                DisplayListEntry entry = dlh.entries[i];
+
+                CommonVertexInstance cvi = new CommonVertexInstance();
+                cvi.Position = posiChunk.Data[entry.PosIndex];
+                cvi.Normal = normChunk.Data[entry.NormIndex];
+                cvi.UV = uv0Chunk.Data[entry.UVIndex];
+
+                int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
+                if (vertexIndex == -1)
+                {
+                    vertexDataAndDesc.VertexData.Add(cvi);
+                    vertexIndex = vertexCount;
+                    vertexCount++;
+                }
+
+                commonMeshData.Vertices.Add(vertexIndex);
+
+                meshIndices.Add(meshIndexCount);
+                meshIndexCount++;
+            }
+
+            meshCount++;
+        }
+    }
+
+    private void BuildSkinnedMesh(DSLSChunk dslsChunk, CommonModelData commonModelData, MESHChunk meshChunk,
+        SKINChunk skinChunk, UV0Chunk uv0Chunk, int lodLevel,VertexDataAndDesc vertexDataAndDesc)
+    {
+        int meshCount = 0;
+        int vertexCount = 0;
+
+
+        foreach (DisplayListHeader dlh in dslsChunk.DisplayListHeaders)
+        {
+
+            if ((meshChunk.PaxElements[meshCount].SelectSetMask & lodLevel) != 0)
             {
                 int meshIndexCount = 0;
-                
+
                 CommonMeshData commonMeshData = new CommonMeshData();
                 commonModelData.CommonMeshData.Add(commonMeshData);
 
@@ -332,142 +434,149 @@ public class GCModel : BaseModel
 
                 List<int> meshIndices = new List<int>();
                 commonModelData.IndexDataList.Add(meshIndices);
+                commonMeshData.Indices = meshIndices;
 
-                if (skinChunk != null)
+                SkinData skinData = skinChunk.SkinDataList[meshCount];
+                List<(Vector3, List<(int, float)>)> positionAndWeights = new List<(Vector3, List<(int, float)>)>();
+                List<Vector3> normals = new List<Vector3>();
+
+
+                // build all the skin data into temp lists
+                foreach (CSK1 csk in skinData.CSK1List)
                 {
-                    List<(Vector3,byte[])> positionAndWeights = new List<(Vector3, byte[])>();
-                    List<Vector3> normals = new List<Vector3>();
-                    
-                    // build all the skin data into temp lists
-                    foreach (CSK1 csk in skinChunk.SkinDataList[meshIndexCount].CSK1List)
+                    foreach (Vector3 v3 in csk.ExtractedPositions)
                     {
-                        foreach (Vector3 v3 in csk.ExtractedPositions)
-                        {
-                            positionAndWeights.Add((v3, new byte[]{ csk.idxBone} ));
-                        }
-
-                        foreach (Vector3 v3 in csk.ExtractedNormals)
-                        {
-                            normals.Add(v3);
-                        }
-
+                        List<(int, float)> weights = new List<(int, float)>();
+                        weights.Add((csk.idxBone, 1f));
+                        positionAndWeights.Add((v3, weights));
                     }
-                    
-                    foreach (CSK2 csk in skinChunk.SkinDataList[meshIndexCount].CSK2List)
+
+                    foreach (Vector3 v3 in csk.ExtractedNormals)
                     {
-                        foreach (Vector3 v3 in csk.ExtractedPositions)
-                        {
-                            positionAndWeights.Add((v3, csk.idxBone));
-                        }
-                        foreach (Vector3 v3 in csk.ExtractedNormals)
-                        {
-                            normals.Add(v3);
-                        }
-                        
+                        normals.Add(v3);
                     }
-                    // foreach (CSKA csk in skinChunk.SkinDataList[meshIndexCount].CSKAList)
-                    // {
-                    //     foreach (Vector3 v3 in csk.ExtractedPositions)
-                    //     {
-                    //         positionAndWeights.Add((v3, csk.idxBone));
-                    //     }
-                    //     
-                    // }
-                    
-                    
-                    for (int i = 0; i < dlh.entries.Count; i++)
-                    {
-                        DisplayListEntry entry = dlh.entries[i];
-
-                        CommonVertexInstance cvi = new CommonVertexInstance();
-                        cvi.Position = positionAndWeights[entry.PosIndex].Item1;
-                        cvi.Normal = normals[entry.NormIndex];
-                        //cvi.UV = uv0Chunk.Data[entry.UVIndex];
-
-                        int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
-                        if (vertexIndex == -1)
-                        {
-                            vertexDataAndDesc.VertexData.Add(cvi);
-                            vertexIndex = vertexCount;
-                            vertexCount++;
-                        
-                        }
-                        commonMeshData.Vertices.Add(vertexIndex);                    
-
-                        meshIndices.Add(meshIndexCount);
-                        meshIndexCount++;
-                    }
-                    
-                    
-                    
-                    
-                    
                 }
-                else
+
+                foreach (CSK2 csk in skinData.CSK2List)
                 {
-                    for (int i = 0; i < dlh.entries.Count; i++)
+                    int count = 0;
+                    foreach (Vector3 v3 in csk.ExtractedPositions)
                     {
-                        DisplayListEntry entry = dlh.entries[i];
+                        List<(int, float)> weights = new List<(int, float)>();
+                        (float, float) weight = csk.ExtractedWeights[count];
 
-                        CommonVertexInstance cvi = new CommonVertexInstance();
-                        cvi.Position = posiChunk.Data[entry.PosIndex];
-                        cvi.Normal = normChunk.Data[entry.NormIndex];
-                        cvi.UV = uv0Chunk.Data[entry.UVIndex];
+                        weights.Add((csk.idxBone[0], weight.Item1));
+                        weights.Add((csk.idxBone[1], weight.Item2));
 
-                        int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
-                        if (vertexIndex == -1)
-                        {
-                            vertexDataAndDesc.VertexData.Add(cvi);
-                            vertexIndex = vertexCount;
-                            vertexCount++;
-                        
-                        }
-                        commonMeshData.Vertices.Add(vertexIndex);                    
-
-                        meshIndices.Add(meshIndexCount);
-                        meshIndexCount++;
+                        positionAndWeights.Add((v3, weights));
+                        count++;
                     }
-                    
+
+                    foreach (Vector3 v3 in csk.ExtractedNormals)
+                    {
+                        normals.Add(v3);
+                    }
                 }
-                
-                
-                previousMeshVertexCount += meshIndices.Count;
-                commonMeshData.Indices.AddRange(meshIndices);
 
-                meshCount++;
+                foreach (CSKA csk in skinData.CSKAList)
+                {
+                    //int n = Mathf.Min(cska.count, Mathf.Min(cska.ExtractedDestinationIndices.Count, cska.ExtractedWeights.Count));
+                    int n = csk.ExtractedDestinationIndices.Count;
+                    for (int k = 0; k < n; k++)
+                    {
+                        // var foundVal = positionAndWeights.Find(x => x.Item1 == csk.ExtractedPositions[k]);
+                        // int foundIndex = positionAndWeights.IndexOf(foundVal);
 
+
+                        int dstIndex = csk.ExtractedDestinationIndices[k];
+                        // if (dstIndex < 0 || dstIndex >= totalVerts)
+                        //     continue;
+
+                        int count0 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
+
+                        positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2
+                            .Add((csk.idxBone, csk.ExtractedWeights[k]));
+
+                        int count1 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
+                        int ibreak = 0;
+                    }
+                }
+
+
+                if (skinData.NumberVertices != positionAndWeights.Count)
+                {
+                    int ibreak = 0;
+                }
+
+                for (int i = 0; i < dlh.entries.Count; i++)
+                {
+                    DisplayListEntry entry = dlh.entries[i];
+
+
+                    CommonVertexInstance cvi = new CommonVertexInstance();
+
+                    cvi.Position = GladiusGlobals.GladiusToUnity(positionAndWeights[entry.PosIndex].Item1);
+                    cvi.Normal = GladiusGlobals.GladiusToUnity(normals[entry.NormIndex]);
+
+                    List<(int, float)> weightsList = positionAndWeights[entry.PosIndex].Item2;
+
+                    int numWeights = weightsList.Count;
+                    float sum = 0.0f;
+                    if (numWeights > 0)
+                    {
+                        cvi.BoneWeight.weight0 = weightsList[0].Item2;
+                        cvi.BoneWeight.boneIndex0 = weightsList[0].Item1;
+                        sum += cvi.BoneWeight.weight0;
+                    }
+
+                    if (numWeights > 1)
+                    {
+                        cvi.BoneWeight.weight1 = weightsList[1].Item2;
+                        cvi.BoneWeight.boneIndex1 = weightsList[1].Item1;
+                        sum += cvi.BoneWeight.weight1;
+                    }
+
+                    if (numWeights > 2)
+                    {
+                        cvi.BoneWeight.weight2 = weightsList[2].Item2;
+                        cvi.BoneWeight.boneIndex2 = weightsList[2].Item1;
+                        sum += cvi.BoneWeight.weight2;
+                    }
+
+                    if (numWeights > 3)
+                    {
+                        cvi.BoneWeight.weight3 = weightsList[3].Item2;
+                        cvi.BoneWeight.boneIndex3 = weightsList[3].Item1;
+                        sum += cvi.BoneWeight.weight3;
+                    }
+
+                    if (sum <= 0f || sum > 1.01f)
+                    {
+                        int ibreak = 0;
+                    }
+
+
+                    int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
+                    if (vertexIndex == -1)
+                    {
+                        vertexDataAndDesc.VertexData.Add(cvi);
+                        vertexIndex = vertexCount;
+                        vertexCount++;
+                    }
+
+                    commonMeshData.Vertices.Add(vertexIndex);
+
+                    meshIndices.Add(meshIndexCount);
+                    meshIndexCount++;
+                }
             }
-        }
 
-        
-        TXTRChunk txtrChunk = (TXTRChunk)m_chunkList.Find(x => x is TXTRChunk);
-        if (txtrChunk != null)
-        {
-            int textureCount = 0;
-            foreach (PaxTexture paxTexture in txtrChunk.Textures)
-            {
-                CommonTextureData commonTextureData = paxTexture.ToCommon(); 
-                commonModelData.CommonTextures.Add(commonTextureData);
-                
-                CommonMaterialData commonMaterialData = new CommonMaterialData();    
-                commonMaterialData.Name = m_name + (textureCount++);
-                commonMaterialData.TextureData1 = commonTextureData;
-                commonModelData.CommonMaterials.Add(commonMaterialData);
-            }
+            meshCount++;
         }
-        
-        
-        foreach(VertexDataAndDesc vdad in commonModelData.VertexDataLists)
-        {
-            commonModelData.AllVertices.AddRange(vdad.VertexData);
-        }
-
-        
-        
-        return commonModelData;
     }
 
-    public void BuildMaterialData(GameObject go,GCModel model)
+
+    public void BuildMaterialData(GameObject go, GCModel model)
     {
         HashSet<Material> materials = new HashSet<Material>();
         foreach (MeshRenderer mr in go.GetComponentsInChildren<MeshRenderer>())
@@ -477,7 +586,7 @@ public class GCModel : BaseModel
 
         foreach (Material m in materials)
         {
-           string textureName = m.mainTexture.name;
+            string textureName = m.mainTexture.name;
 
             textureName += ".tga";
             textureName = textureName.ToLower();
@@ -489,10 +598,9 @@ public class GCModel : BaseModel
             model.m_selsInfo.Add(DefaultShader);
             model.m_selsInfo.Add(textureName);
         }
-
     }
-    
-    public void LoadData(BinaryReader binReader,StringBuilder debugInfo)
+
+    public void LoadData(BinaryReader binReader, StringBuilder debugInfo)
     {
         binReader.BaseStream.Position = 0;
         int count = 0;
@@ -500,7 +608,7 @@ public class GCModel : BaseModel
         do
         {
             int position = (int)binReader.BaseStream.Position;
-            BaseChunk chunk = BaseChunk.FromStreamMaster(m_name, binReader,debugInfo);
+            BaseChunk chunk = BaseChunk.FromStreamMaster(m_name, binReader, debugInfo);
             if (chunk != null)
             {
                 m_chunkList.Add(chunk);
@@ -509,28 +617,26 @@ public class GCModel : BaseModel
                 {
                     break;
                 }
+
                 binReader.BaseStream.Position = position + chunk.Length;
             }
-        }
-        while (count++ < 100);
+        } while (count++ < 100);
 
-        
-        if(SKELChunk != null)
+
+        if (SKELChunk != null)
         {
-            foreach(BoneNode bn in SKELChunk.BoneList)
+            foreach (BoneNode bn in SKELChunk.BoneList)
             {
                 bn.name = NAMEChunk.Names[bn.NameIndex];
-                if(bn.Index != bn.ParentIndex)
+                if (bn.Index != bn.ParentIndex)
                 {
                     bn.parent = SKELChunk.BoneList[bn.ParentIndex];
                 }
             }
             //BoneList.AddRange(SkeletonChunk.BoneList);
         }
-
     }
 
-    
 
     public void BuildBB()
     {
@@ -553,7 +659,6 @@ public class GCModel : BaseModel
         MinBB = min;
         MaxBB = max;
     }
-
 
 
     public void ConstructSkin(GCModel model)
@@ -596,7 +701,7 @@ public class GCModel : BaseModel
         foreach (DisplayListHeader dlh in m_displayListHeaders)
         {
             int counter = 0;
-            for (int i = 0; i < dlh.entries.Count;i++)
+            for (int i = 0; i < dlh.entries.Count; i++)
             {
                 DisplayListEntry entry = dlh.entries[i];
 
@@ -604,6 +709,7 @@ public class GCModel : BaseModel
                 {
                     int ibreak = 0;
                 }
+
                 if (entry.NormIndex >= m_normals.Count)
                 {
                     int ibreak = 0;
@@ -614,7 +720,7 @@ public class GCModel : BaseModel
                     int ibreak = 0;
                 }
 
-                
+
                 points.Add(m_points[entry.PosIndex]);
                 normals.Add(m_normals[entry.NormIndex]);
                 uvs.Add(m_uvs[entry.UVIndex]);
@@ -622,8 +728,6 @@ public class GCModel : BaseModel
                 counter++;
             }
         }
-        
-        
     }
 
 
@@ -668,7 +772,6 @@ public class GCModel : BaseModel
         GladiusFileWriter.WriteEND(writer);
     }
 
-    
 
     public void WriteSELS(BinaryWriter writer)
     {
@@ -676,8 +779,8 @@ public class GCModel : BaseModel
         int textureLength = GladiusFileWriter.GetStringListSize(m_selsInfo);
         total += textureLength;
 
-        int paddedTotal = GladiusFileWriter.GetPadValue(total); 
-        
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
         GladiusFileWriter.WriteASCIIString(writer, "SELS");
 
         //total = 0x50;
@@ -693,37 +796,36 @@ public class GCModel : BaseModel
         int total = GladiusFileWriter.HeaderSize;
         int numV3 = 5;
         total += (12 * numV3);
-        
+
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
         //paddedTotal = 0x50;
         GladiusFileWriter.WriteASCIIString(writer, "CNTR");
         writer.Write(paddedTotal);
         writer.Write(0x01);
         writer.Write(0x01);
-        
-        Vector3 min = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
-        Vector3 max = new Vector3(float.MinValue,float.MinValue,float.MinValue);
 
-        foreach(Vector3 v in m_points)
+        Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+        foreach (Vector3 v in m_points)
         {
             min = Vector3.Min(min, v);
             max = Vector3.Max(max, v);
         }
 
-        Vector3 extents = max-min;
+        Vector3 extents = max - min;
         extents /= 2f;
-        float radius = Math.Max(extents.x,Math.Max(extents.y,extents.z));
+        float radius = Math.Max(extents.x, Math.Max(extents.y, extents.z));
 
         Vector3 midPoint = min + ((max - min) / 2f);
-        
+
         Common.WriteVector3BE(writer, min);
         Common.WriteVector3BE(writer, max);
         Common.WriteVector3BE(writer, midPoint);
-        Common.WriteVector3BE(writer,new IndexedVector3(radius,0,0));
+        Common.WriteVector3BE(writer, new IndexedVector3(radius, 0, 0));
         Common.WriteVector3BE(writer, midPoint);
 
         GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-
     }
 
 
@@ -737,7 +839,7 @@ public class GCModel : BaseModel
         writer.Write(0);
         writer.Write(m_textures.Count); // num materials, 1 for now
 
-        
+
         for (int i = 0; i < m_textures.Count; ++i)
         {
             GCMaterial gcm = new GCMaterial();
@@ -745,22 +847,21 @@ public class GCModel : BaseModel
             gcm.TexIndex[0] = (byte)i;
             gcm.ToStream(writer);
         }
-        
+
         // need to pad?
-        
     }
 
     public void WriteTXTR(BinaryWriter writer)
     {
         int total = GladiusFileWriter.HeaderSize;
         total += m_textures.Count * TextureBlockSize;
-        
+
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        
+
         GladiusFileWriter.WriteASCIIString(writer, "TXTR");
         writer.Write(paddedTotal);
-        writer.Write(0); 
+        writer.Write(0);
         writer.Write(m_textures.Count);
 
 
@@ -778,9 +879,8 @@ public class GCModel : BaseModel
             writer.Write(unknown1);
             writer.Write(unknown2);
         }
-        
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
 
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
     }
 
 
@@ -796,11 +896,11 @@ public class GCModel : BaseModel
         }
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
-        
+
         writer.Write(paddedTotal); // block size
         writer.Write(1);
         writer.Write(1);
-        
+
         // end of standard header.
 
         foreach (DisplayListHeader dlh in m_displayListHeaders)
@@ -816,31 +916,31 @@ public class GCModel : BaseModel
     {
         int total = GladiusFileWriter.HeaderSize;
         total += (8 * m_displayListHeaders.Count); // (start,length for each
-        
+
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        
+
         GladiusFileWriter.WriteASCIIString(writer, "DSLI");
         writer.Write(paddedTotal); // block size
-        writer.Write(1); 
+        writer.Write(1);
         writer.Write(1);
 
 
-        
         int startPos = 0;
-        
+
         foreach (DisplayListHeader header in m_displayListHeaders)
         {
             DSLIInfo dsliInfo = new DSLIInfo();
             dsliInfo.startPos = startPos;
-            dsliInfo.length = header.GetSize();;
-            
-            Common.WriteBigEndian(writer,dsliInfo.startPos);
-            Common.WriteBigEndian(writer,dsliInfo.length);
-            
+            dsliInfo.length = header.GetSize();
+            ;
+
+            Common.WriteBigEndian(writer, dsliInfo.startPos);
+            Common.WriteBigEndian(writer, dsliInfo.length);
+
             startPos += dsliInfo.length;
         }
-        
+
         GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
         //writer.Write(0);
         //writer.Write(0);
@@ -848,7 +948,7 @@ public class GCModel : BaseModel
 
     public void WriteDSLC(BinaryWriter writer)
     {
-        int total = GladiusFileWriter.HeaderSize+16;
+        int total = GladiusFileWriter.HeaderSize + 16;
         GladiusFileWriter.WriteASCIIString(writer, "DSLC");
         writer.Write(total); // block size
         writer.Write(1);
@@ -857,10 +957,10 @@ public class GCModel : BaseModel
         int totalEntries = 12;
         for (int i = 0; i < m_paxElements.Count; ++i)
         {
-            writer.Write((byte)1);    
+            writer.Write((byte)1);
         }
 
-        GladiusFileWriter.WriteNull(writer,totalEntries - m_paxElements.Count);
+        GladiusFileWriter.WriteNull(writer, totalEntries - m_paxElements.Count);
     }
 
     public void WritePOSI(BinaryWriter writer)
@@ -874,20 +974,19 @@ public class GCModel : BaseModel
         writer.Write(1);
         writer.Write(m_points.Count); // number of elements.
 
-        
+
         foreach (IndexedVector3 v in m_points)
         {
             Common.WriteVector3BE(writer, v);
         }
-        
+
         GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-        
     }
 
     public void WriteNORM(BinaryWriter writer)
     {
         int total = GladiusFileWriter.HeaderSize;
-        total +=  (m_normals.Count * 12);
+        total += (m_normals.Count * 12);
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
         GladiusFileWriter.WriteASCIIString(writer, "NORM");
@@ -906,7 +1005,7 @@ public class GCModel : BaseModel
     public void WriteUV0(BinaryWriter writer)
     {
         int total = GladiusFileWriter.HeaderSize;
-        total +=  (m_uvs.Count * 8);
+        total += (m_uvs.Count * 8);
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
         GladiusFileWriter.WriteASCIIString(writer, "UV0 ");
@@ -961,7 +1060,7 @@ public class GCModel : BaseModel
         GladiusFileWriter.WriteASCIIString(writer, "NLVL");
 
         writer.Write(blockSize); // block size
-        writer.Write(2); 
+        writer.Write(2);
         writer.Write(1);
         GladiusFileWriter.WriteNull(writer, 0x10);
     }
@@ -974,38 +1073,35 @@ public class GCModel : BaseModel
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
         writer.Write(paddedTotal); // block size
-        
+
         writer.Write(0);
         writer.Write(m_paxElements.Count); // number of elements
-        
 
-        for (int i = 0; i < m_paxElements.Count;++i)
+
+        for (int i = 0; i < m_paxElements.Count; ++i)
         {
             m_paxElements[i].ToStream(writer);
         }
-        
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
 
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
     }
 
     public void WriteELEM(BinaryWriter writer)
     {
-        int total = GladiusFileWriter.HeaderSize+16;
+        int total = GladiusFileWriter.HeaderSize + 16;
         GladiusFileWriter.WriteASCIIString(writer, "ELEM");
 
         writer.Write(total); // block size
-        writer.Write(0); 
+        writer.Write(0);
         writer.Write(m_paxElements.Count);
 
-        for (int i = 0;i < m_displayListHeaders.Count; ++i)
+        for (int i = 0; i < m_displayListHeaders.Count; ++i)
         {
             int val = (4 | (m_displayListHeaders[i].entries.Count << 8));
             writer.Write(val);
             writer.Write(0);
         }
     }
-
-
 
 
     public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
@@ -1017,7 +1113,7 @@ public class GCModel : BaseModel
     public List<TextureHeaderInfo> m_textures = new List<TextureHeaderInfo>();
     public List<String> m_names = new List<String>();
     public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
-    
+
     public List<String> m_selsInfo = new List<string>();
     public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
     public List<PaxElement> m_paxElements = new List<PaxElement>();
@@ -1047,10 +1143,16 @@ public class GCModel : BaseModel
 
 public class DisplayListHeader
 {
+    public const int DefaultEntryStride = 6;
+    public const int ExtendedEntryStride = 7;
+
     public byte header1 = 0x98;
     public ushort pad1 = 0;
     public byte primitiveFlags = 0x90;
     public ushort indexCount;
+    public int entryStride = DefaultEntryStride;
+
+
     public bool Valid = true;
     public List<DisplayListEntry> entries = new List<DisplayListEntry>();
 
@@ -1058,8 +1160,8 @@ public class DisplayListHeader
     {
         return 6 + (entries.Count * 6);
     }
-    
-    
+
+
     public void ToStream(BinaryWriter writer)
     {
         writer.Write(header1);
@@ -1075,18 +1177,26 @@ public class DisplayListHeader
         }
     }
 
-    public static bool FromStream(BinaryReader reader, out DisplayListHeader header, DSLIInfo dsliInfo)
+    public static bool FromStream(BinaryReader reader, out DisplayListHeader header, DSLIInfo dsliInfo,
+        int forcedEntryStride = DefaultEntryStride)
     {
         long currentPosition = reader.BaseStream.Position;
         bool success = false;
 
         header = new DisplayListHeader();
-        
+
         header.header1 = reader.ReadByte();
         header.pad1 = reader.ReadUInt16();
         header.primitiveFlags = reader.ReadByte();
 
-        
+        if (forcedEntryStride == 0)
+        {
+            forcedEntryStride = DetectEntryStride(reader, currentPosition, header.indexCount, dsliInfo);
+        }
+
+        header.entryStride = forcedEntryStride;
+
+
         if (header.primitiveFlags == 0x90 || header.primitiveFlags == 0x00)
         {
             header.indexCount = Common.ToUInt16BigEndian(reader);
@@ -1094,7 +1204,7 @@ public class DisplayListHeader
             success = true;
             for (int i = 0; i < header.indexCount; ++i)
             {
-                header.entries.Add(DisplayListEntry.FromStream(reader));
+                header.entries.Add(DisplayListEntry.FromStream(reader, header.entryStride));
             }
         }
         else
@@ -1106,11 +1216,84 @@ public class DisplayListHeader
     }
 
 
+    public static int DetectEntryStride(BinaryReader reader, long displayListStart, int entryCount, DSLIInfo dsliInfo)
+    {
+        bool stride6Boundary =
+            LooksLikeDisplayListBoundary(reader, displayListStart, entryCount, dsliInfo, DefaultEntryStride);
+        bool stride7Boundary =
+            LooksLikeDisplayListBoundary(reader, displayListStart, entryCount, dsliInfo, ExtendedEntryStride);
+        return stride7Boundary && !stride6Boundary ? ExtendedEntryStride : DefaultEntryStride;
+    }
+
+    public static bool LooksLikeDisplayListBoundary(BinaryReader reader, long displayListStart, int entryCount,
+        DSLIInfo dsliInfo, int stride)
+    {
+        if (entryCount < 0)
+        {
+            return false;
+        }
+
+        long streamLength = reader.BaseStream.Length;
+        long displayListEnd = streamLength;
+        if (dsliInfo != null && dsliInfo.length > 0)
+        {
+            long dsliEnd = displayListStart + ((long)dsliInfo.length * 2L);
+            if (dsliEnd > displayListStart && dsliEnd < displayListEnd)
+            {
+                displayListEnd = dsliEnd;
+            }
+        }
+
+        long entryEnd = displayListStart + 6L + ((long)entryCount * stride);
+        if (entryEnd < displayListStart || entryEnd > displayListEnd || entryEnd > streamLength)
+        {
+            return false;
+        }
+
+        long oldPosition = reader.BaseStream.Position;
+        try
+        {
+            reader.BaseStream.Position = entryEnd;
+            int sampleLength = (int)Math.Min(16, Math.Min(displayListEnd, streamLength) - entryEnd);
+            if (sampleLength <= 0)
+            {
+                return true;
+            }
+
+            int zeroCount = 0;
+            for (int i = 0; i < sampleLength; ++i)
+            {
+                byte value = reader.ReadByte();
+                if (value == 0)
+                {
+                    ++zeroCount;
+                }
+                else if (i == 0 && IsGcPrimitiveCommand(value))
+                {
+                    return true;
+                }
+            }
+
+            return zeroCount >= Math.Min(8, sampleLength);
+        }
+        finally
+        {
+            reader.BaseStream.Position = oldPosition;
+        }
+    }
+
+    private static bool IsGcPrimitiveCommand(byte value)
+    {
+        return value == 0x80 || value == 0x90 || value == 0x98 || value == 0xA0 ||
+               value == 0xA8 || value == 0xB0 || value == 0xB8;
+    }
+
+
     public static DisplayListHeader CreateFromMeshData(int[] triangles, Vector3[] vertices,
         Vector3[] normals, Vector2[] uvs)
     {
         DisplayListHeader dlh = new DisplayListHeader();
-        for (int i = 0; i < triangles.Length; i ++)
+        for (int i = 0; i < triangles.Length; i++)
         {
             dlh.entries.Add(new DisplayListEntry((ushort)triangles[i]));
         }
@@ -1124,17 +1307,19 @@ public struct DisplayListEntry
 {
     public ushort PosIndex;
     public ushort NormIndex;
+    public byte ExtraIndex;
     public ushort UVIndex;
 
     public String ToString()
     {
-        return "P:" + PosIndex + " N:" + NormIndex + " U:" + UVIndex;
+        return "P:" + PosIndex + " N:" + NormIndex + " X:" + ExtraIndex + " U:" + UVIndex;
     }
 
     public DisplayListEntry(ushort index)
     {
         PosIndex = index;
         NormIndex = index;
+        ExtraIndex = 0;
         UVIndex = index;
     }
 
@@ -1142,34 +1327,47 @@ public struct DisplayListEntry
     {
         PosIndex = pos;
         NormIndex = norm;
+        ExtraIndex = 0;
         UVIndex = uv;
     }
 
 
     public void ToStream(BinaryWriter writer)
     {
+        ToStream(writer, 6);
+    }
+
+    public void ToStream(BinaryWriter writer, int entryStride)
+    {
         Common.WriteBigEndian(writer, (short)PosIndex);
         Common.WriteBigEndian(writer, (short)NormIndex);
+        if (entryStride == DisplayListHeader.ExtendedEntryStride)
+        {
+            writer.Write(ExtraIndex);
+        }
+
         Common.WriteBigEndian(writer, (short)UVIndex);
     }
 
     public static DisplayListEntry FromStream(BinaryReader reader)
     {
+        return FromStream(reader, DisplayListHeader.DefaultEntryStride);
+    }
+
+    public static DisplayListEntry FromStream(BinaryReader reader, int entryStride)
+    {
         DisplayListEntry entry = new DisplayListEntry();
         entry.PosIndex = Common.ToUInt16BigEndian(reader);
         entry.NormIndex = Common.ToUInt16BigEndian(reader);
+        if (entryStride == DisplayListHeader.ExtendedEntryStride)
+        {
+            entry.ExtraIndex = reader.ReadByte();
+        }
+
         entry.UVIndex = Common.ToUInt16BigEndian(reader);
-
-        //if (entry.PosIndex < 0 || entry.NormIndex < 0 || entry.UVIndex < 0)
-        //{
-        //    int ibreak = 0;
-        //}
-
-
         return entry;
     }
 }
-
 
 
 public class DSLIInfo
@@ -1193,10 +1391,10 @@ public class TextureHeaderInfo
     public string Name;
     public int Width;
     public int Height;
-    
+
     public int CompressedSize;
     public int UncompressedSize;
-    
+
     public bool ContainsDefinition;
     public ushort DXTType = 0;
 }
@@ -1204,8 +1402,6 @@ public class TextureHeaderInfo
 
 public class GCMaterial
 {
-    
-    
     public int MaterialId = -1;
     public char[] MatNameRaw = new char[124];
     public string MatName;
@@ -1213,8 +1409,8 @@ public class GCMaterial
     public uint AttributeFlags;
     public uint AttributeValues;
     public byte[] TexIndex = new byte[8];
-    public byte[] BlendModes= new byte[8];
-    public byte[] GenModes= new byte[8];
+    public byte[] BlendModes = new byte[8];
+    public byte[] GenModes = new byte[8];
 
 
     public static GCMaterial FromStream(BinaryReader reader)
@@ -1231,7 +1427,7 @@ public class GCMaterial
         gcm.TexIndex = reader.ReadBytes(8);
         gcm.BlendModes = reader.ReadBytes(8);
         gcm.GenModes = reader.ReadBytes(8);
-        
+
         return gcm;
     }
 
@@ -1248,5 +1444,4 @@ public class GCMaterial
         writer.Write(BlendModes);
         writer.Write(GenModes);
     }
-    
 }

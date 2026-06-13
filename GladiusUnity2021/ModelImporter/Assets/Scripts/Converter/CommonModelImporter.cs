@@ -827,6 +827,28 @@ public static class CommonModelImporter
 
         return methodInfoDictionary;
     }
+    
+    public static int GetBestLodLevel(SELSChunk selsChunk,STYPChunk stypChunk)
+    {
+        return GetMeshLodLevel("set_LOD0",selsChunk, stypChunk);
+    }
+
+    public static int GetMeshLodLevel(string setName,SELSChunk selsChunk,STYPChunk stypChunk)
+    {
+        if (selsChunk != null && stypChunk != null)
+        {
+            int nameIndex = 0;
+            if (nameIndex != -1)
+            {
+                SelectSet selectSet = stypChunk.SelectSetList.Find(x => x.NameIndex == nameIndex);
+                return selectSet.Mask;
+            }
+        }
+        return -1;
+    }
+
+    
+    
 }
 
 public class R2V2
@@ -2299,9 +2321,20 @@ public class DSLSChunk : BaseChunk
 
         using (BinaryReader binReader = new BinaryReader(new MemoryStream(Data)))
         {
+            int startPosMultiplier = 1;
+            // check and see if we use a multiplier (skinned)
+            if (dsliChunk.Data.Count > 1)
+            {
+                if (dsliChunk.Data[1].startPos < dsliChunk.Data[0].length)
+                {
+                    startPosMultiplier = 2;
+                }
+            }
+
             for (int i = 0; i < dsliChunk.Data.Count; ++i)
             {
-                binReader.BaseStream.Position = dsliChunk.Data[i].startPos;
+                binReader.BaseStream.Position = dsliChunk.Data[i].startPos * startPosMultiplier;
+
                 DisplayListHeader.FromStream(binReader, out header, dsliChunk.Data[i]);
                 if (header != null)
                 {
@@ -2564,7 +2597,7 @@ public class PaxElement
     public uint MaterialId;
     public uint ElementCount;
     public uint AlwaysZero2;
-    public uint Unk2;
+    public uint SelectSetMask;
 
     public PaxElement(uint materialId, uint elementCount)
     {
@@ -2580,7 +2613,7 @@ public class PaxElement
         paxElement.MaterialId = reader.ReadUInt32();
         paxElement.ElementCount = reader.ReadUInt32();
         paxElement.AlwaysZero2 = reader.ReadUInt32();
-        paxElement.Unk2 = reader.ReadUInt32();
+        paxElement.SelectSetMask = reader.ReadUInt32();
         return paxElement;
     }
 
@@ -2592,7 +2625,7 @@ public class PaxElement
         writer.Write(MaterialId);
         writer.Write(ElementCount);
         writer.Write(AlwaysZero2);
-        writer.Write(Unk2);
+        writer.Write(SelectSetMask);
     }
 }
 
@@ -2638,7 +2671,7 @@ public class SKINChunk : BaseChunk
     public List<IndexedVector3> Positions = new List<IndexedVector3>();
     public List<IndexedVector3> Normals = new List<IndexedVector3>();
 
-    public const int StructureSize = 96;
+    //public const int StructureSize = 96;
 
     public static char[] ChunkName()
     {
@@ -2662,16 +2695,8 @@ public class SKINChunk : BaseChunk
 
             foreach (CSK1 csk1 in skinData.CSK1List)
             {
-                //binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
-
-                binReader.BaseStream.Position = dataPosition + csk1.vertDst;
+                binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
                 SkinData.ReadPositionAndNormals(binReader, csk1.count, skinData.AnimShift,csk1.ExtractedPositions, csk1.ExtractedNormals);
-
-                // for (int i = 0; i < csk1.count; ++i)
-                // {
-                //     PosNorm16 pn16 = PosNorm16.FromStream(binReader);
-                //     csk1.ExtractedData.Add(pn16);
-                // }
 
                 int ibreak = 0;
             }
@@ -2679,15 +2704,10 @@ public class SKINChunk : BaseChunk
             foreach (CSK2 csk2 in skinData.CSK2List)
             {
                 binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
-                // for (int i = 0; i < csk2.count; ++i)
-                // {
-                //     PosNorm16 pn16 = PosNorm16.FromStream(binReader);
-                //     csk2.ExtractedData.Add(pn16);
-                // }
 
                 SkinData.ReadPositionAndNormals(binReader, csk2.count,skinData.AnimShift, csk2.ExtractedPositions, csk2.ExtractedNormals);
 
-                binReader.BaseStream.Position = dataPosition + csk2.weights;
+                binReader.BaseStream.Position = dataPosition + csk2.weightsSrc;
                 for (int i = 0; i < csk2.count; ++i)
                 {
                     byte b1 = binReader.ReadByte();
@@ -2697,6 +2717,30 @@ public class SKINChunk : BaseChunk
                 }
             }
 
+            foreach (CSKA cska in skinData.CSKAList)
+            {
+                // Accumulation packets add one more weighted bone influence to
+                // already-emitted destination vertices. The source pos/norm
+                // records match the destination bind-pose positions, while
+                // idxDst maps each record back to the output vertex slot.
+                binReader.BaseStream.Position = dataPosition + cska.vertSrc;
+                SkinData.ReadPositionAndNormals(binReader, cska.count, skinData.AnimShift, cska.ExtractedPositions, cska.ExtractedNormals);
+            
+                binReader.BaseStream.Position = dataPosition + cska.idxDst;
+                for (int i = 0; i < cska.count; ++i)
+                {
+                    cska.ExtractedDestinationIndices.Add(Common.ToUInt16BigEndian(binReader));
+                }
+            
+                binReader.BaseStream.Position = dataPosition + cska.weightsSrc;
+                for (int i = 0; i < cska.count; ++i)
+                {
+                    cska.ExtractedWeights.Add(binReader.ReadByte() / 255f);
+                }
+            }
+
+            
+            
             nextHeaderStart += skinData.Size;
 
             int ibreak2 = 0;
@@ -2842,46 +2886,7 @@ public class SkinData
         }
     }
 
-//     public static void ReadPositionAndNormals(BinaryReader binReader, int count, List<Vector3> positions,
-//         List<Vector3> normals)
-//     {
-//         int stride = 9;
-//         long currentPosition = binReader.BaseStream.Position;
-//         long end = currentPosition + (count * stride);
-//
-//         int diff = (count * stride);
-//         for (int i = 0; i < diff - 2; i++)
-//         {
-//             float nx = binReader.ReadByte() / (255f);
-//             float ny = binReader.ReadByte() / (255f);
-//             float nz = binReader.ReadByte() / (255f);
-//
-//             Vector3 n = new Vector3(nx, ny, nz);
-//             if (Common.FuzzyEquals(n.magnitude, 1.0f, 0.001f))
-//             {
-//                 int ibreak2 = 0;
-//             }
-//
-//             binReader.BaseStream.Position -= 2;
-//         }
-//
-//
-//         for (int i = 0; i < count; ++i)
-//         {
-//             float x = binReader.ReadInt16() / (65536f);
-//             float y = binReader.ReadInt16() / (65536f);
-//             float z = binReader.ReadInt16() / (65536f);
-//
-//             float nx = binReader.ReadByte() / (255f);
-//             float ny = binReader.ReadByte() / (255f);
-//             float nz = binReader.ReadByte() / (255f);
-//
-//             positions.Add(new Vector3(x, y, z));
-//             normals.Add(new Vector3(nx, ny, nz));
-//         }
-//
-//         int ibreak = 0;
-//     }
+
     public static void ReadPositionAndNormals(BinaryReader binReader, int count, short animShift,
         List<Vector3> positions,
         List<Vector3> normals)
@@ -3017,12 +3022,11 @@ public class CSK2
 {
     public byte[] idxBone = new byte[2];
     public ushort count;
-    public uint weights;
+    public uint weightsSrc;
     public uint vertSrc;
     public uint vertDst;
 
     public List<(float, float)> ExtractedWeights = new List<(float, float)>();
-    public List<PosNorm16> ExtractedData = new List<PosNorm16>();
 
     public List<Vector3> ExtractedPositions = new List<Vector3>();
     public List<Vector3> ExtractedNormals = new List<Vector3>();
@@ -3033,7 +3037,7 @@ public class CSK2
         csk2.idxBone[0] = binReader.ReadByte();
         csk2.idxBone[1] = binReader.ReadByte();
         csk2.count = Common.ToUInt16BigEndian(binReader);
-        csk2.weights = SKINChunk.ReadAndRelocate(binReader);
+        csk2.weightsSrc = SKINChunk.ReadAndRelocate(binReader);
         csk2.vertSrc = SKINChunk.ReadAndRelocate(binReader);
         csk2.vertDst = binReader.ReadUInt32();
 
@@ -3047,18 +3051,25 @@ public class CSKA
     public byte idxBone;
     public byte _pad;
     public ushort count;
-    public uint weights;
+    public uint weightsSrc;
     public uint idxDst;
     public uint vertSrc;
 
+    public List<Vector3> ExtractedPositions = new List<Vector3>();
+    public List<Vector3> ExtractedNormals = new List<Vector3>();
+
+    public List<int> ExtractedDestinationIndices = new List<int>();
+    public List<float> ExtractedWeights = new List<float>();
+
+    
     public static CSKA FromStream(BinaryReader binReader)
     {
         CSKA cska = new CSKA();
         cska.idxBone = binReader.ReadByte();
         cska._pad = binReader.ReadByte();
         cska.count = Common.ToUInt16BigEndian(binReader);
-        ;
-        cska.weights = SKINChunk.ReadAndRelocate(binReader);
+        
+        cska.weightsSrc = SKINChunk.ReadAndRelocate(binReader);
         cska.idxDst = SKINChunk.ReadAndRelocate(binReader);
         cska.vertSrc = SKINChunk.ReadAndRelocate(binReader);
 
