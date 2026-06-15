@@ -1124,7 +1124,8 @@ public class GCModel : BaseModel
         
         for (int i = 0; i < mesh.boneWeights.Length; ++i)
         {
-            int activeWeights = CommonModelImporter.CountActiveWeights(mesh.boneWeights[i]);
+            BoneWeight bw = mesh.boneWeights[i];
+            int activeWeights = CommonModelImporter.CountActiveWeights(bw);
             Debug.Assert(activeWeights > 0 && activeWeights <= 4);
             {
                 allLists[activeWeights - 1].Add(i);
@@ -1173,6 +1174,10 @@ public class GCModel : BaseModel
             CSK2 csk2 = SkinData.CreateCSK2(key,twoBoneDict[key],mesh.vertices,mesh.normals,mesh.boneWeights);
             skinData.CSK2List.Add(csk2);
         }
+        
+        
+        // do something here to shrink the weights to a max of 3 only. quick look shows that 4th bone often negligible weight
+        // so renormalise and store it as a csk2 plus an extra in cska
         
         
         
