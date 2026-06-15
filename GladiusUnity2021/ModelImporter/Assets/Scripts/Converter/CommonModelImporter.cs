@@ -847,7 +847,29 @@ public static class CommonModelImporter
         return -1;
     }
 
-    
+
+    public static int CountActiveWeights(BoneWeight bw)
+    {
+        int count = 0;
+        if (bw.weight0 > 0f)
+        {
+            count++;
+        }
+        if (bw.weight1 > 0f)
+        {
+            count++;
+        }
+        if (bw.weight2 > 0f)
+        {
+            count++;
+        }
+        if (bw.weight3 > 0f)
+        {
+            count++;
+        }
+
+        return count;   
+    }
     
 }
 
@@ -2713,7 +2735,7 @@ public class SKINChunk : BaseChunk
                     byte b1 = binReader.ReadByte();
                     byte b2 = binReader.ReadByte();
 
-                    csk2.ExtractedWeights.Add((b1 / 255f, b2 / 255f));
+                    csk2.ExtractedWeightsFloats.Add((b1 / 255f, b2 / 255f));
                 }
             }
 
@@ -2776,6 +2798,9 @@ public class SKINChunk : BaseChunk
         baseValue += offset;
         return baseValue;
     }
+
+
+    
 }
 
 public class SkinData
@@ -2912,6 +2937,37 @@ public class SkinData
             normals.Add(new Vector3(nxRaw * normScale, nyRaw * normScale, nzRaw * normScale));
         }
     }
+    
+    public static CSK1 CreateCSK1(int boneId, List<int> positions, Vector3[] vertices, Vector3[] normals,BoneWeight[] weights)
+    {
+        CSK1 csk1 = new CSK1();
+        csk1.idxBone = (byte)boneId;
+        csk1.count = (ushort)positions.Count;
+
+        return csk1;
+    }
+
+    public static CSK2 CreateCSK2((int,int) boneId, List<int> positions, Vector3[] vertices, Vector3[] normals,BoneWeight[] weights)
+    {
+        CSK2 csk2 = new CSK2();
+        csk2.idxBone[0] = (byte)boneId.Item1;
+        csk2.idxBone[1] = (byte)boneId.Item2;
+        
+        csk2.count = (ushort)positions.Count;
+
+        foreach (int position in positions)
+        {
+            // byte w1 = (byte)((float)0xFF * weights[position].weight0);
+            // byte w2 = (byte)((float)0xFF * weights[position].weight1);
+            csk2.ExtractedWeightsFloats.Add((weights[position].weight0,weights[position].weight1));
+        }
+        
+        
+        return csk2;
+    }
+
+
+    
 }
 
 
@@ -3026,7 +3082,8 @@ public class CSK2
     public uint vertSrc;
     public uint vertDst;
 
-    public List<(float, float)> ExtractedWeights = new List<(float, float)>();
+    public List<byte> ExtractedWeightsBytes = new List<byte>();
+    public List<(float, float)> ExtractedWeightsFloats = new List<(float, float)>();
 
     public List<Vector3> ExtractedPositions = new List<Vector3>();
     public List<Vector3> ExtractedNormals = new List<Vector3>();

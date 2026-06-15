@@ -463,7 +463,7 @@ public class GCModel : BaseModel
                     foreach (Vector3 v3 in csk.ExtractedPositions)
                     {
                         List<(int, float)> weights = new List<(int, float)>();
-                        (float, float) weight = csk.ExtractedWeights[count];
+                        (float, float) weight = csk.ExtractedWeightsFloats[count];
 
                         weights.Add((csk.idxBone[0], weight.Item1));
                         weights.Add((csk.idxBone[1], weight.Item2));
@@ -1103,6 +1103,83 @@ public class GCModel : BaseModel
         }
     }
 
+
+    public static SkinData CreateSkinData(Mesh mesh)
+    {
+        Debug.Assert(mesh != null);
+        Debug.Assert(mesh.vertices.Length == mesh.boneWeights.Length);
+        
+        SkinData skinData = new  SkinData();
+        
+        List<int> oneBoneVertices = new List<int>();
+        List<int> twoBoneVertices = new List<int>();
+        List<int> threeBoneVertices = new List<int>();
+        List<int> fourBoneVertices = new List<int>();
+
+        List<List<int>> allLists = new List<List<int>>();
+        allLists.Add(oneBoneVertices);
+        allLists.Add(twoBoneVertices);
+        allLists.Add(threeBoneVertices);
+        allLists.Add(fourBoneVertices);
+        
+        for (int i = 0; i < mesh.boneWeights.Length; ++i)
+        {
+            int activeWeights = CommonModelImporter.CountActiveWeights(mesh.boneWeights[i]);
+            Debug.Assert(activeWeights > 0 && activeWeights <= 4);
+            {
+                allLists[activeWeights - 1].Add(i);
+            }
+        }
+        
+        Dictionary<int,List<int>> oneBoneDict = new Dictionary<int,List<int>>();
+
+        // create all the ones,
+        for (int i = 0; i < oneBoneVertices.Count; ++i)
+        {
+            int boneId = mesh.boneWeights[oneBoneVertices[i]].boneIndex0;
+            if (!oneBoneDict.TryGetValue(boneId, out List<int> boneList))
+            {
+                boneList = new List<int>();
+                oneBoneDict[boneId] = boneList;
+            }
+            boneList.Add(oneBoneVertices[i]);
+        }
+        
+        Dictionary<(int,int),List<int>> twoBoneDict = new Dictionary<(int,int),List<int>>();
+        // and all the twos
+        for (int i = 0; i < twoBoneVertices.Count; ++i)
+        {
+            BoneWeight bw = mesh.boneWeights[twoBoneVertices[i]];
+            
+            var key = (Math.Min(bw.boneIndex0,bw.boneIndex1),Math.Max(bw.boneIndex0,bw.boneIndex1));
+            if (!twoBoneDict.TryGetValue(key, out List<int> boneList))
+            {
+                boneList = new List<int>();
+                twoBoneDict[key] = boneList;
+            }
+            boneList.Add(twoBoneVertices[i]);
+            
+        }
+
+
+        foreach (var key in oneBoneDict.Keys)
+        {
+            CSK1 csk1 = SkinData.CreateCSK1(key,oneBoneDict[key],mesh.vertices,mesh.normals,mesh.boneWeights);
+            skinData.CSK1List.Add(csk1);
+        }
+        
+        foreach (var key in twoBoneDict.Keys)
+        {
+            CSK2 csk2 = SkinData.CreateCSK2(key,twoBoneDict[key],mesh.vertices,mesh.normals,mesh.boneWeights);
+            skinData.CSK2List.Add(csk2);
+        }
+        
+        
+        
+        return skinData;
+    }
+    
+    
 
     public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
     public String m_name;
