@@ -20,7 +20,8 @@ namespace Assets.Editor
         public const string m_newExtension = ".asset";
         public const string OriginalModelDirectory = "XboxModels";
         public const string PrefabOutputDirectory = "XboxModelPrefabs/";
-
+        public const string PlatformPrefix = "xbox/";
+        
         public static bool HasExtension(string asset)
         {
             return asset.EndsWith(m_extension);
@@ -88,7 +89,7 @@ namespace Assets.Editor
 
                     // deal with empty files
 
-                    int lodLevel = 1; //model.m_selsInfo.GetBestLodData();
+                    uint lodLevel = 1;//model.m_selsInfo.GetBestLodData();
 
 
                     
@@ -107,9 +108,9 @@ namespace Assets.Editor
 
                             string outputDirectories =
 
-                                CommonModelProcessor.ProcessCommonModel(assetName, outputHierarchy, lodLevel,
+                                CommonModelProcessor.CommonModelToPrefab(assetName, outputHierarchy, lodLevel,
                                     commonModel,
-                                    PrefabOutputDirectory);
+                                    PrefabOutputDirectory,PlatformPrefix);
                         }
                     }
 

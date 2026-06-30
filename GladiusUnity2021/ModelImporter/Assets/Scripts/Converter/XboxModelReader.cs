@@ -295,7 +295,7 @@ public class XboxModel : BaseModel
             commonMesh.Radius = renderMesh.Radius;
             commonMesh.Center = renderMesh.Center;
             commonMesh.Offset = renderMesh.Offset;
-            commonMesh.LodLevel = (int)renderMesh.SelectionSetMask;
+            commonMesh.LodLevel = renderMesh.SelectionSetMask;
 
             //commonMesh.MaterialId = (int)XRenderSetup.MeshMaterialList[index].PointerToMaterial / s_materialBlockSize;
             int offset = XRenderSetup.MaterialGroupLists[index];
@@ -373,56 +373,59 @@ public class XboxModel : BaseModel
             
             // fix up bone info.
 
-            foreach (int vertexId in sortedVertices)
+            if (commonModel.Skinned)
             {
-                CommonVertexInstance cvi = commonModel.AllVertices[vertexId];
-                cvi.TranslatedBoneIndices = new short[cvi.UntranslatedBoneIndices.Length];
-                
-                for (int j = 0; j < cvi.UntranslatedBoneIndices.Length; ++j)
+                foreach (int vertexId in sortedVertices)
                 {
-                    int originalBoneId = -1;
-                    originalBoneId = XRenderSetup.AdjustBone(cvi.UntranslatedBoneIndices[j], index);
-                    cvi.TranslatedBoneIndices[j] = (short)originalBoneId;
+                    CommonVertexInstance cvi = commonModel.AllVertices[vertexId];
+                    cvi.TranslatedBoneIndices = new short[cvi.UntranslatedBoneIndices.Length];
+
+                    for (int j = 0; j < cvi.UntranslatedBoneIndices.Length; ++j)
+                    {
+                        int originalBoneId = -1;
+                        originalBoneId = XRenderSetup.AdjustBone(cvi.UntranslatedBoneIndices[j], index);
+                        cvi.TranslatedBoneIndices[j] = (short)originalBoneId;
+                    }
+
+
+                    int numWeights = ActiveWeights(cvi.UntranslatedWeightData);
+                    float sum = 0.0f;
+                    if (numWeights > 0)
+                    {
+                        cvi.BoneWeight.weight0 = UnpackWeight(cvi.UntranslatedWeightData, 0);
+                        cvi.BoneWeight.boneIndex0 = cvi.TranslatedBoneIndices[0];
+                        sum += cvi.BoneWeight.weight0;
+                    }
+
+                    if (numWeights > 1)
+                    {
+                        cvi.BoneWeight.weight1 = UnpackWeight(cvi.UntranslatedWeightData, 1);
+                        cvi.BoneWeight.boneIndex1 = cvi.TranslatedBoneIndices[1];
+                        sum += cvi.BoneWeight.weight1;
+                    }
+
+                    if (numWeights > 2)
+                    {
+                        cvi.BoneWeight.weight2 = UnpackWeight(cvi.UntranslatedWeightData, 2);
+                        cvi.BoneWeight.boneIndex2 = cvi.TranslatedBoneIndices[2];
+                        sum += cvi.BoneWeight.weight2;
+                    }
+
+                    if (numWeights > 3)
+                    {
+                        cvi.BoneWeight.weight3 = UnpackWeight(cvi.UntranslatedWeightData, 3);
+                        cvi.BoneWeight.boneIndex3 = cvi.TranslatedBoneIndices[3];
+                        sum += cvi.BoneWeight.weight3;
+
+                    }
+
+                    if (sum > 1.01f)
+                    {
+                        int ibreak = 0;
+                    }
+
+                    commonModel.AllVertices[vertexId] = cvi;
                 }
-
-
-                int numWeights = ActiveWeights(cvi.UntranslatedWeightData);
-                float sum = 0.0f;
-                if (numWeights > 0)
-                {
-                    cvi.BoneWeight.weight0 = UnpackWeight(cvi.UntranslatedWeightData,0);
-                    cvi.BoneWeight.boneIndex0 = cvi.TranslatedBoneIndices[0];
-                    sum += cvi.BoneWeight.weight0;
-                }
-
-                if (numWeights > 1)
-                {
-                    cvi.BoneWeight.weight1 = UnpackWeight(cvi.UntranslatedWeightData,1);
-                    cvi.BoneWeight.boneIndex1 = cvi.TranslatedBoneIndices[1];
-                    sum += cvi.BoneWeight.weight1;
-                }
-
-                if (numWeights > 2)
-                {
-                    cvi.BoneWeight.weight2 = UnpackWeight(cvi.UntranslatedWeightData,2);
-                    cvi.BoneWeight.boneIndex2 = cvi.TranslatedBoneIndices[2];
-                    sum += cvi.BoneWeight.weight2;
-                }
-
-                if (numWeights > 3)
-                {
-                    cvi.BoneWeight.weight3 = UnpackWeight(cvi.UntranslatedWeightData,3);
-                    cvi.BoneWeight.boneIndex3 = cvi.TranslatedBoneIndices[3];
-                    sum += cvi.BoneWeight.weight3;
-
-                }
-
-                if (sum > 1.01f)
-                {
-                    int ibreak = 0;
-                }
-                
-                commonModel.AllVertices[vertexId] = cvi;
             }
 
             index++;
@@ -1447,56 +1450,6 @@ public class MaterialGenericPropertyRenderstate : MaterialPropertyBase
 }
 
 
-
-
-
-
-
-// public class SelectSetTypesChunk : BaseChunk
-// {
-//     public List<SelectSet> SelectSetList = new List<SelectSet>();
-//     public static BaseChunk FromStream(String name, BinaryReader binReader)
-//     {
-//         SelectSetTypesChunk chunk = new SelectSetTypesChunk();
-//         chunk.BaseFromStream(binReader);
-//         for (int i = 0; i < chunk.NumElements; ++i)
-//         {
-//             chunk.SelectSetList.Add(SelectSet.FromStream(binReader));
-//         }
-//         return chunk;
-//     }
-// }
-
-
-// public class PaxTexture
-// {
-//     public String Name;
-//     public int TexNum;
-//     public uint PointerToImageArray;
-//     public uint Width;
-//     public uint Height;
-//     public uint AttribFlags;
-//     public uint AttribValues;
-//
-//     public static PaxTexture FromStream(BinaryReader binReader)
-//     {
-//         PaxTexture paxTexture = new PaxTexture();
-//         byte[] buffer = binReader.ReadBytes(128);
-//         paxTexture.Name = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
-//         paxTexture.TexNum = binReader.ReadInt32();
-//         paxTexture.PointerToImageArray = binReader.ReadUInt32();
-//         paxTexture.Width = binReader.ReadUInt32();
-//         paxTexture.Height = binReader.ReadUInt32();
-//         paxTexture.AttribFlags = binReader.ReadUInt32();
-//         paxTexture.AttribValues = binReader.ReadUInt32();
-//         return paxTexture;
-//     }
-// }
-//
-//
-//
-
-
 public class CLXRenderVertexBuffer
 {
     public uint PointerToVBResource;
@@ -1558,19 +1511,6 @@ public class CLXRenderVertexBuffer
                 vbi.UntranslatedBoneIndices[0] = binReader.ReadInt16();
                 vbi.UntranslatedBoneIndices[1] = binReader.ReadInt16();
                 vbi.UntranslatedBoneIndices[2] = binReader.ReadInt16();
-                
-                //DebugBoneWeights(vbi.BoneIndices[0]);
-                //DebugBoneWeights(vbi.BoneIndices[1]);
-                //DebugBoneWeights(vbi.BoneIndices[2]);
-
-                //for (int z = 0; z < vbi.BoneIndices.Length; ++z)
-                //{
-                //    if (z == 6)
-                //    {
-                //        break;
-                //    }
-                //}
-
 
             }
         }

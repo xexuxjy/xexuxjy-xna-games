@@ -69,7 +69,7 @@ public static class CommonModelProcessor
 
 
     public static Material GetOrCreateMaterial(string modelname,CommonMaterialData commonMaterialData,
-        string outputHierarchy,bool isCharacter)
+        string outputHierarchy,bool saveAssets)
     {
         CommonTextureData textureData1 = commonMaterialData.TextureData1;
         CommonTextureData textureData2 = commonMaterialData.TextureData2;
@@ -100,7 +100,8 @@ public static class CommonModelProcessor
                 else
                 {
 
-                    if (!isCharacter && DoesTextureHaveAlpha(texture1))
+                    //if (!isCharacter && DoesTextureHaveAlpha(texture1))
+                    if (DoesTextureHaveAlpha(texture1))
                     {
                         commonMaterialData.isTransparent = true;
                     }
@@ -159,19 +160,12 @@ public static class CommonModelProcessor
                         Directory.CreateDirectory(fullOuputDirName);
                     }
 
-                    if (TempMaterialStore.ContainsKey(finalMaterial.name))
-                    {
-                        int ibreak = 0;
-                    }
-                    
-                    
-                    
                     TempMaterialStore[finalMaterial.name] = finalMaterial;
-                    AssetDatabase.CreateAsset(finalMaterial, "Assets/" + assetOutputDirName + finalMaterial.name + ".mat");
-                }
-                else
-                {
-                    int ibreak = 0;
+                    if (saveAssets)
+                    {
+                        AssetDatabase.CreateAsset(finalMaterial,
+                            "Assets/" + assetOutputDirName + finalMaterial.name + ".mat");
+                    }
                 }
             }
         }
@@ -184,14 +178,14 @@ public static class CommonModelProcessor
     }
 
     public static void BuildArmourAndSkinVarients(string modelName,string outputHierarchy ,List<Material> armourMaterials,
-        List<Material> skinMaterials,bool isCharacter)
+        List<Material> skinMaterials,bool saveAssets)
     {
-        TryAddMaterialSet(modelName, "skin", outputHierarchy, skinMaterials,isCharacter);
-        TryAddMaterialSet(modelName, "armor", outputHierarchy, armourMaterials,isCharacter);
+        TryAddMaterialSet(modelName, "skin", outputHierarchy, skinMaterials,saveAssets);
+        TryAddMaterialSet(modelName, "armor", outputHierarchy, armourMaterials,saveAssets);
         
     }
 
-    private static void TryAddMaterialSet(string modelName, string type, string outputHierarchy,List<Material> results,bool isCharacter)
+    private static void TryAddMaterialSet(string modelName, string type, string outputHierarchy,List<Material> results,bool saveAssets)
     {
         bool foundSimple = false;
         for (int i = 1; i < 5; ++i)
@@ -206,7 +200,7 @@ public static class CommonModelProcessor
                 cmd.TextureData1 = new CommonTextureData();
                 cmd.TextureData1.textureName = textureName;
                 
-                Material m = GetOrCreateMaterial(modelName, cmd, outputHierarchy,isCharacter);
+                Material m = GetOrCreateMaterial(modelName, cmd, outputHierarchy,saveAssets);
                 results.Add(m);
             }
         }
@@ -224,16 +218,12 @@ public static class CommonModelProcessor
                     CommonMaterialData cmd = new CommonMaterialData();
                     cmd.TextureData1 = new CommonTextureData();
                     cmd.TextureData1.textureName = textureName;
-                    Material m = GetOrCreateMaterial(modelName, cmd, outputHierarchy,isCharacter);
+                    Material m = GetOrCreateMaterial(modelName, cmd, outputHierarchy,saveAssets);
                     results.Add(m);
                 }
             }
         }
-
     }
-
-
-
 
 
     public static bool DoesTextureHaveAlpha(Texture texture)
@@ -556,84 +546,95 @@ public static class CommonModelProcessor
         
         return humanBones.ToArray();
     }
-    
 
-    public static string ProcessCommonModel(string fullAssetPath, string outputHierarchy, int lodLevel,
-        CommonModelData commonModel, string outputDirectory)
+
+    public static string CommonModelToPrefab(string fullAssetPath, string outputHierarchy, uint lodLevel,
+        CommonModelData commonModel, string outputDirectory,string platformPrefix)
     {
-        //lodLevel = model.GetMeshLodLevel("set_LOD1");
-        Debug.Log("Best lod level is : " + lodLevel);
+        String outputDirName = outputDirectory + outputHierarchy + "/";
+        outputDirName = outputDirName.Replace("//", "/"); 
 
-        //TempMaterialStore.Clear();
-        
-        List<CommonMeshData> filteredList = new List<CommonMeshData>();
-
-        foreach (CommonMeshData mesh in commonModel.CommonMeshData)
-        {
-            if (mesh.LodLevel != 0 && (mesh.LodLevel & lodLevel) == 0)
-            {
-                continue;
-            }
-
-            filteredList.Add(mesh);
-        }
-
-        commonModel.CommonMeshData = filteredList;
-
-        Dictionary<CommonMaterialData, List<CommonMeshData>> materialMeshLists =
-            CommonModelProcessor.SplitByMaterial(commonModel);
-
-        GameObject splitPrefab = new GameObject(commonModel.Name + "-SplitPrefab");
-
-        GameObject combinedPrefab = new GameObject(commonModel.Name);
-        GameObject gladiusToUnity = new GameObject("GladiusToUnity");
-        gladiusToUnity.transform.SetParent(combinedPrefab.transform, false);
-
-
-        // Build structure if mapped.
-        var boneObjectMap = new Dictionary<BoneNode, GameObject>();
-        GameObject rootGO = null;
         bool isCharacter = fullAssetPath.ContainsInvariantCultureIgnoreCase("characters");
+        String noExtensionName = commonModel.Name.Replace(".mdl", "");
+        bool isCrowdAnim = noExtensionName.StartsWith("crowd");
+        
+        GameObject combinedPrefab = CommonModelToGameObject(outputHierarchy, lodLevel, commonModel, out Dictionary<BoneNode,GameObject> boneObjectMap);
 
-        if (commonModel.Skinned)
+        if (combinedPrefab != null)
         {
-            // create transform tree?
-            foreach (BoneNode bn in commonModel.BoneList)
+            
+            if (commonModel.Skinned)
             {
-                GameObject go = new GameObject(bn.UniqueName);
-                //RigTransform rigTransform = go.AddComponent<RigTransform>();
-                boneObjectMap[bn] = go;
-                Quaternion q = bn.rotation;
-
-                if (bn.Index != bn.ParentIndex)
+                BoneRenderer boneRenderer = combinedPrefab.AddComponent<BoneRenderer>();
+                boneRenderer.transforms = new Transform[commonModel.BoneList.Count - 1];
+                for (int i = 1; i < commonModel.BoneList.Count; ++i)
                 {
-                    GameObject parentGo = boneObjectMap[bn.parent];
-                    go.transform.SetParent(parentGo.transform, false);
+                    boneRenderer.transforms[i - 1] = boneObjectMap[commonModel.BoneList[i]].transform;
                 }
-
-                go.transform.localPosition = bn.offset;
-                go.transform.localRotation = bn.rotation;
             }
-
-            rootGO = boneObjectMap[commonModel.BoneList[0]];
-            //rootGO.transform.SetParent(gladiusToUnity.transform, false);
-
-
-            String noExtensionName = commonModel.Name.Replace(".mdl", "");
-
-            bool isCrowdAnim = noExtensionName.StartsWith("crowd");
-
-           
+            
             if (isCrowdAnim)
             {
                 List<TextAsset> anims = LoadAnimsAtPath(outputHierarchy);
-                
+
                 CrowdAnim crowdAnim = combinedPrefab.AddComponent<CrowdAnim>();
                 crowdAnim.RandomiseAnimationStart = true;
                 foreach (TextAsset textAsset in anims)
                 {
                     crowdAnim.AddAnimationData(textAsset);
                 }
+            }
+            else if (isCharacter)
+            {
+                CharacterMeshHolder cmh = combinedPrefab.AddComponent<CharacterMeshHolder>();
+
+                List<TextAsset> anims = LoadAnimsAtPath(outputHierarchy);
+                cmh.CharacterAnims = new TextAsset[anims.Count];
+
+                int count = 0;
+                foreach (TextAsset textAsset in anims)
+                {
+                    cmh.CharacterAnims[count++] = textAsset;
+                }
+                Rig rig = combinedPrefab.AddComponent<Rig>();
+
+                RigLayer rigLayer = new RigLayer(rig);
+
+                RigBuilder rigBuilder = combinedPrefab.AddComponent<RigBuilder>();
+                rigBuilder.layers.Add(rigLayer);
+
+                Animator animator = combinedPrefab.GetComponent<Animator>();
+                if (animator == null)
+                {
+                    animator = combinedPrefab.AddComponent<Animator>();
+                }
+
+                Avatar avatar = BuildAvatar(combinedPrefab);
+                avatar.name = commonModel.Name;
+
+
+                animator.avatar = avatar;
+
+                string avatarAssetOutputDirName = "Avatars" + outputHierarchy;
+                string avatarFullOuputDirName = Application.dataPath + "/" + avatarAssetOutputDirName;
+
+                if (!Directory.Exists(avatarFullOuputDirName))
+                {
+                    Directory.CreateDirectory(avatarFullOuputDirName);
+                }
+
+                AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName +platformPrefix+ avatar.name + ".asset");
+
+                List<Material> armourMaterials = new List<Material>();
+                List<Material> skinrMaterials = new List<Material>();
+                BuildArmourAndSkinVarients(commonModel.Name, outputHierarchy, armourMaterials, skinrMaterials, true);
+                CharacterMeshHolder characterMeshHolder = combinedPrefab.GetComponentInChildren<CharacterMeshHolder>();
+                if (characterMeshHolder != null)
+                {
+                    characterMeshHolder.ArmourMaterials.AddRange(armourMaterials);
+                    characterMeshHolder.SkinMaterials.AddRange(skinrMaterials);
+                }
+
             }
             else
             {
@@ -649,93 +650,100 @@ public static class CommonModelProcessor
                     smh.AnimationFile = objectAnimNameTextAsset;
                     smh.RandomiseAnimationStart = true;
                 }
-                else
+            }
+
+        
+
+            string meshOutputDirName = "Meshes/" + platformPrefix+outputHierarchy;
+            string meshFullOutputDirName = Application.dataPath + "/" + meshOutputDirName;
+
+            if (!Directory.Exists(meshFullOutputDirName))
+            {
+                Directory.CreateDirectory(meshFullOutputDirName);
+            }
+
+            foreach (MeshFilter meshFilter in combinedPrefab.GetComponentsInChildren<MeshFilter>())
+            {
+                AssetDatabase.CreateAsset(meshFilter.sharedMesh,
+                    "Assets/" + meshOutputDirName+"/"+meshFilter.sharedMesh.name + ".mesh");
+            }
+
+            String prefabDirectory = Application.dataPath + "/"+outputDirName;
+            
+            if (!Directory.Exists(prefabDirectory))
+            {
+                Directory.CreateDirectory(prefabDirectory);
+            }
+
+            String prefabName = prefabDirectory + commonModel.Name + ".prefab";
+
+            PrefabUtility.SaveAsPrefabAssetAndConnect(combinedPrefab, prefabName, InteractionMode.AutomatedAction);
+
+            if (combinedPrefab != null)
+            {
+                UnityEngine.Object.DestroyImmediate(combinedPrefab);
+            }
+            
+            return outputDirName + commonModel.Name;
+
+        }
+
+        return null;
+    }
+
+
+    public static GameObject CommonModelToGameObject(string outputHierarchy, uint lodLevel,
+        CommonModelData commonModel, out Dictionary<BoneNode, GameObject> boneObjectMap)
+    {
+        List<CommonMeshData> filteredList = new List<CommonMeshData>();
+
+        foreach (CommonMeshData mesh in commonModel.CommonMeshData)
+        {
+            if (mesh.LodLevel != 0 && (mesh.LodLevel & lodLevel) == 0)
+            {
+                continue;
+            }
+
+            filteredList.Add(mesh);
+        }
+
+        commonModel.CommonMeshData = filteredList;
+
+        Dictionary<CommonMaterialData, List<CommonMeshData>> materialMeshLists = SplitByMaterial(commonModel);
+
+        GameObject combinedPrefab = new GameObject(commonModel.Name);
+        GameObject gladiusToUnity = new GameObject("GladiusToUnity");
+        gladiusToUnity.transform.SetParent(combinedPrefab.transform, false);
+
+
+        // Build structure if mapped.
+        boneObjectMap = new Dictionary<BoneNode, GameObject>();
+
+
+        if (commonModel.Skinned)
+        {
+            // create transform tree?
+            foreach (BoneNode bn in commonModel.BoneList)
+            {
+                GameObject go = new GameObject(bn.UniqueName);
+                boneObjectMap[bn] = go;
+                Quaternion q = bn.rotation;
+
+                if (bn.Index != bn.ParentIndex)
                 {
-                    CharacterMeshHolder cmh = combinedPrefab.AddComponent<CharacterMeshHolder>();
-
-                    List<TextAsset> anims = LoadAnimsAtPath(outputHierarchy);
-                    cmh.CharacterAnims = new TextAsset[anims.Count];
-
-                    int count = 0;
-                    foreach (TextAsset textAsset in anims)
-                    {
-                        cmh.CharacterAnims[count++] = textAsset;
-                    }
-                }
-            }
-
-
-            BoneRenderer boneRenderer = rootGO.AddComponent<BoneRenderer>();
-            boneRenderer.transforms = new Transform[commonModel.BoneList.Count - 1];
-            for (int i = 1; i < commonModel.BoneList.Count; ++i)
-            {
-                boneRenderer.transforms[i - 1] = boneObjectMap[commonModel.BoneList[i]].transform;
-            }
-
-            Rig rig = rootGO.AddComponent<Rig>();
-
-            RigLayer rigLayer = new RigLayer(rig);
-
-            RigBuilder rigBuilder = rootGO.AddComponent<RigBuilder>();
-            rigBuilder.layers.Add(rigLayer);
-
-            Animator animator = rootGO.GetComponent<Animator>();
-            if (animator == null)
-            {
-                animator = rootGO.AddComponent<Animator>();
-            }
-
-            if (isCharacter)
-            {
-                Avatar avatar = BuildAvatar(rootGO);
-                avatar.name = commonModel.Name;
-
-
-                animator.avatar = avatar;
-
-                string avatarAssetOutputDirName = "Avatars" + outputHierarchy;
-                string avatarFullOuputDirName = Application.dataPath + "/" + avatarAssetOutputDirName;
-
-                if (!Directory.Exists(avatarFullOuputDirName))
-                {
-                    Directory.CreateDirectory(avatarFullOuputDirName);
+                    GameObject parentGo = boneObjectMap[bn.parent];
+                    go.transform.SetParent(parentGo.transform, false);
                 }
 
-                AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName + avatar.name + ".asset");
+                go.transform.localPosition = bn.offset;
+                go.transform.localRotation = bn.rotation;
             }
 
-
-
+            GameObject rootGO = boneObjectMap[commonModel.BoneList[0]];
             rootGO.transform.SetParent(gladiusToUnity.transform, false);
         }
 
         
-        String outputDirName = outputDirectory + outputHierarchy + "/";
-        outputDirName = outputDirName.Replace("//", "/"); 
-            
-
-        String fullOuputDirName = Application.dataPath + "/" + outputDirName;
-        if (!Directory.Exists(fullOuputDirName))
-        {
-            Directory.CreateDirectory(fullOuputDirName);
-        }
-        
-        bool isArena = fullAssetPath.Contains("levels/") && commonModel.XBoxModel.OBBTChunk != null;
-        bool isRegion = fullAssetPath.Contains("regions/");
-
-        if (isArena)
-        {
-            BuildArenaProps(combinedPrefab, commonModel.Name,outputDirectory);
-            //BuildArenaLightVolume(combinedPrefab,commonModel.Name, outputDirName);
-        }
-
-        if (isRegion)
-        {
-            BuildRegionProps(combinedPrefab, commonModel.Name);
-        }
-
-
-        int everyMeshCounter = 0;
         int everyMeshLowBound = -1;
         int everyMeshHighBound = everyMeshLowBound + 300;
 
@@ -745,8 +753,8 @@ public static class CommonModelProcessor
             foreach (CommonMaterialData commonMaterialData in materialMeshLists.Keys)
             {
                 List<CommonMeshData> commonMeshDataList = materialMeshLists[commonMaterialData];
-                Process(commonModel, outputHierarchy, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity,
-                    counter++, boneObjectMap,isCharacter);
+                Process(commonModel, outputHierarchy, commonMeshDataList, MERGE_MESH, gladiusToUnity,
+                    counter++, boneObjectMap);
             }
         }
         else
@@ -755,42 +763,242 @@ public static class CommonModelProcessor
             {
                 List<CommonMeshData> commonMeshDataList = new List<CommonMeshData>();
                 commonMeshDataList.Add(mesh);
-                Process(commonModel, outputHierarchy, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity,
-                    counter++, boneObjectMap,isCharacter);
+                Process(commonModel, outputHierarchy, commonMeshDataList, MERGE_MESH,  gladiusToUnity,
+                    counter++, boneObjectMap);
             }
         }
 
-        if (isCharacter)
-        {
-            List<Material> armourMaterials = new List<Material>();
-            List<Material> skinrMaterials = new List<Material>();
-            BuildArmourAndSkinVarients(commonModel.Name, outputHierarchy, armourMaterials, skinrMaterials,isCharacter);
-            CharacterMeshHolder characterMeshHolder = combinedPrefab.GetComponentInChildren<CharacterMeshHolder>();
-            if (characterMeshHolder != null)
-            {
-                characterMeshHolder.ArmourMaterials.AddRange(armourMaterials);
-                characterMeshHolder.SkinMaterials.AddRange(skinrMaterials);
-            }
-        }
-        
+        return combinedPrefab;
 
-        String prefabName = "Assets/" + outputDirName + commonModel.Name + ".prefab";
-
-
-        PrefabUtility.SaveAsPrefabAssetAndConnect(combinedPrefab, prefabName, InteractionMode.AutomatedAction);
-
-        if (splitPrefab != null)
-        {
-            UnityEngine.Object.DestroyImmediate(splitPrefab);
-        }
-
-        if (combinedPrefab != null)
-        {
-            UnityEngine.Object.DestroyImmediate(combinedPrefab);
-        }
-
-        return outputDirName + commonModel.Name;
     }
+    
+    
+    // public static string ProcessCommonModel(string fullAssetPath, string outputHierarchy, int lodLevel,
+    //     CommonModelData commonModel, string outputDirectory,bool saveAssets)
+    // {
+    //     Debug.Log("Best lod level is : " + lodLevel);
+    //     
+    //     List<CommonMeshData> filteredList = new List<CommonMeshData>();
+    //
+    //     foreach (CommonMeshData mesh in commonModel.CommonMeshData)
+    //     {
+    //         if (mesh.LodLevel != 0 && (mesh.LodLevel & lodLevel) == 0)
+    //         {
+    //             continue;
+    //         }
+    //
+    //         filteredList.Add(mesh);
+    //     }
+    //
+    //     commonModel.CommonMeshData = filteredList;
+    //
+    //     Dictionary<CommonMaterialData, List<CommonMeshData>> materialMeshLists =
+    //         CommonModelProcessor.SplitByMaterial(commonModel);
+    //
+    //     GameObject splitPrefab = new GameObject(commonModel.Name + "-SplitPrefab");
+    //
+    //     GameObject combinedPrefab = new GameObject(commonModel.Name);
+    //     GameObject gladiusToUnity = new GameObject("GladiusToUnity");
+    //     gladiusToUnity.transform.SetParent(combinedPrefab.transform, false);
+    //
+    //
+    //     // Build structure if mapped.
+    //     var boneObjectMap = new Dictionary<BoneNode, GameObject>();
+    //     GameObject rootGO = null;
+    //     bool isCharacter = fullAssetPath.ContainsInvariantCultureIgnoreCase("characters");
+    //
+    //     if (commonModel.Skinned)
+    //     {
+    //         // create transform tree?
+    //         foreach (BoneNode bn in commonModel.BoneList)
+    //         {
+    //             GameObject go = new GameObject(bn.UniqueName);
+    //             //RigTransform rigTransform = go.AddComponent<RigTransform>();
+    //             boneObjectMap[bn] = go;
+    //             Quaternion q = bn.rotation;
+    //
+    //             if (bn.Index != bn.ParentIndex)
+    //             {
+    //                 GameObject parentGo = boneObjectMap[bn.parent];
+    //                 go.transform.SetParent(parentGo.transform, false);
+    //             }
+    //
+    //             go.transform.localPosition = bn.offset;
+    //             go.transform.localRotation = bn.rotation;
+    //         }
+    //
+    //         rootGO = boneObjectMap[commonModel.BoneList[0]];
+    //         //rootGO.transform.SetParent(gladiusToUnity.transform, false);
+    //
+    //
+    //         String noExtensionName = commonModel.Name.Replace(".mdl", "");
+    //
+    //         bool isCrowdAnim = noExtensionName.StartsWith("crowd");
+    //
+    //        
+    //         if (isCrowdAnim)
+    //         {
+    //             List<TextAsset> anims = LoadAnimsAtPath(outputHierarchy);
+    //             
+    //             CrowdAnim crowdAnim = combinedPrefab.AddComponent<CrowdAnim>();
+    //             crowdAnim.RandomiseAnimationStart = true;
+    //             foreach (TextAsset textAsset in anims)
+    //             {
+    //                 crowdAnim.AddAnimationData(textAsset);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             String objectAnimName = "GladiusAnims/objectanims/" + noExtensionName;
+    //             TextAsset objectAnimNameTextAsset =
+    //                 AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/" + objectAnimName + ".bytes");
+    //
+    //             bool isSingleAnimation = objectAnimNameTextAsset != null;
+    //
+    //             if (isSingleAnimation)
+    //             {
+    //                 SimpleMeshHolder smh = combinedPrefab.AddComponent<SimpleMeshHolder>();
+    //                 smh.AnimationFile = objectAnimNameTextAsset;
+    //                 smh.RandomiseAnimationStart = true;
+    //             }
+    //             else
+    //             {
+    //                 CharacterMeshHolder cmh = combinedPrefab.AddComponent<CharacterMeshHolder>();
+    //
+    //                 List<TextAsset> anims = LoadAnimsAtPath(outputHierarchy);
+    //                 cmh.CharacterAnims = new TextAsset[anims.Count];
+    //
+    //                 int count = 0;
+    //                 foreach (TextAsset textAsset in anims)
+    //                 {
+    //                     cmh.CharacterAnims[count++] = textAsset;
+    //                 }
+    //             }
+    //         }
+    //
+    //
+    //         BoneRenderer boneRenderer = rootGO.AddComponent<BoneRenderer>();
+    //         boneRenderer.transforms = new Transform[commonModel.BoneList.Count - 1];
+    //         for (int i = 1; i < commonModel.BoneList.Count; ++i)
+    //         {
+    //             boneRenderer.transforms[i - 1] = boneObjectMap[commonModel.BoneList[i]].transform;
+    //         }
+    //
+    //         Rig rig = rootGO.AddComponent<Rig>();
+    //
+    //         RigLayer rigLayer = new RigLayer(rig);
+    //
+    //         RigBuilder rigBuilder = rootGO.AddComponent<RigBuilder>();
+    //         rigBuilder.layers.Add(rigLayer);
+    //
+    //         Animator animator = rootGO.GetComponent<Animator>();
+    //         if (animator == null)
+    //         {
+    //             animator = rootGO.AddComponent<Animator>();
+    //         }
+    //
+    //         if (isCharacter)
+    //         {
+    //             Avatar avatar = BuildAvatar(rootGO);
+    //             avatar.name = commonModel.Name;
+    //
+    //
+    //             animator.avatar = avatar;
+    //
+    //             string avatarAssetOutputDirName = "Avatars" + outputHierarchy;
+    //             string avatarFullOuputDirName = Application.dataPath + "/" + avatarAssetOutputDirName;
+    //
+    //             if (!Directory.Exists(avatarFullOuputDirName))
+    //             {
+    //                 Directory.CreateDirectory(avatarFullOuputDirName);
+    //             }
+    //
+    //             AssetDatabase.CreateAsset(avatar, "Assets/" + avatarAssetOutputDirName + avatar.name + ".asset");
+    //         }
+    //
+    //
+    //
+    //         rootGO.transform.SetParent(gladiusToUnity.transform, false);
+    //     }
+    //
+    //     
+    //     String outputDirName = outputDirectory + outputHierarchy + "/";
+    //     outputDirName = outputDirName.Replace("//", "/"); 
+    //         
+    //
+    //     String fullOuputDirName = Application.dataPath + "/" + outputDirName;
+    //     if (!Directory.Exists(fullOuputDirName))
+    //     {
+    //         Directory.CreateDirectory(fullOuputDirName);
+    //     }
+    //     
+    //     bool isArena = fullAssetPath.Contains("levels/") && commonModel.XBoxModel.OBBTChunk != null;
+    //     bool isRegion = fullAssetPath.Contains("regions/");
+    //
+    //     if (isArena)
+    //     {
+    //         BuildArenaProps(combinedPrefab, commonModel.Name,outputDirectory);
+    //         //BuildArenaLightVolume(combinedPrefab,commonModel.Name, outputDirName);
+    //     }
+    //
+    //     if (isRegion)
+    //     {
+    //         BuildRegionProps(combinedPrefab, commonModel.Name);
+    //     }
+    //
+    //
+    //     int counter = 0;
+    //     if (MERGE_MESH)
+    //     {
+    //         foreach (CommonMaterialData commonMaterialData in materialMeshLists.Keys)
+    //         {
+    //             List<CommonMeshData> commonMeshDataList = materialMeshLists[commonMaterialData];
+    //             Process(commonModel, outputHierarchy, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity,
+    //                 counter++, boneObjectMap,,saveAssets);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         foreach (CommonMeshData mesh in commonModel.CommonMeshData)
+    //         {
+    //             List<CommonMeshData> commonMeshDataList = new List<CommonMeshData>();
+    //             commonMeshDataList.Add(mesh);
+    //             Process(commonModel, outputHierarchy, commonMeshDataList, MERGE_MESH, splitPrefab, gladiusToUnity,
+    //                 counter++, boneObjectMap,saveAssets);
+    //         }
+    //     }
+    //
+    //     if (isCharacter)
+    //     {
+    //         List<Material> armourMaterials = new List<Material>();
+    //         List<Material> skinMaterials = new List<Material>();
+    //         BuildArmourAndSkinVarients(commonModel.Name, outputHierarchy, armourMaterials, skinMaterials,saveAssets);
+    //         CharacterMeshHolder characterMeshHolder = combinedPrefab.GetComponentInChildren<CharacterMeshHolder>();
+    //         if (characterMeshHolder != null)
+    //         {
+    //             characterMeshHolder.ArmourMaterials.AddRange(armourMaterials);
+    //             characterMeshHolder.SkinMaterials.AddRange(skinMaterials);
+    //         }
+    //     }
+    //     
+    //
+    //     String prefabName = "Assets/" + outputDirName + commonModel.Name + ".prefab";
+    //
+    //
+    //     PrefabUtility.SaveAsPrefabAssetAndConnect(combinedPrefab, prefabName, InteractionMode.AutomatedAction);
+    //
+    //     if (splitPrefab != null)
+    //     {
+    //         UnityEngine.Object.DestroyImmediate(splitPrefab);
+    //     }
+    //
+    //     if (combinedPrefab != null)
+    //     {
+    //         UnityEngine.Object.DestroyImmediate(combinedPrefab);
+    //     }
+    //
+    //     return outputDirName + commonModel.Name;
+    // }
 
 
     public static List<TextAsset> LoadAnimsAtPath(string outputHierarchy)
@@ -822,19 +1030,18 @@ public static class CommonModelProcessor
     }
     
     public static void Process(CommonModelData commonModel, string outputHierarchy, List<CommonMeshData> meshList,
-        bool merge, GameObject splitPrefab, GameObject combinedPrefab, int index,
-        Dictionary<BoneNode, GameObject> boneObjectMap,bool isCharacter)
+        bool merge,  GameObject parentObject, int index,
+        Dictionary<BoneNode, GameObject> boneObjectMap)
     {
         int count = 0;
 
         GameObject splitParent = new GameObject();
-        splitParent.transform.SetParent(splitPrefab.transform, false);
 
         foreach (CommonMeshData mesh in meshList)
         {
             GameObject submesh =
                 CommonModelProcessor.CreateSubMesh(commonModel, mesh, "Submesh_" + index + "_" + (count++),
-                    outputHierarchy,isCharacter);
+                    outputHierarchy);
             submesh.transform.SetParent(splitParent.transform, false);
         }
 
@@ -845,13 +1052,11 @@ public static class CommonModelProcessor
             meshes[i] = meshFilters[i].sharedMesh;
         }
 
-
-        SkinnedMeshRenderer[] splitSkinnedRenderers = splitParent.GetComponentsInChildren<SkinnedMeshRenderer>();
         Dictionary<int, int> boneConversionDictionary = new Dictionary<int, int>();
         List<BoneNode> remappedBoneNodeList = new List<BoneNode>();
 
         // always merge here as the splits handled furhter up..
-        List<Mesh> combinedMeshes = CommonModelProcessor.MergeMesh(merge, meshes, boneConversionDictionary,
+        List<Mesh> combinedMeshes = MergeMesh(merge, meshes, boneConversionDictionary,
             commonModel.BoneList, remappedBoneNodeList);
 
         CommonMaterialData commonMaterialData = commonModel.CommonMaterials[(int)meshList.First().MaterialId];
@@ -860,7 +1065,7 @@ public static class CommonModelProcessor
         {
             GameObject combinedParent =
                 new GameObject("Submesh-" + index + "-" + commonMaterialData.TextureData1.textureName);
-            combinedParent.transform.SetParent(combinedPrefab.transform, false);
+            combinedParent.transform.SetParent(parentObject.transform, false);
             MeshFilter combinedParentMeshFilter = combinedParent.AddComponent<MeshFilter>();
 
             Renderer renderer = null;
@@ -873,7 +1078,7 @@ public static class CommonModelProcessor
                 renderer = combinedParent.AddComponent<MeshRenderer>();
             }
 
-            Material m =GetOrCreateMaterial(commonModel.Name, commonMaterialData, outputHierarchy,isCharacter);
+            Material m =GetOrCreateMaterial(commonModel.Name, commonMaterialData, outputHierarchy,true);
             if (m != null)
             {
                 renderer.sharedMaterial = m;
@@ -888,7 +1093,6 @@ public static class CommonModelProcessor
             if (commonModel.Skinned)
             {
                 SkinnedMeshRenderer smr = (SkinnedMeshRenderer)renderer;
-
 
                 smr.sharedMesh = combinedParentMeshFilter.sharedMesh;
                 smr.rootBone = boneObjectMap[commonModel.BoneList[0]].transform;
@@ -911,42 +1115,9 @@ public static class CommonModelProcessor
                 smr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
             }
 
-
-            string assetOutputDirName = "Meshes/" + outputHierarchy;
-            string fullOuputDirName = Application.dataPath + "/" + assetOutputDirName;
-
-            if (!Directory.Exists(fullOuputDirName))
-            {
-                Directory.CreateDirectory(fullOuputDirName);
-            }
-
-            AssetDatabase.CreateAsset(combinedParentMeshFilter.sharedMesh, "Assets/" + assetOutputDirName + combinedParentMeshFilter.sharedMesh.name + ".mesh");
-            
-        }
-    }
-
-    private static T CreateOrReplaceAsset<T>(T asset, string path) where T : UnityEngine.Object
-    {
-        T existingAsset = AssetDatabase.LoadAssetAtPath<T>(path);
-
-        if (existingAsset == null)
-        {
-            AssetDatabase.CreateAsset(asset, path);
-        }
-        else
-        {
-            if (typeof(Mesh).IsAssignableFrom(typeof(T)))
-            {
-                //(existingAsset as Mesh)?.Clear();
-            }
-
-            EditorUtility.CopySerialized(asset, existingAsset);
-
-
-            existingAsset = asset;
         }
 
-        return existingAsset;
+        GameObject.DestroyImmediate(splitParent);
     }
 
     // merge basic mesh properties.
@@ -1094,21 +1265,11 @@ public static class CommonModelProcessor
 
     public static Dictionary<CommonMaterialData, List<CommonMeshData>> SplitByMaterial(CommonModelData model)
     {
-        if (model == null)
-        {
-            int ibreak = 0;
-        }
-        
         Dictionary<CommonMaterialData, List<CommonMeshData>> result =
             new Dictionary<CommonMaterialData, List<CommonMeshData>>();
         foreach (CommonMeshData mesh in model.CommonMeshData)
         {
             int materialId = mesh.MaterialId;
-            if (materialId < 0 || materialId >= model.CommonMaterials.Count)
-            {
-                materialId = 0;
-
-            }
             
             CommonMaterialData materialData = model.CommonMaterials[materialId];
             List<CommonMeshData> listResult = null;
@@ -1125,16 +1286,12 @@ public static class CommonModelProcessor
     }
 
     public static GameObject CreateSubMesh(CommonModelData commonModel, CommonMeshData submesh, string name,
-        string outputHierarchy,bool isCharacter)
+        string outputHierarchy)
     {
         GameObject submeshObject = new GameObject();
         string fullName = commonModel.Name + name;
 
         submeshObject.name = fullName;
-        if (submesh.Index == 9)
-        {
-            int ibreak = 0;
-        }
 
         MeshFilter mf = submeshObject.AddComponent<MeshFilter>();
         Renderer renderer = null;
@@ -1149,7 +1306,7 @@ public static class CommonModelProcessor
 
 
         CommonMaterialData commonMaterial = commonModel.CommonMaterials[(int)submesh.MaterialId];
-        Material m = GetOrCreateMaterial(commonModel.Name,commonMaterial, outputHierarchy,isCharacter);
+        Material m = GetOrCreateMaterial(commonModel.Name,commonMaterial, outputHierarchy,true);
         if (m != null)
         {
             renderer.material = m;

@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Reflection;
 using GCTextureTools;
+using UnityEditor;
 using UnityEngine.PlayerLoop;
 using Debug = System.Diagnostics.Debug;
 
@@ -660,8 +661,6 @@ public static class CommonModelImporter
     }
 
 
-
-
     public static IndexedVector3 FromStreamVector3BE(BinaryReader reader)
     {
         IndexedVector3 v = new IndexedVector3();
@@ -827,13 +826,13 @@ public static class CommonModelImporter
 
         return methodInfoDictionary;
     }
-    
-    public static int GetBestLodLevel(SELSChunk selsChunk,STYPChunk stypChunk)
+
+    public static uint GetBestLodLevel(SELSChunk selsChunk, STYPChunk stypChunk)
     {
-        return GetMeshLodLevel("set_LOD0",selsChunk, stypChunk);
+        return GetMeshLodLevel("set_LOD0", selsChunk, stypChunk);
     }
 
-    public static int GetMeshLodLevel(string setName,SELSChunk selsChunk,STYPChunk stypChunk)
+    public static uint GetMeshLodLevel(string setName, SELSChunk selsChunk, STYPChunk stypChunk)
     {
         if (selsChunk != null && stypChunk != null)
         {
@@ -844,7 +843,8 @@ public static class CommonModelImporter
                 return selectSet.Mask;
             }
         }
-        return -1;
+
+        return uint.MaxValue;
     }
 
 
@@ -855,23 +855,131 @@ public static class CommonModelImporter
         {
             count++;
         }
+
         if (bw.weight1 > 0f)
         {
             count++;
         }
+
         if (bw.weight2 > 0f)
         {
             count++;
         }
+
         if (bw.weight3 > 0f)
         {
             count++;
         }
 
-        return count;   
+        return count;
     }
+
+
+    public static BoneWeight RenormaliseWeights(BoneWeight bw, int maxWeights)
+    {
+        BoneWeight b = bw;
+        float sum = bw.weight0;
+        if (maxWeights > 1)
+        {
+            sum += bw.weight1;
+        }
+
+        if (maxWeights > 2)
+        {
+            sum += bw.weight2;
+        }
+
+        if (maxWeights > 3)
+        {
+            sum += bw.weight3;
+        }
+
+        float scalar = 1.0f / sum;
+
+        if (maxWeights == 1)
+        {
+            bw.weight0 *= scalar;
+            bw.weight1 = 0f;
+            bw.weight2 = 0f;
+            bw.weight3 = 0f;
+        }
+        else if (maxWeights == 2)
+        {
+            bw.weight0 *= scalar;
+            bw.weight1 *= scalar;
+            bw.weight2 = 0f;
+            bw.weight3 = 0f;
+        }
+        else if (maxWeights == 3)
+        {
+            bw.weight0 *= scalar;
+            bw.weight1 *= scalar;
+            bw.weight2 *= scalar;
+            bw.weight3 = 0f;
+        }
+
+        return bw;
+    }
+
+
+    // public static GameObject CreateGameObject(CommonModelData commonModel)
+    // {
+    //     GameObject rootGO = null;
+    //     Dictionary<BoneNode,GameObject> boneObjectMap = new Dictionary<BoneNode, GameObject>();
+    //
+    //     GameObject combinedPrefab = new GameObject(commonModel.Name);
+    //     GameObject gladiusToUnity = new GameObject("GladiusToUnity");
+    //     
+    //     gladiusToUnity.transform.SetParent(combinedPrefab.transform, false);
+    //
+    //     if (commonModel.Skinned)
+    //     {
+    //         // create transform tree?
+    //         foreach (BoneNode bn in commonModel.BoneList)
+    //         {
+    //             GameObject go = new GameObject(bn.UniqueName);
+    //             boneObjectMap[bn] = go;
+    //             Quaternion q = bn.rotation;
+    //
+    //             if (bn.Index != bn.ParentIndex)
+    //             {
+    //                 GameObject parentGo = boneObjectMap[bn.parent];
+    //                 go.transform.SetParent(parentGo.transform, false);
+    //             }
+    //
+    //             go.transform.localPosition = bn.offset;
+    //             go.transform.localRotation = bn.rotation;
+    //         }
+    //
+    //         rootGO = boneObjectMap[commonModel.BoneList[0]];
+    //
+    //
+    //         String noExtensionName = commonModel.Name.Replace(".mdl", "");
+    //
+    //         bool isCrowdAnim = noExtensionName.StartsWith("crowd");
+    //
+    //
+    //         rootGO.transform.SetParent(gladiusToUnity.transform, false);
+    //     }
+    //
+    //
+    //     int everyMeshCounter = 0;
+    //     int everyMeshLowBound = -1;
+    //     int everyMeshHighBound = everyMeshLowBound + 300;
+    //
+    //     int counter = 0;
+    //     foreach (CommonMeshData mesh in commonModel.CommonMeshData)
+    //     {
+    //         List<CommonMeshData> commonMeshDataList = new List<CommonMeshData>();
+    //         commonMeshDataList.Add(mesh);
+    //         // CommonModelImporter.Process(commonModel, outputHierarchy, commonMeshDataList, false, splitPrefab, gladiusToUnity,
+    //         //     counter++, boneObjectMap);
+    //     }
+    //
+    // }
     
 }
+
 
 public class R2V2
 {
@@ -1511,7 +1619,7 @@ public class CommonMeshData
 {
     public List<int> Indices = new List<int>();
     public List<int> Vertices = new List<int>();
-    public int LodLevel;
+    public uint LodLevel;
     public string Name;
     public int MaterialId;
     public int Index;
@@ -1544,7 +1652,8 @@ public class CommonModelData
     public List<BoneNode> BoneList = new List<BoneNode>();
     public Dictionary<int, BoneNode> BoneIdDictionary = new Dictionary<int, BoneNode>();
 
-
+    public uint OverallLodLevel;
+    
     public List<CommonMeshData> GetFilteredSubmeshes(List<int> excludeList)
     {
         List<CommonMeshData> filteredList = new List<CommonMeshData>();
@@ -1840,7 +1949,7 @@ public class CommonVertexInstance
     public BoneWeight BoneWeight;
 
     public int WeightCount = 0;
-    
+
     public short[] UntranslatedBoneIndices;
     public short[] TranslatedBoneIndices;
 
@@ -1869,7 +1978,6 @@ public class CommonVertexInstance
     {
         return HashCode.Combine(Position, Normal, Tangent);
     }
-
 }
 
 
@@ -2707,65 +2815,73 @@ public class SKINChunk : BaseChunk
         long afterHeaderPosition = binReader.BaseStream.Position;
         long nextHeaderStart = 0;
 
-        for (int skinDataCount = 0; skinDataCount < chunk.NumElements; ++skinDataCount)
+        using (StreamWriter sw = new StreamWriter(new FileStream("d:/tmp/skin-data-2.txt", FileMode.OpenOrCreate)))
         {
-            binReader.BaseStream.Position = afterHeaderPosition + nextHeaderStart;
-            SkinData skinData = SkinData.FromStream(binReader);
-            chunk.SkinDataList.Add(skinData);
-            long dataPosition = binReader.BaseStream.Position;
-            skinData.ReadSkinWeights(binReader, dataPosition);
-
-            foreach (CSK1 csk1 in skinData.CSK1List)
+            for (int skinDataCount = 0; skinDataCount < chunk.NumElements; ++skinDataCount)
             {
-                binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
-                SkinData.ReadPositionAndNormals(binReader, csk1.count, skinData.AnimShift,csk1.ExtractedPositions, csk1.ExtractedNormals);
+                sw.WriteLine("**************************************************");
+                sw.WriteLine($"SkinData [{skinDataCount}]");
 
-                int ibreak = 0;
-            }
+                binReader.BaseStream.Position = afterHeaderPosition + nextHeaderStart;
+                SkinData skinData = SkinData.FromStream(binReader);
+                chunk.SkinDataList.Add(skinData);
+                long dataPosition = binReader.BaseStream.Position;
+                skinData.ReadSkinWeights(binReader, dataPosition, sw);
 
-            foreach (CSK2 csk2 in skinData.CSK2List)
-            {
-                binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
-
-                SkinData.ReadPositionAndNormals(binReader, csk2.count,skinData.AnimShift, csk2.ExtractedPositions, csk2.ExtractedNormals);
-
-                binReader.BaseStream.Position = dataPosition + csk2.weightsSrc;
-                for (int i = 0; i < csk2.count; ++i)
+                foreach (CSK1 csk1 in skinData.CSK1List)
                 {
-                    byte b1 = binReader.ReadByte();
-                    byte b2 = binReader.ReadByte();
+                    binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
+                    SkinData.ReadPositionAndNormals(binReader, csk1.count, skinData.AnimShift, csk1.ExtractedPositions,
+                        csk1.ExtractedNormals);
 
-                    csk2.ExtractedWeightsFloats.Add((b1 / 255f, b2 / 255f));
+                    int ibreak = 0;
                 }
-            }
 
-            foreach (CSKA cska in skinData.CSKAList)
-            {
-                // Accumulation packets add one more weighted bone influence to
-                // already-emitted destination vertices. The source pos/norm
-                // records match the destination bind-pose positions, while
-                // idxDst maps each record back to the output vertex slot.
-                binReader.BaseStream.Position = dataPosition + cska.vertSrc;
-                SkinData.ReadPositionAndNormals(binReader, cska.count, skinData.AnimShift, cska.ExtractedPositions, cska.ExtractedNormals);
-            
-                binReader.BaseStream.Position = dataPosition + cska.idxDst;
-                for (int i = 0; i < cska.count; ++i)
+                foreach (CSK2 csk2 in skinData.CSK2List)
                 {
-                    cska.ExtractedDestinationIndices.Add(Common.ToUInt16BigEndian(binReader));
+                    binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
+
+                    SkinData.ReadPositionAndNormals(binReader, csk2.count, skinData.AnimShift, csk2.ExtractedPositions,
+                        csk2.ExtractedNormals);
+
+                    binReader.BaseStream.Position = dataPosition + csk2.weightsSrc;
+                    for (int i = 0; i < csk2.count; ++i)
+                    {
+                        byte b1 = binReader.ReadByte();
+                        byte b2 = binReader.ReadByte();
+
+                        csk2.ExtractedWeightsFloats.Add((b1 / 255f, b2 / 255f));
+                    }
                 }
-            
-                binReader.BaseStream.Position = dataPosition + cska.weightsSrc;
-                for (int i = 0; i < cska.count; ++i)
+
+                foreach (CSKA cska in skinData.CSKAList)
                 {
-                    cska.ExtractedWeights.Add(binReader.ReadByte() / 255f);
+                    // Accumulation packets add one more weighted bone influence to
+                    // already-emitted destination vertices. The source pos/norm
+                    // records match the destination bind-pose positions, while
+                    // idxDst maps each record back to the output vertex slot.
+                    binReader.BaseStream.Position = dataPosition + cska.vertSrc;
+                    SkinData.ReadPositionAndNormals(binReader, cska.count, skinData.AnimShift, cska.ExtractedPositions,
+                        cska.ExtractedNormals);
+
+                    binReader.BaseStream.Position = dataPosition + cska.idxDst;
+                    for (int i = 0; i < cska.count; ++i)
+                    {
+                        cska.ExtractedDestinationIndices.Add(Common.ToUInt16BigEndian(binReader));
+                    }
+
+                    binReader.BaseStream.Position = dataPosition + cska.weightsSrc;
+                    for (int i = 0; i < cska.count; ++i)
+                    {
+                        cska.ExtractedWeights.Add(binReader.ReadByte() / 255f);
+                    }
                 }
+
+
+                nextHeaderStart += skinData.Size;
+
+                int ibreak2 = 0;
             }
-
-            
-            
-            nextHeaderStart += skinData.Size;
-
-            int ibreak2 = 0;
         }
 
 
@@ -2798,9 +2914,6 @@ public class SKINChunk : BaseChunk
         baseValue += offset;
         return baseValue;
     }
-
-
-    
 }
 
 public class SkinData
@@ -2884,12 +2997,14 @@ public class SkinData
         return skinData;
     }
 
-    public void ReadSkinWeights(BinaryReader binReader, long dataPosition)
+    public void ReadSkinWeights(BinaryReader binReader, long dataPosition, StreamWriter debugInfo = null)
     {
         binReader.BaseStream.Position = dataPosition + PointerList1;
 
         for (int loop1 = 0; loop1 < NumList1; loop1++)
         {
+            debugInfo?.WriteLine($"CSK1 [{loop1}] position [{binReader.BaseStream.Position}]");
+
             CSK1 csk1 = CSK1.FromStream(binReader);
             CSK1List.Add(csk1);
         }
@@ -2898,6 +3013,7 @@ public class SkinData
 
         for (int loop1 = 0; loop1 < NumList2; loop1++)
         {
+            debugInfo?.WriteLine($"CSK2 [{loop1}] position [{binReader.BaseStream.Position}]");
             CSK2 csk2 = CSK2.FromStream(binReader);
             CSK2List.Add(csk2);
         }
@@ -2906,6 +3022,7 @@ public class SkinData
         binReader.BaseStream.Position = dataPosition + PointerListA;
         for (int loop1 = 0; loop1 < NumListA; loop1++)
         {
+            debugInfo?.WriteLine($"CSKA [{loop1}] position [{binReader.BaseStream.Position}]");
             CSKA cska = CSKA.FromStream(binReader);
             CSKAList.Add(cska);
         }
@@ -2937,8 +3054,25 @@ public class SkinData
             normals.Add(new Vector3(nxRaw * normScale, nyRaw * normScale, nzRaw * normScale));
         }
     }
-    
-    public static CSK1 CreateCSK1(int boneId, List<int> positions, Vector3[] vertices, Vector3[] normals,BoneWeight[] weights)
+
+    public static void WritePositionAndNormal(BinaryWriter binaryWriter, short animShift, Vector3 position,
+        Vector3 normal)
+    {
+        float posScale = 1f / (float)(1 << Mathf.Clamp(animShift, 0, 15));
+        const float normScale = 1f / 64f;
+
+        Vector3 scaledPosition = position * posScale;
+        Vector3 scaledNormal = normal * normScale;
+
+        Common.WriteVector3UShortBE(binaryWriter, scaledPosition);
+        binaryWriter.Write((sbyte)scaledNormal.x);
+        binaryWriter.Write((sbyte)scaledNormal.y);
+        binaryWriter.Write((sbyte)scaledNormal.z);
+    }
+
+
+    public static CSK1 CreateCSK1(int boneId, List<int> positions, Vector3[] vertices, Vector3[] normals,
+        BoneWeight[] weights)
     {
         CSK1 csk1 = new CSK1();
         csk1.idxBone = (byte)boneId;
@@ -2947,27 +3081,35 @@ public class SkinData
         return csk1;
     }
 
-    public static CSK2 CreateCSK2((int,int) boneId, List<int> positions, Vector3[] vertices, Vector3[] normals,BoneWeight[] weights)
+    public static CSK2 CreateCSK2((int, int) boneId, List<int> positions, Vector3[] vertices, Vector3[] normals,
+        BoneWeight[] weights)
     {
         CSK2 csk2 = new CSK2();
         csk2.idxBone[0] = (byte)boneId.Item1;
         csk2.idxBone[1] = (byte)boneId.Item2;
-        
+
         csk2.count = (ushort)positions.Count;
 
         foreach (int position in positions)
         {
             // byte w1 = (byte)((float)0xFF * weights[position].weight0);
             // byte w2 = (byte)((float)0xFF * weights[position].weight1);
-            csk2.ExtractedWeightsFloats.Add((weights[position].weight0,weights[position].weight1));
+            csk2.ExtractedWeightsFloats.Add((weights[position].weight0, weights[position].weight1));
         }
-        
-        
+
+
         return csk2;
     }
 
-
-    
+    public static CSKA CreateCSKA((int, int, float) key, Vector3[] vertices, Vector3[] normals,
+        BoneWeight[] weights)
+    {
+        CSKA cska = new CSKA();
+        cska.idxBone = (byte)key.Item2;
+        cska.vertSrc = (uint)key.Item1;
+        //cska.weightsSrc = key.Item3;
+        return cska;
+    }
 }
 
 
@@ -3118,14 +3260,14 @@ public class CSKA
     public List<int> ExtractedDestinationIndices = new List<int>();
     public List<float> ExtractedWeights = new List<float>();
 
-    
+
     public static CSKA FromStream(BinaryReader binReader)
     {
         CSKA cska = new CSKA();
         cska.idxBone = binReader.ReadByte();
         cska._pad = binReader.ReadByte();
         cska.count = Common.ToUInt16BigEndian(binReader);
-        
+
         cska.weightsSrc = SKINChunk.ReadAndRelocate(binReader);
         cska.idxDst = SKINChunk.ReadAndRelocate(binReader);
         cska.vertSrc = SKINChunk.ReadAndRelocate(binReader);

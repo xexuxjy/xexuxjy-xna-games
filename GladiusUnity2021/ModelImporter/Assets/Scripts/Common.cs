@@ -615,6 +615,19 @@ public static class Common
         bw.Write(ReverseOrder(v.Z));
     }
 
+    public static void WriteVector3UShortBE(BinaryWriter bw,IndexedVector3 v)
+    {
+        short x = (short)v.X;
+        short y = (short)v.Y;
+        short z = (short)v.Z;
+
+        WriteBigEndian(bw,x);
+        WriteBigEndian(bw,y);
+        WriteBigEndian(bw,z);
+    }
+
+    
+    
     public static void WriteVector2BE(BinaryWriter bw,IndexedVector2 v)
     {
         bw.Write(ReverseOrder(v.X));

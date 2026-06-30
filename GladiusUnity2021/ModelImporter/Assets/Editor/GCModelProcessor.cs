@@ -16,6 +16,7 @@ namespace Assets.Editor
         public const string m_newExtension = ".asset";
         public const string OriginalModelDirectory = "GCModels";
         public const string PrefabOutputDirectory = "GCModelPrefabs/";
+        public const string PlatformPrefix = "gc/";
         
         public static bool HasExtension(string asset)
         {
@@ -80,19 +81,16 @@ namespace Assets.Editor
                         StringBuilder debugInfo = new StringBuilder();
                         model.LoadData(binReader, debugInfo);
 
-                        int lodLevel = 1;
-
-                        Debug.Log("Best lod level is : " + lodLevel);
                         
                         CommonModelData commonModel = model.ToCommon();
+                        uint lodLevel = commonModel.OverallLodLevel; 
+                        
+                            Debug.Log("Best lod level is : " + lodLevel);
 
                         commonModel.Name = adjustedFilename;
 
-                        string outputDirectories =
-
-                            CommonModelProcessor.ProcessCommonModel(assetName, outputHierarchy, lodLevel,
-                                commonModel,
-                                PrefabOutputDirectory);
+                        CommonModelProcessor.CommonModelToPrefab(assetName, outputHierarchy, lodLevel,
+                            commonModel,PrefabOutputDirectory,PlatformPrefix);
                     }
                 }
             }
