@@ -844,7 +844,9 @@ public static class CommonModelImporter
             }
         }
 
-        return uint.MaxValue;
+        return 0;
+
+        //return uint.MaxValue;
     }
 
 
