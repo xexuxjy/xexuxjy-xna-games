@@ -146,7 +146,6 @@ public static class GladiusGlobals
     }
 
     public static bool APPLY_UNITY_TRANSLATION = true;
-    public static bool APPLY_UNITY_TRANSLATION_INVERT_X = false;
     
     public static void GladiusToUnity(ref Vector3 input)
     {
@@ -154,11 +153,6 @@ public static class GladiusGlobals
         {
             input = new Vector3(input.x, input.z, input.y);
         }
-        if (APPLY_UNITY_TRANSLATION_INVERT_X)
-        {
-            input.x = -input.x;
-        }
-        
     }
 
     public static Vector3 GladiusToUnity(Vector3 input)
@@ -167,11 +161,6 @@ public static class GladiusGlobals
         {
             input = new Vector3(input.x, input.z, input.y);
         }
-        if (APPLY_UNITY_TRANSLATION_INVERT_X)
-        {
-            input.x = -input.x;
-        }
-
         return input;
     }
 
@@ -181,10 +170,6 @@ public static class GladiusGlobals
         {
             input = new Vector3(input.x, input.z, input.y);
         }
-        if (APPLY_UNITY_TRANSLATION_INVERT_X)
-        {
-            input.x = -input.x;
-        }
     }
 
     public static Vector3 UnityToGladius(Vector3 input)
@@ -193,11 +178,6 @@ public static class GladiusGlobals
         {
             input = new Vector3(input.x, input.z, input.y);
         }
-        if (APPLY_UNITY_TRANSLATION_INVERT_X)
-        {
-            input.x = -input.x;
-        }
-
         return input;
     }
 
@@ -208,10 +188,6 @@ public static class GladiusGlobals
         {
             input = new Vector4(input.x, input.z, input.y, 0);
         }
-        if (APPLY_UNITY_TRANSLATION_INVERT_X)
-        {
-            input.x = -input.x;
-        }
     }
 
     public static Quaternion AdjustQuaternion(Quaternion q)
@@ -221,11 +197,6 @@ public static class GladiusGlobals
         {
             result = new Quaternion(result.x, result.z, result.y, result.w);
         }
-        if (APPLY_UNITY_TRANSLATION_INVERT_X)
-        {
-            result.x = -result.x;
-        }
-
         return result;
     }
 
@@ -236,11 +207,6 @@ public static class GladiusGlobals
         {
             q = new Quaternion(q.x, q.z, q.y, q.w);
         }
-        if (APPLY_UNITY_TRANSLATION_INVERT_X)
-        {
-            q.x = -q.x;
-        }
-        
     }
 
 

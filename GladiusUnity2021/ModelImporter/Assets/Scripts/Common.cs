@@ -6,6 +6,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 public static class Common
 {
@@ -938,5 +939,99 @@ public static class Common
             return false;
         }
     }
+
+
+    public static int CountWeights(this BoneWeight bw)
+    {
+        int count = 0;
+        if (bw.weight0 > 0f)
+        {
+            count++;
+        }
+
+        if (bw.weight1 > 0f)
+        {
+            count++;
+        }
+
+        if (bw.weight2 > 0f)
+        {
+            count++;
+        }
+
+        if (bw.weight3 > 0f)
+        {
+            count++;
+        }
+
+        return count;
+    }
+        
+    
+    public static BoneWeight RenormaliseWeights(this BoneWeight bw, int maxWeights)
+    {
+        BoneWeight b = bw;
+        float sum = bw.weight0;
+        if (maxWeights > 1)
+        {
+            sum += bw.weight1;
+        }
+
+        if (maxWeights > 2)
+        {
+            sum += bw.weight2;
+        }
+
+        if (maxWeights > 3)
+        {
+            sum += bw.weight3;
+        }
+
+        float scalar = 1.0f / sum;
+
+        if (maxWeights == 1)
+        {
+            bw.weight0 *= scalar;
+            bw.weight1 = 0f;
+            bw.weight2 = 0f;
+            bw.weight3 = 0f;
+        }
+        else if (maxWeights == 2)
+        {
+            bw.weight0 *= scalar;
+            bw.weight1 *= scalar;
+            bw.weight2 = 0f;
+            bw.weight3 = 0f;
+        }
+        else if (maxWeights == 3)
+        {
+            bw.weight0 *= scalar;
+            bw.weight1 *= scalar;
+            bw.weight2 *= scalar;
+            bw.weight3 = 0f;
+        }
+
+        return bw;
+    }
+
+    public static float GetWeight(this BoneWeight bw, int index)
+    {
+        Debug.Assert(index >=0 && index <= 3);
+        switch (index)
+        {
+            case 0:
+                return bw.weight0;
+            case 1:
+                return bw.weight1;
+            case 2:
+                return bw.weight2;
+            case 3:
+                return bw.weight3;
+            default:
+                return 0f;
+        }
+    }
+    
+    
     
 }

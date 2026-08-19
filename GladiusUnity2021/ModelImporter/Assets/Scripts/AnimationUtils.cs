@@ -352,9 +352,14 @@ public static class AnimationUtils
 
     public static void WriteOPTR(BinaryWriter writer,List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData)
     {
+        if (positionData.Count == 0)
+        {
+            return;
+        }
+        
         long startPos = writer.BaseStream.Position;
         int total = GladiusFileWriter.HeaderSize;
-        total += transformList.Count * anim_OptPosTrack.Size;
+        total += positionData.Count * anim_OptPosTrack.Size;
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
         int numPadBytes = paddedTotal - total; 
@@ -366,7 +371,10 @@ public static class AnimationUtils
 
         foreach (Transform t in transformList)
         {
-            anim_OptPosTrack.ToStream(writer, positionData[t].Count, PosScalar, 0);
+            if (positionData.ContainsKey(t))
+            {
+                anim_OptPosTrack.ToStream(writer, positionData[t].Count, PosScalar, 0);
+            }
         }
         long endPos = writer.BaseStream.Position;
         long diff =  endPos - startPos;
@@ -375,8 +383,13 @@ public static class AnimationUtils
 
     public static void WriteORTR(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
+        if (rotationData.Count == 0)
+        {
+            return;
+        }
+        
         int total = GladiusFileWriter.HeaderSize;
-        total += transformList.Count * anim_OptRotTrack.Size;
+        total += rotationData.Count * anim_OptRotTrack.Size;
         
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
         int numPadBytes = paddedTotal - total; 
@@ -388,12 +401,15 @@ public static class AnimationUtils
         writer.Write(rotationData.Count); // number of elements.
 
         foreach (Transform t in transformList)
-
         {
-            writer.Write(rotationData[t].Count);
-            writer.Write(0);
-            writer.Write(0);
+            if (rotationData.ContainsKey(t))
+            {
 
+
+                writer.Write(rotationData[t].Count);
+                writer.Write(0);
+                writer.Write(0);
+            }
             // mNumKeys = binReader.ReadUInt32();
             // uint dummyPointer = binReader.ReadUInt32();
             // uint keyTimesPointer = binReader.ReadUInt32();
@@ -412,6 +428,11 @@ public static class AnimationUtils
     
     public static void WriteOVEC(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData)
     {
+        if (positionData.Count == 0)
+        {
+            return;
+        }
+        
         int total = GladiusFileWriter.HeaderSize;
 
         int totalElements = 0;
@@ -433,10 +454,15 @@ public static class AnimationUtils
 
         for (int i = 0; i < transformList.Count; ++i)
         {
-            List<(float,Vector3)> positionList = positionData[transformList[i]];
-            for (int j = 0; j < positionList.Count; ++j)
+            if (positionData.ContainsKey(transformList[i]))
             {
-                optVec.ToStream(writer, optVec.Put(positionList[j].Item2, FloatTimeToUShort(positionList[j].Item1),PosScalar));                
+
+                List<(float, Vector3)> positionList = positionData[transformList[i]];
+                for (int j = 0; j < positionList.Count; ++j)
+                {
+                    optVec.ToStream(writer,
+                        optVec.Put(positionList[j].Item2, FloatTimeToUShort(positionList[j].Item1), PosScalar));
+                }
             }
         }
         GladiusFileWriter.WriteNull(writer, numPadBytes);
@@ -445,6 +471,11 @@ public static class AnimationUtils
 
     public static void WriteOQUA(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
+        if (rotationData.Count == 0)
+        {
+            return;
+        }
+        
         int total = GladiusFileWriter.HeaderSize;
         int totalElements = 0;
         
@@ -466,11 +497,15 @@ public static class AnimationUtils
 
         for (int i = 0; i < transformList.Count; ++i)
         {
-            List<(float,Quaternion)> rotationList = rotationData[transformList[i]];
-            for (int j = 0; j < rotationList.Count; ++j)
+            if (rotationData.ContainsKey(transformList[i]))
             {
-                // time will be set in arkt
-                optQuat.ToStream(writer, optQuat.Put(rotationList[j].Item2, rotationList[j].Item1));
+
+                List<(float, Quaternion)> rotationList = rotationData[transformList[i]];
+                for (int j = 0; j < rotationList.Count; ++j)
+                {
+                    // time will be set in arkt
+                    optQuat.ToStream(writer, optQuat.Put(rotationList[j].Item2, rotationList[j].Item1));
+                }
             }
         }
         GladiusFileWriter.WriteNull(writer, numPadBytes);
@@ -492,6 +527,10 @@ public static class AnimationUtils
      */
     public static void WriteARKT(BinaryWriter writer, List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
+        if (rotationData.Count == 0)
+        {
+            return;
+        }
         int total = GladiusFileWriter.HeaderSize;
         int totalElements = 0;
         foreach (var track in rotationData.Values)
@@ -512,10 +551,13 @@ public static class AnimationUtils
         
         for (int i = 0; i < transformList.Count; ++i)
         {
-            List<(float,Quaternion)> rotationList = rotationData[transformList[i]];
-            for (int j = 0; j < rotationList.Count; ++j)
+            if (rotationData.ContainsKey(transformList[i]))
             {
-                writer.Write(FloatTimeToUShort(rotationList[j].Item1));
+                List<(float, Quaternion)> rotationList = rotationData[transformList[i]];
+                for (int j = 0; j < rotationList.Count; ++j)
+                {
+                    writer.Write(FloatTimeToUShort(rotationList[j].Item1));
+                }
             }
         }
 

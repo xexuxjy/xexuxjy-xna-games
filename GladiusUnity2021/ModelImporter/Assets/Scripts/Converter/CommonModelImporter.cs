@@ -850,78 +850,78 @@ public static class CommonModelImporter
     }
 
 
-    public static int CountActiveWeights(BoneWeight bw)
-    {
-        int count = 0;
-        if (bw.weight0 > 0f)
-        {
-            count++;
-        }
+    // public static int CountActiveWeights(BoneWeight bw)
+    // {
+    //     int count = 0;
+    //     if (bw.weight0 > 0f)
+    //     {
+    //         count++;
+    //     }
+    //
+    //     if (bw.weight1 > 0f)
+    //     {
+    //         count++;
+    //     }
+    //
+    //     if (bw.weight2 > 0f)
+    //     {
+    //         count++;
+    //     }
+    //
+    //     if (bw.weight3 > 0f)
+    //     {
+    //         count++;
+    //     }
+    //
+    //     return count;
+    // }
 
-        if (bw.weight1 > 0f)
-        {
-            count++;
-        }
 
-        if (bw.weight2 > 0f)
-        {
-            count++;
-        }
-
-        if (bw.weight3 > 0f)
-        {
-            count++;
-        }
-
-        return count;
-    }
-
-
-    public static BoneWeight RenormaliseWeights(BoneWeight bw, int maxWeights)
-    {
-        BoneWeight b = bw;
-        float sum = bw.weight0;
-        if (maxWeights > 1)
-        {
-            sum += bw.weight1;
-        }
-
-        if (maxWeights > 2)
-        {
-            sum += bw.weight2;
-        }
-
-        if (maxWeights > 3)
-        {
-            sum += bw.weight3;
-        }
-
-        float scalar = 1.0f / sum;
-
-        if (maxWeights == 1)
-        {
-            bw.weight0 *= scalar;
-            bw.weight1 = 0f;
-            bw.weight2 = 0f;
-            bw.weight3 = 0f;
-        }
-        else if (maxWeights == 2)
-        {
-            bw.weight0 *= scalar;
-            bw.weight1 *= scalar;
-            bw.weight2 = 0f;
-            bw.weight3 = 0f;
-        }
-        else if (maxWeights == 3)
-        {
-            bw.weight0 *= scalar;
-            bw.weight1 *= scalar;
-            bw.weight2 *= scalar;
-            bw.weight3 = 0f;
-        }
-
-        return bw;
-    }
+    // public static BoneWeight RenormaliseWeights(BoneWeight bw, int maxWeights)
+    // {
+    //     BoneWeight b = bw;
+    //     float sum = bw.weight0;
+    //     if (maxWeights > 1)
+    //     {
+    //         sum += bw.weight1;
+    //     }
+    //
+    //     if (maxWeights > 2)
+    //     {
+    //         sum += bw.weight2;
+    //     }
+    //
+    //     if (maxWeights > 3)
+    //     {
+    //         sum += bw.weight3;
+    //     }
+    //
+    //     float scalar = 1.0f / sum;
+    //
+    //     if (maxWeights == 1)
+    //     {
+    //         bw.weight0 *= scalar;
+    //         bw.weight1 = 0f;
+    //         bw.weight2 = 0f;
+    //         bw.weight3 = 0f;
+    //     }
+    //     else if (maxWeights == 2)
+    //     {
+    //         bw.weight0 *= scalar;
+    //         bw.weight1 *= scalar;
+    //         bw.weight2 = 0f;
+    //         bw.weight3 = 0f;
+    //     }
+    //     else if (maxWeights == 3)
+    //     {
+    //         bw.weight0 *= scalar;
+    //         bw.weight1 *= scalar;
+    //         bw.weight2 *= scalar;
+    //         bw.weight3 = 0f;
+    //     }
+    //
+    //     return bw;
+    // }
 
 
     // public static GameObject CreateGameObject(CommonModelData commonModel)
@@ -979,7 +979,16 @@ public static class CommonModelImporter
     //     }
     //
     // }
-    
+    public static uint Align32(uint input)
+    {
+        if (input % 4 != 0)
+        {
+            return input + (input % 4);
+        }
+
+        return input;
+    }
+   
 }
 
 
@@ -1934,10 +1943,13 @@ public class MatrixAndTime
 }
 
 
-public class CommonVertexInstance
+public class CommonVertexInstance : IEquatable<CommonVertexInstance>
 {
     public static int sFailedCount = 0;
 
+    public int DebugDLEPos = -1;
+    public int DebugDLENorm = -1;
+    
     public IndexedVector3 Position;
     public IndexedVector3 Normal;
     public IndexedVector3 Tangent;
@@ -1963,22 +1975,26 @@ public class CommonVertexInstance
             CommonModelImporter.ToString(Normal), CommonModelImporter.ToString(UV), ExtraData);
     }
 
-    protected bool Equals(CommonVertexInstance other)
+    public bool Equals(CommonVertexInstance other)
     {
-        return Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent);
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+        //return Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent) && UV.Equals(other.UV) && UV2.Equals(other.UV2) && UV3.Equals(other.UV3);
+        return Position.Equals(other.Position) && Normal.Equals(other.Normal);
     }
 
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
+        if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
+        if (obj.GetType() != GetType()) return false;
         return Equals((CommonVertexInstance)obj);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Position, Normal, Tangent);
+        //return HashCode.Combine(Position, Normal, Tangent, UV, UV2, UV3);
+        return HashCode.Combine(Position, Normal);
     }
 }
 
@@ -2836,6 +2852,18 @@ public class SKINChunk : BaseChunk
                     SkinData.ReadPositionAndNormals(binReader, csk1.count, skinData.AnimShift, csk1.ExtractedPositions,
                         csk1.ExtractedNormals);
 
+                    HashSet<Vector3> uniqueVert = new HashSet<Vector3>(); 
+                    HashSet<Vector3> uniqueNorm = new HashSet<Vector3>();
+
+                    foreach (var val in csk1.ExtractedPositions)
+                    {
+                        uniqueVert.Add(val);
+                    }
+
+                    foreach (var val in csk1.ExtractedPositions)
+                    {
+                        uniqueNorm.Add(val);
+                    }
                     int ibreak = 0;
                 }
 
@@ -2918,8 +2946,14 @@ public class SKINChunk : BaseChunk
     }
 }
 
+// the skindata structures match the official nintendo ones with the idea of 1List,2List and Accumulations.
+// https://archive.org/details/GCN_SDK_Documentation/Game%20Engine%20Programming/page/80/mode/2up
+
 public class SkinData
 {
+    public const int RawSize = 96;
+    public uint CalculatedSize = 0;
+    
     public int Size;
     public int NumberVertices;
     public int NumberBones;
@@ -2942,7 +2976,7 @@ public class SkinData
     public uint PacketStart2; //pointer uint16
     public uint PacketSize2; //pointer uint16
 
-    public uint VoidPointer;
+    public uint SourceData;
     public uint WeightData;
     public short AnimShift;
 
@@ -2950,6 +2984,13 @@ public class SkinData
     public List<CSK2> CSK2List = new List<CSK2>();
     public List<CSKA> CSKAList = new List<CSKA>();
 
+    
+    public List<uint> Packet1Starts = new List<uint>();
+    public List<uint> Packet1Sizes = new List<uint>();
+    
+    public List<uint> Packet2Starts = new List<uint>();
+    public List<uint> Packet2Sizes = new List<uint>();
+    
     public const int StructureSize = 96;
 
     public static SkinData FromStream(BinaryReader binReader)
@@ -2969,11 +3010,12 @@ public class SkinData
         skinData.NumList2 = Common.ToInt16BigEndian(binReader);
         skinData.NumListA = Common.ToInt16BigEndian(binReader);
 
-        // // align
-        if (binReader.BaseStream.Position % 4 != 0)
-        {
-            binReader.BaseStream.Position += 2;
-        }
+        binReader.BaseStream.Position = (long)CommonModelImporter.Align32((uint)binReader.BaseStream.Position);
+        // // // align
+        // if (binReader.BaseStream.Position % 4 != 0)
+        // {
+        //     binReader.BaseStream.Position += 2;
+        // }
 
         skinData.PointerList1 = SKINChunk.ReadAndRelocate(binReader);
         skinData.PointerList2 = SKINChunk.ReadAndRelocate(binReader);
@@ -2988,7 +3030,7 @@ public class SkinData
         skinData.PacketStart2 = SKINChunk.ReadAndRelocate(binReader);
         skinData.PacketSize2 = SKINChunk.ReadAndRelocate(binReader);
 
-        skinData.VoidPointer = SKINChunk.ReadAndRelocate(binReader);
+        skinData.SourceData = SKINChunk.ReadAndRelocate(binReader);
         skinData.WeightData = SKINChunk.ReadAndRelocate(binReader);
 
         skinData.AnimShift = Common.ToInt16BigEndian(binReader);
@@ -2999,25 +3041,30 @@ public class SkinData
         return skinData;
     }
 
+    
     public void ReadSkinWeights(BinaryReader binReader, long dataPosition, StreamWriter debugInfo = null)
     {
         binReader.BaseStream.Position = dataPosition + PointerList1;
 
         for (int loop1 = 0; loop1 < NumList1; loop1++)
         {
+            Packet1Starts.Add((uint)binReader.BaseStream.Position);
             debugInfo?.WriteLine($"CSK1 [{loop1}] position [{binReader.BaseStream.Position}]");
 
             CSK1 csk1 = CSK1.FromStream(binReader);
             CSK1List.Add(csk1);
+            Packet1Sizes.Add((uint)(binReader.BaseStream.Position - Packet1Starts.Last()));
         }
 
         binReader.BaseStream.Position = dataPosition + PointerList2;
 
         for (int loop1 = 0; loop1 < NumList2; loop1++)
         {
+            Packet2Starts.Add((uint)binReader.BaseStream.Position);
             debugInfo?.WriteLine($"CSK2 [{loop1}] position [{binReader.BaseStream.Position}]");
             CSK2 csk2 = CSK2.FromStream(binReader);
             CSK2List.Add(csk2);
+            Packet2Sizes.Add((uint)(binReader.BaseStream.Position - Packet2Starts.Last()));
         }
 
 
@@ -3052,8 +3099,11 @@ public class SkinData
             sbyte nyRaw = (sbyte)binReader.ReadByte();
             sbyte nzRaw = (sbyte)binReader.ReadByte();
 
-            positions.Add(new Vector3(xRaw * posScale, yRaw * posScale, zRaw * posScale));
-            normals.Add(new Vector3(nxRaw * normScale, nyRaw * normScale, nzRaw * normScale));
+            Vector3 posVector = new Vector3(xRaw * posScale, yRaw * posScale, zRaw * posScale);
+            Vector3 normVector = new Vector3(nxRaw * normScale, nyRaw * normScale, nzRaw * normScale);
+
+            positions.Add(posVector);
+            normals.Add(normVector);
         }
     }
 
@@ -3157,6 +3207,7 @@ public struct PosNorm16
 
 public class CSK1
 {
+    public const int RawSize = 12;
     public byte idxBone; // bone/matrix index
     public byte _pad;
     public ushort count; // total verts in this packet
@@ -3178,6 +3229,22 @@ public class CSK1
         return csk1;
     }
 
+    public void ToStream(BinaryWriter writer,short animShift)
+    {
+        writer.Write(idxBone);
+        writer.Write(count);
+        writer.Write(vertDst);
+        writer.Write(vertSrc);
+
+        long currentPosition = writer.BaseStream.Position;
+        writer.BaseStream.Position = currentPosition + vertSrc;
+        for (int i = 0; i < ExtractedPositions.Count; i++)
+        {
+            SkinData.WritePositionAndNormal(writer, animShift, ExtractedPositions[i], ExtractedNormals[i]);
+        }
+
+    }
+    
     /*
 
     typedef struct { int16 x, y, z; } tVecQ;
@@ -3220,6 +3287,7 @@ public class CSK1
 
 public class CSK2
 {
+    public const int RawSize = 16;
     public byte[] idxBone = new byte[2];
     public ushort count;
     public uint weightsSrc;
@@ -3249,6 +3317,7 @@ public class CSK2
 
 public class CSKA
 {
+    public const int RawSize = 16;
     public byte idxBone;
     public byte _pad;
     public ushort count;
@@ -3434,5 +3503,690 @@ public class STYPChunk : BaseChunk
         }
 
         return chunk;
+    }
+}
+
+
+
+public class COnezie
+{
+    public int			idxBone;			// bone/matrix index
+    public ushort			idx_start;
+    public ushort			count;
+    public List<ushort>	vertSrc = new List<ushort>();
+};
+
+public class CTwozie
+{
+    public int[] idxBone = new int[2];			// bone/matrix index
+    public ushort idx_start;
+    public ushort count;
+    public List<byte> weights = new List<byte>();
+    public List<ushort>	vertSrc = new List<ushort>();
+};
+
+public class CAccList
+{
+    public List<ushort>	vertSrc = new List<ushort>();
+    public List<ushort>	idxVert = new List<ushort>();
+    public List<byte>	weight = new List<byte>();
+};
+
+//public typedef KDArray<int> CIdxArray;
+
+public class CBoneData
+{
+    public CBoneData(int numBones)
+    {
+        for (int i = 0; i < numBones; i++)
+        {
+            twozies.Add(new List<int>());
+        }
+    }
+    
+    public List<int> onezies = new List<int>();
+    public List<List<int>>twozies = new List<List<int>>();
+};
+
+// typedef struct { int16 x, y, z; } tVecQ;
+// typedef struct { int8 x, y, z; } tNormQ;
+//
+// tNormQ defaultNormQ = { 0, 0, 0 };
+
+
+public static class SkinBuilder
+{
+    public static SkinData PrepareData(int numBones,List<Vector3> vertices,List<Vector3> normals,List<BoneWeight> boneWeights)
+    {
+        // dma size , maybe 16k 
+        const int sk_maxPacketSizeSafe = (1024*16)-65;
+        const int size_vector = 2*3;
+        const int size_normal = 3;
+        const int size_index = 2;
+        const int size_weight = 1;
+
+        List<COnezie> onezies = new List<COnezie>();
+        List<CTwozie> twozies = new List<CTwozie>();
+        List<CAccList> acclist = new List<CAccList>(); 
+        Dictionary<int,CBoneData> idxBones = new Dictionary<int,CBoneData>();
+
+
+        for (int i = 0; i < numBones; ++i)
+        {
+            acclist.Add(new CAccList());
+        }
+        
+        
+        int numVerts = vertices.Count();
+
+        int[] pRelocate = new int[numVerts];
+
+        
+        //const bool bBiTan = pI->aBinIds && pI->aTanIds;
+        int numNormals = 1;
+        int size_pos_norm = size_vector + size_normal*numNormals;
+
+        //init reloc table
+        for (int i = 0; i < numVerts; i++)
+        {
+            pRelocate[i] = i;
+        }
+
+        // lets build a tree of onzies and twozies
+        for( int iv=0; iv<numVerts; iv++ )
+        {
+            int vertexBoneCount = boneWeights[iv].CountWeights();
+            
+            // int start_idx = pI->aWeightInds[iv];
+            // int num_idx = pI->aWeightCnts[iv];
+            
+            if (vertexBoneCount==1)
+            {
+                int idx_bone = boneWeights[iv].boneIndex0;
+                if (!idxBones.ContainsKey(idx_bone))
+                {
+                    idxBones[idx_bone] = new CBoneData(numBones);
+                }
+                
+                
+                Debug.Assert(idx_bone<numBones);
+                // all the vertices that only have a single weight on that idx bone.    
+                idxBones[ idx_bone ].onezies.Add( iv );
+            }
+            else // note anything above one is counted as a twozie (with possible accumulations)
+            {
+                int idx_bone = boneWeights[iv].boneIndex0;
+                Debug.Assert(idx_bone<numBones);
+                if (!idxBones.ContainsKey(idx_bone))
+                {
+                    idxBones[idx_bone] = new CBoneData(numBones);
+                }
+
+                
+                List<List<int>> ar = idxBones[ idx_bone ].twozies;
+                
+                //ar.resize( numBones );
+
+                int idx_bone2 = boneWeights[iv].boneIndex1;
+                Debug.Assert(idx_bone2<numBones);
+
+                ar[ idx_bone2 ].Add( iv );
+            }
+        }
+
+        int kMaxVertCount = sk_maxPacketSizeSafe/size_pos_norm;
+
+        // do onezies
+        for( int idx_bone=0; idx_bone<numBones; idx_bone++ )
+        {
+            CBoneData bd = idxBones[idx_bone];
+            int vert_count = bd.onezies.Count();
+            if (vert_count == 0)
+            {
+                continue;
+            }
+
+            ushort nn = 0;
+
+            COnezie data = new COnezie();
+            onezies.Add(data);
+            data.idxBone = idx_bone;
+            data.count = 0;
+            for( int j=0; j<vert_count; j++)
+            {
+                if (nn>kMaxVertCount)
+                {
+                    // finalize last packet
+                    data.count = nn;
+
+                    data = new COnezie();
+                    onezies.Add(data);
+
+                    // need to start a new packet
+                    data.idxBone = idx_bone;
+                    data.count = 0;
+                    nn = 0;
+                }
+                nn++;
+
+                int idx = bd.onezies[j];
+
+                //Debug.Assert(idx_bone==pI->aMtxIds[pI->aWeightInds[idx]]);
+
+                data.vertSrc.Add( (ushort)idx );
+            }
+
+            // finalize last packet
+            data.count = nn;
+        }
+        
+        //== primitive sort
+        for( int i=0; i< onezies.Count-1; i++ )
+        {
+            int max_id = i;
+            int max_verts = onezies[i].count;
+            for(int j=(i+1); j<onezies.Count; j++ )
+            {
+                int cnt = onezies[j].count;
+                if (cnt>max_verts)
+                {
+                    max_verts = cnt;
+                    max_id = j;
+                }
+            }
+            COnezie temp = onezies[i];
+            onezies[i] = onezies[max_id];
+            onezies[max_id] = temp;
+        }
+
+        //== build packets
+        List<int> packets1 = new List<int>();
+        List<int> packet_size1 = new List<int>();
+        if(onezies.Count > 0)
+        {
+            int packet_start = 0;
+            int nn = onezies[0].count;
+            for(int i=1; i<onezies.Count; i++ )
+            {
+                int vert_count = onezies[i].count;
+                if ( (nn+vert_count)>kMaxVertCount )
+                {
+                    packets1.Add(packet_start);
+                    packet_size1.Add(nn);
+                    packet_start = i;
+                    nn = 0;
+                }
+                nn += vert_count;
+            }
+            packets1.Add(packet_start);
+            packet_size1.Add(nn);
+        }
+
+        //== do twozies
+        for( int idx_bone=0; idx_bone<numBones; idx_bone++ )
+        {
+            CBoneData bd = idxBones[idx_bone];
+
+            if (bd.twozies.Count() == 0)
+            {
+                continue;
+            }
+
+            for( int idx_bone2=0; idx_bone2<numBones; idx_bone2++)
+            {
+                List<int> ar = bd.twozies[idx_bone2];
+                int vert_count = ar.Count();
+                if (vert_count == 0)
+                {
+                    continue;
+                }
+
+                int nn = 0;
+
+                CTwozie data = new CTwozie();
+                twozies.Add(data);
+                data.idxBone[0] = idx_bone;
+                data.idxBone[1] = idx_bone2;
+                data.count = 0;
+                for( int k=0; k<vert_count; k++ )
+                {
+                    int idx = ar[k];
+
+                    if (nn>kMaxVertCount)
+                    {
+                        // finalize last packet
+                        data.count = (ushort)nn;
+
+                        // start new packet
+                        data = new CTwozie();
+                        twozies.Add(data);
+                        
+                        data.idxBone[0] = idx_bone;
+                        data.idxBone[1] = idx_bone2;
+                        data.count = 0;
+                    }
+                    nn++;
+
+                    data.vertSrc.Add( (ushort)idx );
+
+                    data.weights.Add((byte)boneWeights[k].weight0);
+                    data.weights.Add((byte)boneWeights[k].weight1);
+                    
+                }
+
+                // finalize last packet
+                data.count = (ushort)nn;
+            }
+        }
+
+        for( int i=0; i<(int)twozies.Count()-1; i++ )
+        {
+            int max_id = i;
+            int max_verts = twozies[i].count;
+            for( int j=(i+1); j<twozies.Count(); j++ )
+            {
+                int cnt = twozies[j].count;
+                if (cnt>max_verts)
+                {
+                    max_verts = cnt;
+                    max_id = j;
+                }
+            }
+            CTwozie temp = twozies[i];
+            twozies[i] = twozies[max_id];
+            twozies[max_id] = temp;
+        }
+
+        //== build packets
+        List<int> packets2 = new List<int>();
+        List<int> packet_size2 = new List<int>();
+        if (twozies.Count() > 0)
+        {
+            int packet_start = 0;
+            int nn = twozies[0].count;
+            for(int i=1; i<twozies.Count(); i++ )
+            {
+                int vert_count = twozies[i].count;
+                if ( (nn+vert_count)>kMaxVertCount )
+                {
+                    packets2.Add(packet_start);
+                    packet_size2.Add(nn);
+                    packet_start = i;
+                    nn = 0;
+                }
+                nn += vert_count;
+            }
+            packets2.Add(packet_start);
+            packet_size2.Add(nn);
+        }
+
+        //== reorder vertices
+        ushort cur_vert = 0;
+
+        for( int i=0; i<onezies.Count(); i++ )
+        {
+            COnezie data = onezies[i];
+            data.idx_start = cur_vert;
+            for( int j=0; j<data.count; j++)
+            {
+                pRelocate[data.vertSrc[j]] = cur_vert++;
+            }
+        }
+
+        for( int i=0; i<twozies.Count(); i++ )
+        {
+            CTwozie data = twozies[i];
+            data.idx_start = cur_vert;
+            for( int j=0; j<data.count; j++)
+            {
+                ushort idx = data.vertSrc[j];
+
+                int weightCount = boneWeights[idx].CountWeights();
+                if (weightCount >= 3)
+                {
+                    CAccList accData = acclist[data.idxBone[0]];
+                    accData.vertSrc.Add(idx);
+                    accData.weight.Add((byte)boneWeights[idx].weight2);
+                    accData.idxVert.Add(cur_vert);
+                    
+                }
+
+                if (weightCount == 4)
+                {
+                    CAccList accData = acclist[data.idxBone[0]];
+                    accData.vertSrc.Add(idx);
+                    accData.weight.Add((byte)boneWeights[idx].weight3);
+                    accData.idxVert.Add(cur_vert);
+                }
+                // int start_idx = pI->aWeightInds[idx];
+                // int num_idx = pI->aWeightCnts[idx];
+                // for ( int ib=(start_idx+2); ib<(start_idx+num_idx); ib++ )
+                // {
+                //     const int idxBone = pI->aMtxIds[ib];
+                //     ASSERT( idxBone<numBones );
+                //     ASSERT( pI->aWeights[ib]!=0 );
+                //     CAccList acc_data = acclist[idxBone];
+                //     acc_data.vertSrc.Add( idx );
+                //     acc_data.weight.Add( pI->aWeights[ib] );
+                //     acc_data.idxVert.Add( cur_vert );
+                // }
+
+                pRelocate[idx] = cur_vert++;
+            }
+        }
+
+        // lets find out how much memory we need for the whole thing
+        uint memsize = SkinData.RawSize;
+
+        uint packetSize = 2;
+        
+        memsize += (uint)packets1.Count*packetSize;
+        memsize += (uint)packets1.Count*packetSize;
+
+        memsize += (uint)packets2.Count*packetSize;
+        memsize += (uint)packets2.Count*packetSize;
+
+        memsize = CommonModelImporter.Align32(memsize);
+        memsize += (uint)(numVerts * size_pos_norm);
+
+        memsize += (uint)(CSK1.RawSize*onezies.Count);
+
+        int weights_count = 0;
+        for( int i=0; i<twozies.Count(); i++ )
+        {
+            CTwozie data = twozies[i];
+            memsize += CSK2.RawSize;
+            weights_count += 2*data.count;
+        }
+        memsize += (uint)(weights_count*size_weight);
+
+        int countAcclist = 0;
+        for( int i=0; i<numBones; i++ )
+        {
+            CAccList acc_data = acclist[i];
+            int count = acc_data.weight.Count();
+            if (count == 0)
+            {
+                continue;
+            }
+            countAcclist++;
+            memsize += CSKA.RawSize;
+            memsize += (uint)(size_pos_norm*count);
+            memsize += (uint)(size_index*count);		// dest index
+            memsize += (uint)(size_weight*count);		// weights
+        }
+
+        uint positionCounter = 0;
+        positionCounter += SkinData.RawSize;
+
+        SkinData skinData = new SkinData();
+        skinData.NumberVertices = numVerts;
+        skinData.NumberBones = numBones;
+
+        skinData.NumPackets1 = packets1.Count;
+        skinData.PacketStart1 = positionCounter;
+        positionCounter += (uint)(skinData.NumPackets1 * 4);
+        skinData.PacketSize1 = positionCounter;
+        positionCounter += (uint)(skinData.NumPackets1 * 4);
+        for (int i = 0; i < skinData.NumPackets1; i++)
+        {
+            skinData.Packet1Starts.Add((uint)packets1[i]);
+            skinData.Packet1Sizes.Add((uint)packet_size1[i]);
+        }
+        skinData.NumPackets2 = packets2.Count;
+        skinData.PacketStart2 = positionCounter;
+        positionCounter += (uint)(skinData.NumPackets2 * 4);
+        skinData.PacketSize2 = positionCounter;
+        positionCounter += (uint)(skinData.NumPackets2 * 4);
+        for (int i = 0; i < skinData.NumPackets2; i++)
+        {
+            skinData.Packet2Starts.Add((uint)packets2[i]);
+            skinData.Packet2Sizes.Add((uint)packet_size2[i]);
+        }
+        positionCounter = CommonModelImporter.Align32(positionCounter);
+        skinData.SourceData = positionCounter;
+        positionCounter += (uint)(numVerts * size_pos_norm);
+        skinData.WeightData = positionCounter;
+
+
+        skinData.CalculatedSize = positionCounter;
+        
+        // lets pack our data into a continuous array
+        // CSkinningData* pOut = (CSkinningData*) (new char[memsize]);
+        // ASSERT( (void*)pOut==align32(pOut) );
+        // memset(pOut,0,memsize);
+        //
+        // pOut->bBiTan = bBiTan;
+        // pOut->numVerts = numVerts;
+        // pOut->numBones = numBones;
+        // pOut->sizeData = memsize;
+        //
+        // char* pData = (char*)pOut + sizeof(CSkinningData);
+        //
+        // pOut->numPackets1 = packets1.size();
+        // pOut->pPacketStart1 = (uint16*)pData;
+        // pData += pOut->numPackets1*sizeof(pOut->pPacketStart1[0]);
+        // pOut->pPacketSize1 = (uint16*)pData;
+        // pData += pOut->numPackets1*sizeof(pOut->pPacketSize1[0]);
+        // for ( int i=0; i<pOut->numPackets1; i++ )
+        // {
+        //     pOut->pPacketStart1[i] = packets1[i];
+        //     pOut->pPacketSize1[i] = packet_size1[i];
+        // }
+        //
+        // pOut->numPackets2 = packets2.size();
+        // pOut->pPacketStart2 = (uint16*)pData;
+        // pData += pOut->numPackets2*sizeof(pOut->pPacketStart2[0]);
+        // pOut->pPacketSize2 = (uint16*)pData;
+        // pData += pOut->numPackets2*sizeof(pOut->pPacketSize2[0]);
+        // for ( int i=0; i<pOut->numPackets2; i++ )
+        // {
+        //     pOut->pPacketStart2[i] = packets2[i];
+        //     pOut->pPacketSize2[i] = packet_size2[i];
+        // }
+        //
+        // pData = (char*)align32(pData);
+        // pOut->pSrcData = pData;
+        // pData += numVerts * size_pos_norm;
+        //
+        // pOut->pWeigthData = pData;
+        // pData += weigths_count * size_weight;
+
+
+        // // do onezies
+        // CSK1* const pSK1_base = (CSK1*)pData;
+        // pOut->pSK1 = pSK1_base;
+        // pOut->numSK1 = onezies.size();
+        // pData += pOut->numSK1*sizeof(CSK1);
+        // for( int i=0; i<pOut->numSK1; i++ )
+        // {
+        //     CSK1* pSK1 = pSK1_base + i;
+        //     const COnezie& data = onezies[i];
+        //     const int count = data.count;
+        //
+        //     pSK1->idxBone = data.idxBone;
+        //     pSK1->count = count;
+        //
+        //     pSK1->vertDst = data.idx_start*size_pos_norm;
+        //     (u8*)pSK1->vertSrc = (u8*)pOut->pSrcData + pSK1->vertDst;
+        //
+        //     // supply the actual data
+        //     for( int j=0; j<count; j++ )
+        //     {
+        //         const char* pD = (char*)pSK1->vertSrc + j*size_pos_norm;
+        //         const int idx = data.vertSrc[j];
+        //         *(tVecQ*)pD = ((tVecQ*)aPos)[idx];
+        //         *(tNormQ*)(pD+size_vector) = ((tNormQ*)aNrms)[pI->aNrmIds[idx]];
+        //         if (bBiTan)
+        //         {
+        //             *(tNormQ*)(pD+size_vector+size_normal) = ((tNormQ*)aNrms)[pI->aBinIds[idx]];
+        //             *(tNormQ*)(pD+size_vector+2*size_normal) = ((tNormQ*)aNrms)[pI->aTanIds[idx]];
+        //         }
+        //     }
+        // }
+
+        foreach(COnezie onezie in onezies)
+        {
+            CSK1 csk1 = new CSK1();
+            skinData.CSK1List.Add(csk1);
+            csk1.idxBone = (byte)onezie.idxBone;
+            csk1.count = onezie.count;
+
+            foreach (int index in onezie.vertSrc)
+            {
+                csk1.ExtractedPositions.Add(vertices[index]);
+                csk1.ExtractedNormals.Add(normals[index]);
+            }
+            
+        }
+        
+
+// do twozies
+        // CSK2* const pSK2_base = (CSK2*)pData;
+        // pOut->pSK2 = pSK2_base;
+        // pOut->numSK2 = twozies.size();
+        // pData += pOut->numSK2*sizeof(CSK2);
+        // int weight_n = 0;
+        // for( int i=0; i<pOut->numSK2; i++ )
+        // {
+        //     CSK2* pSK2 = pSK2_base + i;
+        //     const CTwozie& data = twozies[i];
+        //     const int count = data.count;
+        //
+        //     pSK2->idxBone[0] = data.idxBone[0];
+        //     pSK2->idxBone[1] = data.idxBone[1];
+        //     pSK2->count = count;
+        //
+        //     pSK2->weights = (u8*)pOut->pWeigthData + 2*size_weight * weight_n;
+        //     weight_n += count;
+        //
+        //     pSK2->vertDst = data.idx_start*size_pos_norm;
+        //     (u8*)pSK2->vertSrc = (u8*)pOut->pSrcData + pSK2->vertDst;
+        //
+        //     // supply the actual data
+        //     for( int j=0; j<count; j++ )
+        //     {
+        //         const char* pD = (char*)pSK2->vertSrc + j*size_pos_norm;
+        //         const int idx = data.vertSrc[j];
+        //         *(tVecQ*)pD = ((tVecQ*)aPos)[idx];
+        //         *(tNormQ*)(pD+size_vector) = ((tNormQ*)aNrms)[pI->aNrmIds[idx]];
+        //         if (bBiTan)
+        //         {
+        //             *(tNormQ*)(pD+size_vector+size_normal) = ((tNormQ*)aNrms)[pI->aBinIds[idx]];
+        //             *(tNormQ*)(pD+size_vector+2*size_normal) = ((tNormQ*)aNrms)[pI->aTanIds[idx]];
+        //         }
+        //     }
+        //
+        //     for( int j=0; j<2*count; j++ )
+        //         ((uint8*)pSK2->weights)[j] = data.weights[j];
+        // }
+        foreach(CTwozie twozie in twozies)
+        {
+            CSK2 csk2 = new CSK2();
+            skinData.CSK2List.Add(csk2);
+            csk2.idxBone[0] = (byte)twozie.idxBone[0];
+            csk2.idxBone[1] = (byte)twozie.idxBone[1];
+            
+            csk2.count = twozie.count;
+
+            foreach (int index in twozie.vertSrc)
+            {
+                csk2.ExtractedPositions.Add(vertices[index]);
+                csk2.ExtractedNormals.Add(normals[index]);
+            }
+
+            for (int j = 0; j < 2 * csk2.count; j++)
+            {
+                csk2.ExtractedWeightsBytes.Add((twozie.weights[j]));
+            }
+        }
+
+        // do accumulations
+        
+        // CSKA* const pSKA_base = (CSKA*)pData;
+        // pOut->pSKA = pSKA_base;
+        // pOut->numSKA = countAcclist;
+        // pData += pOut->numSKA*sizeof(CSKA);
+        // CSKA* pSKA = pSKA_base ;
+        // for( int i=0; i<numBones; i++ )
+        // {
+        //     const CAccList& data = acclist[i];
+        //     const int count = data.weight.size();
+        //     if (!count) continue;
+        //
+        //     pSKA->idxBone = i;
+        //     pSKA->count = count;
+        //
+        //     pSKA->vertSrc = pData;
+        //     pData += size_pos_norm*count;
+        //     pSKA->idxDst = pData;
+        //     pData += size_index*count;
+        //     pSKA->weights = pData;
+        //     pData += size_weight*count;
+        //
+        //     // supply the actual data
+        //     for( int j=0; j<count; j++ )
+        //     {
+        //         const char* pD = (char*)pSKA->vertSrc + j*size_pos_norm;
+        //         const int idx = data.vertSrc[j];
+        //         *(tVecQ*)pD = ((tVecQ*)aPos)[idx];
+        //         *(tNormQ*)(pD+size_vector) = ((tNormQ*)aNrms)[pI->aNrmIds[idx]];
+        //         if (bBiTan)
+        //         {
+        //             *(tNormQ*)(pD+size_vector+size_normal) = ((tNormQ*)aNrms)[pI->aBinIds[idx]];
+        //             *(tNormQ*)(pD+size_vector+2*size_normal) = ((tNormQ*)aNrms)[pI->aTanIds[idx]];
+        //         }
+        //     }
+        //
+        //     for( int j=0; j<count; j++ ) 
+        //         ((uint16*)pSKA->idxDst)[j] = data.idxVert[j];
+        //
+        //     for( int j=0; j<count; j++ )
+        //         ((uint8*)pSKA->weights)[j] = data.weight[j];
+        //
+        //     pSKA++;
+        // }
+
+        
+        for (int i = 0; i < numBones; i++)
+        {
+            CAccList data = acclist[i];
+            int count = data.weight.Count;
+            if (count == 0)
+            {
+                continue;
+            }
+
+            CSKA cska = new CSKA();
+            cska.idxBone = (byte)i;
+            cska.count = (ushort)count;
+            
+            for( int j=0; j<count; j++ )
+            {
+                int idx = data.vertSrc[j];
+
+                cska.ExtractedPositions.Add(vertices[idx]);
+                cska.ExtractedNormals.Add(normals[idx]);
+
+            }
+
+            for (int j = 0; j < count; j++)
+            {
+                //((uint16*)pSKA->idxDst)[j] = data.idxVert[j];
+                cska.ExtractedDestinationIndices.Add(data.idxVert[j]);
+                
+            }
+
+
+            for (int j = 0; j < count; j++)
+            {
+                //((uint8*)pSKA->weights)[j] = data.weight[j];
+                cska.ExtractedWeights.Add(data.weight[j]);
+            }
+
+
+        }
+        
+        return skinData;
     }
 }

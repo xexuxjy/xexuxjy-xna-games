@@ -39,7 +39,7 @@ namespace Gladius.util.Test
             FrameDuration = (1f / (float)AnimationRate);
             
             
-            Animator.Play(AnimationState);
+            //Animator.Play(AnimationState);
         }
 
         void BuildBoneData(Transform t)

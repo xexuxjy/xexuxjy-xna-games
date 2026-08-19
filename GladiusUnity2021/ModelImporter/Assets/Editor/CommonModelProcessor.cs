@@ -1373,6 +1373,15 @@ public static class CommonModelProcessor
             tempTriangles[i + 2] = submesh.Indices[i + 2];
         }
 
+        // for (int i = 0; i < tempTriangles.Length; i += 3)
+        // {
+        //     tempTriangles[i] = submesh.Indices[i];
+        //     tempTriangles[i + 1] = submesh.Indices[i + 2];
+        //     tempTriangles[i + 2] = submesh.Indices[i + 1];
+        // }
+
+        
+        
         mesh.vertices = tempPos;
         mesh.normals = tempNormal;
         mesh.uv = tempUV;
