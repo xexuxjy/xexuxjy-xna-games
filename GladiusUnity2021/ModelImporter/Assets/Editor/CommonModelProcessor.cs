@@ -1419,7 +1419,7 @@ public static class CommonModelProcessor
         }
 
         bool twoSidedMaterial = commonModel.Skinned && submesh.LodLevel == 0;
-
+        twoSidedMaterial = false;
 
         if (twoSidedMaterial || commonMaterial.IsTwoSided)
         {

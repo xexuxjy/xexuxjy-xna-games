@@ -3950,6 +3950,7 @@ public static class SkinBuilder
 
 
         skinData.CalculatedSize = positionCounter;
+        skinData.Size = (int)skinData.CalculatedSize;
         
         // lets pack our data into a continuous array
         // CSkinningData* pOut = (CSkinningData*) (new char[memsize]);
@@ -4183,10 +4184,11 @@ public static class SkinBuilder
                 //((uint8*)pSKA->weights)[j] = data.weight[j];
                 cska.ExtractedWeights.Add(data.weight[j]);
             }
-
-
         }
-        
+
+        skinData.NumList1 = (short)skinData.CSK1List.Count;
+        skinData.NumList2 = (short)skinData.CSK2List.Count;
+        skinData.NumListA = (short)skinData.CSKAList.Count;
         return skinData;
     }
 }

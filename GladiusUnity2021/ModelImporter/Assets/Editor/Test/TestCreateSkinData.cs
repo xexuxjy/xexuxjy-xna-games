@@ -15,7 +15,8 @@ public class TestCreateSkinData : Editor
 
     private bool m_csk1Foldout = false;
     private bool m_csk2Foldout = false;
-
+    private bool m_diffData = true;
+    
     public int IndentLevel = 20;
     
     public override void OnInspectorGUI()
@@ -23,6 +24,9 @@ public class TestCreateSkinData : Editor
         TestCreateSkinDataStub stub = target as TestCreateSkinDataStub;
         
         base.OnInspectorGUI();
+
+        m_diffData = EditorGUILayout.Toggle("Diff Data", m_diffData);
+        
         if (GUILayout.Button("Process model"))
         {
             CommonModelData commonModel = null;
@@ -72,7 +76,7 @@ public class TestCreateSkinData : Editor
                             CommonVertexInstance cvi = new CommonVertexInstance();
                             cvi.Position = positions[i];
                             cvi.Normal = normals[i];
-                            //cvi.BoneWeight = boneWeights[i];
+                            cvi.BoneWeight = boneWeights[i];
                             cviSet.Add(cvi);
                             positionSet.Add(positions[i]);
                             normalSet.Add(normals[i]);
@@ -140,6 +144,8 @@ public class TestCreateSkinData : Editor
         }
 
         
+        
+        
         if (m_originalSkinData != null && m_newSkinData != null)
         {
             GUILayout.BeginHorizontal();
@@ -174,18 +180,30 @@ public class TestCreateSkinData : Editor
                 EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
                 GUILayout.EndHorizontal();
 
-                foreach (CSK1 csk1 in m_originalSkinData.CSK1List)
+                if (m_diffData)
                 {
-                    GUILayout.BeginHorizontal();
-                    DrawCSK1(csk1, Color.green);
-                    GUILayout.EndHorizontal();
+                    for (int i = 0; i < m_originalSkinData.CSK1List.Count; i++)
+                    {
+                        GUILayout.BeginHorizontal();
+                        DrawCSK1Compare(m_originalSkinData.CSK1List[i],m_newSkinData.CSK1List[i], Color.green,Color.yellow);
+                        GUILayout.EndHorizontal();
+                    }                    
                 }
-
-                foreach (CSK1 csk1 in m_newSkinData.CSK1List)
+                else
                 {
-                    GUILayout.BeginHorizontal();
-                    DrawCSK1(csk1, Color.red);
-                    GUILayout.EndHorizontal();
+                    foreach (CSK1 csk1 in m_originalSkinData.CSK1List)
+                    {
+                        GUILayout.BeginHorizontal();
+                        DrawCSK1(csk1, Color.green);
+                        GUILayout.EndHorizontal();
+                    }
+
+                    foreach (CSK1 csk1 in m_newSkinData.CSK1List)
+                    {
+                        GUILayout.BeginHorizontal();
+                        DrawCSK1(csk1, Color.yellow);
+                        GUILayout.EndHorizontal();
+                    }
                 }
             }
             EndIndentedFoldoutHeader();
@@ -201,18 +219,30 @@ public class TestCreateSkinData : Editor
                 EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
                 GUILayout.EndHorizontal();
 
-                foreach (CSK2 csk2 in m_originalSkinData.CSK2List)
+                if (m_diffData)
                 {
-                    GUILayout.BeginHorizontal();
-                    DrawCSK2(csk2, Color.green);
-                    GUILayout.EndHorizontal();
+                    for (int i = 0; i < m_originalSkinData.CSK2List.Count; i++)
+                    {
+                        GUILayout.BeginHorizontal();
+                        DrawCSK2Compare(m_originalSkinData.CSK2List[i],m_newSkinData.CSK2List[i], Color.green,Color.yellow);
+                        GUILayout.EndHorizontal();
+                    }                    
                 }
-
-                foreach (CSK2 csk2 in m_newSkinData.CSK2List)
+                else
                 {
-                    GUILayout.BeginHorizontal();
-                    DrawCSK2(csk2, Color.red);
-                    GUILayout.EndHorizontal();
+                    foreach (CSK2 csk2 in m_originalSkinData.CSK2List)
+                    {
+                        GUILayout.BeginHorizontal();
+                        DrawCSK2(csk2, Color.green);
+                        GUILayout.EndHorizontal();
+                    }
+
+                    foreach (CSK2 csk2 in m_newSkinData.CSK2List)
+                    {
+                        GUILayout.BeginHorizontal();
+                        DrawCSK2(csk2, Color.yellow);
+                        GUILayout.EndHorizontal();
+                    }
                 }
             }
             EndIndentedFoldoutHeader();
@@ -232,6 +262,25 @@ public class TestCreateSkinData : Editor
         GUI.contentColor = oldColor;
     }
 
+    public Color CompareVals(int val1, int val2, Color matchColor, Color diffColor)
+    {
+        return val1 == val2? matchColor: diffColor;
+    }
+    public void DrawCSK1Compare(CSK1 oldCsk1,CSK1 newCsk1,Color matchColor,Color diffColor)
+    {
+        Color oldColor = GUI.contentColor;
+        GUI.contentColor = CompareVals(oldCsk1.idxBone, newCsk1.idxBone,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk1.idxBone} / {newCsk1.idxBone}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals(oldCsk1.count, newCsk1.count,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk1.count} / {newCsk1.count}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals((int)oldCsk1.vertSrc, (int)newCsk1.vertSrc,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk1.vertSrc} / {newCsk1.vertSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals((int)oldCsk1.vertDst, (int)newCsk1.vertDst,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk1.vertDst} / {newCsk1.vertDst}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = oldColor;
+    }
+
+    
     public void DrawCSK2(CSK2 csk2,Color color)
     {
         Color oldColor = GUI.contentColor;
@@ -245,6 +294,23 @@ public class TestCreateSkinData : Editor
                 
     }
 
+    public void DrawCSK2Compare(CSK2 oldCsk2,CSK2 newCsk2,Color matchColor,Color diffColor)
+    {
+        Color oldColor = GUI.contentColor;
+        GUI.contentColor = CompareVals(oldCsk2.idxBone[0], newCsk2.idxBone[0],matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk2.idxBone[0]} / {newCsk2.idxBone[0]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals(oldCsk2.idxBone[1], newCsk2.idxBone[1],matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk2.idxBone[1]} / {newCsk2.idxBone[1]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals(oldCsk2.count, newCsk2.count,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk2.count} / {newCsk2.count}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals((int)oldCsk2.vertSrc, (int)newCsk2.vertSrc,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk2.vertSrc} / {newCsk2.vertSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals((int)oldCsk2.vertDst, (int)newCsk2.vertDst,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCsk2.vertDst} / {newCsk2.vertDst}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+
+        GUI.contentColor = oldColor;
+                
+    }
     
     public int ColumnWidth = 100;
     
