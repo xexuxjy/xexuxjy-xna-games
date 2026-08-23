@@ -1979,8 +1979,8 @@ public class CommonVertexInstance : IEquatable<CommonVertexInstance>
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        //return Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent) && UV.Equals(other.UV) && UV2.Equals(other.UV2) && UV3.Equals(other.UV3);
-        return Position.Equals(other.Position) && Normal.Equals(other.Normal);
+        return Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent) && UV.Equals(other.UV) && UV2.Equals(other.UV2) && UV3.Equals(other.UV3);
+        //return Position.Equals(other.Position) && Normal.Equals(other.Normal);
     }
 
     public override bool Equals(object obj)
@@ -1993,8 +1993,8 @@ public class CommonVertexInstance : IEquatable<CommonVertexInstance>
 
     public override int GetHashCode()
     {
-        //return HashCode.Combine(Position, Normal, Tangent, UV, UV2, UV3);
-        return HashCode.Combine(Position, Normal);
+        return HashCode.Combine(Position, Normal, Tangent, UV, UV2, UV3);
+        //return HashCode.Combine(Position, Normal);
     }
 }
 
@@ -2860,10 +2860,26 @@ public class SKINChunk : BaseChunk
                         uniqueVert.Add(val);
                     }
 
-                    foreach (var val in csk1.ExtractedPositions)
+                    foreach (var val in csk1.ExtractedNormals)
                     {
                         uniqueNorm.Add(val);
                     }
+                    
+                    List<int> multiplePositionCounts =  new List<int>();
+                    for (int i = 0; i < csk1.ExtractedPositions.Count; i++)
+                    {
+                        int count = csk1.ExtractedPositions.FindAll(x => x == csk1.ExtractedPositions[i]).Count;
+                        multiplePositionCounts.Add(count);
+                    }
+                    
+                    List<int> multipleNormalCounts =  new List<int>();
+                    for (int i = 0; i < csk1.ExtractedNormals.Count; i++)
+                    {
+                        int count = csk1.ExtractedNormals.FindAll(x => x == csk1.ExtractedNormals[i]).Count;
+                        multipleNormalCounts.Add(count);
+                    }
+
+                    
                     int ibreak = 0;
                 }
 
@@ -2880,6 +2896,7 @@ public class SKINChunk : BaseChunk
                         byte b1 = binReader.ReadByte();
                         byte b2 = binReader.ReadByte();
 
+                        csk2.ExtractedWeightsBytes.Add((b1,b2));
                         csk2.ExtractedWeightsFloats.Add((b1 / 255f, b2 / 255f));
                     }
                 }
@@ -3147,6 +3164,9 @@ public class SkinData
             // byte w1 = (byte)((float)0xFF * weights[position].weight0);
             // byte w2 = (byte)((float)0xFF * weights[position].weight1);
             csk2.ExtractedWeightsFloats.Add((weights[position].weight0, weights[position].weight1));
+            byte b1 = (byte)(255f * weights[position].weight0);
+            byte b2 = (byte)(255f * weights[position].weight1);
+            csk2.ExtractedWeightsBytes.Add((b1,b2));
         }
 
 
@@ -3294,7 +3314,7 @@ public class CSK2
     public uint vertSrc;
     public uint vertDst;
 
-    public List<byte> ExtractedWeightsBytes = new List<byte>();
+    public List<(byte,byte)> ExtractedWeightsBytes = new List<(byte,byte)>();
     public List<(float, float)> ExtractedWeightsFloats = new List<(float, float)>();
 
     public List<Vector3> ExtractedPositions = new List<Vector3>();
@@ -3607,8 +3627,11 @@ public static class SkinBuilder
                 {
                     idxBones[idx_bone] = new CBoneData(numBones);
                 }
-                
-                
+
+                if (idx_bone == 1)
+                {
+                    int stopHere = 0;
+                }
                 Debug.Assert(idx_bone<numBones);
                 // all the vertices that only have a single weight on that idx bone.    
                 idxBones[ idx_bone ].onezies.Add( iv );
@@ -3698,6 +3721,9 @@ public static class SkinBuilder
             onezies[i] = onezies[max_id];
             onezies[max_id] = temp;
         }
+        
+        onezies = onezies.OrderByDescending(x => x.count).ThenBy(x => x.idxBone).ToList();
+        
 
         //== build packets
         List<int> packets1 = new List<int>();
@@ -3705,6 +3731,7 @@ public static class SkinBuilder
         if(onezies.Count > 0)
         {
             int packet_start = 0;
+            
             int nn = onezies[0].count;
             for(int i=1; i<onezies.Count; i++ )
             {
@@ -3797,6 +3824,8 @@ public static class SkinBuilder
             twozies[max_id] = temp;
         }
 
+        twozies = twozies.OrderByDescending(x => x.count).ThenBy(y => y.idxBone[0]).ThenBy(y => y.idxBone[1]).ToList();
+        
         //== build packets
         List<int> packets2 = new List<int>();
         List<int> packet_size2 = new List<int>();
@@ -4032,7 +4061,12 @@ public static class SkinBuilder
             skinData.CSK1List.Add(csk1);
             csk1.idxBone = (byte)onezie.idxBone;
             csk1.count = onezie.count;
+            csk1.vertDst = (uint)(onezie.idx_start * size_pos_norm);
+            //csk1.vertSrc = csk1.vertDst + 32;
 
+            int csk1Start = 32;
+            csk1.vertSrc = (uint)(csk1Start + csk1.vertDst);
+            
             foreach (int index in onezie.vertSrc)
             {
                 csk1.ExtractedPositions.Add(vertices[index]);
@@ -4090,16 +4124,27 @@ public static class SkinBuilder
             
             csk2.count = twozie.count;
 
+            csk2.vertDst = (uint)(twozie.idx_start * size_pos_norm);
+            //csk2.vertSrc = csk2.vertDst + 36;
+            csk2.vertSrc = skinData.SourceData + csk2.vertDst;
+             
+
             foreach (int index in twozie.vertSrc)
             {
                 csk2.ExtractedPositions.Add(vertices[index]);
                 csk2.ExtractedNormals.Add(normals[index]);
             }
 
-            for (int j = 0; j < 2 * csk2.count; j++)
+            for (int j = 0; j < 2 * csk2.count; j+=2)
             {
-                csk2.ExtractedWeightsBytes.Add((twozie.weights[j]));
+                byte b1 = twozie.weights[j];
+                byte b2 = twozie.weights[j+1];
+                float f1 = b1 / 255f;
+                float f2 = b2 / 255f;
+                csk2.ExtractedWeightsBytes.Add((b1,b2));
+                csk2.ExtractedWeightsFloats.Add((f1,f2));
             }
+            
         }
 
         // do accumulations

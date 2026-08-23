@@ -18,6 +18,9 @@ public class TestCreateSkinData : Editor
     private bool m_diffData = true;
     
     public int IndentLevel = 20;
+
+    private GameObject m_originalModel;
+    private GameObject m_rebuiltModel;
     
     public override void OnInspectorGUI()
     {
@@ -29,47 +32,75 @@ public class TestCreateSkinData : Editor
         
         if (GUILayout.Button("Process model"))
         {
-            CommonModelData commonModel = null;
+            CommonModelData originalCommonModel = null;
+            CommonModelData rebuiltCommonModel = null;
 
-            GCModel gcModel = new GCModel("");
+            GCModel originalGCModel = new GCModel("");
             // Load the skin data into a model.
             using (BinaryReader binReader = new BinaryReader(new MemoryStream(stub.OriginalModel.bytes)))
             {
-                gcModel.LoadData(binReader, null);
-                commonModel = gcModel.ToCommon();
+                originalGCModel.LoadData(binReader, null);
+                originalCommonModel = originalGCModel.ToCommon();
+                
+                int count1 = 0;
+                for (int i = 0; i < originalCommonModel.AllVertices.Count; i++)
+                {
+                    if (originalCommonModel.AllVertices[i].BoneWeight.CountWeights() == 1 &&
+                        originalCommonModel.AllVertices[i].BoneWeight.boneIndex0 == 1)
+                    {
+                        count1++;
+                    }
+                }
+
+                int stopHere = 0;
+
             }
 
-            if (commonModel != null)
+            if (originalCommonModel != null)
             {
-                
-                HashSet<CommonVertexInstance> cviSet = new HashSet<CommonVertexInstance>();
-                HashSet<Vector3> positionSet = new HashSet<Vector3>();
-                HashSet<Vector3> normalSet = new HashSet<Vector3>();
-                
                 string assetName = "test";
                 string outputHierarchy = "";
                 uint lodLevel = 0;
                 string prefabOutputDirectory = "";
-            
-                GameObject gameObject = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, lodLevel,
-                    commonModel,out Dictionary<BoneNode,GameObject> boneObjectMap);
 
-                if (gameObject != null)
+                if (m_originalModel != null)
                 {
+                    DestroyImmediate(m_originalModel);
+                }
+                
+                m_originalModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, lodLevel,
+                    originalCommonModel,out Dictionary<BoneNode,GameObject> boneObjectMapOriginal);
+
+                if (m_originalModel != null)
+                {
+                    m_originalModel.name = "Original";
+                    m_originalModel.transform.position = new Vector3(-10, 0, 0);
+                    
                     // back to skin.
-                    SkinnedMeshRenderer[] skinnedRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                    SkinnedMeshRenderer[] skinnedRenderers = m_originalModel.GetComponentsInChildren<SkinnedMeshRenderer>();
                     List<SkinData> skinDataList = new List<SkinData>();
                     foreach (SkinnedMeshRenderer renderer in skinnedRenderers)
                     {
-                        int numBones = commonModel.BoneList.Count;
+                        int numBones = originalCommonModel.BoneList.Count;
                         List<Vector3> positions = new List<Vector3>();
                         List<Vector3> normals = new List<Vector3>();
                         List<BoneWeight> boneWeights = new List<BoneWeight>();
+                        List<Vector2> uvs = new List<Vector2>();
                         
                         positions.AddRange(renderer.sharedMesh.vertices);
                         normals.AddRange(renderer.sharedMesh.normals);
                         boneWeights.AddRange(renderer.sharedMesh.boneWeights);
+                        uvs.AddRange(renderer.sharedMesh.uv);
 
+                        int count1 = 0;
+                        for (int i = 0; i < renderer.sharedMesh.boneWeights.Length; i++)
+                        {
+                            if (renderer.sharedMesh.boneWeights[i].CountWeights() == 1 &&
+                                renderer.sharedMesh.boneWeights[i].boneIndex0 == 1)
+                            {
+                                count1++;
+                            }
+                        }
                         
                         for (int i = 0; i < positions.Count; i++)
                         {
@@ -77,13 +108,8 @@ public class TestCreateSkinData : Editor
                             cvi.Position = positions[i];
                             cvi.Normal = normals[i];
                             cvi.BoneWeight = boneWeights[i];
-                            cviSet.Add(cvi);
-                            positionSet.Add(positions[i]);
-                            normalSet.Add(normals[i]);
-
+                            
                         }
-                        
-                        
                         
                         SkinData skinData = SkinBuilder.PrepareData(numBones,positions,normals,boneWeights);
                         skinDataList.Add(skinData);
@@ -94,13 +120,34 @@ public class TestCreateSkinData : Editor
                     
                     
                     
-                    if (gcModel?.SKINChunk().SkinDataList.Count > 0 && skinDataList.Count > 0)
+                    if (originalGCModel?.SKINChunk().SkinDataList.Count > 0 && skinDataList.Count > 0)
                     {
-                        m_originalSkinData = gcModel.SKINChunk().SkinDataList[0];
+                        m_originalSkinData = originalGCModel.SKINChunk().SkinDataList[0];
                         m_newSkinData = skinDataList[0];
                     }
 
-                    DestroyImmediate(gameObject);
+
+                    if (m_rebuiltModel != null)
+                    {
+                        DestroyImmediate(m_rebuiltModel);
+                    }
+                    
+                    GCModel rebuiltGCModel = new GCModel("");
+                    // Load the skin data into a model.
+                    using (BinaryReader binReader = new BinaryReader(new MemoryStream(stub.OriginalModel.bytes)))
+                    {
+                        rebuiltGCModel.LoadData(binReader, null);
+                        rebuiltGCModel.SKINChunk().SkinDataList.Clear();
+                        rebuiltGCModel.SKINChunk().SkinDataList.AddRange(skinDataList);
+                        rebuiltCommonModel = rebuiltGCModel.ToCommon();
+                        m_rebuiltModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, lodLevel,
+                            rebuiltCommonModel,out Dictionary<BoneNode,GameObject> boneObjectMapRebuilt);
+                        m_rebuiltModel.name = "Rebuilt";
+                        m_rebuiltModel.transform.position = new Vector3(10, 0, 0);
+                    }
+                    
+                    
+                    //DestroyImmediate(gameObject);
                     
                 }
             }

@@ -453,7 +453,6 @@ public class GCModel : BaseModel
                     SkinData skinData = skinChunk.SkinDataList[meshCount];
                     List<(Vector3, List<(int, float)>)> positionAndWeights = new List<(Vector3, List<(int, float)>)>();
                     List<Vector3> normals = new List<Vector3>();
-                    
                     // build all the skin data into temp lists
                     foreach (CSK1 csk in skinData.CSK1List)
                     {
@@ -505,79 +504,81 @@ public class GCModel : BaseModel
                             // if (dstIndex < 0 || dstIndex >= totalVerts)
                             //     continue;
 
-                            int count0 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
+                            //int count0 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
 
                             positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2
                                 .Add((csk.idxBone, csk.ExtractedWeights[k]));
 
-                            int count1 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
+                            //int count1 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
                             int ibreak = 0;
                         }
                     }
+                    
+                    bool[] referencedPositions = new bool[positionAndWeights.Count];
+                    int[] mappedPositions = new int[positionAndWeights.Count];
 
+                    int count1 = 0;
+                    int vertexIndex = -1;
                     for (int i = 0; i < dlh.entries.Count; i++)
                     {
                         DisplayListEntry entry = dlh.entries[i];
-
-                        if (entry.PosIndex != entry.NormIndex)
+                        vertexIndex = dlh.entries[i].PosIndex;
+                        if (!referencedPositions[entry.PosIndex])
                         {
-                            int ibreak = 0;
-                        }
-                        
-                        CommonVertexInstance cvi = new CommonVertexInstance();
+                            CommonVertexInstance cvi = new CommonVertexInstance();
 
-                        cvi.DebugDLEPos = entry.PosIndex;
-                        cvi.DebugDLENorm = entry.NormIndex;
-                        
-                        cvi.Position = GladiusGlobals.GladiusToUnity(positionAndWeights[entry.PosIndex].Item1);
-                        //cvi.Normal = GladiusGlobals.GladiusToUnity(normals[entry.NormIndex]);
-                        cvi.Normal = normals[entry.NormIndex];
-
-                        List<(int, float)> weightsList = positionAndWeights[entry.PosIndex].Item2;
-
-                        int numWeights = weightsList.Count;
-                        float sum = 0.0f;
-                        if (numWeights > 0)
-                        {
-                            cvi.BoneWeight.weight0 = weightsList[0].Item2;
-                            cvi.BoneWeight.boneIndex0 = weightsList[0].Item1;
-                            sum += cvi.BoneWeight.weight0;
-                        }
-
-                        if (numWeights > 1)
-                        {
-                            cvi.BoneWeight.weight1 = weightsList[1].Item2;
-                            cvi.BoneWeight.boneIndex1 = weightsList[1].Item1;
-                            sum += cvi.BoneWeight.weight1;
-                        }
-
-                        if (numWeights > 2)
-                        {
-                            cvi.BoneWeight.weight2 = weightsList[2].Item2;
-                            cvi.BoneWeight.boneIndex2 = weightsList[2].Item1;
-                            sum += cvi.BoneWeight.weight2;
-                        }
-
-                        if (numWeights > 3)
-                        {
-                            cvi.BoneWeight.weight3 = weightsList[3].Item2;
-                            cvi.BoneWeight.boneIndex3 = weightsList[3].Item1;
-                            sum += cvi.BoneWeight.weight3;
-                        }
-
-                        if (sum <= 0f || sum > 1.01f)
-                        {
-                            int ibreak = 0;
-                        }
+                            cvi.DebugDLEPos = entry.PosIndex;
+                            cvi.DebugDLENorm = entry.NormIndex;
 
 
-                        int vertexIndex = vertexDataAndDesc.VertexData.IndexOf(cvi);
-                        if (vertexIndex == -1)
-                        {
+                            cvi.Position = GladiusGlobals.GladiusToUnity(positionAndWeights[entry.PosIndex].Item1);
+                            cvi.Normal = GladiusGlobals.GladiusToUnity(normals[entry.NormIndex]);
+                            cvi.UV = uv0Chunk.Data[entry.UVIndex];
+
+                            List<(int, float)> weightsList = positionAndWeights[entry.PosIndex].Item2;
+
+                            int numWeights = weightsList.Count;
+                            float sum = 0.0f;
+                            if (numWeights > 0)
+                            {
+                                cvi.BoneWeight.weight0 = weightsList[0].Item2;
+                                cvi.BoneWeight.boneIndex0 = weightsList[0].Item1;
+                                sum += cvi.BoneWeight.weight0;
+                            }
+
+                            if (numWeights > 1)
+                            {
+                                cvi.BoneWeight.weight1 = weightsList[1].Item2;
+                                cvi.BoneWeight.boneIndex1 = weightsList[1].Item1;
+                                sum += cvi.BoneWeight.weight1;
+                            }
+
+                            if (numWeights > 2)
+                            {
+                                cvi.BoneWeight.weight2 = weightsList[2].Item2;
+                                cvi.BoneWeight.boneIndex2 = weightsList[2].Item1;
+                                sum += cvi.BoneWeight.weight2;
+                            }
+
+                            if (numWeights > 3)
+                            {
+                                cvi.BoneWeight.weight3 = weightsList[3].Item2;
+                                cvi.BoneWeight.boneIndex3 = weightsList[3].Item1;
+                                sum += cvi.BoneWeight.weight3;
+                            }
+                            
                             vertexDataAndDesc.VertexData.Add(cvi);
                             vertexIndex = vertexCount;
+
+                            referencedPositions[entry.PosIndex] = true;
+                            mappedPositions[entry.PosIndex] = vertexIndex;
                             vertexCount++;
+
                         }
+                        
+                        vertexIndex = mappedPositions[entry.PosIndex];
+                        
+                        // don't do this, instead use a dle index
 
                         if (!commonMeshData.Vertices.Contains(vertexIndex))
                         {
@@ -588,7 +589,8 @@ public class GCModel : BaseModel
                         meshIndices.Add(localIndex);
 
                     }
-                    
+
+                    int ibreak2 = 0;
                     // change winding order on indices.
                     for (int i = 0; i < meshIndices.Count; i += 3)
                     {
@@ -597,9 +599,6 @@ public class GCModel : BaseModel
                         meshIndices[i+1] = meshIndices[i + 2];
                         meshIndices[i + 2] = temp;
                     }
-
-
-
                     
                 }
 

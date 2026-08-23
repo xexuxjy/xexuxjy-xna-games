@@ -1135,6 +1135,8 @@ public static class CommonModelProcessor
         List<Color> colors = new List<Color>();
 
 
+        remapBones = false;
+        
         int vertexOffset = 0;
 
         foreach (Mesh subMesh in meshes)
@@ -1242,6 +1244,17 @@ public static class CommonModelProcessor
             mergedMeshes.Add(mergedMesh);
         }
 
+        int count1 = 0;
+        for (int i = 0; i < mergedMeshes[0].boneWeights.Length; i++)
+        {
+            if (mergedMeshes[0].boneWeights[i].CountWeights() == 1 &&
+                mergedMeshes[0].boneWeights[i].boneIndex0 == 1)
+            {
+                count1++;
+            }
+        }
+        
+        
         return mergedMeshes;
     }
 
@@ -1418,6 +1431,18 @@ public static class CommonModelProcessor
             mesh.boneWeights = tempBoneWeights;
         }
 
+        int count1 = 0;
+        for (int i = 0; i < mesh.boneWeights.Length; i++)
+        {
+            if (mesh.boneWeights[i].CountWeights() == 1 &&
+                mesh.boneWeights[i].boneIndex0 == 1)
+            {
+                count1++;
+            }
+        }
+
+        
+        
         bool twoSidedMaterial = commonModel.Skinned && submesh.LodLevel == 0;
         twoSidedMaterial = false;
 
