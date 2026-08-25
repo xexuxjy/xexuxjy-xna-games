@@ -2948,6 +2948,11 @@ public class SKINChunk : BaseChunk
         return (uint)Common.ToInt32BigEndian(CommonModelImporter.s_buffer, 0);
     }
 
+    public static void RelocateAndWrite(BinaryWriter binWriter,uint value)
+    {
+        
+    }
+    
     public static uint RelocateAddr(uint baseValue, uint offset)
     {
         if (offset == 0)
@@ -3094,6 +3099,27 @@ public class SkinData
         }
     }
 
+    public void WriteSkinWeights(BinaryWriter binWriter,short animShift)
+    {
+        foreach (CSK1 csk1 in CSK1List)
+        {
+            csk1.ToStream(binWriter,animShift);
+        }
+        // align
+        foreach (CSK2 csk2 in CSK2List)
+        {
+            csk2.ToStream(binWriter,animShift);
+        }
+        // align
+        foreach (CSKA cska in CSKAList)
+        {
+            cska.ToStream(binWriter,animShift);
+        }
+        
+    }
+    
+    
+    
 
     public static void ReadPositionAndNormals(BinaryReader binReader, int count, short animShift,
         List<Vector3> positions,
@@ -3124,7 +3150,47 @@ public class SkinData
         }
     }
 
-    public static void WritePositionAndNormal(BinaryWriter binaryWriter, short animShift, Vector3 position,
+    public void ToStream(BinaryWriter binWriter)
+    {
+        binWriter.Write(Size);
+        binWriter.Write(NumberVertices);
+        binWriter.Write(NumberBones);
+        binWriter.Write(Components);
+
+
+        binWriter.Write(Flags);
+        binWriter.Write(NumList1);
+        binWriter.Write(NumList2);
+        binWriter.Write(NumListA);
+
+        SKINChunk.RelocateAndWrite(binWriter,PointerList1);
+        SKINChunk.RelocateAndWrite(binWriter,PointerList2);
+        SKINChunk.RelocateAndWrite(binWriter,PointerListA);
+
+        Common.WriteBigEndian(binWriter,NumPackets1);
+        SKINChunk.RelocateAndWrite(binWriter,PacketStart1);
+        SKINChunk.RelocateAndWrite(binWriter,PacketSize1);
+
+        Common.WriteBigEndian(binWriter,NumPackets2);
+        SKINChunk.RelocateAndWrite(binWriter,PacketStart2);
+        SKINChunk.RelocateAndWrite(binWriter,PacketSize2);
+
+        SKINChunk.RelocateAndWrite(binWriter, SourceData);
+        SKINChunk.RelocateAndWrite(binWriter, WeightData);
+        
+        Common.WriteBigEndian(binWriter,AnimShift);
+        
+        int extraPadding = 26;
+        GladiusFileWriter.WriteNull(binWriter,extraPadding);
+        
+        
+        
+        
+    }
+    
+    
+    
+    public static void WritePositionAndNormal(BinaryWriter binWriter, short animShift, Vector3 position,
         Vector3 normal)
     {
         float posScale = 1f / (float)(1 << Mathf.Clamp(animShift, 0, 15));
@@ -3133,10 +3199,10 @@ public class SkinData
         Vector3 scaledPosition = position * posScale;
         Vector3 scaledNormal = normal * normScale;
 
-        Common.WriteVector3UShortBE(binaryWriter, scaledPosition);
-        binaryWriter.Write((sbyte)scaledNormal.x);
-        binaryWriter.Write((sbyte)scaledNormal.y);
-        binaryWriter.Write((sbyte)scaledNormal.z);
+        Common.WriteVector3UShortBE(binWriter, scaledPosition);
+        binWriter.Write((sbyte)scaledNormal.x);
+        binWriter.Write((sbyte)scaledNormal.y);
+        binWriter.Write((sbyte)scaledNormal.z);
     }
 
 
@@ -3332,6 +3398,23 @@ public class CSK2
 
         return csk2;
     }
+
+    public void ToStream(BinaryWriter writer, short animShift)
+    {
+        writer.Write(idxBone[0]);
+        writer.Write(idxBone[1]);
+        writer.Write(count);
+        writer.Write(weightsSrc);
+        writer.Write(vertDst);
+        writer.Write(vertSrc);
+
+        long currentPosition = writer.BaseStream.Position;
+        writer.BaseStream.Position = currentPosition + vertSrc;
+        for (int i = 0; i < ExtractedPositions.Count; i++)
+        {
+            SkinData.WritePositionAndNormal(writer, animShift, ExtractedPositions[i], ExtractedNormals[i]);
+        }
+    }
 }
 
 
@@ -3365,6 +3448,17 @@ public class CSKA
 
         return cska;
     }
+
+    public void ToStream(BinaryWriter binWriter, short animShift)
+    {
+        binWriter.Write(idxBone);
+        binWriter.Write(_pad);
+        binWriter.Write(count);
+        binWriter.Write(weightsSrc);
+        binWriter.Write(idxDst);
+        binWriter.Write(vertSrc);
+    }
+    
 }
 
 
@@ -3612,6 +3706,12 @@ public static class SkinBuilder
             pRelocate[i] = i;
         }
 
+        for (int i = 0; i < numBones; i++)
+        {
+            idxBones[i] = new CBoneData(numBones);
+        }
+        
+        
         // lets build a tree of onzies and twozies
         for( int iv=0; iv<numVerts; iv++ )
         {
@@ -3623,10 +3723,6 @@ public static class SkinBuilder
             if (vertexBoneCount==1)
             {
                 int idx_bone = boneWeights[iv].boneIndex0;
-                if (!idxBones.ContainsKey(idx_bone))
-                {
-                    idxBones[idx_bone] = new CBoneData(numBones);
-                }
 
                 if (idx_bone == 1)
                 {
@@ -3640,11 +3736,6 @@ public static class SkinBuilder
             {
                 int idx_bone = boneWeights[iv].boneIndex0;
                 Debug.Assert(idx_bone<numBones);
-                if (!idxBones.ContainsKey(idx_bone))
-                {
-                    idxBones[idx_bone] = new CBoneData(numBones);
-                }
-
                 
                 List<List<int>> ar = idxBones[ idx_bone ].twozies;
                 

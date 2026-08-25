@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Assets.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,11 +11,14 @@ using UnityEngine;
 public class TestCreateSkinData : Editor
 {
     
-    private SkinData m_originalSkinData;
-    private SkinData m_newSkinData;
+    public string OriginalName = "**Original**";
+    public string RebuiltName = "**Rebuilt**";
+    
+    private List<SkinData> m_originalSkinData = new  List<SkinData>();
+    private List<SkinData> m_newSkinData = new  List<SkinData>();
 
-    private bool m_csk1Foldout = false;
-    private bool m_csk2Foldout = false;
+    private List<(bool, bool,bool)> m_foldOutsList = new List<(bool, bool,bool)>();
+    
     private bool m_diffData = true;
     
     public int IndentLevel = 20;
@@ -32,35 +36,40 @@ public class TestCreateSkinData : Editor
         
         if (GUILayout.Button("Process model"))
         {
+            GameObject go = GameObject.Find(OriginalName);
+            if (go != null)
+            {
+                DestroyImmediate(go);
+            }
+            go = GameObject.Find(RebuiltName);
+            if (go != null)
+            {
+                DestroyImmediate(go);
+            }
+            
             CommonModelData originalCommonModel = null;
             CommonModelData rebuiltCommonModel = null;
 
-            GCModel originalGCModel = new GCModel("");
+            GCModel originalGCModel = null;
             // Load the skin data into a model.
             using (BinaryReader binReader = new BinaryReader(new MemoryStream(stub.OriginalModel.bytes)))
             {
-                originalGCModel.LoadData(binReader, null);
+                originalGCModel = GCModel.ReadData(binReader,"", null);
                 originalCommonModel = originalGCModel.ToCommon();
-                
-                int count1 = 0;
-                for (int i = 0; i < originalCommonModel.AllVertices.Count; i++)
-                {
-                    if (originalCommonModel.AllVertices[i].BoneWeight.CountWeights() == 1 &&
-                        originalCommonModel.AllVertices[i].BoneWeight.boneIndex0 == 1)
-                    {
-                        count1++;
-                    }
-                }
-
-                int stopHere = 0;
-
             }
 
+            int filteredMeshCount = originalGCModel.CountMeshesForLodLevel(stub.LodLevel);
+            m_foldOutsList.Clear();
+            for (int i = 0; i < filteredMeshCount; i++)
+            {
+                m_foldOutsList.Add((false, false,false));
+            }
+            
             if (originalCommonModel != null)
             {
                 string assetName = "test";
                 string outputHierarchy = "";
-                uint lodLevel = 0;
+                
                 string prefabOutputDirectory = "";
 
                 if (m_originalModel != null)
@@ -68,86 +77,64 @@ public class TestCreateSkinData : Editor
                     DestroyImmediate(m_originalModel);
                 }
                 
-                m_originalModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, lodLevel,
+                m_originalModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, stub.LodLevel,
                     originalCommonModel,out Dictionary<BoneNode,GameObject> boneObjectMapOriginal);
 
                 if (m_originalModel != null)
                 {
-                    m_originalModel.name = "Original";
+                    m_originalModel.name = OriginalName;
                     m_originalModel.transform.position = new Vector3(-10, 0, 0);
                     
-                    // back to skin.
-                    SkinnedMeshRenderer[] skinnedRenderers = m_originalModel.GetComponentsInChildren<SkinnedMeshRenderer>();
-                    List<SkinData> skinDataList = new List<SkinData>();
-                    foreach (SkinnedMeshRenderer renderer in skinnedRenderers)
-                    {
-                        int numBones = originalCommonModel.BoneList.Count;
-                        List<Vector3> positions = new List<Vector3>();
-                        List<Vector3> normals = new List<Vector3>();
-                        List<BoneWeight> boneWeights = new List<BoneWeight>();
-                        List<Vector2> uvs = new List<Vector2>();
                         
-                        positions.AddRange(renderer.sharedMesh.vertices);
-                        normals.AddRange(renderer.sharedMesh.normals);
-                        boneWeights.AddRange(renderer.sharedMesh.boneWeights);
-                        uvs.AddRange(renderer.sharedMesh.uv);
+                    GCModel rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel);
+                    GCModel sanityCheckGCModel;
+                    
+                    MemoryStream memoryStream = new MemoryStream();
+                    using(BinaryWriter binWriter = new BinaryWriter(memoryStream))
+                    {
+                        rebuiltGCModel.WriteData(binWriter);
+                    }
 
-                        int count1 = 0;
-                        for (int i = 0; i < renderer.sharedMesh.boneWeights.Length; i++)
+                    memoryStream.Position = 0;
+                    using (BinaryReader binReader = new BinaryReader(memoryStream))
+                    {
+                        sanityCheckGCModel = GCModel.ReadData(binReader, "SanityCheck", null);
+                    }
+                    
+                    // compare the two :)
+                    
+                    
+                    if (originalGCModel?.SKINChunk().SkinDataList.Count > 0 && rebuiltGCModel?.SKINChunk().SkinDataList.Count > 0)
+                    {
+                        m_originalSkinData.Clear();
+                        for (int i = 0; i < originalGCModel.MESHChunk().NumElements; i++)
                         {
-                            if (renderer.sharedMesh.boneWeights[i].CountWeights() == 1 &&
-                                renderer.sharedMesh.boneWeights[i].boneIndex0 == 1)
+                            if ((originalGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
                             {
-                                count1++;
+                                m_originalSkinData.Add(originalGCModel.SKINChunk().SkinDataList[i]);
                             }
                         }
                         
-                        for (int i = 0; i < positions.Count; i++)
+                        m_newSkinData.Clear();
+                        for (int i = 0; i < rebuiltGCModel.MESHChunk().NumElements; i++)
                         {
-                            CommonVertexInstance cvi = new CommonVertexInstance();
-                            cvi.Position = positions[i];
-                            cvi.Normal = normals[i];
-                            cvi.BoneWeight = boneWeights[i];
-                            
+                            if ((rebuiltGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
+                            {
+                                m_newSkinData.Add(rebuiltGCModel.SKINChunk().SkinDataList[i]);
+                            }
                         }
-                        
-                        SkinData skinData = SkinBuilder.PrepareData(numBones,positions,normals,boneWeights);
-                        skinDataList.Add(skinData);
-                        // SkinData skinData = GCModel.CreateSkinData(renderer.sharedMesh);
-                        // skinDataList.Add(skinData);       
                     }
-
-                    
-                    
-                    
-                    if (originalGCModel?.SKINChunk().SkinDataList.Count > 0 && skinDataList.Count > 0)
-                    {
-                        m_originalSkinData = originalGCModel.SKINChunk().SkinDataList[0];
-                        m_newSkinData = skinDataList[0];
-                    }
-
 
                     if (m_rebuiltModel != null)
                     {
                         DestroyImmediate(m_rebuiltModel);
                     }
                     
-                    GCModel rebuiltGCModel = new GCModel("");
-                    // Load the skin data into a model.
-                    using (BinaryReader binReader = new BinaryReader(new MemoryStream(stub.OriginalModel.bytes)))
-                    {
-                        rebuiltGCModel.LoadData(binReader, null);
-                        rebuiltGCModel.SKINChunk().SkinDataList.Clear();
-                        rebuiltGCModel.SKINChunk().SkinDataList.AddRange(skinDataList);
-                        rebuiltCommonModel = rebuiltGCModel.ToCommon();
-                        m_rebuiltModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, lodLevel,
-                            rebuiltCommonModel,out Dictionary<BoneNode,GameObject> boneObjectMapRebuilt);
-                        m_rebuiltModel.name = "Rebuilt";
-                        m_rebuiltModel.transform.position = new Vector3(10, 0, 0);
-                    }
-                    
-                    
-                    //DestroyImmediate(gameObject);
+                    rebuiltCommonModel = rebuiltGCModel.ToCommon();
+                    m_rebuiltModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, stub.LodLevel,
+                        rebuiltCommonModel,out Dictionary<BoneNode,GameObject> boneObjectMapRebuilt);
+                    m_rebuiltModel.name = RebuiltName;
+                    m_rebuiltModel.transform.position = new Vector3(10, 0, 0);
                     
                 }
             }
@@ -167,7 +154,7 @@ public class TestCreateSkinData : Editor
             {
                 try
                 {
-                    GCModel model = GCModelReader.LoadSingleModel(file, null, true);
+                    GCModel model = GCModelReader.LoadSingleModel(file,true);
                     if (model != null)
                     {
                         models.Add(model);
@@ -193,106 +180,172 @@ public class TestCreateSkinData : Editor
         
         
         
-        if (m_originalSkinData != null && m_newSkinData != null)
+        if (m_originalSkinData.Count > 0 && m_newSkinData.Count > 0)
         {
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumList1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumList2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumListA", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            GUILayout.EndHorizontal();
+            int numRows = Math.Min(m_originalSkinData.Count, m_newSkinData.Count);
 
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(m_originalSkinData.Size.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(m_originalSkinData.NumList1.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(m_originalSkinData.NumList2.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(m_originalSkinData.NumListA.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(m_newSkinData.Size.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(m_newSkinData.NumList1.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(m_newSkinData.NumList2.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(m_newSkinData.NumListA.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-            GUILayout.EndHorizontal();
-
-            m_csk1Foldout = StartIndentedFoldoutHeader("CSK1", m_csk1Foldout);
-            if (m_csk1Foldout)
+            for (int i = 0; i < numRows; i++)
             {
-
+                SkinData origSD = m_originalSkinData[i];
+                SkinData newSD = m_newSkinData[i];
+                
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("IdxBone", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField($"Mesh {i}", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                GUILayout.EndHorizontal();
+                
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField("NumList1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField("NumList2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField("NumListA", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
                 GUILayout.EndHorizontal();
 
-                if (m_diffData)
-                {
-                    for (int i = 0; i < m_originalSkinData.CSK1List.Count; i++)
-                    {
-                        GUILayout.BeginHorizontal();
-                        DrawCSK1Compare(m_originalSkinData.CSK1List[i],m_newSkinData.CSK1List[i], Color.green,Color.yellow);
-                        GUILayout.EndHorizontal();
-                    }                    
-                }
-                else
-                {
-                    foreach (CSK1 csk1 in m_originalSkinData.CSK1List)
-                    {
-                        GUILayout.BeginHorizontal();
-                        DrawCSK1(csk1, Color.green);
-                        GUILayout.EndHorizontal();
-                    }
-
-                    foreach (CSK1 csk1 in m_newSkinData.CSK1List)
-                    {
-                        GUILayout.BeginHorizontal();
-                        DrawCSK1(csk1, Color.yellow);
-                        GUILayout.EndHorizontal();
-                    }
-                }
-            }
-            EndIndentedFoldoutHeader();
-            
-            m_csk2Foldout = StartIndentedFoldoutHeader("CSK2",m_csk2Foldout);
-            if (m_csk2Foldout)
-            {
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("IdxBone1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("IdxBone2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField(origSD.Size.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField(origSD.NumList1.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField(origSD.NumList2.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField(origSD.NumListA.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
                 GUILayout.EndHorizontal();
 
-                if (m_diffData)
-                {
-                    for (int i = 0; i < m_originalSkinData.CSK2List.Count; i++)
-                    {
-                        GUILayout.BeginHorizontal();
-                        DrawCSK2Compare(m_originalSkinData.CSK2List[i],m_newSkinData.CSK2List[i], Color.green,Color.yellow);
-                        GUILayout.EndHorizontal();
-                    }                    
-                }
-                else
-                {
-                    foreach (CSK2 csk2 in m_originalSkinData.CSK2List)
-                    {
-                        GUILayout.BeginHorizontal();
-                        DrawCSK2(csk2, Color.green);
-                        GUILayout.EndHorizontal();
-                    }
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(newSD.Size.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField(newSD.NumList1.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField(newSD.NumList2.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
+                EditorGUILayout.LabelField(newSD.NumListA.ToString(), GetTableStyle(),
+                    GUILayout.Width(ColumnWidth));
+                GUILayout.EndHorizontal();
 
-                    foreach (CSK2 csk2 in m_newSkinData.CSK2List)
+                bool csk1FoldOut = m_foldOutsList[i].Item1;
+                bool csk2FoldOut = m_foldOutsList[i].Item2;
+                bool cskAFoldOut = m_foldOutsList[i].Item3;
+                
+                csk1FoldOut = StartIndentedFoldoutHeader("CSK1", csk1FoldOut);
+                if (csk1FoldOut)
+                {
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("IdxBone", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    GUILayout.EndHorizontal();
+
+                    if (m_diffData)
                     {
-                        GUILayout.BeginHorizontal();
-                        DrawCSK2(csk2, Color.yellow);
-                        GUILayout.EndHorizontal();
+                        for (int j = 0; j < origSD.CSK1List.Count; j++)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSK1Compare(origSD.CSK1List[j], newSD.CSK1List[j], Color.green,
+                                Color.yellow);
+                            GUILayout.EndHorizontal();
+                        }
+                    }
+                    else
+                    {
+                        foreach (CSK1 csk1 in origSD.CSK1List)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSK1(csk1, Color.green);
+                            GUILayout.EndHorizontal();
+                        }
+
+                        foreach (CSK1 csk1 in newSD.CSK1List)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSK1(csk1, Color.yellow);
+                            GUILayout.EndHorizontal();
+                        }
                     }
                 }
+
+                EndIndentedFoldoutHeader();
+
+                csk2FoldOut = StartIndentedFoldoutHeader("CSK2", csk2FoldOut);
+                if (csk2FoldOut)
+                {
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("IdxBone1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("IdxBone2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    GUILayout.EndHorizontal();
+
+                    if (m_diffData)
+                    {
+                        for (int j = 0; j < origSD.CSK2List.Count; j++)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSK2Compare(origSD.CSK2List[j], newSD.CSK2List[j], Color.green,
+                                Color.yellow);
+                            GUILayout.EndHorizontal();
+                        }
+                    }
+                    else
+                    {
+                        foreach (CSK2 csk2 in origSD.CSK2List)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSK2(csk2, Color.green);
+                            GUILayout.EndHorizontal();
+                        }
+
+                        foreach (CSK2 csk2 in newSD.CSK2List)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSK2(csk2, Color.yellow);
+                            GUILayout.EndHorizontal();
+                        }
+                    }
+                }
+
+                EndIndentedFoldoutHeader();
+                
+                cskAFoldOut = StartIndentedFoldoutHeader("CSKA", cskAFoldOut);
+                if (cskAFoldOut)
+                {
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("IdxBone", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("VertSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("WeightSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    GUILayout.EndHorizontal();
+                    if (m_diffData)
+                    {
+                        for (int j = 0; j < origSD.CSKAList.Count; j++)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSKACompare(origSD.CSKAList[j], newSD.CSKAList[j], Color.green,
+                                Color.yellow);
+                            GUILayout.EndHorizontal();
+                        }
+                    }
+                    else
+                    {
+                        foreach (CSKA cska in origSD.CSKAList)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSKA(cska, Color.green);
+                            GUILayout.EndHorizontal();
+                        }
+
+                        foreach (CSKA cska in newSD.CSKAList)
+                        {
+                            GUILayout.BeginHorizontal();
+                            DrawCSKA(cska, Color.yellow);
+                            GUILayout.EndHorizontal();
+                        }
+                    }
+                }
+
+                m_foldOutsList[i] = (csk1FoldOut, csk2FoldOut,cskAFoldOut);
             }
-            EndIndentedFoldoutHeader();
         }
         
         
@@ -357,6 +410,32 @@ public class TestCreateSkinData : Editor
 
         GUI.contentColor = oldColor;
                 
+    }
+
+
+    public void DrawCSKA(CSKA cska, Color color)
+    {
+        Color oldColor = GUI.contentColor;
+        GUI.contentColor = color;
+        EditorGUILayout.LabelField($"{cska.idxBone}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        EditorGUILayout.LabelField($"{cska.count}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        EditorGUILayout.LabelField($"{cska.vertSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        EditorGUILayout.LabelField($"{cska.weightsSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = oldColor;
+    }
+
+    public void DrawCSKACompare(CSKA oldCSKA, CSKA newCSKA, Color matchColor, Color diffColor)
+    {
+        Color oldColor = GUI.contentColor;
+        GUI.contentColor = CompareVals(oldCSKA.idxBone, newCSKA.idxBone,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCSKA.idxBone} / {newCSKA.idxBone}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals(oldCSKA.count, newCSKA.count,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCSKA.count} / {newCSKA.count}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals((int)oldCSKA.vertSrc, (int)newCSKA.vertSrc,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCSKA.vertSrc} / {newCSKA.vertSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = CompareVals((int)oldCSKA.weightsSrc, (int)newCSKA.weightsSrc,matchColor,diffColor);
+        EditorGUILayout.LabelField($"{oldCSKA.weightsSrc} / {newCSKA.weightsSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+        GUI.contentColor = oldColor;
     }
     
     public int ColumnWidth = 100;

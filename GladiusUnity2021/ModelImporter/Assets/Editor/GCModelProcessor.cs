@@ -72,16 +72,15 @@ namespace Assets.Editor
                     string adjustedFilename = CommonModelProcessor.TidyAssetName(assetName, OriginalModelDirectory);
                     string outputHierarchy = CommonModelProcessor.GetOutputHierarchy(assetName, OriginalModelDirectory);
 
-                    GCModel model = new GCModel("");
+                    GCModel model = null;
 
                     model.m_name = adjustedFilename;
 
                     using (BinaryReader binReader = new BinaryReader(new MemoryStream(assetData.bytes)))
                     {
                         StringBuilder debugInfo = new StringBuilder();
-                        model.LoadData(binReader, debugInfo);
+                        model = GCModel.ReadData(binReader,"", debugInfo);
 
-                        
                         CommonModelData commonModel = model.ToCommon();
                         uint lodLevel = commonModel.OverallLodLevel; 
                         
