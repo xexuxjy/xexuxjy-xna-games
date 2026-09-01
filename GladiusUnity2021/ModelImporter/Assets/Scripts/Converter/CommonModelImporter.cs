@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Reflection;
 using GCTextureTools;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine.PlayerLoop;
 using Debug = System.Diagnostics.Debug;
@@ -988,7 +989,6 @@ public static class CommonModelImporter
 
         return input;
     }
-   
 }
 
 
@@ -1134,6 +1134,11 @@ public class BaseModel
 {
     public List<BaseChunk> m_chunkList = new List<BaseChunk>();
 
+    public T GetChunk<T>() where T : BaseChunk
+    {
+        T chunk = (T)m_chunkList.Find(x => x is T);
+        return chunk;
+    }
 
     public BaseModel(string name)
     {
@@ -1239,8 +1244,6 @@ public class BaseModel
                     // build tranform from parent chain?
                 }
 
-                SkelMinBB = min;
-                SkelMaxBB = max;
                 m_builtSkelBB = true;
             }
         }
@@ -1258,50 +1261,33 @@ public class BaseModel
         get
         {
             //return m_bones; 
-            return m_bonesShrunk;
+            return GetChunk<SKELChunk>().BoneList;
         }
     }
 
-    public SKELChunk SKELChunk
-    {
-        get { return (m_chunkList.Find(x => x is SKELChunk) as SKELChunk); }
-    }
-
-    public NAMEChunk NAMEChunk
-    {
-        get { return (m_chunkList.Find(x => x is NAMEChunk) as NAMEChunk); }
-    }
-
-    public OBBTChunk OBBTChunk
-    {
-        get { return (m_chunkList.Find(x => x is OBBTChunk) as OBBTChunk); }
-    }
-
-
     public Dictionary<int, BoneNode> m_boneIdDictionary = new Dictionary<int, BoneNode>();
+
     public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
-    public List<ModelSubMesh> m_modelMeshes = new List<ModelSubMesh>();
+
+    //public List<ModelSubMesh> m_modelMeshes = new List<ModelSubMesh>();
     public String m_name;
-    public List<TextureData> m_textures = new List<TextureData>();
+
+    //public List<TextureData> m_textures = new List<TextureData>();
     public List<MaterialData> m_materials = new List<MaterialData>();
     public List<String> m_boneNames = new List<String>();
     public Dictionary<int, String> m_boneNameDictionary = new Dictionary<int, string>();
     public List<String> m_textureNames = new List<String>();
     public List<Vector3> m_centers = new List<Vector3>();
-    public List<String> m_selsInfo = new List<string>();
+    //public List<String> m_selsInfo = new List<string>();
 
     public List<ShaderData> m_shaderData = new List<ShaderData>();
     //public List<Vector2> UVs = new List<Vector2>();
 
-    public Vector3 MinBB;
-    public Vector3 MaxBB;
-    public Vector3 SkelMinBB;
-    public Vector3 SkelMaxBB;
-
-    public Vector3 Center;
     public List<IndexedMatrix> m_matrices = new List<IndexedMatrix>();
+
     private List<BoneNode> m_bones = new List<BoneNode>();
-    private List<BoneNode> m_bonesShrunk = new List<BoneNode>();
+
+    //private List<BoneNode> m_bonesShrunk = new List<BoneNode>();
     public BoneNode m_rootBone;
     public BoneNode m_zeroBone;
 
@@ -1395,11 +1381,6 @@ public abstract class ModelSubMesh
         MinUV = int.MaxValue;
         MaxUV = int.MinValue;
     }
-
-    //public List<Vector3> Vertices = new List<Vector3>();
-    //public List<Vector3> Normals = new List<Vector3>();
-    //public List<Vector2> UVs = new List<Vector2>();
-    //public List<ushort> Indices = new List<ushort>();
 }
 
 public class BaseModelReader
@@ -1664,7 +1645,7 @@ public class CommonModelData
     public Dictionary<int, BoneNode> BoneIdDictionary = new Dictionary<int, BoneNode>();
 
     public uint OverallLodLevel;
-    
+
     public List<CommonMeshData> GetFilteredSubmeshes(List<int> excludeList)
     {
         List<CommonMeshData> filteredList = new List<CommonMeshData>();
@@ -1949,7 +1930,7 @@ public class CommonVertexInstance : IEquatable<CommonVertexInstance>
 
     public int DebugDLEPos = -1;
     public int DebugDLENorm = -1;
-    
+
     public IndexedVector3 Position;
     public IndexedVector3 Normal;
     public IndexedVector3 Tangent;
@@ -1979,7 +1960,8 @@ public class CommonVertexInstance : IEquatable<CommonVertexInstance>
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        return Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent) && UV.Equals(other.UV) && UV2.Equals(other.UV2) && UV3.Equals(other.UV3);
+        return Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent) &&
+               UV.Equals(other.UV) && UV2.Equals(other.UV2) && UV3.Equals(other.UV3);
         //return Position.Equals(other.Position) && Normal.Equals(other.Normal);
     }
 
@@ -2117,6 +2099,18 @@ public class VERSChunk : BaseChunk
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
         return chunk;
     }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        binWriter.Write(ChunkName());
+        binWriter.Write(GladiusFileWriter.HeaderSize + 16); // block size
+        binWriter.Write(1);
+        binWriter.Write(0);
+        binWriter.Write(14);
+        binWriter.Write(0);
+        binWriter.Write(0);
+        binWriter.Write(0);
+    }
 }
 
 public class CPRTChunk : BaseChunk
@@ -2134,6 +2128,24 @@ public class CPRTChunk : BaseChunk
         chunk.BaseFromStream(binReader);
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int blockSize = 0x90;
+        int remain = blockSize;
+        binWriter.Write(ChunkName());
+        binWriter.Write(blockSize); // block size
+        binWriter.Write(0x00);
+        binWriter.Write(0x80);
+
+        remain -= GladiusFileWriter.HeaderSize;
+
+        string s = "(C) Mar 21 2003 LucasArts Entertainment LLC";
+        remain -= s.Length;
+
+        GladiusFileWriter.WriteASCIIString(binWriter, s);
+        GladiusFileWriter.WriteNull(binWriter, remain);
     }
 }
 
@@ -2165,7 +2177,7 @@ public class SKELChunk : BaseChunk
 
 public class SELSChunk : BaseChunk
 {
-    public List<SelectSet> SelectSetList = new List<SelectSet>();
+    public List<string> Names = new List<string>();
 
     public static char[] ChunkName()
     {
@@ -2177,17 +2189,32 @@ public class SELSChunk : BaseChunk
     {
         SELSChunk chunk = new SELSChunk();
         chunk.BaseFromStream(binReader);
-        for (int i = 0; i < chunk.NumElements; ++i)
-        {
-            chunk.SelectSetList.Add(SelectSet.FromStream(binReader));
-        }
+        CommonModelImporter.ReadNullSeparatedNames(binReader, chunk.Names);
 
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        int textureLength = GladiusFileWriter.GetStringListSize(Names);
+        total += textureLength;
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        binWriter.Write(ChunkName());
+        binWriter.Write(paddedTotal);
+        binWriter.Write(0x00);
+        binWriter.Write(0x01);
+
+        GladiusFileWriter.WriteStringList(binWriter, Names, (paddedTotal - GladiusFileWriter.HeaderSize));
     }
 }
 
 public class SelectSet
 {
+    public const int Size = 4;
+
     public UInt16 Mask;
     public UInt16 NameIndex;
 
@@ -2197,6 +2224,12 @@ public class SelectSet
         set.Mask = binReader.ReadUInt16();
         set.NameIndex = binReader.ReadUInt16();
         return set;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        binWriter.Write(Mask);
+        binWriter.Write(NameIndex);
     }
 }
 
@@ -2239,6 +2272,38 @@ public class TXTRChunk : BaseChunk
 
         return chunk;
     }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        total += Textures.Count * GCModel.TextureBlockSize;
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+
+        binWriter.Write(ChunkName());
+        binWriter.Write(paddedTotal);
+        binWriter.Write(0);
+        binWriter.Write(Textures.Count);
+
+
+        foreach (PaxTexture textureInfo in Textures)
+        {
+            GladiusFileWriter.WriteASCIIString(binWriter, textureInfo.Name, GCModel.MaxTextureNameSize);
+            binWriter.Write(-1);
+            binWriter.Write(0);
+            binWriter.Write(textureInfo.Width);
+            binWriter.Write(textureInfo.Height);
+
+            int unknown1 = 3;
+            int unknown2 = 3;
+
+            binWriter.Write(unknown1);
+            binWriter.Write(unknown2);
+        }
+
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
+    }
 }
 
 
@@ -2278,7 +2343,7 @@ public class PaxTexture
 }
 
 
-public class EndChunk : BaseChunk
+public class ENDChunk : BaseChunk
 {
     public static char[] ChunkName()
     {
@@ -2287,9 +2352,19 @@ public class EndChunk : BaseChunk
 
     public static BaseChunk FromStream(BinaryReader binReader)
     {
-        EndChunk chunk = new EndChunk();
+        ENDChunk chunk = new ENDChunk();
         chunk.BaseFromStream(binReader);
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+
+        binWriter.Write(ChunkName());
+        binWriter.Write(total);
+        binWriter.Write(0);
+        binWriter.Write(1);
     }
 }
 
@@ -2313,7 +2388,7 @@ public class OBBTChunk : BaseChunk
 
 public class POSIChunk : BaseChunk
 {
-    public List<IndexedVector3> Data = new List<IndexedVector3>();
+    public List<Vector3> Data = new List<Vector3>();
 
     public static char[] ChunkName()
     {
@@ -2332,12 +2407,31 @@ public class POSIChunk : BaseChunk
 
         return chunk;
     }
+
+    public void ToStream(BinaryWriter writer)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        total += (Data.Count * 12);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        writer.Write(ChunkName());
+        writer.Write(paddedTotal); // block size
+        writer.Write(1);
+        writer.Write(Data.Count); // number of elements.
+
+
+        foreach (IndexedVector3 v in Data)
+        {
+            Common.WriteVector3BE(writer, v);
+        }
+
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+    }
 }
 
 public class NORMChunk : BaseChunk
 {
-    public List<IndexedVector3> Data = new List<IndexedVector3>();
-
+    public List<Vector3> Data = new List<Vector3>();
 
     public static char[] ChunkName()
     {
@@ -2356,11 +2450,31 @@ public class NORMChunk : BaseChunk
 
         return chunk;
     }
+
+    public void ToStream(BinaryWriter writer)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        total += (Data.Count * 12);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        writer.Write(ChunkName());
+        writer.Write(paddedTotal); // block size
+        writer.Write(1);
+        writer.Write(Data.Count); // number of elements.
+
+
+        foreach (IndexedVector3 v in Data)
+        {
+            Common.WriteVector3BE(writer, v);
+        }
+
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+    }
 }
 
 public class UV0Chunk : BaseChunk
 {
-    public List<IndexedVector2> Data = new List<IndexedVector2>();
+    public List<Vector2> Data = new List<Vector2>();
 
     public static char[] ChunkName()
     {
@@ -2378,6 +2492,26 @@ public class UV0Chunk : BaseChunk
         }
 
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter writer)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        total += (Data.Count * 8);
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        writer.Write(ChunkName());
+        writer.Write(paddedTotal); // block size
+        writer.Write(1);
+        writer.Write(Data.Count); // number of elements.
+
+
+        foreach (IndexedVector2 v in Data)
+        {
+            Common.WriteVector2BE(writer, v);
+        }
+
+        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
     }
 }
 
@@ -2407,8 +2541,30 @@ public class SHDRChunk : BaseChunk
             chunk.Data.Add(gcm);
         }
 
-
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter, List<PaxTexture> paxTextures)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        binWriter.Write(ChunkName());
+
+        total += paxTextures.Count * GCModel.MaterialBlockSize;
+
+        binWriter.Write(total); // block size
+        binWriter.Write(0);
+        binWriter.Write(paxTextures.Count); // num materials, 1 for now
+
+
+        for (int i = 0; i < paxTextures.Count; ++i)
+        {
+            GCMaterial gcm = new GCMaterial();
+            gcm.MatName = paxTextures[i].Name;
+            gcm.TexIndex[0] = (byte)i;
+            gcm.ToStream(binWriter);
+        }
+
+        // need to pad?
     }
 }
 
@@ -2441,6 +2597,30 @@ public class DSLIChunk : BaseChunk
 
         return chunk;
     }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        total += (8 * Data.Count); // (start,length for each
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        binWriter.Write(ChunkName());
+        binWriter.Write(paddedTotal); // block size
+        binWriter.Write(1);
+        binWriter.Write(1);
+
+        int startPos = 0;
+
+        foreach (DSLIInfo dsliInfo in Data)
+        {
+            dsliInfo.startPos = startPos;
+            dsliInfo.ToStream(binWriter);
+            startPos += dsliInfo.length;
+        }
+
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
+    }
 }
 
 public class DSLSChunk : BaseChunk
@@ -2454,14 +2634,6 @@ public class DSLSChunk : BaseChunk
         return CommonModelImporter.dslsTag;
     }
 
-    public static BaseChunk FromStream(BinaryReader binReader)
-    {
-        DSLSChunk chunk = new DSLSChunk();
-        chunk.BaseFromStream(binReader);
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
-
-        return chunk;
-    }
 
     public void BuildData(DSLIChunk dsliChunk)
     {
@@ -2491,6 +2663,42 @@ public class DSLSChunk : BaseChunk
             }
         }
     }
+
+    public static BaseChunk FromStream(BinaryReader binReader)
+    {
+        DSLSChunk chunk = new DSLSChunk();
+        chunk.BaseFromStream(binReader);
+        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+
+        return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        binWriter.Write(ChunkName());
+
+
+        foreach (DisplayListHeader dlh in DisplayListHeaders)
+        {
+            total += dlh.GetSize();
+        }
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        binWriter.Write(paddedTotal); // block size
+        binWriter.Write(1);
+        binWriter.Write(1);
+
+        // end of standard header.
+
+        foreach (DisplayListHeader dlh in DisplayListHeaders)
+        {
+            dlh.ToStream(binWriter);
+        }
+
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
+    }
 }
 
 public class CNTRChunk : BaseChunk
@@ -2509,6 +2717,43 @@ public class CNTRChunk : BaseChunk
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
 
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter, List<Vector3> positions)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        int numV3 = 5;
+        total += (12 * numV3);
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        binWriter.Write(ChunkName());
+        binWriter.Write(paddedTotal);
+        binWriter.Write(0x01);
+        binWriter.Write(0x01);
+
+        Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+        foreach (Vector3 v in positions)
+        {
+            min = Vector3.Min(min, v);
+            max = Vector3.Max(max, v);
+        }
+
+        Vector3 extents = max - min;
+        extents /= 2f;
+        float radius = Math.Max(extents.x, Math.Max(extents.y, extents.z));
+
+        Vector3 midPoint = min + ((max - min) / 2f);
+
+        Common.WriteVector3BE(binWriter, min);
+        Common.WriteVector3BE(binWriter, max);
+        Common.WriteVector3BE(binWriter, midPoint);
+        Common.WriteVector3BE(binWriter, new IndexedVector3(radius, 0, 0));
+        Common.WriteVector3BE(binWriter, midPoint);
+
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
     }
 }
 
@@ -2551,6 +2796,23 @@ public class DSLCChunk : BaseChunk
 
         return chunk;
     }
+
+    public void ToStream(BinaryWriter binWriter, List<PaxElement> paxElements)
+    {
+        int total = GladiusFileWriter.HeaderSize + 16;
+        binWriter.Write(ChunkName());
+        binWriter.Write(total); // block size
+        binWriter.Write(1);
+        binWriter.Write(paxElements.Count);
+
+        int totalEntries = 12;
+        for (int i = 0; i < paxElements.Count; ++i)
+        {
+            binWriter.Write((byte)1);
+        }
+
+        GladiusFileWriter.WriteNull(binWriter, totalEntries - paxElements.Count);
+    }
 }
 
 
@@ -2570,6 +2832,19 @@ public class VFLAChunk : BaseChunk
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
 
         return chunk;
+    }
+
+
+    static byte[] VFLAGSData = new byte[]
+        { 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        binWriter.Write(ChunkName());
+        binWriter.Write(0x20); // block size
+        binWriter.Write(1);
+        binWriter.Write(1);
+        binWriter.Write(VFLAGSData);
     }
 }
 
@@ -2591,6 +2866,16 @@ public class RAMChunk : BaseChunk
 
         return chunk;
     }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int blockSize = 0x90;
+        binWriter.Write(ChunkName());
+        binWriter.Write(blockSize); // block size
+        binWriter.Write(1);
+        binWriter.Write(1);
+        GladiusFileWriter.WriteNull(binWriter, blockSize - GladiusFileWriter.HeaderSize);
+    }
 }
 
 public class MSARChunk : BaseChunk
@@ -2609,6 +2894,16 @@ public class MSARChunk : BaseChunk
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
 
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int blockSize = 0x40;
+        binWriter.Write(ChunkName());
+        binWriter.Write(blockSize); // block size
+        binWriter.Write(1);
+        binWriter.Write(1);
+        GladiusFileWriter.WriteNull(binWriter, blockSize - GladiusFileWriter.HeaderSize);
     }
 }
 
@@ -2629,6 +2924,17 @@ public class NLVLChunk : BaseChunk
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
 
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int blockSize = 0x20;
+        binWriter.Write(ChunkName());
+        binWriter.Write(blockSize); // block size
+        binWriter.Write(2);
+        binWriter.Write(1);
+        //GladiusFileWriter.WriteNull(binWriter, blockSize - GladiusFileWriter.HeaderSize);
+        GladiusFileWriter.WriteNull(binWriter, 0x10);
     }
 }
 
@@ -2657,6 +2963,27 @@ public class MESHChunk : BaseChunk
 
         return chunk;
     }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize + (24 * PaxElements.Count);
+        binWriter.Write(ChunkName());
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        binWriter.Write(paddedTotal); // block size
+
+        binWriter.Write(0);
+        binWriter.Write(PaxElements.Count); // number of elements
+
+
+        for (int i = 0; i < PaxElements.Count; ++i)
+        {
+            PaxElements[i].ToStream(binWriter);
+        }
+
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
+    }
 }
 
 
@@ -2676,6 +3003,24 @@ public class ELEMChunk : BaseChunk
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
 
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter, List<DisplayListHeader> headers)
+    {
+        int total = GladiusFileWriter.HeaderSize + 16;
+        binWriter.Write(ChunkName());
+
+
+        binWriter.Write(total); // block size
+        binWriter.Write(0);
+        binWriter.Write(headers.Count);
+
+        for (int i = 0; i < headers.Count; ++i)
+        {
+            int val = (4 | (headers[i].entries.Count << 8));
+            binWriter.Write(val);
+            binWriter.Write(0);
+        }
     }
 }
 
@@ -2816,8 +3161,8 @@ public class SKINChunk : BaseChunk
     public byte[] Data;
 
     public List<SkinData> SkinDataList = new List<SkinData>();
-    public List<IndexedVector3> Positions = new List<IndexedVector3>();
-    public List<IndexedVector3> Normals = new List<IndexedVector3>();
+    public List<Vector3> Positions = new List<Vector3>();
+    public List<Vector3> Normals = new List<Vector3>();
 
     //public const int StructureSize = 96;
 
@@ -2833,102 +3178,14 @@ public class SKINChunk : BaseChunk
         long afterHeaderPosition = binReader.BaseStream.Position;
         long nextHeaderStart = 0;
 
-        using (StreamWriter sw = new StreamWriter(new FileStream("d:/tmp/skin-data-2.txt", FileMode.OpenOrCreate)))
+        for (int skinDataCount = 0; skinDataCount < chunk.NumElements; ++skinDataCount)
         {
-            for (int skinDataCount = 0; skinDataCount < chunk.NumElements; ++skinDataCount)
-            {
-                sw.WriteLine("**************************************************");
-                sw.WriteLine($"SkinData [{skinDataCount}]");
+            binReader.BaseStream.Position = afterHeaderPosition + nextHeaderStart;
+            SkinData skinData = SkinData.FromStream(binReader);
+            chunk.SkinDataList.Add(skinData);
+            nextHeaderStart += skinData.Size;
 
-                binReader.BaseStream.Position = afterHeaderPosition + nextHeaderStart;
-                SkinData skinData = SkinData.FromStream(binReader);
-                chunk.SkinDataList.Add(skinData);
-                long dataPosition = binReader.BaseStream.Position;
-                skinData.ReadSkinWeights(binReader, dataPosition, sw);
-
-                foreach (CSK1 csk1 in skinData.CSK1List)
-                {
-                    binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
-                    SkinData.ReadPositionAndNormals(binReader, csk1.count, skinData.AnimShift, csk1.ExtractedPositions,
-                        csk1.ExtractedNormals);
-
-                    HashSet<Vector3> uniqueVert = new HashSet<Vector3>(); 
-                    HashSet<Vector3> uniqueNorm = new HashSet<Vector3>();
-
-                    foreach (var val in csk1.ExtractedPositions)
-                    {
-                        uniqueVert.Add(val);
-                    }
-
-                    foreach (var val in csk1.ExtractedNormals)
-                    {
-                        uniqueNorm.Add(val);
-                    }
-                    
-                    List<int> multiplePositionCounts =  new List<int>();
-                    for (int i = 0; i < csk1.ExtractedPositions.Count; i++)
-                    {
-                        int count = csk1.ExtractedPositions.FindAll(x => x == csk1.ExtractedPositions[i]).Count;
-                        multiplePositionCounts.Add(count);
-                    }
-                    
-                    List<int> multipleNormalCounts =  new List<int>();
-                    for (int i = 0; i < csk1.ExtractedNormals.Count; i++)
-                    {
-                        int count = csk1.ExtractedNormals.FindAll(x => x == csk1.ExtractedNormals[i]).Count;
-                        multipleNormalCounts.Add(count);
-                    }
-
-                    
-                    int ibreak = 0;
-                }
-
-                foreach (CSK2 csk2 in skinData.CSK2List)
-                {
-                    binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
-
-                    SkinData.ReadPositionAndNormals(binReader, csk2.count, skinData.AnimShift, csk2.ExtractedPositions,
-                        csk2.ExtractedNormals);
-
-                    binReader.BaseStream.Position = dataPosition + csk2.weightsSrc;
-                    for (int i = 0; i < csk2.count; ++i)
-                    {
-                        byte b1 = binReader.ReadByte();
-                        byte b2 = binReader.ReadByte();
-
-                        csk2.ExtractedWeightsBytes.Add((b1,b2));
-                        csk2.ExtractedWeightsFloats.Add((b1 / 255f, b2 / 255f));
-                    }
-                }
-
-                foreach (CSKA cska in skinData.CSKAList)
-                {
-                    // Accumulation packets add one more weighted bone influence to
-                    // already-emitted destination vertices. The source pos/norm
-                    // records match the destination bind-pose positions, while
-                    // idxDst maps each record back to the output vertex slot.
-                    binReader.BaseStream.Position = dataPosition + cska.vertSrc;
-                    SkinData.ReadPositionAndNormals(binReader, cska.count, skinData.AnimShift, cska.ExtractedPositions,
-                        cska.ExtractedNormals);
-
-                    binReader.BaseStream.Position = dataPosition + cska.idxDst;
-                    for (int i = 0; i < cska.count; ++i)
-                    {
-                        cska.ExtractedDestinationIndices.Add(Common.ToUInt16BigEndian(binReader));
-                    }
-
-                    binReader.BaseStream.Position = dataPosition + cska.weightsSrc;
-                    for (int i = 0; i < cska.count; ++i)
-                    {
-                        cska.ExtractedWeights.Add(binReader.ReadByte() / 255f);
-                    }
-                }
-
-
-                nextHeaderStart += skinData.Size;
-
-                int ibreak2 = 0;
-            }
+            int ibreak2 = 0;
         }
 
 
@@ -2948,11 +3205,14 @@ public class SKINChunk : BaseChunk
         return (uint)Common.ToInt32BigEndian(CommonModelImporter.s_buffer, 0);
     }
 
-    public static void RelocateAndWrite(BinaryWriter binWriter,uint value)
+    public static void RelocateAndWrite(BinaryWriter binWriter, uint value)
     {
-        
+        byte[] ba = BitConverter.GetBytes(value);
+        ba[3] = 0xdd;
+        uint val = (uint)Common.ToInt32BigEndian(ba, 0);
+        binWriter.Write(val);
     }
-    
+
     public static uint RelocateAddr(uint baseValue, uint offset)
     {
         if (offset == 0)
@@ -2966,6 +3226,33 @@ public class SKINChunk : BaseChunk
         baseValue += offset;
         return baseValue;
     }
+
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        long startPosition = binWriter.BaseStream.Position;
+        int total = GladiusFileWriter.HeaderSize;
+        foreach (SkinData skinData in SkinDataList)
+        {
+            total += skinData.Size;
+        }
+
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+
+        binWriter.Write(ChunkName());
+        binWriter.Write(paddedTotal);
+        binWriter.Write(1);
+        binWriter.Write(SkinDataList.Count);
+
+        foreach (SkinData skinData in SkinDataList)
+        {
+            skinData.ToStream(binWriter);
+        }
+
+        long endPosition = binWriter.BaseStream.Position;
+        long diff = endPosition - startPosition;
+        int ibreak = 0;
+    }
 }
 
 // the skindata structures match the official nintendo ones with the idea of 1List,2List and Accumulations.
@@ -2975,7 +3262,7 @@ public class SkinData
 {
     public const int RawSize = 96;
     public uint CalculatedSize = 0;
-    
+
     public int Size;
     public int NumberVertices;
     public int NumberBones;
@@ -3006,13 +3293,13 @@ public class SkinData
     public List<CSK2> CSK2List = new List<CSK2>();
     public List<CSKA> CSKAList = new List<CSKA>();
 
-    
-    public List<uint> Packet1Starts = new List<uint>();
-    public List<uint> Packet1Sizes = new List<uint>();
-    
-    public List<uint> Packet2Starts = new List<uint>();
-    public List<uint> Packet2Sizes = new List<uint>();
-    
+
+    public List<ushort> Packet1Starts = new List<ushort>();
+    public List<ushort> Packet1Sizes = new List<ushort>();
+
+    public List<ushort> Packet2Starts = new List<ushort>();
+    public List<ushort> Packet2Sizes = new List<ushort>();
+
     public const int StructureSize = 96;
 
     public static SkinData FromStream(BinaryReader binReader)
@@ -3033,11 +3320,6 @@ public class SkinData
         skinData.NumListA = Common.ToInt16BigEndian(binReader);
 
         binReader.BaseStream.Position = (long)CommonModelImporter.Align32((uint)binReader.BaseStream.Position);
-        // // // align
-        // if (binReader.BaseStream.Position % 4 != 0)
-        // {
-        //     binReader.BaseStream.Position += 2;
-        // }
 
         skinData.PointerList1 = SKINChunk.ReadAndRelocate(binReader);
         skinData.PointerList2 = SKINChunk.ReadAndRelocate(binReader);
@@ -3060,33 +3342,56 @@ public class SkinData
         long extraPadding = 26;
         binReader.BaseStream.Position += extraPadding;
 
+        long dataPosition = binReader.BaseStream.Position;
+
+        long positionCopy = binReader.BaseStream.Position;
+        //binReader.BaseStream.Position += skinData.PacketStart1;
+        for (int i = 0; i < skinData.NumPackets1; i++)
+        {
+            skinData.Packet1Starts.Add(Common.ToUInt16BigEndian(binReader));
+        }
+
+        for (int i = 0; i < skinData.NumPackets1; i++)
+        {
+            skinData.Packet1Sizes.Add(Common.ToUInt16BigEndian(binReader));
+        }
+
+        binReader.BaseStream.Position = positionCopy + skinData.PacketStart2;
+        for (int i = 0; i < skinData.NumPackets2; i++)
+        {
+            skinData.Packet2Starts.Add(Common.ToUInt16BigEndian(binReader));
+        }
+
+        for (int i = 0; i < skinData.NumPackets2; i++)
+        {
+            skinData.Packet2Sizes.Add(Common.ToUInt16BigEndian(binReader));
+        }
+
+        skinData.ReadSkinWeights(binReader, dataPosition, null);
+
+
         return skinData;
     }
 
-    
+
     public void ReadSkinWeights(BinaryReader binReader, long dataPosition, StreamWriter debugInfo = null)
     {
         binReader.BaseStream.Position = dataPosition + PointerList1;
 
         for (int loop1 = 0; loop1 < NumList1; loop1++)
         {
-            Packet1Starts.Add((uint)binReader.BaseStream.Position);
             debugInfo?.WriteLine($"CSK1 [{loop1}] position [{binReader.BaseStream.Position}]");
-
             CSK1 csk1 = CSK1.FromStream(binReader);
             CSK1List.Add(csk1);
-            Packet1Sizes.Add((uint)(binReader.BaseStream.Position - Packet1Starts.Last()));
         }
 
         binReader.BaseStream.Position = dataPosition + PointerList2;
 
         for (int loop1 = 0; loop1 < NumList2; loop1++)
         {
-            Packet2Starts.Add((uint)binReader.BaseStream.Position);
             debugInfo?.WriteLine($"CSK2 [{loop1}] position [{binReader.BaseStream.Position}]");
             CSK2 csk2 = CSK2.FromStream(binReader);
             CSK2List.Add(csk2);
-            Packet2Sizes.Add((uint)(binReader.BaseStream.Position - Packet2Starts.Last()));
         }
 
 
@@ -3097,29 +3402,82 @@ public class SkinData
             CSKA cska = CSKA.FromStream(binReader);
             CSKAList.Add(cska);
         }
+
+        foreach (CSK1 csk1 in CSK1List)
+        {
+            binReader.BaseStream.Position = dataPosition + csk1.vertSrc;
+            SkinData.ReadPositionAndNormals(binReader, csk1.count, AnimShift, csk1.ExtractedPositions,
+                csk1.ExtractedNormals);
+        }
+
+        foreach (CSK2 csk2 in CSK2List)
+        {
+            binReader.BaseStream.Position = dataPosition + csk2.vertSrc;
+
+            ReadPositionAndNormals(binReader, csk2.count, AnimShift, csk2.ExtractedPositions,
+                csk2.ExtractedNormals);
+
+            binReader.BaseStream.Position = dataPosition + csk2.weightsSrc;
+            for (int i = 0; i < csk2.count; ++i)
+            {
+                byte b1 = binReader.ReadByte();
+                byte b2 = binReader.ReadByte();
+
+                csk2.ExtractedWeightsBytes.Add((b1, b2));
+                csk2.ExtractedWeightsFloats.Add((b1 / 255f, b2 / 255f));
+            }
+        }
+
+        foreach (CSKA cska in CSKAList)
+        {
+            // Accumulation packets add one more weighted bone influence to
+            // already-emitted destination vertices. The source pos/norm
+            // records match the destination bind-pose positions, while
+            // idxDst maps each record back to the output vertex slot.
+            binReader.BaseStream.Position = dataPosition + cska.vertSrc;
+            ReadPositionAndNormals(binReader, cska.count, AnimShift, cska.ExtractedPositions,
+                cska.ExtractedNormals);
+
+            binReader.BaseStream.Position = dataPosition + cska.idxDst;
+            for (int i = 0; i < cska.count; ++i)
+            {
+                cska.ExtractedDestinationIndices.Add(Common.ToUInt16BigEndian(binReader));
+            }
+
+            binReader.BaseStream.Position = dataPosition + cska.weightsSrc;
+            for (int i = 0; i < cska.count; ++i)
+            {
+                cska.ExtractedWeights.Add(binReader.ReadByte() / 255f);
+            }
+        }
     }
 
-    public void WriteSkinWeights(BinaryWriter binWriter,short animShift)
+    public void WriteSkinWeights(BinaryWriter binWriter, short animShift)
     {
         foreach (CSK1 csk1 in CSK1List)
         {
-            csk1.ToStream(binWriter,animShift);
+            csk1.ToStream(binWriter, animShift);
         }
+
         // align
         foreach (CSK2 csk2 in CSK2List)
         {
-            csk2.ToStream(binWriter,animShift);
+            csk2.ToStream(binWriter, animShift);
         }
+
         // align
         foreach (CSKA cska in CSKAList)
         {
-            cska.ToStream(binWriter,animShift);
+            cska.ToStream(binWriter, animShift);
         }
         
+        // write packet starts and sizes
+        
+        // write position normals and weights
+        
+        
     }
-    
-    
-    
+
 
     public static void ReadPositionAndNormals(BinaryReader binReader, int count, short animShift,
         List<Vector3> positions,
@@ -3163,33 +3521,35 @@ public class SkinData
         binWriter.Write(NumList2);
         binWriter.Write(NumListA);
 
-        SKINChunk.RelocateAndWrite(binWriter,PointerList1);
-        SKINChunk.RelocateAndWrite(binWriter,PointerList2);
-        SKINChunk.RelocateAndWrite(binWriter,PointerListA);
+        SKINChunk.RelocateAndWrite(binWriter, PointerList1);
+        SKINChunk.RelocateAndWrite(binWriter, PointerList2);
+        SKINChunk.RelocateAndWrite(binWriter, PointerListA);
 
-        Common.WriteBigEndian(binWriter,NumPackets1);
-        SKINChunk.RelocateAndWrite(binWriter,PacketStart1);
-        SKINChunk.RelocateAndWrite(binWriter,PacketSize1);
+        Common.WriteBigEndian(binWriter, NumPackets1);
+        SKINChunk.RelocateAndWrite(binWriter, PacketStart1);
+        SKINChunk.RelocateAndWrite(binWriter, PacketSize1);
 
-        Common.WriteBigEndian(binWriter,NumPackets2);
-        SKINChunk.RelocateAndWrite(binWriter,PacketStart2);
-        SKINChunk.RelocateAndWrite(binWriter,PacketSize2);
+        Common.WriteBigEndian(binWriter, NumPackets2);
+        SKINChunk.RelocateAndWrite(binWriter, PacketStart2);
+        SKINChunk.RelocateAndWrite(binWriter, PacketSize2);
 
         SKINChunk.RelocateAndWrite(binWriter, SourceData);
         SKINChunk.RelocateAndWrite(binWriter, WeightData);
-        
-        Common.WriteBigEndian(binWriter,AnimShift);
-        
+
+        Common.WriteBigEndian(binWriter, AnimShift);
+
         int extraPadding = 26;
-        GladiusFileWriter.WriteNull(binWriter,extraPadding);
+        GladiusFileWriter.WriteNull(binWriter, extraPadding);
+
+        WriteSkinWeights(binWriter,AnimShift);
         
-        
-        
-        
+        // write packets
+        // write onezies
+        // write twozies
+        // write accs
     }
-    
-    
-    
+
+
     public static void WritePositionAndNormal(BinaryWriter binWriter, short animShift, Vector3 position,
         Vector3 normal)
     {
@@ -3232,7 +3592,7 @@ public class SkinData
             csk2.ExtractedWeightsFloats.Add((weights[position].weight0, weights[position].weight1));
             byte b1 = (byte)(255f * weights[position].weight0);
             byte b2 = (byte)(255f * weights[position].weight1);
-            csk2.ExtractedWeightsBytes.Add((b1,b2));
+            csk2.ExtractedWeightsBytes.Add((b1, b2));
         }
 
 
@@ -3315,7 +3675,7 @@ public class CSK1
         return csk1;
     }
 
-    public void ToStream(BinaryWriter writer,short animShift)
+    public void ToStream(BinaryWriter writer, short animShift)
     {
         writer.Write(idxBone);
         writer.Write(count);
@@ -3328,9 +3688,8 @@ public class CSK1
         {
             SkinData.WritePositionAndNormal(writer, animShift, ExtractedPositions[i], ExtractedNormals[i]);
         }
-
     }
-    
+
     /*
 
     typedef struct { int16 x, y, z; } tVecQ;
@@ -3380,7 +3739,7 @@ public class CSK2
     public uint vertSrc;
     public uint vertDst;
 
-    public List<(byte,byte)> ExtractedWeightsBytes = new List<(byte,byte)>();
+    public List<(byte, byte)> ExtractedWeightsBytes = new List<(byte, byte)>();
     public List<(float, float)> ExtractedWeightsFloats = new List<(float, float)>();
 
     public List<Vector3> ExtractedPositions = new List<Vector3>();
@@ -3458,7 +3817,6 @@ public class CSKA
         binWriter.Write(idxDst);
         binWriter.Write(vertSrc);
     }
-    
 }
 
 
@@ -3618,32 +3976,46 @@ public class STYPChunk : BaseChunk
 
         return chunk;
     }
-}
 
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize;
+        total += (SelectSet.Size) * SelectSetList.Count;
+
+        binWriter.Write(ChunkName());
+        binWriter.Write(total);
+        binWriter.Write(0);
+        binWriter.Write(1);
+        foreach (SelectSet selectSet in SelectSetList)
+        {
+            selectSet.ToStream(binWriter);
+        }
+    }
+}
 
 
 public class COnezie
 {
-    public int			idxBone;			// bone/matrix index
-    public ushort			idx_start;
-    public ushort			count;
-    public List<ushort>	vertSrc = new List<ushort>();
+    public int idxBone; // bone/matrix index
+    public ushort idx_start;
+    public ushort count;
+    public List<ushort> vertSrc = new List<ushort>();
 };
 
 public class CTwozie
 {
-    public int[] idxBone = new int[2];			// bone/matrix index
+    public int[] idxBone = new int[2]; // bone/matrix index
     public ushort idx_start;
     public ushort count;
     public List<byte> weights = new List<byte>();
-    public List<ushort>	vertSrc = new List<ushort>();
+    public List<ushort> vertSrc = new List<ushort>();
 };
 
 public class CAccList
 {
-    public List<ushort>	vertSrc = new List<ushort>();
-    public List<ushort>	idxVert = new List<ushort>();
-    public List<byte>	weight = new List<byte>();
+    public List<ushort> vertSrc = new List<ushort>();
+    public List<ushort> idxVert = new List<ushort>();
+    public List<byte> weight = new List<byte>();
 };
 
 //public typedef KDArray<int> CIdxArray;
@@ -3657,9 +4029,9 @@ public class CBoneData
             twozies.Add(new List<int>());
         }
     }
-    
+
     public List<int> onezies = new List<int>();
-    public List<List<int>>twozies = new List<List<int>>();
+    public List<List<int>> twozies = new List<List<int>>();
 };
 
 // typedef struct { int16 x, y, z; } tVecQ;
@@ -3670,35 +4042,73 @@ public class CBoneData
 
 public static class SkinBuilder
 {
-    public static SkinData PrepareData(int numBones,List<Vector3> vertices,List<Vector3> normals,List<BoneWeight> boneWeights)
+
+    public static SkinData PrepareData(SkinnedMeshRenderer skinnedMeshRenderer, short animShift)
+    {
+        List<Vector3> vertices = new  List<Vector3>();
+        vertices.AddRange(skinnedMeshRenderer.sharedMesh.vertices);
+
+        List<Vector3> normals = new  List<Vector3>();
+        normals.AddRange(skinnedMeshRenderer.sharedMesh.normals);
+
+        List<BoneWeight> boneWeights = new  List<BoneWeight>();
+        boneWeights.AddRange(skinnedMeshRenderer.sharedMesh.boneWeights);
+
+        HashSet<int> bones = new HashSet<int>();
+        foreach (BoneWeight bw in boneWeights)
+        {
+            if (bw.CountWeights() > 0)
+            {
+                bones.Add(bw.boneIndex0);
+            }
+            if (bw.CountWeights() > 1)
+            {
+                bones.Add(bw.boneIndex1);
+            }
+            if (bw.CountWeights() > 2)
+            {
+                bones.Add(bw.boneIndex2);
+            }
+            if (bw.CountWeights() > 3)
+            {
+                bones.Add(bw.boneIndex3);
+            }
+        }
+        
+        return PrepareData(bones.Count,vertices,normals,boneWeights);
+        
+    }
+    
+    public static SkinData PrepareData(int numBones, List<Vector3> vertices, List<Vector3> normals,
+        List<BoneWeight> boneWeights)
     {
         // dma size , maybe 16k 
-        const int sk_maxPacketSizeSafe = (1024*16)-65;
-        const int size_vector = 2*3;
+        const int sk_maxPacketSizeSafe = (1024 * 16) - 65;
+        const int size_vector = 2 * 3;
         const int size_normal = 3;
         const int size_index = 2;
         const int size_weight = 1;
 
         List<COnezie> onezies = new List<COnezie>();
         List<CTwozie> twozies = new List<CTwozie>();
-        List<CAccList> acclist = new List<CAccList>(); 
-        Dictionary<int,CBoneData> idxBones = new Dictionary<int,CBoneData>();
+        List<CAccList> acclist = new List<CAccList>();
+        Dictionary<int, CBoneData> idxBones = new Dictionary<int, CBoneData>();
 
 
         for (int i = 0; i < numBones; ++i)
         {
             acclist.Add(new CAccList());
         }
-        
-        
+
+
         int numVerts = vertices.Count();
 
         int[] pRelocate = new int[numVerts];
 
-        
+
         //const bool bBiTan = pI->aBinIds && pI->aTanIds;
         int numNormals = 1;
-        int size_pos_norm = size_vector + size_normal*numNormals;
+        int size_pos_norm = size_vector + size_normal * numNormals;
 
         //init reloc table
         for (int i = 0; i < numVerts; i++)
@@ -3710,17 +4120,17 @@ public static class SkinBuilder
         {
             idxBones[i] = new CBoneData(numBones);
         }
-        
-        
+
+
         // lets build a tree of onzies and twozies
-        for( int iv=0; iv<numVerts; iv++ )
+        for (int iv = 0; iv < numVerts; iv++)
         {
             int vertexBoneCount = boneWeights[iv].CountWeights();
-            
+
             // int start_idx = pI->aWeightInds[iv];
             // int num_idx = pI->aWeightCnts[iv];
-            
-            if (vertexBoneCount==1)
+
+            if (vertexBoneCount == 1)
             {
                 int idx_bone = boneWeights[iv].boneIndex0;
 
@@ -3728,30 +4138,31 @@ public static class SkinBuilder
                 {
                     int stopHere = 0;
                 }
-                Debug.Assert(idx_bone<numBones);
+
+                Debug.Assert(idx_bone < numBones);
                 // all the vertices that only have a single weight on that idx bone.    
-                idxBones[ idx_bone ].onezies.Add( iv );
+                idxBones[idx_bone].onezies.Add(iv);
             }
             else // note anything above one is counted as a twozie (with possible accumulations)
             {
                 int idx_bone = boneWeights[iv].boneIndex0;
-                Debug.Assert(idx_bone<numBones);
-                
-                List<List<int>> ar = idxBones[ idx_bone ].twozies;
-                
+                Debug.Assert(idx_bone < numBones);
+
+                List<List<int>> ar = idxBones[idx_bone].twozies;
+
                 //ar.resize( numBones );
 
                 int idx_bone2 = boneWeights[iv].boneIndex1;
-                Debug.Assert(idx_bone2<numBones);
+                Debug.Assert(idx_bone2 < numBones);
 
-                ar[ idx_bone2 ].Add( iv );
+                ar[idx_bone2].Add(iv);
             }
         }
 
-        int kMaxVertCount = sk_maxPacketSizeSafe/size_pos_norm;
+        int kMaxVertCount = sk_maxPacketSizeSafe / size_pos_norm;
 
         // do onezies
-        for( int idx_bone=0; idx_bone<numBones; idx_bone++ )
+        for (int idx_bone = 0; idx_bone < numBones; idx_bone++)
         {
             CBoneData bd = idxBones[idx_bone];
             int vert_count = bd.onezies.Count();
@@ -3766,9 +4177,9 @@ public static class SkinBuilder
             onezies.Add(data);
             data.idxBone = idx_bone;
             data.count = 0;
-            for( int j=0; j<vert_count; j++)
+            for (int j = 0; j < vert_count; j++)
             {
-                if (nn>kMaxVertCount)
+                if (nn > kMaxVertCount)
                 {
                     // finalize last packet
                     data.count = nn;
@@ -3781,67 +4192,71 @@ public static class SkinBuilder
                     data.count = 0;
                     nn = 0;
                 }
+
                 nn++;
 
                 int idx = bd.onezies[j];
 
                 //Debug.Assert(idx_bone==pI->aMtxIds[pI->aWeightInds[idx]]);
 
-                data.vertSrc.Add( (ushort)idx );
+                data.vertSrc.Add((ushort)idx);
             }
 
             // finalize last packet
             data.count = nn;
         }
-        
+
         //== primitive sort
-        for( int i=0; i< onezies.Count-1; i++ )
+        for (int i = 0; i < onezies.Count - 1; i++)
         {
             int max_id = i;
             int max_verts = onezies[i].count;
-            for(int j=(i+1); j<onezies.Count; j++ )
+            for (int j = (i + 1); j < onezies.Count; j++)
             {
                 int cnt = onezies[j].count;
-                if (cnt>max_verts)
+                if (cnt > max_verts)
                 {
                     max_verts = cnt;
                     max_id = j;
                 }
             }
+
             COnezie temp = onezies[i];
             onezies[i] = onezies[max_id];
             onezies[max_id] = temp;
         }
-        
+
         onezies = onezies.OrderByDescending(x => x.count).ThenBy(x => x.idxBone).ToList();
-        
+
 
         //== build packets
-        List<int> packets1 = new List<int>();
-        List<int> packet_size1 = new List<int>();
-        if(onezies.Count > 0)
+        List<ushort> packets1 = new List<ushort>();
+        List<ushort> packet_size1 = new List<ushort>();
+        if (onezies.Count > 0)
         {
-            int packet_start = 0;
-            
-            int nn = onezies[0].count;
-            for(int i=1; i<onezies.Count; i++ )
+            ushort packet_start = 0;
+
+            ushort nn = onezies[0].count;
+            for (int i = 1; i < onezies.Count; i++)
             {
-                int vert_count = onezies[i].count;
-                if ( (nn+vert_count)>kMaxVertCount )
+                ushort vert_count = onezies[i].count;
+                if ((nn + vert_count) > kMaxVertCount)
                 {
                     packets1.Add(packet_start);
                     packet_size1.Add(nn);
-                    packet_start = i;
+                    packet_start = (ushort)i;
                     nn = 0;
                 }
+
                 nn += vert_count;
             }
+
             packets1.Add(packet_start);
             packet_size1.Add(nn);
         }
 
         //== do twozies
-        for( int idx_bone=0; idx_bone<numBones; idx_bone++ )
+        for (int idx_bone = 0; idx_bone < numBones; idx_bone++)
         {
             CBoneData bd = idxBones[idx_bone];
 
@@ -3850,7 +4265,7 @@ public static class SkinBuilder
                 continue;
             }
 
-            for( int idx_bone2=0; idx_bone2<numBones; idx_bone2++)
+            for (int idx_bone2 = 0; idx_bone2 < numBones; idx_bone2++)
             {
                 List<int> ar = bd.twozies[idx_bone2];
                 int vert_count = ar.Count();
@@ -3866,11 +4281,11 @@ public static class SkinBuilder
                 data.idxBone[0] = idx_bone;
                 data.idxBone[1] = idx_bone2;
                 data.count = 0;
-                for( int k=0; k<vert_count; k++ )
+                for (int k = 0; k < vert_count; k++)
                 {
                     int idx = ar[k];
 
-                    if (nn>kMaxVertCount)
+                    if (nn > kMaxVertCount)
                     {
                         // finalize last packet
                         data.count = (ushort)nn;
@@ -3878,18 +4293,18 @@ public static class SkinBuilder
                         // start new packet
                         data = new CTwozie();
                         twozies.Add(data);
-                        
+
                         data.idxBone[0] = idx_bone;
                         data.idxBone[1] = idx_bone2;
                         data.count = 0;
                     }
+
                     nn++;
 
-                    data.vertSrc.Add( (ushort)idx );
+                    data.vertSrc.Add((ushort)idx);
 
                     data.weights.Add((byte)boneWeights[k].weight0);
                     data.weights.Add((byte)boneWeights[k].weight1);
-                    
                 }
 
                 // finalize last packet
@@ -3897,45 +4312,48 @@ public static class SkinBuilder
             }
         }
 
-        for( int i=0; i<(int)twozies.Count()-1; i++ )
+        for (int i = 0; i < (int)twozies.Count() - 1; i++)
         {
             int max_id = i;
             int max_verts = twozies[i].count;
-            for( int j=(i+1); j<twozies.Count(); j++ )
+            for (int j = (i + 1); j < twozies.Count(); j++)
             {
                 int cnt = twozies[j].count;
-                if (cnt>max_verts)
+                if (cnt > max_verts)
                 {
                     max_verts = cnt;
                     max_id = j;
                 }
             }
+
             CTwozie temp = twozies[i];
             twozies[i] = twozies[max_id];
             twozies[max_id] = temp;
         }
 
         twozies = twozies.OrderByDescending(x => x.count).ThenBy(y => y.idxBone[0]).ThenBy(y => y.idxBone[1]).ToList();
-        
+
         //== build packets
-        List<int> packets2 = new List<int>();
-        List<int> packet_size2 = new List<int>();
+        List<ushort> packets2 = new List<ushort>();
+        List<ushort> packet_size2 = new List<ushort>();
         if (twozies.Count() > 0)
         {
-            int packet_start = 0;
-            int nn = twozies[0].count;
-            for(int i=1; i<twozies.Count(); i++ )
+            ushort packet_start = 0;
+            ushort nn = twozies[0].count;
+            for (int i = 1; i < twozies.Count(); i++)
             {
-                int vert_count = twozies[i].count;
-                if ( (nn+vert_count)>kMaxVertCount )
+                ushort vert_count = twozies[i].count;
+                if ((nn + vert_count) > kMaxVertCount)
                 {
                     packets2.Add(packet_start);
                     packet_size2.Add(nn);
-                    packet_start = i;
+                    packet_start = (ushort)i;
                     nn = 0;
                 }
+
                 nn += vert_count;
             }
+
             packets2.Add(packet_start);
             packet_size2.Add(nn);
         }
@@ -3943,21 +4361,21 @@ public static class SkinBuilder
         //== reorder vertices
         ushort cur_vert = 0;
 
-        for( int i=0; i<onezies.Count(); i++ )
+        for (int i = 0; i < onezies.Count(); i++)
         {
             COnezie data = onezies[i];
             data.idx_start = cur_vert;
-            for( int j=0; j<data.count; j++)
+            for (int j = 0; j < data.count; j++)
             {
                 pRelocate[data.vertSrc[j]] = cur_vert++;
             }
         }
 
-        for( int i=0; i<twozies.Count(); i++ )
+        for (int i = 0; i < twozies.Count(); i++)
         {
             CTwozie data = twozies[i];
             data.idx_start = cur_vert;
-            for( int j=0; j<data.count; j++)
+            for (int j = 0; j < data.count; j++)
             {
                 ushort idx = data.vertSrc[j];
 
@@ -3968,7 +4386,6 @@ public static class SkinBuilder
                     accData.vertSrc.Add(idx);
                     accData.weight.Add((byte)boneWeights[idx].weight2);
                     accData.idxVert.Add(cur_vert);
-                    
                 }
 
                 if (weightCount == 4)
@@ -3999,29 +4416,30 @@ public static class SkinBuilder
         uint memsize = SkinData.RawSize;
 
         uint packetSize = 2;
-        
-        memsize += (uint)packets1.Count*packetSize;
-        memsize += (uint)packets1.Count*packetSize;
 
-        memsize += (uint)packets2.Count*packetSize;
-        memsize += (uint)packets2.Count*packetSize;
+        memsize += (uint)packets1.Count * packetSize;
+        memsize += (uint)packets1.Count * packetSize;
+
+        memsize += (uint)packets2.Count * packetSize;
+        memsize += (uint)packets2.Count * packetSize;
 
         memsize = CommonModelImporter.Align32(memsize);
         memsize += (uint)(numVerts * size_pos_norm);
 
-        memsize += (uint)(CSK1.RawSize*onezies.Count);
+        memsize += (uint)(CSK1.RawSize * onezies.Count);
 
         int weights_count = 0;
-        for( int i=0; i<twozies.Count(); i++ )
+        for (int i = 0; i < twozies.Count(); i++)
         {
             CTwozie data = twozies[i];
             memsize += CSK2.RawSize;
-            weights_count += 2*data.count;
+            weights_count += 2 * data.count;
         }
-        memsize += (uint)(weights_count*size_weight);
+
+        memsize += (uint)(weights_count * size_weight);
 
         int countAcclist = 0;
-        for( int i=0; i<numBones; i++ )
+        for (int i = 0; i < numBones; i++)
         {
             CAccList acc_data = acclist[i];
             int count = acc_data.weight.Count();
@@ -4029,11 +4447,12 @@ public static class SkinBuilder
             {
                 continue;
             }
+
             countAcclist++;
             memsize += CSKA.RawSize;
-            memsize += (uint)(size_pos_norm*count);
-            memsize += (uint)(size_index*count);		// dest index
-            memsize += (uint)(size_weight*count);		// weights
+            memsize += (uint)(size_pos_norm * count);
+            memsize += (uint)(size_index * count); // dest index
+            memsize += (uint)(size_weight * count); // weights
         }
 
         uint positionCounter = 0;
@@ -4045,24 +4464,26 @@ public static class SkinBuilder
 
         skinData.NumPackets1 = packets1.Count;
         skinData.PacketStart1 = positionCounter;
-        positionCounter += (uint)(skinData.NumPackets1 * 4);
+        positionCounter += (uint)(skinData.NumPackets1 * 2);
         skinData.PacketSize1 = positionCounter;
-        positionCounter += (uint)(skinData.NumPackets1 * 4);
+        positionCounter += (uint)(skinData.NumPackets1 * 2);
         for (int i = 0; i < skinData.NumPackets1; i++)
         {
-            skinData.Packet1Starts.Add((uint)packets1[i]);
-            skinData.Packet1Sizes.Add((uint)packet_size1[i]);
+            skinData.Packet1Starts.Add(packets1[i]);
+            skinData.Packet1Sizes.Add(packet_size1[i]);
         }
+
         skinData.NumPackets2 = packets2.Count;
         skinData.PacketStart2 = positionCounter;
-        positionCounter += (uint)(skinData.NumPackets2 * 4);
+        positionCounter += (uint)(skinData.NumPackets2 * 2);
         skinData.PacketSize2 = positionCounter;
-        positionCounter += (uint)(skinData.NumPackets2 * 4);
+        positionCounter += (uint)(skinData.NumPackets2 * 2);
         for (int i = 0; i < skinData.NumPackets2; i++)
         {
-            skinData.Packet2Starts.Add((uint)packets2[i]);
-            skinData.Packet2Sizes.Add((uint)packet_size2[i]);
+            skinData.Packet2Starts.Add(packets2[i]);
+            skinData.Packet2Sizes.Add(packet_size2[i]);
         }
+
         positionCounter = CommonModelImporter.Align32(positionCounter);
         skinData.SourceData = positionCounter;
         positionCounter += (uint)(numVerts * size_pos_norm);
@@ -4071,7 +4492,7 @@ public static class SkinBuilder
 
         skinData.CalculatedSize = positionCounter;
         skinData.Size = (int)skinData.CalculatedSize;
-        
+
         // lets pack our data into a continuous array
         // CSkinningData* pOut = (CSkinningData*) (new char[memsize]);
         // ASSERT( (void*)pOut==align32(pOut) );
@@ -4146,7 +4567,7 @@ public static class SkinBuilder
         //     }
         // }
 
-        foreach(COnezie onezie in onezies)
+        foreach (COnezie onezie in onezies)
         {
             CSK1 csk1 = new CSK1();
             skinData.CSK1List.Add(csk1);
@@ -4157,15 +4578,14 @@ public static class SkinBuilder
 
             int csk1Start = 32;
             csk1.vertSrc = (uint)(csk1Start + csk1.vertDst);
-            
+
             foreach (int index in onezie.vertSrc)
             {
                 csk1.ExtractedPositions.Add(vertices[index]);
                 csk1.ExtractedNormals.Add(normals[index]);
             }
-            
         }
-        
+
 
 // do twozies
         // CSK2* const pSK2_base = (CSK2*)pData;
@@ -4206,19 +4626,19 @@ public static class SkinBuilder
         //     for( int j=0; j<2*count; j++ )
         //         ((uint8*)pSK2->weights)[j] = data.weights[j];
         // }
-        foreach(CTwozie twozie in twozies)
+        foreach (CTwozie twozie in twozies)
         {
             CSK2 csk2 = new CSK2();
             skinData.CSK2List.Add(csk2);
             csk2.idxBone[0] = (byte)twozie.idxBone[0];
             csk2.idxBone[1] = (byte)twozie.idxBone[1];
-            
+
             csk2.count = twozie.count;
 
             csk2.vertDst = (uint)(twozie.idx_start * size_pos_norm);
             //csk2.vertSrc = csk2.vertDst + 36;
             csk2.vertSrc = skinData.SourceData + csk2.vertDst;
-             
+
 
             foreach (int index in twozie.vertSrc)
             {
@@ -4226,20 +4646,19 @@ public static class SkinBuilder
                 csk2.ExtractedNormals.Add(normals[index]);
             }
 
-            for (int j = 0; j < 2 * csk2.count; j+=2)
+            for (int j = 0; j < 2 * csk2.count; j += 2)
             {
                 byte b1 = twozie.weights[j];
-                byte b2 = twozie.weights[j+1];
+                byte b2 = twozie.weights[j + 1];
                 float f1 = b1 / 255f;
                 float f2 = b2 / 255f;
-                csk2.ExtractedWeightsBytes.Add((b1,b2));
-                csk2.ExtractedWeightsFloats.Add((f1,f2));
+                csk2.ExtractedWeightsBytes.Add((b1, b2));
+                csk2.ExtractedWeightsFloats.Add((f1, f2));
             }
-            
         }
 
         // do accumulations
-        
+
         // CSKA* const pSKA_base = (CSKA*)pData;
         // pOut->pSKA = pSKA_base;
         // pOut->numSKA = countAcclist;
@@ -4284,7 +4703,7 @@ public static class SkinBuilder
         //     pSKA++;
         // }
 
-        
+
         for (int i = 0; i < numBones; i++)
         {
             CAccList data = acclist[i];
@@ -4297,21 +4716,19 @@ public static class SkinBuilder
             CSKA cska = new CSKA();
             cska.idxBone = (byte)i;
             cska.count = (ushort)count;
-            
-            for( int j=0; j<count; j++ )
+
+            for (int j = 0; j < count; j++)
             {
                 int idx = data.vertSrc[j];
 
                 cska.ExtractedPositions.Add(vertices[idx]);
                 cska.ExtractedNormals.Add(normals[idx]);
-
             }
 
             for (int j = 0; j < count; j++)
             {
                 //((uint16*)pSKA->idxDst)[j] = data.idxVert[j];
                 cska.ExtractedDestinationIndices.Add(data.idxVert[j]);
-                
             }
 
 

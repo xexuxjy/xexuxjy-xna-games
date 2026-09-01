@@ -252,7 +252,7 @@ namespace GCTextureTools
                 {
                     chunkList.Add(chunk);
 
-                    if (chunk is EndChunk)
+                    if (chunk is ENDChunk)
                     {
                         break;
                     }

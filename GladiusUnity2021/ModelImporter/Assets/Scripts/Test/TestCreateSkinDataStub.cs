@@ -6,6 +6,6 @@
         public string DumpSearchDirectory;
         public string DumpFileName;
         public uint LodLevel;
-        
+        public int AnimShift;
 
     }

@@ -75,40 +75,6 @@ public static class GladiusFileWriter
     }
 
     
-    
-    
-    public static void WriteVERS(BinaryWriter writer)
-    {
-        int total = HeaderSize + 8;
-        WriteASCIIString(writer, "VERS");
-        // header size
-        writer.Write(total);
-        writer.Write(0);
-        writer.Write(1);
-        writer.Write(0);
-        writer.Write(14);
-        // writer.Write(0);
-        // writer.Write(0);
-    }
-
-    public static void WriteCPRT(BinaryWriter writer)
-    {
-        int blockSize = 0x90;
-        int remain = blockSize;
-        WriteASCIIString(writer, "CPRT");
-        writer.Write(blockSize);
-        writer.Write(0x00);
-        writer.Write(0x80);
-
-        remain -= GladiusFileWriter.HeaderSize;
-        
-        string s = "(C) Mar 21 2003 LucasArts Entertainment LLC";
-        remain -= s.Length;
-
-        WriteASCIIString(writer, s);
-        WriteNull(writer, remain);
-    }
-
 
     public static int GetPadValue(int total)
     {

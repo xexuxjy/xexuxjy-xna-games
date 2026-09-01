@@ -21,13 +21,13 @@ public class GCModelReader : BaseModelReader
         LoadModels(@"c:\tmp\unpacking\gc-models\", @"c:\tmp\unpacking\gc-models\results.txt");
     }
 
-    public static GCModel LoadSingleModel(String modelPath,  bool readDisplayLists = true)
+    public static GCModel LoadSingleModel(String modelPath, bool readDisplayLists = true)
     {
         FileInfo sourceFile = new FileInfo(modelPath);
 
         using (BinaryReader binReader = new BinaryReader(new FileStream(sourceFile.FullName, FileMode.Open)))
         {
-            GCModel model = GCModel.ReadData(binReader,sourceFile.Name, null);
+            GCModel model = GCModel.ReadData(binReader, sourceFile.Name, null);
             model.Validate();
             return model;
         }
@@ -45,7 +45,7 @@ public class GCModelReader : BaseModelReader
             {
                 try
                 {
-                    GCModel model = LoadSingleModel(file,  true);
+                    GCModel model = LoadSingleModel(file, true);
                     if (model != null)
                     {
                         m_models.Add(model);
@@ -78,13 +78,40 @@ public class GCModel : BaseModel
     public GCModel(String name) : base(name)
     {
         m_name = name;
+        m_chunkList.Add(new VERSChunk());
+        m_chunkList.Add(new CPRTChunk());
+        m_chunkList.Add(new SELSChunk());
+        m_chunkList.Add(new CNTRChunk());
+        m_chunkList.Add(new SHDRChunk());
+        m_chunkList.Add(new TXTRChunk());
+        m_chunkList.Add(new DSLSChunk());
+        m_chunkList.Add(new DSLIChunk());
+        m_chunkList.Add(new DSLCChunk());
+        m_chunkList.Add(new UV0Chunk());
+        m_chunkList.Add(new SKINChunk());
+        m_chunkList.Add(new SKELChunk());
+        m_chunkList.Add(new VFLAChunk());
+        m_chunkList.Add(new RAMChunk());
+        m_chunkList.Add(new MSARChunk());
+        m_chunkList.Add(new NLVLChunk());
+        m_chunkList.Add(new MESHChunk());
+        m_chunkList.Add(new ELEMChunk());
+        m_chunkList.Add(new ENDChunk());
     }
 
-    public static GCModel CreateFromGameObject(GameObject gameObj)
+    public static GCModel CreateFromGameObject(GameObject gameObj, short animShift)
     {
         // not valid
-        if (gameObj == null || gameObj.GetComponentsInChildren<MeshFilter>().Length == 0 ||
-            gameObj.GetComponentsInChildren<MeshRenderer>().Length == 0)
+        if (gameObj == null)
+        {
+            return null;
+        }
+
+        MeshFilter[] meshFilters = gameObj.GetComponentsInChildren<MeshFilter>();
+        SkinnedMeshRenderer[] skinnedMeshRenderers = gameObj.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        if ((meshFilters == null || meshFilters.Length == 0) &&
+            (skinnedMeshRenderers == null || skinnedMeshRenderers.Length == 0))
         {
             return null;
         }
@@ -102,19 +129,23 @@ public class GCModel : BaseModel
             offset = attachPoint.position;
         }
 
-        MeshFilter[] meshFilters = gameObj.GetComponentsInChildren<MeshFilter>();
-        SkinnedMeshRenderer[] skinnedMeshRenderers = gameObj.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         if (skinnedMeshRenderers != null && skinnedMeshRenderers.Length > 0)
         {
             foreach (SkinnedMeshRenderer skinnedMeshRenderer in skinnedMeshRenderers)
             {
-                SkinData skinData = GCModel.CreateSkinData(skinnedMeshRenderer.sharedMesh);
+                SkinData skinData = SkinBuilder.PrepareData(skinnedMeshRenderer, animShift);
+                    
                 if (skinData != null)
                 {
-                    model.m_skinData.Add(skinData);
+                    model.AddSkinData(skinData);
                 }
             }
+
+            // build a skeleton from rootBone.
+
+            byte boneId = 0;
+            AnimationUtils.BuildSkeleton(gameObj.transform, null, ref boneId, model.GetChunk<SKELChunk>().BoneList);
         }
         else
         {
@@ -144,29 +175,35 @@ public class GCModel : BaseModel
 
             foreach (Vector3 v in adjustedVertices)
             {
-                model.m_points.Add(v);
+                model.AddUnskinnedPosition(v);
             }
 
             foreach (Vector3 v in adjustedNormals)
             {
-                model.m_normals.Add(v);
+                model.AddUnskinnedNormal(v);
             }
         }
 
 
         foreach (Vector2 v in uniqueUVs)
         {
-            model.m_uvs.Add(v);
+            model.AddUV(v);
         }
 
         int subObjectCount = 0;
 
 
-        model.m_selsInfo.Add(DefaultShader);
+        model.GetChunk<SELSChunk>().Names.Add(DefaultShader);
 
         List<Mesh> meshes = new List<Mesh>();
         List<GameObject> gameObjects = new List<GameObject>();
         List<Material> materials = new List<Material>();
+
+        POSIChunk posiChunk = model.GetChunk<POSIChunk>();
+        NORMChunk normChunk = model.GetChunk<NORMChunk>();
+        UV0Chunk uv0Chunk = model.GetChunk<UV0Chunk>();
+        TXTRChunk txtrChunk = model.GetChunk<TXTRChunk>();
+        SELSChunk selsChunk = model.GetChunk<SELSChunk>();
 
         if (skinnedMeshRenderers != null && skinnedMeshRenderers.Length > 0)
         {
@@ -176,6 +213,8 @@ public class GCModel : BaseModel
                 gameObjects.Add(skinnedMeshRenderer.gameObject);
                 materials.Add(skinnedMeshRenderer.sharedMaterial);
             }
+
+            // Need to make bone lists here as well..
         }
         else
         {
@@ -188,18 +227,18 @@ public class GCModel : BaseModel
             }
 
             // go through and adjust positions and normals now that the lists have been built
-            for (int i = 0; i < model.m_points.Count; ++i)
+            for (int i = 0; i < posiChunk.Data.Count; ++i)
             {
-                IndexedVector3 adjusted = model.m_points[i];
+                IndexedVector3 adjusted = posiChunk.Data[i];
                 adjusted = gameObj.transform.TransformPoint(adjusted);
                 adjusted -= offset;
-                model.m_points[i] = GladiusGlobals.UnityToGladius(adjusted);
+                posiChunk.Data[i] = GladiusGlobals.UnityToGladius(adjusted);
             }
 
-            for (int i = 0; i < model.m_normals.Count; ++i)
+            for (int i = 0; i < normChunk.Data.Count; ++i)
             {
-                model.m_normals[i] =
-                    GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(model.m_normals[i]));
+                normChunk.Data[i] =
+                    GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(normChunk.Data[i]));
             }
         }
 
@@ -208,6 +247,13 @@ public class GCModel : BaseModel
             Mesh mesh = meshes[m];
             GameObject gameObject = gameObjects[m];
             Material material = materials[m];
+
+            List<Vector3> vertices = model.IsSkinned()
+                ? model.GetChunk<SKINChunk>().Positions
+                : model.GetChunk<POSIChunk>().Data;
+            List<Vector3> normals =
+                model.IsSkinned() ? model.GetChunk<SKINChunk>().Normals : model.GetChunk<NORMChunk>().Data;
+
 
             DisplayListHeader dlh = new DisplayListHeader();
             int[] triangleOrder = new[] { 0, 2, 1 };
@@ -224,14 +270,10 @@ public class GCModel : BaseModel
                         mesh.normals[lookupIndex]);
                     Vector2 sharedMeshU = mesh.uv[lookupIndex];
 
+                    int posIndex = lookupIndex;
+                    int normIndex = lookupIndex;
 
-                    int posIndex = model.m_points.IndexOf(sharedMeshV);
-                    int normIndex = model.m_normals.IndexOf(sharedMeshN);
-
-                    posIndex = lookupIndex;
-                    normIndex = lookupIndex;
-
-                    int uvIndex = model.m_uvs.IndexOf(sharedMeshU);
+                    int uvIndex = uv0Chunk.Data.IndexOf(sharedMeshU);
 
                     dlh.entries.Add(new DisplayListEntry((ushort)posIndex, (ushort)normIndex, (ushort)uvIndex));
                 }
@@ -241,24 +283,30 @@ public class GCModel : BaseModel
 
             dlh.indexCount = (ushort)dlh.entries.Count;
 
-            model.m_displayListHeaders.Add(dlh);
 
+            model.AddDSLH(dlh);
 
-            string textureName = material.mainTexture.name;
+            if (material != null && material.mainTexture != null)
+            {
+                string textureName = material.mainTexture.name;
 
-            textureName += ".tga";
-            textureName = textureName.ToLower();
+                textureName += ".tga";
+                textureName = textureName.ToLower();
 
-            model.m_textures.Add(new TextureHeaderInfo()
-                { Name = textureName, Width = material.mainTexture.width, Height = material.mainTexture.height });
+                txtrChunk.Textures.Add(new PaxTexture()
+                {
+                    Name = textureName, Width = (uint)material.mainTexture.width,
+                    Height = (uint)material.mainTexture.height
+                });
 
-            model.m_selsInfo.Add(textureName);
+                selsChunk.Names.Add(textureName);
+            }
 
             PaxElement paxElement = new PaxElement((uint)subObjectCount, 0);
             paxElement.VertexCount = (uint)mesh.vertexCount;
 
 
-            model.m_paxElements.Add(paxElement);
+            model.AddPaxElement(paxElement);
 
             subObjectCount++;
         }
@@ -269,18 +317,20 @@ public class GCModel : BaseModel
 
     public uint LodLevelForMesh(int meshIndex)
     {
-        if (meshIndex < 0 || meshIndex >= MESHChunk().PaxElements.Count)
+        MESHChunk meshChunk = GetChunk<MESHChunk>();
+        if (meshIndex < 0 || meshIndex >= meshChunk.NumElements)
         {
             return 0;
         }
 
-        return MESHChunk().PaxElements[meshIndex].SelectSetMask;
+        return meshChunk.PaxElements[meshIndex].SelectSetMask;
     }
 
     public int CountMeshesForLodLevel(uint lodLevel)
     {
         int count = 0;
-        foreach (PaxElement paxElement in MESHChunk().PaxElements)
+        MESHChunk meshChunk = GetChunk<MESHChunk>();
+        foreach (PaxElement paxElement in meshChunk.PaxElements)
         {
             if (lodLevel == 0 || (paxElement.SelectSetMask & lodLevel) != 0)
             {
@@ -293,20 +343,9 @@ public class GCModel : BaseModel
 
     public bool IsSkinned()
     {
-        return m_bones.Count > 0;
+        return GetChunk<SKELChunk>() != null && GetChunk<SKELChunk>().BoneList.Count > 0;
     }
 
-    public SKINChunk SKINChunk()
-    {
-        SKINChunk skinChunk = (SKINChunk)m_chunkList.Find(x => x is SKINChunk);
-        return skinChunk;
-    }
-
-    public MESHChunk MESHChunk()
-    {
-        MESHChunk meshChunk = (MESHChunk)m_chunkList.Find(x => x is MESHChunk);
-        return meshChunk;
-    }
 
     public CommonModelData ToCommon()
     {
@@ -318,23 +357,25 @@ public class GCModel : BaseModel
         commonModelData.IndexDataList = new List<List<int>>();
 
 
-        SKELChunk skelChunk = (SKELChunk)m_chunkList.Find(x => x is SKELChunk);
+        SKELChunk skelChunk = GetChunk<SKELChunk>();
         if (skelChunk != null)
         {
             commonModelData.BoneList.AddRange(skelChunk.BoneList);
         }
 
-        POSIChunk posiChunk = (POSIChunk)m_chunkList.Find(x => x is POSIChunk);
-        NORMChunk normChunk = (NORMChunk)m_chunkList.Find(x => x is NORMChunk);
-        UV0Chunk uv0Chunk = (UV0Chunk)m_chunkList.Find(x => x is UV0Chunk);
-        DSLIChunk dsliChunk = (DSLIChunk)m_chunkList.Find(x => x is DSLIChunk);
-        DSLSChunk dslsChunk = (DSLSChunk)m_chunkList.Find(x => x is DSLSChunk);
-        DSLCChunk dslcChunk = (DSLCChunk)m_chunkList.Find(x => x is DSLCChunk);
-        MESHChunk meshChunk = (MESHChunk)m_chunkList.Find(x => x is MESHChunk);
-        ELEMChunk elemChunk = (ELEMChunk)m_chunkList.Find(x => x is ELEMChunk);
-        SKINChunk skinChunk = (SKINChunk)m_chunkList.Find(x => x is SKINChunk);
-        SELSChunk selsChunk = (SELSChunk)m_chunkList.Find(x => x is SELSChunk);
-        STYPChunk stypChunk = (STYPChunk)m_chunkList.Find(x => x is STYPChunk);
+        POSIChunk posiChunk = GetChunk<POSIChunk>();
+        NORMChunk normChunk = GetChunk<NORMChunk>();
+        UV0Chunk uv0Chunk = GetChunk<UV0Chunk>();
+        DSLIChunk dsliChunk = GetChunk<DSLIChunk>();
+        DSLSChunk dslsChunk = GetChunk<DSLSChunk>();
+        DSLCChunk dslcChunk = GetChunk<DSLCChunk>();
+        MESHChunk meshChunk = GetChunk<MESHChunk>();
+        ELEMChunk elemChunk = GetChunk<ELEMChunk>();
+        SKINChunk skinChunk = GetChunk<SKINChunk>();
+        SELSChunk selsChunk = GetChunk<SELSChunk>();
+        STYPChunk stypChunk = GetChunk<STYPChunk>();
+        SHDRChunk shdrChunk = GetChunk<SHDRChunk>();
+        TXTRChunk txtrChunk = GetChunk<TXTRChunk>();
 
 
         if (dsliChunk != null && dslsChunk != null)
@@ -360,8 +401,6 @@ public class GCModel : BaseModel
             }
         }
 
-        SHDRChunk shdrChunk = (SHDRChunk)m_chunkList.Find(x => x is SHDRChunk);
-        TXTRChunk txtrChunk = (TXTRChunk)m_chunkList.Find(x => x is TXTRChunk);
 
         if (shdrChunk != null && txtrChunk != null)
         {
@@ -662,6 +701,9 @@ public class GCModel : BaseModel
 
     public void BuildMaterialData(GameObject go, GCModel model)
     {
+        TXTRChunk txtrChunk = model.GetChunk<TXTRChunk>();
+        SELSChunk selsChunk = model.GetChunk<SELSChunk>();
+
         HashSet<Material> materials = new HashSet<Material>();
         foreach (MeshRenderer mr in go.GetComponentsInChildren<MeshRenderer>())
         {
@@ -676,17 +718,19 @@ public class GCModel : BaseModel
             textureName = textureName.ToLower();
 
 
-            model.m_textures.Add(new TextureHeaderInfo()
-                { Name = textureName, Width = m.mainTexture.width, Height = m.mainTexture.height });
+            txtrChunk.Textures.Add(new PaxTexture()
+                { Name = textureName, Width = (uint)m.mainTexture.width, Height = (uint)m.mainTexture.height });
 
-            model.m_selsInfo.Add(DefaultShader);
-            model.m_selsInfo.Add(textureName);
+            selsChunk.Names.Add(DefaultShader);
+            selsChunk.Names.Add(textureName);
         }
     }
 
-    public static GCModel  ReadData(BinaryReader binReader, string name,StringBuilder debugInfo)
+    public static GCModel ReadData(BinaryReader binReader, string name, StringBuilder debugInfo)
     {
         GCModel gcModel = new GCModel(name);
+        gcModel.m_chunkList.Clear();
+
         binReader.BaseStream.Position = 0;
         int count = 0;
 
@@ -698,7 +742,7 @@ public class GCModel : BaseModel
             {
                 gcModel.m_chunkList.Add(chunk);
 
-                if (chunk is EndChunk)
+                if (chunk is ENDChunk)
                 {
                     break;
                 }
@@ -708,42 +752,23 @@ public class GCModel : BaseModel
         } while (count++ < 100);
 
 
-        if (gcModel.SKELChunk != null)
+        SKELChunk skelChunk = gcModel.GetChunk<SKELChunk>();
+        NAMEChunk nameChunk = gcModel.GetChunk<NAMEChunk>();
+        if (skelChunk != null)
         {
-            foreach (BoneNode bn in gcModel.SKELChunk.BoneList)
+            foreach (BoneNode bn in skelChunk.BoneList)
             {
-                bn.name = gcModel.NAMEChunk.Names[bn.NameIndex];
+                bn.name = nameChunk.Names[bn.NameIndex];
                 if (bn.Index != bn.ParentIndex)
                 {
-                    bn.parent = gcModel.SKELChunk.BoneList[bn.ParentIndex];
+                    bn.parent = skelChunk.BoneList[bn.ParentIndex];
                 }
             }
-            //BoneList.AddRange(SkeletonChunk.BoneList);
+            //BoneList.AddRange(skelChunk.BoneList);
         }
+
+
         return gcModel;
-    }
-
-
-    public void BuildBB()
-    {
-        IndexedVector3 min = new IndexedVector3(float.MaxValue);
-        IndexedVector3 max = new IndexedVector3(float.MinValue);
-
-        //MinBB.X = MinBB.Y = MinBB.Z = float.MaxValue;
-        //MaxBB.X = MaxBB.Y = MaxBB.Z = float.MinValue;
-
-        for (int i = 0; i < m_points.Count; ++i)
-        {
-            if (m_points[i].X < min.X) min.X = m_points[i].X;
-            if (m_points[i].Y < min.Y) min.Y = m_points[i].Y;
-            if (m_points[i].Z < min.Z) min.Z = m_points[i].Z;
-            if (m_points[i].X > max.X) max.X = m_points[i].X;
-            if (m_points[i].Y > max.Y) max.Y = m_points[i].Y;
-            if (m_points[i].Z > max.Z) max.Z = m_points[i].Z;
-        }
-
-        MinBB = min;
-        MaxBB = max;
     }
 
 
@@ -752,64 +777,23 @@ public class GCModel : BaseModel
     }
 
 
-    public void Validate()
-    {
-        foreach (DisplayListHeader header in m_displayListHeaders)
-        {
-            if (header.primitiveFlags == 0x90)
-            {
-                for (int i = 0; i < header.entries.Count; ++i)
-                {
-                    if (header.entries[i].PosIndex < 0 || header.entries[i].PosIndex >= m_points.Count)
-                    {
-                        header.Valid = false;
-                        break;
-                    }
-
-                    if (header.entries[i].NormIndex < 0 || header.entries[i].NormIndex >= m_normals.Count)
-                    {
-                        header.Valid = false;
-                        break;
-                    }
-
-                    if (header.entries[i].UVIndex < 0 || header.entries[i].UVIndex >= m_uvs.Count)
-                    {
-                        header.Valid = false;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     public void BuildStandardMesh(List<int> indices, List<Vector3> points, List<Vector3> normals, List<Vector2> uvs)
     {
-        foreach (DisplayListHeader dlh in m_displayListHeaders)
+        DSLSChunk dslsChunk = GetChunk<DSLSChunk>();
+        POSIChunk posiChunk = GetChunk<POSIChunk>();
+        NORMChunk normChunk = GetChunk<NORMChunk>();
+        UV0Chunk uv0Chunk = GetChunk<UV0Chunk>();
+
+        foreach (DisplayListHeader dlh in dslsChunk.DisplayListHeaders)
         {
             int counter = 0;
             for (int i = 0; i < dlh.entries.Count; i++)
             {
                 DisplayListEntry entry = dlh.entries[i];
 
-                if (entry.PosIndex >= m_points.Count)
-                {
-                    int ibreak = 0;
-                }
-
-                if (entry.NormIndex >= m_normals.Count)
-                {
-                    int ibreak = 0;
-                }
-
-                if (entry.UVIndex >= m_uvs.Count)
-                {
-                    int ibreak = 0;
-                }
-
-
-                points.Add(m_points[entry.PosIndex]);
-                normals.Add(m_normals[entry.NormIndex]);
-                uvs.Add(m_uvs[entry.UVIndex]);
+                points.Add(posiChunk.Data[entry.PosIndex]);
+                normals.Add(normChunk.Data[entry.NormIndex]);
+                uvs.Add(uv0Chunk.Data[entry.UVIndex]);
                 indices.Add(counter);
                 counter++;
             }
@@ -817,680 +801,430 @@ public class GCModel : BaseModel
     }
 
 
-    public void WriteData(BinaryWriter writer)
+    public void WriteData(BinaryWriter binWriter)
     {
-        GladiusFileWriter.WriteVERS(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        GladiusFileWriter.WriteCPRT(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteSELS(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteCNTR(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteSHDR(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteTXTR(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        int dslsSize = WriteDSLS(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteDSLI(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteDSLC(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
+        GetChunk<VERSChunk>().ToStream(binWriter);
+        GetChunk<CPRTChunk>().ToStream(binWriter);
+        GetChunk<SELSChunk>().ToStream(binWriter);
+        GetChunk<CNTRChunk>().ToStream(binWriter,
+            IsSkinned() ? GetChunk<SKINChunk>().Positions : GetChunk<POSIChunk>().Data);
+        GetChunk<SHDRChunk>().ToStream(binWriter, GetChunk<TXTRChunk>().Textures);
+        GetChunk<TXTRChunk>().ToStream(binWriter);
+        GetChunk<DSLSChunk>().ToStream(binWriter);
+        GetChunk<DSLIChunk>().ToStream(binWriter);
+        GetChunk<DSLCChunk>().ToStream(binWriter, GetChunk<MESHChunk>().PaxElements);
+
         if (IsSkinned())
         {
-            WriteSKIN(writer);
+            GetChunk<SKINChunk>().ToStream(binWriter);
         }
         else
         {
-            WritePOSI(writer);
-            GladiusFileWriter.PadIfNeeded(writer);
-            WriteNORM(writer);
-            GladiusFileWriter.PadIfNeeded(writer);
+            GetChunk<POSIChunk>().ToStream(binWriter);
+            GetChunk<NORMChunk>().ToStream(binWriter);
         }
 
-        WriteUV0(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteVFLA(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteRAM(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteMSAR(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteNLVL(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteMESH(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        WriteELEM(writer);
-        GladiusFileWriter.PadIfNeeded(writer);
-        GladiusFileWriter.WriteEND(writer);
+        GetChunk<UV0Chunk>().ToStream(binWriter);
+        GetChunk<VFLAChunk>().ToStream(binWriter);
+        GetChunk<RAMChunk>().ToStream(binWriter);
+        GetChunk<MSARChunk>().ToStream(binWriter);
+        GetChunk<NLVLChunk>().ToStream(binWriter);
+        GetChunk<MESHChunk>().ToStream(binWriter);
+        GetChunk<ELEMChunk>().ToStream(binWriter, GetChunk<DSLSChunk>().DisplayListHeaders);
+        GetChunk<ENDChunk>().ToStream(binWriter);
     }
 
+    // public void WriteDSLI(BinaryWriter writer)
+    // {
+    //     int total = GladiusFileWriter.HeaderSize;
+    //     total += (8 * m_displayListHeaders.Count); // (start,length for each
+    //
+    //     int paddedTotal = GladiusFileWriter.GetPadValue(total);
+    //
+    //
+    //     GladiusFileWriter.WriteASCIIString(writer, "DSLI");
+    //     writer.Write(paddedTotal); // block size
+    //     writer.Write(1);
+    //     writer.Write(1);
+    //
+    //
+    //     int startPos = 0;
+    //
+    //     foreach (DisplayListHeader header in m_displayListHeaders)
+    //     {
+    //         DSLIInfo dsliInfo = new DSLIInfo();
+    //         dsliInfo.startPos = startPos;
+    //         dsliInfo.length = header.GetSize();
+    //         ;
+    //
+    //         Common.WriteBigEndian(writer, dsliInfo.startPos);
+    //         Common.WriteBigEndian(writer, dsliInfo.length);
+    //
+    //         startPos += dsliInfo.length;
+    //     }
+    //
+    //     GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+    //     //writer.Write(0);
+    //     //writer.Write(0);
+    // }
+
+    // public void WriteDSLC(BinaryWriter writer)
+    // {
+    //     int total = GladiusFileWriter.HeaderSize + 16;
+    //     GladiusFileWriter.WriteASCIIString(writer, "DSLC");
+    //     writer.Write(total); // block size
+    //     writer.Write(1);
+    //     writer.Write(m_paxElements.Count);
+    //
+    //     int totalEntries = 12;
+    //     for (int i = 0; i < m_paxElements.Count; ++i)
+    //     {
+    //         writer.Write((byte)1);
+    //     }
+    //
+    //     GladiusFileWriter.WriteNull(writer, totalEntries - m_paxElements.Count);
+    // }
+
+
+    // public void WriteNLVL(BinaryWriter writer)
+    // {
+    //     int blockSize = 0x20;
+    //     GladiusFileWriter.WriteASCIIString(writer, "NLVL");
+    //
+    //     writer.Write(blockSize); // block size
+    //     writer.Write(2);
+    //     writer.Write(1);
+    //     GladiusFileWriter.WriteNull(writer, 0x10);
+    // }
+    //
+    // // public void WriteMESH(BinaryWriter writer)
+    // {
+    //     int total = GladiusFileWriter.HeaderSize + (24 * m_paxElements.Count);
+    //     GladiusFileWriter.WriteASCIIString(writer, "MESH");
+    //
+    //     int paddedTotal = GladiusFileWriter.GetPadValue(total);
+    //
+    //     writer.Write(paddedTotal); // block size
+    //
+    //     writer.Write(0);
+    //     writer.Write(m_paxElements.Count); // number of elements
+    //
+    //
+    //     for (int i = 0; i < m_paxElements.Count; ++i)
+    //     {
+    //         m_paxElements[i].ToStream(writer);
+    //     }
+    //
+    //     GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+    // }
+
+    // public void WriteELEM(BinaryWriter writer)
+    // {
+    //     int total = GladiusFileWriter.HeaderSize + 16;
+    //     GladiusFileWriter.WriteASCIIString(writer, "ELEM");
+    //
+    //     writer.Write(total); // block size
+    //     writer.Write(0);
+    //     writer.Write(m_paxElements.Count);
+    //
+    //     for (int i = 0; i < m_displayListHeaders.Count; ++i)
+    //     {
+    //         int val = (4 | (m_displayListHeaders[i].entries.Count << 8));
+    //         writer.Write(val);
+    //         writer.Write(0);
+    //     }
+    // }
+
 
-    public void WriteSELS(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        int textureLength = GladiusFileWriter.GetStringListSize(m_selsInfo);
-        total += textureLength;
+    // public static SkinData CreateSkinData(Mesh mesh, short animShift)
+    // {
+    //     Debug.Assert(mesh != null);
+    //     Debug.Assert(mesh.vertices.Length == mesh.boneWeights.Length);
+    //
+    //     SkinData skinData = new SkinData();
+    //
+    //     // convert back to common vertex to identify duplicates?
+    //     List<CommonVertexInstance> cviList = new List<CommonVertexInstance>();
+    //     for (int i = 0; i < mesh.vertices.Length; ++i)
+    //     {
+    //         CommonVertexInstance cvi = new CommonVertexInstance();
+    //         cvi.Position = mesh.vertices[i];
+    //         cvi.Normal = mesh.normals[i];
+    //         cvi.UV = mesh.uv[i];
+    //         cvi.BoneWeight = mesh.boneWeights[i];
+    //         cviList.Add(cvi);
+    //     }
+    //
+    //     int headerLength = 32;
+    //     int posNormSize = 9;
+    //     int memSize = SkinData.RawSize;
+    //     
+    //     
+    //     
+    //     BoneWeight[] boneWeightsCopy = new BoneWeight[mesh.boneWeights.Length];
+    //     mesh.boneWeights.CopyTo(boneWeightsCopy, 0);
+    //
+    //     // do something here to shrink the weights to a max of 3 only. quick look shows that 4th bone often negligible weight
+    //     // so renormalise and store it as a csk2 plus an extra in cska
+    //
+    //     for (int i = 0; i < boneWeightsCopy.Length; ++i)
+    //     {
+    //         boneWeightsCopy[i] = boneWeightsCopy[i].RenormaliseWeights(3);
+    //     }
+    //
+    //     HashSet<(int, PosNorm)> uniqueVertexOneBone = new HashSet<(int, PosNorm)>();
+    //     HashSet<((int, int), PosNorm)> uniqueVertexTwoBone = new HashSet<((int, int), PosNorm)>();
+    //
+    //     for (int i = 0; i < boneWeightsCopy.Length; i++)
+    //     {
+    //         BoneWeight bw = boneWeightsCopy[i];
+    //         int activeWeights = bw.CountWeights();
+    //         if (activeWeights == 1)
+    //         {
+    //             uniqueVertexOneBone.Add((bw.boneIndex0,
+    //                 new PosNorm() { Position = mesh.vertices[i], Normal = mesh.normals[i] }));
+    //         }
+    //         else if (activeWeights == 2)
+    //         {
+    //             uniqueVertexTwoBone.Add(((bw.boneIndex0, bw.boneIndex1),
+    //                 new PosNorm() { Position = mesh.vertices[i], Normal = mesh.normals[i] }));
+    //         }
+    //     }
+    //
+    //     int srcPosition = 0;
+    //     Dictionary<int, List<int>> oneBoneDict = new Dictionary<int, List<int>>();
+    //     List<PosNorm> oneBonePosNormals = new List<PosNorm>();
+    //
+    //     foreach (var entry in uniqueVertexOneBone)
+    //     {
+    //         int boneId = entry.Item1;
+    //         if (!oneBoneDict.TryGetValue(boneId, out List<int> boneList))
+    //         {
+    //             boneList = new List<int>();
+    //             oneBoneDict[boneId] = boneList;
+    //         }
+    //
+    //         int positionIndex = oneBonePosNormals.IndexOf(entry.Item2);
+    //         if (positionIndex == -1)
+    //         {
+    //             oneBonePosNormals.Add(entry.Item2);
+    //             positionIndex = boneList.Count;
+    //         }
+    //
+    //         boneList.Add(positionIndex);
+    //     }
+    //
+    //     Dictionary<(int, int), List<int>> twoBoneDict = new Dictionary<(int, int), List<int>>();
+    //     List<PosNorm> twoBonePosNormals = new List<PosNorm>();
+    //
+    //     // and all the twos
+    //     foreach (var entry in uniqueVertexTwoBone)
+    //     {
+    //         var key = (Math.Min(entry.Item1.Item1, entry.Item1.Item2),
+    //             Math.Max(entry.Item1.Item1, entry.Item1.Item2));
+    //         //var key = (Math.Min(bw.boneIndex0, bw.boneIndex1), Math.Max(bw.boneIndex0, bw.boneIndex1));
+    //         if (!twoBoneDict.TryGetValue(key, out List<int> boneList))
+    //         {
+    //             boneList = new List<int>();
+    //             twoBoneDict[key] = boneList;
+    //         }
+    //
+    //         int positionIndex = twoBonePosNormals.IndexOf(entry.Item2);
+    //         if (positionIndex == -1)
+    //         {
+    //             twoBonePosNormals.Add(entry.Item2);
+    //             positionIndex = boneList.Count;
+    //         }
+    //
+    //         boneList.Add(positionIndex);
+    //     }
+    //
+    //     List<(CSK1, int)> csk1LinkMap = new List<(CSK1, int)>();
+    //
+    //     foreach (var key in oneBoneDict.Keys)
+    //     {
+    //         CSK1 csk1 = SkinData.CreateCSK1(key, oneBoneDict[key], mesh.vertices, mesh.normals, boneWeightsCopy);
+    //         srcPosition += CSK1.RawSize;
+    //
+    //         csk1LinkMap.Add((csk1, key));
+    //         skinData.CSK1List.Add(csk1);
+    //     }
+    //     // store them in size
+    //
+    //     skinData.CSK1List.Sort((x, y) => y.count.CompareTo(x.count));
+    //
+    //     foreach (var csk1 in skinData.CSK1List)
+    //     {
+    //         int key = csk1LinkMap.Find(x => x.Item1 == csk1).Item2;
+    //
+    //         csk1.vertSrc = (uint)srcPosition;
+    //         csk1.vertDst = (uint)(csk1.vertSrc - headerLength);
+    //
+    //         // write the vertices and normals associated with csk1.
+    //         foreach (var index in oneBoneDict[key])
+    //         {
+    //             Vector3 pos = GladiusGlobals.UnityToGladius(oneBonePosNormals[index].Position);
+    //             Vector3 normal = GladiusGlobals.UnityToGladius(oneBonePosNormals[index].Normal);
+    //             csk1.ExtractedPositions.Add(pos);
+    //             csk1.ExtractedNormals.Add(normal);
+    //         }
+    //
+    //         srcPosition += (csk1.ExtractedPositions.Count * posNormSize);
+    //     }
+    //
+    //
+    //     List<(int, int, float)> additionalValues = new List<(int, int, float)>();
+    //
+    //     Dictionary<(int, int, int), List<int>> threeBoneDict = new Dictionary<(int, int, int), List<int>>();
+    //     // // and all the twos
+    //     // for (int i = 0; i < threeBoneVertices.Count; ++i)
+    //     // {
+    //     //     BoneWeight bw = boneWeightsCopy[threeBoneVertices[i]];
+    //     //
+    //     //     var twoPartKey = (Math.Min(bw.boneIndex0, Math.Min(bw.boneIndex1, bw.boneIndex2)),
+    //     //         Math.Max(bw.boneIndex0, Math.Max(bw.boneIndex1, bw.boneIndex2)));
+    //     //
+    //     //     if (!twoBoneDict.TryGetValue(twoPartKey, out List<int> boneList))
+    //     //     {
+    //     //         boneList = new List<int>();
+    //     //         twoBoneDict[twoPartKey] = boneList;
+    //     //     }
+    //     //
+    //     //     boneList.Add(threeBoneVertices[i]);
+    //     //
+    //     //     // add an additional (vertexIndex, boneId, weight) 
+    //     //     // FIXME - need to figure out which bone we haven't used.'
+    //     //     additionalValues.Add((threeBoneVertices[i], bw.boneIndex2, bw.weight2));
+    //     // }
+    //
+    //
+    //     List<(CSK2, (int, int))> csk2LinkMap = new List<(CSK2, (int, int))>();
+    //
+    //     foreach (var key in twoBoneDict.Keys)
+    //     {
+    //         CSK2 csk2 = SkinData.CreateCSK2(key, twoBoneDict[key], mesh.vertices, mesh.normals, boneWeightsCopy);
+    //         srcPosition += CSK2.RawSize;
+    //
+    //         csk2LinkMap.Add((csk2, key));
+    //         skinData.CSK2List.Add(csk2);
+    //     }
+    //
+    //     // store them in size
+    //     skinData.CSK2List.Sort((x, y) => y.count.CompareTo(x.count));
+    //
+    //     // write positions and normals
+    //     foreach (CSK2 csk2 in skinData.CSK2List)
+    //     {
+    //         var key = csk2LinkMap.Find(x => x.Item1 == csk2).Item2;
+    //
+    //         csk2.vertSrc = (uint)srcPosition;
+    //         csk2.vertDst = (uint)(csk2.vertSrc - headerLength);
+    //
+    //         // write the vertices and normals associated with csk2.
+    //         foreach (var index in twoBoneDict[key])
+    //         {
+    //             Vector3 pos = GladiusGlobals.UnityToGladius(twoBonePosNormals[index].Position);
+    //             Vector3 normal = GladiusGlobals.UnityToGladius(twoBonePosNormals[index].Normal);
+    //             csk2.ExtractedPositions.Add(pos);
+    //             csk2.ExtractedNormals.Add(normal);
+    //         }
+    //
+    //         srcPosition += (csk2.ExtractedPositions.Count * posNormSize);
+    //     }
+    //
+    //     // write weight data
+    //     foreach (CSK2 csk2 in skinData.CSK2List)
+    //     {
+    //         var key = csk2LinkMap.Find(x => x.Item1 == csk2).Item2;
+    //
+    //         csk2.weightsSrc = (uint)srcPosition;
+    //         // write the weights
+    //         foreach (var index in twoBoneDict[key])
+    //         {
+    //             BoneWeight bw = boneWeightsCopy[index];
+    //             csk2.ExtractedWeightsFloats.Add((bw.weight0, bw.weight1));
+    //             csk2.ExtractedWeightsBytes.Add(((byte)(0xFF * bw.weight0), (byte)(0xFF * bw.weight1)));
+    //         }
+    //
+    //         srcPosition += (csk2.ExtractedWeightsBytes.Count * 2);
+    //     }
+    //
+    //     // create all weights.
+    //
+    //
+    //     foreach (var key in additionalValues)
+    //     {
+    //         CSKA cska = SkinData.CreateCSKA(key, mesh.vertices, mesh.normals, boneWeightsCopy);
+    //         skinData.CSKAList.Add(cska);
+    //     }
+    //
+    //
+    //     skinData.NumList1 = (short)skinData.CSK1List.Count;
+    //     skinData.NumList2 = (short)skinData.CSK2List.Count;
+    //     skinData.NumListA = (short)skinData.CSKAList.Count;
+    //
+    //     skinData.Size = headerLength + srcPosition;
+    //
+    //     // general structure of files 
+    //     // for each mesh
+    //     // skindata info (csk1,csk2,cska)
+    //     // vertex and normal data
+    //     // weight data and idx dst mixed?
+    //
+    //
+    //     return skinData;
+    // }
 
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        GladiusFileWriter.WriteASCIIString(writer, "SELS");
-
-        //total = 0x50;
-        writer.Write(paddedTotal);
-        writer.Write(0x00);
-        writer.Write(0x01);
-
-        GladiusFileWriter.WriteStringList(writer, m_selsInfo, (paddedTotal - GladiusFileWriter.HeaderSize));
-    }
-
-    public void WriteCNTR(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        int numV3 = 5;
-        total += (12 * numV3);
-
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-        //paddedTotal = 0x50;
-        GladiusFileWriter.WriteASCIIString(writer, "CNTR");
-        writer.Write(paddedTotal);
-        writer.Write(0x01);
-        writer.Write(0x01);
-
-        Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-        Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-
-        foreach (Vector3 v in m_points)
-        {
-            min = Vector3.Min(min, v);
-            max = Vector3.Max(max, v);
-        }
-
-        Vector3 extents = max - min;
-        extents /= 2f;
-        float radius = Math.Max(extents.x, Math.Max(extents.y, extents.z));
-
-        Vector3 midPoint = min + ((max - min) / 2f);
-
-        Common.WriteVector3BE(writer, min);
-        Common.WriteVector3BE(writer, max);
-        Common.WriteVector3BE(writer, midPoint);
-        Common.WriteVector3BE(writer, new IndexedVector3(radius, 0, 0));
-        Common.WriteVector3BE(writer, midPoint);
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-    }
-
-
-    public void WriteSHDR(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        GladiusFileWriter.WriteASCIIString(writer, "SHDR");
-        total += m_textures.Count * MaterialBlockSize;
-
-        writer.Write(total); // block size
-        writer.Write(0);
-        writer.Write(m_textures.Count); // num materials, 1 for now
-
-
-        for (int i = 0; i < m_textures.Count; ++i)
-        {
-            GCMaterial gcm = new GCMaterial();
-            gcm.MatName = m_textures[i].Name;
-            gcm.TexIndex[0] = (byte)i;
-            gcm.ToStream(writer);
-        }
-
-        // need to pad?
-    }
-
-    public void WriteTXTR(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        total += m_textures.Count * TextureBlockSize;
-
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-
-        GladiusFileWriter.WriteASCIIString(writer, "TXTR");
-        writer.Write(paddedTotal);
-        writer.Write(0);
-        writer.Write(m_textures.Count);
-
-
-        foreach (TextureHeaderInfo textureInfo in m_textures)
-        {
-            GladiusFileWriter.WriteASCIIString(writer, textureInfo.Name, MaxTextureNameSize);
-            writer.Write(-1);
-            writer.Write(0);
-            writer.Write(textureInfo.Width);
-            writer.Write(textureInfo.Height);
-
-            int unknown1 = 3;
-            int unknown2 = 3;
-
-            writer.Write(unknown1);
-            writer.Write(unknown2);
-        }
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-    }
-
-
-    public int WriteDSLS(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-
-        GladiusFileWriter.WriteASCIIString(writer, "DSLS");
-
-        foreach (DisplayListHeader dlh in m_displayListHeaders)
-        {
-            total += dlh.GetSize();
-        }
-
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(1);
-
-        // end of standard header.
-
-        foreach (DisplayListHeader dlh in m_displayListHeaders)
-        {
-            dlh.ToStream(writer);
-        }
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-        return paddedTotal - GladiusFileWriter.HeaderSize;
-    }
-
-    public void WriteDSLI(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        total += (8 * m_displayListHeaders.Count); // (start,length for each
-
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-
-        GladiusFileWriter.WriteASCIIString(writer, "DSLI");
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(1);
-
-
-        int startPos = 0;
-
-        foreach (DisplayListHeader header in m_displayListHeaders)
-        {
-            DSLIInfo dsliInfo = new DSLIInfo();
-            dsliInfo.startPos = startPos;
-            dsliInfo.length = header.GetSize();
-            ;
-
-            Common.WriteBigEndian(writer, dsliInfo.startPos);
-            Common.WriteBigEndian(writer, dsliInfo.length);
-
-            startPos += dsliInfo.length;
-        }
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-        //writer.Write(0);
-        //writer.Write(0);
-    }
-
-    public void WriteDSLC(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize + 16;
-        GladiusFileWriter.WriteASCIIString(writer, "DSLC");
-        writer.Write(total); // block size
-        writer.Write(1);
-        writer.Write(m_paxElements.Count);
-
-        int totalEntries = 12;
-        for (int i = 0; i < m_paxElements.Count; ++i)
-        {
-            writer.Write((byte)1);
-        }
-
-        GladiusFileWriter.WriteNull(writer, totalEntries - m_paxElements.Count);
-    }
-
-    public void WritePOSI(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        total += (m_points.Count * 12);
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-        GladiusFileWriter.WriteASCIIString(writer, "POSI");
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(m_points.Count); // number of elements.
-
-
-        foreach (IndexedVector3 v in m_points)
-        {
-            Common.WriteVector3BE(writer, v);
-        }
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-    }
-
-    public void WriteNORM(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        total += (m_normals.Count * 12);
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-        GladiusFileWriter.WriteASCIIString(writer, "NORM");
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(m_normals.Count); // number of elements.
-
-        foreach (IndexedVector3 v in m_normals)
-        {
-            Common.WriteVector3BE(writer, v);
-        }
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-    }
-
-    public void WriteUV0(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        total += (m_uvs.Count * 8);
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-        GladiusFileWriter.WriteASCIIString(writer, "UV0 ");
-
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(m_uvs.Count); // number of elements.
-        foreach (IndexedVector2 v in m_uvs)
-        {
-            Common.WriteVector2BE(writer, v);
-        }
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-    }
-
-    public void WriteSKIN(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize;
-        foreach (SkinData skinData in m_skinData)
-        {
-            total += skinData.Size;
-        }
-        
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-        GladiusFileWriter.WriteASCIIString(writer, "SKIN");
-        writer.Write(paddedTotal);
-        writer.Write(1);
-        writer.Write(m_skinData.Count);
-
-        foreach (SkinData skinData in m_skinData)
-        {
-            skinData.ToStream(writer);
-        }
-    }
-
-
-    static byte[] VFLAGSData = new byte[]
-        { 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-    public void WriteVFLA(BinaryWriter writer)
-    {
-        GladiusFileWriter.WriteASCIIString(writer, "VFLA");
-        writer.Write(0x20); // block size
-        writer.Write(1);
-        writer.Write(1);
-        writer.Write(VFLAGSData);
-    }
-
-    public void WriteRAM(BinaryWriter writer)
-    {
-        int blockSize = 0x90;
-        GladiusFileWriter.WriteASCIIString(writer, "RAM ");
-        writer.Write(blockSize); // block size
-        writer.Write(1);
-        writer.Write(1);
-        GladiusFileWriter.WriteNull(writer, blockSize - GladiusFileWriter.HeaderSize);
-    }
-
-    public void WriteMSAR(BinaryWriter writer)
-    {
-        int blockSize = 0x40;
-        GladiusFileWriter.WriteASCIIString(writer, "MSAR");
-
-        writer.Write(blockSize); // block size
-        writer.Write(0);
-        writer.Write(1);
-        GladiusFileWriter.WriteNull(writer, blockSize - GladiusFileWriter.HeaderSize);
-    }
-
-    public void WriteNLVL(BinaryWriter writer)
-    {
-        int blockSize = 0x20;
-        GladiusFileWriter.WriteASCIIString(writer, "NLVL");
-
-        writer.Write(blockSize); // block size
-        writer.Write(2);
-        writer.Write(1);
-        GladiusFileWriter.WriteNull(writer, 0x10);
-    }
-
-    public void WriteMESH(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize + (24 * m_paxElements.Count);
-        GladiusFileWriter.WriteASCIIString(writer, "MESH");
-
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
-
-        writer.Write(paddedTotal); // block size
-
-        writer.Write(0);
-        writer.Write(m_paxElements.Count); // number of elements
-
-
-        for (int i = 0; i < m_paxElements.Count; ++i)
-        {
-            m_paxElements[i].ToStream(writer);
-        }
-
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
-    }
-
-    public void WriteELEM(BinaryWriter writer)
-    {
-        int total = GladiusFileWriter.HeaderSize + 16;
-        GladiusFileWriter.WriteASCIIString(writer, "ELEM");
-
-        writer.Write(total); // block size
-        writer.Write(0);
-        writer.Write(m_paxElements.Count);
-
-        for (int i = 0; i < m_displayListHeaders.Count; ++i)
-        {
-            int val = (4 | (m_displayListHeaders[i].entries.Count << 8));
-            writer.Write(val);
-            writer.Write(0);
-        }
-    }
-
-
-    public static SkinData CreateSkinData(Mesh mesh)
-    {
-        Debug.Assert(mesh != null);
-        Debug.Assert(mesh.vertices.Length == mesh.boneWeights.Length);
-
-        SkinData skinData = new SkinData();
-
-
-        // convert back to common vertex to identify duplicates?
-        List<CommonVertexInstance> cviList = new List<CommonVertexInstance>();
-        for (int i = 0; i < mesh.vertices.Length; ++i)
-        {
-            CommonVertexInstance cvi = new CommonVertexInstance();
-            cvi.Position = mesh.vertices[i];
-            cvi.Normal = mesh.normals[i];
-            cvi.UV = mesh.uv[i];
-            cvi.BoneWeight = mesh.boneWeights[i];
-            cviList.Add(cvi);
-        }
-
-        HashSet<CommonVertexInstance> uniqueSet = new HashSet<CommonVertexInstance>();
-        foreach (var cvi in cviList)
-        {
-            uniqueSet.Add(cvi);
-        }
-
-
-        using (BinaryWriter binaryWriter = new BinaryWriter(new MemoryStream()))
-        {
-            int headerLength = 32;
-            short animShift = 9;
-
-            GladiusFileWriter.WriteNull(binaryWriter, headerLength);
-
-            long srcPosition = (uint)binaryWriter.BaseStream.Position;
-
-
-            BoneWeight[] boneWeightsCopy = new BoneWeight[mesh.boneWeights.Length];
-            mesh.boneWeights.CopyTo(boneWeightsCopy, 0);
-
-
-            // do something here to shrink the weights to a max of 3 only. quick look shows that 4th bone often negligible weight
-            // so renormalise and store it as a csk2 plus an extra in cska
-
-            for (int i = 0; i < boneWeightsCopy.Length; ++i)
-            {
-                boneWeightsCopy[i] = boneWeightsCopy[i].RenormaliseWeights(3);
-            }
-
-
-            HashSet<(int, PosNorm)> uniqueVertexOneBone = new HashSet<(int, PosNorm)>();
-            HashSet<((int, int), PosNorm)> uniqueVertexTwoBone = new HashSet<((int, int), PosNorm)>();
-
-            for (int i = 0; i < boneWeightsCopy.Length; i++)
-            {
-                BoneWeight bw = boneWeightsCopy[i];
-                int activeWeights = bw.CountWeights();
-                if (activeWeights == 1)
-                {
-                    uniqueVertexOneBone.Add((bw.boneIndex0,
-                        new PosNorm() { Position = mesh.vertices[i], Normal = mesh.normals[i] }));
-                }
-                else if (activeWeights == 2)
-                {
-                    uniqueVertexTwoBone.Add(((bw.boneIndex0, bw.boneIndex1),
-                        new PosNorm() { Position = mesh.vertices[i], Normal = mesh.normals[i] }));
-                }
-            }
-
-            Dictionary<int, List<int>> oneBoneDict = new Dictionary<int, List<int>>();
-            List<PosNorm> oneBonePosNormals = new List<PosNorm>();
-
-            foreach (var entry in uniqueVertexOneBone)
-            {
-                int boneId = entry.Item1;
-                if (!oneBoneDict.TryGetValue(boneId, out List<int> boneList))
-                {
-                    boneList = new List<int>();
-                    oneBoneDict[boneId] = boneList;
-                }
-
-                int positionIndex = oneBonePosNormals.IndexOf(entry.Item2);
-                if (positionIndex == -1)
-                {
-                    oneBonePosNormals.Add(entry.Item2);
-                    positionIndex = boneList.Count;
-                }
-
-                boneList.Add(positionIndex);
-            }
-
-            Dictionary<(int, int), List<int>> twoBoneDict = new Dictionary<(int, int), List<int>>();
-            List<PosNorm> twoBonePosNormals = new List<PosNorm>();
-
-            // and all the twos
-            foreach (var entry in uniqueVertexTwoBone)
-            {
-                var key = (Math.Min(entry.Item1.Item1, entry.Item1.Item2),
-                    Math.Max(entry.Item1.Item1, entry.Item1.Item2));
-                //var key = (Math.Min(bw.boneIndex0, bw.boneIndex1), Math.Max(bw.boneIndex0, bw.boneIndex1));
-                if (!twoBoneDict.TryGetValue(key, out List<int> boneList))
-                {
-                    boneList = new List<int>();
-                    twoBoneDict[key] = boneList;
-                }
-
-                int positionIndex = twoBonePosNormals.IndexOf(entry.Item2);
-                if (positionIndex == -1)
-                {
-                    twoBonePosNormals.Add(entry.Item2);
-                    positionIndex = boneList.Count;
-                }
-
-                boneList.Add(positionIndex);
-            }
-
-            List<(CSK1, int)> csk1LinkMap = new List<(CSK1, int)>();
-
-            foreach (var key in oneBoneDict.Keys)
-            {
-                CSK1 csk1 = SkinData.CreateCSK1(key, oneBoneDict[key], mesh.vertices, mesh.normals, boneWeightsCopy);
-                csk1LinkMap.Add((csk1, key));
-                skinData.CSK1List.Add(csk1);
-            }
-            // store them in size
-
-            skinData.CSK1List.Sort((x, y) => y.count.CompareTo(x.count));
-
-            foreach (var csk1 in skinData.CSK1List)
-            {
-                int key = csk1LinkMap.Find(x => x.Item1 == csk1).Item2;
-
-                csk1.vertSrc = (uint)srcPosition;
-                csk1.vertDst = (uint)(csk1.vertSrc - headerLength);
-
-                // write the vertices and normals associated with csk1.
-                foreach (var index in oneBoneDict[key])
-                {
-                    Vector3 pos = GladiusGlobals.UnityToGladius(oneBonePosNormals[index].Position);
-                    Vector3 normal = GladiusGlobals.UnityToGladius(oneBonePosNormals[index].Normal);
-
-                    SkinData.WritePositionAndNormal(binaryWriter, animShift, pos, normal);
-                }
-
-                srcPosition = binaryWriter.BaseStream.Position;
-            }
-
-
-            List<(int, int, float)> additionalValues = new List<(int, int, float)>();
-
-            Dictionary<(int, int, int), List<int>> threeBoneDict = new Dictionary<(int, int, int), List<int>>();
-            // // and all the twos
-            // for (int i = 0; i < threeBoneVertices.Count; ++i)
-            // {
-            //     BoneWeight bw = boneWeightsCopy[threeBoneVertices[i]];
-            //
-            //     var twoPartKey = (Math.Min(bw.boneIndex0, Math.Min(bw.boneIndex1, bw.boneIndex2)),
-            //         Math.Max(bw.boneIndex0, Math.Max(bw.boneIndex1, bw.boneIndex2)));
-            //
-            //     if (!twoBoneDict.TryGetValue(twoPartKey, out List<int> boneList))
-            //     {
-            //         boneList = new List<int>();
-            //         twoBoneDict[twoPartKey] = boneList;
-            //     }
-            //
-            //     boneList.Add(threeBoneVertices[i]);
-            //
-            //     // add an additional (vertexIndex, boneId, weight) 
-            //     // FIXME - need to figure out which bone we haven't used.'
-            //     additionalValues.Add((threeBoneVertices[i], bw.boneIndex2, bw.weight2));
-            // }
-
-
-            List<(CSK2, (int, int))> csk2LinkMap = new List<(CSK2, (int, int))>();
-
-            foreach (var key in twoBoneDict.Keys)
-            {
-                CSK2 csk2 = SkinData.CreateCSK2(key, twoBoneDict[key], mesh.vertices, mesh.normals, boneWeightsCopy);
-                csk2LinkMap.Add((csk2, key));
-                skinData.CSK2List.Add(csk2);
-            }
-
-            // store them in size
-            skinData.CSK2List.Sort((x, y) => y.count.CompareTo(x.count));
-
-            // write positions and normals
-            foreach (CSK2 csk2 in skinData.CSK2List)
-            {
-                var key = csk2LinkMap.Find(x => x.Item1 == csk2).Item2;
-
-                csk2.vertSrc = (uint)srcPosition;
-                csk2.vertDst = (uint)(csk2.vertSrc - headerLength);
-
-                // write the vertices and normals associated with csk2.
-                foreach (var index in twoBoneDict[key])
-                {
-                    Vector3 pos = GladiusGlobals.UnityToGladius(twoBonePosNormals[index].Position);
-                    Vector3 normal = GladiusGlobals.UnityToGladius(twoBonePosNormals[index].Normal);
-
-                    SkinData.WritePositionAndNormal(binaryWriter, animShift, pos, normal);
-                }
-
-                srcPosition = binaryWriter.BaseStream.Position;
-            }
-
-            // write weight data
-            foreach (CSK2 csk2 in skinData.CSK2List)
-            {
-                var key = csk2LinkMap.Find(x => x.Item1 == csk2).Item2;
-
-                csk2.weightsSrc = (uint)srcPosition;
-                // write the weights
-                foreach (var index in twoBoneDict[key])
-                {
-                    BoneWeight bw = boneWeightsCopy[index];
-                    byte val1 = (byte)(0xFF * bw.weight0);
-                    byte val2 = (byte)(0xFF * bw.weight1);
-                    binaryWriter.Write(val1);
-                    binaryWriter.Write(val2);
-                }
-
-                srcPosition = binaryWriter.BaseStream.Position;
-            }
-
-            // create all weights.
-
-
-            foreach (var key in additionalValues)
-            {
-                CSKA cska = SkinData.CreateCSKA(key, mesh.vertices, mesh.normals, boneWeightsCopy);
-                skinData.CSKAList.Add(cska);
-            }
-
-
-            skinData.NumList1 = (short)skinData.CSK1List.Count;
-            skinData.NumList2 = (short)skinData.CSK2List.Count;
-            skinData.NumListA = (short)skinData.CSKAList.Count;
-
-
-            // general structure of files 
-            // for each mesh
-            // skindata info (csk1,csk2,cska)
-            // vertex and normal data
-            // weight data and idx dst mixed?
-        }
-
-        return skinData;
-    }
-
-
-    public Dictionary<char[], int> m_tagSizes = new Dictionary<char[], int>();
     public String m_name;
-    public List<IndexedVector3> m_points = new List<IndexedVector3>();
-    public List<IndexedVector3> m_normals = new List<IndexedVector3>();
-    public List<IndexedVector2> m_uvs = new List<IndexedVector2>();
-    public List<IndexedVector2> m_uv2s = new List<IndexedVector2>();
-    public List<TextureHeaderInfo> m_textures = new List<TextureHeaderInfo>();
-    public List<String> m_names = new List<String>();
-    public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
-
-    public List<String> m_selsInfo = new List<string>();
-    public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
-    public List<PaxElement> m_paxElements = new List<PaxElement>();
-    public List<SkinData> m_skinData = new List<SkinData>();
-
-    public IndexedVector3 MinBB;
-    public IndexedVector3 MaxBB;
-    public IndexedVector3 Center;
-
-    public List<BoneNode> m_bones = new List<BoneNode>();
+    // public List<IndexedVector3> m_points = new List<IndexedVector3>();
+    // public List<IndexedVector3> m_normals = new List<IndexedVector3>();
+    // public List<IndexedVector2> m_uvs = new List<IndexedVector2>();
+    // public List<TextureHeaderInfo> m_textures = new List<TextureHeaderInfo>();
+    // public List<String> m_names = new List<String>();
+    // public List<DSLIInfo> m_dsliInfos = new List<DSLIInfo>();
+    //
+    // public List<String> m_selsInfo = new List<string>();
+    // public List<DisplayListHeader> m_displayListHeaders = new List<DisplayListHeader>();
+    // public List<PaxElement> m_paxElements = new List<PaxElement>();
+    // public List<SkinData> m_skinData = new List<SkinData>();
+    // public List<BoneNode> m_bones = new List<BoneNode>();
     //public bool Valid =true;
+
+    public void AddSkinData(SkinData skinData)
+    {
+        GetChunk<SKINChunk>().SkinDataList.Add(skinData);
+    }
+
+    public void AddUnskinnedPosition(Vector3 position)
+    {
+        GetChunk<POSIChunk>().Data.Add(position);
+    }
+
+    public void AddUnskinnedNormal(Vector3 normal)
+    {
+        GetChunk<NORMChunk>().Data.Add(normal);
+    }
+
+    public void AddUV(Vector2 uv)
+    {
+        GetChunk<UV0Chunk>().Data.Add(uv);
+    }
+
+    public void AddDSLIInfo(DSLIInfo dsli)
+    {
+        GetChunk<DSLIChunk>().Data.Add(dsli);
+    }
+
+    public void AddDSLH(DisplayListHeader dslh)
+    {
+        GetChunk<DSLSChunk>().DisplayListHeaders.Add(dslh);
+    }
+
+    public void AddPaxElement(PaxElement paxElement)
+    {
+        GetChunk<MESHChunk>().PaxElements.Add(paxElement);
+    }
 }
 
 
@@ -1749,6 +1483,12 @@ public class DSLIInfo
         info.startPos = Common.ReadInt32BigEndian(reader);
         info.length = Common.ReadInt32BigEndian(reader);
         return info;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        Common.WriteBigEndian(binWriter, startPos);
+        Common.WriteBigEndian(binWriter, length);
     }
 }
 

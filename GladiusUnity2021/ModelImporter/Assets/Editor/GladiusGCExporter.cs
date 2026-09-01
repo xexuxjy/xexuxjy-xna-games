@@ -23,7 +23,7 @@ public class GladiusGCExporter : UnityEditor.Editor
         ExportCurrentGameObject(false, false);
     }
 
-    private static void ExportCurrentGameObject(bool copyMaterials, bool copyTextures)
+    private static void ExportCurrentGameObject(bool copyMaterials, bool copyTextures,short animShift=12)
     {
         if (Selection.activeGameObject == null)
         {
@@ -39,7 +39,7 @@ public class GladiusGCExporter : UnityEditor.Editor
             return;
         }
 
-        ExportGameObject(currentGameObject, copyMaterials, copyTextures);
+        ExportGameObject(currentGameObject, copyMaterials, copyTextures,animShift);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class GladiusGCExporter : UnityEditor.Editor
     /// <param name="copyMaterials">If set to <c>true</c> copy materials.</param>
     /// <param name="copyTextures">If set to <c>true</c> copy textures.</param>
     /// <param name="oldPath">Old path.</param>
-    public static string ExportGameObject(GameObject gameObject, bool copyMaterials, bool copyTextures,
+    public static string ExportGameObject(GameObject gameObject, bool copyMaterials, bool copyTextures,short animShift,
         string oldPath = null)
     {
         if (gameObject == null)
@@ -68,7 +68,7 @@ public class GladiusGCExporter : UnityEditor.Editor
             string testPath = newPath.Substring(0,(newPath.LastIndexOf("/"))+1);
             //testPath += "/";
             
-            GCModel model = GCModel.CreateFromGameObject(gameObject);
+            GCModel model = GCModel.CreateFromGameObject(gameObject,animShift);
             if (model != null)
             {
                 using (BinaryWriter bw = new BinaryWriter(File.Create(newPath)))

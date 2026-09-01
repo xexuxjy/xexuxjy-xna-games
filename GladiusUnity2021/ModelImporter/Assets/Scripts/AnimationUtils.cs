@@ -50,7 +50,7 @@ public static class AnimationUtils
     }
     
     
-    public static void WriteDataAsPAN(BinaryWriter writer, Transform rootBone,List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
+    public static void WriteDataAsPAN(BinaryWriter binWriter, Transform rootBone,List<Transform> transformList, List<float> timeData,Dictionary<Transform, List<(float,Vector3)>> positionData,Dictionary<Transform, List<(float,Quaternion)>> rotationData)
     {
         // build a skeleton from rootBone.
         
@@ -71,42 +71,42 @@ public static class AnimationUtils
         }
         
         List<ushort> timeDataUShort = new List<ushort>();
-        
 
-        GladiusFileWriter.WriteVERS(writer);
+
+        new VERSChunk().ToStream(binWriter);
         //GladiusFileWriter.PadIfNeeded(writer);
-        GladiusFileWriter.WriteCPRT(writer);
+        new CPRTChunk().ToStream(binWriter);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteHEDR(writer,timeData.Last());
+        WriteHEDR(binWriter,timeData.Last());
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteNAME(writer, boneNames);
+        WriteNAME(binWriter, boneNames);
 
         List<string> eventsString = new List<string>();
-        WriteBLNM(writer, eventsString);
+        WriteBLNM(binWriter, eventsString);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteMASK(writer, boneNodes);
+        WriteMASK(binWriter, boneNodes);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteBLTK(writer);
+        WriteBLTK(binWriter);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteBKTM(writer,timeData);
+        WriteBKTM(binWriter,timeData);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteBOOL(writer,timeData);
+        WriteBOOL(binWriter,timeData);
         //GladiusFileWriter.PadIfNeeded(writer);
 
         // these both work with the vectors
-        WriteOPTR(writer, transformList,timeData,positionData);
+        WriteOPTR(binWriter, transformList,timeData,positionData);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteOVEC(writer,transformList,timeData,positionData);
+        WriteOVEC(binWriter,transformList,timeData,positionData);
         //GladiusFileWriter.PadIfNeeded(writer);
 
         // these all work with the quaternions
-        WriteORTR(writer, transformList,timeData,rotationData);
+        WriteORTR(binWriter, transformList,timeData,rotationData);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteARKT(writer, transformList,timeData,rotationData);
+        WriteARKT(binWriter, transformList,timeData,rotationData);
         //GladiusFileWriter.PadIfNeeded(writer);
-        WriteOQUA(writer, transformList,timeData,rotationData);
+        WriteOQUA(binWriter, transformList,timeData,rotationData);
         //GladiusFileWriter.PadIfNeeded(writer);
-        GladiusFileWriter.WriteEND(writer);
+        GladiusFileWriter.WriteEND(binWriter);
     }
 
     // public static void WriteData(BinaryWriter writer, GladiusSimpleAnim simpleAnim)

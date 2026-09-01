@@ -98,9 +98,9 @@ namespace Assets.Editor
                     {
                         StringBuilder debugInfo = new StringBuilder(); 
                         model.LoadData(binReader,debugInfo);
-                        if (model.XRNDChunk != null)
+                        if (model.GetChunk<XRNDChunk>() != null)
                         {
-                            model.XRNDChunk.BuildData(model.m_name);
+                            model.GetChunk<XRNDChunk>().BuildData(model.m_name);
 
                             CommonModelData commonModel = model.ToCommon();
 

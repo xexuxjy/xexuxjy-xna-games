@@ -206,7 +206,7 @@ public class XboxModel : BaseModel
             {
                 m_chunkList.Add(chunk);
 
-                if (chunk is EndChunk)
+                if (chunk is ENDChunk)
                 {
                     break;
                 }
@@ -215,41 +215,27 @@ public class XboxModel : BaseModel
         }
         while (count++ < 100);
 
-        if(SKELChunk != null)
+        SKELChunk skelChunk = GetChunk<SKELChunk>();
+        NAMEChunk nameChunk = GetChunk<NAMEChunk>();
+        if(skelChunk != null)
         {
-            foreach(BoneNode bn in SKELChunk.BoneList)
+            foreach(BoneNode bn in skelChunk.BoneList)
             {
-                bn.name = NAMEChunk.Names[bn.NameIndex];
+                bn.name = nameChunk.Names[bn.NameIndex];
                 if(bn.Index != bn.ParentIndex)
                 {
-                    bn.parent = SKELChunk.BoneList[bn.ParentIndex];
+                    bn.parent = skelChunk.BoneList[bn.ParentIndex];
                 }
             }
-            BoneList.AddRange(SKELChunk.BoneList);
+            BoneList.AddRange(skelChunk.BoneList);
         }
 
 
     }
 
-
-
-    public XRNDChunk XRNDChunk
-    { get { return (m_chunkList.Find(x => x is XRNDChunk) as XRNDChunk); } }
-
-
     public XRenderSetup XRenderSetup
-    { get { return XRNDChunk.XRenderSetup; } }
+    { get { return GetChunk<XRNDChunk>().XRenderSetup; } }
 
-
-    public SELSChunk SELSChunk
-    {
-        get { return (m_chunkList.Find(x => x is SELSChunk) as SELSChunk); }
-    }
-
-    public STYPChunk StypChunk
-    {
-        get { return (m_chunkList.Find(x => x is STYPChunk) as STYPChunk); }
-    }
 
 
     public CommonModelData ToCommon()

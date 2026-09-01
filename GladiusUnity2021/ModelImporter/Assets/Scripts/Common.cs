@@ -492,7 +492,7 @@ public static class Common
         reader.Read(s_buffer, 0, s_buffer.Length);
         return Common.ToInt32BigEndian(s_buffer, 0);
     }
-
+    
     public static uint ReadUInt32BigEndian(BinaryReader reader)
     {
         reader.Read(s_buffer, 0, s_buffer.Length);
