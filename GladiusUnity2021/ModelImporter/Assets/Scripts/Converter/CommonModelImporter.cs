@@ -982,9 +982,22 @@ public static class CommonModelImporter
     // }
     public static uint Align32(uint input)
     {
-        if (input % 4 != 0)
+        uint comparator = 4;
+        if (input % comparator != 0)
         {
-            return input + (input % 4);
+            return input + (input % comparator);
+        }
+
+        return input;
+    }
+
+    public static uint Align32Test(uint input)
+    {
+        uint comparator = 32;
+        if (input % comparator != 0)
+        {
+            uint part1 = comparator - (input % comparator);
+            return input + part1;
         }
 
         return input;
@@ -3213,6 +3226,14 @@ public class SKINChunk : BaseChunk
         binWriter.Write(val);
     }
 
+    public static uint RelocateAddr(uint baseValue)
+    {
+        byte[] ba = BitConverter.GetBytes(baseValue);
+        ba[3] = 0xdd;
+        uint val = (uint)Common.ToInt32BigEndian(ba, 0);
+        return val;
+    }
+
     public static uint RelocateAddr(uint baseValue, uint offset)
     {
         if (offset == 0)
@@ -3356,7 +3377,7 @@ public class SkinData
             skinData.Packet1Sizes.Add(Common.ToUInt16BigEndian(binReader));
         }
 
-        binReader.BaseStream.Position = positionCopy + skinData.PacketStart2;
+        //binReader.BaseStream.Position = positionCopy + skinData.PacketStart2;
         for (int i = 0; i < skinData.NumPackets2; i++)
         {
             skinData.Packet2Starts.Add(Common.ToUInt16BigEndian(binReader));
@@ -3447,17 +3468,23 @@ public class SkinData
             binReader.BaseStream.Position = dataPosition + cska.weightsSrc;
             for (int i = 0; i < cska.count; ++i)
             {
-                cska.ExtractedWeights.Add(binReader.ReadByte() / 255f);
+                byte b = binReader.ReadByte();
+                cska.ExtractedWeights.Add(b / 255f);
+                cska.ExtractedWeightsBytes.Add(b);
             }
         }
     }
 
-    public void WriteSkinWeights(BinaryWriter binWriter, short animShift)
+    public void WriteSkinWeights(BinaryWriter binWriter, long dataPosition, short animShift)
     {
+        binWriter.BaseStream.Position = dataPosition + PointerList1;
+
         foreach (CSK1 csk1 in CSK1List)
         {
             csk1.ToStream(binWriter, animShift);
         }
+
+        binWriter.BaseStream.Position = dataPosition + PointerList2;
 
         // align
         foreach (CSK2 csk2 in CSK2List)
@@ -3465,17 +3492,65 @@ public class SkinData
             csk2.ToStream(binWriter, animShift);
         }
 
+        binWriter.BaseStream.Position = dataPosition + PointerListA;
+
         // align
         foreach (CSKA cska in CSKAList)
         {
             cska.ToStream(binWriter, animShift);
         }
-        
-        // write packet starts and sizes
-        
-        // write position normals and weights
-        
-        
+
+        foreach (CSK1 csk1 in CSK1List)
+        {
+            binWriter.BaseStream.Position = dataPosition + csk1.vertSrc;
+
+            for (int i = 0; i < csk1.ExtractedPositions.Count; i++)
+            {
+                SkinData.WritePositionAndNormal(binWriter, animShift, csk1.ExtractedPositions[i],
+                    csk1.ExtractedNormals[i]);
+            }
+        }
+
+        foreach (CSK2 csk2 in CSK2List)
+        {
+            binWriter.BaseStream.Position = dataPosition + csk2.vertSrc;
+
+            for (int i = 0; i < csk2.ExtractedPositions.Count; i++)
+            {
+                SkinData.WritePositionAndNormal(binWriter, animShift, csk2.ExtractedPositions[i],
+                    csk2.ExtractedNormals[i]);
+            }
+
+            binWriter.BaseStream.Position = dataPosition + csk2.weightsSrc;
+            foreach ((byte,byte) b1 in csk2.ExtractedWeightsBytes)
+            {
+                binWriter.Write(b1.Item1);
+                binWriter.Write(b1.Item2);
+            }
+        }
+
+        foreach (CSKA cska in CSKAList)
+        {
+            binWriter.BaseStream.Position = dataPosition + cska.vertSrc;
+
+            for (int i = 0; i < cska.ExtractedPositions.Count; i++)
+            {
+                SkinData.WritePositionAndNormal(binWriter, animShift, cska.ExtractedPositions[i],
+                    cska.ExtractedNormals[i]);
+            }
+
+            binWriter.BaseStream.Position = dataPosition + cska.idxDst;
+            for (int i = 0; i < cska.count; i++)
+            {
+                Common.WriteBigEndian(binWriter,cska.ExtractedDestinationIndices[i]);
+            }
+
+            binWriter.BaseStream.Position = dataPosition + cska.weightsSrc;
+            for (int i = 0; i < cska.count; i++)
+            {
+                binWriter.Write(cska.ExtractedWeightsBytes[i]);
+            }
+        }
     }
 
 
@@ -3510,16 +3585,18 @@ public class SkinData
 
     public void ToStream(BinaryWriter binWriter)
     {
-        binWriter.Write(Size);
-        binWriter.Write(NumberVertices);
-        binWriter.Write(NumberBones);
-        binWriter.Write(Components);
+        Common.WriteBigEndian(binWriter, Size);
+        Common.WriteBigEndian(binWriter, NumberVertices);
+        Common.WriteBigEndian(binWriter, NumberBones);
+        Common.WriteBigEndian(binWriter, Components);
 
 
-        binWriter.Write(Flags);
-        binWriter.Write(NumList1);
-        binWriter.Write(NumList2);
-        binWriter.Write(NumListA);
+        Common.WriteBigEndian(binWriter, Flags);
+        Common.WriteBigEndian(binWriter, NumList1);
+        Common.WriteBigEndian(binWriter, NumList2);
+        Common.WriteBigEndian(binWriter, NumListA);
+
+        binWriter.BaseStream.Position = (long)CommonModelImporter.Align32((uint)binWriter.BaseStream.Position);
 
         SKINChunk.RelocateAndWrite(binWriter, PointerList1);
         SKINChunk.RelocateAndWrite(binWriter, PointerList2);
@@ -3541,12 +3618,30 @@ public class SkinData
         int extraPadding = 26;
         GladiusFileWriter.WriteNull(binWriter, extraPadding);
 
-        WriteSkinWeights(binWriter,AnimShift);
+        long dataPosition = binWriter.BaseStream.Position;
         
-        // write packets
-        // write onezies
-        // write twozies
-        // write accs
+        for (int i = 0; i < NumPackets1; i++)
+        {
+            Common.WriteBigEndian(binWriter, Packet1Starts[i]);
+        }
+
+        for (int i = 0; i < NumPackets1; i++)
+        {
+            Common.WriteBigEndian(binWriter, Packet1Sizes[i]);
+        }
+
+        for (int i = 0; i < NumPackets2; i++)
+        {
+            Common.WriteBigEndian(binWriter, Packet2Starts[i]);
+        }
+
+        for (int i = 0; i < NumPackets2; i++)
+        {
+            Common.WriteBigEndian(binWriter, Packet2Sizes[i]);
+        }
+
+
+        WriteSkinWeights(binWriter, dataPosition,AnimShift);
     }
 
 
@@ -3681,13 +3776,6 @@ public class CSK1
         writer.Write(count);
         writer.Write(vertDst);
         writer.Write(vertSrc);
-
-        long currentPosition = writer.BaseStream.Position;
-        writer.BaseStream.Position = currentPosition + vertSrc;
-        for (int i = 0; i < ExtractedPositions.Count; i++)
-        {
-            SkinData.WritePositionAndNormal(writer, animShift, ExtractedPositions[i], ExtractedNormals[i]);
-        }
     }
 
     /*
@@ -3790,9 +3878,9 @@ public class CSKA
     public List<Vector3> ExtractedPositions = new List<Vector3>();
     public List<Vector3> ExtractedNormals = new List<Vector3>();
 
-    public List<int> ExtractedDestinationIndices = new List<int>();
+    public List<ushort> ExtractedDestinationIndices = new List<ushort>();
     public List<float> ExtractedWeights = new List<float>();
-
+    public List<byte> ExtractedWeightsBytes = new List<byte>();
 
     public static CSKA FromStream(BinaryReader binReader)
     {
@@ -4042,16 +4130,15 @@ public class CBoneData
 
 public static class SkinBuilder
 {
-
     public static SkinData PrepareData(SkinnedMeshRenderer skinnedMeshRenderer, short animShift)
     {
-        List<Vector3> vertices = new  List<Vector3>();
+        List<Vector3> vertices = new List<Vector3>();
         vertices.AddRange(skinnedMeshRenderer.sharedMesh.vertices);
 
-        List<Vector3> normals = new  List<Vector3>();
+        List<Vector3> normals = new List<Vector3>();
         normals.AddRange(skinnedMeshRenderer.sharedMesh.normals);
 
-        List<BoneWeight> boneWeights = new  List<BoneWeight>();
+        List<BoneWeight> boneWeights = new List<BoneWeight>();
         boneWeights.AddRange(skinnedMeshRenderer.sharedMesh.boneWeights);
 
         HashSet<int> bones = new HashSet<int>();
@@ -4061,24 +4148,26 @@ public static class SkinBuilder
             {
                 bones.Add(bw.boneIndex0);
             }
+
             if (bw.CountWeights() > 1)
             {
                 bones.Add(bw.boneIndex1);
             }
+
             if (bw.CountWeights() > 2)
             {
                 bones.Add(bw.boneIndex2);
             }
+
             if (bw.CountWeights() > 3)
             {
                 bones.Add(bw.boneIndex3);
             }
         }
-        
-        return PrepareData(bones.Count,vertices,normals,boneWeights);
-        
+
+        return PrepareData(bones.Count, vertices, normals, boneWeights);
     }
-    
+
     public static SkinData PrepareData(int numBones, List<Vector3> vertices, List<Vector3> normals,
         List<BoneWeight> boneWeights)
     {
@@ -4108,7 +4197,7 @@ public static class SkinBuilder
 
         //const bool bBiTan = pI->aBinIds && pI->aTanIds;
         int numNormals = 1;
-        int size_pos_norm = size_vector + size_normal * numNormals;
+        int size_pos_norm = (size_vector + size_normal) * numNormals;
 
         //init reloc table
         for (int i = 0; i < numVerts; i++)
@@ -4423,7 +4512,7 @@ public static class SkinBuilder
         memsize += (uint)packets2.Count * packetSize;
         memsize += (uint)packets2.Count * packetSize;
 
-        memsize = CommonModelImporter.Align32(memsize);
+        memsize = CommonModelImporter.Align32Test(memsize);
         memsize += (uint)(numVerts * size_pos_norm);
 
         memsize += (uint)(CSK1.RawSize * onezies.Count);
@@ -4433,7 +4522,7 @@ public static class SkinBuilder
         {
             CTwozie data = twozies[i];
             memsize += CSK2.RawSize;
-            weights_count += 2 * data.count;
+            weights_count += (2 * data.count);
         }
 
         memsize += (uint)(weights_count * size_weight);
@@ -4455,12 +4544,17 @@ public static class SkinBuilder
             memsize += (uint)(size_weight * count); // weights
         }
 
+        // Checkme
+        memsize = CommonModelImporter.Align32Test(memsize);
+
         uint positionCounter = 0;
-        positionCounter += SkinData.RawSize;
+        //positionCounter += SkinData.RawSize;
 
         SkinData skinData = new SkinData();
         skinData.NumberVertices = numVerts;
         skinData.NumberBones = numBones;
+        skinData.Size = (int)memsize;
+
 
         skinData.NumPackets1 = packets1.Count;
         skinData.PacketStart1 = positionCounter;
@@ -4484,88 +4578,15 @@ public static class SkinBuilder
             skinData.Packet2Sizes.Add(packet_size2[i]);
         }
 
-        positionCounter = CommonModelImporter.Align32(positionCounter);
+        positionCounter = CommonModelImporter.Align32Test(positionCounter);
+
+
         skinData.SourceData = positionCounter;
         positionCounter += (uint)(numVerts * size_pos_norm);
         skinData.WeightData = positionCounter;
+        positionCounter += (uint)(weights_count * size_weight);
 
-
-        skinData.CalculatedSize = positionCounter;
-        skinData.Size = (int)skinData.CalculatedSize;
-
-        // lets pack our data into a continuous array
-        // CSkinningData* pOut = (CSkinningData*) (new char[memsize]);
-        // ASSERT( (void*)pOut==align32(pOut) );
-        // memset(pOut,0,memsize);
-        //
-        // pOut->bBiTan = bBiTan;
-        // pOut->numVerts = numVerts;
-        // pOut->numBones = numBones;
-        // pOut->sizeData = memsize;
-        //
-        // char* pData = (char*)pOut + sizeof(CSkinningData);
-        //
-        // pOut->numPackets1 = packets1.size();
-        // pOut->pPacketStart1 = (uint16*)pData;
-        // pData += pOut->numPackets1*sizeof(pOut->pPacketStart1[0]);
-        // pOut->pPacketSize1 = (uint16*)pData;
-        // pData += pOut->numPackets1*sizeof(pOut->pPacketSize1[0]);
-        // for ( int i=0; i<pOut->numPackets1; i++ )
-        // {
-        //     pOut->pPacketStart1[i] = packets1[i];
-        //     pOut->pPacketSize1[i] = packet_size1[i];
-        // }
-        //
-        // pOut->numPackets2 = packets2.size();
-        // pOut->pPacketStart2 = (uint16*)pData;
-        // pData += pOut->numPackets2*sizeof(pOut->pPacketStart2[0]);
-        // pOut->pPacketSize2 = (uint16*)pData;
-        // pData += pOut->numPackets2*sizeof(pOut->pPacketSize2[0]);
-        // for ( int i=0; i<pOut->numPackets2; i++ )
-        // {
-        //     pOut->pPacketStart2[i] = packets2[i];
-        //     pOut->pPacketSize2[i] = packet_size2[i];
-        // }
-        //
-        // pData = (char*)align32(pData);
-        // pOut->pSrcData = pData;
-        // pData += numVerts * size_pos_norm;
-        //
-        // pOut->pWeigthData = pData;
-        // pData += weigths_count * size_weight;
-
-
-        // // do onezies
-        // CSK1* const pSK1_base = (CSK1*)pData;
-        // pOut->pSK1 = pSK1_base;
-        // pOut->numSK1 = onezies.size();
-        // pData += pOut->numSK1*sizeof(CSK1);
-        // for( int i=0; i<pOut->numSK1; i++ )
-        // {
-        //     CSK1* pSK1 = pSK1_base + i;
-        //     const COnezie& data = onezies[i];
-        //     const int count = data.count;
-        //
-        //     pSK1->idxBone = data.idxBone;
-        //     pSK1->count = count;
-        //
-        //     pSK1->vertDst = data.idx_start*size_pos_norm;
-        //     (u8*)pSK1->vertSrc = (u8*)pOut->pSrcData + pSK1->vertDst;
-        //
-        //     // supply the actual data
-        //     for( int j=0; j<count; j++ )
-        //     {
-        //         const char* pD = (char*)pSK1->vertSrc + j*size_pos_norm;
-        //         const int idx = data.vertSrc[j];
-        //         *(tVecQ*)pD = ((tVecQ*)aPos)[idx];
-        //         *(tNormQ*)(pD+size_vector) = ((tNormQ*)aNrms)[pI->aNrmIds[idx]];
-        //         if (bBiTan)
-        //         {
-        //             *(tNormQ*)(pD+size_vector+size_normal) = ((tNormQ*)aNrms)[pI->aBinIds[idx]];
-        //             *(tNormQ*)(pD+size_vector+2*size_normal) = ((tNormQ*)aNrms)[pI->aTanIds[idx]];
-        //         }
-        //     }
-        // }
+        skinData.PointerList1 = positionCounter;
 
         foreach (COnezie onezie in onezies)
         {
@@ -4586,46 +4607,11 @@ public static class SkinBuilder
             }
         }
 
+        positionCounter += (uint)(onezies.Count * CSK1.RawSize);
 
-// do twozies
-        // CSK2* const pSK2_base = (CSK2*)pData;
-        // pOut->pSK2 = pSK2_base;
-        // pOut->numSK2 = twozies.size();
-        // pData += pOut->numSK2*sizeof(CSK2);
-        // int weight_n = 0;
-        // for( int i=0; i<pOut->numSK2; i++ )
-        // {
-        //     CSK2* pSK2 = pSK2_base + i;
-        //     const CTwozie& data = twozies[i];
-        //     const int count = data.count;
-        //
-        //     pSK2->idxBone[0] = data.idxBone[0];
-        //     pSK2->idxBone[1] = data.idxBone[1];
-        //     pSK2->count = count;
-        //
-        //     pSK2->weights = (u8*)pOut->pWeigthData + 2*size_weight * weight_n;
-        //     weight_n += count;
-        //
-        //     pSK2->vertDst = data.idx_start*size_pos_norm;
-        //     (u8*)pSK2->vertSrc = (u8*)pOut->pSrcData + pSK2->vertDst;
-        //
-        //     // supply the actual data
-        //     for( int j=0; j<count; j++ )
-        //     {
-        //         const char* pD = (char*)pSK2->vertSrc + j*size_pos_norm;
-        //         const int idx = data.vertSrc[j];
-        //         *(tVecQ*)pD = ((tVecQ*)aPos)[idx];
-        //         *(tNormQ*)(pD+size_vector) = ((tNormQ*)aNrms)[pI->aNrmIds[idx]];
-        //         if (bBiTan)
-        //         {
-        //             *(tNormQ*)(pD+size_vector+size_normal) = ((tNormQ*)aNrms)[pI->aBinIds[idx]];
-        //             *(tNormQ*)(pD+size_vector+2*size_normal) = ((tNormQ*)aNrms)[pI->aTanIds[idx]];
-        //         }
-        //     }
-        //
-        //     for( int j=0; j<2*count; j++ )
-        //         ((uint8*)pSK2->weights)[j] = data.weights[j];
-        // }
+        skinData.PointerList2 = positionCounter;
+
+        int weight_n = 0;
         foreach (CTwozie twozie in twozies)
         {
             CSK2 csk2 = new CSK2();
@@ -4638,7 +4624,10 @@ public static class SkinBuilder
             csk2.vertDst = (uint)(twozie.idx_start * size_pos_norm);
             //csk2.vertSrc = csk2.vertDst + 36;
             csk2.vertSrc = skinData.SourceData + csk2.vertDst;
+            csk2.weightsSrc = (uint)(skinData.WeightData + (2 * size_weight * weight_n));
+            csk2.vertDst = SKINChunk.RelocateAddr(csk2.vertDst);
 
+            weight_n += csk2.count;
 
             foreach (int index in twozie.vertSrc)
             {
@@ -4657,51 +4646,11 @@ public static class SkinBuilder
             }
         }
 
-        // do accumulations
+        positionCounter += (uint)(twozies.Count * CSK2.RawSize);
 
-        // CSKA* const pSKA_base = (CSKA*)pData;
-        // pOut->pSKA = pSKA_base;
-        // pOut->numSKA = countAcclist;
-        // pData += pOut->numSKA*sizeof(CSKA);
-        // CSKA* pSKA = pSKA_base ;
-        // for( int i=0; i<numBones; i++ )
-        // {
-        //     const CAccList& data = acclist[i];
-        //     const int count = data.weight.size();
-        //     if (!count) continue;
-        //
-        //     pSKA->idxBone = i;
-        //     pSKA->count = count;
-        //
-        //     pSKA->vertSrc = pData;
-        //     pData += size_pos_norm*count;
-        //     pSKA->idxDst = pData;
-        //     pData += size_index*count;
-        //     pSKA->weights = pData;
-        //     pData += size_weight*count;
-        //
-        //     // supply the actual data
-        //     for( int j=0; j<count; j++ )
-        //     {
-        //         const char* pD = (char*)pSKA->vertSrc + j*size_pos_norm;
-        //         const int idx = data.vertSrc[j];
-        //         *(tVecQ*)pD = ((tVecQ*)aPos)[idx];
-        //         *(tNormQ*)(pD+size_vector) = ((tNormQ*)aNrms)[pI->aNrmIds[idx]];
-        //         if (bBiTan)
-        //         {
-        //             *(tNormQ*)(pD+size_vector+size_normal) = ((tNormQ*)aNrms)[pI->aBinIds[idx]];
-        //             *(tNormQ*)(pD+size_vector+2*size_normal) = ((tNormQ*)aNrms)[pI->aTanIds[idx]];
-        //         }
-        //     }
-        //
-        //     for( int j=0; j<count; j++ ) 
-        //         ((uint16*)pSKA->idxDst)[j] = data.idxVert[j];
-        //
-        //     for( int j=0; j<count; j++ )
-        //         ((uint8*)pSKA->weights)[j] = data.weight[j];
-        //
-        //     pSKA++;
-        // }
+        skinData.PointerListA = positionCounter;
+
+        // do accumulations
 
 
         for (int i = 0; i < numBones; i++)
@@ -4714,6 +4663,8 @@ public static class SkinBuilder
             }
 
             CSKA cska = new CSKA();
+            skinData.CSKAList.Add(cska);
+
             cska.idxBone = (byte)i;
             cska.count = (ushort)count;
 
@@ -4738,6 +4689,9 @@ public static class SkinBuilder
                 cska.ExtractedWeights.Add(data.weight[j]);
             }
         }
+
+        positionCounter += (uint)(skinData.CSKAList.Count * CSKA.RawSize);
+
 
         skinData.NumList1 = (short)skinData.CSK1List.Count;
         skinData.NumList2 = (short)skinData.CSK2List.Count;
