@@ -82,6 +82,7 @@ public class GCModel : BaseModel
         m_chunkList.Add(new VERSChunk());
         m_chunkList.Add(new CPRTChunk());
         m_chunkList.Add(new SELSChunk());
+        m_chunkList.Add(new NAMEChunk());
         m_chunkList.Add(new CNTRChunk());
         m_chunkList.Add(new SHDRChunk());
         m_chunkList.Add(new TXTRChunk());
@@ -92,6 +93,7 @@ public class GCModel : BaseModel
         m_chunkList.Add(new SKINChunk());
         m_chunkList.Add(new SKELChunk());
         m_chunkList.Add(new VFLAChunk());
+        m_chunkList.Add(new VFLGChunk());
         m_chunkList.Add(new RAMChunk());
         m_chunkList.Add(new MSARChunk());
         m_chunkList.Add(new NLVLChunk());
@@ -869,6 +871,7 @@ public class GCModel : BaseModel
         GetChunk<VERSChunk>().ToStream(binWriter);
         GetChunk<CPRTChunk>().ToStream(binWriter);
         GetChunk<SELSChunk>().ToStream(binWriter);
+        GetChunk<NAMEChunk>().ToStream(binWriter);
         GetChunk<CNTRChunk>().ToStream(binWriter,
             IsSkinned() ? GetChunk<SKINChunk>().Positions : GetChunk<POSIChunk>().Data);
         GetChunk<SHDRChunk>().ToStream(binWriter, GetChunk<TXTRChunk>().Textures);
@@ -879,6 +882,7 @@ public class GCModel : BaseModel
 
         if (IsSkinned())
         {
+            GetChunk<SKELChunk>().ToStream(binWriter);
             GetChunk<SKINChunk>().ToStream(binWriter);
         }
         else
@@ -889,6 +893,7 @@ public class GCModel : BaseModel
 
         GetChunk<UV0Chunk>().ToStream(binWriter,IsSkinned());
         GetChunk<VFLAChunk>().ToStream(binWriter);
+        GetChunk<VFLGChunk>().ToStream(binWriter);
         GetChunk<RAMChunk>().ToStream(binWriter);
         GetChunk<MSARChunk>().ToStream(binWriter);
         GetChunk<NLVLChunk>().ToStream(binWriter);
@@ -1215,6 +1220,8 @@ public class TextureHeaderInfo
 
 public class GCMaterial
 {
+    public const uint RawSize = 164;
+    
     public int MaterialId = -1;
     public char[] MatNameRaw = new char[124];
     public string MatName;
@@ -1232,7 +1239,6 @@ public class GCMaterial
         gcm.MaterialId = reader.ReadInt32();
         gcm.MatNameRaw = reader.ReadChars(124);
 
-        gcm.MatName = new string(gcm.MatNameRaw);
         gcm.SelectSetMask = reader.ReadUInt32();
         gcm.AttributeFlags = reader.ReadUInt32();
         gcm.AttributeValues = reader.ReadUInt32();
@@ -1240,6 +1246,8 @@ public class GCMaterial
         gcm.TexIndex = reader.ReadBytes(8);
         gcm.BlendModes = reader.ReadBytes(8);
         gcm.GenModes = reader.ReadBytes(8);
+
+        gcm.MatName = new string(gcm.MatNameRaw);
 
         return gcm;
     }

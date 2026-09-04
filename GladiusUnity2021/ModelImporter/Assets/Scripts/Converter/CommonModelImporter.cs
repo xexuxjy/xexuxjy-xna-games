@@ -1089,9 +1089,8 @@ public class R2V2
 
 public class BoneNode
 {
-    public static HashSet<byte> pad1Bytes = new HashSet<byte>();
-    public static Dictionary<byte, int> pad1ByteCount = new Dictionary<byte, int>();
-    public static Dictionary<byte, List<string>> pad1ByteNames = new Dictionary<byte, List<string>>();
+    public const int RawSize = 12 + 16 + 4;
+    
     public String name;
     public Vector3 offset;
     public Quaternion rotation;
@@ -1131,6 +1130,16 @@ public class BoneNode
         return node;
     }
 
+    public void ToStream(BinaryWriter binWriter)
+    {
+        Common.Write(binWriter, offset);
+        Common.Write(binWriter, rotation);
+        binWriter.Write(Type);
+        binWriter.Write(Index);
+        binWriter.Write(NameIndex);
+        binWriter.Write(ParentIndex);
+    }
+    
     public override String ToString()
     {
         String result = String.Format("N[{0}]\t\t id1[{1}]\t id2[{2}]\t pr[{3}]\t f[{4}]\n", name, Index, NameIndex,
@@ -2178,12 +2187,16 @@ public class SKELChunk : BaseChunk
 
     public void ToStream(BinaryWriter binWriter)
     {
-        // Signature = ChunkName();
-        // Length = (uint)blockSize;
-        // Version = 0;
-        // NumElements = 0x80;
-        // BaseToStream(binWriter);
-
+        int size = ChunkHeaderSize + (BoneNode.RawSize * BoneList.Count);
+        Signature = ChunkName();
+        Length = (uint)size;
+        Version = 0;
+        NumElements = (uint)BoneList.Count;
+        BaseToStream(binWriter);
+        foreach (BoneNode node in BoneList)
+        {
+            node.ToStream(binWriter);
+        }
     }
     
     public List<BoneNode> BoneList = new List<BoneNode>();
@@ -2268,12 +2281,13 @@ public class NAMEChunk : BaseChunk
 
     public void ToStream(BinaryWriter binWriter)
     {
-        // Signature = ChunkName();
-        // Length = (uint)paddedTotal;
-        // Version = 0;
-        // NumElements = 1;
-        // BaseToStream(binWriter);
-
+        int total = 80;
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 0;
+        NumElements = 1;
+        BaseToStream(binWriter);
+        GladiusFileWriter.WriteNull(binWriter,total-ChunkHeaderSize);
     }
         
     
@@ -2888,16 +2902,18 @@ public class VFLAChunk : BaseChunk
         return chunk;
     }
 
+    
 
     static byte[] VFLAGSData = new byte[]
         { 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
     public void ToStream(BinaryWriter binWriter)
     {
-        binWriter.Write(ChunkName());
-        binWriter.Write(0x20); // block size
-        binWriter.Write(1);
-        binWriter.Write(1);
+        Signature = ChunkName();
+        Length = 0x20;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);                
         binWriter.Write(VFLAGSData);
     }
 }
@@ -3102,6 +3118,18 @@ public class VFLGChunk : BaseChunk
         chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
 
         return chunk;
+    }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        int total = GladiusFileWriter.HeaderSize + 16;
+
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 1;
+        NumElements = (uint)1;
+        BaseToStream(binWriter);
+        GladiusFileWriter.WriteNull(binWriter, 16);
     }
 }
 
