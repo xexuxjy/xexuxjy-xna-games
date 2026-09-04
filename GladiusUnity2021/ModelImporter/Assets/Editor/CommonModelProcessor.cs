@@ -22,7 +22,9 @@ public static class CommonModelProcessor
     public static Texture GetTexture(string name)
     {
         string fullPath = TexturesPath + name + ".png";
+        
         Texture t = AssetDatabase.LoadAssetAtPath<Texture>(fullPath);
+        
         if (t == null && !name.EndsWith(".tga"))
         {
             t = AssetDatabase.LoadAssetAtPath<Texture>(TexturesPath + name + ".tga.png");

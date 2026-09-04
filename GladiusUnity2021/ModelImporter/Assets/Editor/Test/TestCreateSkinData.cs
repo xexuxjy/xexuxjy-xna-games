@@ -138,7 +138,17 @@ public class TestCreateSkinData : Editor
                             {
                                 using (BinaryReader binReader = new BinaryReader(readMemoryStream))
                                 {
-                                    m_sanityCheckGCModel = GCModel.ReadData(binReader, "SanityCheck", null);
+                                    
+                                    StringBuilder debugInfo = new StringBuilder();
+                                    try
+                                    {
+                                       // m_sanityCheckGCModel = GCModel.ReadData(binReader, "SanityCheck", debugInfo);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Debug.Log(debugInfo.ToString());
+                                    }
+                                    
                                 }
                             }
                         }
@@ -404,12 +414,18 @@ public class TestCreateSkinData : Editor
 
     public void DisplayModelCompare()
     {
-        if (m_rebuiltGCModel != null && m_sanityCheckGCModel != null)
+        // if (m_rebuiltGCModel != null && m_sanityCheckGCModel != null)
+        // {
+        //     DrawChunkCompare(m_rebuiltGCModel, m_sanityCheckGCModel, Color.green, Color.yellow);
+        // }
+
+        if (m_originalGCModel != null && m_rebuiltGCModel != null)
         {
-            DrawChunkCompare(m_rebuiltGCModel, m_sanityCheckGCModel, Color.green, Color.yellow);
+            DrawChunkCompare(m_originalGCModel, m_rebuiltGCModel, Color.green, Color.yellow);
         }
 
-        if (m_originalSkinData.Count > 0 && m_newSkinData.Count > 0)
+        
+        if (false && m_originalSkinData.Count > 0 && m_newSkinData.Count > 0)
         {
             int numRows = Math.Min(m_originalSkinData.Count, m_newSkinData.Count);
 
@@ -731,19 +747,32 @@ public class TestCreateSkinData : Editor
 
         foreach (BaseChunk model1Chunk in model1.m_chunkList)
         {
-            if (model1Chunk == null)
+
+            string model1ChunkName = new  string(model1Chunk.Signature);
+            string model2ChunkName = null;
+
+            
+            BaseChunk model2Chunk = null;
+            foreach (BaseChunk m2c in model2.m_chunkList)
             {
-                int ibreak = 0;
+                if (m2c.Signature != null)
+                {
+                    if (Enumerable.SequenceEqual(model1Chunk.Signature, m2c.Signature))
+                    {
+                        model2Chunk = m2c;
+                        model2ChunkName = new  string(model2Chunk.Signature);
+                        break;
+                    }
+                }
             }
+            
 
-            BaseChunk model2Chunk =
-                model2.m_chunkList.Find(x => Enumerable.SequenceEqual(model1Chunk.Signature, x.Signature));
-
+            
             if (model2Chunk == null)
             {
                 GUI.contentColor = Color.red;
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"{model1Chunk.Signature}", GetTableHeaderStyle(),
+                EditorGUILayout.LabelField($"{model1ChunkName}", GetTableHeaderStyle(),
                     GUILayout.Width(ColumnWidth));
                 EditorGUILayout.LabelField($"{model1Chunk.Length}", GetTableHeaderStyle(),
                     GUILayout.Width(ColumnWidth));
@@ -753,8 +782,9 @@ public class TestCreateSkinData : Editor
             }
             else
             {
+                GUI.contentColor = matchColor;
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"{model1Chunk.Signature} / {model2Chunk.Signature}", GetTableHeaderStyle(),
+                EditorGUILayout.LabelField($"{model1ChunkName} / {model2ChunkName}", GetTableHeaderStyle(),
                     GUILayout.Width(ColumnWidth));
                 GUI.contentColor = CompareVals((int)model1Chunk.Length, (int)model2Chunk.Length, matchColor, diffColor);
                 EditorGUILayout.LabelField($"{model1Chunk.Length} / {model2Chunk.Length}", GetTableHeaderStyle(),

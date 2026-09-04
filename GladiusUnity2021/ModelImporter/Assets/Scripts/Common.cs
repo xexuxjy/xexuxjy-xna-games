@@ -489,14 +489,14 @@ public static class Common
 
     public static int ReadInt32BigEndian(BinaryReader reader)
     {
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        return Common.ToInt32BigEndian(s_buffer, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        return Common.ToInt32BigEndian(s_buffer4, 0);
     }
     
     public static uint ReadUInt32BigEndian(BinaryReader reader)
     {
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        return Common.ToUInt32BigEndian(s_buffer, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        return Common.ToUInt32BigEndian(s_buffer4, 0);
     }
 
 
@@ -509,29 +509,36 @@ public static class Common
         return v;
     }
 
-    static byte[] s_buffer = new byte[4];
-
+    static byte[] s_buffer4 = new byte[4];
+    static byte[] s_buffer2 = new byte[2];
     public static IndexedVector3 FromStreamInt32BE(BinaryReader reader)
     {
         IndexedVector3 v = new IndexedVector3();
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.X = Common.ToInt32BigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Y = Common.ToInt32BigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Z = Common.ToInt32BigEndian(s_buffer, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.X = Common.ToInt32BigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.Y = Common.ToInt32BigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.Z = Common.ToInt32BigEndian(s_buffer4, 0);
         return v;
     }
     public static IndexedVector2 FromStreamVector2BE(BinaryReader reader)
     {
         IndexedVector2 v = new IndexedVector2();
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.X = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.X = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.Y = Common.ReadSingleBigEndian(s_buffer4, 0);
         return v;
     }
 
+    public static IndexedVector2 FromStreamVector2BEShort(BinaryReader reader)
+    {
+        IndexedVector2 v = new IndexedVector2();
+        v.X = ToFloatUInt16BigEndian(reader);
+        v.Y = ToFloatInt16BigEndian(reader);
+        return v;
+    }
 
     public static IndexedVector3 FromStreamVector3(BinaryReader reader)
     {
@@ -578,9 +585,22 @@ public static class Common
         writer.Write(BEValue);
     }
 
+    public static void WriteBigEndian(BinaryWriter writer,ushort uvalue)
+    {
+        ushort BEValue = BinaryPrimitives.ReverseEndianness(uvalue);
+        writer.Write(BEValue);
+    }
+
+    
     public static void WriteBigEndian(BinaryWriter writer,int value)
     {
         int BEValue = BinaryPrimitives.ReverseEndianness(value);
+        writer.Write(BEValue);
+    }
+
+    public static void WriteBigEndian(BinaryWriter writer,uint value)
+    {
+        uint BEValue = BinaryPrimitives.ReverseEndianness(value);
         writer.Write(BEValue);
     }
 
@@ -633,8 +653,20 @@ public static class Common
     {
         bw.Write(ReverseOrder(v.X));
         bw.Write(ReverseOrder(v.Y));  
+        
+    }
+    public static void WriteVector2BEShort(BinaryWriter bw,IndexedVector2 v)
+    {
+        short x = (short)v.X;
+        short y = (short)v.Y;
+
+        WriteBigEndian(bw,x);
+        WriteBigEndian(bw,y);
+
     }
 
+    
+    
     public static void WriteVector4BE(BinaryWriter bw,IndexedVector4 v)
     {
         bw.Write(ReverseOrder(v.X));
@@ -714,12 +746,12 @@ public static class Common
     public static IndexedVector3 FromStreamVector3BE(BinaryReader reader)
     {
         IndexedVector3 v = new IndexedVector3();
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.X = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Y = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        v.Z = Common.ReadSingleBigEndian(s_buffer, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.X = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.Y = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        v.Z = Common.ReadSingleBigEndian(s_buffer4, 0);
         return v;
     }
 
@@ -727,38 +759,38 @@ public static class Common
     public static IndexedMatrix FromStreamMatrixBE(BinaryReader reader)
     {
 
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m11 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m12 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m13 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m14 = Common.ReadSingleBigEndian(s_buffer, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m11 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m12 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m13 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m14 = Common.ReadSingleBigEndian(s_buffer4, 0);
 
-        float m21 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m22 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m23 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m24 = Common.ReadSingleBigEndian(s_buffer, 0);
+        float m21 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m22 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m23 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m24 = Common.ReadSingleBigEndian(s_buffer4, 0);
 
-        float m31 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m32 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m33 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m34 = Common.ReadSingleBigEndian(s_buffer, 0);
+        float m31 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m32 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m33 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m34 = Common.ReadSingleBigEndian(s_buffer4, 0);
 
-        float m41 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m42 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m43 = Common.ReadSingleBigEndian(s_buffer, 0);
-        reader.Read(s_buffer, 0, s_buffer.Length);
-        float m44 = Common.ReadSingleBigEndian(s_buffer, 0);
+        float m41 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m42 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m43 = Common.ReadSingleBigEndian(s_buffer4, 0);
+        reader.Read(s_buffer4, 0, s_buffer4.Length);
+        float m44 = Common.ReadSingleBigEndian(s_buffer4, 0);
 
         return new IndexedMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33, m41, m42, m43);
     }

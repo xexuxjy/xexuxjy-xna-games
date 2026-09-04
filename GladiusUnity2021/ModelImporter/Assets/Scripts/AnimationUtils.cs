@@ -25,6 +25,11 @@ public static class AnimationUtils
             boneNodes.Add(boneNode);
             
             boneNode.name = t.name;
+            int index = boneNode.name.IndexOf("--");
+            if (index != -1)
+            {
+                boneNode.name = boneNode.name.Substring(0, index);
+            }
             boneNode.Index = boneId;
             boneNode.offset = t.localPosition;
             boneNode.rotation = t.localRotation;
@@ -38,6 +43,7 @@ public static class AnimationUtils
             
             if (parent != null)
             {
+                boneNode.parent = parent;
                 boneNode.ParentIndex = parent.Index;
             }
 

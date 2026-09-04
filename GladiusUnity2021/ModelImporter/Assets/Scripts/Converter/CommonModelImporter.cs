@@ -1239,26 +1239,6 @@ public class BaseModel
                     break;
                 }
             }
-
-
-            if (!m_builtSkelBB)
-            {
-                IndexedVector3 min = new IndexedVector3(float.MaxValue);
-                IndexedVector3 max = new IndexedVector3(float.MinValue);
-
-
-                foreach (BoneNode node in BoneList)
-                {
-                    //if (node.name == "zero")
-                    //{
-                    //    continue;
-                    //}
-
-                    // build tranform from parent chain?
-                }
-
-                m_builtSkelBB = true;
-            }
         }
     }
 
@@ -1278,44 +1258,44 @@ public class BaseModel
         }
     }
 
-    public Dictionary<int, BoneNode> m_boneIdDictionary = new Dictionary<int, BoneNode>();
-
+    
     public Dictionary<char[], TagSizeAndData> m_tagSizes = new Dictionary<char[], TagSizeAndData>();
 
     //public List<ModelSubMesh> m_modelMeshes = new List<ModelSubMesh>();
     public String m_name;
 
     //public List<TextureData> m_textures = new List<TextureData>();
-    public List<MaterialData> m_materials = new List<MaterialData>();
-    public List<String> m_boneNames = new List<String>();
-    public Dictionary<int, String> m_boneNameDictionary = new Dictionary<int, string>();
-    public List<String> m_textureNames = new List<String>();
-    public List<Vector3> m_centers = new List<Vector3>();
-    //public List<String> m_selsInfo = new List<string>();
-
-    public List<ShaderData> m_shaderData = new List<ShaderData>();
-    //public List<Vector2> UVs = new List<Vector2>();
-
-    public List<IndexedMatrix> m_matrices = new List<IndexedMatrix>();
-
-    private List<BoneNode> m_bones = new List<BoneNode>();
-
-    //private List<BoneNode> m_bonesShrunk = new List<BoneNode>();
+    // public List<MaterialData> m_materials = new List<MaterialData>();
+    // public List<String> m_boneNames = new List<String>();
+    // public Dictionary<int, String> m_boneNameDictionary = new Dictionary<int, string>();
+    // public List<String> m_textureNames = new List<String>();
+    // public List<Vector3> m_centers = new List<Vector3>();
+    // //public List<String> m_selsInfo = new List<string>();
+    //
+    // public List<ShaderData> m_shaderData = new List<ShaderData>();
+    // //public List<Vector2> UVs = new List<Vector2>();
+    //
+    // public List<IndexedMatrix> m_matrices = new List<IndexedMatrix>();
+    //
+    // private List<BoneNode> m_bones = new List<BoneNode>();
+    //
+    // //private List<BoneNode> m_bonesShrunk = new List<BoneNode>();
+    public Dictionary<int, BoneNode> m_boneIdDictionary = new Dictionary<int, BoneNode>();
     public BoneNode m_rootBone;
     public BoneNode m_zeroBone;
-
-    public bool m_builtBB = false;
-    public bool m_builtSkelBB = false;
-    public bool m_skinned = false;
-    public bool m_hasSkeleton = false;
-    public bool m_animsLoaded = false;
-    public bool m_hasColorInfo = false;
-
-    //public int m_maxVertex;
-    public int MaxVertex { get; set; }
-
-    public int m_maxNormal;
-    public int m_maxUv;
+    //
+    // public bool m_builtBB = false;
+    // public bool m_builtSkelBB = false;
+    // public bool m_skinned = false;
+    // public bool m_hasSkeleton = false;
+    // public bool m_animsLoaded = false;
+    // public bool m_hasColorInfo = false;
+    //
+    // //public int m_maxVertex;
+    // public int MaxVertex { get; set; }
+    //
+    // public int m_maxNormal;
+    // public int m_maxUv;
 }
 
 
@@ -2093,6 +2073,14 @@ public class BaseChunk
         Version = binReader.ReadUInt32();
         NumElements = binReader.ReadUInt32();
     }
+
+    public void BaseToStream(BinaryWriter binWriter)
+    {
+        binWriter.Write(Signature);
+        binWriter.Write(Length);
+        binWriter.Write(Version);
+        binWriter.Write(NumElements);
+    }
 }
 
 
@@ -2115,10 +2103,12 @@ public class VERSChunk : BaseChunk
 
     public void ToStream(BinaryWriter binWriter)
     {
-        binWriter.Write(ChunkName());
-        binWriter.Write(GladiusFileWriter.HeaderSize + 16); // block size
-        binWriter.Write(1);
-        binWriter.Write(0);
+        Signature = ChunkName();
+        Length = GladiusFileWriter.HeaderSize + 16;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);
+        
         binWriter.Write(14);
         binWriter.Write(0);
         binWriter.Write(0);
@@ -2147,10 +2137,12 @@ public class CPRTChunk : BaseChunk
     {
         int blockSize = 0x90;
         int remain = blockSize;
-        binWriter.Write(ChunkName());
-        binWriter.Write(blockSize); // block size
-        binWriter.Write(0x00);
-        binWriter.Write(0x80);
+        
+        Signature = ChunkName();
+        Length = (uint)blockSize;
+        Version = 0;
+        NumElements = 0x80;
+        BaseToStream(binWriter);
 
         remain -= GladiusFileWriter.HeaderSize;
 
@@ -2184,6 +2176,16 @@ public class SKELChunk : BaseChunk
         return chunk;
     }
 
+    public void ToStream(BinaryWriter binWriter)
+    {
+        // Signature = ChunkName();
+        // Length = (uint)blockSize;
+        // Version = 0;
+        // NumElements = 0x80;
+        // BaseToStream(binWriter);
+
+    }
+    
     public List<BoneNode> BoneList = new List<BoneNode>();
 }
 
@@ -2215,10 +2217,11 @@ public class SELSChunk : BaseChunk
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        binWriter.Write(ChunkName());
-        binWriter.Write(paddedTotal);
-        binWriter.Write(0x00);
-        binWriter.Write(0x01);
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 0;
+        NumElements = 1;
+        BaseToStream(binWriter);
 
         GladiusFileWriter.WriteStringList(binWriter, Names, (paddedTotal - GladiusFileWriter.HeaderSize));
     }
@@ -2262,6 +2265,18 @@ public class NAMEChunk : BaseChunk
         CommonModelImporter.ReadNullSeparatedNames(binReader, chunk.Names);
         return chunk;
     }
+
+    public void ToStream(BinaryWriter binWriter)
+    {
+        // Signature = ChunkName();
+        // Length = (uint)paddedTotal;
+        // Version = 0;
+        // NumElements = 1;
+        // BaseToStream(binWriter);
+
+    }
+        
+    
 }
 
 public class TXTRChunk : BaseChunk
@@ -2293,12 +2308,11 @@ public class TXTRChunk : BaseChunk
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-
-        binWriter.Write(ChunkName());
-        binWriter.Write(paddedTotal);
-        binWriter.Write(0);
-        binWriter.Write(Textures.Count);
-
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 0;
+        NumElements = (uint)Textures.Count;
+        BaseToStream(binWriter);
 
         foreach (PaxTexture textureInfo in Textures)
         {
@@ -2334,7 +2348,9 @@ public class PaxTexture
     {
         PaxTexture paxTexture = new PaxTexture();
         byte[] buffer = binReader.ReadBytes(128);
+        
         paxTexture.Name = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+        paxTexture.Name = paxTexture.Name.Replace("\0", "");
         paxTexture.TexNum = binReader.ReadInt32();
         paxTexture.PointerToImageArray = binReader.ReadUInt32();
         paxTexture.Width = binReader.ReadUInt32();
@@ -2374,10 +2390,11 @@ public class ENDChunk : BaseChunk
     {
         int total = GladiusFileWriter.HeaderSize;
 
-        binWriter.Write(ChunkName());
-        binWriter.Write(total);
-        binWriter.Write(0);
-        binWriter.Write(1);
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 0;
+        NumElements = 0;
+        BaseToStream(binWriter);
     }
 }
 
@@ -2421,24 +2438,24 @@ public class POSIChunk : BaseChunk
         return chunk;
     }
 
-    public void ToStream(BinaryWriter writer)
+    public void ToStream(BinaryWriter binWriter)
     {
         int total = GladiusFileWriter.HeaderSize;
         total += (Data.Count * 12);
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        writer.Write(ChunkName());
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(Data.Count); // number of elements.
-
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 1;
+        NumElements = (uint)Data.Count;
+        BaseToStream(binWriter);
 
         foreach (IndexedVector3 v in Data)
         {
-            Common.WriteVector3BE(writer, v);
+            Common.WriteVector3BE(binWriter, v);
         }
 
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
     }
 }
 
@@ -2464,24 +2481,25 @@ public class NORMChunk : BaseChunk
         return chunk;
     }
 
-    public void ToStream(BinaryWriter writer)
+    public void ToStream(BinaryWriter binWriter)
     {
         int total = GladiusFileWriter.HeaderSize;
         total += (Data.Count * 12);
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        writer.Write(ChunkName());
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(Data.Count); // number of elements.
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 0;
+        NumElements = (uint)Data.Count;
+        BaseToStream(binWriter);
 
 
         foreach (IndexedVector3 v in Data)
         {
-            Common.WriteVector3BE(writer, v);
+            Common.WriteVector3BE(binWriter, v);
         }
 
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
     }
 }
 
@@ -2499,32 +2517,52 @@ public class UV0Chunk : BaseChunk
     {
         UV0Chunk chunk = new UV0Chunk();
         chunk.BaseFromStream(binReader);
+
+        uint avgSize = (chunk.Length - 16) / chunk.NumElements;  
+        
         for (int i = 0; i < chunk.NumElements; ++i)
         {
-            chunk.Data.Add(Common.FromStreamVector2BE(binReader));
+            if (avgSize == 8)
+            {
+                chunk.Data.Add(Common.FromStreamVector2BE(binReader));    
+            }
+            else
+            {
+                chunk.Data.Add(Common.FromStreamVector2BEShort(binReader));    
+            }
         }
 
         return chunk;
     }
 
-    public void ToStream(BinaryWriter writer)
+    public void ToStream(BinaryWriter binWriter,bool skinned)
     {
         int total = GladiusFileWriter.HeaderSize;
-        total += (Data.Count * 8);
+        int elementSize = skinned ? 4 : 8;
+        
+        total += (Data.Count * elementSize);
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        writer.Write(ChunkName());
-        writer.Write(paddedTotal); // block size
-        writer.Write(1);
-        writer.Write(Data.Count); // number of elements.
-
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 0;
+        NumElements = (uint)Data.Count;
+        BaseToStream(binWriter);
 
         foreach (IndexedVector2 v in Data)
         {
-            Common.WriteVector2BE(writer, v);
+            if (skinned)
+            {
+                Common.WriteVector2BE(binWriter, v);
+            }
+            else
+            {
+                Common.WriteVector2BEShort(binWriter, v);    
+            }
+            
         }
 
-        GladiusFileWriter.WriteNull(writer, (paddedTotal - total));
+        GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
     }
 }
 
@@ -2560,14 +2598,13 @@ public class SHDRChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter, List<PaxTexture> paxTextures)
     {
         int total = GladiusFileWriter.HeaderSize;
-        binWriter.Write(ChunkName());
-
         total += paxTextures.Count * GCModel.MaterialBlockSize;
 
-        binWriter.Write(total); // block size
-        binWriter.Write(0);
-        binWriter.Write(paxTextures.Count); // num materials, 1 for now
-
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 0;
+        NumElements = (uint)paxTextures.Count;
+        BaseToStream(binWriter);
 
         for (int i = 0; i < paxTextures.Count; ++i)
         {
@@ -2618,10 +2655,11 @@ public class DSLIChunk : BaseChunk
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        binWriter.Write(ChunkName());
-        binWriter.Write(paddedTotal); // block size
-        binWriter.Write(1);
-        binWriter.Write(1);
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);
 
         int startPos = 0;
 
@@ -2689,8 +2727,6 @@ public class DSLSChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter)
     {
         int total = GladiusFileWriter.HeaderSize;
-        binWriter.Write(ChunkName());
-
 
         foreach (DisplayListHeader dlh in DisplayListHeaders)
         {
@@ -2699,9 +2735,11 @@ public class DSLSChunk : BaseChunk
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        binWriter.Write(paddedTotal); // block size
-        binWriter.Write(1);
-        binWriter.Write(1);
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);
 
         // end of standard header.
 
@@ -2740,10 +2778,11 @@ public class CNTRChunk : BaseChunk
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        binWriter.Write(ChunkName());
-        binWriter.Write(paddedTotal);
-        binWriter.Write(0x01);
-        binWriter.Write(0x01);
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);
 
         Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
@@ -2813,10 +2852,12 @@ public class DSLCChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter, List<PaxElement> paxElements)
     {
         int total = GladiusFileWriter.HeaderSize + 16;
-        binWriter.Write(ChunkName());
-        binWriter.Write(total); // block size
-        binWriter.Write(1);
-        binWriter.Write(paxElements.Count);
+        
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 1;
+        NumElements = (uint)paxElements.Count;
+        BaseToStream(binWriter);
 
         int totalEntries = 12;
         for (int i = 0; i < paxElements.Count; ++i)
@@ -2883,10 +2924,13 @@ public class RAMChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter)
     {
         int blockSize = 0x90;
-        binWriter.Write(ChunkName());
-        binWriter.Write(blockSize); // block size
-        binWriter.Write(1);
-        binWriter.Write(1);
+        
+        Signature = ChunkName();
+        Length = (uint)blockSize;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);
+
         GladiusFileWriter.WriteNull(binWriter, blockSize - GladiusFileWriter.HeaderSize);
     }
 }
@@ -2912,10 +2956,13 @@ public class MSARChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter)
     {
         int blockSize = 0x40;
-        binWriter.Write(ChunkName());
-        binWriter.Write(blockSize); // block size
-        binWriter.Write(1);
-        binWriter.Write(1);
+        
+        Signature = ChunkName();
+        Length = (uint)blockSize;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);
+        
         GladiusFileWriter.WriteNull(binWriter, blockSize - GladiusFileWriter.HeaderSize);
     }
 }
@@ -2942,11 +2989,13 @@ public class NLVLChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter)
     {
         int blockSize = 0x20;
-        binWriter.Write(ChunkName());
-        binWriter.Write(blockSize); // block size
-        binWriter.Write(2);
-        binWriter.Write(1);
-        //GladiusFileWriter.WriteNull(binWriter, blockSize - GladiusFileWriter.HeaderSize);
+
+        Signature = ChunkName();
+        Length = (uint)blockSize;
+        Version = 2;
+        NumElements = 1;
+        BaseToStream(binWriter);
+
         GladiusFileWriter.WriteNull(binWriter, 0x10);
     }
 }
@@ -2980,15 +3029,14 @@ public class MESHChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter)
     {
         int total = GladiusFileWriter.HeaderSize + (24 * PaxElements.Count);
-        binWriter.Write(ChunkName());
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        binWriter.Write(paddedTotal); // block size
-
-        binWriter.Write(0);
-        binWriter.Write(PaxElements.Count); // number of elements
-
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 1;
+        NumElements = (uint)PaxElements.Count;
+        BaseToStream(binWriter);
 
         for (int i = 0; i < PaxElements.Count; ++i)
         {
@@ -3021,12 +3069,12 @@ public class ELEMChunk : BaseChunk
     public void ToStream(BinaryWriter binWriter, List<DisplayListHeader> headers)
     {
         int total = GladiusFileWriter.HeaderSize + 16;
-        binWriter.Write(ChunkName());
 
-
-        binWriter.Write(total); // block size
-        binWriter.Write(0);
-        binWriter.Write(headers.Count);
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 1;
+        NumElements = (uint)headers.Count;
+        BaseToStream(binWriter);
 
         for (int i = 0; i < headers.Count; ++i)
         {
@@ -3260,10 +3308,11 @@ public class SKINChunk : BaseChunk
 
         int paddedTotal = GladiusFileWriter.GetPadValue(total);
 
-        binWriter.Write(ChunkName());
-        binWriter.Write(paddedTotal);
-        binWriter.Write(1);
-        binWriter.Write(SkinDataList.Count);
+        Signature = ChunkName();
+        Length = (uint)paddedTotal;
+        Version = 1;
+        NumElements = (uint)SkinDataList.Count;
+        BaseToStream(binWriter);
 
         foreach (SkinData skinData in SkinDataList)
         {
@@ -3478,10 +3527,11 @@ public class SkinData
     public void WriteSkinWeights(BinaryWriter binWriter, long dataPosition, short animShift)
     {
         binWriter.BaseStream.Position = dataPosition + PointerList1;
-
+            
         foreach (CSK1 csk1 in CSK1List)
         {
             csk1.ToStream(binWriter, animShift);
+            
         }
 
         binWriter.BaseStream.Position = dataPosition + PointerList2;
@@ -3585,6 +3635,7 @@ public class SkinData
 
     public void ToStream(BinaryWriter binWriter)
     {
+        long startPosition = binWriter.BaseStream.Position;
         Common.WriteBigEndian(binWriter, Size);
         Common.WriteBigEndian(binWriter, NumberVertices);
         Common.WriteBigEndian(binWriter, NumberBones);
@@ -3618,7 +3669,7 @@ public class SkinData
         int extraPadding = 26;
         GladiusFileWriter.WriteNull(binWriter, extraPadding);
 
-        long dataPosition = binWriter.BaseStream.Position;
+        long dataPosition = startPosition;
         
         for (int i = 0; i < NumPackets1; i++)
         {
@@ -3640,8 +3691,18 @@ public class SkinData
             Common.WriteBigEndian(binWriter, Packet2Sizes[i]);
         }
 
-
         WriteSkinWeights(binWriter, dataPosition,AnimShift);
+        
+        
+        long endPosition = binWriter.BaseStream.Position;
+        long diff = endPosition - startPosition;
+        long sizeDiff = Size - diff;
+        if (sizeDiff > 0)
+        {
+            GladiusFileWriter.WriteNull(binWriter, (int)sizeDiff);
+        }
+
+        int ibreak = 0;
     }
 
 
@@ -3773,9 +3834,10 @@ public class CSK1
     public void ToStream(BinaryWriter writer, short animShift)
     {
         writer.Write(idxBone);
-        writer.Write(count);
-        writer.Write(vertDst);
-        writer.Write(vertSrc);
+        writer.Write((byte)0);
+        Common.WriteBigEndian(writer,count);
+        SKINChunk.RelocateAndWrite(writer,vertSrc);
+        Common.WriteBigEndian(writer,vertDst);
     }
 
     /*
@@ -3850,17 +3912,10 @@ public class CSK2
     {
         writer.Write(idxBone[0]);
         writer.Write(idxBone[1]);
-        writer.Write(count);
-        writer.Write(weightsSrc);
-        writer.Write(vertDst);
-        writer.Write(vertSrc);
-
-        long currentPosition = writer.BaseStream.Position;
-        writer.BaseStream.Position = currentPosition + vertSrc;
-        for (int i = 0; i < ExtractedPositions.Count; i++)
-        {
-            SkinData.WritePositionAndNormal(writer, animShift, ExtractedPositions[i], ExtractedNormals[i]);
-        }
+        Common.WriteBigEndian(writer,count);
+        SKINChunk.RelocateAndWrite(writer,weightsSrc);
+        SKINChunk.RelocateAndWrite(writer,vertSrc);
+        Common.WriteBigEndian(writer,vertDst);
     }
 }
 
@@ -3896,14 +3951,15 @@ public class CSKA
         return cska;
     }
 
-    public void ToStream(BinaryWriter binWriter, short animShift)
+    public void ToStream(BinaryWriter writer, short animShift)
     {
-        binWriter.Write(idxBone);
-        binWriter.Write(_pad);
-        binWriter.Write(count);
-        binWriter.Write(weightsSrc);
-        binWriter.Write(idxDst);
-        binWriter.Write(vertSrc);
+        writer.Write(idxBone);
+        writer.Write(_pad);
+
+        Common.WriteBigEndian(writer,count);
+        SKINChunk.RelocateAndWrite(writer,weightsSrc);
+        SKINChunk.RelocateAndWrite(writer,idxDst);
+        Common.WriteBigEndian(writer,vertSrc);
     }
 }
 
@@ -4070,10 +4126,12 @@ public class STYPChunk : BaseChunk
         int total = GladiusFileWriter.HeaderSize;
         total += (SelectSet.Size) * SelectSetList.Count;
 
-        binWriter.Write(ChunkName());
-        binWriter.Write(total);
-        binWriter.Write(0);
-        binWriter.Write(1);
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 1;
+        NumElements = 1;
+        BaseToStream(binWriter);
+
         foreach (SelectSet selectSet in SelectSetList)
         {
             selectSet.ToStream(binWriter);
