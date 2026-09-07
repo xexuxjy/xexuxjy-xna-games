@@ -74,12 +74,11 @@ namespace Assets.Editor
 
                     GCModel model = null;
 
-                    model.m_name = adjustedFilename;
 
                     using (BinaryReader binReader = new BinaryReader(new MemoryStream(assetData.bytes)))
                     {
                         StringBuilder debugInfo = new StringBuilder();
-                        model = GCModel.ReadData(binReader,"", debugInfo);
+                        model = GCModel.ReadData(binReader,adjustedFilename, debugInfo);
 
                         CommonModelData commonModel = model.ToCommon();
                         uint lodLevel = commonModel.OverallLodLevel; 

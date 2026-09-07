@@ -132,6 +132,123 @@ public class TestCreateSkinData : Editor
                             buffer = writeMemoryStream.ToArray();
                         }
 
+                        DSLSChunk oldDS = m_originalGCModel.GetChunk<DSLSChunk>();
+                        DSLSChunk newDS = m_rebuiltGCModel.GetChunk<DSLSChunk>();
+
+                        StringBuilder oldSB = new StringBuilder();
+                        StringBuilder newSB = new StringBuilder();
+                        
+                        foreach (DisplayListEntry dse in oldDS.DisplayListHeaders[0].entries)
+                        {
+                            oldSB.AppendLine($"{dse.PosIndex},{dse.NormIndex},{dse.UVIndex}");
+                        }
+
+                        foreach (DisplayListEntry dse in newDS.DisplayListHeaders[0].entries)
+                        {
+                            newSB.AppendLine($"{dse.PosIndex},{dse.NormIndex},{dse.UVIndex}");
+                        }
+
+                        SKELChunk oldSKEL = m_originalGCModel.GetChunk<SKELChunk>();
+                        SKELChunk newSKEL = m_rebuiltGCModel.GetChunk<SKELChunk>();
+                        
+                        StringBuilder oldSBS = new StringBuilder();
+                        StringBuilder newSBS = new StringBuilder();
+
+                        foreach (BoneNode boneNode in oldSKEL.BoneList)
+                        {
+                            oldSBS.AppendLine(
+                                $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
+                        }
+
+                        foreach (BoneNode boneNode in newSKEL.BoneList)
+                        {
+                            newSBS.AppendLine(
+                                $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
+                            
+                        }
+                        
+                        SKINChunk oldSKIN =  m_originalGCModel.GetChunk<SKINChunk>();
+                        SKINChunk newSKIN =  m_rebuiltGCModel.GetChunk<SKINChunk>();
+
+                        UV0Chunk oldUV0 =  m_originalGCModel.GetChunk<UV0Chunk>();
+                        UV0Chunk newUV0 =  m_rebuiltGCModel.GetChunk<UV0Chunk>();
+                        
+                        List<Vector3> oldPositions = new List<Vector3>();
+                        List<Vector3> oldNormals = new List<Vector3>();
+
+                        foreach (CSK1 csk in oldSKIN.SkinDataList[0].CSK1List)
+                        {
+                            oldPositions.AddRange(csk.ExtractedPositions);
+                            //oldNormals.AddRange(csk.ExtractedNormals);
+                        }
+
+                        foreach (CSK2 csk in oldSKIN.SkinDataList[0].CSK2List)
+                        {
+                            oldPositions.AddRange(csk.ExtractedPositions);
+                            //oldNormals.AddRange(csk.ExtractedNormals);
+                        }
+
+                        List<Vector3> newPositions = new List<Vector3>();
+                        List<Vector3> newNormals = new List<Vector3>();
+
+                        foreach (CSK1 csk in newSKIN.SkinDataList[0].CSK1List)
+                        {
+                            newPositions.AddRange(csk.ExtractedPositions);
+                            //newNormals.AddRange(csk.ExtractedNormals);
+                        }
+
+                        foreach (CSK2 csk in newSKIN.SkinDataList[0].CSK2List)
+                        {
+                            newPositions.AddRange(csk.ExtractedPositions);
+                            //newNormals.AddRange(csk.ExtractedNormals);
+                        }
+
+                        StringBuilder oldPN = new StringBuilder();
+                        StringBuilder newPN = new StringBuilder();
+
+                        foreach (Vector3 p in oldPositions)
+                        {
+                            oldPN.AppendLine(p.ToString());
+                        }
+                        foreach (Vector3 n in oldNormals)
+                        {
+                            oldPN.AppendLine(n.ToString());
+                        }
+
+                        foreach (Vector3 p in newPositions)
+                        {
+                            newPN.AppendLine(p.ToString());
+                        }
+                        foreach (Vector3 n in newNormals)
+                        {
+                            newPN.AppendLine(n.ToString());
+                        }
+                        
+                        StringBuilder oldUV = new StringBuilder();
+                        StringBuilder newUV = new StringBuilder();
+
+                        foreach (Vector2 uv in oldUV0.Data)
+                        {
+                            oldUV.AppendLine(uv.ToString());
+                        }
+
+                        foreach (Vector2 uv in newUV0.Data)
+                        {
+                            newUV.AppendLine(uv.ToString());
+                        }
+
+                        File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
+                        File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
+                        
+                        File.WriteAllText("d:/tmp/old-skel.txt", oldSBS.ToString());
+                        File.WriteAllText("d:/tmp/new-skel.txt", newSBS.ToString());
+                        
+                        File.WriteAllText("d:/tmp/old-pn.txt", oldPN.ToString());
+                        File.WriteAllText("d:/tmp/new-pn.txt", newPN.ToString());
+
+                        File.WriteAllText("d:/tmp/old-uv.txt", oldUV.ToString());
+                        File.WriteAllText("d:/tmp/new-uv.txt", newUV.ToString());
+
                         if (buffer != null)
                         {
                             using (MemoryStream readMemoryStream = new MemoryStream(buffer))

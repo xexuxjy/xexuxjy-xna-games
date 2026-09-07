@@ -1135,9 +1135,6 @@ public static class CommonModelProcessor
         List<int> triangles = new List<int>();
         List<BoneWeight> boneWeights = new List<BoneWeight>();
         List<Color> colors = new List<Color>();
-
-
-        remapBones = false;
         
         int vertexOffset = 0;
 
@@ -1173,20 +1170,24 @@ public static class CommonModelProcessor
                 //
                 //foreach(BoneWeight bw in subMesh.sharedMesh.boneWeights)
                 BoneWeight[] bonesCopy = new BoneWeight[subMesh.boneWeights.Length];
+                    
+                remappedBoneNodeList.Clear();
+                remappedBoneNodeList.AddRange(originalBoneNodeList);
+                
                 for (int i = 0; i < subMesh.boneWeights.Length; ++i)
                 {
                     BoneWeight bw = subMesh.boneWeights[i];
-                    if (remapBones)
-                    {
-                        bw.boneIndex0 = RemapBone(bw.boneIndex0, bw.weight0, boneConversionDictionary,
-                            originalBoneNodeList, remappedBoneNodeList);
-                        bw.boneIndex1 = RemapBone(bw.boneIndex1, bw.weight1, boneConversionDictionary,
-                            originalBoneNodeList, remappedBoneNodeList);
-                        bw.boneIndex2 = RemapBone(bw.boneIndex2, bw.weight2, boneConversionDictionary,
-                            originalBoneNodeList, remappedBoneNodeList);
-                        bw.boneIndex3 = RemapBone(bw.boneIndex3, bw.weight3, boneConversionDictionary,
-                            originalBoneNodeList, remappedBoneNodeList);
-                    }
+                    // if (remapBones)
+                    // {
+                    //     bw.boneIndex0 = RemapBone(bw.boneIndex0, bw.weight0, boneConversionDictionary,
+                    //         originalBoneNodeList, remappedBoneNodeList);
+                    //     bw.boneIndex1 = RemapBone(bw.boneIndex1, bw.weight1, boneConversionDictionary,
+                    //         originalBoneNodeList, remappedBoneNodeList);
+                    //     bw.boneIndex2 = RemapBone(bw.boneIndex2, bw.weight2, boneConversionDictionary,
+                    //         originalBoneNodeList, remappedBoneNodeList);
+                    //     bw.boneIndex3 = RemapBone(bw.boneIndex3, bw.weight3, boneConversionDictionary,
+                    //         originalBoneNodeList, remappedBoneNodeList);
+                    // }
 
                     //subMesh.sharedMesh.boneWeights[i] = bw;
                     bonesCopy[i] = bw;
@@ -1351,14 +1352,16 @@ public static class CommonModelProcessor
         for (int i = 0; i < tempUV.Length; ++i)
         {
             Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV;
-            tempUV[i] = new Vector2(uv.x, 1.0f - uv.y);
+            //tempUV[i] = new Vector2(uv.x, 1.0f - uv.y);
+            tempUV[i] = new Vector2(uv.x,uv.y);
             maxy = Math.Max(maxy, uv.y);
         }
 
         for (int i = 0; i < tempUV.Length; ++i)
         {
             Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV;
-            tempUV[i] = new Vector2(uv.x, maxy - uv.y);
+            //tempUV[i] = new Vector2(uv.x, maxy - uv.y);
+            tempUV[i] = new Vector2(uv.x,uv.y);
         }
 
         Vector2[] tempUV2 = null;

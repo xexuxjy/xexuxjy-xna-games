@@ -264,6 +264,7 @@ public class GCModel : BaseModel
 
         int dsliStart = 0;
         
+        SKINChunk skinChunk = model.GetChunk<SKINChunk>();
         
         for (int m = 0; m < meshes.Count; m++)
         {
@@ -271,15 +272,9 @@ public class GCModel : BaseModel
             GameObject gameObject = gameObjects[m];
             Material material = materials[m];
 
-            List<Vector3> vertices = model.IsSkinned()
-                ? model.GetChunk<SKINChunk>().Positions
-                : model.GetChunk<POSIChunk>().Data;
-            List<Vector3> normals =
-                model.IsSkinned() ? model.GetChunk<SKINChunk>().Normals : model.GetChunk<NORMChunk>().Data;
-
-
             DisplayListHeader dlh = new DisplayListHeader();
             int[] triangleOrder = new[] { 0, 2, 1 };
+            
             for (int i = 0; i < mesh.triangles.Length; i += 3)
             {
                 foreach (int order in triangleOrder)
@@ -287,14 +282,22 @@ public class GCModel : BaseModel
                     int adjustedPoint = i + order;
 
                     int lookupIndex = mesh.triangles[adjustedPoint];
+                    int posNormLookupIndex = lookupIndex;
+                    
+                    if (model.IsSkinned())
+                    {
+                        int conversion = skinChunk.SkinDataList[m].RelocationTable[lookupIndex];
+                        posNormLookupIndex = conversion;
+                    }
+                    
 
                     Vector3 sharedMeshV = mesh.vertices[lookupIndex] + gameObject.transform.position;
                     Vector3 sharedMeshN = gameObject.transform.TransformDirection(
                         mesh.normals[lookupIndex]);
                     Vector2 sharedMeshU = mesh.uv[lookupIndex];
 
-                    int posIndex = lookupIndex;
-                    int normIndex = lookupIndex;
+                    int posIndex = posNormLookupIndex;
+                    int normIndex = posNormLookupIndex;
 
                     int uvIndex = uv0Chunk.Data.IndexOf(sharedMeshU);
 

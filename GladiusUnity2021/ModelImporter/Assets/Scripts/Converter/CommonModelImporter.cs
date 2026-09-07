@@ -2567,11 +2567,11 @@ public class UV0Chunk : BaseChunk
         {
             if (skinned)
             {
-                Common.WriteVector2BE(binWriter, v);
+                Common.WriteVector2BEShort(binWriter, v);
             }
             else
             {
-                Common.WriteVector2BEShort(binWriter, v);    
+                Common.WriteVector2BE(binWriter, v); 
             }
             
         }
@@ -2944,10 +2944,11 @@ public class RAMChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)blockSize;
         Version = 1;
-        NumElements = 1;
+        int numElements = blockSize - GladiusFileWriter.HeaderSize;
+        NumElements = (uint)numElements;
         BaseToStream(binWriter);
 
-        GladiusFileWriter.WriteNull(binWriter, blockSize - GladiusFileWriter.HeaderSize);
+        GladiusFileWriter.WriteNull(binWriter, numElements);
     }
 }
 
@@ -3400,6 +3401,8 @@ public class SkinData
 
     public const int StructureSize = 96;
 
+    public int[] RelocationTable;
+    
     public static SkinData FromStream(BinaryReader binReader)
     {
         long startPosition = binReader.BaseStream.Position;
@@ -4275,6 +4278,15 @@ public static class SkinBuilder
             acclist.Add(new CAccList());
         }
 
+        for (int i = 0; i < vertices.Count; i++)
+        {
+            vertices[i] = GladiusGlobals.UnityToGladius(vertices[i]);
+        }
+        
+        for (int i = 0; i < normals.Count; i++)
+        {
+            normals[i] = GladiusGlobals.UnityToGladius(normals[i]);
+        }
 
         int numVerts = vertices.Count();
 
@@ -4640,7 +4652,7 @@ public static class SkinBuilder
         skinData.NumberVertices = numVerts;
         skinData.NumberBones = numBones;
         skinData.Size = (int)memsize;
-
+        skinData.RelocationTable = pRelocate;
 
         skinData.NumPackets1 = packets1.Count;
         skinData.PacketStart1 = positionCounter;

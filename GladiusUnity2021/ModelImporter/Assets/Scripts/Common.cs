@@ -582,6 +582,7 @@ public static class Common
     public static void WriteBigEndian(BinaryWriter writer,short value)
     {
         short BEValue = BinaryPrimitives.ReverseEndianness(value);
+        //BEValue = value;
         writer.Write(BEValue);
     }
 
@@ -657,9 +658,9 @@ public static class Common
     }
     public static void WriteVector2BEShort(BinaryWriter bw,IndexedVector2 v)
     {
-        short x = (short)v.X;
-        short y = (short)v.Y;
-
+        short x = (short)(v.X/(float)UInt16.MaxValue);
+        short y = (short)(v.Y/(float)UInt16.MaxValue);
+        
         WriteBigEndian(bw,x);
         WriteBigEndian(bw,y);
 
