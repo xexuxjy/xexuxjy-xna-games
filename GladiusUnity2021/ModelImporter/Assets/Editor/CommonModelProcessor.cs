@@ -1061,7 +1061,15 @@ public static class CommonModelProcessor
         List<Mesh> combinedMeshes = MergeMesh(merge, meshes, boneConversionDictionary,
             commonModel.BoneList, remappedBoneNodeList);
 
-        CommonMaterialData commonMaterialData = commonModel.CommonMaterials[(int)meshList.First().MaterialId];
+        // FIXME MATERIALID
+        int materialId = meshList.First().MaterialId;
+
+        if (materialId < 0 || materialId >= commonModel.CommonMaterials.Count)
+        {
+            materialId = 0;
+        }
+        
+        CommonMaterialData commonMaterialData = commonModel.CommonMaterials[materialId];
 
         foreach (Mesh combinedMesh in combinedMeshes)
         {
@@ -1285,7 +1293,13 @@ public static class CommonModelProcessor
             new Dictionary<CommonMaterialData, List<CommonMeshData>>();
         foreach (CommonMeshData mesh in model.CommonMeshData)
         {
+            // FIXME MATERIALID
             int materialId = mesh.MaterialId;
+
+            if (materialId < 0 || materialId >= model.CommonMaterials.Count)
+            {
+                materialId = 0;
+            }
             
             CommonMaterialData materialData = model.CommonMaterials[materialId];
             List<CommonMeshData> listResult = null;
@@ -1320,8 +1334,16 @@ public static class CommonModelProcessor
             renderer = submeshObject.AddComponent<MeshRenderer>();
         }
 
+        // FIXME MATERIALID
+        int materialId = submesh.MaterialId;
 
-        CommonMaterialData commonMaterial = commonModel.CommonMaterials[(int)submesh.MaterialId];
+        if (materialId < 0 || materialId >= commonModel.CommonMaterials.Count)
+        {
+            materialId = 0;
+        }
+
+
+        CommonMaterialData commonMaterial = commonModel.CommonMaterials[materialId];
         Material m = GetOrCreateMaterial(commonModel.Name,commonMaterial, outputHierarchy,true);
         if (m != null)
         {
@@ -1352,16 +1374,14 @@ public static class CommonModelProcessor
         for (int i = 0; i < tempUV.Length; ++i)
         {
             Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV;
-            //tempUV[i] = new Vector2(uv.x, 1.0f - uv.y);
-            tempUV[i] = new Vector2(uv.x,uv.y);
+            tempUV[i] = new Vector2(uv.x, 1.0f - uv.y);
             maxy = Math.Max(maxy, uv.y);
         }
 
         for (int i = 0; i < tempUV.Length; ++i)
         {
             Vector2 uv = commonModel.AllVertices[submesh.Vertices[i]].UV;
-            //tempUV[i] = new Vector2(uv.x, maxy - uv.y);
-            tempUV[i] = new Vector2(uv.x,uv.y);
+            tempUV[i] = new Vector2(uv.x, maxy - uv.y);
         }
 
         Vector2[] tempUV2 = null;

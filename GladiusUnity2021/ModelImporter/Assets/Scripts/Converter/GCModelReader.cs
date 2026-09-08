@@ -131,13 +131,27 @@ public class GCModel : BaseModel
         {
             offset = attachPoint.position;
         }
+        // build a skeleton from rootBone.
+
+        // Look and see if theres a GladiusToUnity transform.
+        Transform boneRoot = gameObj.transform.Find("GladiusToUnity");
+        if (boneRoot == null)
+        {
+            boneRoot = gameObj.transform.GetChild(0);
+        }
+        else
+        {
+            boneRoot = boneRoot.GetChild(0);
+        }
+        byte boneId = 0;
+        AnimationUtils.BuildSkeleton(boneRoot, null, ref boneId, model.GetChunk<SKELChunk>().BoneList);
 
 
         if (skinnedMeshRenderers != null && skinnedMeshRenderers.Length > 0)
         {
             foreach (SkinnedMeshRenderer skinnedMeshRenderer in skinnedMeshRenderers)
             {
-                SkinData skinData = SkinBuilder.PrepareData(skinnedMeshRenderer, animShift);
+                SkinData skinData = SkinBuilder.PrepareData(skinnedMeshRenderer, animShift,model.GetChunk<SKELChunk>().BoneList.Count);
                     
                 if (skinData != null)
                 {
@@ -150,20 +164,6 @@ public class GCModel : BaseModel
                 }
             }
 
-            // build a skeleton from rootBone.
-
-            // Look and see if theres a GladiusToUnity transform.
-            Transform boneRoot = gameObj.transform.Find("GladiusToUnity");
-            if (boneRoot == null)
-            {
-                boneRoot = gameObj.transform.GetChild(0);
-            }
-            else
-            {
-                boneRoot = boneRoot.GetChild(0);
-            }
-            byte boneId = 0;
-            AnimationUtils.BuildSkeleton(boneRoot, null, ref boneId, model.GetChunk<SKELChunk>().BoneList);
             int ibreak = 0;
         }
         else
@@ -209,7 +209,7 @@ public class GCModel : BaseModel
             model.AddUV(v);
         }
 
-        int subObjectCount = 0;
+        //int subObjectCount = 0;
 
 
         model.GetChunk<SELSChunk>().Names.Add(DefaultShader);
@@ -265,6 +265,16 @@ public class GCModel : BaseModel
         int dsliStart = 0;
         
         SKINChunk skinChunk = model.GetChunk<SKINChunk>();
+
+        List<Material> uniqueMaterials = new List<Material>();
+        foreach (Material material in materials)
+        {
+            if (!uniqueMaterials.Contains(material))
+            {
+                uniqueMaterials.Add(material);
+            }
+        }
+        
         
         for (int m = 0; m < meshes.Count; m++)
         {
@@ -317,8 +327,9 @@ public class GCModel : BaseModel
             model.AddDSLIInfo(dsliInfo);
             model.AddDSLH(dlh);
 
+            int materialIndex = uniqueMaterials.IndexOf(materials[m]);
             
-            PaxElement paxElement = new PaxElement((uint)subObjectCount, 0);
+            PaxElement paxElement = new PaxElement((uint)materialIndex, 0);
             paxElement.VertexCount = (uint)mesh.vertexCount;
             model.AddPaxElement(paxElement);
 
@@ -334,8 +345,12 @@ public class GCModel : BaseModel
                 ms.Flush();
                 model.GetChunk<DSLSChunk>().Data = ms.GetBuffer();
             }
-            
-            
+
+            //subObjectCount++;
+        }
+
+        foreach (Material material in uniqueMaterials)
+        {
             if (material != null && material.mainTexture != null)
             {
                 string textureName = material.mainTexture.name;
@@ -350,14 +365,11 @@ public class GCModel : BaseModel
                 });
 
                 selsChunk.Names.Add(textureName);
-                
+
                 GCMaterial gcMaterial = new GCMaterial();
                 gcMaterial.MatName = textureName;
                 shdrChunk.Data.Add(gcMaterial);
             }
-
-
-            subObjectCount++;
         }
 
 

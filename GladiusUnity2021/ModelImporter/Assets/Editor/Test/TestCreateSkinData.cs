@@ -113,9 +113,13 @@ public class TestCreateSkinData : Editor
                 if (m_originalModel != null)
                 {
                     m_originalModel.name = OriginalName;
-                    m_originalModel.transform.position = new Vector3(-10, 0, 0);
+                    m_originalModel.transform.position = new Vector3(-2, 0, 0);
 
+                    // SkinnedMeshRenderer oldsmr =
+                    //     m_originalModel.transform.FindDescendentTransform("Submesh-2-barbarian_skin_var03").GetComponent<SkinnedMeshRenderer>();
 
+                    SkinnedMeshRenderer oldsmr =m_originalModel.transform.GetComponentInChildren<SkinnedMeshRenderer>();
+                    
                     m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift);
 
                     if (m_rebuiltGCModel != null)
@@ -237,6 +241,7 @@ public class TestCreateSkinData : Editor
                             newUV.AppendLine(uv.ToString());
                         }
 
+
                         File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
                         File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
                         
@@ -305,7 +310,32 @@ public class TestCreateSkinData : Editor
                         m_rebuiltModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, stub.LodLevel,
                             rebuiltCommonModel, out Dictionary<BoneNode, GameObject> boneObjectMapRebuilt);
                         m_rebuiltModel.name = RebuiltName;
-                        m_rebuiltModel.transform.position = new Vector3(10, 0, 0);
+                        m_rebuiltModel.transform.position = new Vector3(2, 0, 0);
+                        
+                        
+                        // SkinnedMeshRenderer newsmr =
+                        //     m_rebuiltModel.transform.FindDescendentTransform("Submesh-2-barbarian_skin_var03").GetComponent<SkinnedMeshRenderer>();
+
+                        SkinnedMeshRenderer newsmr =m_rebuiltModel.transform.GetComponentInChildren<SkinnedMeshRenderer>();
+
+                        StringBuilder oldSB = new StringBuilder();
+                        StringBuilder newSB = new StringBuilder();
+                        
+                        foreach (BoneWeight bw in oldsmr.sharedMesh.boneWeights)
+                        {
+                            oldSB.AppendLine($"{bw.boneIndex0},{bw.boneIndex1},{bw.boneIndex2},{bw.boneIndex3} : {bw.weight0},{bw.weight1},{bw.weight2},{bw.weight3}");
+                        }
+                        
+                        foreach (BoneWeight bw in newsmr.sharedMesh.boneWeights)
+                        {
+                            newSB.AppendLine($"{bw.boneIndex0},{bw.boneIndex1},{bw.boneIndex2},{bw.boneIndex3} : {bw.weight0},{bw.weight1},{bw.weight2},{bw.weight3}");
+                        }
+                        
+                        File.WriteAllText("d:/tmp/old-bp.txt", oldSB.ToString());
+                        File.WriteAllText("d:/tmp/new-bp.txt", newSB.ToString());
+
+                        
+                        
                     }
                 }
             }
@@ -542,7 +572,7 @@ public class TestCreateSkinData : Editor
         }
 
         
-        if (false && m_originalSkinData.Count > 0 && m_newSkinData.Count > 0)
+        if (m_originalSkinData.Count > 0 && m_newSkinData.Count > 0)
         {
             int numRows = Math.Min(m_originalSkinData.Count, m_newSkinData.Count);
 
@@ -679,6 +709,7 @@ public class TestCreateSkinData : Editor
                     EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
                     EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
                     EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
+                    EditorGUILayout.LabelField("WeightSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
                     GUILayout.EndHorizontal();
 
                     if (m_diffData)
@@ -747,7 +778,7 @@ public class TestCreateSkinData : Editor
                         }
                     }
                 }
-                
+                EndIndentedFoldoutHeader();
 
                 m_foldOutsCompareList[i] = (csk1FoldOut, csk2FoldOut, cskAFoldOut,packetsFoldout);
             }
@@ -799,6 +830,7 @@ public class TestCreateSkinData : Editor
         EditorGUILayout.LabelField(csk2.count.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
         EditorGUILayout.LabelField(csk2.vertSrc.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
         EditorGUILayout.LabelField(csk2.vertDst.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
+        EditorGUILayout.LabelField(csk2.weightsSrc.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
         GUI.contentColor = oldColor;
     }
 
@@ -819,7 +851,9 @@ public class TestCreateSkinData : Editor
         GUI.contentColor = CompareVals((int)oldCsk2.vertDst, (int)newCsk2.vertDst, matchColor, diffColor);
         EditorGUILayout.LabelField($"{oldCsk2.vertDst} / {newCsk2.vertDst}", GetTableStyle(),
             GUILayout.Width(ColumnWidth));
-
+        GUI.contentColor = CompareVals((int)oldCsk2.weightsSrc, (int)newCsk2.weightsSrc, matchColor, diffColor);
+        EditorGUILayout.LabelField($"{oldCsk2.weightsSrc} / {newCsk2.weightsSrc}", GetTableStyle(),
+            GUILayout.Width(ColumnWidth));
         GUI.contentColor = oldColor;
     }
 

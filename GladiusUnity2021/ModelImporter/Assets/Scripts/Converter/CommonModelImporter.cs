@@ -2563,15 +2563,20 @@ public class UV0Chunk : BaseChunk
         NumElements = (uint)Data.Count;
         BaseToStream(binWriter);
 
-        foreach (IndexedVector2 v in Data)
+        for(int i=0;i<Data.Count;++i)
         {
+            // adjust to gc format.
+            IndexedVector2 av = Data[i];
+            av.Y = 1.0f - av.Y;
+            Data[i] = av;
+            
             if (skinned)
             {
-                Common.WriteVector2BEShort(binWriter, v);
+                Common.WriteVector2BEShort(binWriter, av);
             }
             else
             {
-                Common.WriteVector2BE(binWriter, v); 
+                Common.WriteVector2BE(binWriter, av); 
             }
             
         }
@@ -4219,7 +4224,7 @@ public class CBoneData
 
 public static class SkinBuilder
 {
-    public static SkinData PrepareData(SkinnedMeshRenderer skinnedMeshRenderer, short animShift)
+    public static SkinData PrepareData(SkinnedMeshRenderer skinnedMeshRenderer, short animShift,int numBones)
     {
         List<Vector3> vertices = new List<Vector3>();
         vertices.AddRange(skinnedMeshRenderer.sharedMesh.vertices);
@@ -4254,7 +4259,7 @@ public static class SkinBuilder
             }
         }
 
-        return PrepareData(bones.Count, vertices, normals, boneWeights);
+        return PrepareData(numBones, vertices, normals, boneWeights);
     }
 
     public static SkinData PrepareData(int numBones, List<Vector3> vertices, List<Vector3> normals,
@@ -4320,11 +4325,6 @@ public static class SkinBuilder
             if (vertexBoneCount == 1)
             {
                 int idx_bone = boneWeights[iv].boneIndex0;
-
-                if (idx_bone == 1)
-                {
-                    int stopHere = 0;
-                }
 
                 Debug.Assert(idx_bone < numBones);
                 // all the vertices that only have a single weight on that idx bone.    
@@ -4490,8 +4490,8 @@ public static class SkinBuilder
 
                     data.vertSrc.Add((ushort)idx);
 
-                    data.weights.Add((byte)boneWeights[k].weight0);
-                    data.weights.Add((byte)boneWeights[k].weight1);
+                    data.weights.Add((byte)(255f * boneWeights[idx].weight0));
+                    data.weights.Add((byte)(255f * boneWeights[idx].weight1));
                 }
 
                 // finalize last packet
@@ -4571,7 +4571,7 @@ public static class SkinBuilder
                 {
                     CAccList accData = acclist[data.idxBone[0]];
                     accData.vertSrc.Add(idx);
-                    accData.weight.Add((byte)boneWeights[idx].weight2);
+                    accData.weight.Add((byte)(255f * boneWeights[idx].weight2));
                     accData.idxVert.Add(cur_vert);
                 }
 
@@ -4579,7 +4579,7 @@ public static class SkinBuilder
                 {
                     CAccList accData = acclist[data.idxBone[0]];
                     accData.vertSrc.Add(idx);
-                    accData.weight.Add((byte)boneWeights[idx].weight3);
+                    accData.weight.Add((byte)(255f * boneWeights[idx].weight3));
                     accData.idxVert.Add(cur_vert);
                 }
                 // int start_idx = pI->aWeightInds[idx];
@@ -4784,7 +4784,11 @@ public static class SkinBuilder
             for (int j = 0; j < count; j++)
             {
                 //((uint8*)pSKA->weights)[j] = data.weight[j];
-                cska.ExtractedWeights.Add(data.weight[j]);
+                float weight = data.weight[j];
+                cska.ExtractedWeights.Add(weight);
+                byte b1 = (byte)(255f * weight);
+                cska.ExtractedWeightsBytes.Add(b1);
+                
             }
         }
 
