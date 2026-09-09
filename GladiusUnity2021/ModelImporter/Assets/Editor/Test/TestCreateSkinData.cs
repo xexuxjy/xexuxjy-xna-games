@@ -118,7 +118,7 @@ public class TestCreateSkinData : Editor
                     // SkinnedMeshRenderer oldsmr =
                     //     m_originalModel.transform.FindDescendentTransform("Submesh-2-barbarian_skin_var03").GetComponent<SkinnedMeshRenderer>();
 
-                    SkinnedMeshRenderer oldsmr =m_originalModel.transform.GetComponentInChildren<SkinnedMeshRenderer>();
+                    SkinnedMeshRenderer[] oldsmr =m_originalModel.transform.GetComponentsInChildren<SkinnedMeshRenderer>();
                     
                     m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift);
 
@@ -316,21 +316,29 @@ public class TestCreateSkinData : Editor
                         // SkinnedMeshRenderer newsmr =
                         //     m_rebuiltModel.transform.FindDescendentTransform("Submesh-2-barbarian_skin_var03").GetComponent<SkinnedMeshRenderer>();
 
-                        SkinnedMeshRenderer newsmr =m_rebuiltModel.transform.GetComponentInChildren<SkinnedMeshRenderer>();
+                        SkinnedMeshRenderer[] newsmr =m_rebuiltModel.transform.GetComponentsInChildren<SkinnedMeshRenderer>();
 
                         StringBuilder oldSB = new StringBuilder();
                         StringBuilder newSB = new StringBuilder();
-                        
-                        foreach (BoneWeight bw in oldsmr.sharedMesh.boneWeights)
+
+                        foreach (SkinnedMeshRenderer smr in oldsmr)
                         {
-                            oldSB.AppendLine($"{bw.boneIndex0},{bw.boneIndex1},{bw.boneIndex2},{bw.boneIndex3} : {bw.weight0},{bw.weight1},{bw.weight2},{bw.weight3}");
+                            foreach (BoneWeight bw in smr.sharedMesh.boneWeights)
+                            {
+                                oldSB.AppendLine(
+                                    $"{bw.boneIndex0},{bw.boneIndex1},{bw.boneIndex2},{bw.boneIndex3} : {bw.weight0},{bw.weight1},{bw.weight2},{bw.weight3}");
+                            }
                         }
-                        
-                        foreach (BoneWeight bw in newsmr.sharedMesh.boneWeights)
+
+                        foreach (SkinnedMeshRenderer smr in newsmr)
                         {
-                            newSB.AppendLine($"{bw.boneIndex0},{bw.boneIndex1},{bw.boneIndex2},{bw.boneIndex3} : {bw.weight0},{bw.weight1},{bw.weight2},{bw.weight3}");
+                            foreach (BoneWeight bw in smr.sharedMesh.boneWeights)
+                            {
+                                newSB.AppendLine(
+                                    $"{bw.boneIndex0},{bw.boneIndex1},{bw.boneIndex2},{bw.boneIndex3} : {bw.weight0},{bw.weight1},{bw.weight2},{bw.weight3}");
+                            }
                         }
-                        
+
                         File.WriteAllText("d:/tmp/old-bp.txt", oldSB.ToString());
                         File.WriteAllText("d:/tmp/new-bp.txt", newSB.ToString());
 

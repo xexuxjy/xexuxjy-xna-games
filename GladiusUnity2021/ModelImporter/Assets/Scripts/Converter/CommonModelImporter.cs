@@ -3554,7 +3554,7 @@ public class SkinData
             for (int i = 0; i < cska.count; ++i)
             {
                 byte b = binReader.ReadByte();
-                cska.ExtractedWeights.Add(b / 255f);
+                cska.ExtractedWeightsFloats.Add(b / 255f);
                 cska.ExtractedWeightsBytes.Add(b);
             }
         }
@@ -3970,7 +3970,7 @@ public class CSKA
     public List<Vector3> ExtractedNormals = new List<Vector3>();
 
     public List<ushort> ExtractedDestinationIndices = new List<ushort>();
-    public List<float> ExtractedWeights = new List<float>();
+    public List<float> ExtractedWeightsFloats = new List<float>();
     public List<byte> ExtractedWeightsBytes = new List<byte>();
 
     public static CSKA FromStream(BinaryReader binReader)
@@ -4784,10 +4784,10 @@ public static class SkinBuilder
             for (int j = 0; j < count; j++)
             {
                 //((uint8*)pSKA->weights)[j] = data.weight[j];
-                float weight = data.weight[j];
-                cska.ExtractedWeights.Add(weight);
-                byte b1 = (byte)(255f * weight);
+                byte b1 = data.weight[j];
                 cska.ExtractedWeightsBytes.Add(b1);
+                float f1 = (float)b1 / 255f;
+                cska.ExtractedWeightsFloats.Add(f1);
                 
             }
         }

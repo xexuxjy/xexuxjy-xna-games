@@ -662,7 +662,7 @@ public class GCModel : BaseModel
                             //int count0 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
 
                             positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2
-                                .Add((csk.idxBone, csk.ExtractedWeights[k]));
+                                .Add((csk.idxBone, csk.ExtractedWeightsFloats[k]));
 
                             //int count1 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
                             int ibreak = 0;
