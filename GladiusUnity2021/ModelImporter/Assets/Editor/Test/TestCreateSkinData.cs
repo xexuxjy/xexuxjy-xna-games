@@ -120,7 +120,7 @@ public class TestCreateSkinData : Editor
 
                     SkinnedMeshRenderer[] oldsmr =m_originalModel.transform.GetComponentsInChildren<SkinnedMeshRenderer>();
                     
-                    m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift);
+                    m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift,null);
 
                     if (m_rebuiltGCModel != null)
                     {
@@ -242,17 +242,17 @@ public class TestCreateSkinData : Editor
                         }
 
 
-                        File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
-                        File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
-                        
-                        File.WriteAllText("d:/tmp/old-skel.txt", oldSBS.ToString());
-                        File.WriteAllText("d:/tmp/new-skel.txt", newSBS.ToString());
-                        
-                        File.WriteAllText("d:/tmp/old-pn.txt", oldPN.ToString());
-                        File.WriteAllText("d:/tmp/new-pn.txt", newPN.ToString());
-
-                        File.WriteAllText("d:/tmp/old-uv.txt", oldUV.ToString());
-                        File.WriteAllText("d:/tmp/new-uv.txt", newUV.ToString());
+                        // File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
+                        // File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
+                        //
+                        // File.WriteAllText("d:/tmp/old-skel.txt", oldSBS.ToString());
+                        // File.WriteAllText("d:/tmp/new-skel.txt", newSBS.ToString());
+                        //
+                        // File.WriteAllText("d:/tmp/old-pn.txt", oldPN.ToString());
+                        // File.WriteAllText("d:/tmp/new-pn.txt", newPN.ToString());
+                        //
+                        // File.WriteAllText("d:/tmp/old-uv.txt", oldUV.ToString());
+                        // File.WriteAllText("d:/tmp/new-uv.txt", newUV.ToString());
 
                         if (buffer != null)
                         {

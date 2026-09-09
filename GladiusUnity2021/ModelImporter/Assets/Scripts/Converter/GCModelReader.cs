@@ -104,7 +104,7 @@ public class GCModel : BaseModel
         m_chunkList.Add(new ENDChunk());
     }
 
-    public static GCModel CreateFromGameObject(GameObject gameObj, short animShift)
+    public static GCModel CreateFromGameObject(GameObject gameObj, short animShift,Transform boneRoot)
     {
         // not valid
         if (gameObj == null)
@@ -135,16 +135,21 @@ public class GCModel : BaseModel
         }
         // build a skeleton from rootBone.
 
-        // Look and see if theres a GladiusToUnity transform.
-        Transform boneRoot = gameObj.transform.Find("GladiusToUnity");
         if (boneRoot == null)
         {
-            boneRoot = gameObj.transform.GetChild(0);
+            // Look and see if theres a GladiusToUnity transform.
+
+            boneRoot = gameObj.transform.Find("GladiusToUnity");
+            if (boneRoot == null)
+            {
+                boneRoot = gameObj.transform.GetChild(0);
+            }
+            else
+            {
+                boneRoot = boneRoot.GetChild(0);
+            }
         }
-        else
-        {
-            boneRoot = boneRoot.GetChild(0);
-        }
+
         byte boneId = 0;
         AnimationUtils.BuildSkeleton(boneRoot, null, ref boneId, model.GetChunk<SKELChunk>().BoneList);
 
@@ -885,7 +890,9 @@ public class GCModel : BaseModel
 
     public void WriteData(BinaryWriter binWriter)
     {
+
         GetChunk<VERSChunk>().ToStream(binWriter);
+        
         GetChunk<CPRTChunk>().ToStream(binWriter);
         GetChunk<SELSChunk>().ToStream(binWriter);
         GetChunk<NAMEChunk>().ToStream(binWriter);
@@ -920,6 +927,19 @@ public class GCModel : BaseModel
         GetChunk<MESHChunk>().ToStream(binWriter);
         GetChunk<ELEMChunk>().ToStream(binWriter, GetChunk<DSLSChunk>().DisplayListHeaders);
         GetChunk<ENDChunk>().ToStream(binWriter);
+
+        foreach (BaseChunk chunk in m_chunkList)
+        {
+            if (chunk.WriteStart != 0 || chunk.WriteEnd != 0)
+            {
+                long diff = chunk.WriteEnd - chunk.WriteStart; 
+                if (diff != chunk.Length)
+                {
+                    int ibreak = 0;
+                }
+            }
+        }
+        
     }
 
     public void AddSkinData(SkinData skinData)

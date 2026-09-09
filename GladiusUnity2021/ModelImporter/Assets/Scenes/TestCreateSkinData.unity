@@ -4318,6 +4318,68 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &137162026
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 563208289078902842, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_Name
+      value: druid_game_rig2-test
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908383903497771648, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+--- !u!1 &137162027 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 563208289078902842, guid: c04e7dc92be973e43a13284e83c8ce71, type: 3}
+  m_PrefabInstance: {fileID: 137162026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &141396864
 GameObject:
   m_ObjectHideFlags: 0
@@ -8524,6 +8586,7 @@ GameObject:
   m_Component:
   - component: {fileID: 244488348}
   - component: {fileID: 244488349}
+  - component: {fileID: 244488350}
   m_Layer: 0
   m_Name: TestCreateSkinData
   m_TagString: EditorOnly
@@ -8561,6 +8624,21 @@ MonoBehaviour:
   OriginalModel: {fileID: 4900000, guid: 8701c15bf15d956419ce72b4509844b0, type: 3}
   DumpSearchDirectory: D:\GladiusModding\GC\unpack\data\characters\
   DumpFileName: d:\tmp\skindata-info.csv
+  LodLevel: 1
+  AnimShift: 12
+--- !u!114 &244488350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244488346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d481beca5ad74a8eb6c642fd828584ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OriginalModel: {fileID: 137162027}
   LodLevel: 1
   AnimShift: 12
 --- !u!1 &248595039
@@ -64545,3 +64623,4 @@ SceneRoots:
   - {fileID: 244488348}
   - {fileID: 1572328174}
   - {fileID: 1031505625}
+  - {fileID: 137162026}

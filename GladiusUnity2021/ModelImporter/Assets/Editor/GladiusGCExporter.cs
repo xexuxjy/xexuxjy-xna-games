@@ -68,7 +68,7 @@ public class GladiusGCExporter : UnityEditor.Editor
             string testPath = newPath.Substring(0,(newPath.LastIndexOf("/"))+1);
             //testPath += "/";
             
-            GCModel model = GCModel.CreateFromGameObject(gameObject,animShift);
+            GCModel model = GCModel.CreateFromGameObject(gameObject,animShift,null);
             if (model != null)
             {
                 using (BinaryWriter bw = new BinaryWriter(File.Create(newPath)))
