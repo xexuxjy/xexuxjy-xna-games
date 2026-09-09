@@ -99,6 +99,8 @@ public class GCModel : BaseModel
         m_chunkList.Add(new NLVLChunk());
         m_chunkList.Add(new MESHChunk());
         m_chunkList.Add(new ELEMChunk());
+        m_chunkList.Add(new STYPChunk());
+        m_chunkList.Add(new JLODChunk());
         m_chunkList.Add(new ENDChunk());
     }
 
@@ -899,6 +901,7 @@ public class GCModel : BaseModel
         {
             GetChunk<SKELChunk>().ToStream(binWriter);
             GetChunk<SKINChunk>().ToStream(binWriter);
+            GetChunk<JLODChunk>().ToStream(binWriter,GetChunk<SKELChunk>().BoneList);
         }
         else
         {
@@ -909,6 +912,8 @@ public class GCModel : BaseModel
         GetChunk<UV0Chunk>().ToStream(binWriter,IsSkinned());
         GetChunk<VFLAChunk>().ToStream(binWriter);
         GetChunk<VFLGChunk>().ToStream(binWriter);
+        GetChunk<STYPChunk>().ToStream(binWriter);
+        
         GetChunk<RAMChunk>().ToStream(binWriter);
         GetChunk<MSARChunk>().ToStream(binWriter);
         GetChunk<NLVLChunk>().ToStream(binWriter);

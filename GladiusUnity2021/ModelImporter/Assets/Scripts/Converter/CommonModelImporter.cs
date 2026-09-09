@@ -841,7 +841,10 @@ public static class CommonModelImporter
             if (nameIndex != -1)
             {
                 SelectSet selectSet = stypChunk.SelectSetList.Find(x => x.NameIndex == nameIndex);
-                return selectSet.Mask;
+                if (selectSet != null)
+                {
+                    return selectSet.Mask;
+                }
             }
         }
 
@@ -3141,7 +3144,7 @@ public class VFLGChunk : BaseChunk
 
 public class JLODChunk : BaseChunk
 {
-    public byte[] Data;
+    public List<int> Data = new List<int>();
 
     public static char[] ChunkName()
     {
@@ -3152,10 +3155,32 @@ public class JLODChunk : BaseChunk
     {
         JLODChunk chunk = new JLODChunk();
         chunk.BaseFromStream(binReader);
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
+        for (int i = 0; i < chunk.NumElements; i++)
+        {
+            chunk.Data.Add(Common.ReadInt32BigEndian(binReader));
+        }
 
         return chunk;
     }
+    
+    public void ToStream(BinaryWriter binWriter,List<BoneNode> boneList)
+    {
+        int total = GladiusFileWriter.HeaderSize + (boneList.Count * 4);
+        Data.Clear();
+        
+        Signature = ChunkName();
+        Length = (uint)total;
+        Version = 1;
+        NumElements = (uint)boneList.Count;
+        BaseToStream(binWriter);
+        foreach (BoneNode bone in boneList)
+        {
+            Data.Add(0);    
+            Common.WriteBigEndian(binWriter,0);
+        }
+    }
+
+    
 }
 
 public class NMTPChunk : BaseChunk
