@@ -104,7 +104,7 @@ public class GCModel : BaseModel
         m_chunkList.Add(new ENDChunk());
     }
 
-    public static GCModel CreateFromGameObject(GameObject gameObj, short animShift,Transform boneRoot)
+    public static GCModel CreateFromGameObject(GameObject gameObj, short animShift,uint lodLevel,Transform boneRoot)
     {
         // not valid
         if (gameObj == null)
@@ -121,6 +121,9 @@ public class GCModel : BaseModel
             return null;
         }
 
+        bool isSkinned = skinnedMeshRenderers != null && skinnedMeshRenderers.Length > 0;
+        
+        
         List<Vector3> adjustedVertices = new List<Vector3>();
         List<Vector3> adjustedNormals = new List<Vector3>();
         HashSet<Vector2> uniqueUVs = new HashSet<Vector2>();
@@ -135,36 +138,45 @@ public class GCModel : BaseModel
         }
         // build a skeleton from rootBone.
 
-        if (boneRoot == null)
-        {
-            // Look and see if theres a GladiusToUnity transform.
 
-            boneRoot = gameObj.transform.Find("GladiusToUnity");
+        if (isSkinned)
+        {
             if (boneRoot == null)
             {
-                boneRoot = gameObj.transform.GetChild(0);
+                // Look and see if theres a GladiusToUnity transform.
+
+                boneRoot = gameObj.transform.Find("GladiusToUnity");
+                if (boneRoot == null)
+                {
+                    boneRoot = gameObj.transform.GetChild(0);
+                }
+                else
+                {
+                    boneRoot = boneRoot.GetChild(0);
+                }
             }
-            else
+
+            NAMEChunk nameChunk = model.GetChunk<NAMEChunk>();
+            SKELChunk skelChunk = model.GetChunk<SKELChunk>();
+
+            byte boneId = 0;
+            AnimationUtils.BuildSkeleton(boneRoot, null, ref boneId, skelChunk.BoneList);
+
+            foreach (BoneNode boneNode in skelChunk.BoneList)
             {
-                boneRoot = boneRoot.GetChild(0);
+                nameChunk.Names.Add(boneNode.name);
             }
-        }
-
-        byte boneId = 0;
-        AnimationUtils.BuildSkeleton(boneRoot, null, ref boneId, model.GetChunk<SKELChunk>().BoneList);
-
-
-        if (skinnedMeshRenderers != null && skinnedMeshRenderers.Length > 0)
-        {
+            
             foreach (SkinnedMeshRenderer skinnedMeshRenderer in skinnedMeshRenderers)
             {
-                SkinData skinData = SkinBuilder.PrepareData(skinnedMeshRenderer, animShift,model.GetChunk<SKELChunk>().BoneList.Count);
-                    
+                SkinData skinData = SkinBuilder.PrepareData(skinnedMeshRenderer, animShift,
+                    model.GetChunk<SKELChunk>().BoneList.Count);
+
                 if (skinData != null)
                 {
                     model.AddSkinData(skinData);
                 }
-                
+
                 foreach (Vector2 v in skinnedMeshRenderer.sharedMesh.uv)
                 {
                     uniqueUVs.Add(v);
@@ -338,6 +350,7 @@ public class GCModel : BaseModel
             
             PaxElement paxElement = new PaxElement((uint)materialIndex, 0);
             paxElement.VertexCount = (uint)mesh.vertexCount;
+            paxElement.SelectSetMask = (uint)lodLevel;
             model.AddPaxElement(paxElement);
 
             using(MemoryStream ms = new MemoryStream())
@@ -400,7 +413,9 @@ public class GCModel : BaseModel
         MESHChunk meshChunk = GetChunk<MESHChunk>();
         foreach (PaxElement paxElement in meshChunk.PaxElements)
         {
-            if (lodLevel == 0 || (paxElement.SelectSetMask & lodLevel) != 0)
+            
+            //if (lodLevel == 0 || (paxElement.SelectSetMask & lodLevel) != 0)
+            if((paxElement.SelectSetMask & lodLevel) == lodLevel)
             {
                 count++;
             }
@@ -593,7 +608,7 @@ public class GCModel : BaseModel
                 maxPositionIndex += 1;
 
                 uint mask = meshChunk.PaxElements[meshCount].SelectSetMask;
-                if (mask == 0 || (mask & lodLevel) != 0)
+                if ((mask & lodLevel) == lodLevel)
                 {
                     CommonMeshData commonMeshData = new CommonMeshData();
                     commonModelData.CommonMeshData.Add(commonMeshData);
@@ -686,11 +701,17 @@ public class GCModel : BaseModel
                         DisplayListEntry entry = dlh.entries[i];
                         vertexIndex = dlh.entries[i].PosIndex;
 
-                        if (dlh.entries[i].PosIndex >= referencedPositions.Length)
+                        if (entry.PosIndex >= referencedPositions.Length)
                         {
                             int ibreak = 0;
                         }
 
+                        if (entry.PosIndex >= positionAndWeights.Count)
+                        {
+                            int ibreak = 0;
+                        }
+                        
+                        
                         if (!referencedPositions[entry.PosIndex])
                         {
                             CommonVertexInstance cvi = new CommonVertexInstance();
@@ -895,7 +916,7 @@ public class GCModel : BaseModel
         
         GetChunk<CPRTChunk>().ToStream(binWriter);
         GetChunk<SELSChunk>().ToStream(binWriter);
-        GetChunk<NAMEChunk>().ToStream(binWriter);
+
         GetChunk<CNTRChunk>().ToStream(binWriter,
             IsSkinned() ? GetChunk<SKINChunk>().Positions : GetChunk<POSIChunk>().Data);
         GetChunk<SHDRChunk>().ToStream(binWriter, GetChunk<TXTRChunk>().Textures);
@@ -906,6 +927,7 @@ public class GCModel : BaseModel
 
         if (IsSkinned())
         {
+            GetChunk<NAMEChunk>().ToStream(binWriter);
             GetChunk<SKELChunk>().ToStream(binWriter);
             GetChunk<SKINChunk>().ToStream(binWriter);
             GetChunk<JLODChunk>().ToStream(binWriter,GetChunk<SKELChunk>().BoneList);

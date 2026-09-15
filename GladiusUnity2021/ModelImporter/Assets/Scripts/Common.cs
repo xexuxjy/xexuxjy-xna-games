@@ -489,8 +489,11 @@ public static class Common
 
     public static int ReadInt32BigEndian(BinaryReader reader)
     {
-        reader.Read(s_buffer4, 0, s_buffer4.Length);
-        return Common.ToInt32BigEndian(s_buffer4, 0);
+        int value = reader.ReadInt32();
+        int BEValue = BinaryPrimitives.ReverseEndianness(value);
+        return BEValue;
+        // reader.Read(s_buffer4, 0, s_buffer4.Length);
+        // return Common.ToInt32BigEndian(s_buffer4, 0);
     }
     
     public static uint ReadUInt32BigEndian(BinaryReader reader)

@@ -120,7 +120,7 @@ public class TestCreateSkinData : Editor
 
                     SkinnedMeshRenderer[] oldsmr =m_originalModel.transform.GetComponentsInChildren<SkinnedMeshRenderer>();
                     
-                    m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift,null);
+                    m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift,stub.LodLevel,null);
 
                     if (m_rebuiltGCModel != null)
                     {
@@ -607,52 +607,52 @@ public class TestCreateSkinData : Editor
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(origSD.Size.ToString(), GetTableStyle(),
+                
+                Color oldColor = GUI.contentColor;
+                GUI.contentColor = CompareVals(origSD.Size, newSD.Size,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.Size} / {newSD.Size}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.NumList1.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals(origSD.NumList1, newSD.NumList1,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.NumList1} / {newSD.NumList1}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.NumList2.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals(origSD.NumList2, newSD.NumList2,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.NumList2} / {newSD.NumList2}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.NumListA.ToString(), GetTableStyle(),
+                
+                GUI.contentColor = CompareVals(origSD.NumListA, newSD.NumListA,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.NumListA} / {newSD.NumListA}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.NumPackets1.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals(origSD.NumPackets1, newSD.NumPackets1,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.NumPackets1} / {newSD.NumPackets1}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.PacketStart1.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals((int)origSD.PacketStart1, (int)newSD.PacketStart1,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.PacketStart1} / {newSD.PacketStart1}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.PacketSize1.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals((int)origSD.PacketSize1, (int)newSD.PacketSize1,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.PacketSize1} / {newSD.PacketSize1}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.NumPackets2.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals(origSD.NumPackets2, newSD.NumPackets2,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.NumPackets2} / {newSD.NumPackets2}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.PacketStart2.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals((int)origSD.PacketStart2, (int)newSD.PacketStart2,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.PacketStart2} / {newSD.PacketStart2}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(origSD.PacketSize2.ToString(), GetTableStyle(),
+
+                GUI.contentColor = CompareVals((int)origSD.PacketSize2, (int)newSD.PacketSize2,Color.green, Color.yellow);
+                EditorGUILayout.LabelField($"{origSD.PacketSize2} / {newSD.PacketSize2}", GetTableStyle(),
                     GUILayout.Width(ColumnWidth));
                 
                 GUILayout.EndHorizontal();
 
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(newSD.Size.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.NumList1.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.NumList2.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.NumListA.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.NumPackets1.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.PacketStart1.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.PacketSize1.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.NumPackets2.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.PacketStart2.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField(newSD.PacketSize2.ToString(), GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-
+                GUI.contentColor = oldColor;
+                
                 bool csk1FoldOut = m_foldOutsCompareList[i].Item1;
                 bool csk2FoldOut = m_foldOutsCompareList[i].Item2;
                 bool cskAFoldOut = m_foldOutsCompareList[i].Item3;
@@ -989,10 +989,11 @@ public class TestCreateSkinData : Editor
             GUI.contentColor = CompareVals(oldSkinData.Packet2Starts[j], newSkinData.Packet2Starts[j], matchColor, diffColor);
             EditorGUILayout.LabelField($"{oldSkinData.Packet2Starts[j]} / {newSkinData.Packet2Starts[j]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
             GUI.contentColor = CompareVals(oldSkinData.Packet2Sizes[j], newSkinData.Packet2Sizes[j], matchColor, diffColor);
-            EditorGUILayout.LabelField($"{oldSkinData.Packet2Sizes[j]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
+            EditorGUILayout.LabelField($"{oldSkinData.Packet2Sizes[j]} / {newSkinData.Packet2Sizes[j]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
             GUILayout.EndHorizontal();
         }
-       
+
+        GUI.contentColor = oldColor;
     }
     
     public int ColumnWidth = 100;

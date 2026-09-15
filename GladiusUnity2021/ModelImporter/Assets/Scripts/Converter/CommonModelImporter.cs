@@ -2298,13 +2298,17 @@ public class NAMEChunk : BaseChunk
 
     public void ToStream(BinaryWriter binWriter)
     {
-        int total = 80;
+        int total = ChunkHeaderSize;
+        int nameLength = GladiusFileWriter.GetStringListSize(Names);
+        total += nameLength;
+        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        
         Signature = ChunkName();
-        Length = (uint)total;
+        Length = (uint)paddedTotal;
         Version = 0;
         NumElements = 1;
         BaseToStream(binWriter);
-        GladiusFileWriter.WriteNull(binWriter,total-ChunkHeaderSize);
+        GladiusFileWriter.WriteStringList(binWriter, Names, (paddedTotal - GladiusFileWriter.HeaderSize));
         WriteEnd = binWriter.BaseStream.Position;
     }
         
@@ -3634,7 +3638,7 @@ public class SkinData
             csk1.ToStream(binWriter, animShift);
             
         }
-
+        TestValue(binWriter,115424);
         binWriter.BaseStream.Position = dataPosition + PointerList2;
 
         // align
@@ -3642,7 +3646,7 @@ public class SkinData
         {
             csk2.ToStream(binWriter, animShift);
         }
-
+        TestValue(binWriter,115424);
         binWriter.BaseStream.Position = dataPosition + PointerListA;
 
         // align
@@ -3650,7 +3654,7 @@ public class SkinData
         {
             cska.ToStream(binWriter, animShift);
         }
-
+        TestValue(binWriter,115424);
         foreach (CSK1 csk1 in CSK1List)
         {
             binWriter.BaseStream.Position = dataPosition + csk1.vertSrc;
@@ -3661,7 +3665,7 @@ public class SkinData
                     csk1.ExtractedNormals[i]);
             }
         }
-
+        TestValue(binWriter,115424);
         foreach (CSK2 csk2 in CSK2List)
         {
             binWriter.BaseStream.Position = dataPosition + csk2.vertSrc;
@@ -3679,7 +3683,7 @@ public class SkinData
                 binWriter.Write(b1.Item2);
             }
         }
-
+        TestValue(binWriter,115424);
         foreach (CSKA cska in CSKAList)
         {
             binWriter.BaseStream.Position = dataPosition + cska.vertSrc;
@@ -3702,6 +3706,7 @@ public class SkinData
                 binWriter.Write(cska.ExtractedWeightsBytes[i]);
             }
         }
+        TestValue(binWriter,115424);
     }
 
 
@@ -3734,10 +3739,34 @@ public class SkinData
         }
     }
 
+    public static void TestValue(BinaryWriter binWriter, int testValue)
+    {
+        long savePosition = binWriter.BaseStream.Position;
+        binWriter.BaseStream.Position = 142564;
+        byte[] test = new byte[4];
+        for (int i = 0; i < test.Length; i++)
+        {
+            test[i] = (byte)binWriter.BaseStream.ReadByte();
+        }
+        int tv = Common.ToInt32BigEndian(test, 0);
+        if (tv != testValue)
+        {
+            int ibreak = 0;
+        }
+        
+        binWriter.BaseStream.Position = savePosition;
+    }
+
+
+    
+    
     public void ToStream(BinaryWriter binWriter)
     {
         long startPosition = binWriter.BaseStream.Position;
         Common.WriteBigEndian(binWriter, Size);
+
+        TestValue(binWriter,115424);
+        
         Common.WriteBigEndian(binWriter, NumberVertices);
         Common.WriteBigEndian(binWriter, NumberBones);
         Common.WriteBigEndian(binWriter, Components);
@@ -3770,6 +3799,8 @@ public class SkinData
         int extraPadding = 26;
         GladiusFileWriter.WriteNull(binWriter, extraPadding);
 
+        TestValue(binWriter,115424);
+        
         long dataPosition = startPosition;
         
         for (int i = 0; i < NumPackets1; i++)
@@ -3792,8 +3823,14 @@ public class SkinData
             Common.WriteBigEndian(binWriter, Packet2Sizes[i]);
         }
 
+        
+        long currentPosition = binWriter.BaseStream.Position;
+        
+        TestValue(binWriter,115424);
+        
         WriteSkinWeights(binWriter, dataPosition,AnimShift);
         
+        TestValue(binWriter,115424);
         
         long endPosition = binWriter.BaseStream.Position;
         long diff = endPosition - startPosition;
@@ -4004,7 +4041,7 @@ public class CSK2
         csk2.count = Common.ToUInt16BigEndian(binReader);
         csk2.weightsSrc = SKINChunk.ReadAndRelocate(binReader);
         csk2.vertSrc = SKINChunk.ReadAndRelocate(binReader);
-        csk2.vertDst = binReader.ReadUInt32();
+        csk2.vertDst = Common.ReadUInt32BigEndian(binReader);
 
         return csk2;
     }
@@ -4041,6 +4078,7 @@ public class CSKA
     public static CSKA FromStream(BinaryReader binReader)
     {
         CSKA cska = new CSKA();
+        
         cska.idxBone = binReader.ReadByte();
         cska._pad = binReader.ReadByte();
         cska.count = Common.ToUInt16BigEndian(binReader);
@@ -4056,12 +4094,11 @@ public class CSKA
     {
         writer.Write(idxBone);
         writer.Write(_pad);
-
         Common.WriteBigEndian(writer,count);
+
         SKINChunk.RelocateAndWrite(writer,weightsSrc);
         SKINChunk.RelocateAndWrite(writer,idxDst);
-        Common.WriteBigEndian(writer,vertSrc);
-        
+        SKINChunk.RelocateAndWrite(writer,vertSrc);
     }
 }
 
@@ -4636,7 +4673,10 @@ public static class SkinBuilder
                 int weightCount = boneWeights[idx].CountWeights();
                 if (weightCount >= 3)
                 {
-                    CAccList accData = acclist[data.idxBone[0]];
+                    int boneIndex = boneWeights[idx].boneIndex2;
+                    
+                    //CAccList accData = acclist[data.idxBone[0]];
+                    CAccList accData = acclist[boneIndex];
                     accData.vertSrc.Add(idx);
                     accData.weight.Add((byte)(255f * boneWeights[idx].weight2));
                     accData.idxVert.Add(cur_vert);
@@ -4644,7 +4684,10 @@ public static class SkinBuilder
 
                 if (weightCount == 4)
                 {
-                    CAccList accData = acclist[data.idxBone[0]];
+                    int boneIndex = boneWeights[idx].boneIndex3;
+                    
+                    //CAccList accData = acclist[data.idxBone[0]];
+                    CAccList accData = acclist[boneIndex];
                     accData.vertSrc.Add(idx);
                     accData.weight.Add((byte)(255f * boneWeights[idx].weight3));
                     accData.idxVert.Add(cur_vert);
@@ -4790,7 +4833,7 @@ public static class SkinBuilder
             //csk2.vertSrc = csk2.vertDst + 36;
             csk2.vertSrc = skinData.SourceData + csk2.vertDst;
             csk2.weightsSrc = (uint)(skinData.WeightData + (2 * size_weight * weight_n));
-            csk2.vertDst = SKINChunk.RelocateAddr(csk2.vertDst);
+            //csk2.vertDst = SKINChunk.RelocateAddr(csk2.vertDst);
 
             weight_n += csk2.count;
 
@@ -4817,9 +4860,24 @@ public static class SkinBuilder
 
         // do accumulations
 
+        int numAccumulations = 0;
+        for (int i = 0; i < numBones; i++)
+        {
+
+            CAccList data = acclist[i];
+            int count = data.weight.Count;
+            if (count > 0)
+            {
+                numAccumulations++;
+            }
+        }
+
+        long cskaDataArea = positionCounter + (uint)(CSKA.RawSize * numAccumulations);
+        positionCounter = (uint)cskaDataArea;
 
         for (int i = 0; i < numBones; i++)
         {
+            
             CAccList data = acclist[i];
             int count = data.weight.Count;
             if (count == 0)
@@ -4833,6 +4891,13 @@ public static class SkinBuilder
             cska.idxBone = (byte)i;
             cska.count = (ushort)count;
 
+            cska.vertSrc = (uint)cskaDataArea;
+            cskaDataArea += (uint)(size_pos_norm * count);
+            cska.idxDst = (uint)cskaDataArea;
+            cskaDataArea += (uint)(size_index * count);
+            cska.weightsSrc = (uint)cskaDataArea;
+            cskaDataArea += (uint)(size_weight * count);
+            
             for (int j = 0; j < count; j++)
             {
                 int idx = data.vertSrc[j];
@@ -4843,23 +4908,18 @@ public static class SkinBuilder
 
             for (int j = 0; j < count; j++)
             {
-                //((uint16*)pSKA->idxDst)[j] = data.idxVert[j];
                 cska.ExtractedDestinationIndices.Add(data.idxVert[j]);
             }
 
 
             for (int j = 0; j < count; j++)
             {
-                //((uint8*)pSKA->weights)[j] = data.weight[j];
                 byte b1 = data.weight[j];
                 cska.ExtractedWeightsBytes.Add(b1);
                 float f1 = (float)b1 / 255f;
                 cska.ExtractedWeightsFloats.Add(f1);
-                
             }
         }
-
-        positionCounter += (uint)(skinData.CSKAList.Count * CSKA.RawSize);
 
 
         skinData.NumList1 = (short)skinData.CSK1List.Count;

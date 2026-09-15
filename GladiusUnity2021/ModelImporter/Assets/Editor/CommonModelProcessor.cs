@@ -701,7 +701,8 @@ public static class CommonModelProcessor
 
         foreach (CommonMeshData mesh in commonModel.CommonMeshData)
         {
-            if (mesh.LodLevel != 0 && (mesh.LodLevel & lodLevel) == 0)
+            //if (mesh.LodLevel != 0 && (mesh.LodLevel & lodLevel) == 0)
+            if((mesh.LodLevel & lodLevel) != lodLevel)
             {
                 continue;
             }

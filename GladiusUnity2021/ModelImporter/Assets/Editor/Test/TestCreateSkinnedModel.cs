@@ -20,7 +20,7 @@ public class TestCreateSkinnedModel : Editor
 
         if (GUILayout.Button("Create GC Model"))
         {
-            GCModel gcModel = GCModel.CreateFromGameObject(stub.OriginalModel,(short)stub.AnimShift,stub.BoneRoot);
+            GCModel gcModel = GCModel.CreateFromGameObject(stub.OriginalModel,(short)stub.AnimShift,stub.LodLevel,stub.BoneRoot);
             byte[] buffer = null;
 
             using (MemoryStream writeMemoryStream = new MemoryStream())
@@ -38,14 +38,23 @@ public class TestCreateSkinnedModel : Editor
             {
                 using (BinaryReader binReader = new BinaryReader(readMemoryStream))
                 {
-                    GCModel rebuiltModelGC = GCModel.ReadData(binReader, "", null);
-                    CommonModelData rebuiltCommonModel = rebuiltModelGC.ToCommon();
-                    if (rebuiltCommonModel != null)
+                    StringBuilder debugInfo = new StringBuilder();
+                    try
                     {
-                        GameObject rebuiltModel = CommonModelProcessor.CommonModelToGameObject("", stub.LodLevel,
-                            rebuiltCommonModel, out Dictionary<BoneNode, GameObject> boneObjectMapRebuilt);
-                        rebuiltModel.name = stub.OriginalModel.name + "-Rebuilt";
-                        rebuiltModel.transform.position = new Vector3(0, 3, 0);
+                        GCModel rebuiltModelGC = GCModel.ReadData(binReader, "", debugInfo);
+                        CommonModelData rebuiltCommonModel = rebuiltModelGC.ToCommon();
+                        if (rebuiltCommonModel != null)
+                        {
+                            GameObject rebuiltModel = CommonModelProcessor.CommonModelToGameObject("", stub.LodLevel,
+                                rebuiltCommonModel, out Dictionary<BoneNode, GameObject> boneObjectMapRebuilt);
+                            rebuiltModel.name = stub.OriginalModel.name + "-Rebuilt";
+                            rebuiltModel.transform.position = new Vector3(0, 3, 0);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(debugInfo.ToString());
+                        throw;
                     }
                 }
             }
