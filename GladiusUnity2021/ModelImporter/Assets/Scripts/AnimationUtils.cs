@@ -31,6 +31,7 @@ public static class AnimationUtils
                 boneNode.name = boneNode.name.Substring(0, index);
             }
             boneNode.Index = boneId;
+            boneNode.NameIndex = boneNode.Index;
             boneNode.offset = t.localPosition;
             boneNode.rotation = t.localRotation;
             

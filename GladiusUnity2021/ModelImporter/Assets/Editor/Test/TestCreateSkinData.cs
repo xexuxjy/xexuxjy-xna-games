@@ -34,6 +34,10 @@ public class TestCreateSkinData : Editor
     private GCModel m_rebuiltGCModel;
     private GCModel m_sanityCheckGCModel;
 
+    GCModel m_lhsCompareGCModel = null;
+    GCModel m_rhsCompareGCModel = null;
+
+    
     public override void OnInspectorGUI()
     {
         TestCreateSkinDataStub stub = target as TestCreateSkinDataStub;
@@ -81,13 +85,35 @@ public class TestCreateSkinData : Editor
             CommonModelData rebuiltCommonModel = null;
 
 
+            byte[] originalModelReadBuffer = null;
+            byte[] originalModelWriteBuffer = null;
+
             // Load the skin data into a model.
             using (BinaryReader binReader = new BinaryReader(new MemoryStream(stub.OriginalModel.bytes)))
             {
-                m_originalGCModel = GCModel.ReadData(binReader, "", null);
+                originalModelReadBuffer = binReader.ReadBytes(stub.OriginalModel.bytes.Length);
+                binReader.BaseStream.Position = 0;
+                StringBuilder debugInfo = new StringBuilder();
+                m_originalGCModel = GCModel.ReadData(binReader, "", debugInfo);
+                m_lhsCompareGCModel = m_originalGCModel;
+
+                Debug.Log("ORIG ORDER : \n"+debugInfo.ToString());
+                
+                using (MemoryStream writeMemoryStream = new MemoryStream())
+                {
+                    using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
+                    {
+                        m_originalGCModel.WriteData(binWriter);
+                    }
+
+                    originalModelWriteBuffer = writeMemoryStream.ToArray();
+                }
                 originalCommonModel = m_originalGCModel.ToCommon();
+                
             }
 
+            
+            
             int filteredMeshCount = m_originalGCModel.CountMeshesForLodLevel(stub.LodLevel);
             m_foldOutsCompareList.Clear();
             for (int i = 0; i < filteredMeshCount; i++)
@@ -97,6 +123,26 @@ public class TestCreateSkinData : Editor
 
             if (originalCommonModel != null)
             {
+                using (MemoryStream readMemoryStream = new MemoryStream(originalModelWriteBuffer))
+                {
+                    using (BinaryReader binReader = new BinaryReader(readMemoryStream))
+                    {
+                                    
+                        StringBuilder debugInfo = new StringBuilder();
+                        try
+                        {
+                            m_sanityCheckGCModel = GCModel.ReadData(binReader, "SanityCheck", debugInfo);
+                            m_rhsCompareGCModel = m_sanityCheckGCModel;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log(debugInfo.ToString());
+                        }
+                    }
+                }
+
+                
+                
                 string assetName = "test";
                 string outputHierarchy = "";
 
@@ -110,13 +156,13 @@ public class TestCreateSkinData : Editor
                 m_originalModel = CommonModelProcessor.CommonModelToGameObject(outputHierarchy, stub.LodLevel,
                     originalCommonModel, out Dictionary<BoneNode, GameObject> boneObjectMapOriginal);
 
+
+                
                 if (m_originalModel != null)
                 {
+                    
                     m_originalModel.name = OriginalName;
                     m_originalModel.transform.position = new Vector3(-2, 0, 0);
-
-                    // SkinnedMeshRenderer oldsmr =
-                    //     m_originalModel.transform.FindDescendentTransform("Submesh-2-barbarian_skin_var03").GetComponent<SkinnedMeshRenderer>();
 
                     SkinnedMeshRenderer[] oldsmr =m_originalModel.transform.GetComponentsInChildren<SkinnedMeshRenderer>();
                     
@@ -136,165 +182,150 @@ public class TestCreateSkinData : Editor
                             buffer = writeMemoryStream.ToArray();
                         }
 
-                        DSLSChunk oldDS = m_originalGCModel.GetChunk<DSLSChunk>();
-                        DSLSChunk newDS = m_rebuiltGCModel.GetChunk<DSLSChunk>();
-
-                        StringBuilder oldSB = new StringBuilder();
-                        StringBuilder newSB = new StringBuilder();
-                        
-                        foreach (DisplayListEntry dse in oldDS.DisplayListHeaders[0].entries)
+                        if (m_lhsCompareGCModel != null && m_rhsCompareGCModel != null)
                         {
-                            oldSB.AppendLine($"{dse.PosIndex},{dse.NormIndex},{dse.UVIndex}");
-                        }
 
-                        foreach (DisplayListEntry dse in newDS.DisplayListHeaders[0].entries)
-                        {
-                            newSB.AppendLine($"{dse.PosIndex},{dse.NormIndex},{dse.UVIndex}");
-                        }
+                            DSLSChunk oldDS = m_lhsCompareGCModel.GetChunk<DSLSChunk>();
+                            DSLSChunk newDS = m_rhsCompareGCModel.GetChunk<DSLSChunk>();
 
-                        SKELChunk oldSKEL = m_originalGCModel.GetChunk<SKELChunk>();
-                        SKELChunk newSKEL = m_rebuiltGCModel.GetChunk<SKELChunk>();
-                        
-                        StringBuilder oldSBS = new StringBuilder();
-                        StringBuilder newSBS = new StringBuilder();
+                            StringBuilder oldSB = new StringBuilder();
+                            StringBuilder newSB = new StringBuilder();
 
-                        foreach (BoneNode boneNode in oldSKEL.BoneList)
-                        {
-                            oldSBS.AppendLine(
-                                $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
-                        }
-
-                        foreach (BoneNode boneNode in newSKEL.BoneList)
-                        {
-                            newSBS.AppendLine(
-                                $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
-                            
-                        }
-                        
-                        SKINChunk oldSKIN =  m_originalGCModel.GetChunk<SKINChunk>();
-                        SKINChunk newSKIN =  m_rebuiltGCModel.GetChunk<SKINChunk>();
-
-                        UV0Chunk oldUV0 =  m_originalGCModel.GetChunk<UV0Chunk>();
-                        UV0Chunk newUV0 =  m_rebuiltGCModel.GetChunk<UV0Chunk>();
-                        
-                        List<Vector3> oldPositions = new List<Vector3>();
-                        List<Vector3> oldNormals = new List<Vector3>();
-
-                        foreach (CSK1 csk in oldSKIN.SkinDataList[0].CSK1List)
-                        {
-                            oldPositions.AddRange(csk.ExtractedPositions);
-                            //oldNormals.AddRange(csk.ExtractedNormals);
-                        }
-
-                        foreach (CSK2 csk in oldSKIN.SkinDataList[0].CSK2List)
-                        {
-                            oldPositions.AddRange(csk.ExtractedPositions);
-                            //oldNormals.AddRange(csk.ExtractedNormals);
-                        }
-
-                        List<Vector3> newPositions = new List<Vector3>();
-                        List<Vector3> newNormals = new List<Vector3>();
-
-                        foreach (CSK1 csk in newSKIN.SkinDataList[0].CSK1List)
-                        {
-                            newPositions.AddRange(csk.ExtractedPositions);
-                            //newNormals.AddRange(csk.ExtractedNormals);
-                        }
-
-                        foreach (CSK2 csk in newSKIN.SkinDataList[0].CSK2List)
-                        {
-                            newPositions.AddRange(csk.ExtractedPositions);
-                            //newNormals.AddRange(csk.ExtractedNormals);
-                        }
-
-                        StringBuilder oldPN = new StringBuilder();
-                        StringBuilder newPN = new StringBuilder();
-
-                        foreach (Vector3 p in oldPositions)
-                        {
-                            oldPN.AppendLine(p.ToString());
-                        }
-                        foreach (Vector3 n in oldNormals)
-                        {
-                            oldPN.AppendLine(n.ToString());
-                        }
-
-                        foreach (Vector3 p in newPositions)
-                        {
-                            newPN.AppendLine(p.ToString());
-                        }
-                        foreach (Vector3 n in newNormals)
-                        {
-                            newPN.AppendLine(n.ToString());
-                        }
-                        
-                        StringBuilder oldUV = new StringBuilder();
-                        StringBuilder newUV = new StringBuilder();
-
-                        foreach (Vector2 uv in oldUV0.Data)
-                        {
-                            oldUV.AppendLine(uv.ToString());
-                        }
-
-                        foreach (Vector2 uv in newUV0.Data)
-                        {
-                            newUV.AppendLine(uv.ToString());
-                        }
-
-
-                        // File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
-                        // File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
-                        //
-                        // File.WriteAllText("d:/tmp/old-skel.txt", oldSBS.ToString());
-                        // File.WriteAllText("d:/tmp/new-skel.txt", newSBS.ToString());
-                        //
-                        // File.WriteAllText("d:/tmp/old-pn.txt", oldPN.ToString());
-                        // File.WriteAllText("d:/tmp/new-pn.txt", newPN.ToString());
-                        //
-                        // File.WriteAllText("d:/tmp/old-uv.txt", oldUV.ToString());
-                        // File.WriteAllText("d:/tmp/new-uv.txt", newUV.ToString());
-
-                        if (buffer != null)
-                        {
-                            using (MemoryStream readMemoryStream = new MemoryStream(buffer))
+                            foreach (DisplayListEntry dse in oldDS.DisplayListHeaders[0].entries)
                             {
-                                using (BinaryReader binReader = new BinaryReader(readMemoryStream))
-                                {
-                                    
-                                    StringBuilder debugInfo = new StringBuilder();
-                                    try
-                                    {
-                                       // m_sanityCheckGCModel = GCModel.ReadData(binReader, "SanityCheck", debugInfo);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Debug.Log(debugInfo.ToString());
-                                    }
-                                    
-                                }
+                                oldSB.AppendLine($"{dse.PosIndex},{dse.NormIndex},{dse.UVIndex}");
                             }
+
+                            foreach (DisplayListEntry dse in newDS.DisplayListHeaders[0].entries)
+                            {
+                                newSB.AppendLine($"{dse.PosIndex},{dse.NormIndex},{dse.UVIndex}");
+                            }
+
+                            SKELChunk oldSKEL = m_lhsCompareGCModel.GetChunk<SKELChunk>();
+                            SKELChunk newSKEL = m_rhsCompareGCModel.GetChunk<SKELChunk>();
+
+                            StringBuilder oldSBS = new StringBuilder();
+                            StringBuilder newSBS = new StringBuilder();
+
+                            foreach (BoneNode boneNode in oldSKEL.BoneList)
+                            {
+                                oldSBS.AppendLine(
+                                    $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
+                            }
+
+                            foreach (BoneNode boneNode in newSKEL.BoneList)
+                            {
+                                newSBS.AppendLine(
+                                    $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
+
+                            }
+
+                            SKINChunk oldSKIN = m_lhsCompareGCModel.GetChunk<SKINChunk>();
+                            SKINChunk newSKIN = m_rhsCompareGCModel.GetChunk<SKINChunk>();
+
+                            UV0Chunk oldUV0 = m_lhsCompareGCModel.GetChunk<UV0Chunk>();
+                            UV0Chunk newUV0 = m_rhsCompareGCModel.GetChunk<UV0Chunk>();
+
+                            List<Vector3> oldPositions = new List<Vector3>();
+                            List<Vector3> oldNormals = new List<Vector3>();
+
+                            foreach (CSK1 csk in oldSKIN.SkinDataList[0].CSK1List)
+                            {
+                                oldPositions.AddRange(csk.ExtractedPositions);
+                                //oldNormals.AddRange(csk.ExtractedNormals);
+                            }
+
+                            foreach (CSK2 csk in oldSKIN.SkinDataList[0].CSK2List)
+                            {
+                                oldPositions.AddRange(csk.ExtractedPositions);
+                                //oldNormals.AddRange(csk.ExtractedNormals);
+                            }
+
+                            List<Vector3> newPositions = new List<Vector3>();
+                            List<Vector3> newNormals = new List<Vector3>();
+
+                            foreach (CSK1 csk in newSKIN.SkinDataList[0].CSK1List)
+                            {
+                                newPositions.AddRange(csk.ExtractedPositions);
+                                //newNormals.AddRange(csk.ExtractedNormals);
+                            }
+
+                            foreach (CSK2 csk in newSKIN.SkinDataList[0].CSK2List)
+                            {
+                                newPositions.AddRange(csk.ExtractedPositions);
+                                //newNormals.AddRange(csk.ExtractedNormals);
+                            }
+
+                            StringBuilder oldPN = new StringBuilder();
+                            StringBuilder newPN = new StringBuilder();
+
+                            foreach (Vector3 p in oldPositions)
+                            {
+                                oldPN.AppendLine(p.ToString());
+                            }
+
+                            foreach (Vector3 n in oldNormals)
+                            {
+                                oldPN.AppendLine(n.ToString());
+                            }
+
+                            foreach (Vector3 p in newPositions)
+                            {
+                                newPN.AppendLine(p.ToString());
+                            }
+
+                            foreach (Vector3 n in newNormals)
+                            {
+                                newPN.AppendLine(n.ToString());
+                            }
+
+                            StringBuilder oldUV = new StringBuilder();
+                            StringBuilder newUV = new StringBuilder();
+
+                            foreach (Vector2 uv in oldUV0.Data)
+                            {
+                                oldUV.AppendLine(uv.ToString());
+                            }
+
+                            foreach (Vector2 uv in newUV0.Data)
+                            {
+                                newUV.AppendLine(uv.ToString());
+                            }
+
+
+                            // File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
+                            // File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
+                            //
+                            // File.WriteAllText("d:/tmp/old-skel.txt", oldSBS.ToString());
+                            // File.WriteAllText("d:/tmp/new-skel.txt", newSBS.ToString());
+                            //
+                            // File.WriteAllText("d:/tmp/old-pn.txt", oldPN.ToString());
+                            // File.WriteAllText("d:/tmp/new-pn.txt", newPN.ToString());
+                            //
+                            // File.WriteAllText("d:/tmp/old-uv.txt", oldUV.ToString());
+                            // File.WriteAllText("d:/tmp/new-uv.txt", newUV.ToString());
                         }
                     }
 
 
-                    if (m_originalGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0 &&
-                        m_rebuiltGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0)
+                    if (m_lhsCompareGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0 &&
+                        m_rhsCompareGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0)
                     {
                         m_originalSkinData.Clear();
-                        for (int i = 0; i < m_originalGCModel.GetChunk<MESHChunk>().NumElements; i++)
+                        for (int i = 0; i < m_lhsCompareGCModel.GetChunk<MESHChunk>().NumElements; i++)
                         {
-                            if ((m_originalGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
+                            if ((m_lhsCompareGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
                             {
-                                m_originalSkinData.Add(m_originalGCModel.GetChunk<SKINChunk>().SkinDataList[i]);
+                                m_originalSkinData.Add(m_lhsCompareGCModel.GetChunk<SKINChunk>().SkinDataList[i]);
                             }
                         }
 
                         m_newSkinData.Clear();
-                        for (int i = 0; i < m_rebuiltGCModel.GetChunk<MESHChunk>().NumElements; i++)
+                        for (int i = 0; i < m_rhsCompareGCModel.GetChunk<MESHChunk>().NumElements; i++)
                         {
-                            if ((m_rebuiltGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
+                            if ((m_rhsCompareGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
                             {
-                                m_newSkinData.Add(m_rebuiltGCModel.GetChunk<SKINChunk>().SkinDataList[i]);
+                                m_newSkinData.Add(m_rhsCompareGCModel.GetChunk<SKINChunk>().SkinDataList[i]);
                             }
                         }
                     }
@@ -574,9 +605,9 @@ public class TestCreateSkinData : Editor
         //     DrawChunkCompare(m_rebuiltGCModel, m_sanityCheckGCModel, Color.green, Color.yellow);
         // }
 
-        if (m_originalGCModel != null && m_rebuiltGCModel != null)
+        if (m_lhsCompareGCModel != null && m_rhsCompareGCModel != null)
         {
-            DrawChunkCompare(m_originalGCModel, m_rebuiltGCModel, Color.green, Color.yellow);
+            DrawChunkCompare(m_lhsCompareGCModel, m_rhsCompareGCModel, Color.green, Color.yellow);
         }
 
         

@@ -3629,7 +3629,7 @@ public class SkinData
         }
     }
 
-    public void WriteSkinWeights(BinaryWriter binWriter, long dataPosition, short animShift)
+    public void WriteSkinWeights(BinaryWriter binWriter, long dataPosition, short animShift,long testPosition,int testValue)
     {
         binWriter.BaseStream.Position = dataPosition + PointerList1;
             
@@ -3638,7 +3638,7 @@ public class SkinData
             csk1.ToStream(binWriter, animShift);
             
         }
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         binWriter.BaseStream.Position = dataPosition + PointerList2;
 
         // align
@@ -3646,7 +3646,7 @@ public class SkinData
         {
             csk2.ToStream(binWriter, animShift);
         }
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         binWriter.BaseStream.Position = dataPosition + PointerListA;
 
         // align
@@ -3654,7 +3654,7 @@ public class SkinData
         {
             cska.ToStream(binWriter, animShift);
         }
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         foreach (CSK1 csk1 in CSK1List)
         {
             binWriter.BaseStream.Position = dataPosition + csk1.vertSrc;
@@ -3665,7 +3665,7 @@ public class SkinData
                     csk1.ExtractedNormals[i]);
             }
         }
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         foreach (CSK2 csk2 in CSK2List)
         {
             binWriter.BaseStream.Position = dataPosition + csk2.vertSrc;
@@ -3683,7 +3683,7 @@ public class SkinData
                 binWriter.Write(b1.Item2);
             }
         }
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         foreach (CSKA cska in CSKAList)
         {
             binWriter.BaseStream.Position = dataPosition + cska.vertSrc;
@@ -3706,7 +3706,7 @@ public class SkinData
                 binWriter.Write(cska.ExtractedWeightsBytes[i]);
             }
         }
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
     }
 
 
@@ -3739,15 +3739,21 @@ public class SkinData
         }
     }
 
-    public static void TestValue(BinaryWriter binWriter, int testValue)
+    public static void TestValue(BinaryWriter binWriter,long position, int testValue)
     {
         long savePosition = binWriter.BaseStream.Position;
-        binWriter.BaseStream.Position = 142564;
+        binWriter.BaseStream.Position = position;
         byte[] test = new byte[4];
         for (int i = 0; i < test.Length; i++)
         {
             test[i] = (byte)binWriter.BaseStream.ReadByte();
         }
+
+        if (test[0] == 0xdd)
+        {
+            test[0] = 0;
+        }
+        
         int tv = Common.ToInt32BigEndian(test, 0);
         if (tv != testValue)
         {
@@ -3763,9 +3769,11 @@ public class SkinData
     public void ToStream(BinaryWriter binWriter)
     {
         long startPosition = binWriter.BaseStream.Position;
+        long testPosition = startPosition;
+        int testValue = Size;
         Common.WriteBigEndian(binWriter, Size);
 
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         
         Common.WriteBigEndian(binWriter, NumberVertices);
         Common.WriteBigEndian(binWriter, NumberBones);
@@ -3781,6 +3789,9 @@ public class SkinData
 
         SKINChunk.RelocateAndWrite(binWriter, PointerList1);
         SKINChunk.RelocateAndWrite(binWriter, PointerList2);
+
+        testPosition = binWriter.BaseStream.Position;
+        testValue = (int)PointerListA;
         SKINChunk.RelocateAndWrite(binWriter, PointerListA);
 
         Common.WriteBigEndian(binWriter, NumPackets1);
@@ -3799,9 +3810,10 @@ public class SkinData
         int extraPadding = 26;
         GladiusFileWriter.WriteNull(binWriter, extraPadding);
 
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         
-        long dataPosition = startPosition;
+        //long dataPosition = startPosition;
+        long dataPosition = binWriter.BaseStream.Position;
         
         for (int i = 0; i < NumPackets1; i++)
         {
@@ -3826,11 +3838,11 @@ public class SkinData
         
         long currentPosition = binWriter.BaseStream.Position;
         
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         
-        WriteSkinWeights(binWriter, dataPosition,AnimShift);
+        WriteSkinWeights(binWriter, dataPosition,AnimShift,testPosition,testValue);
         
-        TestValue(binWriter,115424);
+        TestValue(binWriter,testPosition,testValue);
         
         long endPosition = binWriter.BaseStream.Position;
         long diff = endPosition - startPosition;

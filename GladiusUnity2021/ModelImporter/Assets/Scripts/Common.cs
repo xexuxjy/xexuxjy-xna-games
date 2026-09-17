@@ -386,6 +386,11 @@ public static class Common
     
     public static short ToInt16BigEndian(BinaryReader reader)
     {
+        if (reader.BaseStream.Position >= reader.BaseStream.Length - 1)
+        {
+            int ibreak = 0;
+        }
+        
         byte b1 = reader.ReadByte();
         byte b2 = reader.ReadByte();
         return (short)(b1 << 8 | b2);

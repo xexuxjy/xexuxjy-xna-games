@@ -872,9 +872,16 @@ public class GCModel : BaseModel
                     bn.parent = skelChunk.BoneList[bn.ParentIndex];
                 }
             }
-            //BoneList.AddRange(skelChunk.BoneList);
         }
 
+        DSLSChunk dslsChunk = gcModel.GetChunk<DSLSChunk>();
+        DSLIChunk dsliChunk = gcModel.GetChunk<DSLIChunk>();
+        
+        if (dslsChunk.DisplayListHeaders.Count != dsliChunk.Data.Count)
+        {
+            dslsChunk.BuildData(dsliChunk);
+        }
+        
 
         return gcModel;
     }
@@ -917,37 +924,47 @@ public class GCModel : BaseModel
         GetChunk<CPRTChunk>().ToStream(binWriter);
         GetChunk<SELSChunk>().ToStream(binWriter);
 
-        GetChunk<CNTRChunk>().ToStream(binWriter,
-            IsSkinned() ? GetChunk<SKINChunk>().Positions : GetChunk<POSIChunk>().Data);
+        GetChunk<DSLCChunk>().ToStream(binWriter, GetChunk<MESHChunk>().PaxElements);
+        GetChunk<RAMChunk>()?.ToStream(binWriter);
+        
         GetChunk<SHDRChunk>().ToStream(binWriter, GetChunk<TXTRChunk>().Textures);
         GetChunk<TXTRChunk>().ToStream(binWriter);
-        GetChunk<DSLSChunk>().ToStream(binWriter);
+        GetChunk<MESHChunk>()?.ToStream(binWriter);
+        GetChunk<ELEMChunk>()?.ToStream(binWriter, GetChunk<DSLSChunk>().DisplayListHeaders);
+
+        GetChunk<DSLSChunk>().ToStream(binWriter);        
         GetChunk<DSLIChunk>().ToStream(binWriter);
-        GetChunk<DSLCChunk>().ToStream(binWriter, GetChunk<MESHChunk>().PaxElements);
+        
+        GetChunk<UV0Chunk>()?.ToStream(binWriter,IsSkinned());
+        GetChunk<VFLGChunk>()?.ToStream(binWriter);
+        GetChunk<STYPChunk>()?.ToStream(binWriter);
 
         if (IsSkinned())
         {
-            GetChunk<NAMEChunk>().ToStream(binWriter);
-            GetChunk<SKELChunk>().ToStream(binWriter);
-            GetChunk<SKINChunk>().ToStream(binWriter);
-            GetChunk<JLODChunk>().ToStream(binWriter,GetChunk<SKELChunk>().BoneList);
+            GetChunk<NAMEChunk>()?.ToStream(binWriter);
+            GetChunk<SKELChunk>()?.ToStream(binWriter);
+            GetChunk<JLODChunk>()?.ToStream(binWriter,GetChunk<SKELChunk>()?.BoneList);
         }
         else
         {
-            GetChunk<POSIChunk>().ToStream(binWriter);
-            GetChunk<NORMChunk>().ToStream(binWriter);
+            GetChunk<POSIChunk>()?.ToStream(binWriter);
+            GetChunk<NORMChunk>()?.ToStream(binWriter);
+        }
+        
+        
+        GetChunk<CNTRChunk>().ToStream(binWriter,
+            IsSkinned() ? GetChunk<SKINChunk>().Positions : GetChunk<POSIChunk>().Data);
+
+        if (IsSkinned())
+        {
+            GetChunk<SKINChunk>()?.ToStream(binWriter);
         }
 
-        GetChunk<UV0Chunk>().ToStream(binWriter,IsSkinned());
-        GetChunk<VFLAChunk>().ToStream(binWriter);
-        GetChunk<VFLGChunk>().ToStream(binWriter);
-        GetChunk<STYPChunk>().ToStream(binWriter);
+
+        // GetChunk<VFLAChunk>()?.ToStream(binWriter);
+        // GetChunk<MSARChunk>()?.ToStream(binWriter);
+        // GetChunk<NLVLChunk>()?.ToStream(binWriter);
         
-        GetChunk<RAMChunk>().ToStream(binWriter);
-        GetChunk<MSARChunk>().ToStream(binWriter);
-        GetChunk<NLVLChunk>().ToStream(binWriter);
-        GetChunk<MESHChunk>().ToStream(binWriter);
-        GetChunk<ELEMChunk>().ToStream(binWriter, GetChunk<DSLSChunk>().DisplayListHeaders);
         GetChunk<ENDChunk>().ToStream(binWriter);
 
         foreach (BaseChunk chunk in m_chunkList)
