@@ -29,6 +29,7 @@ public class TestCreateSkinnedModel : Editor
                 {
                     gcModel.WriteData(binWriter);
                 }
+                writeMemoryStream.Flush();
                 buffer = writeMemoryStream.ToArray();
             }
 

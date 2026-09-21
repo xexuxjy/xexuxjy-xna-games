@@ -182,7 +182,7 @@ public static class GladiusGlobals
     }
 
 
-    public static void AdjustV4(ref Vector4 input)
+    public static void UnityToGladius(ref Vector4 input)
     {
         if (APPLY_UNITY_TRANSLATION)
         {
@@ -190,7 +190,7 @@ public static class GladiusGlobals
         }
     }
 
-    public static Quaternion AdjustQuaternion(Quaternion q)
+    public static Quaternion UnityToGladius(Quaternion q)
     {
         Quaternion result = q;
         if (APPLY_UNITY_TRANSLATION)
@@ -201,7 +201,7 @@ public static class GladiusGlobals
     }
 
 
-    public static void AdjustQuaternion(ref Quaternion q)
+    public static void UnityToGladius(ref Quaternion q)
     {
         if (APPLY_UNITY_TRANSLATION)
         {
@@ -377,7 +377,7 @@ public static class GladiusGlobals
             float.TryParse(values[startPos + 2], out result.z);
             float.TryParse(values[startPos + 3], out result.w);
         }
-        AdjustQuaternion(ref result);
+        UnityToGladius(ref result);
         return result;
     }
 

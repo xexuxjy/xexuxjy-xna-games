@@ -1123,7 +1123,7 @@ public class BoneNode
         GladiusGlobals.GladiusToUnity(ref node.offset);
 
         node.rotation = Common.FromStreamQuaternion(binReader);
-        GladiusGlobals.AdjustQuaternion(ref node.rotation);
+        GladiusGlobals.UnityToGladius(ref node.rotation);
 
         node.Type = binReader.ReadByte();
         node.Index = binReader.ReadByte();
@@ -1135,8 +1135,10 @@ public class BoneNode
 
     public void ToStream(BinaryWriter binWriter)
     {
-        Common.Write(binWriter, offset);
-        Common.Write(binWriter, rotation);
+        Vector3 convertedOffset = GladiusGlobals.UnityToGladius(offset);
+        Common.Write(binWriter, convertedOffset);
+        Quaternion convertedRotation = GladiusGlobals.UnityToGladius(rotation);
+        Common.Write(binWriter, convertedRotation);
         binWriter.Write(Type);
         binWriter.Write(Index);
         binWriter.Write(NameIndex);
@@ -2016,6 +2018,8 @@ public class BaseChunk
 
     public long WriteStart;
     public long WriteEnd;
+
+    public byte[] RawData;
     
     public static bool CompareSignature(char[] a, char[] b)
     {
@@ -2065,7 +2069,11 @@ public class BaseChunk
                 {
                     MethodInfo methodInfo = CommonModelImporter.ChunkMapping[key];
 
+                    byte[] rawData = binReader.ReadBytes((int)size);
+                    binReader.BaseStream.Position -= size;
+                    
                     BaseChunk chunk = (BaseChunk)methodInfo.Invoke(null, parameters);
+                    chunk.RawData = rawData;
                     return chunk;
                 }
             }
@@ -3321,8 +3329,6 @@ public class PaxElement
 
 public class SKINChunk : BaseChunk
 {
-    public byte[] Data;
-
     public List<SkinData> SkinDataList = new List<SkinData>();
     public List<Vector3> Positions = new List<Vector3>();
     public List<Vector3> Normals = new List<Vector3>();
@@ -3350,11 +3356,6 @@ public class SKINChunk : BaseChunk
 
             int ibreak2 = 0;
         }
-
-
-        binReader.BaseStream.Position = afterHeaderPosition;
-
-        chunk.Data = binReader.ReadBytes((int)(chunk.Length - ChunkHeaderSize));
 
         return chunk;
     }
@@ -3629,7 +3630,7 @@ public class SkinData
         }
     }
 
-    public void WriteSkinWeights(BinaryWriter binWriter, long dataPosition, short animShift,long testPosition,int testValue)
+    public long WriteSkinWeights(BinaryWriter binWriter, long dataPosition, short animShift,long testPosition,int testValue)
     {
         binWriter.BaseStream.Position = dataPosition + PointerList1;
             
@@ -3654,6 +3655,9 @@ public class SkinData
         {
             cska.ToStream(binWriter, animShift);
         }
+        
+        long maxWritePosition = binWriter.BaseStream.Position;
+        
         TestValue(binWriter,testPosition,testValue);
         foreach (CSK1 csk1 in CSK1List)
         {
@@ -3707,6 +3711,7 @@ public class SkinData
             }
         }
         TestValue(binWriter,testPosition,testValue);
+        return maxWritePosition;
     }
 
 
@@ -3840,9 +3845,12 @@ public class SkinData
         
         TestValue(binWriter,testPosition,testValue);
         
-        WriteSkinWeights(binWriter, dataPosition,AnimShift,testPosition,testValue);
+        long maxWritePosition = WriteSkinWeights(binWriter, dataPosition,AnimShift,testPosition,testValue);
         
         TestValue(binWriter,testPosition,testValue);
+
+        // do this as we wrote the weight data before the csk structure data and don't want to wipe it.
+        binWriter.BaseStream.Position = maxWritePosition;
         
         long endPosition = binWriter.BaseStream.Position;
         long diff = endPosition - startPosition;
@@ -3862,10 +3870,17 @@ public class SkinData
         float posScale = 1f / (float)(1 << Mathf.Clamp(animShift, 0, 15));
         const float normScale = 1f / 64f;
 
-        Vector3 scaledPosition = position * posScale;
-        Vector3 scaledNormal = normal * normScale;
+        short px = (short)(position.x / posScale);
+        short py = (short)(position.y / posScale);
+        short pz = (short)(position.z / posScale);
+        
+        Common.WriteBigEndian(binWriter, px);
+        Common.WriteBigEndian(binWriter, py);
+        Common.WriteBigEndian(binWriter, pz);
+        //Vector3 scaledPosition = position / posScale;
+        Vector3 scaledNormal = normal / normScale;
 
-        Common.WriteVector3UShortBE(binWriter, scaledPosition);
+        //Common.WriteVector3UShortBE(binWriter, scaledPosition);
         binWriter.Write((sbyte)scaledNormal.x);
         binWriter.Write((sbyte)scaledNormal.y);
         binWriter.Write((sbyte)scaledNormal.z);
@@ -4375,11 +4390,11 @@ public static class SkinBuilder
             }
         }
 
-        return PrepareData(numBones, vertices, normals, boneWeights);
+        return PrepareData(vertices, normals, boneWeights,animShift,numBones);
     }
 
-    public static SkinData PrepareData(int numBones, List<Vector3> vertices, List<Vector3> normals,
-        List<BoneWeight> boneWeights)
+    public static SkinData PrepareData(List<Vector3> vertices, List<Vector3> normals,
+        List<BoneWeight> boneWeights,short animShift,int numBones)
     {
         // dma size , maybe 16k 
         const int sk_maxPacketSizeSafe = (1024 * 16) - 65;
@@ -4774,6 +4789,7 @@ public static class SkinBuilder
         skinData.NumberVertices = numVerts;
         skinData.NumberBones = numBones;
         skinData.Size = (int)memsize;
+        skinData.AnimShift = animShift;
         skinData.RelocationTable = pRelocate;
 
         skinData.NumPackets1 = packets1.Count;

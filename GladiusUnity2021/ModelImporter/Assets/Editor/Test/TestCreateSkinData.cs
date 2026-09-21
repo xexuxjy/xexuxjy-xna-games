@@ -98,6 +98,17 @@ public class TestCreateSkinData : Editor
                 m_lhsCompareGCModel = m_originalGCModel;
 
                 Debug.Log("ORIG ORDER : \n"+debugInfo.ToString());
+
+                File.WriteAllBytes("d:/tmp/test-skin-only-orig.bin",m_originalGCModel.GetChunk<SKINChunk>().RawData);
+                using (MemoryStream writeMemoryStream = new MemoryStream())
+                {
+                    using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
+                    {
+                        m_originalGCModel.GetChunk<SKINChunk>().ToStream(binWriter);
+                    }
+                    File.WriteAllBytes("d:/tmp/test-skin-only-orig-write.bin",writeMemoryStream.ToArray());
+                }
+
                 
                 using (MemoryStream writeMemoryStream = new MemoryStream())
                 {
@@ -109,7 +120,7 @@ public class TestCreateSkinData : Editor
                     originalModelWriteBuffer = writeMemoryStream.ToArray();
                 }
                 originalCommonModel = m_originalGCModel.ToCommon();
-                
+
             }
 
             
@@ -170,6 +181,16 @@ public class TestCreateSkinData : Editor
 
                     if (m_rebuiltGCModel != null)
                     {
+                        
+                        using (MemoryStream writeMemoryStream = new MemoryStream())
+                        {
+                            using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
+                            {
+                                m_originalGCModel.GetChunk<SKINChunk>().ToStream(binWriter);
+                            }
+                            File.WriteAllBytes("d:/tmp/test-skin-only-rebuilt.bin",writeMemoryStream.ToArray());
+                        }
+
                         byte[] buffer = null;
 
                         using (MemoryStream writeMemoryStream = new MemoryStream())

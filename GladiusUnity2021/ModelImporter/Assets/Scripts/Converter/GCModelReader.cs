@@ -213,12 +213,12 @@ public class GCModel : BaseModel
 
             foreach (Vector3 v in adjustedVertices)
             {
-                model.AddUnskinnedPosition(v);
+                model.AddUnskinnedPosition(GladiusGlobals.UnityToGladius(v));
             }
 
             foreach (Vector3 v in adjustedNormals)
             {
-                model.AddUnskinnedNormal(v);
+                model.AddUnskinnedNormal(GladiusGlobals.UnityToGladius(v));
             }
         }
 
@@ -669,25 +669,13 @@ public class GCModel : BaseModel
 
                     foreach (CSKA csk in skinData.CSKAList)
                     {
-                        //int n = Mathf.Min(cska.count, Mathf.Min(cska.ExtractedDestinationIndices.Count, cska.ExtractedWeights.Count));
                         int n = csk.ExtractedDestinationIndices.Count;
                         for (int k = 0; k < n; k++)
                         {
-                            // var foundVal = positionAndWeights.Find(x => x.Item1 == csk.ExtractedPositions[k]);
-                            // int foundIndex = positionAndWeights.IndexOf(foundVal);
-
-
                             int dstIndex = csk.ExtractedDestinationIndices[k];
-                            // if (dstIndex < 0 || dstIndex >= totalVerts)
-                            //     continue;
-
-                            //int count0 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
 
                             positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2
                                 .Add((csk.idxBone, csk.ExtractedWeightsFloats[k]));
-
-                            //int count1 = positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2.Count;
-                            int ibreak = 0;
                         }
                     }
 
@@ -787,7 +775,6 @@ public class GCModel : BaseModel
                     // change winding order on indices.
                     for (int i = 0; i < meshIndices.Count; i += 3)
                     {
-                        //tempTriangles[i] = submesh.Indices[i];
                         int temp = meshIndices[i + 1];
                         meshIndices[i + 1] = meshIndices[i + 2];
                         meshIndices[i + 2] = temp;
@@ -1346,20 +1333,3 @@ public class GCMaterial
     }
 }
 
-public record PosNorm
-{
-    public virtual bool Equals(PosNorm other)
-    {
-        if (other is null) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return Position.Equals(other.Position) && Normal.Equals(other.Normal);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Position, Normal);
-    }
-
-    public Vector3 Position;
-    public Vector3 Normal;
-}

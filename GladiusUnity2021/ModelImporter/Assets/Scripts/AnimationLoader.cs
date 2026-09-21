@@ -511,7 +511,7 @@ public struct optQuat
     
     public static optQuat Put(Quaternion q,float time)
     {
-        q = GladiusGlobals.AdjustQuaternion(q);
+        q = GladiusGlobals.UnityToGladius(q);
         
         IndexedQuaternion originalQuaternion = new IndexedQuaternion(q);
         IndexedQuaternion quantizedQuaternion = originalQuaternion;
@@ -1580,7 +1580,7 @@ public class AnimationData
                     Quaternion iq = Quaternion.identity;
                     Eval(ref output, ref iq, true, track, mLength, time, (mFlags & ANIM_LOOP) != 0, false);
 
-                    GladiusGlobals.AdjustV4(ref output);
+                    GladiusGlobals.UnityToGladius(ref output);
 
                     //output *= -1.0f;
 
@@ -1617,7 +1617,7 @@ public class AnimationData
                     Quaternion output = Quaternion.identity;
                     Eval(ref iv4, ref output, false, track, mLength, time, (mFlags & ANIM_LOOP) != 0, false);
 
-                    GladiusGlobals.AdjustQuaternion(ref output);
+                    GladiusGlobals.UnityToGladius(ref output);
 
                     if (track.boneAnimData != null)
                     {
@@ -1713,7 +1713,7 @@ public class AnimationData
                 Done:
                     if (rotTrack.boneAnimData != null)
                     {
-                        GladiusGlobals.AdjustQuaternion(ref resolvedQuaternion);
+                        GladiusGlobals.UnityToGladius(ref resolvedQuaternion);
                         rotTrack.boneAnimData.CurrentRotation = resolvedQuaternion;
                     }
 
