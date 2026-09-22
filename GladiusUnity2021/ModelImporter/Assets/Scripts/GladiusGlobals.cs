@@ -164,6 +164,26 @@ public static class GladiusGlobals
         return input;
     }
 
+    public static void GladiusToUnity(ref Quaternion q)
+    {
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            q = new Quaternion(q.x, q.z, q.y, q.w);
+        }
+    }
+
+    public static Quaternion GladiusToUnity(Quaternion q)
+    {
+        if (APPLY_UNITY_TRANSLATION)
+        {
+            q = new Quaternion(q.x, q.z, q.y, q.w);
+        }
+
+        return q;
+    }
+
+    
+    
     public static void UnityToGladius(ref Vector3 input)
     {
         if (APPLY_UNITY_TRANSLATION)
@@ -439,15 +459,15 @@ public static class GladiusGlobals
     }
 
 
-    public static Vector3 FromStreamVector3(BinaryReader reader)
-    {
-        Vector3 v = new Vector3();
-        v.x = reader.ReadSingle();
-        v.y = reader.ReadSingle();
-        v.z = reader.ReadSingle();
-        v = GladiusToUnity(v);
-        return v;
-    }
+    // public static Vector3 FromStreamVector3(BinaryReader reader)
+    // {
+    //     Vector3 v = new Vector3();
+    //     v.x = reader.ReadSingle();
+    //     v.y = reader.ReadSingle();
+    //     v.z = reader.ReadSingle();
+    //     v = GladiusToUnity(v);
+    //     return v;
+    // }
 
 
 

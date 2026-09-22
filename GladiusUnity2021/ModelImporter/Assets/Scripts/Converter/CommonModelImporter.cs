@@ -1123,7 +1123,7 @@ public class BoneNode
         GladiusGlobals.GladiusToUnity(ref node.offset);
 
         node.rotation = Common.FromStreamQuaternion(binReader);
-        GladiusGlobals.UnityToGladius(ref node.rotation);
+        GladiusGlobals.GladiusToUnity(ref node.rotation);
 
         node.Type = binReader.ReadByte();
         node.Index = binReader.ReadByte();
@@ -2478,7 +2478,9 @@ public class POSIChunk : BaseChunk
         chunk.BaseFromStream(binReader);
         for (int i = 0; i < chunk.NumElements; ++i)
         {
-            chunk.Data.Add(Common.FromStreamVector3BE(binReader));
+            Vector3 v3 = Common.FromStreamVector3BE(binReader);
+            GladiusGlobals.GladiusToUnity(ref v3);
+            chunk.Data.Add(v3);
         }
 
         return chunk;
@@ -2498,7 +2500,8 @@ public class POSIChunk : BaseChunk
 
         foreach (IndexedVector3 v in Data)
         {
-            Common.WriteVector3BE(binWriter, v);
+            Vector3 v3 = GladiusGlobals.UnityToGladius(v);
+            Common.WriteVector3BE(binWriter, v3);
         }
 
         GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
@@ -2522,7 +2525,9 @@ public class NORMChunk : BaseChunk
         chunk.BaseFromStream(binReader);
         for (int i = 0; i < chunk.NumElements; ++i)
         {
-            chunk.Data.Add(Common.FromStreamVector3BE(binReader));
+            Vector3 v3 = Common.FromStreamVector3BE(binReader);
+            GladiusGlobals.GladiusToUnity(ref v3);
+            chunk.Data.Add(v3);
         }
 
         return chunk;
@@ -2543,7 +2548,8 @@ public class NORMChunk : BaseChunk
 
         foreach (IndexedVector3 v in Data)
         {
-            Common.WriteVector3BE(binWriter, v);
+            Vector3 v3 = GladiusGlobals.UnityToGladius(v);
+            Common.WriteVector3BE(binWriter, v3);
         }
 
         GladiusFileWriter.WriteNull(binWriter, (paddedTotal - total));
@@ -4414,15 +4420,15 @@ public static class SkinBuilder
             acclist.Add(new CAccList());
         }
 
-        for (int i = 0; i < vertices.Count; i++)
-        {
-            vertices[i] = GladiusGlobals.UnityToGladius(vertices[i]);
-        }
-        
-        for (int i = 0; i < normals.Count; i++)
-        {
-            normals[i] = GladiusGlobals.UnityToGladius(normals[i]);
-        }
+        // for (int i = 0; i < vertices.Count; i++)
+        // {
+        //     vertices[i] = GladiusGlobals.UnityToGladius(vertices[i]);
+        // }
+        //
+        // for (int i = 0; i < normals.Count; i++)
+        // {
+        //     normals[i] = GladiusGlobals.UnityToGladius(normals[i]);
+        // }
 
         int numVerts = vertices.Count();
 

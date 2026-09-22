@@ -213,12 +213,14 @@ public class GCModel : BaseModel
 
             foreach (Vector3 v in adjustedVertices)
             {
-                model.AddUnskinnedPosition(GladiusGlobals.UnityToGladius(v));
+                //model.AddUnskinnedPosition(GladiusGlobals.UnityToGladius(v));
+                model.AddUnskinnedPosition(v);
             }
 
             foreach (Vector3 v in adjustedNormals)
             {
-                model.AddUnskinnedNormal(GladiusGlobals.UnityToGladius(v));
+                //model.AddUnskinnedNormal(GladiusGlobals.UnityToGladius(v));
+                model.AddUnskinnedNormal(v);
             }
         }
 
@@ -271,14 +273,19 @@ public class GCModel : BaseModel
                 IndexedVector3 adjusted = posiChunk.Data[i];
                 adjusted = gameObj.transform.TransformPoint(adjusted);
                 adjusted -= offset;
-                posiChunk.Data[i] = GladiusGlobals.UnityToGladius(adjusted);
+                //posiChunk.Data[i] = GladiusGlobals.UnityToGladius(adjusted);
+                posiChunk.Data[i] = adjusted;
             }
 
             for (int i = 0; i < normChunk.Data.Count; ++i)
             {
-                normChunk.Data[i] =
-                    GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(normChunk.Data[i]));
+                // normChunk.Data[i] =
+                //     GladiusGlobals.UnityToGladius(gameObj.transform.TransformDirection(normChunk.Data[i]));
+                
+                normChunk.Data[i] = gameObj.transform.TransformDirection(normChunk.Data[i]);
+
             }
+            
         }
 
         int dsliStart = 0;
@@ -552,8 +559,10 @@ public class GCModel : BaseModel
                 DisplayListEntry entry = dlh.entries[i];
 
                 CommonVertexInstance cvi = new CommonVertexInstance();
-                cvi.Position = GladiusGlobals.GladiusToUnity(posiChunk.Data[entry.PosIndex]);
-                cvi.Normal = GladiusGlobals.GladiusToUnity(normChunk.Data[entry.NormIndex]);
+                // cvi.Position = GladiusGlobals.GladiusToUnity(posiChunk.Data[entry.PosIndex]);
+                // cvi.Normal = GladiusGlobals.GladiusToUnity(normChunk.Data[entry.NormIndex]);
+                cvi.Position = posiChunk.Data[entry.PosIndex];
+                cvi.Normal = normChunk.Data[entry.NormIndex];
                 //cvi.Normal = normChunk.Data[entry.NormIndex];
                 cvi.UV = uv0Chunk.Data[entry.UVIndex];
 
@@ -708,9 +717,13 @@ public class GCModel : BaseModel
                             cvi.DebugDLENorm = entry.NormIndex;
 
 
-                            cvi.Position = GladiusGlobals.GladiusToUnity(positionAndWeights[entry.PosIndex].Item1);
-                            cvi.Normal = GladiusGlobals.GladiusToUnity(normals[entry.NormIndex]);
+                            // cvi.Position = GladiusGlobals.GladiusToUnity(positionAndWeights[entry.PosIndex].Item1);
+                            // cvi.Normal = GladiusGlobals.GladiusToUnity(normals[entry.NormIndex]);
 
+                            cvi.Position = positionAndWeights[entry.PosIndex].Item1;
+                            cvi.Normal = normals[entry.NormIndex];
+
+                            
                             if (entry.UVIndex < 0 || entry.UVIndex >= uv0Chunk.Data.Count)
                             {
                                 int ibreak = 0;
