@@ -7,5 +7,6 @@
         public string DumpFileName;
         public uint LodLevel;
         public int AnimShift;
+        public int RamSize;
 
     }

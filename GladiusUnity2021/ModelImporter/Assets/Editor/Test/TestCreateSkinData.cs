@@ -64,6 +64,9 @@ public class TestCreateSkinData : Editor
 
         if (GUILayout.Button("Rebuild and Compare model"))
         {
+            m_lhsCompareGCModel = null;
+            m_rhsCompareGCModel = null;
+            
             m_displaySingle = false;
             m_originalGCModel = null;
             m_rebuiltGCModel = null;
@@ -84,7 +87,21 @@ public class TestCreateSkinData : Editor
             CommonModelData originalCommonModel = null;
             CommonModelData rebuiltCommonModel = null;
 
+            string chunkComparePath = "d:/tmp/chunk-compare";
+            
+            string chunkComparePathOriginal = chunkComparePath + "/original";
+            Directory.CreateDirectory(chunkComparePathOriginal);
 
+            string chunkComparePathOriginalWrite = chunkComparePath + "/original-write";
+            Directory.CreateDirectory(chunkComparePathOriginalWrite);
+
+            string chunkComparePathRebuiltWrite = chunkComparePath + "/rebuilt-write";
+            Directory.CreateDirectory(chunkComparePathRebuiltWrite);
+            
+            
+            StringBuilder chunkAlignmentLHS = new StringBuilder();
+            StringBuilder chunkAlignmentRHS = new StringBuilder();
+            
             byte[] originalModelReadBuffer = null;
             byte[] originalModelWriteBuffer = null;
 
@@ -97,16 +114,58 @@ public class TestCreateSkinData : Editor
                 m_originalGCModel = GCModel.ReadData(binReader, "", debugInfo);
                 m_lhsCompareGCModel = m_originalGCModel;
 
-                Debug.Log("ORIG ORDER : \n"+debugInfo.ToString());
-
-                File.WriteAllBytes("d:/tmp/test-skin-only-orig.bin",m_originalGCModel.GetChunk<SKINChunk>().RawData);
                 using (MemoryStream writeMemoryStream = new MemoryStream())
                 {
                     using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
                     {
-                        m_originalGCModel.GetChunk<SKINChunk>().ToStream(binWriter);
+                        m_originalGCModel.ToStream(binWriter);
                     }
-                    File.WriteAllBytes("d:/tmp/test-skin-only-orig-write.bin",writeMemoryStream.ToArray());
+
+                    originalModelWriteBuffer = writeMemoryStream.ToArray();
+                }
+
+                StringBuilder dsliDebugInfo = new StringBuilder();
+                dsliDebugInfo.AppendLine("DSLI");
+                m_originalGCModel.GetChunk<DSLIChunk>().DebugChunk(dsliDebugInfo);
+                dsliDebugInfo.AppendLine();
+                dsliDebugInfo.AppendLine("DSLS");
+                m_originalGCModel.GetChunk<DSLSChunk>().DebugChunk(dsliDebugInfo);
+                // dsliDebugInfo.AppendLine();
+                // dsliDebugInfo.AppendLine("DSLC");
+                // m_originalGCModel.GetChunk<DSLCChunk>().DebugChunk(dsliDebugInfo);
+                // dsliDebugInfo.AppendLine();
+                // dsliDebugInfo.AppendLine("SKIN");
+                // m_originalGCModel.GetChunk<SKINChunk>().DebugChunk(dsliDebugInfo);
+                
+                
+                File.WriteAllText($"{chunkComparePathOriginal}/dsliInfo.txt", dsliDebugInfo.ToString());
+                
+                Debug.Log("ORIG ORDER : \n"+debugInfo.ToString());
+
+
+                foreach (BaseChunk chunk in m_originalGCModel.m_chunkList)
+                {
+                    File.WriteAllBytes($"{chunkComparePathOriginal}/{new string(chunk.Signature)}.bin",chunk.RawData);
+                    chunkAlignmentLHS.Append($" {new string(chunk.Signature)} - {chunk.ReadStart} ");
+                    foreach (int val in chunk.ReadAlignments.Keys.OrderByDescending(x => x))
+                    {
+                        chunkAlignmentLHS.Append($"{val}:{chunk.ReadAlignments[val]} ,");
+                    }
+                    chunkAlignmentLHS.AppendLine();
+                }
+                
+
+                foreach (BaseChunk chunk in m_originalGCModel.m_chunkList)
+                {
+                    using (MemoryStream writeMemoryStream = new MemoryStream())
+                    {
+                        using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
+                        {
+                            chunk.ToStream(binWriter);
+                        }
+                        File.WriteAllBytes($"{chunkComparePathOriginalWrite}/{new string(chunk.Signature)}.bin",
+                            writeMemoryStream.ToArray());
+                    }
                 }
 
                 
@@ -114,16 +173,37 @@ public class TestCreateSkinData : Editor
                 {
                     using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
                     {
-                        m_originalGCModel.WriteData(binWriter);
+                        //m_originalGCModel.ToStreamRawData(binWriter);
+                        m_originalGCModel.ToStream(binWriter);
+                        
                     }
 
-                    originalModelWriteBuffer = writeMemoryStream.ToArray();
+                    File.WriteAllBytes($"{chunkComparePathOriginalWrite}/rawdata-model.bin",
+                        writeMemoryStream.ToArray());
+                    
+                    File.WriteAllBytes($"D:\\GladiusModding\\GC\\unpack\\data\\characters\\galdrf\\galdrf.pax",
+                        writeMemoryStream.ToArray());
+
+                    foreach (BaseChunk chunk in m_originalGCModel.m_chunkList)
+                    {
+                        chunkAlignmentRHS.Append($" {new string(chunk.Signature)} - {chunk.WriteStart} ");
+                        foreach (int val in chunk.WriteAlignments.Keys.OrderByDescending(x => x))
+                        {
+                            //chunkAlignmentRHS.Append($"{val}:{chunk.ReadAlignments[val]} ,");
+                            chunkAlignmentRHS.Append($"{val}:{chunk.WriteAlignments[val]} ,");
+                        }
+
+                        chunkAlignmentRHS.AppendLine();
+                    }
                 }
+
                 originalCommonModel = m_originalGCModel.ToCommon();
 
             }
 
-            
+            File.WriteAllText($"{chunkComparePathOriginal}/alignments.txt", chunkAlignmentLHS.ToString());
+            File.WriteAllText($"{chunkComparePathOriginalWrite}/alignments.txt", chunkAlignmentRHS.ToString());
+
             
             int filteredMeshCount = m_originalGCModel.CountMeshesForLodLevel(stub.LodLevel);
             m_foldOutsCompareList.Clear();
@@ -143,6 +223,22 @@ public class TestCreateSkinData : Editor
                         try
                         {
                             m_sanityCheckGCModel = GCModel.ReadData(binReader, "SanityCheck", debugInfo);
+                            string chunkComparePathSanity = chunkComparePath + "/sanity";
+                            Directory.CreateDirectory(chunkComparePathSanity);
+                            
+                            foreach (BaseChunk chunk in m_originalGCModel.m_chunkList)
+                            {
+                                using (MemoryStream writeMemoryStream = new MemoryStream())
+                                {
+                                    using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
+                                    {
+                                        chunk.ToStream(binWriter);
+                                    }
+                                    File.WriteAllBytes($"{chunkComparePathSanity}/{new string(chunk.Signature)}.bin",
+                                        writeMemoryStream.ToArray());
+                                }
+                            }
+                            
                             m_rhsCompareGCModel = m_sanityCheckGCModel;
                         }
                         catch (Exception e)
@@ -177,30 +273,47 @@ public class TestCreateSkinData : Editor
 
                     SkinnedMeshRenderer[] oldsmr =m_originalModel.transform.GetComponentsInChildren<SkinnedMeshRenderer>();
                     
-                    m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift,stub.LodLevel,null);
+                    m_rebuiltGCModel = GCModel.CreateFromGameObject(m_originalModel,(short)stub.AnimShift,stub.LodLevel,stub.RamSize,null);
 
                     if (m_rebuiltGCModel != null)
                     {
+                        m_rhsCompareGCModel = m_rebuiltGCModel;
                         
-                        using (MemoryStream writeMemoryStream = new MemoryStream())
+                        foreach (BaseChunk chunk in m_rebuiltGCModel.m_chunkList)
                         {
-                            using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
+                            using (MemoryStream writeMemoryStream = new MemoryStream())
                             {
-                                m_originalGCModel.GetChunk<SKINChunk>().ToStream(binWriter);
+                                using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
+                                {
+                                    chunk.ToStream(binWriter);
+                                }
+                                File.WriteAllBytes($"{chunkComparePathRebuiltWrite}/{new string(chunk.Signature)}.bin",
+                                    writeMemoryStream.ToArray());
                             }
-                            File.WriteAllBytes("d:/tmp/test-skin-only-rebuilt.bin",writeMemoryStream.ToArray());
                         }
 
+                        
+                        
                         byte[] buffer = null;
 
                         using (MemoryStream writeMemoryStream = new MemoryStream())
                         {
                             using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
                             {
-                                m_rebuiltGCModel.WriteData(binWriter);
+                                // m_rebuiltGCModel.GetChunk<SHDRChunk>().RawData = m_originalGCModel.GetChunk<SHDRChunk>().RawData;
+                                // m_rebuiltGCModel.GetChunk<TXTRChunk>().RawData = m_originalGCModel.GetChunk<TXTRChunk>().RawData;
+                                // m_rebuiltGCModel.GetChunk<ELEMChunk>().RawData = m_originalGCModel.GetChunk<ELEMChunk>().RawData;
+                                // m_rebuiltGCModel.GetChunk<MESHChunk>().RawData = m_originalGCModel.GetChunk<MESHChunk>().RawData;
+                                // m_rebuiltGCModel.GetChunk<UV0Chunk>().RawData = m_originalGCModel.GetChunk<UV0Chunk>().RawData;
+                                // m_rebuiltGCModel.GetChunk<DSLIChunk>().RawData = m_originalGCModel.GetChunk<DSLIChunk>().RawData;
+                                
+                                m_rebuiltGCModel.ToStream(binWriter);
+                                //m_rebuiltGCModel.ToStreamPADD(binWriter);
+                                
                             }
 
                             buffer = writeMemoryStream.ToArray();
+                            File.WriteAllBytes($"D:\\GladiusModding\\GC\\unpack\\data\\characters\\galdrf\\galdrf.pax",buffer);
                         }
 
                         if (m_lhsCompareGCModel != null && m_rhsCompareGCModel != null)
@@ -394,7 +507,21 @@ public class TestCreateSkinData : Editor
                         File.WriteAllText("d:/tmp/old-bp.txt", oldSB.ToString());
                         File.WriteAllText("d:/tmp/new-bp.txt", newSB.ToString());
 
-                        
+                     
+                
+                        StringBuilder chunkAlignmentRebuild = new StringBuilder();
+                        foreach (BaseChunk chunk in m_rebuiltGCModel.m_chunkList)
+                        {
+                            chunkAlignmentRebuild.Append($" {new string(chunk.Signature)} - {chunk.WriteStart} ");
+                            foreach (int val in chunk.WriteAlignments.Keys.OrderByDescending(x => x))
+                            {
+                                chunkAlignmentRebuild.Append($"{val}:{chunk.WriteAlignments[val]} ,");
+                            }
+
+                            chunkAlignmentRebuild.AppendLine();
+                        }
+
+                        File.WriteAllText($"{chunkComparePathRebuiltWrite}/alignments.txt", chunkAlignmentRebuild.ToString());
                         
                     }
                 }
@@ -408,16 +535,42 @@ public class TestCreateSkinData : Editor
             int counter = 0;
 
             StringBuilder outputInfo = new StringBuilder();
+            StringBuilder chunkOrderInfo = new StringBuilder();
+            StringBuilder chunkAlignmentInfo = new StringBuilder();
+            
+            
             outputInfo.AppendLine(
                 "Model,SkinData#,Flags,AnimShift,CSK1 size,CSK2 size,CSKA size,NumPacket1,Packet1Start,Packet1Size,Packet1Info,NumPacket2,Packet2Start,Packet2Size,Packet2Info");
 
+            chunkAlignmentInfo.AppendLine("Model,Chunk,256,128,64,32,16");
+            
+            
             foreach (String file in files)
             {
                 try
                 {
                     GCModel model = GCModelReader.LoadSingleModel(file, true);
-                    if (model != null)
+                    if (model != null && model.IsSkinned())
                     {
+                        int paddChunks = model.m_chunkList.FindAll(x=>x is PADDChunk).Count;
+
+                        chunkOrderInfo.Append($"{model.m_name} ({paddChunks}) ELEM({model.GetChunk<ELEMChunk>().NumElements}) MESH({model.GetChunk<MESHChunk>().NumElements}) DSLS({model.GetChunk<DSLSChunk>().NumElements})({model.GetChunk<DSLSChunk>().DisplayListHeaders.Count})  DSLI({model.GetChunk<DSLIChunk>().NumElements})({model.GetChunk<DSLIChunk>().DisplayListIndices.Count})  DSLC({model.GetChunk<DSLCChunk>().NumElements}) SKIN({model.GetChunk<SKINChunk>().SkinDataList.Count})");
+                        
+                        foreach (BaseChunk chunk in model.m_chunkList)
+                        {
+                            // chunkOrderInfo.Append(new String(chunk.Signature));
+                            // //if (chunk is PADDChunk)
+                            // {
+                            //     chunkOrderInfo.Append($"({chunk.Length}) [16:{chunk.ReadStart%16} ,32:{chunk.ReadStart%32} , 64:{chunk.ReadStart%64}, 128:{chunk.ReadStart%128}]");
+                            // }
+                            // chunkOrderInfo.Append(",");
+                            
+                            chunkAlignmentInfo.AppendLine($"{model.m_name},{new string(chunk.Signature)},{chunk.ReadAlignments[256]},{chunk.ReadAlignments[128]},{chunk.ReadAlignments[64]},{chunk.ReadAlignments[32]},{chunk.ReadAlignments[16]}");
+                        }
+
+                        chunkOrderInfo.AppendLine();
+                        
+                        
                         models.Add(model);
                         if (model.GetChunk<SKINChunk>() != null)
                         {
@@ -448,6 +601,9 @@ public class TestCreateSkinData : Editor
             }
 
             File.WriteAllText(stub.DumpFileName, outputInfo.ToString());
+            File.WriteAllText("d:/tmp/skinned-model-chunk-order.txt", chunkOrderInfo.ToString());
+            File.WriteAllText("d:/tmp/skinned-model-chunk-alignment.csv", chunkAlignmentInfo.ToString());
+            
         }
 
 

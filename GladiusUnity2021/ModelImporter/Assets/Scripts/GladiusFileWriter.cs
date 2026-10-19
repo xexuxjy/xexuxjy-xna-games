@@ -76,7 +76,7 @@ public static class GladiusFileWriter
 
     
 
-    public static int GetPadValue(int total)
+    public static int GetChunkPadValue(int total)
     {
         int pad = total % AlignmentValue;
         if (pad != 0)
@@ -99,31 +99,32 @@ public static class GladiusFileWriter
     }
 
     
-    public static void PadIfNeeded(BinaryWriter writer)
+    public static void AddPadChunkAlign32(BinaryWriter writer)
     {
         //return;
-        int padValue = 64;
+        int padValue = 32;
         if (writer.BaseStream.Position % padValue == 0)
         {
-            WritePADD(writer);
+            //WritePADD(writer);
+            new PADDChunk().ToStream(writer);
         }
     }
     
-    public static void WritePADD(BinaryWriter writer)
-    {
-        WriteASCIIString(writer, "PADD");
-        writer.Write(HeaderSize);
-        writer.Write(0x00);
-        writer.Write(0x00);
-    }
-
-    public static void WriteEND(BinaryWriter writer)
-    {
-        GladiusFileWriter.WriteASCIIString(writer, "END.");
-        writer.Write(GladiusFileWriter.HeaderSize); // number of elements.
-        writer.Write(0);
-        writer.Write(0);
-    }
+    // public static void WritePADD(BinaryWriter writer)
+    // {
+    //     WriteASCIIString(writer, "PADD");
+    //     writer.Write(HeaderSize);
+    //     writer.Write(0x00);
+    //     writer.Write(0x00);
+    // }
+    //
+    // public static void WriteEND(BinaryWriter writer)
+    // {
+    //     GladiusFileWriter.WriteASCIIString(writer, "END.");
+    //     writer.Write(GladiusFileWriter.HeaderSize); // number of elements.
+    //     writer.Write(0);
+    //     writer.Write(0);
+    // }
 
     public static void WriteHEDR(BinaryWriter writer)
     {

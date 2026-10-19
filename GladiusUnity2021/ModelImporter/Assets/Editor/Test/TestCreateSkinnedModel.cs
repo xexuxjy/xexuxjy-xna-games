@@ -20,14 +20,14 @@ public class TestCreateSkinnedModel : Editor
 
         if (GUILayout.Button("Create GC Model"))
         {
-            GCModel gcModel = GCModel.CreateFromGameObject(stub.OriginalModel,(short)stub.AnimShift,stub.LodLevel,stub.BoneRoot);
+            GCModel gcModel = GCModel.CreateFromGameObject(stub.OriginalModel,(short)stub.AnimShift,stub.LodLevel,stub.RamSize,stub.BoneRoot);
             byte[] buffer = null;
 
             using (MemoryStream writeMemoryStream = new MemoryStream())
             {
                 using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
                 {
-                    gcModel.WriteData(binWriter);
+                    gcModel.ToStream(binWriter);
                 }
                 writeMemoryStream.Flush();
                 buffer = writeMemoryStream.ToArray();
@@ -50,6 +50,32 @@ public class TestCreateSkinnedModel : Editor
                                 rebuiltCommonModel, out Dictionary<BoneNode, GameObject> boneObjectMapRebuilt);
                             rebuiltModel.name = stub.OriginalModel.name + "-Rebuilt";
                             rebuiltModel.transform.position = new Vector3(0, 3, 0);
+                            
+                            SkinnedMeshRenderer oldSMR = stub.OriginalModel.GetComponentInChildren<SkinnedMeshRenderer>();
+                            SkinnedMeshRenderer newSMR = rebuiltModel.GetComponentInChildren<SkinnedMeshRenderer>();
+
+                            Mesh oldMesh = oldSMR.sharedMesh;
+                            Mesh newMesh = newSMR.sharedMesh;
+                            
+                            StringBuilder oldSB = new StringBuilder();
+                            StringBuilder newSB = new StringBuilder();
+
+                            for (int i = 0; i < oldMesh.vertices.Length; i++)
+                            {
+                                oldSB.AppendLine(oldMesh.vertices[i].ToString());
+                                newSB.AppendLine(newMesh.vertices[i].ToString());
+                            }
+
+                            for (int i = 0; i < oldMesh.boneWeights.Length; i++)
+                            {
+                                oldSB.AppendLine(oldMesh.boneWeights[i].DebugInfo());
+                                newSB.AppendLine(newMesh.boneWeights[i].DebugInfo());
+                            }
+                            
+                            
+                            File.WriteAllText("d:/tmp/old-smr.txt", oldSB.ToString());
+                            File.WriteAllText("d:/tmp/new-smr.txt", newSB.ToString());
+                            
                         }
                     }
                     catch (Exception e)

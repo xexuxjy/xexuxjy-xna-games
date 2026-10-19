@@ -113,7 +113,7 @@ public static class AnimationUtils
         //GladiusFileWriter.PadIfNeeded(writer);
         WriteOQUA(binWriter, transformList,timeData,rotationData);
         //GladiusFileWriter.PadIfNeeded(writer);
-        GladiusFileWriter.WriteEND(binWriter);
+        new ENDChunk().ToStream(binWriter);
     }
 
     // public static void WriteData(BinaryWriter writer, GladiusSimpleAnim simpleAnim)
@@ -262,7 +262,7 @@ public static class AnimationUtils
         
         total += runningTotal;
 
-        total = GladiusFileWriter.GetPadValue(total);
+        total = GladiusFileWriter.GetChunkPadValue(total);
 
         
         GladiusFileWriter.WriteASCIIString(writer, "BLNM");
@@ -339,7 +339,7 @@ public static class AnimationUtils
     {
         int total = GladiusFileWriter.HeaderSize;
         total += (points.Count * 12);
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetChunkPadValue(total);
         int numPadBytes = paddedTotal - total; 
 
 
@@ -368,7 +368,7 @@ public static class AnimationUtils
         int total = GladiusFileWriter.HeaderSize;
         total += positionData.Count * anim_OptPosTrack.Size;
 
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetChunkPadValue(total);
         int numPadBytes = paddedTotal - total; 
 
         GladiusFileWriter.WriteASCIIString(writer, "OPTR");
@@ -398,7 +398,7 @@ public static class AnimationUtils
         int total = GladiusFileWriter.HeaderSize;
         total += rotationData.Count * anim_OptRotTrack.Size;
         
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetChunkPadValue(total);
         int numPadBytes = paddedTotal - total; 
 
 
@@ -450,7 +450,7 @@ public static class AnimationUtils
 
         total += (totalElements * optVec.Size);
         
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetChunkPadValue(total);
         int numPadBytes = paddedTotal - total; 
 
 
@@ -493,7 +493,7 @@ public static class AnimationUtils
 
         total += (totalElements * optQuat.Size);
         
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetChunkPadValue(total);
         int numPadBytes = paddedTotal - total; 
 
         
@@ -547,7 +547,7 @@ public static class AnimationUtils
 
         total += (totalElements * 2);
         
-        int paddedTotal = GladiusFileWriter.GetPadValue(total);
+        int paddedTotal = GladiusFileWriter.GetChunkPadValue(total);
         int numPadBytes = paddedTotal - total; 
         
 

@@ -985,11 +985,11 @@ namespace GCTextureTools
 
                     GladiusFileWriter.WritePFHD(binWriter, textureInfoList);
 
-                    GladiusFileWriter.PadIfNeeded(binWriter);
+                    GladiusFileWriter.AddPadChunkAlign32(binWriter);
 
                     GladiusFileWriter.WritePTDT(binWriter, textureInfoList, dataList);
 
-                    GladiusFileWriter.WriteEND(binWriter);
+                    new ENDChunk().ToStream(binWriter);
                 }
             }
         }

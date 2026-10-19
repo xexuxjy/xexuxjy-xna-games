@@ -666,8 +666,8 @@ public static class Common
     }
     public static void WriteVector2BEShort(BinaryWriter bw,IndexedVector2 v)
     {
-        short x = (short)(v.X/(float)UInt16.MaxValue);
-        short y = (short)(v.Y/(float)UInt16.MaxValue);
+        short x = (short)(v.X*(float)UInt16.MaxValue);
+        short y = (short)(v.Y*(float)UInt16.MaxValue);
         
         WriteBigEndian(bw,x);
         WriteBigEndian(bw,y);
@@ -1072,7 +1072,11 @@ public static class Common
                 return 0f;
         }
     }
-    
+
+    public static String DebugInfo(this BoneWeight bw)
+    {
+        return $"{bw.boneIndex0} , {bw.boneIndex1} ,  {bw.boneIndex2} , {bw.boneIndex3} , {bw.weight0} , {bw.weight1} , {bw.weight2} , {bw.weight3}";
+    }
     
     
 }
