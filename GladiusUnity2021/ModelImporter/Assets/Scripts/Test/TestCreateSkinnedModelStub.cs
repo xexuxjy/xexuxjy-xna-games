@@ -9,4 +9,9 @@ public class TestCreateSkinnedModelStub : MonoBehaviour
     public int AnimShift;
     public string OutputPath;
     public int RamSize;
+    public bool IgnoreCSKA;
+    [Range(1,4)]
+    public int MaxWeights;
+
+    public int MaxVertices;
 }

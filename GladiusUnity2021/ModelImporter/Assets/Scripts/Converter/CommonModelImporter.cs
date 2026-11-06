@@ -854,135 +854,6 @@ public static class CommonModelImporter
     }
 
 
-    // public static int CountActiveWeights(BoneWeight bw)
-    // {
-    //     int count = 0;
-    //     if (bw.weight0 > 0f)
-    //     {
-    //         count++;
-    //     }
-    //
-    //     if (bw.weight1 > 0f)
-    //     {
-    //         count++;
-    //     }
-    //
-    //     if (bw.weight2 > 0f)
-    //     {
-    //         count++;
-    //     }
-    //
-    //     if (bw.weight3 > 0f)
-    //     {
-    //         count++;
-    //     }
-    //
-    //     return count;
-    // }
-
-
-    // public static BoneWeight RenormaliseWeights(BoneWeight bw, int maxWeights)
-    // {
-    //     BoneWeight b = bw;
-    //     float sum = bw.weight0;
-    //     if (maxWeights > 1)
-    //     {
-    //         sum += bw.weight1;
-    //     }
-    //
-    //     if (maxWeights > 2)
-    //     {
-    //         sum += bw.weight2;
-    //     }
-    //
-    //     if (maxWeights > 3)
-    //     {
-    //         sum += bw.weight3;
-    //     }
-    //
-    //     float scalar = 1.0f / sum;
-    //
-    //     if (maxWeights == 1)
-    //     {
-    //         bw.weight0 *= scalar;
-    //         bw.weight1 = 0f;
-    //         bw.weight2 = 0f;
-    //         bw.weight3 = 0f;
-    //     }
-    //     else if (maxWeights == 2)
-    //     {
-    //         bw.weight0 *= scalar;
-    //         bw.weight1 *= scalar;
-    //         bw.weight2 = 0f;
-    //         bw.weight3 = 0f;
-    //     }
-    //     else if (maxWeights == 3)
-    //     {
-    //         bw.weight0 *= scalar;
-    //         bw.weight1 *= scalar;
-    //         bw.weight2 *= scalar;
-    //         bw.weight3 = 0f;
-    //     }
-    //
-    //     return bw;
-    // }
-
-
-    // public static GameObject CreateGameObject(CommonModelData commonModel)
-    // {
-    //     GameObject rootGO = null;
-    //     Dictionary<BoneNode,GameObject> boneObjectMap = new Dictionary<BoneNode, GameObject>();
-    //
-    //     GameObject combinedPrefab = new GameObject(commonModel.Name);
-    //     GameObject gladiusToUnity = new GameObject("GladiusToUnity");
-    //     
-    //     gladiusToUnity.transform.SetParent(combinedPrefab.transform, false);
-    //
-    //     if (commonModel.Skinned)
-    //     {
-    //         // create transform tree?
-    //         foreach (BoneNode bn in commonModel.BoneList)
-    //         {
-    //             GameObject go = new GameObject(bn.UniqueName);
-    //             boneObjectMap[bn] = go;
-    //             Quaternion q = bn.rotation;
-    //
-    //             if (bn.Index != bn.ParentIndex)
-    //             {
-    //                 GameObject parentGo = boneObjectMap[bn.parent];
-    //                 go.transform.SetParent(parentGo.transform, false);
-    //             }
-    //
-    //             go.transform.localPosition = bn.offset;
-    //             go.transform.localRotation = bn.rotation;
-    //         }
-    //
-    //         rootGO = boneObjectMap[commonModel.BoneList[0]];
-    //
-    //
-    //         String noExtensionName = commonModel.Name.Replace(".mdl", "");
-    //
-    //         bool isCrowdAnim = noExtensionName.StartsWith("crowd");
-    //
-    //
-    //         rootGO.transform.SetParent(gladiusToUnity.transform, false);
-    //     }
-    //
-    //
-    //     int everyMeshCounter = 0;
-    //     int everyMeshLowBound = -1;
-    //     int everyMeshHighBound = everyMeshLowBound + 300;
-    //
-    //     int counter = 0;
-    //     foreach (CommonMeshData mesh in commonModel.CommonMeshData)
-    //     {
-    //         List<CommonMeshData> commonMeshDataList = new List<CommonMeshData>();
-    //         commonMeshDataList.Add(mesh);
-    //         // CommonModelImporter.Process(commonModel, outputHierarchy, commonMeshDataList, false, splitPrefab, gladiusToUnity,
-    //         //     counter++, boneObjectMap);
-    //     }
-    //
-    // }
     public static uint Align4ByteBoundary(uint input)
     {
         uint comparator = 4;
@@ -2153,6 +2024,11 @@ public abstract class BaseChunk
         }
     }
 
+    public virtual void DebugChunk(StringBuilder debugInfo)
+    {
+        
+    }
+    
 }
 
 
@@ -3031,6 +2907,25 @@ public class CNTRChunk : BaseChunk
         GladiusFileWriter.WriteNull(binWriter,(int)diff);
         WriteEnd = binWriter.BaseStream.Position;
     }
+
+    public override void DebugChunk(StringBuilder debugInfo)
+    {
+        if (Positions.Count > 0)
+        {
+            debugInfo.AppendLine($"Center [{Positions[0]}");
+        }
+        if (Positions.Count > 2)
+        {
+            debugInfo.AppendLine($"Min [{Positions[1]}");
+            debugInfo.AppendLine($"Max [{Positions[2]}");
+        }
+
+        for (int i = 3; i < Positions.Count; i++)
+        {
+            debugInfo.AppendLine($"[{i}] [{Positions[i]}");
+        }
+        
+    }
 }
 
 
@@ -3689,16 +3584,61 @@ public class SKINChunk : BaseChunk
         WriteEnd = binWriter.BaseStream.Position;
     }
     
-    public void DebugChunk(StringBuilder sb)
-    {
-        for(int i=0;i<SkinDataList.Count;i++)
-        {
-            sb.AppendLine($"[{i}] [{SkinDataList[i].Size}]");
-        }
-        
-    }
+    // public override void DebugChunk(StringBuilder sb)
+    // {
+    //     for(int i=0;i<SkinDataList.Count;i++)
+    //     {
+    //         sb.AppendLine($"[{i}] [{SkinDataList[i].Size}]");
+    //     }
+    //     
+    // }
 
-    
+    public override void DebugChunk(StringBuilder debugInfo)
+    {
+        int count = 0;
+        foreach (SkinData skinData in SkinDataList)
+        {
+            
+            
+            string packet1Info = "";
+            for (int i = 0; i < skinData.NumPackets1; i++)
+            {
+                packet1Info += $"[{skinData.Packet1Starts[i]}->{skinData.Packet1Sizes[i]}]**";
+            }
+
+            string packet2Info = "";
+            for (int i = 0; i < skinData.NumPackets2; i++)
+            {
+                packet2Info += $"[{skinData.Packet2Starts[i]}->{skinData.Packet2Sizes[i]}]**";
+            }
+
+            debugInfo.AppendLine(
+                "*************************************************************************************");
+            
+            debugInfo.AppendLine(
+                $", {count++}, {skinData.Flags},{skinData.AnimShift},{skinData.CSK1List.Count},{skinData.CSK2List.Count},{skinData.CSKAList.Count},{skinData.NumPackets1},{skinData.PacketStart1},{skinData.PacketSize1},{packet1Info},{skinData.NumPackets2},{skinData.PacketStart2},{skinData.PacketSize2},{packet2Info}");
+
+            debugInfo.AppendLine("CSK1");
+            foreach (CSK1 csk in skinData.CSK1List)
+            {
+                csk.DebugInfo(debugInfo);
+            }
+
+            debugInfo.AppendLine("\nCSK2");
+            foreach (CSK2 csk in skinData.CSK2List)
+            {
+                csk.DebugInfo(debugInfo);
+            }
+
+            debugInfo.AppendLine("\nCSKA");
+            foreach (CSKA csk in skinData.CSKAList)
+            {
+                csk.DebugInfo(debugInfo);
+            }
+            
+            
+        }
+    }
 }
 
 // the skindata structures match the official nintendo ones with the idea of 1List,2List and Accumulations.
@@ -4281,6 +4221,23 @@ public class CSK1
         SKINChunk.RelocateAndWrite(writer, vertSrc);
         Common.WriteBigEndian(writer, vertDst);
     }
+
+    public void DebugInfo(StringBuilder sb)
+    {
+        sb.AppendLine($" Bone[{idxBone}] Count[{count}]");
+        sb.AppendLine("--------------------");
+        sb.AppendLine("---POSITIONS---");
+        foreach (Vector3 v in ExtractedPositions)
+        {
+            sb.AppendLine(v.ToString());
+        }
+        sb.AppendLine("---NORMALS---");
+        foreach (Vector3 v in ExtractedNormals)
+        {
+            sb.AppendLine(v.ToString());
+        }
+        
+    }
 }
 
 
@@ -4321,6 +4278,25 @@ public class CSK2
         SKINChunk.RelocateAndWrite(writer,vertSrc);
         Common.WriteBigEndian(writer,vertDst);
     }
+    
+    public void DebugInfo(StringBuilder sb)
+    {
+        sb.AppendLine($" Bone0 [{idxBone[0]}]  Bone1[{idxBone[1]}] Count[{count}]");
+        sb.AppendLine("--------------------");
+        sb.AppendLine("---POSITIONS---");
+        foreach (Vector3 v in ExtractedPositions)
+        {
+            sb.AppendLine(v.ToString());
+        }
+        sb.AppendLine("---NORMALS---");
+        foreach (Vector3 v in ExtractedNormals)
+        {
+            sb.AppendLine(v.ToString());
+        }
+        
+    }
+
+    
 }
 
 
@@ -4366,6 +4342,13 @@ public class CSKA
         SKINChunk.RelocateAndWrite(writer,idxDst);
         SKINChunk.RelocateAndWrite(writer,vertSrc);
     }
+    
+    public void DebugInfo(StringBuilder sb)
+    {
+        sb.AppendLine($" Bone[{idxBone}] Count[{count}]");
+    }
+
+    
 }
 
 
@@ -4625,7 +4608,7 @@ public class CBoneData
 
 public static class SkinBuilder
 {
-    public static SkinData PrepareData(SkinnedMeshRenderer skinnedMeshRenderer, short animShift,int numBones)
+    public static SkinData PrepareData(SkinnedMeshRenderer skinnedMeshRenderer, short animShift,int numBones,bool ignoreCSKA,int maxBoneWeights,int maxVertices)
     {
         
         List<Vector3> vertices = new List<Vector3>();
@@ -4642,17 +4625,15 @@ public static class SkinBuilder
         {
             normals.Add(skinnedMeshRenderer.transform.TransformVector(norm));
         }
-        
-        //normals.AddRange(skinnedMeshRenderer.sharedMesh.normals);
 
         List<BoneWeight> boneWeights = new List<BoneWeight>();
         boneWeights.AddRange(skinnedMeshRenderer.sharedMesh.boneWeights);
 
-        return PrepareData(vertices, normals, boneWeights,animShift,numBones);
+        return PrepareData(vertices, normals, boneWeights,animShift,numBones,ignoreCSKA,maxBoneWeights,maxVertices);
     }
 
     public static SkinData PrepareData(List<Vector3> vertices, List<Vector3> normals,
-        List<BoneWeight> boneWeights,short animShift,int numBones)
+        List<BoneWeight> boneWeights,short animShift,int numBones,bool ignoreCSKA,int maxBoneWeights,int maxVertices)
     {
         // dma size , maybe 16k 
         const int size_vector = 2 * 3;
@@ -4673,12 +4654,19 @@ public static class SkinBuilder
 
         int numVerts = vertices.Count();
 
-        int[] pRelocate = new int[numVerts];
+        if (maxVertices > 0)
+        {
+            //numVerts = Math.Min(numVerts, maxVertices);
+        }
+
+
 
 
         //const bool bBiTan = pI->aBinIds && pI->aTanIds;
         int numNormals = 1;
         int size_pos_norm = (size_vector + size_normal) * numNormals;
+
+        int[] pRelocate = new int[numVerts];
 
         //init reloc table
         for (int i = 0; i < numVerts; i++)
@@ -4686,20 +4674,28 @@ public static class SkinBuilder
             pRelocate[i] = i;
         }
 
+        
         for (int i = 0; i < numBones; i++)
         {
             idxBones[i] = new CBoneData(numBones);
         }
 
 
+        List<BoneWeight> reweightedBones = new List<BoneWeight>();
+        foreach (BoneWeight bw in boneWeights)
+        {
+            reweightedBones.Add(bw.RenormaliseWeights(maxBoneWeights));
+        }
+        
+
         // lets build a tree of onzies and twozies
         for (int iv = 0; iv < numVerts; iv++)
         {
-            int vertexBoneCount = boneWeights[iv].CountWeights();
+            int vertexBoneCount = reweightedBones[iv].CountWeights();
 
             if (vertexBoneCount == 1)
             {
-                int idx_bone = boneWeights[iv].boneIndex0;
+                int idx_bone = reweightedBones[iv].boneIndex0;
 
                 Debug.Assert(idx_bone < numBones);
                 // all the vertices that only have a single weight on that idx bone.    
@@ -4707,14 +4703,14 @@ public static class SkinBuilder
             }
             else // note anything above one is counted as a twozie (with possible accumulations)
             {
-                int idx_bone = boneWeights[iv].boneIndex0;
+                int idx_bone = reweightedBones[iv].boneIndex0;
                 Debug.Assert(idx_bone < numBones);
 
                 List<List<int>> ar = idxBones[idx_bone].twozies;
 
                 //ar.resize( numBones );
 
-                int idx_bone2 = boneWeights[iv].boneIndex1;
+                int idx_bone2 = reweightedBones[iv].boneIndex1;
                 Debug.Assert(idx_bone2 < numBones);
 
                 ar[idx_bone2].Add(iv);
@@ -4723,8 +4719,13 @@ public static class SkinBuilder
 
         int kMaxVertCount = SKINChunk.sk_maxPacketSizeSafe / size_pos_norm;
 
+        kMaxVertCount = 412;
+        
+        int maxVerticesReached = 0;
+        
+
         // do onezies
-        for (int idx_bone = 0; idx_bone < numBones; idx_bone++)
+        for (int idx_bone = 0; idx_bone < numBones; idx_bone++) 
         {
             CBoneData bd = idxBones[idx_bone];
             int vert_count = bd.onezies.Count();
@@ -4741,6 +4742,7 @@ public static class SkinBuilder
             data.count = 0;
             for (int j = 0; j < vert_count; j++)
             {
+                maxVerticesReached = Math.Max(maxVerticesReached, nn);
                 if (nn > kMaxVertCount)
                 {
                     // finalize last packet
@@ -4800,6 +4802,8 @@ public static class SkinBuilder
             for (int i = 1; i < onezies.Count; i++)
             {
                 ushort vert_count = onezies[i].count;
+                maxVerticesReached = Math.Max(maxVerticesReached, (nn + vert_count));
+                
                 if ((nn + vert_count) > kMaxVertCount)
                 {
                     packets1.Add(packet_start);
@@ -4863,8 +4867,8 @@ public static class SkinBuilder
 
                     data.vertSrc.Add((ushort)idx);
 
-                    data.weights.Add((byte)(255f * boneWeights[idx].weight0));
-                    data.weights.Add((byte)(255f * boneWeights[idx].weight1));
+                    data.weights.Add((byte)(255f * reweightedBones[idx].weight0));
+                    data.weights.Add((byte)(255f * reweightedBones[idx].weight1));
                 }
 
                 // finalize last packet
@@ -4891,7 +4895,8 @@ public static class SkinBuilder
             twozies[max_id] = temp;
         }
 
-        twozies = twozies.OrderByDescending(x => x.count).ThenBy(y => y.idxBone[0]).ThenBy(y => y.idxBone[1]).ToList();
+        twozies = twozies.OrderByDescending(x => x.count).ThenBy(y => y.idxBone[0]).ThenByDescending(y => y.idxBone[1]).ToList();
+        //twozies = twozies.OrderByDescending(x => x.count).ThenBy(y => y.idxBone[0]).ThenBy(y => y.idxBone[1]).ToList();
 
         //== build packets
         List<ushort> packets2 = new List<ushort>();
@@ -4931,36 +4936,39 @@ public static class SkinBuilder
             }
         }
 
-        for (int i = 0; i < twozies.Count(); i++)
+        if (!ignoreCSKA)
         {
-            CTwozie data = twozies[i];
-            data.idx_start = cur_vert;
-            for (int j = 0; j < data.count; j++)
+            for (int i = 0; i < twozies.Count(); i++)
             {
-                ushort idx = data.vertSrc[j];
-
-                int weightCount = boneWeights[idx].CountWeights();
-                if (weightCount >= 3)
+                CTwozie data = twozies[i];
+                data.idx_start = cur_vert;
+                for (int j = 0; j < data.count; j++)
                 {
-                    int boneIndex = boneWeights[idx].boneIndex2;
-                    
-                    CAccList accData = acclist[boneIndex];
-                    accData.vertSrc.Add(idx);
-                    accData.weight.Add((byte)(255f * boneWeights[idx].weight2));
-                    accData.idxVert.Add(cur_vert);
-                }
+                    ushort idx = data.vertSrc[j];
 
-                if (weightCount == 4)
-                {
-                    int boneIndex = boneWeights[idx].boneIndex3;
-                    
-                    CAccList accData = acclist[boneIndex];
-                    accData.vertSrc.Add(idx);
-                    accData.weight.Add((byte)(255f * boneWeights[idx].weight3));
-                    accData.idxVert.Add(cur_vert);
-                }
+                    int weightCount = reweightedBones[idx].CountWeights();
+                    if (weightCount >= 3)
+                    {
+                        int boneIndex = reweightedBones[idx].boneIndex2;
 
-                pRelocate[idx] = cur_vert++;
+                        CAccList accData = acclist[boneIndex];
+                        accData.vertSrc.Add(idx);
+                        accData.weight.Add((byte)(255f * reweightedBones[idx].weight2));
+                        accData.idxVert.Add(cur_vert);
+                    }
+
+                    if (weightCount == 4)
+                    {
+                        int boneIndex = reweightedBones[idx].boneIndex3;
+
+                        CAccList accData = acclist[boneIndex];
+                        accData.vertSrc.Add(idx);
+                        accData.weight.Add((byte)(255f * reweightedBones[idx].weight3));
+                        accData.idxVert.Add(cur_vert);
+                    }
+
+                    pRelocate[idx] = cur_vert++;
+                }
             }
         }
 
@@ -5010,6 +5018,8 @@ public static class SkinBuilder
         // Checkme
         memsize = CommonModelImporter.Align32ByteBoundary(memsize);
 
+        memsize += 32;
+        
         uint positionCounter = 0;
 
         SkinData skinData = new SkinData();
@@ -5104,6 +5114,7 @@ public static class SkinBuilder
             {
                 byte b1 = twozie.weights[j];
                 byte b2 = twozie.weights[j + 1];
+                
                 float f1 = b1 / 255f;
                 float f2 = b2 / 255f;
                 csk2.ExtractedWeightsBytes.Add((b1, b2));

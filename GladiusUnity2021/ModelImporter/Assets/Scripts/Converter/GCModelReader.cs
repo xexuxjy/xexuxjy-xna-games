@@ -109,7 +109,7 @@ public class GCModel : BaseModel
         }
     }
 
-    public static GCModel CreateFromGameObject(GameObject gameObj, short animShift, uint lodLevel, int ramSize,Transform boneRoot)
+    public static GCModel CreateFromGameObject(GameObject gameObj, short animShift, uint lodLevel, int ramSize,Transform boneRoot,bool ignoreCSKA,int maxWeights,int maxVertices)
     {
         // not valid
         if (gameObj == null)
@@ -177,7 +177,7 @@ public class GCModel : BaseModel
             foreach (SkinnedMeshRenderer skinnedMeshRenderer in skinnedMeshRenderers)
             {
                 SkinData skinData = SkinBuilder.PrepareData(skinnedMeshRenderer, animShift,
-                    model.GetChunk<SKELChunk>().BoneList.Count);
+                    model.GetChunk<SKELChunk>().BoneList.Count,ignoreCSKA,maxWeights,maxVertices);
 
                 if (skinData != null)
                 {
@@ -293,11 +293,27 @@ public class GCModel : BaseModel
             GameObject gameObject = gameObjects[m];
             Material material = materials[m];
 
+            int localMaxVertices = maxVertices;
+            
+            if (localMaxVertices <= 0)
+            {
+                localMaxVertices = mesh.vertices.Length;
+            }
+            
             DisplayListHeader dlh = new DisplayListHeader();
             int[] triangleOrder = new[] { 0, 2, 1 };
 
             for (int i = 0; i < mesh.triangles.Length; i += 3)
             {
+                int index1 = i + triangleOrder[0];
+                int index2 = i + triangleOrder[1];
+                int index3 = i + triangleOrder[2];
+
+                if (mesh.triangles[index1] >= localMaxVertices || mesh.triangles[index2] >= localMaxVertices || mesh.triangles[index3] >= localMaxVertices)
+                {
+                    continue;
+                }
+                
                 foreach (int order in triangleOrder)
                 {
                     int adjustedPoint = i + order;
@@ -418,12 +434,13 @@ public class GCModel : BaseModel
     {
         int count = 0;
         MESHChunk meshChunk = GetChunk<MESHChunk>();
-        foreach (PaxElement paxElement in meshChunk.PaxElements)
+        DSLCChunk dslcChunk = GetChunk<DSLCChunk>();
+        
+        for(int i=0;i<meshChunk.PaxElements.Count;i++)
         {
-            //if (lodLevel == 0 || (paxElement.SelectSetMask & lodLevel) != 0)
-            if ((paxElement.SelectSetMask & lodLevel) == lodLevel)
+            if ((meshChunk.PaxElements[i].SelectSetMask & lodLevel) == lodLevel)
             {
-                count++;
+                count += dslcChunk.DisplayListCounts[i];
             }
         }
 
@@ -540,13 +557,27 @@ public class GCModel : BaseModel
     {
         int displayListPosition = 0;
 
-        for(int meshCount = 0;meshCount<meshChunk.NumElements;meshCount++)
+        Dictionary<int,List<int>> meshToDLSS = new Dictionary<int, List<int>>();
+        for (int meshCount = 0; meshCount < meshChunk.NumElements; meshCount++)
         {
+            List<int> dslsIndices = new List<int>();
+            meshToDLSS.Add(meshCount, dslsIndices);
             for (int displayListCount = 0;
                  displayListCount < dslcChunk.DisplayListCounts[meshCount];
                  displayListCount++)
             {
-                DisplayListHeader dlh = dslsChunk.DisplayListHeaders[displayListPosition];
+                dslsIndices.Add(displayListPosition++);                
+            }
+        }
+
+        
+        for(int meshCount = 0;meshCount<meshChunk.NumElements;meshCount++)
+        {
+            List<int> dslsIndices = meshToDLSS[meshCount];
+
+            foreach(int dslsIndex in dslsIndices)
+            {
+                DisplayListHeader dlh = dslsChunk.DisplayListHeaders[dslsIndex];
 
                 CommonMeshData commonMeshData = new CommonMeshData();
                 commonModelData.CommonMeshData.Add(commonMeshData);
@@ -607,97 +638,120 @@ public class GCModel : BaseModel
         int vertexCount = 0;
         int displayListPosition = 0;
 
-        for(int meshCount = 0;meshCount<meshChunk.NumElements;meshCount++)
+        Dictionary<int,List<int>> meshToDLSS = new Dictionary<int, List<int>>();
+        for (int meshCount = 0; meshCount < meshChunk.NumElements; meshCount++)
         {
+            List<int> dslsIndices = new List<int>();
+            meshToDLSS.Add(meshCount, dslsIndices);
             for (int displayListCount = 0;
                  displayListCount < dslcChunk.DisplayListCounts[meshCount];
                  displayListCount++)
             {
-                DisplayListHeader dlh = dslsChunk.DisplayListHeaders[displayListPosition];
+                dslsIndices.Add(displayListPosition++);                
+            }
+        }
+
+        for(int meshCount = 0;meshCount<meshChunk.NumElements;meshCount++)
+        {
+            uint mask = meshChunk.PaxElements[meshCount].SelectSetMask;
+            if ((mask & lodLevel) == lodLevel)
+            {
+                CommonMeshData commonMeshData = new CommonMeshData();
+                commonModelData.CommonMeshData.Add(commonMeshData);
+
+                commonMeshData.Name = m_name;
+                commonMeshData.Index = meshCount;
+                commonMeshData.MaterialId = (int)meshChunk.PaxElements[meshCount].MaterialId;
+                commonMeshData.LodLevel = lodLevel;
+
+                List<int> meshIndices = new List<int>();
+                commonModelData.IndexDataList.Add(meshIndices);
+                commonMeshData.Indices = meshIndices;
+
+                SkinData skinData = skinChunk.SkinDataList[meshCount];
+                List<(Vector3, List<(int, float)>)> positionAndWeights = new List<(Vector3, List<(int, float)>)>();
+                List<Vector3> normals = new List<Vector3>();
+                // build all the skin data into temp lists
+                foreach (CSK1 csk in skinData.CSK1List)
+                {
+                    foreach (Vector3 v3 in csk.ExtractedPositions)
+                    {
+                        List<(int, float)> weights = new List<(int, float)>();
+                        weights.Add((csk.idxBone, 1f));
+                        positionAndWeights.Add((v3, weights));
+                    }
+
+                    foreach (Vector3 v3 in csk.ExtractedNormals)
+                    {
+                        normals.Add(v3);
+                    }
+                }
+
+                foreach (CSK2 csk in skinData.CSK2List)
+                {
+                    int count = 0;
+                    foreach (Vector3 v3 in csk.ExtractedPositions)
+                    {
+                        List<(int, float)> weights = new List<(int, float)>();
+                        (float, float) weight = csk.ExtractedWeightsFloats[count];
+
+                        weights.Add((csk.idxBone[0], weight.Item1));
+                        weights.Add((csk.idxBone[1], weight.Item2));
+
+                        positionAndWeights.Add((v3, weights));
+                        count++;
+                    }
+
+                    foreach (Vector3 v3 in csk.ExtractedNormals)
+                    {
+                        normals.Add(v3);
+                    }
+                }
+
+                foreach (CSKA csk in skinData.CSKAList)
+                {
+                    int n = csk.ExtractedDestinationIndices.Count;
+                    for (int k = 0; k < n; k++)
+                    {
+                        int dstIndex = csk.ExtractedDestinationIndices[k];
+
+                        positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2
+                            .Add((csk.idxBone, csk.ExtractedWeightsFloats[k]));
+                    }
+                }
+
+                // sort positions and weights so that weights are in descending order to keep unity happy.
+                // for (int i = 0; i < positionAndWeights.Count; i++)
+                // {
+                //     var entry = positionAndWeights[i];
+                //     var list = entry.Item2;
+                //     var orderedList = new List<(int,float)>();
+                //     orderedList.AddRange(list.OrderByDescending(x => x.Item2));
+                //     positionAndWeights[i] = (positionAndWeights[i].Item1, orderedList);
+                // }
 
                 int maxPositionIndex = -1;
-                foreach (DisplayListEntry entry in dlh.entries)
+
+                List<int> dslsIndices = meshToDLSS[meshCount];
+
+                foreach(int dslsIndex in dslsIndices)
                 {
-                    maxPositionIndex = Math.Max(maxPositionIndex, entry.PosIndex);
+                    DisplayListHeader dlh = dslsChunk.DisplayListHeaders[dslsIndex];
+
+                    foreach (DisplayListEntry entry in dlh.entries)
+                    {
+                        maxPositionIndex = Math.Max(maxPositionIndex, entry.PosIndex);
+                    }
                 }
 
                 // zero based.
                 maxPositionIndex += 1;
+                bool[] referencedPositions = new bool[maxPositionIndex];
+                int[] mappedPositions = new int[maxPositionIndex];
 
-                uint mask = meshChunk.PaxElements[meshCount].SelectSetMask;
-                if ((mask & lodLevel) == lodLevel)
+                foreach(int dslsIndex in dslsIndices)
                 {
-                    CommonMeshData commonMeshData = new CommonMeshData();
-                    commonModelData.CommonMeshData.Add(commonMeshData);
-
-                    commonMeshData.Name = m_name;
-                    commonMeshData.Index = meshCount;
-                    commonMeshData.MaterialId = (int)meshChunk.PaxElements[meshCount].MaterialId;
-                    commonMeshData.LodLevel = lodLevel;
-
-                    List<int> meshIndices = new List<int>();
-                    commonModelData.IndexDataList.Add(meshIndices);
-                    commonMeshData.Indices = meshIndices;
-
-                    if (meshCount < 0 || meshCount >= skinChunk.SkinDataList.Count)
-                    {
-                        int ibreak = 0;
-                    }
-
-                    SkinData skinData = skinChunk.SkinDataList[meshCount];
-                    List<(Vector3, List<(int, float)>)> positionAndWeights = new List<(Vector3, List<(int, float)>)>();
-                    List<Vector3> normals = new List<Vector3>();
-                    // build all the skin data into temp lists
-                    foreach (CSK1 csk in skinData.CSK1List)
-                    {
-                        foreach (Vector3 v3 in csk.ExtractedPositions)
-                        {
-                            List<(int, float)> weights = new List<(int, float)>();
-                            weights.Add((csk.idxBone, 1f));
-                            positionAndWeights.Add((v3, weights));
-                        }
-
-                        foreach (Vector3 v3 in csk.ExtractedNormals)
-                        {
-                            normals.Add(v3);
-                        }
-                    }
-
-                    foreach (CSK2 csk in skinData.CSK2List)
-                    {
-                        int count = 0;
-                        foreach (Vector3 v3 in csk.ExtractedPositions)
-                        {
-                            List<(int, float)> weights = new List<(int, float)>();
-                            (float, float) weight = csk.ExtractedWeightsFloats[count];
-
-                            weights.Add((csk.idxBone[0], weight.Item1));
-                            weights.Add((csk.idxBone[1], weight.Item2));
-
-                            positionAndWeights.Add((v3, weights));
-                            count++;
-                        }
-
-                        foreach (Vector3 v3 in csk.ExtractedNormals)
-                        {
-                            normals.Add(v3);
-                        }
-                    }
-
-                    foreach (CSKA csk in skinData.CSKAList)
-                    {
-                        int n = csk.ExtractedDestinationIndices.Count;
-                        for (int k = 0; k < n; k++)
-                        {
-                            int dstIndex = csk.ExtractedDestinationIndices[k];
-
-                            positionAndWeights[csk.ExtractedDestinationIndices[k]].Item2
-                                .Add((csk.idxBone, csk.ExtractedWeightsFloats[k]));
-                        }
-                    }
-
-                    bool[] referencedPositions = new bool[maxPositionIndex];
-                    int[] mappedPositions = new int[maxPositionIndex];
+                    DisplayListHeader dlh = dslsChunk.DisplayListHeaders[dslsIndex];
 
                     int count1 = 0;
                     int vertexIndex = -1;
@@ -717,8 +771,10 @@ public class GCModel : BaseModel
                         }
 
 
+                        
                         if (!referencedPositions[entry.PosIndex])
                         {
+
                             CommonVertexInstance cvi = new CommonVertexInstance();
 
                             cvi.DebugDLEPos = entry.PosIndex;
@@ -730,7 +786,7 @@ public class GCModel : BaseModel
 
                             if (entry.UVIndex < 0 || entry.UVIndex >= uv0Chunk.Data.Count)
                             {
-                                int ibreak = 0;
+                                int ibreak = 0; 
                             }
 
                             cvi.UV = uv0Chunk.Data[entry.UVIndex];
@@ -767,6 +823,8 @@ public class GCModel : BaseModel
                                 sum += cvi.BoneWeight.weight3;
                             }
 
+                            cvi.BoneWeight.RenormaliseWeights(4);
+
                             vertexDataAndDesc.VertexData.Add(cvi);
                             vertexIndex = vertexCount;
 
@@ -788,20 +846,18 @@ public class GCModel : BaseModel
                         ;
                         meshIndices.Add(localIndex);
                     }
-
-                    int ibreak2 = 0;
-                    // change winding order on indices.
-                    for (int i = 0; i < meshIndices.Count; i += 3)
-                    {
-                        int temp = meshIndices[i + 1];
-                        meshIndices[i + 1] = meshIndices[i + 2];
-                        meshIndices[i + 2] = temp;
-                    }
+                    
                 }
 
-                displayListPosition++;
+                // change winding order on indices.
+                for (int i = 0; i < meshIndices.Count; i += 3)
+                {
+                    int temp = meshIndices[i + 1];
+                    meshIndices[i + 1] = meshIndices[i + 2];
+                    meshIndices[i + 2] = temp;
+                }
+
             }
-            
         }
     }
 
@@ -992,6 +1048,26 @@ public class GCModel : BaseModel
         GetChunk<ENDChunk>().ToStreamRawData(binWriter);
     }
 
+    public List<BaseChunk> GetOrderedChunksForWriting()
+    {
+        List<BaseChunk> chunks = new List<BaseChunk>();
+
+        foreach (Type t in ChunkTypeWriteOrder)
+        {
+            chunks.Add(m_chunkList.Find(chunk => chunk.GetType() == t));
+        }
+
+        return chunks;
+    }
+
+    public void ToStream(List<BaseChunk> chunks, BinaryWriter binWriter)
+    {
+        foreach (BaseChunk chunk in chunks)
+        {
+            chunk.ToStream(binWriter);
+        }
+    }
+    
     public void ToStream(BinaryWriter binWriter)
     {
         GetChunk<VERSChunk>().ToStream(binWriter);
@@ -1030,10 +1106,6 @@ public class GCModel : BaseModel
         }
         
         GetChunk<DSLIChunk>().ToStream(binWriter);
-        
-        //GetChunk<DSLIChunk>().ToStreamRawData(binWriter);
-
-
 
         // never on 32 boundary?
         if (binWriter.BaseStream.Position % 32 == 0)

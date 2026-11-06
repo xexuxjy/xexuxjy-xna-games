@@ -1012,6 +1012,13 @@ public static class Common
     public static BoneWeight RenormaliseWeights(this BoneWeight bw, int maxWeights)
     {
         BoneWeight b = bw;
+
+        if (bw.weight3 > 0f)
+        {
+            int ibreak = 0;
+            
+        }
+        
         float sum = bw.weight0;
         if (maxWeights > 1)
         {
@@ -1028,6 +1035,17 @@ public static class Common
             sum += bw.weight3;
         }
 
+        if (sum < 1f)
+        {
+            int ibreak = 0;
+        }
+
+        if (sum > 1f)
+        {
+            int ibreak = 0;
+        }
+
+        
         float scalar = 1.0f / sum;
 
         if (maxWeights == 1)
@@ -1050,6 +1068,13 @@ public static class Common
             bw.weight1 *= scalar;
             bw.weight2 *= scalar;
             bw.weight3 = 0f;
+        }
+        else if (maxWeights == 4)
+        {
+            bw.weight0 *= scalar;
+            bw.weight1 *= scalar;
+            bw.weight2 *= scalar;
+            bw.weight3 *= scalar;
         }
 
         return bw;
