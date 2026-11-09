@@ -273,8 +273,8 @@ public class TestCreateSkinData : Editor
                             }
                         }
 
-                        m_rebuiltGCModel.m_chunkList.Clear();
-                        m_rebuiltGCModel.m_chunkList.AddRange(writeChunks);
+                        // m_rebuiltGCModel.m_chunkList.Clear();
+                        // m_rebuiltGCModel.m_chunkList.AddRange(writeChunks);
 
                         
                         foreach (BaseChunk chunk in m_rebuiltGCModel.m_chunkList)
@@ -298,10 +298,18 @@ public class TestCreateSkinData : Editor
                         {
                             using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
                             {
-                                m_rebuiltGCModel.ToStream(writeChunks,binWriter);
+                                foreach (BaseChunk chunk in m_rebuiltGCModel.m_chunkList)
+                                {
+                                    chunk.ToStream(binWriter);
+                                }
                             }
+                            writeMemoryStream.Flush();
+                            buffer = writeMemoryStream.ToArray();
                         }
 
+                        File.WriteAllBytes(@"D:\GladiusModding\GC\unpack\data\characters\galdrf\galdrf.pax",buffer);
+
+                        
                         if (m_lhsCompareGCModel != null && m_rhsCompareGCModel != null)
                         {
 

@@ -5018,7 +5018,7 @@ public static class SkinBuilder
         // Checkme
         memsize = CommonModelImporter.Align32ByteBoundary(memsize);
 
-        memsize += 32;
+        //memsize += 32;
         
         uint positionCounter = 0;
 
