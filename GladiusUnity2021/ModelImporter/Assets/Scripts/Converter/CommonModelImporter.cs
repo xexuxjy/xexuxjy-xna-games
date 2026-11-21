@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -1906,6 +1907,12 @@ public abstract class BaseChunk
     public long WriteEnd;
 
     public byte[] RawData;
+
+
+    public virtual uint CalculatedNumElements()
+    {
+        return NumElements;
+    }
     
     public static bool CompareSignature(char[] a, char[] b)
     {
@@ -2049,12 +2056,18 @@ public class VERSChunk : BaseChunk
         return chunk;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return 1;
+    }
+
+    
     public override void ToStream(BinaryWriter binWriter)
     {
         Signature = ChunkName();
         Length = GladiusFileWriter.HeaderSize + 16;
         Version = 0;
-        NumElements = 1;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
         
         binWriter.Write(0);
@@ -2076,6 +2089,12 @@ public class CPRTChunk : BaseChunk
         return CommonModelImporter.cprtTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return 0x80;
+    }
+
+    
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         CPRTChunk chunk = new CPRTChunk();
@@ -2092,7 +2111,7 @@ public class CPRTChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)blockSize;
         Version = 0;
-        NumElements = 0x80;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         remain -= GladiusFileWriter.HeaderSize;
@@ -2129,6 +2148,12 @@ public class SKELChunk : BaseChunk
         return chunk;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return (uint)BoneList.Count;
+    }
+
+    
     public override void ToStream(BinaryWriter binWriter)
     {
         int size = ChunkHeaderSize + (BoneNode.RawSize * BoneList.Count);
@@ -2137,7 +2162,7 @@ public class SKELChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 0;
-        NumElements = (uint)BoneList.Count;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
         foreach (BoneNode node in BoneList)
         {
@@ -2160,6 +2185,11 @@ public class SELSChunk : BaseChunk
     public static char[] ChunkName()
     {
         return CommonModelImporter.selsTag;
+    }
+
+    public override uint CalculatedNumElements()
+    {
+        return 1;
     }
 
 
@@ -2191,7 +2221,7 @@ public class SELSChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 0;
-        NumElements = 1;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         GladiusFileWriter.WriteStringList(binWriter, Names, (int)(alignedSize - GladiusFileWriter.HeaderSize));
@@ -2239,6 +2269,12 @@ public class NAMEChunk : BaseChunk
         return chunk;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return 1;
+    }
+
+    
     public override void ToStream(BinaryWriter binWriter)
     {
         int size = ChunkHeaderSize;
@@ -2250,7 +2286,7 @@ public class NAMEChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 0;
-        NumElements = 1;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
         GladiusFileWriter.WriteStringList(binWriter, Names, (alignedSize - GladiusFileWriter.HeaderSize));
         WriteEnd = binWriter.BaseStream.Position;
@@ -2281,6 +2317,12 @@ public class TXTRChunk : BaseChunk
         return chunk;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return (uint)Textures.Count;
+    }
+
+    
     public override void ToStream(BinaryWriter binWriter)
     {
         int size = GladiusFileWriter.HeaderSize;
@@ -2291,7 +2333,7 @@ public class TXTRChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 0;
-        NumElements = (uint)Textures.Count;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         foreach (PaxTexture textureInfo in Textures)
@@ -2360,6 +2402,11 @@ public class ENDChunk : BaseChunk
         return CommonModelImporter.endTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return 0;
+    }
+
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         ENDChunk chunk = new ENDChunk();
@@ -2374,7 +2421,7 @@ public class ENDChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)total;
         Version = 0;
-        NumElements = 0;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
         WriteEnd = binWriter.BaseStream.Position;
     }
@@ -2412,6 +2459,11 @@ public class POSIChunk : BaseChunk
         return CommonModelImporter.posiTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return (uint)Data.Count;
+    }
+
 
     public static BaseChunk FromStream(BinaryReader binReader)
     {
@@ -2437,7 +2489,7 @@ public class POSIChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 1;
-        NumElements = (uint)Data.Count;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         foreach (IndexedVector3 v in Data)
@@ -2460,6 +2512,10 @@ public class NORMChunk : BaseChunk
         return CommonModelImporter.normTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return (uint)Data.Count;
+    }
 
     public static BaseChunk FromStream(BinaryReader binReader)
     {
@@ -2484,7 +2540,7 @@ public class NORMChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 0;
-        NumElements = (uint)Data.Count;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
 
@@ -2506,6 +2562,11 @@ public class UV0Chunk : BaseChunk
     public static char[] ChunkName()
     {
         return CommonModelImporter.uv0Tag;
+    }
+
+    public override uint CalculatedNumElements()
+    {
+        return (uint)Data.Count;
     }
 
 
@@ -2550,7 +2611,7 @@ public class UV0Chunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 0;
-        NumElements = (uint)Data.Count;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         for(int i=0;i<Data.Count;++i)
@@ -2585,6 +2646,10 @@ public class SHDRChunk : BaseChunk
         return CommonModelImporter.shdrTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return (uint)Data.Count;
+    }
 
     public static BaseChunk FromStream(BinaryReader binReader)
     {
@@ -2611,12 +2676,16 @@ public class SHDRChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 0;
-        NumElements = (uint)paxTextures.Count;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
         
         for (int i = 0; i < paxTextures.Count; ++i)
         {
             GCMaterial gcm = new GCMaterial();
+            for (int j = 0; j < gcm.TexIndex.Length;j++)
+            {
+                gcm.TexIndex[j] = 0xFF;
+            }
             gcm.MatName = paxTextures[i].Name;
             gcm.TexIndex[0] = (byte)i;
             gcm.ToStream(binWriter);
@@ -2638,6 +2707,12 @@ public class DSLIChunk : BaseChunk
         return CommonModelImporter.dsliTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return 1;
+    }
+
+    
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         DSLIChunk chunk = new DSLIChunk();
@@ -2680,6 +2755,8 @@ public class DSLIChunk : BaseChunk
             int headerSize = header.GetSize(); 
             DisplayListIndices.Add(new DSLIInfo(){startPos = start,length=headerSize});
             start += skinned ? (headerSize / 2) : headerSize;
+
+            start += 16;
         }
         
     }
@@ -2694,7 +2771,7 @@ public class DSLIChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 1;
-        NumElements = 1;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         BuildFromDSLS();
@@ -2737,6 +2814,10 @@ public class DSLSChunk : BaseChunk
         return CommonModelImporter.dslsTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return 1;
+    }
 
     public void BuildData(DSLIChunk dsliChunk)
     {
@@ -2778,27 +2859,56 @@ public class DSLSChunk : BaseChunk
 
     public override void ToStream(BinaryWriter binWriter)
     {
-        int size = GladiusFileWriter.HeaderSize;
+        int size = 0;
 
+        DSLIChunk dsliChunk = GetChunk<DSLIChunk>();
+
+        int dsliSize = 0;
+        foreach (DSLIInfo dsliInfo in dsliChunk.DisplayListIndices)
+        {
+            dsliSize += dsliInfo.length;
+        }
+        
+        
+        int ibreak = 0;
+        
         foreach (DisplayListHeader dlh in DisplayListHeaders)
         {
             size += dlh.GetSize();
         }
 
+
+        for (int i = 0; i < DisplayListHeaders.Count; i++)
+        {
+            int diff = dsliChunk.DisplayListIndices[i].length - DisplayListHeaders[i].GetSize();
+            int ibreak2 = 0;
+        }
+        
         int alignedSize = GladiusFileWriter.GetChunkPadValue(size);
-        alignedSize += 48;
+        
+        alignedSize += GladiusFileWriter.HeaderSize;
         
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 1;
-        NumElements = 1;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         // end of standard header.
-
-        foreach (DisplayListHeader dlh in DisplayListHeaders)
+        int startPosMultiplier = 1;
+        // check and see if we use a multiplier (skinned)
+        if (dsliChunk.DisplayListIndices.Count > 1)
         {
-            dlh.ToStream(binWriter);
+            if (dsliChunk.DisplayListIndices[1].startPos < dsliChunk.DisplayListIndices[0].length)
+            {
+                startPosMultiplier = 2;
+            }
+        }
+
+        for (int i = 0; i < dsliChunk.DisplayListIndices.Count; ++i)
+        {
+            binWriter.BaseStream.Position = dsliChunk.DisplayListIndices[i].startPos * startPosMultiplier;
+            DisplayListHeaders[i].ToStream(binWriter);
         }
 
         GladiusFileWriter.WriteNull(binWriter, (alignedSize - size));
@@ -2823,6 +2933,11 @@ public class CNTRChunk : BaseChunk
     public static char[] ChunkName()
     {
         return CommonModelImporter.cntrTag;
+    }
+    
+    public override uint CalculatedNumElements()
+    {
+        return 1;
     }
 
     public static BaseChunk FromStream(BinaryReader binReader)
@@ -2867,7 +2982,7 @@ public class CNTRChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 1;
-        NumElements = 1;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -2938,6 +3053,12 @@ public class PADDChunk : BaseChunk
         return CommonModelImporter.paddTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return 0;
+    }
+
+    
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         PADDChunk chunk = new PADDChunk();
@@ -2969,6 +3090,12 @@ public class DSLCChunk : BaseChunk
         return CommonModelImporter.dslcTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return (uint)DisplayListCounts.Count;
+    }
+
+    
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         long startPosition = binReader.BaseStream.Position;
@@ -2996,7 +3123,7 @@ public class DSLCChunk : BaseChunk
         Signature = ChunkName();
         Length = (uint)alignedSize;
         Version = 1;
-        NumElements = (uint)paxElements.Count;
+        NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
         for (int i = 0; i < paxElements.Count; ++i)
@@ -3167,6 +3294,12 @@ public class MESHChunk : BaseChunk
         return CommonModelImporter.meshTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        return (uint)PaxElements.Count;
+    }
+
+    
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         MESHChunk chunk = new MESHChunk();
@@ -3216,6 +3349,13 @@ public class ELEMChunk : BaseChunk
         return CommonModelImporter.elemTag;
     }
 
+    public override uint CalculatedNumElements()
+    {
+        List<DisplayListHeader> headers = GetChunk<DSLSChunk>().DisplayListHeaders;
+        return (uint)headers.Count;
+    }
+
+    
     public static BaseChunk FromStream(BinaryReader binReader)
     {
         
@@ -3453,6 +3593,11 @@ public class SKINChunk : BaseChunk
     public static char[] ChunkName()
     {
         return CommonModelImporter.skinTag;
+    }
+
+    public override uint CalculatedNumElements()
+    {
+        return (uint)SkinDataList.Count;
     }
 
     public static BaseChunk FromStream(BinaryReader binReader)

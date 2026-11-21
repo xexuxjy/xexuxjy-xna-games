@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Assets.Editor;
+using Assets.Editor.Test;
 using JetBrains.Annotations;
 using TMPro;
 using Unity.Mathematics;
@@ -27,8 +28,6 @@ public class TestCreateSkinData : Editor
     private bool m_overrideSort = true;
     
     private bool m_displaySingle = false;
-
-    public int IndentLevel = 20;
 
     private GameObject m_originalModel;
     private GameObject m_rebuiltModel;
@@ -259,7 +258,8 @@ public class TestCreateSkinData : Editor
                     {
                         m_rhsCompareGCModel = m_rebuiltGCModel;
 
-                        List<BaseChunk> writeChunks = new List<BaseChunk>();//m_rebuiltGCModel.GetOrderedChunksForWriting();
+                        List<BaseChunk>
+                            writeChunks = new List<BaseChunk>(); //m_rebuiltGCModel.GetOrderedChunksForWriting();
 
                         foreach (BaseChunk basechunk in m_originalGCModel.m_chunkList)
                         {
@@ -269,14 +269,15 @@ public class TestCreateSkinData : Editor
                             }
                             else
                             {
-                                writeChunks.Add(m_rebuiltGCModel.m_chunkList.Find(chunk => chunk.GetType() == basechunk.GetType()));
+                                writeChunks.Add(m_rebuiltGCModel.m_chunkList.Find(chunk =>
+                                    chunk.GetType() == basechunk.GetType()));
                             }
                         }
 
                         // m_rebuiltGCModel.m_chunkList.Clear();
                         // m_rebuiltGCModel.m_chunkList.AddRange(writeChunks);
 
-                        
+
                         foreach (BaseChunk chunk in m_rebuiltGCModel.m_chunkList)
                         {
                             using (MemoryStream writeMemoryStream = new MemoryStream())
@@ -285,13 +286,14 @@ public class TestCreateSkinData : Editor
                                 {
                                     chunk.ToStream(binWriter);
                                 }
+
                                 File.WriteAllBytes($"{chunkComparePathRebuiltWrite}/{new string(chunk.Signature)}.bin",
                                     writeMemoryStream.ToArray());
                             }
                         }
 
-                        
-                        
+
+
                         byte[] buffer = null;
 
                         using (MemoryStream writeMemoryStream = new MemoryStream())
@@ -303,13 +305,14 @@ public class TestCreateSkinData : Editor
                                     chunk.ToStream(binWriter);
                                 }
                             }
+
                             writeMemoryStream.Flush();
                             buffer = writeMemoryStream.ToArray();
                         }
 
-                        File.WriteAllBytes(@"D:\GladiusModding\GC\unpack\data\characters\galdrf\galdrf.pax",buffer);
+                        File.WriteAllBytes(@"D:\GladiusModding\GC\unpack\data\characters\galdrf\galdrf.pax", buffer);
 
-                        
+
                         if (m_lhsCompareGCModel != null && m_rhsCompareGCModel != null)
                         {
 
@@ -329,149 +332,161 @@ public class TestCreateSkinData : Editor
                                 newSB.AppendLine($"{dse.PosIndex},{dse.NormIndex},{dse.UVIndex}");
                             }
 
-                            SKELChunk oldSKEL = m_lhsCompareGCModel.GetChunk<SKELChunk>();
-                            SKELChunk newSKEL = m_rhsCompareGCModel.GetChunk<SKELChunk>();
-
-                            StringBuilder oldSBS = new StringBuilder();
-                            StringBuilder newSBS = new StringBuilder();
-
-                            foreach (BoneNode boneNode in oldSKEL.BoneList)
+                            if (m_lhsCompareGCModel.IsSkinned())
                             {
-                                oldSBS.AppendLine(
-                                    $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
+
+                                SKELChunk oldSKEL = m_lhsCompareGCModel.GetChunk<SKELChunk>();
+                                SKELChunk newSKEL = m_rhsCompareGCModel.GetChunk<SKELChunk>();
+
+                                StringBuilder oldSBS = new StringBuilder();
+                                StringBuilder newSBS = new StringBuilder();
+
+                                foreach (BoneNode boneNode in oldSKEL.BoneList)
+                                {
+                                    oldSBS.AppendLine(
+                                        $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
+                                }
+
+                                foreach (BoneNode boneNode in newSKEL.BoneList)
+                                {
+                                    newSBS.AppendLine(
+                                        $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
+
+                                }
+
+                                SKINChunk oldSKIN = m_lhsCompareGCModel.GetChunk<SKINChunk>();
+                                SKINChunk newSKIN = m_rhsCompareGCModel.GetChunk<SKINChunk>();
+
+                                UV0Chunk oldUV0 = m_lhsCompareGCModel.GetChunk<UV0Chunk>();
+                                UV0Chunk newUV0 = m_rhsCompareGCModel.GetChunk<UV0Chunk>();
+
+                                List<Vector3> oldPositions = new List<Vector3>();
+                                List<Vector3> oldNormals = new List<Vector3>();
+
+                                foreach (CSK1 csk in oldSKIN.SkinDataList[0].CSK1List)
+                                {
+                                    oldPositions.AddRange(csk.ExtractedPositions);
+                                    //oldNormals.AddRange(csk.ExtractedNormals);
+                                }
+
+                                foreach (CSK2 csk in oldSKIN.SkinDataList[0].CSK2List)
+                                {
+                                    oldPositions.AddRange(csk.ExtractedPositions);
+                                    //oldNormals.AddRange(csk.ExtractedNormals);
+                                }
+
+                                List<Vector3> newPositions = new List<Vector3>();
+                                List<Vector3> newNormals = new List<Vector3>();
+
+                                foreach (CSK1 csk in newSKIN.SkinDataList[0].CSK1List)
+                                {
+                                    newPositions.AddRange(csk.ExtractedPositions);
+                                    //newNormals.AddRange(csk.ExtractedNormals);
+                                }
+
+                                foreach (CSK2 csk in newSKIN.SkinDataList[0].CSK2List)
+                                {
+                                    newPositions.AddRange(csk.ExtractedPositions);
+                                    //newNormals.AddRange(csk.ExtractedNormals);
+                                }
+
+                                StringBuilder oldPN = new StringBuilder();
+                                StringBuilder newPN = new StringBuilder();
+
+                                foreach (Vector3 p in oldPositions)
+                                {
+                                    oldPN.AppendLine(p.ToString());
+                                }
+
+                                foreach (Vector3 n in oldNormals)
+                                {
+                                    oldPN.AppendLine(n.ToString());
+                                }
+
+                                foreach (Vector3 p in newPositions)
+                                {
+                                    newPN.AppendLine(p.ToString());
+                                }
+
+                                foreach (Vector3 n in newNormals)
+                                {
+                                    newPN.AppendLine(n.ToString());
+                                }
+
+                                StringBuilder oldUV = new StringBuilder();
+                                StringBuilder newUV = new StringBuilder();
+
+                                foreach (Vector2 uv in oldUV0.Data)
+                                {
+                                    oldUV.AppendLine(uv.ToString());
+                                }
+
+                                foreach (Vector2 uv in newUV0.Data)
+                                {
+                                    newUV.AppendLine(uv.ToString());
+                                }
+
+
+                                File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
+                                File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
+                                
+                                File.WriteAllText("d:/tmp/old-skel.txt", oldSBS.ToString());
+                                File.WriteAllText("d:/tmp/new-skel.txt", newSBS.ToString());
+                                
+                                File.WriteAllText("d:/tmp/old-pn.txt", oldPN.ToString());
+                                File.WriteAllText("d:/tmp/new-pn.txt", newPN.ToString());
+                                
+                                File.WriteAllText("d:/tmp/old-uv.txt", oldUV.ToString());
+                                File.WriteAllText("d:/tmp/new-uv.txt", newUV.ToString());
                             }
-
-                            foreach (BoneNode boneNode in newSKEL.BoneList)
-                            {
-                                newSBS.AppendLine(
-                                    $"{boneNode.Index} , {boneNode.ParentIndex} , {boneNode.offset},{boneNode.rotation}");
-
-                            }
-
-                            SKINChunk oldSKIN = m_lhsCompareGCModel.GetChunk<SKINChunk>();
-                            SKINChunk newSKIN = m_rhsCompareGCModel.GetChunk<SKINChunk>();
-
-                            UV0Chunk oldUV0 = m_lhsCompareGCModel.GetChunk<UV0Chunk>();
-                            UV0Chunk newUV0 = m_rhsCompareGCModel.GetChunk<UV0Chunk>();
-
-                            List<Vector3> oldPositions = new List<Vector3>();
-                            List<Vector3> oldNormals = new List<Vector3>();
-
-                            foreach (CSK1 csk in oldSKIN.SkinDataList[0].CSK1List)
-                            {
-                                oldPositions.AddRange(csk.ExtractedPositions);
-                                //oldNormals.AddRange(csk.ExtractedNormals);
-                            }
-
-                            foreach (CSK2 csk in oldSKIN.SkinDataList[0].CSK2List)
-                            {
-                                oldPositions.AddRange(csk.ExtractedPositions);
-                                //oldNormals.AddRange(csk.ExtractedNormals);
-                            }
-
-                            List<Vector3> newPositions = new List<Vector3>();
-                            List<Vector3> newNormals = new List<Vector3>();
-
-                            foreach (CSK1 csk in newSKIN.SkinDataList[0].CSK1List)
-                            {
-                                newPositions.AddRange(csk.ExtractedPositions);
-                                //newNormals.AddRange(csk.ExtractedNormals);
-                            }
-
-                            foreach (CSK2 csk in newSKIN.SkinDataList[0].CSK2List)
-                            {
-                                newPositions.AddRange(csk.ExtractedPositions);
-                                //newNormals.AddRange(csk.ExtractedNormals);
-                            }
-
-                            StringBuilder oldPN = new StringBuilder();
-                            StringBuilder newPN = new StringBuilder();
-
-                            foreach (Vector3 p in oldPositions)
-                            {
-                                oldPN.AppendLine(p.ToString());
-                            }
-
-                            foreach (Vector3 n in oldNormals)
-                            {
-                                oldPN.AppendLine(n.ToString());
-                            }
-
-                            foreach (Vector3 p in newPositions)
-                            {
-                                newPN.AppendLine(p.ToString());
-                            }
-
-                            foreach (Vector3 n in newNormals)
-                            {
-                                newPN.AppendLine(n.ToString());
-                            }
-
-                            StringBuilder oldUV = new StringBuilder();
-                            StringBuilder newUV = new StringBuilder();
-
-                            foreach (Vector2 uv in oldUV0.Data)
-                            {
-                                oldUV.AppendLine(uv.ToString());
-                            }
-
-                            foreach (Vector2 uv in newUV0.Data)
-                            {
-                                newUV.AppendLine(uv.ToString());
-                            }
-
-
-                            // File.WriteAllText("d:/tmp/old-dse.txt", oldSB.ToString());
-                            // File.WriteAllText("d:/tmp/new-dse.txt", newSB.ToString());
-                            //
-                            // File.WriteAllText("d:/tmp/old-skel.txt", oldSBS.ToString());
-                            // File.WriteAllText("d:/tmp/new-skel.txt", newSBS.ToString());
-                            //
-                            // File.WriteAllText("d:/tmp/old-pn.txt", oldPN.ToString());
-                            // File.WriteAllText("d:/tmp/new-pn.txt", newPN.ToString());
-                            //
-                            // File.WriteAllText("d:/tmp/old-uv.txt", oldUV.ToString());
-                            // File.WriteAllText("d:/tmp/new-uv.txt", newUV.ToString());
                         }
                     }
 
-
-                    if (m_lhsCompareGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0 &&
-                        m_rhsCompareGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0)
+                    if (m_lhsCompareGCModel.IsSkinned())
                     {
-                        m_originalSkinData.Clear();
-                        for (int i = 0; i < m_lhsCompareGCModel.GetChunk<MESHChunk>().NumElements; i++)
+                        if (m_lhsCompareGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0 &&
+                            m_rhsCompareGCModel?.GetChunk<SKINChunk>().SkinDataList.Count > 0)
                         {
-                            if ((m_lhsCompareGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
+                            m_originalSkinData.Clear();
+                            for (int i = 0; i < m_lhsCompareGCModel.GetChunk<MESHChunk>().NumElements; i++)
                             {
-                                SkinData skinData = m_lhsCompareGCModel.GetChunk<SKINChunk>().SkinDataList[i];
-                                m_originalSkinData.Add(skinData);
-
-                                if (m_overrideSort)
+                                if ((m_lhsCompareGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
                                 {
-                                    skinData.CSK1List = skinData.CSK1List.OrderByDescending(x => x.count).ThenBy(x => x.idxBone).ToList();
-                                    skinData.CSK2List = skinData.CSK2List.OrderByDescending(x => x.count).ThenBy(y => y.idxBone[0]).ThenByDescending(y => y.idxBone[1]).ToList();
-                                    skinData.CSKAList = skinData.CSKAList.OrderByDescending(x => x.count).ThenBy(x => x.idxBone).ToList();
+                                    SkinData skinData = m_lhsCompareGCModel.GetChunk<SKINChunk>().SkinDataList[i];
+                                    m_originalSkinData.Add(skinData);
+
+                                    if (m_overrideSort)
+                                    {
+                                        skinData.CSK1List = skinData.CSK1List.OrderByDescending(x => x.count)
+                                            .ThenBy(x => x.idxBone).ToList();
+                                        skinData.CSK2List = skinData.CSK2List.OrderByDescending(x => x.count)
+                                            .ThenBy(y => y.idxBone[0]).ThenByDescending(y => y.idxBone[1]).ToList();
+                                        skinData.CSKAList = skinData.CSKAList.OrderByDescending(x => x.count)
+                                            .ThenBy(x => x.idxBone).ToList();
+
+                                    }
 
                                 }
-                                
                             }
-                        }
 
-                        m_newSkinData.Clear();
-                        for (int i = 0; i < m_rhsCompareGCModel.GetChunk<MESHChunk>().NumElements; i++)
-                        {
-                            if ((m_rhsCompareGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
+                            m_newSkinData.Clear();
+                            for (int i = 0; i < m_rhsCompareGCModel.GetChunk<MESHChunk>().NumElements; i++)
                             {
-                                SkinData skinData = m_rhsCompareGCModel.GetChunk<SKINChunk>().SkinDataList[i];
-                                m_newSkinData.Add(skinData);
-                                
-                                if (m_overrideSort)
+                                if ((m_rhsCompareGCModel.LodLevelForMesh(i) & stub.LodLevel) == stub.LodLevel)
                                 {
-                                    skinData.CSK1List = skinData.CSK1List.OrderByDescending(x => x.count).ThenBy(x => x.idxBone).ToList();
-                                    skinData.CSK2List = skinData.CSK2List.OrderByDescending(x => x.count).ThenBy(y => y.idxBone[0]).ThenByDescending(y => y.idxBone[1]).ToList();
-                                    skinData.CSKAList = skinData.CSKAList.OrderByDescending(x => x.count).ThenBy(x => x.idxBone).ToList();
+                                    SkinData skinData = m_rhsCompareGCModel.GetChunk<SKINChunk>().SkinDataList[i];
+                                    m_newSkinData.Add(skinData);
 
+                                    if (m_overrideSort)
+                                    {
+                                        skinData.CSK1List = skinData.CSK1List.OrderByDescending(x => x.count)
+                                            .ThenBy(x => x.idxBone).ToList();
+                                        skinData.CSK2List = skinData.CSK2List.OrderByDescending(x => x.count)
+                                            .ThenBy(y => y.idxBone[0]).ThenByDescending(y => y.idxBone[1]).ToList();
+                                        skinData.CSKAList = skinData.CSKAList.OrderByDescending(x => x.count)
+                                            .ThenBy(x => x.idxBone).ToList();
+
+                                    }
                                 }
                             }
                         }
@@ -621,32 +636,6 @@ public class TestCreateSkinData : Editor
         }
 
     }
-
-    // public static void DumpSkinInfo(GCModel model,StringBuilder debugInfo)
-    // {
-    //     if (model.GetChunk<SKINChunk>() != null)
-    //     {
-    //         int count = 0;
-    //         foreach (SkinData skinData in model.GetChunk<SKINChunk>().SkinDataList)
-    //         {
-    //             string packet1Info = "";
-    //             for (int i = 0; i < skinData.NumPackets1; i++)
-    //             {
-    //                 packet1Info += $"[{skinData.Packet1Starts[i]}->{skinData.Packet1Sizes[i]}]**";
-    //             }
-    //
-    //             string packet2Info = "";
-    //             for (int i = 0; i < skinData.NumPackets2; i++)
-    //             {
-    //                 packet2Info += $"[{skinData.Packet2Starts[i]}->{skinData.Packet2Sizes[i]}]**";
-    //             }
-    //
-    //             debugInfo.AppendLine(
-    //                 $"{model.m_name}, {count++}, {skinData.Flags},{skinData.AnimShift},{skinData.CSK1List.Count},{skinData.CSK2List.Count},{skinData.CSKAList.Count},{skinData.NumPackets1},{skinData.PacketStart1},{skinData.PacketSize1},{packet1Info},{skinData.NumPackets2},{skinData.PacketStart2},{skinData.PacketSize2},{packet2Info}");
-    //         }
-    //     }
-    // }
-    
     
     public void DisplaySingleModel()
     {
@@ -660,150 +649,7 @@ public class TestCreateSkinData : Editor
         for (int i = 0; i < numRows; i++)
         {
             SkinData origSD = m_originalGCModel.GetChunk<SKINChunk>().SkinDataList[i];
-
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField($"Mesh {i}", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("AnimShift", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumList1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumList2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumListA", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumPackets1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("Packets1Start", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("Packets1Sizes", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("NumPackets2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("Packets2Start", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField("Packets2Sizes", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(origSD.Size.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.AnimShift.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.NumList1.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.NumList2.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.NumListA.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.NumPackets1.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.PacketStart1.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.PacketSize1.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.NumPackets2.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.PacketStart2.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-            EditorGUILayout.LabelField(origSD.PacketSize2.ToString(), GetTableStyle(),
-                GUILayout.Width(ColumnWidth));
-
-            GUILayout.EndHorizontal();
-
-            
-            bool csk1FoldOut = m_foldOutsSingleList[i].Item1;
-            bool csk2FoldOut = m_foldOutsSingleList[i].Item2;
-            bool cskAFoldOut = m_foldOutsSingleList[i].Item3;
-            bool packetsFoldout = m_foldOutsSingleList[i].Item4;
-
-            packetsFoldout = StartIndentedFoldoutHeader("Packets", packetsFoldout);
-            if (packetsFoldout)
-            {
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Packet1 Start", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Packet1 Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-
-                for (int j = 0; j < origSD.NumPackets1; j++)
-                {
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{origSD.Packet1Starts[j]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField($"{origSD.Packet1Sizes[j]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-                    GUILayout.EndHorizontal();
-                }
-
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Packet2 Start", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Packet2 Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-
-                for (int j = 0; j < origSD.NumPackets2; j++)
-                {
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{origSD.Packet2Starts[j]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField($"{origSD.Packet2Sizes[j]}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-                    GUILayout.EndHorizontal();
-                }
-
-            }
-            EndIndentedFoldoutHeader();
-            
-            csk1FoldOut = StartIndentedFoldoutHeader("CSK1", csk1FoldOut);
-            if (csk1FoldOut)
-            {
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("IdxBone", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-
-                foreach (CSK1 csk1 in origSD.CSK1List)
-                {
-                    GUILayout.BeginHorizontal();
-                    DrawCSK1(csk1, Color.green);
-                    GUILayout.EndHorizontal();
-                }
-            }
-
-            EndIndentedFoldoutHeader();
-
-            csk2FoldOut = StartIndentedFoldoutHeader("CSK2", csk2FoldOut);
-            if (csk2FoldOut)
-            {
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("IdxBone1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("IdxBone2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-
-                foreach (CSK2 csk2 in origSD.CSK2List)
-                {
-                    GUILayout.BeginHorizontal();
-                    DrawCSK2(csk2, Color.green);
-                    GUILayout.EndHorizontal();
-                }
-            }
-
-            EndIndentedFoldoutHeader();
-
-            cskAFoldOut = StartIndentedFoldoutHeader("CSKA", cskAFoldOut);
-            if (cskAFoldOut)
-            {
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("IdxBone", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("VertSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("WeightSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-                foreach (CSKA cska in origSD.CSKAList)
-                {
-                    GUILayout.BeginHorizontal();
-                    DrawCSKA(cska, Color.green);
-                    GUILayout.EndHorizontal();
-                }
-            }
-
-            EndIndentedFoldoutHeader();
-
-            m_foldOutsSingleList[i] = (csk1FoldOut, csk2FoldOut, cskAFoldOut,packetsFoldout);
+            ChunkComparisonTools.DrawSingleSkinData(i,origSD,m_foldOutsSingleList);
         }
     }
 
@@ -812,566 +658,15 @@ public class TestCreateSkinData : Editor
     {
         if (m_lhsCompareGCModel != null && m_rhsCompareGCModel != null)
         {
-            DrawChunkCompare(m_lhsCompareGCModel, m_rhsCompareGCModel, Color.green, Color.yellow);
-        }
-        
-        if (m_originalSkinData.Count > 0 && m_newSkinData.Count > 0)
-        {
-            int numRows = Math.Min(m_originalSkinData.Count, m_newSkinData.Count);
+            ChunkComparisonTools.DrawChunkCompare(m_lhsCompareGCModel, m_rhsCompareGCModel, Color.green, Color.yellow);
 
-            for (int i = 0; i < numRows; i++)
-            {
-                SkinData origSD = m_originalSkinData[i];
-                SkinData newSD = m_newSkinData[i];
+            ChunkComparisonTools.DrawDSLIListsCompare(m_lhsCompareGCModel.GetChunk<DSLIChunk>().DisplayListIndices,
+                m_rhsCompareGCModel.GetChunk<DSLIChunk>().DisplayListIndices, m_lhsCompareGCModel.GetChunk<DSLSChunk>(),
+                m_rhsCompareGCModel.GetChunk<DSLSChunk>());
 
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"Mesh {i}", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("AnimShift", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("NumList1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("NumList2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("NumListA", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("NumPackets1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("PacketsStart1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("PacketsSizes1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("NumPackets2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("PacketsStart2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField("Packets2Sizes2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                
-                Color oldColor = GUI.contentColor;
-                GUI.contentColor = CompareVals(origSD.Size, newSD.Size,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.Size} / {newSD.Size}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                GUI.contentColor = CompareVals(origSD.AnimShift, newSD.AnimShift,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.AnimShift} / {newSD.AnimShift}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals(origSD.NumList1, newSD.NumList1,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.NumList1} / {newSD.NumList1}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals(origSD.NumList2, newSD.NumList2,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.NumList2} / {newSD.NumList2}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                
-                GUI.contentColor = CompareVals(origSD.NumListA, newSD.NumListA,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.NumListA} / {newSD.NumListA}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals(origSD.NumPackets1, newSD.NumPackets1,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.NumPackets1} / {newSD.NumPackets1}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals((int)origSD.PacketStart1, (int)newSD.PacketStart1,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.PacketStart1} / {newSD.PacketStart1}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals((int)origSD.PacketSize1, (int)newSD.PacketSize1,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.PacketSize1} / {newSD.PacketSize1}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals(origSD.NumPackets2, newSD.NumPackets2,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.NumPackets2} / {newSD.NumPackets2}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals((int)origSD.PacketStart2, (int)newSD.PacketStart2,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.PacketStart2} / {newSD.PacketStart2}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-
-                GUI.contentColor = CompareVals((int)origSD.PacketSize2, (int)newSD.PacketSize2,Color.green, Color.yellow);
-                EditorGUILayout.LabelField($"{origSD.PacketSize2} / {newSD.PacketSize2}", GetTableStyle(),
-                    GUILayout.Width(ColumnWidth));
-                
-                GUILayout.EndHorizontal();
-
-                GUI.contentColor = oldColor;
-                
-                bool csk1FoldOut = m_foldOutsCompareList[i].Item1;
-                bool csk2FoldOut = m_foldOutsCompareList[i].Item2;
-                bool cskAFoldOut = m_foldOutsCompareList[i].Item3;
-                bool packetsFoldout = m_foldOutsCompareList[i].Item4;
-
-                packetsFoldout = StartIndentedFoldoutHeader("Packets", packetsFoldout);
-                if (packetsFoldout)
-                {
-                    DrawPacketsCompare(origSD, newSD, Color.green, Color.yellow);
-
-                }
-                EndIndentedFoldoutHeader();
-
-                
-                
-                csk1FoldOut = StartIndentedFoldoutHeader("CSK1", csk1FoldOut);
-                if (csk1FoldOut)
-                {
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("IdxBone", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    GUILayout.EndHorizontal();
-
-                    if (m_diffData)
-                    {
-                        int numSteps = math.max(origSD.CSK1List.Count, newSD.CSK1List.Count);
-                        for (int j = 0; j < numSteps; j++)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSK1Compare(origSD.CSK1List, newSD.CSK1List,j, Color.green,Color.yellow);
-                            GUILayout.EndHorizontal();
-                        }
-                    }
-                    else
-                    {
-                        foreach (CSK1 csk1 in origSD.CSK1List)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSK1(csk1, Color.green);
-                            GUILayout.EndHorizontal();
-                        }
-
-                        foreach (CSK1 csk1 in newSD.CSK1List)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSK1(csk1, Color.yellow);
-                            GUILayout.EndHorizontal();
-                        }
-                    }
-                }
-
-                EndIndentedFoldoutHeader();
-
-                csk2FoldOut = StartIndentedFoldoutHeader("CSK2", csk2FoldOut);
-                if (csk2FoldOut)
-                {
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("IdxBone1", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("IdxBone2", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("Src", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("Dst", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("WeightSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    GUILayout.EndHorizontal();
-
-                    if (m_diffData)
-                    {
-                        int numSteps = Math.Max(origSD.CSK2List.Count,newSD.CSK2List.Count);
-                        for (int j = 0; j < numSteps; j++)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSK2Compare(origSD.CSK2List, newSD.CSK2List,j, Color.green,Color.yellow);
-                            GUILayout.EndHorizontal();
-                        }
-                    }
-                    else
-                    {
-                        foreach (CSK2 csk2 in origSD.CSK2List)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSK2(csk2, Color.green);
-                            GUILayout.EndHorizontal();
-                        }
-
-                        foreach (CSK2 csk2 in newSD.CSK2List)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSK2(csk2, Color.yellow);
-                            GUILayout.EndHorizontal();
-                        }
-                    }
-                }
-
-                EndIndentedFoldoutHeader();
-
-                cskAFoldOut = StartIndentedFoldoutHeader("CSKA", cskAFoldOut);
-                if (cskAFoldOut)
-                {
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("IdxBone", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("Count", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("VertSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    EditorGUILayout.LabelField("WeightSrc", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                    GUILayout.EndHorizontal();
-                    if (m_diffData)
-                    {
-                        int numSteps = math.max(origSD.CSKAList.Count, newSD.CSKAList.Count);
-                        for (int j = 0; j < numSteps; j++)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSKACompare(origSD.CSKAList, newSD.CSKAList,j, Color.green,Color.yellow);
-                            GUILayout.EndHorizontal();
-                        }
-                    }
-                    else
-                    {
-                        foreach (CSKA cska in origSD.CSKAList)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSKA(cska, Color.green);
-                            GUILayout.EndHorizontal();
-                        }
-
-                        foreach (CSKA cska in newSD.CSKAList)
-                        {
-                            GUILayout.BeginHorizontal();
-                            DrawCSKA(cska, Color.yellow);
-                            GUILayout.EndHorizontal();
-                        }
-                    }
-                }
-                EndIndentedFoldoutHeader();
-
-                m_foldOutsCompareList[i] = (csk1FoldOut, csk2FoldOut, cskAFoldOut,packetsFoldout);
-            }
-        }
-
-    }
-    
-
-    public void DrawCSK1(CSK1 csk1, Color color)
-    {
-        Color oldColor = GUI.contentColor;
-        GUI.contentColor = color;
-        EditorGUILayout.LabelField(csk1.idxBone.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk1.count.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk1.vertSrc.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk1.vertDst.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        GUI.contentColor = oldColor;
-    }
-
-    public static Color CompareVals(int val1, int val2, Color matchColor, Color diffColor)
-    {
-        return val1 == val2 ? matchColor : diffColor;
-    }
-    public static Color CompareVals(uint val1, uint val2, Color matchColor, Color diffColor)
-    {
-        return val1 == val2 ? matchColor : diffColor;
-    }
-
-    public void DrawCSK1Compare(List<CSK1> oldList,[ItemNotNull] List<CSK1> newList,int index, Color matchColor, Color diffColor)
-    {
-        Color oldColor = GUI.contentColor;
-        CSK1 oldCSK = index<oldList.Count?oldList[index]:null;
-        CSK1 newCSK = index<newList.Count?newList[index]:null;
-
-        int oldVal = oldCSK != null ? oldCSK.idxBone : -1;
-        int newVal = newCSK != null ? newCSK.idxBone : -1;
-        
-        GUI.contentColor = CompareVals(oldVal, newVal,matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        oldVal = oldCSK != null ? oldCSK.count : -1;
-        newVal = newCSK != null ? newCSK.count : -1;
-        
-        GUI.contentColor = CompareVals(oldVal, newVal,matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        uint oldValU = oldCSK != null ? oldCSK.vertSrc : uint.MaxValue;
-        uint newValU = newCSK != null ? newCSK.vertSrc : uint.MaxValue;
-
-        GUI.contentColor = CompareVals(oldVal, newVal,matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        oldValU = oldCSK != null ? oldCSK.vertDst : uint.MaxValue;
-        newValU = newCSK != null ? newCSK.vertDst : uint.MaxValue;
-
-        GUI.contentColor = CompareVals(oldValU, newValU,matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldValU} / {newValU}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        GUI.contentColor = oldColor;
-    }
-
-
-    public void DrawCSK2(CSK2 csk2, Color color)
-    {
-        Color oldColor = GUI.contentColor;
-        GUI.contentColor = color;
-        EditorGUILayout.LabelField(csk2.idxBone[0].ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk2.idxBone[1].ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk2.count.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk2.vertSrc.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk2.vertDst.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField(csk2.weightsSrc.ToString(), GetTableStyle(), GUILayout.Width(ColumnWidth));
-        GUI.contentColor = oldColor;
-    }
-
-    public void DrawCSK2Compare(List<CSK2> oldList, List<CSK2> newList,int index, Color matchColor, Color diffColor)
-    {
-        CSK2 oldCSK = index<oldList.Count?oldList[index]:null;
-        CSK2 newCSK = index<newList.Count?newList[index]:null;
-
-        
-        int oldVal = oldCSK != null ? oldCSK.idxBone[0] : -1;
-        int newVal = newCSK != null ? newCSK.idxBone[0] : -1;
-
-        
-        Color oldColor = GUI.contentColor;
-        GUI.contentColor = CompareVals(oldVal, newVal, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        oldVal = oldCSK != null ? oldCSK.idxBone[1] : -1;
-        newVal = newCSK != null ? newCSK.idxBone[1] : -1;
-
-        GUI.contentColor = CompareVals(oldVal, newVal, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-        
-        oldVal = oldCSK != null ? oldCSK.count : -1;
-        newVal = newCSK != null ? newCSK.count : -1;
-        
-        GUI.contentColor = CompareVals(oldVal, newVal, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-        
-        uint oldValU = oldCSK != null ? oldCSK.vertSrc : uint.MaxValue;
-        uint newValU = newCSK != null ? newCSK.vertSrc : uint.MaxValue;
-        
-        GUI.contentColor = CompareVals(oldValU, newValU, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldValU} / {newValU}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-        
-        oldValU = oldCSK != null ? oldCSK.vertDst : uint.MaxValue;
-        newValU = newCSK != null ? newCSK.vertDst : uint.MaxValue;
-
-        GUI.contentColor = CompareVals(oldValU, newValU, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldValU} / {newValU}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        oldValU = oldCSK != null ? oldCSK.weightsSrc : uint.MaxValue;
-        newValU = newCSK != null ? newCSK.weightsSrc : uint.MaxValue;
-
-        GUI.contentColor = CompareVals(oldValU, newValU, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldValU} / {newValU}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-        
-        GUI.contentColor = oldColor;
-    }
-
-
-    public void DrawCSKA(CSKA cska, Color color)
-    {
-        Color oldColor = GUI.contentColor;
-        GUI.contentColor = color;
-        EditorGUILayout.LabelField($"{cska.idxBone}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField($"{cska.count}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField($"{cska.vertSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField($"{cska.weightsSrc}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-        GUI.contentColor = oldColor;
-    }
-
-    public void DrawCSKACompare(List<CSKA> oldList, List<CSKA> newList,int index, Color matchColor, Color diffColor)
-    {
-        CSKA oldCSK = index<oldList.Count?oldList[index]:null;
-        CSKA newCSK = index<newList.Count?newList[index]:null;
-
-        Color oldColor = GUI.contentColor;
-
-        int oldVal = oldCSK != null ? oldCSK.idxBone : -1;
-        int newVal = newCSK != null ? newCSK.idxBone : -1;
-
-        
-        GUI.contentColor = CompareVals(oldVal, newVal, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-        
-        oldVal = oldCSK != null ? oldCSK.count : -1;
-        newVal = newCSK != null ? newCSK.count : -1;
-        
-        GUI.contentColor = CompareVals(oldVal, newVal, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-        
-        uint oldValU = oldCSK != null ? oldCSK.vertSrc : uint.MaxValue;
-        uint newValU = newCSK != null ? newCSK.vertSrc : uint.MaxValue;
-        
-        GUI.contentColor = CompareVals(oldValU, newValU, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldValU} / {newValU}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        oldValU = oldCSK != null ? oldCSK.weightsSrc : uint.MaxValue;
-        newValU = newCSK != null ? newCSK.weightsSrc : uint.MaxValue;
-        
-        GUI.contentColor = CompareVals(oldValU, newValU, matchColor, diffColor);
-        EditorGUILayout.LabelField($"{oldValU} / {newValU}", GetTableStyle(),GUILayout.Width(ColumnWidth));
-
-        GUI.contentColor = oldColor;
-    }
-
-
-    public void DrawChunkCompare(GCModel model1, GCModel model2, Color matchColor, Color diffColor)
-    {
-        GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField($"Chunk", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField($"Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField($"Elements", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-        GUILayout.EndHorizontal();
-        Color oldColor = GUI.contentColor;
-
-        foreach (BaseChunk model1Chunk in model1.m_chunkList)
-        {
-
-            string model1ChunkName = new  string(model1Chunk.Signature);
-            string model2ChunkName = null;
-
-            
-            
-            BaseChunk model2Chunk = model2.m_chunkList.Find(x=>x.GetType() == model1Chunk.GetType());
-            
-            if (model2Chunk == null)
-            {
-                GUI.contentColor = Color.red;
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"{model1ChunkName}", GetTableHeaderStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField($"{model1Chunk.Length}", GetTableHeaderStyle(),
-                    GUILayout.Width(ColumnWidth));
-                EditorGUILayout.LabelField($"{model1Chunk.NumElements}", GetTableHeaderStyle(),
-                    GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-            }
-            else
-            {
-                model2ChunkName = new  string(model2Chunk.Signature);;
-
-                GUI.contentColor = matchColor;
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"{model1ChunkName} / {model2ChunkName}", GetTableHeaderStyle(),
-                    GUILayout.Width(ColumnWidth));
-                GUI.contentColor = CompareVals((int)model1Chunk.Length, (int)model2Chunk.Length, matchColor, diffColor);
-                EditorGUILayout.LabelField($"{model1Chunk.Length} / {model2Chunk.Length}", GetTableHeaderStyle(),
-                    GUILayout.Width(ColumnWidth));
-                GUI.contentColor = CompareVals((int)model1Chunk.NumElements, (int)model2Chunk.NumElements, matchColor,
-                    diffColor);
-                EditorGUILayout.LabelField($"{model1Chunk.NumElements} / {model2Chunk.NumElements}",
-                    GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-                GUILayout.EndHorizontal();
-            }
-        }
-
-        GUI.contentColor = oldColor;
-    }
-
-
-    public void DrawPacketsCompare(SkinData oldSkinData, SkinData newSkinData, Color matchColor, Color diffColor)
-    {
-        Color oldColor = GUI.contentColor;
-        GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Packet1 Start", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField("Packet1 Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-        GUILayout.EndHorizontal();
-
-        int max = Math.Max(oldSkinData.NumPackets1,newSkinData.NumPackets1);
-        
-        for (int j = 0; j < max; j++)
-        {
-            ushort oldVal = ushort.MaxValue;
-            ushort newVal = ushort.MaxValue;
-            
-            GUILayout.BeginHorizontal();
-            GUI.contentColor = CompareListPosition(oldSkinData.Packet1Starts, newSkinData.Packet1Starts,j, ref oldVal,ref newVal,matchColor, diffColor);
-            EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-            
-            GUI.contentColor = CompareListPosition(oldSkinData.Packet1Sizes, newSkinData.Packet1Sizes,j, ref oldVal,ref newVal,matchColor, diffColor);
-            EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(), GUILayout.Width(ColumnWidth));   
-            GUILayout.EndHorizontal();
-        }
-        GUI.contentColor = oldColor;
-        GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Packet2 Start", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-        EditorGUILayout.LabelField("Packet2 Size", GetTableHeaderStyle(), GUILayout.Width(ColumnWidth));
-        GUILayout.EndHorizontal();
-
-        
-        max = Math.Max(oldSkinData.NumPackets2,newSkinData.NumPackets2);
-        for (int j = 0; j < max; j++)
-        {
-            ushort oldVal = ushort.MaxValue;
-            ushort newVal = ushort.MaxValue;
-
-            GUILayout.BeginHorizontal();
-            GUI.contentColor = CompareListPosition(oldSkinData.Packet2Starts, newSkinData.Packet2Starts,j, ref oldVal,ref newVal,matchColor, diffColor);
-            EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-
-            GUI.contentColor = CompareListPosition(oldSkinData.Packet2Sizes, newSkinData.Packet2Sizes,j, ref oldVal,ref newVal,matchColor, diffColor);
-            EditorGUILayout.LabelField($"{oldVal} / {newVal}", GetTableStyle(), GUILayout.Width(ColumnWidth));
-
-            
-            GUILayout.EndHorizontal();
-        }
-
-        GUI.contentColor = oldColor;
-    }
-
-    public static Color CompareListPosition(List<ushort> oldList, List<ushort> newList,int index, ref ushort oldVal, ref ushort newVal, Color matchColor, Color diffColor)
-    {
-        oldVal = index < oldList.Count ? oldList[index] : ushort.MaxValue;
-        newVal = index < newList.Count ? newList[index] : ushort.MaxValue;
-
-        if (oldVal == ushort.MaxValue || newVal == ushort.MaxValue)
-        {
-            return Color.red;
-        }
-        else
-        {
-            return CompareVals(oldVal, newVal, matchColor, diffColor);
+            ChunkComparisonTools.DrawSkinDataListsCompare(m_originalSkinData, m_newSkinData, m_diffData,
+                m_foldOutsCompareList);
         }
     }
-    
-    // public static Color CompareListPosition<T>(List<T> oldList, List<T> newList,int index, ref T oldVal, ref T newVal, Color matchColor, Color diffColor)
-    // {
-    //     oldVal = index < oldList.Count ? oldList[index] : ushort.MaxValue;
-    //     newVal = index < newList.Count ? newList[index] : ushort.MaxValue;
-    //
-    //     if (oldVal == ushort.MaxValue || newVal == ushort.MaxValue)
-    //     {
-    //         return Color.red;
-    //     }
-    //     else
-    //     {
-    //         return CompareVals(oldVal, newVal, matchColor, diffColor);
-    //     }
-    // }
-    
-    
-    public int ColumnWidth = 100;
 
-    private GUIStyle GetTableHeaderStyle()
-    {
-        GUIStyle gs = new GUIStyle(GUI.skin.label);
-        gs.fontStyle = FontStyle.Bold;
-        gs.normal.textColor = Color.white;
-        return gs;
-    }
-
-    private GUIStyle GetTableStyle()
-    {
-        GUIStyle gs = new GUIStyle(GUI.skin.label);
-        gs.normal.textColor = Color.white;
-        return gs;
-    }
-
-    private bool StartIndentedFoldoutHeader(string name, bool foldout)
-    {
-        bool returnValue = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, name,
-            GetFoldoutSectionHeaderStyle(), null, GUI.skin.GetStyle("IconButton"));
-        GUILayout.BeginHorizontal();
-        GUILayout.Space(IndentLevel);
-        GUILayout.BeginVertical();
-
-        return returnValue;
-    }
-
-    private void EndIndentedFoldoutHeader()
-    {
-        GUILayout.EndVertical();
-        GUILayout.EndHorizontal();
-        EditorGUILayout.EndFoldoutHeaderGroup();
-    }
-
-    private GUIStyle GetFoldoutSectionHeaderStyle()
-    {
-        GUIStyle gs = new GUIStyle(GUI.skin.GetStyle("FoldoutHeader"));
-        gs.fontStyle = FontStyle.Bold;
-        gs.fontSize = 20;
-        gs.normal.textColor = Color.white;
-        return gs;
-    }
 }
