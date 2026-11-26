@@ -77,23 +77,13 @@ public class GCModel : BaseModel
 
     public const string DefaultShader = "lambert2";
 
-    public Type[] ChunkTypeDefaultOrder = new Type[]
-    {
-        typeof(VERSChunk), typeof(CPRTChunk), typeof(SELSChunk), typeof(NAMEChunk), typeof(CNTRChunk),
-        typeof(SHDRChunk), typeof(TXTRChunk),
-        typeof(DSLSChunk), typeof(DSLIChunk), typeof(DSLCChunk), typeof(UV0Chunk), typeof(SKINChunk), typeof(SKELChunk),
-        typeof(VFLAChunk), typeof(VFLAChunk), typeof(RAMChunk), typeof(MSARChunk),
-        typeof(NLVLChunk), typeof(MESHChunk), typeof(ELEMChunk), typeof(STYPChunk), typeof(JLODChunk), typeof(ENDChunk)
-    };
-
-
     public Type[] SkinnedChunkTypeWriteOrder = new Type[]
     {
         typeof(VERSChunk), typeof(CPRTChunk), typeof(SELSChunk), typeof(DSLCChunk), typeof(RAMChunk), typeof(SHDRChunk),
-        typeof(TXTRChunk), typeof(MESHChunk), typeof(ELEMChunk),
-        typeof(DSLSChunk), typeof(DSLIChunk), typeof(UV0Chunk), typeof(VFLGChunk), typeof(STYPChunk), typeof(NAMEChunk),
-        typeof(SKELChunk), typeof(JLODChunk),
-        typeof(CNTRChunk), typeof(SKINChunk), typeof(ENDChunk)
+        typeof(TXTRChunk), typeof(MESHChunk), typeof(ELEMChunk),typeof(PADDChunk),
+        typeof(DSLSChunk), typeof(DSLIChunk), typeof(PADDChunk),typeof(UV0Chunk), typeof(VFLGChunk), 
+        typeof(NAMEChunk),typeof(SKELChunk), typeof(CNTRChunk), typeof(SKINChunk), 
+        typeof(ENDChunk)
     };
 
     public Type[] UnSkinnedChunkTypeWriteOrder = new Type[]
@@ -1160,18 +1150,6 @@ public class GCModel : BaseModel
         GetChunk<ENDChunk>().ToStreamRawData(binWriter);
     }
 
-    public List<BaseChunk> GetOrderedChunksForWriting()
-    {
-        List<BaseChunk> chunks = new List<BaseChunk>();
-
-        foreach (Type t in SkinnedChunkTypeWriteOrder)
-        {
-            chunks.Add(m_chunkList.Find(chunk => chunk.GetType() == t));
-        }
-
-        return chunks;
-    }
-
     public void ToStream(List<BaseChunk> chunks, BinaryWriter binWriter)
     {
         foreach (BaseChunk chunk in chunks)
@@ -1185,7 +1163,10 @@ public class GCModel : BaseModel
         foreach (Type t in IsSkinned()?SkinnedChunkTypeWriteOrder:UnSkinnedChunkTypeWriteOrder)
         {
             BaseChunk chunk = m_chunkList.Find(chunk => chunk.GetType() == t);
-            chunk.ToStream(binWriter);
+            if (chunk != null)
+            {
+                chunk.ToStream(binWriter);
+            }
         }
 
         

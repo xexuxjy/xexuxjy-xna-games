@@ -2756,7 +2756,8 @@ public class DSLIChunk : BaseChunk
             DisplayListIndices.Add(new DSLIInfo(){startPos = start,length=headerSize});
             start += skinned ? (headerSize / 2) : headerSize;
 
-            start += 16;
+            start = GladiusFileWriter.GetPadValue(start, 32);
+            //start += 16;
         }
         
     }
@@ -2861,6 +2862,7 @@ public class DSLSChunk : BaseChunk
     {
         int size = 0;
 
+        
         DSLIChunk dsliChunk = GetChunk<DSLIChunk>();
 
         int dsliSize = 0;
@@ -2894,6 +2896,8 @@ public class DSLSChunk : BaseChunk
         NumElements = CalculatedNumElements();
         BaseToStream(binWriter);
 
+        long chunkStartPosition = binWriter.BaseStream.Position;
+        
         // end of standard header.
         int startPosMultiplier = 1;
         // check and see if we use a multiplier (skinned)
@@ -2907,7 +2911,7 @@ public class DSLSChunk : BaseChunk
 
         for (int i = 0; i < dsliChunk.DisplayListIndices.Count; ++i)
         {
-            binWriter.BaseStream.Position = dsliChunk.DisplayListIndices[i].startPos * startPosMultiplier;
+            binWriter.BaseStream.Position = chunkStartPosition + (dsliChunk.DisplayListIndices[i].startPos * startPosMultiplier);
             DisplayListHeaders[i].ToStream(binWriter);
         }
 
@@ -5161,7 +5165,8 @@ public static class SkinBuilder
         }
 
         // Checkme
-        memsize = CommonModelImporter.Align32ByteBoundary(memsize);
+        //memsize = CommonModelImporter.Align32ByteBoundary(memsize);
+        memsize = (uint)GladiusFileWriter.GetPadValue((int)memsize,32);
 
         //memsize += 32;
         

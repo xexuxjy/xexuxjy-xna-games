@@ -300,10 +300,11 @@ public class TestCreateSkinData : Editor
                         {
                             using (BinaryWriter binWriter = new BinaryWriter(writeMemoryStream))
                             {
-                                foreach (BaseChunk chunk in m_rebuiltGCModel.m_chunkList)
-                                {
-                                    chunk.ToStream(binWriter);
-                                }
+                                //foreach (BaseChunk chunk in m_rebuiltGCModel.m_chunkList)
+                                // {
+                                //     chunk.ToStream(binWriter);
+                                // }
+                                m_rebuiltGCModel.ToStream(binWriter);
                             }
 
                             writeMemoryStream.Flush();
